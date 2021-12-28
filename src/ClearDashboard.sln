@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.Core", "ClearDashboard\ClearDashboard.Core.csproj", "{902DB1FC-7A91-4701-8690-1AA5F39A5BDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.Wpf", "ClearDashboard.WPF\ClearDashboard.Wpf.csproj", "{702260F1-4412-4DC7-AC4D-330B99A970BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{902DB1FC-7A91-4701-8690-1AA5F39A5BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{902DB1FC-7A91-4701-8690-1AA5F39A5BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{902DB1FC-7A91-4701-8690-1AA5F39A5BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{902DB1FC-7A91-4701-8690-1AA5F39A5BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{702260F1-4412-4DC7-AC4D-330B99A970BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{702260F1-4412-4DC7-AC4D-330B99A970BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{702260F1-4412-4DC7-AC4D-330B99A970BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{702260F1-4412-4DC7-AC4D-330B99A970BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}
+	EndGlobalSection
+EndGlobal
