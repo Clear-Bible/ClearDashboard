@@ -25,8 +25,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore $env:Solution_Path
     - name: Build
-      run: dotnet build src\ClearDashboard.sln --no-restore
+      run: dotnet build $env:Solution_Path --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
