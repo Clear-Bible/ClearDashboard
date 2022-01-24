@@ -77,11 +77,11 @@ jobs:
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
-      run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
+      #run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
+      run: dotnet restore $env:Solution_Path
       env:
         Configuration: ${{ matrix.configuration }}
         
-    # MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       run: dotnet build $env:Solution_Path --no-restore
       #uses: microsoft/setup-msbuild@v1.0.2
