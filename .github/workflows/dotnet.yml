@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  Solution_Path: src\ClearDashboard.sln
+  Test_Project_Path: src\ClearDashboard.CoreTests\ClearDashboard.CoreTests.csproj
+  Wpf_Project_Path: ClearDashboard.WPF\ClearDashboard.WPF.csproj
+  Wap_Project_Directory: ClearDashboard.WPF.Package
+  Wap_Project_Name: ClearDashboard.WPF.Package.wapproj
+
 jobs:
   build:
 
