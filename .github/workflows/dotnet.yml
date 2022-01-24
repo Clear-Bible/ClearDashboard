@@ -30,3 +30,8 @@ jobs:
       run: dotnet build $env:Solution_Path --no-restore
     - name: Test
       run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: MSIX Package
+        path: ClearDashboard.Package\AppPackages\
