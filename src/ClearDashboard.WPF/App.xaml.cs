@@ -1,32 +1,17 @@
-﻿using System.Windows;
-using System.Windows.Threading;
-using Microsoft.Extensions.Logging;
-using MvvmCross.Core;
-using MvvmCross.Platforms.Wpf.Core;
-using MvvmCross.Platforms.Wpf.Views;
-using Serilog;
-using Serilog.Extensions.Logging;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : MvxApplication
+    public partial class App : Application
     {
-        public App()
-        {
-            this.RegisterSetupType<Setup>();
-        }
-
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            // Process unhandled exception
-            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message, "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
-            // Prevent default unhandled exception processing
-            e.Handled = true;
-        }
-
     }
-
 }
