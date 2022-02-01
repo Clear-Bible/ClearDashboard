@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf
 {
@@ -26,7 +27,6 @@ namespace ClearDashboard.Wpf
         {
             InitializeComponent();
 
-            this.Title = "ClearDashboard Version";
 
             var userPrefs = new UserPreferences();
 
@@ -48,6 +48,13 @@ namespace ClearDashboard.Wpf
             userPrefs.WindowState = this.WindowState;
 
             userPrefs.Save();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //var vm = (MainWindowViewModel)this.DataContext;
+
+            //this.Title = "ClearDashboard " + vm.Version;
         }
     }
 }
