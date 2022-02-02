@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.NamedPipes.Models
 {

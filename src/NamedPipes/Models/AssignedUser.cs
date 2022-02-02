@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.NamedPipes.Models
 {
