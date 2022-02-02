@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: AbstractModelBase
+    public class MainWindowViewModel: BindableBase
     {
         #region Props
 

@@ -5,7 +5,7 @@ using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ColorStylesViewModel: AbstractModelBase
+    public class ColorStylesViewModel: BindableBase
     {
 
         ObservableCollection<Inline> _inlinesText = new ObservableCollection<Inline>();
