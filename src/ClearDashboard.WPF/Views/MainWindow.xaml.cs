@@ -2,6 +2,8 @@
 using ClearDashboard.Wpf.Properties;
 using System.Net.Mime;
 using System.Windows;
+using System.Windows.Input;
+using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf
 {
@@ -10,6 +12,9 @@ namespace ClearDashboard.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        //NavigationCommands
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,9 +44,8 @@ namespace ClearDashboard.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var vm = (MainWindowViewModel)this.DataContext;
-
-            //this.Title = "ClearDashboard " + vm.Version;
+            var vm = (MainWindowViewModel)this.DataContext;
+            this.Title = "ClearDashboard " + vm.Version;
         }
 
         private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();

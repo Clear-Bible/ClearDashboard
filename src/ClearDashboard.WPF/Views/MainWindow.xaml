@@ -24,35 +24,30 @@
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <viewModels:MainWindowViewModel/>
+        <viewModels:MainWindowViewModel />
     </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
             <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
-        <Button
+
+        <!--<Button
             x:Uid="NewProjectButton"
-            Command="{Binding NewProjectCommand}"
-            CommandParameter="Hai"
             Grid.Row="0"
             Grid.Column="0"
-            Height="25">
+            Height="25"
+            Command="{Binding NewProjectCommand}"
+            CommandParameter="Hai">
             CREATE NEW PROJECT
-        </Button>
+        </Button>-->
 
 
         <StackPanel
-            Grid.Row="2"
-            Grid.Column="1"
+            Grid.Row="0"
+            HorizontalAlignment="Right"
             Orientation="Horizontal">
             <StackPanel Orientation="Horizontal">
                 <TextBlock
@@ -79,5 +74,10 @@
                 ColorStyles
             </Button>
         </StackPanel>
+
+        <Frame
+            Grid.Row="1"
+            NavigationUIVisibility="Hidden"
+            Source="/Views/Landing.xaml" />
     </Grid>
 </Window>

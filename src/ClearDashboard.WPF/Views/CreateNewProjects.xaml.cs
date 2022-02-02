@@ -10,16 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ClearDashboard.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for CreateNewProject.xaml
-    /// </summary>
-    public partial class CreateNewProject : Window
+    public partial class CreateNewProjects : Page
     {
-        public CreateNewProject()
+        public CreateNewProjects()
         {
             InitializeComponent();
         }

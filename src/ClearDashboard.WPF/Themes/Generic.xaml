@@ -6,7 +6,7 @@
 
 
     <Style TargetType="{x:Type helpers:NavButton}">
-        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Margin" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type helpers:NavButton}">
@@ -32,19 +32,17 @@
                                 Text="{TemplateBinding Text}"
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
-
                             <Rectangle
                                 Name="Line"
-                                Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Fill="Transparent"
                                 Stroke="RoyalBlue"
                                 StrokeDashArray="1,2"
                                 StrokeThickness="0" />
                         </Grid>
+
                     </Border>
 
-                    <!--  Set up mouse over trigger  -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Line" Property="StrokeThickness" Value="1" />

@@ -41,7 +41,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             //get the assembly version
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Revision}.{thisVersion.Build}";
+            Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
 
             // wire up the commands

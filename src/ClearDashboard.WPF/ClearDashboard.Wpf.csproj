@@ -6,7 +6,15 @@
     <UseWPF>true</UseWPF>
     <PackageIcon>ClearDashboard_logo_128.png</PackageIcon>
     <ApplicationIcon>Assets\ClearDashboard_logo.ico</ApplicationIcon>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\NewProject.png" />
+    <None Remove="Resources\Notes.png" />
+    <None Remove="Resources\Settings.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\ClearDashboard_logo.ico" />
@@ -17,7 +25,6 @@
     <Folder Include="UserControls\" />
     <Folder Include="Converters\" />
     <Folder Include="Fonts\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +34,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Notes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Settings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
