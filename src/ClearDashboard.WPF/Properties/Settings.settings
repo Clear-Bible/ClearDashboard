@@ -17,5 +17,8 @@
     <Setting Name="WindowState" Type="System.Windows.WindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
+    <Setting Name="Theme" Type="MaterialDesignThemes.Wpf.BaseTheme" Scope="User">
+      <Value Profile="(Default)">Inherit</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
