@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ClearDashboard.Common.Models;
+using Newtonsoft.Json;
+using System;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: AbstractModelBase
+    public class MainWindowViewModel: BindableBase
     {
-        private string _version;
 
+        private string _Version;
+        [JsonProperty]
         public string Version
         {
-            get => _version;
-            set
-            {
-                _version = value;
-                OnPropertyChanged("");
-            }
+            get => _Version;
+            set { SetProperty(ref _Version, value); }
         }
-
-
 
         public MainWindowViewModel()
         {
