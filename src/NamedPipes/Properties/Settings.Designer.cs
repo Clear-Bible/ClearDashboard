@@ -22,17 +22,5 @@ namespace NamedPipes.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool GenerateResourceUsePreserializedResources {
-            get {
-                return ((bool)(this["GenerateResourceUsePreserializedResources"]));
-            }
-            set {
-                this["GenerateResourceUsePreserializedResources"] = value;
-            }
-        }
     }
 }
