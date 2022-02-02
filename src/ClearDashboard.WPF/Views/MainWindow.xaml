@@ -15,33 +15,71 @@
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    Loaded="Window_Loaded"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d" Loaded="Window_Loaded">
+    mc:Ignorable="d">
+
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
             <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
-        <Button
-            Grid.Row="2"
-            Grid.Column="1"
-            Width="110"
+
+        <!--<Button
+            x:Uid="NewProjectButton"
+            Grid.Row="0"
+            Grid.Column="0"
             Height="25"
-            Margin="8,0,20,0"
-            Style="{StaticResource GreenLightButton}"
-            Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
-            ColorStyles
-        </Button>
+            Command="{Binding NewProjectCommand}"
+            CommandParameter="Hai">
+            CREATE NEW PROJECT
+        </Button>-->
+
+
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    x:Uid="TextLightTheme"
+                    VerticalAlignment="Center"
+                    Text="Light" />
+                <ToggleButton
+                    x:Name="Toggle"
+                    Margin="5,0,5,0"
+                    Checked="Toggle_Checked"
+                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                    Unchecked="Toggle_Unchecked" />
+                <TextBlock
+                    x:Uid="TextLightTheme"
+                    VerticalAlignment="Center"
+                    Text="Dark" />
+            </StackPanel>
+            <Button
+                Width="110"
+                Height="25"
+                Margin="8,0,20,0"
+                Command="{Binding ColorStylesCommand}"
+                CommandParameter=""
+                Style="{StaticResource GreenLightButton}"
+                Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                ColorStyles
+            </Button>
+        </StackPanel>
+
+        <Frame
+            Grid.Row="1"
+            NavigationUIVisibility="Hidden"
+            Source="/Views/Landing.xaml" />
     </Grid>
 </Window>

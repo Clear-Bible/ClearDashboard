@@ -17,7 +17,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid>
+    <Grid ButtonBase.Click="Grid_Click">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
