@@ -12,8 +12,10 @@
 
   <ItemGroup>
     <None Remove="Resources\NewProject.png" />
+    <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Notes.png" />
     <None Remove="Resources\Settings.png" />
+    <None Remove="Resources\settings_logo_96.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,10 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Notes.png">
+    <Resource Include="Resources\NewProject_Icon_96.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Settings.png">
+    <Resource Include="Resources\settings_logo_96.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

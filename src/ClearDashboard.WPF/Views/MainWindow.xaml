@@ -69,6 +69,8 @@
                 Width="110"
                 Height="25"
                 Margin="8,0,20,0"
+                Command="{Binding ColorStylesCommand}"
+                CommandParameter=""
                 Style="{StaticResource GreenLightButton}"
                 Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
                 ColorStyles

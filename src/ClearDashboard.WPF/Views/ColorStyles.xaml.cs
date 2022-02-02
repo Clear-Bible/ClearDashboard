@@ -24,5 +24,22 @@ namespace ClearDashboard.Wpf.Views
             InitializeComponent();
         }
 
+        private void Grid_Click(object sender, RoutedEventArgs e)
+        {
+            var ClickedButton = e.OriginalSource as Button;
+            try
+            {
+                var brush = ClickedButton.Background;
+                SolidColorBrush scb = brush as SolidColorBrush;
+                Clipboard.Clear();
+                Clipboard.SetText(String.Format("Name: {0}\nHex Code: {1}", ClickedButton.Content.ToString(), scb.Color.ToString()));
+            }
+            catch (Exception exception)
+            {
+                Clipboard.Clear();
+                Clipboard.SetText(exception.Message);
+            }
+
+        }
     }
 }

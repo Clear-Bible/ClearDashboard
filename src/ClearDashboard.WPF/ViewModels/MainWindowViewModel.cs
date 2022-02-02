@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -22,13 +23,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Commands
 
-        private ICommand _newProjectCommand;
-        public ICommand NewProjectCommand
+        private ICommand _colorStylesCommand;
+        public ICommand ColorStylesCommand
         {
-            get => _newProjectCommand; 
+            get => _colorStylesCommand; 
             set
             {
-                _newProjectCommand = value;
+                _colorStylesCommand = value;
             }
         }
 
@@ -45,8 +46,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // wire up the commands
-            //NewProjectCommand = new RelayCommand(ShowCreateNewProject, param => this.canExecute);
-            NewProjectCommand = new RelayCommand(ShowCreateNewProject);
+            //ColorStylesCommand = new RelayCommand(ShowColorStyles, param => this.canExecute);
+            ColorStylesCommand = new RelayCommand(ShowColorStyles);
         }
 
 
@@ -55,9 +56,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void ShowCreateNewProject(object obj)
+        private void ShowColorStyles(object obj)
         {
-            throw new NotImplementedException();
+            ColorStyles frm = new ColorStyles();
+            frm.Show();
         }
 
         #endregion

@@ -17,7 +17,7 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for Landing.xaml
+    /// Interaction logic for LandingViewModel.xaml
     /// </summary>
     public partial class Landing : Page
     {
