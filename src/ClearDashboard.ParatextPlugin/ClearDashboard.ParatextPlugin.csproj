@@ -9,15 +9,10 @@
     <PackageReference Include="NLog" Version="4.7.13" />
     <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.9" />
     <PackageReference Include="ParatextPluginInterfaces" Version="2.0.9" />
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NamedPipes\NamedPipes.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
 
 </Project>
