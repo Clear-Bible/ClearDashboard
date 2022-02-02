@@ -91,7 +91,7 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: Build
-      run: dotnet msbuild $env:Solution_Path --no-restore
+      run: dotnet build $env:Solution_Path --no-restore
 
     - name: Execute unit tests
       run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
