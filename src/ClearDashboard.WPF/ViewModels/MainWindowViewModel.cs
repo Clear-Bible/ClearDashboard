@@ -1,8 +1,7 @@
-﻿using ClearDashboard.Wpf.Helpers;
+﻿using ClearDashboard.Common.Models;
+using Newtonsoft.Json;
 using System;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -13,12 +12,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private string _version;
         public string Version
         {
-            get => _version;
-            set
-            {
-                _version = value;
-                OnPropertyChanged("");
-            }
+            get => _Version;
+            set { SetProperty(ref _Version, value); }
         }
 
         #endregion

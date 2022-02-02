@@ -1,37 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using ClearDashboard.Common.Models;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ColorStylesViewModel: BindableBase
     {
 
-        ObservableCollection<Inline> _inlinesText = new ObservableCollection<Inline>();
+        private ObservableCollection<Inline> _InlinesText;
+        [JsonProperty]
         public ObservableCollection<Inline> InlinesText
         {
-            get { return _inlinesText; }
-            set
-            {
-                _inlinesText = value;
-                OnPropertyChanged("InlinesText");
-            }
+            get => _InlinesText;
+            set { SetProperty(ref _InlinesText, value); }
         }
 
         public ColorStylesViewModel()
         {
-            _inlinesText.Add(new Run("First text")
+            _InlinesText.Add(new Run("First text")
             {
                 Background = Brushes.BurlyWood,
                 Foreground = Brushes.Red
             });
-            _inlinesText.Add(new Run("Second text")
+            _InlinesText.Add(new Run("Second text")
             {
                 Background = Brushes.Cyan,
                 Foreground = Brushes.Green
             });
-            _inlinesText.Add(new Run("Third text")
+            _InlinesText.Add(new Run("Third text")
             {
                 Background = Brushes.Cornsilk,
                 Foreground = Brushes.DarkBlue
