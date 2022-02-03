@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
