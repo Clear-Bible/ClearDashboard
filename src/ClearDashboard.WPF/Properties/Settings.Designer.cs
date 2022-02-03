@@ -82,5 +82,17 @@ namespace ClearDashboard.Wpf.Properties {
                 this["WindowState"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Inherit")]
+        public MaterialDesignThemes.Wpf.BaseTheme Theme {
+            get {
+                return ((MaterialDesignThemes.Wpf.BaseTheme)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace ClearDashboard.ParatextPlugin
         /// </summary>
         private void Run(IWindowPluginHost host, IParatextChildState windowState)
         {
-           // host.ShowEmbeddedUi(new MainWindow(), windowState.Project);
+            host.ShowEmbeddedUi(new MainWindow(), windowState.Project);
         }
 
     }
