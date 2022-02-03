@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class BiblicalTermsData : BindableBase
+    public class BiblicalTermsData : ObservableObject
     {
         private string _id = String.Empty;
         [JsonProperty]

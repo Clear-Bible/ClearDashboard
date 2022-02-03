@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    internal class NotesObject : BindableBase
+    internal class NotesObject : ObservableObject
     {
         private Anchor _Anchor;
         [JsonProperty]

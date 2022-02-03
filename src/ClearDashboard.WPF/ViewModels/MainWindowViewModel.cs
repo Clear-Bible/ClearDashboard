@@ -1,4 +1,4 @@
-﻿using ClearDashboard.Common.Models;
+﻿using MvvmHelpers;
 using Newtonsoft.Json;
 using System;
 using System.Reflection;
@@ -8,7 +8,7 @@ using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: BindableBase
+    public class MainWindowViewModel: ObservableObject
     {
         #region Props
 

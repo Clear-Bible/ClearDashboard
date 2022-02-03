@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class VerseRefStart : BindableBase
+    public class VerseRefStart : ObservableObject
     {
         private string _BookCode;
         [JsonProperty]

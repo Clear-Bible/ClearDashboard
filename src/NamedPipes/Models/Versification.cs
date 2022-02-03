@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public  class Versification : BindableBase
+    public  class Versification : ObservableObject
     {
         private int _Type;
         [JsonProperty]
