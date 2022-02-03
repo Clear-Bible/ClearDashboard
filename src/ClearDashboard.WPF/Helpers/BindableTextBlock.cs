@@ -7,6 +7,7 @@ namespace ClearDashboard.Wpf.Helpers
 {
     public class BindableTextBlock : TextBlock
     {
+        
 
         public ObservableCollection<Inline> InlineList
         {

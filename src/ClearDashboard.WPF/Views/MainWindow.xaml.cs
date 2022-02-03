@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Properties;
+using System.Net.Mime;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf
@@ -23,6 +12,9 @@ namespace ClearDashboard.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        //NavigationCommands
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,9 +44,27 @@ namespace ClearDashboard.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var vm = (MainWindowViewModel)this.DataContext;
+            var vm = (MainWindowViewModel)this.DataContext;
+            this.Title = "ClearDashboard " + vm.Version;
+        }
 
-            //this.Title = "ClearDashboard " + vm.Version;
+        private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();
+
+        private void Toggle_Unchecked(object sender, RoutedEventArgs e) => SetTheme();
+
+        private void SetTheme()
+        {
+            if (Toggle.IsChecked == true)
+            {
+                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
+            }
+            else
+            {
+                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
+            }
+
+            Settings.Default.Save();
+            ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
     }
 }

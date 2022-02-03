@@ -1,20 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
 	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog" Version="4.7.13" />
-    <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.9" />
-    <PackageReference Include="ParatextPluginInterfaces" Version="2.0.9" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NamedPipes\NamedPipes.csproj" />
+    <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
