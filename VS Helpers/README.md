@@ -13,7 +13,7 @@ To increase productivity we created snippets and item templates. 
 ## Item Templates
 
 1.  Copy the item template to the user item template directory. The default location is
-             %USERPROFILE%\\Documents\\Visual Studio &lt;version&gt;\\Templates\\ItemTemplates\
+    `%USERPROFILE%\\Documents\\Visual Studio &lt;version&gt;\\Templates\\ItemTemplates\\`
 2.  Close Visual Studio and then reopen it.
 3.  Open the ClearDashboard project, and then choose Project > Add New Item or press Ctrl+Shift+A.
 
