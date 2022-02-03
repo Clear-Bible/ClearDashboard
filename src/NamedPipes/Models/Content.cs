@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class Content : BindableBase
+    public class Content : ObservableObject
     {
         private List<Span> _Spans;
         [JsonProperty]

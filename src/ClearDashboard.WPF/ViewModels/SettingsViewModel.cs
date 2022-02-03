@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class SettingsViewModel: BindableBase
+    public class SettingsViewModel: ObservableObject
     {
 
         public SettingsViewModel()

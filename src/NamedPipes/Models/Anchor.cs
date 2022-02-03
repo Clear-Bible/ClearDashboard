@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class Anchor : BindableBase
+    public class Anchor : ObservableObject
     {
         private VerseRefStart _VerseRefStart;
         [JsonProperty]

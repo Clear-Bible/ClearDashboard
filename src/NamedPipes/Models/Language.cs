@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class Language : BindableBase
+    public class Language : ObservableObject
     {
         private string _FontFamily;
         [JsonProperty]

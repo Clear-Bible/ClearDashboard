@@ -1,0 +1,15 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>ClearDashboard.ViewModel.cs</DefaultName>
+    <Name>ClearDashboard.ViewModel</Name>
+    <Description>ViewModel template for the ClearDashboard project.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <References>
+    </References>
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">Template.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
