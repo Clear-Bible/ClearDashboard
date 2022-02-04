@@ -141,15 +141,12 @@ namespace ClearDashboard.Common.Models
             set { _DefaultFont = value; }
         }
 
-
-
         private string _NormalizationForm;
         public string NormalizationForm
         {
             get { return _NormalizationForm; }
             set { _NormalizationForm = value; }
         }
-
 
         private string _name;
         public string Name

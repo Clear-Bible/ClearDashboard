@@ -57,6 +57,8 @@
                 Grid.Column="0"
                 Margin="5"
                 ItemsSource="{Binding ParatextProjects}"
+                PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
+                PreviewMouseMove="listview_PreviewMouseMove"
                 Style="{StaticResource MaterialDesignListBox}">
 
                 <ListView.ItemTemplate>
@@ -120,11 +122,12 @@
             </ListView>
 
             <Canvas
-                x:Name="CanvasSurface"
+                x:Name="DrawCanvas"
                 Grid.Column="1"
                 Margin="5"
                 AllowDrop="True"
-                Background="AntiqueWhite" />
+                Background="AntiqueWhite"
+                PreviewDrop="Canvas_PreviewDrop" />
 
             <FlowDocumentPageViewer
                 Grid.Column="2"
