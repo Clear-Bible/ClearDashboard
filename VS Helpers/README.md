@@ -12,7 +12,7 @@ To increase productivity and make coding more fun we created snippets and item t
 
 ## Item Templates
 
-1.  Copy the item template to the user item template directory. The default location is:
+1.  Copy the item template zip files to the user item template directory. Do not unzip them. The default location is:
 
     `%USERPROFILE%\\Documents\\Visual Studio <version>\\Templates\\ItemTemplates\\`
 2.  Close Visual Studio and then reopen it.
