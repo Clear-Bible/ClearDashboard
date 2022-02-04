@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.Common.Models;
 using Microsoft.Win32;
@@ -81,6 +82,7 @@ namespace ClearDashboard.DAL.Paratext
                     Debug.WriteLine("");
                 }
 
+                // read in settings.xml file
                 if (File.Exists(sSettingFilePath))
                 {
                     var project = GetSettingFileInfo(sSettingFilePath);
@@ -98,12 +100,67 @@ namespace ClearDashboard.DAL.Paratext
                             project.CustomVRSfilePath = sCusteomVRSfilePath;
                         }
 
+                        // read in booknames.xml file
+                        string sBookNamesPath = Path.Combine(directory, "booknames.xml");
+                        if (File.Exists(sBookNamesPath))
+                        {
+                            var xmlString = File.ReadAllText(sBookNamesPath);
+
+                            int iRow = 1;
+                            // Create an XmlReader
+                            using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+                            {
+                                while (reader.Read())
+                                {
+                                    reader.ReadToFollowing("book");
+                                    reader.MoveToFirstAttribute();
+                                    string code = reader.Value;
+                                    reader.MoveToNextAttribute();
+                                    string abbr = reader.Value;
+                                    reader.MoveToNextAttribute();
+                                    string shortname = reader.Value;
+                                    reader.MoveToNextAttribute();
+                                    string longname = reader.Value;
+
+                                    iRow++;
+                                    if (iRow == 40)
+                                    {
+                                        iRow = 41;
+                                    }
+
+                                    if (project.BookNames.ContainsKey(iRow))
+                                    {
+                                        var temp = project.BookNames[iRow];
+
+                                        if (temp.code == code)
+                                        {
+                                            temp.abbr = abbr;
+                                            temp.shortname = shortname;
+                                            temp.longname = longname;
+
+                                            // replace key
+                                            project.BookNames.Remove(iRow);
+                                            project.BookNames.Add(iRow, temp);
+                                        }
+
+                                    }
+                                    
+                                    // exit after revelation
+                                    if (iRow == 67)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         projects.Add(project);
                     }
                 }
 
-
             }
+
+            // alphabetize the list by the short name
+            projects.Sort((a, b) => a.Name.CompareTo(b.Name));
 
             return projects;
         }
@@ -142,6 +199,7 @@ namespace ClearDashboard.DAL.Paratext
                     if (obj != null)
                     {
                         p.Name = obj.Name;
+                        p.Guid = obj.Guid;
                         p.FullName = obj.FullName;
                         p.Copyright = obj.Copyright;
                         p.BooksPresent = obj.BooksPresent;
@@ -152,7 +210,39 @@ namespace ClearDashboard.DAL.Paratext
                         }
                         if (obj.FileNamePrePart != null)
                         {
-                            p.FileNamePrePart = obj.FileNamePrePart.ToString();
+                            if (obj.FileNamePrePart is object)
+                            {
+                                p.FileNamePrePart = "";
+                            }
+                            else
+                            {
+                                p.FileNamePrePart = obj.FileNamePrePart.ToString();
+                            }
+                        }
+
+                        if (obj.NormalizationForm != null)
+                        {
+                            p.NormalizationForm = obj.NormalizationForm;
+                        }
+
+                        if (obj.Language != null)
+                        {
+                            p.Language = obj.Language;
+                        }
+
+                        if (obj.DefaultFont != null)
+                        {
+                            p.DefaultFont = obj.DefaultFont;
+                        }
+
+                        if (obj.Encoding != null)
+                        {
+                            p.Encoding = obj.Encoding;
+                        }
+
+                        if (obj.LanguageIsoCode != null)
+                        {
+                            p.LanguageIsoCode = obj.LanguageIsoCode;
                         }
 
                         if (obj.LeftToRight != null)
@@ -160,6 +250,34 @@ namespace ClearDashboard.DAL.Paratext
                             if (obj.LeftToRight.ToUpper() == "F")
                             {
                                 p.IsRTL = true;
+                            }
+                        }
+
+                        if (obj.TranslationInfo != null)
+                        {
+                            var split = obj.TranslationInfo.Split(':');
+                            if (split.Length >= 3)
+                            {
+                                p.TranslationInfo = new Translation_Info
+                                {
+                                    projectType = "",
+                                    projectName = "",
+                                    projectGuid = ""
+                                };
+                            }
+                        }
+
+                        if (obj.BaseTranslation != null)
+                        {
+                            var split = obj.BaseTranslation.Split(':');
+                            if (split.Length >= 3)
+                            {
+                                p.BaseTranslation = new Translation_Info
+                                {
+                                    projectType = "",
+                                    projectName = "",
+                                    projectGuid = ""
+                                };
                             }
                         }
 

@@ -38,7 +38,7 @@ namespace ClearDashboard.DAL.Models
 
         private string _Title = string.Empty;
         /// <summary>
-        /// The title of the Tag or Note. This is the Tag name or Note title.
+        /// The title of the Tag or Note. This is the Tag abbr or Note title.
         /// </summary>
         [JsonProperty]
         public string Title

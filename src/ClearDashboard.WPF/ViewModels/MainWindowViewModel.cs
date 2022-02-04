@@ -82,7 +82,7 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Capture the current Paratext username
         /// </summary>
-        /// <param name="e"></param>
+        /// <param abbr="e"></param>
         private void HandleSetParatextUserNameEvent(object sender, EventArgs e)
         {
             var args = (CustomEvents.ParatextUsernameEventArgs)e;
@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param abbr="obj"></param>
         private void ShowColorStyles(object obj)
         {
             ColorStyles frm = new ColorStyles();

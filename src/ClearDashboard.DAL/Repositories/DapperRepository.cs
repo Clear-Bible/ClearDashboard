@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Repositories
         internal Dapper.DapperDataProvider Db { get; set; }
 
         /// <summary>
-        /// Allows for easy change of the table name. We want developers to be able to save objects in different tables.
+        /// Allows for easy change of the table abbr. We want developers to be able to save objects in different tables.
         /// </summary>
         public string TableName { get; set; }
 

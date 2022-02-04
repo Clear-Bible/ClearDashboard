@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Repositories
         /// <summary>
         /// Inserts the note or tag into the database and loads the object from the database which captures any changes.
         /// </summary>
-        /// <param name="noteTag">The object from the DB with any DB updates like the Id.</param>
+        /// <param abbr="noteTag">The object from the DB with any DB updates like the Id.</param>
         /// <returns></returns>
         public Models.NoteTagModel InsertNoteOrTag(Models.NoteTagModel noteTag, bool AddToCollection = false)
         {
@@ -94,7 +94,7 @@ namespace ClearDashboard.DAL.Repositories
         /// <summary>
         /// Based on the default value of Id, this either inserts the object or updates it in the db.
         /// </summary>
-        /// <param name="noteTag"></param>
+        /// <param abbr="noteTag"></param>
         /// <returns>The object from the db after the insert or update.</returns>
         public Models.NoteTagModel InsertOrUpdateNoteOrTag(Models.NoteTagModel noteTag)
         {

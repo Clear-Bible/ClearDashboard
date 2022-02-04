@@ -12,6 +12,30 @@ namespace ClearDashboard.Common.Models
         [XmlElement(ElementName = "FullName")]
         public string FullName { get; set; }
 
+        [XmlElement(ElementName = "Guid")]
+        public string Guid { get; set; }
+
+        [XmlElement(ElementName = "NormalizationForm")]
+        public string NormalizationForm { get; set; }
+
+        [XmlElement(ElementName = "Language")]
+        public string Language { get; set; }
+
+        [XmlElement(ElementName = "DefaultFont")]
+        public string DefaultFont { get; set; }
+
+        [XmlElement(ElementName = "Encoding")]
+        public string Encoding { get; set; }
+
+        [XmlElement(ElementName = "LanguageIsoCode")]
+        public string LanguageIsoCode { get; set; }
+
+        [XmlElement(ElementName = "BaseTranslation")]
+        public string BaseTranslation { get; set; }
+
+        [XmlElement(ElementName = "TranslationInfo")]
+        public string TranslationInfo { get; set; }
+
         [XmlElement(ElementName = "Copyright")]
         public string Copyright { get; set; }
 
