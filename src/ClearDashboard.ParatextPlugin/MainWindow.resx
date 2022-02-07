@@ -61,64 +61,64 @@
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element abbr="root" msdata:IsDataSet="true">
+    <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
-          <xsd:element abbr="metadata">
+          <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element abbr="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute abbr="abbr" use="required" type="xsd:string" />
-              <xsd:attribute abbr="type" type="xsd:string" />
-              <xsd:attribute abbr="mimetype" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
               <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
-          <xsd:element abbr="assembly">
+          <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute abbr="alias" type="xsd:string" />
-              <xsd:attribute abbr="abbr" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
-          <xsd:element abbr="data">
+          <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element abbr="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element abbr="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute abbr="abbr" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute abbr="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute abbr="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
               <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
-          <xsd:element abbr="resheader">
+          <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element abbr="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute abbr="abbr" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader abbr="resmimetype">
+  <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
-  <resheader abbr="version">
+  <resheader name="version">
     <value>2.0</value>
   </resheader>
-  <resheader abbr="reader">
+  <resheader name="reader">
     <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <resheader abbr="writer">
+  <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" abbr="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data abbr="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAyAAAAEcCAYAAAA/V9CXAAABgWlDQ1BzUkdCIElFQzYxOTY2LTIuMQAA
         KM+Vkc8rRFEUxz8zQyNGFEqxeGlYIT9qYmMxk1+FxRjl1+bNMz/UzHi996TJVtlOUWLj14K/gK2yVopI

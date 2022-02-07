@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.NamedPipes.Models;
+using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
 using Microsoft.Win32;
 using NamedPipes;
@@ -14,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClearDashboard.ParatextPlugin
+namespace ClearDashboardPlugin
 {
     public partial class MainWindow : EmbeddedPluginControl
     {
@@ -78,7 +79,7 @@ namespace ClearDashboard.ParatextPlugin
             {
                 if (_clearSuitePath != string.Empty)
                 {
-                    _serverPipe = new ServerPipe("ClearSuitePlugin", p => p.StartStringReaderAsync());
+                    _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
                     _serverPipe.DataReceived += ServerPipeOnDataReceived;
                     AppendText(MsgColor.Green, "Server Pipe Created");
 
@@ -113,8 +114,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// this window is closing event
         /// </summary>
-        /// <param abbr="sender"></param>
-        /// <param abbr="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void MainWindow_Disposed(object sender, EventArgs e)
         {
             // this user control is closing - clean up pipe
@@ -168,7 +169,7 @@ namespace ClearDashboard.ParatextPlugin
 
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
-            parent.SetTitle(ClearSuitePlugin.pluginName);
+            parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
             parent.ProjectChanged += ProjectChanged;
             parent.VerseRefChanged += VerseRefChanged;
 
@@ -217,9 +218,9 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Paratext has a verse change
         /// </summary>
-        /// <param abbr="sender"></param>
-        /// <param abbr="oldReference"></param>
-        /// <param abbr="newReference"></param>
+        /// <param name="sender"></param>
+        /// <param name="oldReference"></param>
+        /// <param name="newReference"></param>
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
 
@@ -236,8 +237,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// The client has sent a message through the pipe to us
         /// </summary>
-        /// <param abbr="sender"></param>
-        /// <param abbr="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
         {
             NamedPipeMessage msg = null;
@@ -256,27 +257,7 @@ namespace ClearDashboard.ParatextPlugin
             switch (msg.actionType)
             {
                 case "GetBibilicalTerms":
-                    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
-                    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
-
-                    GetBibilicalTerms bt = new GetBibilicalTerms(ProjectList, m_project, m_host);
-                    List<BiblicalTermsData> biblicalTermList = bt.ProcessBiblicalTerms(m_project);
-
-                    var dataPayload = JsonConvert.SerializeObject(biblicalTermList, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-
-                    NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.BiblicalTerms, "", dataPayload);
-                    var msgSend = msgOut.CreateMessage();
-
-                    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
-
-                    await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-
-                    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: msgSend sent");
-                    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
+                    await GetBibilicalTerms(msg);
                     break;
                 case "GetTargetVerses":
                     await ShowUSXScripture().ConfigureAwait(false);
@@ -288,16 +269,52 @@ namespace ClearDashboard.ParatextPlugin
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
-                    msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
-                    msgSend = msgOut.CreateMessage();
+                    var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
+                    var msgSend = msgOut.CreateMessage();
 
                     await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
                     AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
+
+                    await ShowUSXScripture().ConfigureAwait(false);
+
+                    await GetBibilicalTerms(msg);
                     break;
                 case "OnDisconnected":
                     AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+
+                    await Task.Delay(2000).ConfigureAwait(true);
+
+                    btnRestart_Click(null, null);
                     break;
             }
+        }
+
+        private async Task GetBibilicalTerms(NamedPipeMessage msg)
+        {
+            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
+            AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
+            string dataPayload = "";
+
+            await Task.Run(() => { 
+                GetBibilicalTerms bt = new GetBibilicalTerms(ProjectList, m_project, m_host);
+                List<BiblicalTermsData> biblicalTermList = bt.ProcessBiblicalTerms(m_project);
+
+                dataPayload = JsonConvert.SerializeObject(biblicalTermList, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+            }).ConfigureAwait(true);
+
+            NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.BiblicalTerms, "", dataPayload);
+            var msgSend = msgOut.CreateMessage();
+
+            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
+
+            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+
+            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: msgSend sent");
+            AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
         }
 
         /// <summary>
@@ -396,8 +413,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param abbr="sError"></param>
-        /// <param abbr="color"></param>
+        /// <param name="sError"></param>
+        /// <param name="color"></param>
         internal void AppendText(string sError, StringBuilder sb)
         {
             //check for threading issues
@@ -416,8 +433,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param abbr="sMsg"></param>
-        /// <param abbr="color"></param>
+        /// <param name="sMsg"></param>
+        /// <param name="color"></param>
         internal void AppendText(MsgColor color, string sMsg)
         {
             //check for threading issues
@@ -449,8 +466,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Force a restart of the named pipes
         /// </summary>
-        /// <param abbr="sender"></param>
-        /// <param abbr="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnRestart_Click(object sender, EventArgs e)
         {
             // disconnect the pipe
@@ -459,7 +476,7 @@ namespace ClearDashboard.ParatextPlugin
             await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
 
             // reconnect the pipe
-            _serverPipe = new ServerPipe("ClearSuitePlugin", p => p.StartStringReaderAsync());
+            _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
             _serverPipe.DataReceived += ServerPipeOnDataReceived;
 
             // clear out the existing data

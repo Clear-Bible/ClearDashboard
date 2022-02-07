@@ -10,6 +10,23 @@ namespace ClearDashboard.Common.Models
 {
     public class ParatextProject : INotifyPropertyChanged
     {
+        public enum eProjectType
+        {
+            Unknown,
+            Standard,
+            Resource,
+            BackTranslation,
+            Auxiliary,
+            Daughter,
+            MarbleResource,
+        }
+
+        public enum eDirType
+        {
+            Project,
+            Resources
+        }
+
         public Dictionary<int, ParatextBookName> BookNames = new Dictionary<int, ParatextBookName>
         {
             {01, new ParatextBookName{code="GEN", abbr = "Gen", shortname ="Genesis", longname ="Genesis"}},
@@ -81,6 +98,14 @@ namespace ClearDashboard.Common.Models
         };
 
 
+        private eDirType _dirType = eDirType.Project;
+        public eDirType DirType
+        {
+            get => _dirType;
+            set { _dirType = value; }
+        }
+
+
         private string _fullName;
         public string FullName
         {
@@ -92,60 +117,104 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+        private eProjectType _projectType;
+
+        public eProjectType ProjectType
+        {
+            get => _projectType;
+            set
+            {
+                _projectType = value;
+                OnPropertyChanged(nameof(ProjectType));
+            }
+        }
+
         private string _guid;
         public string Guid
         {
-            get { return _guid; }
-            set { _guid = value; }
+            get => _guid;
+            set
+            {
+                _guid = value;
+                OnPropertyChanged(nameof(Guid));
+            }
         }
 
         private string _Language;
         public string Language
         {
-            get { return _Language; }
-            set { _Language = value; }
+            get => _Language;
+            set
+            {
+                _Language = value;
+                OnPropertyChanged(nameof(Language));
+            }
         }
 
         private string _Encoding;
         public string Encoding
         {
-            get { return _Encoding; }
-            set { _Encoding = value; }
+            get => _Encoding;
+            set
+            {
+                _Encoding = value;
+                OnPropertyChanged(nameof(Encoding));
+            }
         }
 
         private string _LanguageIsoCode;
         public string LanguageIsoCode
         {
-            get { return _LanguageIsoCode; }
-            set { _LanguageIsoCode = value; }
+            get => _LanguageIsoCode;
+            set
+            {
+                _LanguageIsoCode = value;
+                OnPropertyChanged(nameof(LanguageIsoCode));
+            }
         }
 
         private Translation_Info _TranslationInfo;
         public Translation_Info TranslationInfo
         {
-            get { return _TranslationInfo; }
-            set { _TranslationInfo = value; }
+            get => _TranslationInfo;
+            set
+            {
+                _TranslationInfo = value;
+                OnPropertyChanged(nameof(TranslationInfo));
+            }
         }
 
         private Translation_Info _BaseTranslation;
         public Translation_Info BaseTranslation
         {
-            get { return _BaseTranslation; }
-            set { _BaseTranslation = value; }
+            get => _BaseTranslation;
+            set
+            {
+                _BaseTranslation = value;
+                OnPropertyChanged(nameof(BaseTranslation));
+            }
         }
 
         private string _DefaultFont;
         public string DefaultFont
         {
-            get { return _DefaultFont; }
-            set { _DefaultFont = value; }
+            get => _DefaultFont; 
+            set
+            {
+                _DefaultFont = value;
+                OnPropertyChanged(nameof(DefaultFont));
+            }
         }
 
         private string _NormalizationForm;
         public string NormalizationForm
         {
-            get { return _NormalizationForm; }
-            set { _NormalizationForm = value; }
+            get => _NormalizationForm;
+            set
+            {
+                _NormalizationForm = value;
+                OnPropertyChanged(nameof(NormalizationForm));
+            }
         }
 
         private string _name;
@@ -177,54 +246,7 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _projectPath = value;
-                DirectoryPath = _projectPath.Replace("settings.xml", "");
-
-                if (!String.IsNullOrEmpty(Name))
-                {
-                    string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    ClearEngineDirectoryPath = Path.Combine(appPath, "CLEAR_Projects", Name,
-                        "ClearEngine");
-
-                    //check to see if the directory exists already
-                    string newDir = Path.Combine(appPath, "CLEAR_Projects");
-                    if (!Directory.Exists(newDir))
-                    {
-                        try
-                        {
-                            Directory.CreateDirectory(newDir);
-                        }
-                        catch (Exception)
-                        {
-                            return;
-                        }
-                    }
-
-                    newDir = Path.Combine(newDir, Name);
-                    if (!Directory.Exists(newDir))
-                    {
-                        try
-                        {
-                            Directory.CreateDirectory(newDir);
-                        }
-                        catch (Exception)
-                        {
-                            return;
-                        }
-                    }
-
-                    newDir = Path.Combine(newDir, "ClearEngine");
-                    if (!Directory.Exists(newDir))
-                    {
-                        try
-                        {
-                            Directory.CreateDirectory(newDir);
-                        }
-                        catch (Exception)
-                        {
-                            return;
-                        }
-                    }
-                }
+                OnPropertyChanged(nameof(ProjectPath));
             }
         }
 
@@ -287,7 +309,7 @@ namespace ClearDashboard.Common.Models
 
     public class Translation_Info
     {
-        public string projectType { get; set; } = "";
+        public ParatextProject.eProjectType projectType { get; set; } = ParatextProject.eProjectType.Unknown;
         public string projectName { get; set; } = "";
         public string projectGuid { get; set; } = "";
     }
