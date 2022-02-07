@@ -104,6 +104,10 @@ namespace ClearDashboard.Wpf.Views
             }
         }
 
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 
     public class ItemInfo
