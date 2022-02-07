@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Reflection;
 using System.Windows.Input;
+using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
 
@@ -12,12 +13,28 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Props
 
+        //Connection to the DAL
+        DAL.StartUp _startup;
+
+        private string _paratextUserName;
+        public string ParatextUserName
+        {
+            get => _paratextUserName;
+            set { SetProperty(ref _paratextUserName, value); }
+        }
+
+
         private string _version;
         public string Version
         {
             get => _version;
             set { SetProperty(ref _version, value); }
         }
+
+        #endregion
+
+        #region ObservableProps
+
 
         #endregion
 
@@ -35,6 +52,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        #region events
+
+
+        #endregion
+
 
         #region Startup
 
@@ -46,16 +68,31 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // wire up the commands
-            //ColorStylesCommand = new RelayCommand(ShowColorStyles, param => this.canExecute);
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
+
+            // listen for username changes in Paratext
+            DAL.StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            _startup = new DAL.StartUp();
         }
-
-
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Capture the current Paratext username
+        /// </summary>
+        /// <param abbr="e"></param>
+        private void HandleSetParatextUserNameEvent(object sender, EventArgs e)
+        {
+            var args = (CustomEvents.ParatextUsernameEventArgs)e;
+            ParatextUserName = args.ParatextUserName;
+        }
+
+        /// <summary>
+        /// Show the ColorStyles form
+        /// </summary>
+        /// <param abbr="obj"></param>
         private void ShowColorStyles(object obj)
         {
             ColorStyles frm = new ColorStyles();

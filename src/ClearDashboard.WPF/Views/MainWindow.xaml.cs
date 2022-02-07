@@ -3,6 +3,7 @@ using ClearDashboard.Wpf.Properties;
 using System.Net.Mime;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf
@@ -27,6 +28,15 @@ namespace ClearDashboard.Wpf
             this.Top = userPrefs.WindowTop;
             this.Left = userPrefs.WindowLeft;
             this.WindowState = userPrefs.WindowState;
+
+            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            {
+                Toggle.IsChecked = true;
+            }
+            else
+            {
+                Toggle.IsChecked = false;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

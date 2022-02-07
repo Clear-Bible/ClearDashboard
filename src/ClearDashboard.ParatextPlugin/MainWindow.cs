@@ -113,8 +113,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// this window is closing event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param abbr="sender"></param>
+        /// <param abbr="e"></param>
         private async void MainWindow_Disposed(object sender, EventArgs e)
         {
             // this user control is closing - clean up pipe
@@ -217,9 +217,9 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Paratext has a verse change
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="oldReference"></param>
-        /// <param name="newReference"></param>
+        /// <param abbr="sender"></param>
+        /// <param abbr="oldReference"></param>
+        /// <param abbr="newReference"></param>
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
 
@@ -236,8 +236,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// The client has sent a message through the pipe to us
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param abbr="sender"></param>
+        /// <param abbr="e"></param>
         private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
         {
             NamedPipeMessage msg = null;
@@ -396,8 +396,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param name="sError"></param>
-        /// <param name="color"></param>
+        /// <param abbr="sError"></param>
+        /// <param abbr="color"></param>
         internal void AppendText(string sError, StringBuilder sb)
         {
             //check for threading issues
@@ -416,8 +416,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param name="sMsg"></param>
-        /// <param name="color"></param>
+        /// <param abbr="sMsg"></param>
+        /// <param abbr="color"></param>
         internal void AppendText(MsgColor color, string sMsg)
         {
             //check for threading issues
@@ -449,8 +449,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Force a restart of the named pipes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param abbr="sender"></param>
+        /// <param abbr="e"></param>
         private async void btnRestart_Click(object sender, EventArgs e)
         {
             // disconnect the pipe

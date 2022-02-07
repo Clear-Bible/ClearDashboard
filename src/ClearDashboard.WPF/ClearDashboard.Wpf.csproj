@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,7 +52,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
-    <ProjectReference Include="..\ClearDashboard.ParatextPlugin\ClearDashboard.ParatextPlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

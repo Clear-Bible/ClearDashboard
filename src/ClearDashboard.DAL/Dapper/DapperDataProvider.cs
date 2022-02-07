@@ -35,8 +35,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Create a connection to a DB file at the path location. Will attempt to create the path and DB file if createFile is true.
         /// </summary>
-        /// <param name="dbFilePath">The full path including file name and extension. The extension should be '.sqlite'.</param>
-        /// <param name="createFile">If true it will create the DB file if it does not exist.</param>
+        /// <param abbr="dbFilePath">The full path including file abbr and extension. The extension should be '.sqlite'.</param>
+        /// <param abbr="createFile">If true it will create the DB file if it does not exist.</param>
         public DapperDataProvider(string dbFilePath, bool createFile = false)
         {
             // Check for any errors in the path and filename.
@@ -55,8 +55,8 @@ namespace ClearDashboard.DAL.Dapper
         /// If an INSERT or UPDATE query returns the updated record, please use ExecuteGetFirst or ExecuteGetFirstAsync.
         /// Use Delete to delete a record since it will also delete the object.
         /// </summary>
-        /// <param name="query">A text SQL statement.</param>
-        /// <param name="queryObj">Parameter POCO object</param>
+        /// <param abbr="query">A text SQL statement.</param>
+        /// <param abbr="queryObj">Parameter POCO object</param>
         /// <returns>Number of records inserted, updated, or deleted. 
         /// Can also be used to create tables and indexes.</returns>
         public int ExecuteQuery(string query, object queryObj)
@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Executes the query, and if the result is 1 the record has been deleted.
         /// </summary>
-        /// <param name="objToDelete"></param>
+        /// <param abbr="objToDelete"></param>
         /// <returns>The number of records changed.</returns>
         public async Task<int> DeleteAsync(DataObject dataObj, string query)
         {
@@ -82,8 +82,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Inserts an object into the DB.
         /// </summary>
-        /// <typeparam name="T">Type of the object being inserted into the DB</typeparam>
-        /// <param name="dataObj">The actual data object</param>
+        /// <typeparam abbr="T">Type of the object being inserted into the DB</typeparam>
+        /// <param abbr="dataObj">The actual data object</param>
         /// <returns>The data object as read from the DB.</returns>
         public T Insert<T>(DataObject dataObj, string query)
         {
@@ -95,8 +95,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Inserts an object into the DB.
         /// </summary>
-        /// <typeparam name="T">Type of the object being inserted into the DB</typeparam>
-        /// <param name="dataObj">The actual data object</param>
+        /// <typeparam abbr="T">Type of the object being inserted into the DB</typeparam>
+        /// <param abbr="dataObj">The actual data object</param>
         /// <returns>The data object as read from the DB.</returns>
         public async Task<T> InsertAsync<T>(DataObject dataObj, string query)
         {
@@ -108,8 +108,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Updates an object in the DB.
         /// </summary>
-        /// <typeparam name="T">Type of the object being inserted into the DB</typeparam>
-        /// <param name="dataObj">The actual data object</param>
+        /// <typeparam abbr="T">Type of the object being inserted into the DB</typeparam>
+        /// <param abbr="dataObj">The actual data object</param>
         /// <returns>The data object as read from the DB.</returns>
         public async Task<T> UpdateAsync<T>(DataObject dataObj, string query)
         {
@@ -121,9 +121,9 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Returns a collection of records that matches the query
         /// </summary>
-        /// <typeparam name="T">POCO type of the return record</typeparam>
-        /// <param name="query">SQL query</param>
-        /// <param name="queryObj">Parameter data in a POCO to be submitted in the query.</param>
+        /// <typeparam abbr="T">POCO type of the return record</typeparam>
+        /// <param abbr="query">SQL query</param>
+        /// <param abbr="queryObj">Parameter data in a POCO to be submitted in the query.</param>
         /// <returns>A collection of POCOs record based on the type passed to the method.</returns>
         public IEnumerable<T> ExecuteGet<T>(string query, object queryObj)
         {
@@ -136,9 +136,9 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Returns the first record that matches the query
         /// </summary>
-        /// <typeparam name="T">POCO type of the return record</typeparam>
-        /// <param name="query">SQL query</param>
-        /// <param name="queryObj">Parameter data in a POCO to be submitted in the query.</param>
+        /// <typeparam abbr="T">POCO type of the return record</typeparam>
+        /// <param abbr="query">SQL query</param>
+        /// <param abbr="queryObj">Parameter data in a POCO to be submitted in the query.</param>
         /// <returns>A single POCO record based on the type passed to the method.</returns>
         public T ExecuteGetFirst<T>(string query, object queryObj)
         {
@@ -151,9 +151,9 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Threaded. Returns a collection of records that matches the query.
         /// </summary>
-        /// <typeparam name="T">POCO type of the return record.</typeparam>
-        /// <param name="query">SQL query</param>
-        /// <param name="queryObj">Parameter data in a POCO to be submitted in the query.</param>
+        /// <typeparam abbr="T">POCO type of the return record.</typeparam>
+        /// <param abbr="query">SQL query</param>
+        /// <param abbr="queryObj">Parameter data in a POCO to be submitted in the query.</param>
         /// <returns>A collection of POCOs record based on the type passed to the method.</returns>
         public async Task<IEnumerable<T>> ExecuteGetAsync<T>(string query, object queryObj)
         {
@@ -166,9 +166,9 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Threaded. Returns the first record that matches the query.
         /// </summary>
-        /// <typeparam name="T">POCO type of the return record.</typeparam>
-        /// <param name="query">SQL query.</param>
-        /// <param name="queryObj">Parameter data in a POCO to be submitted in the query.</param>
+        /// <typeparam abbr="T">POCO type of the return record.</typeparam>
+        /// <param abbr="query">SQL query.</param>
+        /// <param abbr="queryObj">Parameter data in a POCO to be submitted in the query.</param>
         /// <returns>A single POCO record based on the type passed to the method.</returns>
         public async Task<T> ExecuteGetFirstAsync<T>(string query, object queryObj)
         {
@@ -181,8 +181,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Given just a filename this method finds the path of My Documents and possibly creates and opens the SqLite file.
         /// </summary>
-        /// <param name="dbFileNameStr">A database filename with or without the extension.</param>
-        /// <param name="createFile">If true this will try to create the file if it does not exist.</param>
+        /// <param abbr="dbFileNameStr">A database filename with or without the extension.</param>
+        /// <param abbr="createFile">If true this will try to create the file if it does not exist.</param>
         private void CreateConnectionToFilename(string dbFileNameStr, bool createFile = false)
         {
             string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -200,8 +200,8 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Creates the DB connection and sets up Type Handlers.
         /// </summary>
-        /// <param name="dbFilePath">The full path including file name and extension. The extension should be '.sqlite'.</param>
-        /// <param name="createFile">If true it will create the DB file if it does not exist.</param>
+        /// <param abbr="dbFilePath">The full path including file abbr and extension. The extension should be '.sqlite'.</param>
+        /// <param abbr="createFile">If true it will create the DB file if it does not exist.</param>
         private void CreateConnection(string dbFilePath, bool createFile = false)
         {
             if (createFile && !File.Exists(dbFilePath))
@@ -223,7 +223,7 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Check the filename and path for errors.
         /// </summary>
-        /// <param name="dbPathFileName"></param>
+        /// <param abbr="dbPathFileName"></param>
         /// <returns></returns>
         private string DatabasePathFileNameErrors(string dbPathFileName)
         {
@@ -253,7 +253,7 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Create and test the connection.
         /// </summary>
-        /// <param name="connStr">A valid SqLite connection string.</param>
+        /// <param abbr="connStr">A valid SqLite connection string.</param>
         private void ConnFromConnectionString(string connStr)
         {
             Conn = new SQLiteConnection(connStr);
@@ -274,7 +274,7 @@ namespace ClearDashboard.DAL.Dapper
         /// <summary>
         /// Check for common problems with queries.
         /// </summary>
-        /// <param name="query">SQL query text</param>
+        /// <param abbr="query">SQL query text</param>
         /// <exception cref="ArgumentException"></exception>
         private static void CheckQuery(string query)
         {
