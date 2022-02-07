@@ -88,7 +88,12 @@
                                                     <ColumnDefinition Width="150" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
                                                 <TextBlock
+                                                    Grid.Row="0"
                                                     Grid.Column="0"
                                                     Margin="2"
                                                     HorizontalAlignment="Left"
@@ -96,9 +101,19 @@
                                                     Text="{Binding Name}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
+                                                    Grid.Row="0"
                                                     Grid.Column="1"
+                                                    Margin="2"
                                                     HorizontalAlignment="Left"
                                                     Text="{Binding Language}"
+                                                    TextWrapping="Wrap" />
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    Grid.ColumnSpan="2"
+                                                    Grid.Row="1"
+                                                    Margin="2"
+                                                    HorizontalAlignment="Left"
+                                                    Text="{Binding TranslationInfo.projectType}"
                                                     TextWrapping="Wrap" />
                                             </Grid>
                                         </Border>

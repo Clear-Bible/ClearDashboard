@@ -1,5 +1,5 @@
 ﻿
-namespace ClearDashboard.ParatextPlugin
+namespace ClearDashboardPlugin
 {
 	partial class MainWindow
 	{
@@ -11,7 +11,7 @@ namespace ClearDashboard.ParatextPlugin
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		/// <param abbr="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))

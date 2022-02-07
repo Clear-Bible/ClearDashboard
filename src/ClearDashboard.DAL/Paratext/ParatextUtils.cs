@@ -85,7 +85,7 @@ namespace ClearDashboard.DAL.Paratext
                 // read in settings.xml file
                 if (File.Exists(sSettingFilePath))
                 {
-                    var project = GetSettingFileInfo(sSettingFilePath);
+                    var project = GetSettingFileInfo(sSettingFilePath, ParatextProject.eDirType.Project);
                     if (project.FullName != "")
                     {
                         // get the books
@@ -185,7 +185,13 @@ namespace ClearDashboard.DAL.Paratext
             return books;
         }
 
-        public ParatextProject GetSettingFileInfo(string sSettingFilePath)
+        /// <summary>
+        /// Parse through the Settings file and return back a ParatextProject obj
+        /// </summary>
+        /// <param name="sSettingFilePath"></param>
+        /// <param name="dirType"></param>
+        /// <returns></returns>
+        public ParatextProject GetSettingFileInfo(string sSettingFilePath, ParatextProject.eDirType dirType)
         {
             ParatextProject p = new ParatextProject();
 
@@ -258,12 +264,16 @@ namespace ClearDashboard.DAL.Paratext
                             var split = obj.TranslationInfo.Split(':');
                             if (split.Length >= 3)
                             {
+                                ParatextProject.eProjectType projType = GetProjectType(split[0], dirType);
+
                                 p.TranslationInfo = new Translation_Info
                                 {
-                                    projectType = "",
-                                    projectName = "",
-                                    projectGuid = ""
+                                    projectType = projType,
+                                    projectName = split[1],
+                                    projectGuid = split[2],
                                 };
+
+                                p.ProjectType = projType;
                             }
                         }
 
@@ -272,11 +282,13 @@ namespace ClearDashboard.DAL.Paratext
                             var split = obj.BaseTranslation.Split(':');
                             if (split.Length >= 3)
                             {
+                                ParatextProject.eProjectType projType = GetProjectType(split[0], dirType);
+
                                 p.BaseTranslation = new Translation_Info
                                 {
-                                    projectType = "",
-                                    projectName = "",
-                                    projectGuid = ""
+                                    projectType = projType,
+                                    projectName = split[1],
+                                    projectGuid = split[2],
                                 };
                             }
                         }
@@ -298,6 +310,44 @@ namespace ClearDashboard.DAL.Paratext
             return p;
         }
 
+        /// <summary>
+        /// convert from string to a project type enum
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="dirType"></param>
+        /// <returns></returns>
+        private ParatextProject.eProjectType GetProjectType(string s, ParatextProject.eDirType dirType)
+        {
+            s = s.ToUpper().Trim();
+
+            switch (s)
+            {
+                case "STANDARD":
+                    if (dirType == ParatextProject.eDirType.Project)
+                    {
+                        return ParatextProject.eProjectType.Standard;
+                    }
+                    else
+                    {
+                        return ParatextProject.eProjectType.Resource;
+                    }
+                    break;
+                case "BACKTRANSLATION":
+                    return ParatextProject.eProjectType.BackTranslation;
+                    break;
+                case "AUXILIARY":
+                    return ParatextProject.eProjectType.Auxiliary;
+                    break;
+                case "DAUGHTER":
+                    return ParatextProject.eProjectType.Daughter;
+                    break;
+                case "MARBLERESOURCE":
+                    return ParatextProject.eProjectType.MarbleResource;
+                    break;
+            }
+
+            return ParatextProject.eProjectType.Unknown;
+        }
 
         public static List<ParatextBook> GetBookList(ParatextProject project, string directory)
         {

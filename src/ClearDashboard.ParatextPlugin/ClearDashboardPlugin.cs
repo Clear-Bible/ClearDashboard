@@ -1,10 +1,11 @@
 ﻿using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
+using ClearDashboardPlugin;
 
 namespace ClearDashboard.ParatextPlugin
 {
-    public class ClearSuitePlugin : IParatextWindowPlugin
+    public class ClearDashboardPlugin : IParatextWindowPlugin
     {
         public const string pluginName = "ClearSuite Plugin";
         public string Name => pluginName;
