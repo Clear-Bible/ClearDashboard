@@ -28,11 +28,15 @@
 
         <WrapPanel Margin="5">
             <helpers:NavButton
-                ImageSource="/Resources/NewProject_Icon_96.png"
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/NewProject_Icon_128.png"
                 NavUri="/Views/CreateNewProjects.xaml"
                 Text="New Project" />
             <helpers:NavButton
-                ImageSource="/Resources/settings_logo_96.png"
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/settings_logo_128.png"
                 NavUri="/Views/Settings.xaml"
                 Text="Settings" />
         </WrapPanel>

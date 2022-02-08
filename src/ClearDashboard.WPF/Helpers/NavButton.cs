@@ -9,6 +9,13 @@ namespace ClearDashboard.Wpf.Helpers
     {
         #region Dependency Properties
 
+        public static readonly DependencyProperty ImageFillProperty =
+            DependencyProperty.Register("Stretch", typeof(Stretch), typeof(NavButton), new PropertyMetadata(null));
+        public Stretch Stretch
+        {
+            get { return (Stretch)GetValue(ImageFillProperty); }
+            set { SetValue(ImageFillProperty, value); }
+        }
 
         public static readonly DependencyProperty ImageSourceProperty = 
             DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(NavButton), new PropertyMetadata(null));

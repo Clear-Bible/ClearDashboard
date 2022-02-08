@@ -11,10 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\NewProject.png" />
+    <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Notes.png" />
     <None Remove="Resources\Settings.png" />
+    <None Remove="Resources\settings_logo_128.png" />
     <None Remove="Resources\settings_logo_96.png" />
   </ItemGroup>
 
@@ -41,7 +44,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\ClearDashboard_logo_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NewProject_Icon_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\NewProject_Icon_96.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\settings_logo_128.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\settings_logo_96.png">
