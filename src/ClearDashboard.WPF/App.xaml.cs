@@ -1,7 +1,12 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Windows;
+using System.Windows.Input;
 using ClearDashboard.Wpf.Properties;
+using ClearDashboard.Wpf.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace ClearDashboard.Wpf
 {
@@ -10,10 +15,29 @@ namespace ClearDashboard.Wpf
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        private readonly IHost _host;
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
+            await _host.StartAsync();
+
+            MainWindow = _host.Services.GetRequiredService<MainWindow>();
+            MainWindow.Show();
+
             SetTheme(Settings.Default.Theme);
+
             base.OnStartup(e);
+        }
+
+        protected override async void OnExit(ExitEventArgs e)
+        {
+            using (_host)
+            {
+                await _host.StopAsync();
+            }
+            _host.Dispose();
+
+            base.OnExit(e);
         }
 
         public void SetTheme(BaseTheme theme)
@@ -43,6 +67,27 @@ namespace ClearDashboard.Wpf
                 //This handles both Light and Inherit
                 Resources.MergedDictionaries.Insert(0, new ResourceDictionary { Source = new Uri(lightSource) });
             }
+        }
+
+        public App()
+        {
+            _host = Host.CreateDefaultBuilder()
+                .UseSerilog((host, loggerConfiguration) =>
+                {
+                    loggerConfiguration.WriteTo.File("ClearDashboard.log", rollingInterval: RollingInterval.Day)
+                        .WriteTo.Debug()
+                        .MinimumLevel.Debug();
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton<MainWindowViewModel>();
+
+                    services.AddSingleton<MainWindow>(s => new MainWindow()
+                    {
+                        DataContext = s.GetRequiredService<MainWindowViewModel>()
+                    });
+                })
+                .Build();
         }
     }
 }
