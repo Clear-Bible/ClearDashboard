@@ -159,6 +159,8 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(text, p.X);
                 DrawCanvas.Children.Add(text);
 
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
+
                 DrawTheCanvas();
             }
         }
@@ -799,6 +801,7 @@ namespace ClearDashboard.Wpf.Views
                         Debug.WriteLine(exception);
                     }
                 }
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
             }
 
             DrawTheCanvas();

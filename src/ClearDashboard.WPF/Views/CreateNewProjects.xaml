@@ -36,11 +36,13 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
+
         <Label
             Grid.Row="0"
+            Margin="0,0,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Content="New Projects"
+            Content="Create New Project"
             FontSize="25" />
 
         <!--  ROW 1  -->
@@ -154,7 +156,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 BorderThickness="0"
-                Command="NavigationCommands.BrowseBack">
+                Command="{Binding CreateNewProjectCommand}"
+                IsEnabled="{Binding ButtonEnabled}">
                 Generate New Project
             </Button>
         </Grid>

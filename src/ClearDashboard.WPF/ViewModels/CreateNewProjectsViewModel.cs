@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.Paratext;
+using ClearDashboard.Wpf.Helpers;
 using MvvmHelpers;
+using Newtonsoft.Json;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -15,15 +18,45 @@ namespace ClearDashboard.Wpf.ViewModels
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
+
+        private bool _ButtonEnabled;
+        public bool ButtonEnabled
+        {
+            get => _ButtonEnabled;
+            set { SetProperty(ref _ButtonEnabled, value, nameof(ButtonEnabled)); }
+        }
+
+
+
+        private List<ParatextProject> _LWCprojects = new List<ParatextProject>();
+        private ParatextProject _TargetProject = null; 
+        private List<ParatextProject> _BackTransProjects = new List<ParatextProject>();
+
         public ObservableRangeCollection<ParatextProject> ParatextProjects { get; set; } =
             new ObservableRangeCollection<ParatextProject>();
+
+
+        #endregion
+        private ICommand createNewProjectCommand { get; set; }
+        public ICommand CreateNewProjectCommand
+        {
+            get
+            {
+                return createNewProjectCommand;
+            }
+            set
+            {
+                createNewProjectCommand = value;
+            }
+        }
+        #region commands
 
 
         #endregion
 
         public CreateNewProjectsViewModel()
         {
-            // get the paratext project
+            createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
         public async Task Init()
@@ -39,11 +72,44 @@ namespace ClearDashboard.Wpf.ViewModels
                 ParatextProjects.AddRange(projects);
             }
 
-
-
             // get all the Paratext Resources (LWC)
+            // TODO
+
+        }
+
+        public void CreateNewProject(object obj)
+        {
+            if (_TargetProject == null)
+            {
+                // unlikely to be true
+                return;
+            }
+
+            DashboardProject dashboardProject = new DashboardProject();
+            dashboardProject.TargetProject = _TargetProject;
+            dashboardProject.LWCProjects = _LWCprojects;
+            dashboardProject.BTProjects = _BackTransProjects;
+            dashboardProject.CreationDate = DateTime.Now;
+            dashboardProject.ParatextUser = "";
 
 
+        }
+
+        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject)
+        {
+            _LWCprojects = new List<ParatextProject>(lWCproject);
+            _TargetProject = targetProject;
+            _BackTransProjects = new List<ParatextProject>(backTransProject);
+
+            // check to see if we have at least a target project
+            if (_TargetProject is null)
+            {
+                ButtonEnabled = false;
+            }
+            else
+            {
+                ButtonEnabled = true;
+            }
         }
     }
 }
