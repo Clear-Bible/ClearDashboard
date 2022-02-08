@@ -64,6 +64,9 @@ jobs:
       Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
+    - name: Always Fail # For testing the CI notifier in Slack.
+      uses: cutenode/action-always-fail@v1.0.1
+  
     - name: Checkout
       uses: actions/checkout@v2
       with:
