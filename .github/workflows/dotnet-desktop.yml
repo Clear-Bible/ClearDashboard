@@ -127,12 +127,9 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-    - name: Post results to a Slack channel
-      id: slack
-      uses: slackapi/slack-github-action@v1.18.0
+    - name: CINotify Email
+      uses: cinotify/github-action@v1.1.0
       with:
-        channel-id: 'CKC1D8GFN'
-        # For posting a simple plain text message
-        slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        to: elliott.stoddard@clear.bible
+        subject: "CI Job ${{ job.status }}"
+        body: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
