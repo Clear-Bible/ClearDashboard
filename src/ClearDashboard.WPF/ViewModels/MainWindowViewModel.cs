@@ -6,12 +6,17 @@ using System.Windows.Input;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
+using Microsoft.Extensions.Logging;
+using ILogger = Serilog.ILogger;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class MainWindowViewModel: ObservableObject
     {
         #region Props
+
+        private readonly ILogger<MainWindowViewModel> _logger;
+
 
         //Connection to the DAL
         DAL.StartUp _startup;
@@ -54,6 +59,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region events
 
+        /// <summary>
+        /// Capture the current Paratext username
+        /// </summary>
+        /// <param abbr="e"></param>
+        private void HandleSetParatextUserNameEvent(object sender, EventArgs e)
+        {
+            var args = (CustomEvents.ParatextUsernameEventArgs)e;
+            ParatextUserName = args.ParatextUserName;
+        }
 
         #endregion
 
@@ -62,6 +76,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public MainWindowViewModel()
         {
+            // default one for the XAML page
+        }
+
+        /// <summary>
+        /// Overload for DI of the logger
+        /// </summary>
+        /// <param name="logger"></param>
+        public MainWindowViewModel(ILogger<MainWindowViewModel> logger)
+        {
+            _logger = logger;
+
             //get the assembly version
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
@@ -78,16 +103,6 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Capture the current Paratext username
-        /// </summary>
-        /// <param abbr="e"></param>
-        private void HandleSetParatextUserNameEvent(object sender, EventArgs e)
-        {
-            var args = (CustomEvents.ParatextUsernameEventArgs)e;
-            ParatextUserName = args.ParatextUserName;
-        }
 
         /// <summary>
         /// Show the ColorStyles form
