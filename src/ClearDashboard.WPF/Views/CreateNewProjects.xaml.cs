@@ -171,15 +171,9 @@ namespace ClearDashboard.Wpf.Views
             _boxWidth = DrawCanvas.ActualWidth / 4; //width of each box
             _boxHeight = DrawCanvas.ActualHeight;  // Height of each box
 
-            const int iHeaderHeight = 50;
             const int cornerRadius = 8;
             int projectBoxWidth = (int)(_boxWidth * 0.5);
             const int projectBoxHeight = 40;
-
-            for (int i = 0; i < Application.Current.Resources.Count; i++)
-            {
-                Debug.WriteLine(Application.Current.Resources[i].ToString());
-            }
 
             DrawCanvas.Children.Clear();
             // ========================
@@ -194,33 +188,42 @@ namespace ClearDashboard.Wpf.Views
                 text.Width = _boxWidth;
 
                 Rectangle rect = new Rectangle();
-                rect.Height = DrawCanvas.ActualHeight - iHeaderHeight;
-                rect.Width = _boxWidth;
+                rect.Height = DrawCanvas.ActualHeight;
+                rect.Width = _boxWidth - 2;
                 rect.RadiusX = cornerRadius;
                 rect.RadiusY = cornerRadius;
-                rect.Opacity = 0.75;
+                rect.StrokeThickness = 2;
+                rect.Opacity = 0.5;
 
                 Point point = new Point();
-                point.Y = iHeaderHeight;
+                point.Y = 0;
                 switch (i)
                 {
                     case 0:
-                        rect.Fill = Application.Current.FindResource("TealLightBrush") as Brush;
+                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
+                        rect.Stroke = Application.Current.FindResource("OrangeLightBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("OrangeLightBrush") as Brush;
                         point.X = 0;
                         text.Text = "Source";
                         break;
                     case 1:
-                        rect.Fill = Application.Current.FindResource("PurpleLightBrush") as Brush;
+                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
+                        rect.Stroke = Application.Current.FindResource("BlueLightBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("BlueLightBrush") as Brush;
                         point.X = _boxWidth;
                         text.Text = "LWC(s)";
                         break;
                     case 2:
-                        rect.Fill = Application.Current.FindResource("OrangeLightBrush") as Brush;
+                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
+                        rect.Stroke = Application.Current.FindResource("PurpleLightBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("PurpleLightBrush") as Brush;
                         point.X = _boxWidth * 2;
                         text.Text = "Target";
                         break;
                     case 3:
-                        rect.Fill = Application.Current.FindResource("BlueLightBrush") as Brush;
+                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
+                        rect.Stroke = Application.Current.FindResource("TealLightBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("TealLightBrush") as Brush;
                         point.X = _boxWidth * 3;
                         text.Text = "Back Translation";
                         break;
@@ -268,10 +271,11 @@ namespace ClearDashboard.Wpf.Views
                 // no LWC's so connect target to source
                 if (_targetProject != null)
                 {
-
+                    var leftPt = new Point(_SourceConnectionPt.X + 6, _SourceConnectionPt.Y + 2);
+                    var rightPt = new Point(_TargetConnectionPtLeft.X - 6, _TargetConnectionPtLeft.Y + 2);
                     Point controlPtSource = new Point(_SourceConnectionPt.X + 20, _SourceConnectionPt.Y);
                     Point controlPtTarget = new Point(_TargetConnectionPtLeft.X - 20, _TargetConnectionPtLeft.Y);
-                    Path path = GenerateLine( _SourceConnectionPt, _TargetConnectionPtLeft, controlPtSource, controlPtTarget);
+                    Path path = GenerateLine(leftPt, rightPt, controlPtSource, controlPtTarget);
                     DrawCanvas.Children.Add(path);
                 }
             }
@@ -280,17 +284,21 @@ namespace ClearDashboard.Wpf.Views
                 // some LWC's so connect to Source
                 for (int i = 0; i < _LWCproject.Count; i++)
                 {
+                    var leftPt = new Point(_SourceConnectionPt.X + 6, _SourceConnectionPt.Y + 2);
+                    var rightPt = new Point(_LWCconnectionPtsLeft[i].X - 6, _LWCconnectionPtsLeft[i].Y + 2);
                     Point controlPtSource = new Point(_SourceConnectionPt.X + 20, _SourceConnectionPt.Y);
                     Point controlPtTarget = new Point(_LWCconnectionPtsLeft[i].X - 20, _LWCconnectionPtsLeft[i].Y);
-                    Path path = GenerateLine(_SourceConnectionPt, _LWCconnectionPtsLeft[i], controlPtSource, controlPtTarget);
+                    Path path = GenerateLine(leftPt, rightPt, controlPtSource, controlPtTarget);
                     DrawCanvas.Children.Add(path);
 
                     if (_targetProject != null)
                     {
+                        leftPt = new Point(_LWCconnectionPtsRight[i].X + 6, _LWCconnectionPtsRight[i].Y + 2);
+                        rightPt = new Point(_TargetConnectionPtLeft.X - 6, _TargetConnectionPtLeft.Y + 2);
                         // draw from right LWC to Target
                         controlPtSource = new Point(_LWCconnectionPtsRight[i].X - 20, _LWCconnectionPtsRight[i].Y); 
                         controlPtTarget = new Point(_TargetConnectionPtLeft.X + 20, _TargetConnectionPtLeft.Y);
-                        path = GenerateLine(_LWCconnectionPtsRight[i], _TargetConnectionPtLeft, controlPtSource, controlPtTarget);
+                        path = GenerateLine(leftPt, rightPt, controlPtSource, controlPtTarget);
                         DrawCanvas.Children.Add(path);
                     }
                 }
@@ -312,57 +320,12 @@ namespace ClearDashboard.Wpf.Views
                 controlPtRight.X.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture), controlPtRight.Y.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture),
                 rightPt.X.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture), rightPt.Y.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
 
-            var path = new Path
-            {
-                //Uid = sourceLoc.ToString() + "|" + targetLoc.ToString()  // put the alignment indexes into the UID
-            };
+            var path = new Path();
 
             path.Stroke = Brushes.CornflowerBlue;
             path.Data = Geometry.Parse(sPath);
+            path.StrokeThickness = 3;
 
-            // set up a hover trigger
-            Style style = new Style(typeof(Path), path.Style);
-
-
-            // current validation level line
-            Setter setterDefault = new Setter
-            {
-                Property = Path.OpacityProperty,
-                Value = 1.0
-            };
-            style.Setters.Add(setterDefault);
-
-            setterDefault = new Setter
-            {
-                Property = Path.StrokeThicknessProperty,
-                Value = 5.0
-            };
-            style.Setters.Add(setterDefault);
-
-
-            Trigger t = new Trigger
-            {
-                Property = Path.IsMouseOverProperty,
-                Value = true
-            };
-            Setter setter = new Setter
-            {
-                Property = OpacityProperty,
-                Value = 0.25,
-            };
-            t.Setters.Add(setter);
-
-            // current validation level line
-            setter = new Setter
-            {
-                Property = Path.StrokeThicknessProperty,
-                Value = 6.0,
-            };
-            t.Setters.Add(setter);
-
-
-            style.Triggers.Add(t);
-            path.Style = style;
             return path;
         }
 
@@ -379,7 +342,7 @@ namespace ClearDashboard.Wpf.Views
             _LWCconnectionPtsRight.Clear();
             _LWCconnectionPtsLeft.Clear();
 
-            const double separation = 50;
+            const double separation = 75;
             double offset = 0;
             if (_LWCproject.Count > 1)
             {
@@ -469,6 +432,28 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(circlePt, lPt.X - 5);
                 DrawCanvas.Children.Add(circlePt);
                 _LWCconnectionPtsLeft.Add(new Point(lPt.X, lPt.Y));
+
+                // draw the remove button
+                Button btn = new Button();
+                btn.Style = (Style)Application.Current.TryFindResource("MaterialDesignIconButton");
+                btn.Content = new MaterialDesignThemes.Wpf.PackIcon
+                    { Kind = MaterialDesignThemes.Wpf.PackIconKind.CloseCircle };
+                btn.Width = 25;
+                btn.Height = 25;
+                btn.Click += RemoveItem_Click;
+                btn.Uid = "LWC:" + _LWCproject[i].Name;
+                btn.Foreground = Brushes.Red;
+                btn.Effect =
+                    new DropShadowEffect
+                    {
+                        BlurRadius = 5,
+                        ShadowDepth = 2,
+                        Opacity = 0.75
+                    };
+
+                Canvas.SetTop(btn, point.Y - btn.Height / 2);
+                Canvas.SetLeft(btn, point.X + projectBoxWidth - btn.Width / 2);
+                DrawCanvas.Children.Add(btn);
 
                 offset -= separation * 2;
             }
@@ -576,25 +561,16 @@ namespace ClearDashboard.Wpf.Views
             btn.Click += RemoveItem_Click;
             btn.Uid = "TARGET:";
             btn.Foreground = Brushes.Red;
+            btn.Effect =
+                new DropShadowEffect
+                {
+                    BlurRadius = 5,
+                    ShadowDepth = 2,
+                    Opacity = 0.75
+                };
             Canvas.SetTop(btn, point.Y - btn.Height / 2);
             Canvas.SetLeft(btn, point.X + projectBoxWidth - btn.Width / 2);
             DrawCanvas.Children.Add(btn);
-
-
-            /*
-             * 
-             *<Button
-  Style="{StaticResource MaterialDesignIconButton}"
-  ToolTip="MaterialDesignIconButton"
-  Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-  <materialDesign:PackIcon
-    Kind="Play" />
-</Button>
-             *
-             */
-
-
         }
 
         private void RemoveItem_Click(object sender, RoutedEventArgs e)
@@ -608,9 +584,19 @@ namespace ClearDashboard.Wpf.Views
                 } 
                 else if (btn.Uid.StartsWith("LWC:"))
                 {
-                    // TODO
+                    var name = btn.Uid.Substring(4);
+                    var index = _LWCproject.FindIndex(a => a.Name == name);
+                    try
+                    {
+                        _LWCproject.RemoveAt(index);
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine(exception);
+                    }
+                    
                 }
-                else if (btn.Uid.StartsWith("LWC:"))
+                else if (btn.Uid.StartsWith("BT:"))
                 {
                     // TODO
                 }
