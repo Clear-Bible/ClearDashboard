@@ -64,8 +64,8 @@ jobs:
       Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
-    - name: Always Fail # For testing the CI notifier.
-      uses: cutenode/action-always-fail@v1.0.1
+    #- name: Always Fail # For testing the CI notifier.
+    #  uses: cutenode/action-always-fail@v1.0.1
   
     - name: Checkout
       uses: actions/checkout@v2
@@ -127,20 +127,30 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-    - name: Post to a Slack channel
-      id: slack
+    - name: Post success to a Slack channel
+      id: slack-success
       uses: slackapi/slack-github-action@v1.18.0
-      if: always()
+      if: "contains(job.status, 'success')"
       with:
         channel-id: 'CKC1D8GFN'
-        slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        slack-message: ":grin: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     
+    - name: Post fail to a Slack channel
+      id: slack-fail
+      uses: slackapi/slack-github-action@v1.18.0
+      if: "!contains(job.status, 'success')"
+      with:
+        channel-id: 'CKC1D8GFN'
+        slack-message: ":slightly_frowning_face: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        
     - name: CINotify Email
       uses: cinotify/github-action@v1.1.0
       if: always()
       with:
         to: 'elliott.stoddard@clear.bible'
         subject: 'CI Job ${{ job.status }}'
-        body: 'GitHub build result: ${{ job.status }}\r\n\r\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}'
+        body: 'GitHub build result: ${{ job.status }}   ${{ github.event.pull_request.html_url || github.event.head_commit.url }}'
