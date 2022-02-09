@@ -127,30 +127,28 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-    - name: Post success to a Slack channel
+    - name: Determine Job Status
+      uses: haya14busa/action-cond@v1
+      id: jobstatus
+      with:
+        cond: "contains(job.status, 'success')"
+        if_true: ':grin:'
+        if_false: ':poop:'
+    
+    - name: Post status to a Slack channel
       id: slack-success
       uses: slackapi/slack-github-action@v1.18.0
-      if: "contains(job.status, 'success')"
+      if: always()
       with:
         channel-id: 'CKC1D8GFN'
-        slack-message: ":grin: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        slack-message: "${{ steps.jobstatus.outputs.value }} GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     
-    - name: Post fail to a Slack channel
-      id: slack-fail
-      uses: slackapi/slack-github-action@v1.18.0
-      if: "!contains(job.status, 'success')"
-      with:
-        channel-id: 'CKC1D8GFN'
-        slack-message: ":slightly_frowning_face: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        
     - name: CINotify Email
       uses: cinotify/github-action@v1.1.0
       if: always()
       with:
         to: 'elliott.stoddard@clear.bible'
-        subject: 'CI Job ${{ job.status }}'
+        subject: '${{ steps.jobstatus.outputs.value }} CI Job ${{ job.status }}'
         body: 'GitHub build result: ${{ job.status }}   ${{ github.event.pull_request.html_url || github.event.head_commit.url }}'
