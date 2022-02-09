@@ -114,7 +114,7 @@ namespace ClearDashboard.Wpf.Views
                 switch (dropZone)
                 {
                     case eDropZones.Source:
-                        text.Text = "SOURCE";
+                        text.Text = "MANUSCRIPT";
                         break;
                     case eDropZones.LWC:
                         text.Text = "LWC";
@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Views
                                 t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
                                 if (t.Count() == 0)
                                 {
-                                    _BackTransProject.Add(project);
+                                    _BackTransProject.Add(btProject);
                                 }
                             }
                         }
@@ -209,38 +209,43 @@ namespace ClearDashboard.Wpf.Views
                 rect.Width = _boxWidth - 2;
                 rect.RadiusX = cornerRadius;
                 rect.RadiusY = cornerRadius;
-                rect.StrokeThickness = 2;
-                rect.Opacity = 0.5;
+                rect.StrokeThickness = 3;
+                //rect.Opacity = 0.5;
+                //rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
+                rect.Fill = Brushes.Transparent;
+                rect.Effect =
+                    new DropShadowEffect
+                    {
+                        BlurRadius = 2,
+                        ShadowDepth = 2,
+                        Opacity = 0.75
+                    };
 
                 Point point = new Point();
                 point.Y = 0;
                 switch (i)
                 {
                     case 0:
-                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
-                        rect.Stroke = Application.Current.FindResource("OrangeLightBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("OrangeLightBrush") as Brush;
+                        rect.Stroke = Application.Current.FindResource("OrangeDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("OrangeDarkBrush") as Brush;
                         point.X = 0;
-                        text.Text = "Source";
+                        text.Text = "Manuscript";
                         break;
                     case 1:
-                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
-                        rect.Stroke = Application.Current.FindResource("BlueLightBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("BlueLightBrush") as Brush;
+                        rect.Stroke = Application.Current.FindResource("BlueDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("BlueDarkBrush") as Brush;
                         point.X = _boxWidth;
                         text.Text = "LWC(s)";
                         break;
                     case 2:
-                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
-                        rect.Stroke = Application.Current.FindResource("PurpleLightBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("PurpleLightBrush") as Brush;
+                        rect.Stroke = Application.Current.FindResource("PurpleDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("PurpleDarkBrush") as Brush;
                         point.X = _boxWidth * 2;
                         text.Text = "Target";
                         break;
                     case 3:
-                        rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
-                        rect.Stroke = Application.Current.FindResource("TealLightBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("TealLightBrush") as Brush;
+                        rect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("TealDarkBrush") as Brush;
                         point.X = _boxWidth * 3;
                         text.Text = "Back Translation";
                         break;
@@ -399,7 +404,7 @@ namespace ClearDashboard.Wpf.Views
                 Rectangle targetRect = new Rectangle();
                 targetRect.Width = projectBoxWidth;
                 targetRect.Height = projectBoxHeight;
-                targetRect.Fill = Application.Current.FindResource("TealLightBrush") as Brush;
+                targetRect.Fill = Application.Current.FindResource("TealMidBrush") as Brush;
                 targetRect.RadiusX = 3;
                 targetRect.RadiusY = 3;
                 //sourceRect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
@@ -427,7 +432,7 @@ namespace ClearDashboard.Wpf.Views
 
                 // draw the 'Source' word
                 TextBlock text = new TextBlock();
-                text.FontSize = 18;
+                text.FontSize = 16;
                 text.FontWeight = FontWeights.Bold;
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 text.Width = _boxWidth;
@@ -539,7 +544,7 @@ namespace ClearDashboard.Wpf.Views
                 Rectangle targetRect = new Rectangle();
                 targetRect.Width = projectBoxWidth;
                 targetRect.Height = projectBoxHeight;
-                targetRect.Fill = Application.Current.FindResource("BlueLightBrush") as Brush;
+                targetRect.Fill = Application.Current.FindResource("BlueMidBrush") as Brush;
                 targetRect.RadiusX = 3;
                 targetRect.RadiusY = 3;
                 //sourceRect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
@@ -567,7 +572,7 @@ namespace ClearDashboard.Wpf.Views
 
                 // draw the 'Source' word
                 TextBlock text = new TextBlock();
-                text.FontSize = 18;
+                text.FontSize = 16;
                 text.FontWeight = FontWeights.Bold;
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 text.Width = _boxWidth;
@@ -669,7 +674,7 @@ namespace ClearDashboard.Wpf.Views
             Rectangle targetRect = new Rectangle();
             targetRect.Width = projectBoxWidth;
             targetRect.Height = projectBoxHeight;
-            targetRect.Fill = Application.Current.FindResource("PurpleLightBrush") as Brush;
+            targetRect.Fill = Application.Current.FindResource("PurpleMidBrush") as Brush;
             targetRect.RadiusX = 3;
             targetRect.RadiusY = 3;
             //sourceRect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
@@ -687,7 +692,7 @@ namespace ClearDashboard.Wpf.Views
 
             // draw the 'Source' word
             text = new TextBlock();
-            text.FontSize = 18;
+            text.FontSize = 16;
             text.FontWeight = FontWeights.Bold;
             text.HorizontalAlignment = HorizontalAlignment.Center;
             text.Width = _boxWidth;
@@ -828,11 +833,9 @@ namespace ClearDashboard.Wpf.Views
             Rectangle sourceRect = new Rectangle();
             sourceRect.Width = projectBoxWidth;
             sourceRect.Height = projectBoxHeight;
-            sourceRect.Fill = Application.Current.FindResource("OrangeLightBrush") as Brush;
+            sourceRect.Fill = Application.Current.FindResource("OrangeMidBrush") as Brush;
             sourceRect.RadiusX = 3;
             sourceRect.RadiusY = 3;
-            //sourceRect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
-            //sourceRect.StrokeThickness = 2;
             sourceRect.Effect =
                 new DropShadowEffect
                 {
@@ -846,11 +849,11 @@ namespace ClearDashboard.Wpf.Views
 
             // draw the 'Source' word
             text = new TextBlock();
-            text.FontSize = 18;
+            text.FontSize = 14;
             text.FontWeight = FontWeights.Bold;
             text.HorizontalAlignment = HorizontalAlignment.Center;
             text.Width = _boxWidth;
-            text.Text = "SOURCE";
+            text.Text = "MANUSCRIPT";
             sz = DrawingUtils.MeasureString(text.Text, text);
             additionalX = (projectBoxWidth - sz.Width) / 2;
             Canvas.SetLeft(text, point.X + additionalX);

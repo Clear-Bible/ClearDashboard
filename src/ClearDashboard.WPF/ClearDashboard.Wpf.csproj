@@ -90,4 +90,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="HelpFiles\NewProjectHelp_us.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+
 </Project>

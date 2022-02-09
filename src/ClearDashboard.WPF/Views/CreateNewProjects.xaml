@@ -52,93 +52,221 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="350" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
 
             <!--  ==========================  -->
             <!--  LIST OF PROJECTS  -->
             <!--  ==========================  -->
-            <ListView
+            <GroupBox
+                Grid.Row="0"
                 Grid.Column="0"
-                Margin="5"
-                ItemsSource="{Binding ParatextProjects}"
-                PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
-                PreviewMouseMove="listview_PreviewMouseMove"
-                Style="{StaticResource MaterialDesignListBox}">
-
-                <ListView.ItemTemplate>
+                Margin="0"
+                Header="PARATEXT PROJECTS">
+                <GroupBox.HeaderTemplate>
                     <DataTemplate>
-                        <Border
-                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="2"
-                            CornerRadius="3">
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="3"
-                                    Opacity=".5"
-                                    ShadowDepth="3" />
-                            </Border.Effect>
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="32"
+                                Height="32"
+                                VerticalAlignment="Center"
+                                Kind="ImageArea" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
 
-                                    <!--  PROJECT TEXT  -->
-                                    <StackPanel Background="{StaticResource PrimaryHueMidBrush}" Orientation="Vertical">
-                                        <Border Background="{StaticResource PrimaryHueDarkBrush}" CornerRadius="3">
-                                            <StackPanel Orientation="Vertical">
+                <ListView
+                    Margin="5"
+                    ItemsSource="{Binding ParatextProjects}"
+                    PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
+                    PreviewMouseMove="listview_PreviewMouseMove"
+                    Style="{StaticResource MaterialDesignListBox}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                                BorderThickness="2"
+                                CornerRadius="3">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="3"
+                                        Opacity=".5"
+                                        ShadowDepth="3" />
+                                </Border.Effect>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <!--  PROJECT TEXT  -->
+                                        <StackPanel Background="{StaticResource PrimaryHueMidBrush}" Orientation="Vertical">
+                                            <Border Background="{StaticResource PrimaryHueDarkBrush}" CornerRadius="3">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock
+                                                        Margin="2"
+                                                        HorizontalAlignment="Left"
+                                                        FontWeight="Bold"
+                                                        Text="{Binding Name}"
+                                                        TextWrapping="Wrap" />
+                                                    <TextBlock
+                                                        Width="250"
+                                                        Margin="2"
+                                                        HorizontalAlignment="Left"
+                                                        Text="{Binding FullName}"
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                            <StackPanel Orientation="Horizontal">
                                                 <TextBlock
-                                                    Grid.Row="0"
-                                                    Grid.Column="0"
+                                                    Width="100"
                                                     Margin="2"
                                                     HorizontalAlignment="Left"
-                                                    FontWeight="Bold"
-                                                    Text="{Binding Name}"
+                                                    FontSize="11"
+                                                    Text="{Binding TranslationInfo.projectType}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
-                                                    Grid.Row="1"
-                                                    Grid.Column="1"
                                                     Margin="2"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding FullName}"
+                                                    FontSize="11"
+                                                    Text="{Binding Language}"
                                                     TextWrapping="Wrap" />
 
                                             </StackPanel>
-                                        </Border>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock
-                                                Width="100"
-                                                Margin="2"
-                                                HorizontalAlignment="Left"
-                                                FontSize="11"
-                                                Text="{Binding TranslationInfo.projectType}"
-                                                TextWrapping="Wrap" />
-                                            <TextBlock
-                                                Width="370"
-                                                Margin="2"
-                                                HorizontalAlignment="Left"
-                                                FontSize="11"
-                                                Text="{Binding Language}"
-                                                TextWrapping="Wrap" />
-
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </Border>
+                            </Border>
 
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+
+                </ListView>
+            </GroupBox>
+
+
+            <!--  ==========================  -->
+            <!--  LIST OF RESOURCES  -->
+            <!--  ==========================  -->
+            <GroupBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,5,0,0"
+                materialDesign:ColorZoneAssist.Mode="SecondaryMid"
+                Header="PARATEXT RESOURCES"
+                Style="{DynamicResource MaterialDesignGroupBox}">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="32"
+                                Height="32"
+                                VerticalAlignment="Center"
+                                Kind="ImageArea" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding}" />
+                        </StackPanel>
                     </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <ListView
+                    Margin="5"
+                    ItemsSource="{Binding ParatextProjects}"
+                    PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
+                    PreviewMouseMove="listview_PreviewMouseMove"
+                    Style="{StaticResource MaterialDesignListBox}">
 
-                </ListView.ItemTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                BorderBrush="{StaticResource SecondaryHueMidBrush}"
+                                BorderThickness="2"
+                                CornerRadius="3">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="3"
+                                        Opacity=".5"
+                                        ShadowDepth="3" />
+                                </Border.Effect>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
 
-            </ListView>
+                                        <!--  PROJECT TEXT  -->
+                                        <StackPanel Background="{StaticResource SecondaryHueMidBrush}" Orientation="Vertical">
+                                            <Border Background="{StaticResource SecondaryHueMidBrush}" CornerRadius="3">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock
+                                                        Margin="2"
+                                                        HorizontalAlignment="Left"
+                                                        FontWeight="Bold"
+                                                        Text="{Binding Name}"
+                                                        TextWrapping="Wrap" />
+                                                    <TextBlock
+                                                        Width="250"
+                                                        Margin="2"
+                                                        HorizontalAlignment="Left"
+                                                        Text="{Binding FullName}"
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock
+                                                    Width="100"
+                                                    Margin="2"
+                                                    HorizontalAlignment="Left"
+                                                    FontSize="11"
+                                                    Text="{Binding TranslationInfo.projectType}"
+                                                    TextWrapping="Wrap" />
+                                                <TextBlock
+                                                    Margin="2"
+                                                    HorizontalAlignment="Left"
+                                                    FontSize="11"
+                                                    Text="{Binding Language}"
+                                                    TextWrapping="Wrap" />
+
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+
+                </ListView>
+            </GroupBox>
+
+
 
             <Canvas
                 x:Name="DrawCanvas"
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="5"
                 AllowDrop="True"
                 PreviewDrop="Canvas_PreviewDrop" />
 
-            <FlowDocumentPageViewer Grid.Column="2" Document="{Binding helpText}" />
-
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="4"
+                BorderBrush="{StaticResource MaterialDesignShadowBrush}"
+                BorderThickness="2"
+                CornerRadius="3">
+                <FlowDocumentPageViewer Grid.Column="2" Document="{Binding HelpText}" />
+            </Border>
 
 
         </Grid>

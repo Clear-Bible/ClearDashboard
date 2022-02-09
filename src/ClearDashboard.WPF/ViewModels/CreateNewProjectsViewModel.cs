@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.Paratext;
@@ -17,6 +19,14 @@ namespace ClearDashboard.Wpf.ViewModels
         #region props
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
+
+
+        private FlowDocument _helpText;
+        public FlowDocument HelpText
+        {
+            get => _helpText;
+            set { SetProperty(ref _helpText, value, nameof(HelpText)); }
+        }
 
 
         private bool _ButtonEnabled;
@@ -61,19 +71,41 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task Init()
         {
+            // get the right help text
+            // TODO Work on the help regionalization
+            ResourceDictionary dict = new ResourceDictionary { Source = new Uri("/HelpFiles/NewProjectHelp_us.xaml", UriKind.Relative) };
+            var text = dict["helpText_us"] as FlowDocument;
+            if (text != null)
+            {
+                HelpText = text;
+            }
+
             // detect if Paratext is installed
             ParatextUtils paratextUtils = new ParatextUtils();
             ParatextVisible = await paratextUtils.IsParatextInstalledAsync().ConfigureAwait(true);
 
             if (ParatextVisible)
             {
+                ParatextProjects.Clear();
                 // get all the Paratext Projects (Projects/Backtranslations)
                 List<ParatextProject> projects = paratextUtils.GetParatextProjects();
-                ParatextProjects.AddRange(projects);
+                try
+                {
+                    // TODO - why is the next line causing an error but actually still working?
+                    ParatextProjects.AddRange(projects);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
             }
 
             // get all the Paratext Resources (LWC)
             // TODO
+
+
+
 
         }
 
