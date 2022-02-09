@@ -8,7 +8,9 @@ using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace ClearDashboard.Wpf
 {
@@ -18,6 +20,7 @@ namespace ClearDashboard.Wpf
     public partial class App : Application
     {
         private readonly IHost _host;
+        private readonly ILogger _logger;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -26,6 +29,7 @@ namespace ClearDashboard.Wpf
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
+            //set the light/dark
             SetTheme(Settings.Default.Theme);
 
             base.OnStartup(e);
@@ -80,6 +84,7 @@ namespace ClearDashboard.Wpf
             // setup to catch global unhandled exceptions
             SetupUnhandledExceptionHandling();
 
+            // setup dependency injection
             _host = Host.CreateDefaultBuilder()
                 .UseSerilog((host, loggerConfiguration) =>
                 {
@@ -97,6 +102,10 @@ namespace ClearDashboard.Wpf
                     });
                 })
                 .Build();
+
+            // connect up to an instance of the logger
+            _logger = (ILogger)_host.Services.GetService(typeof(ILogger));
+            _logger.Information("Configured Serilog");
         }
 
         /// <summary>
@@ -126,22 +135,30 @@ namespace ClearDashboard.Wpf
             // Catch exceptions from the main UI dispatcher thread.
             // Typically we only need to catch this OR the Dispatcher.UnhandledException.
             // Handling both can result in the exception getting handled twice.
-            //Application.Current.DispatcherUnhandledException += (sender, args) =>
-            //{
-            //	// If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
-            //	if (!Debugger.IsAttached)
-            //	{
-            //		args.Handled = true;
-            //		ShowUnhandledException(args.Exception, "Application.Current.DispatcherUnhandledException", true);
-            //	}
-            //};
+            Application.Current.DispatcherUnhandledException += (sender, args) =>
+            {
+                // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
+                if (!Debugger.IsAttached)
+                {
+                    args.Handled = true;
+                    ShowUnhandledException(args.Exception, "Application.Current.DispatcherUnhandledException", true);
+                }
+            };
         }
 
+        /// <summary>
+        /// Show the exception to the user
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="unhandledExceptionType"></param>
+        /// <param name="promptUserForShutdown"></param>
         void ShowUnhandledException(Exception e, string unhandledExceptionType, bool promptUserForShutdown)
         {
             var messageBoxTitle = $"Unexpected Error Occurred: {unhandledExceptionType}";
             var messageBoxMessage = $"The following exception occurred:\n\n{e}";
             var messageBoxButtons = MessageBoxButton.OK;
+
+            _logger.Error(e, messageBoxTitle, messageBoxMessage);
 
             if (promptUserForShutdown)
             {
