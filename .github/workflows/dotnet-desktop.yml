@@ -64,7 +64,7 @@ jobs:
       Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
-    #- name: Always Fail # For testing the CI notifier in Slack.
+    #- name: Always Fail # For testing the CI notifier.
     #  uses: cutenode/action-always-fail@v1.0.1
   
     - name: Checkout
@@ -129,6 +129,7 @@ jobs:
 
     - name: CINotify Email
       uses: cinotify/github-action@v1.1.0
+      if: always()
       with:
         to: 'dirk.kaiser@clear.bible'
         subject: 'CI Job ${{ job.status }}'
