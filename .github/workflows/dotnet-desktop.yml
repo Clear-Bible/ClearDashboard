@@ -127,10 +127,19 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-    - name: CINotify Email
-      uses: cinotify/github-action@v1.1.0
-      if: always()
+    - name: Post to a Slack channel
+      id: slack
+      uses: slackapi/slack-github-action@v1.18.0
       with:
-        to: 'dirk.kaiser@clear.bible'
-        subject: 'CI Job ${{ job.status }}'
-        body: 'GitHub build result: ${{ job.status }}\r\n\r\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}'
+        channel-id: 'CKC1D8GFN'
+        slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    
+    #- name: CINotify Email
+    #  uses: cinotify/github-action@v1.1.0
+    #  if: always()
+    #  with:
+    #    to: 'dirk.kaiser@clear.bible'
+    #    subject: 'CI Job ${{ job.status }}'
+    #    body: 'GitHub build result: ${{ job.status }}\r\n\r\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}'
