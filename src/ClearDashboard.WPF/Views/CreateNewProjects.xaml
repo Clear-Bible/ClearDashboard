@@ -64,7 +64,7 @@
             <GroupBox
                 Grid.Row="0"
                 Grid.Column="0"
-                Margin="0"
+                Margin="5,0,0,0"
                 Header="PARATEXT PROJECTS">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
@@ -89,7 +89,11 @@
                     PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
                     PreviewMouseMove="listview_PreviewMouseMove"
                     Style="{StaticResource MaterialDesignListBox}">
-
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="60" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -110,9 +114,10 @@
                                             <Border Background="{StaticResource PrimaryHueDarkBrush}" CornerRadius="3">
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock
-                                                        Margin="2"
+                                                        Margin="2,0,0,0"
                                                         HorizontalAlignment="Left"
                                                         FontWeight="Bold"
+                                                        Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
                                                         Text="{Binding Name}"
                                                         TextWrapping="Wrap" />
                                                     <TextBlock
@@ -129,12 +134,14 @@
                                                     Margin="2"
                                                     HorizontalAlignment="Left"
                                                     FontSize="11"
+                                                    Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
                                                     Text="{Binding TranslationInfo.projectType}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
                                                     Margin="2"
                                                     HorizontalAlignment="Left"
                                                     FontSize="11"
+                                                    Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
                                                     Text="{Binding Language}"
                                                     TextWrapping="Wrap" />
 
@@ -158,7 +165,7 @@
             <GroupBox
                 Grid.Row="1"
                 Grid.Column="0"
-                Margin="0,5,0,0"
+                Margin="5,5,0,0"
                 materialDesign:ColorZoneAssist.Mode="SecondaryMid"
                 Header="PARATEXT RESOURCES"
                 Style="{DynamicResource MaterialDesignGroupBox}">
@@ -185,7 +192,11 @@
                     PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
                     PreviewMouseMove="listview_PreviewMouseMove"
                     Style="{StaticResource MaterialDesignListBox}">
-
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="30" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -205,11 +216,12 @@
                                         <StackPanel Background="{StaticResource SecondaryHueMidBrush}" Orientation="Vertical">
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock
-                                                    Margin="20 2 0 2"
+                                                    Width="{Binding ActualWidth, ElementName=resourcesLV}"
+                                                    Margin="20,2,0,2"
                                                     HorizontalAlignment="Center"
                                                     FontWeight="Bold"
+                                                    Foreground="{StaticResource SecondaryHueMidForegroundBrush}"
                                                     Text="{Binding Name}"
-                                                    Width="{Binding ActualWidth, ElementName=resourcesLV}"
                                                     TextWrapping="Wrap" />
                                             </StackPanel>
                                         </StackPanel>

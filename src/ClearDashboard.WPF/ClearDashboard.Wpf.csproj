@@ -27,12 +27,14 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
-    <Folder Include="UserControls\" />
-    <Folder Include="Converters\" />
     <Folder Include="Fonts\" />
+    <Folder Include="Stores\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.60.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.60.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.60.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />

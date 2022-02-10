@@ -72,6 +72,22 @@ namespace ClearDashboard.Wpf.ViewModels
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
+        public void CreateNewProject(object obj)
+        {
+            if (_TargetProject == null)
+            {
+                // unlikely to be true
+                return;
+            }
+
+            DashboardProject dashboardProject = new DashboardProject();
+            dashboardProject.TargetProject = _TargetProject;
+            dashboardProject.LWCProjects = _LWCprojects;
+            dashboardProject.BTProjects = _BackTransProjects;
+            dashboardProject.CreationDate = DateTime.Now;
+            dashboardProject.ParatextUser = "";
+        }
+
         public async Task Init()
         {
             // get the right help text
@@ -125,24 +141,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-
-
-        }
-
-        public void CreateNewProject(object obj)
-        {
-            if (_TargetProject == null)
-            {
-                // unlikely to be true
-                return;
-            }
-
-            DashboardProject dashboardProject = new DashboardProject();
-            dashboardProject.TargetProject = _TargetProject;
-            dashboardProject.LWCProjects = _LWCprojects;
-            dashboardProject.BTProjects = _BackTransProjects;
-            dashboardProject.CreationDate = DateTime.Now;
-            dashboardProject.ParatextUser = "";
 
 
         }

@@ -39,6 +39,12 @@
                 ImageSource="/Resources/settings_logo_128.png"
                 NavUri="/Views/Settings.xaml"
                 Text="Settings" />
+            <helpers:NavButton
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/settings_logo_128.png"
+                NavUri="/Views/Workspace.xaml"
+                Text="Project" />
         </WrapPanel>
 
     </Grid>

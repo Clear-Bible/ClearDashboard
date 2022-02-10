@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using ILogger = Serilog.ILogger;
+using Settings = ClearDashboard.Wpf.Properties.Settings;
 
 namespace ClearDashboard.Wpf
 {
@@ -20,7 +21,7 @@ namespace ClearDashboard.Wpf
     public partial class App : Application
     {
         private readonly IHost _host;
-        private readonly ILogger _logger;
+        public readonly ILogger _logger;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -99,6 +100,13 @@ namespace ClearDashboard.Wpf
                     services.AddSingleton<MainWindow>(s => new MainWindow()
                     {
                         DataContext = s.GetRequiredService<MainWindowViewModel>()
+                    });
+
+                    services.AddTransient<LandingViewModel>();
+
+                    services.AddTransient<Landing>(s => new Landing()
+                    {
+                        DataContext = s.GetRequiredService<LandingViewModel>()
                     });
                 })
                 .Build();
