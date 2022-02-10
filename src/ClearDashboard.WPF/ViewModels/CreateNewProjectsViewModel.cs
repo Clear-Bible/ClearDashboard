@@ -10,6 +10,7 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.Paratext;
 using ClearDashboard.Wpf.Helpers;
 using MvvmHelpers;
+using Nelibur.ObjectMapper;
 using Newtonsoft.Json;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -42,9 +43,11 @@ namespace ClearDashboard.Wpf.ViewModels
         private ParatextProject _TargetProject = null; 
         private List<ParatextProject> _BackTransProjects = new List<ParatextProject>();
 
-        public ObservableRangeCollection<ParatextProject> ParatextProjects { get; set; } =
-            new ObservableRangeCollection<ParatextProject>();
+        public ObservableRangeCollection<ParatextProjectDisplay> ParatextProjects { get; set; } =
+            new ObservableRangeCollection<ParatextProjectDisplay>();
 
+        public ObservableRangeCollection<ParatextProjectDisplay> ParatextResources { get; set; } =
+            new ObservableRangeCollection<ParatextProjectDisplay>();
 
         #endregion
         private ICommand createNewProjectCommand { get; set; }
@@ -82,27 +85,44 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // detect if Paratext is installed
             ParatextUtils paratextUtils = new ParatextUtils();
-            ParatextVisible = await paratextUtils.IsParatextInstalledAsync().ConfigureAwait(true);
+            ParatextVisible = paratextUtils.IsParatextInstalled();
 
             if (ParatextVisible)
             {
-                ParatextProjects.Clear();
                 // get all the Paratext Projects (Projects/Backtranslations)
-                List<ParatextProject> projects = paratextUtils.GetParatextProjects();
+                ParatextProjects.Clear();
+                List<ParatextProject> projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.eFolderType.Projects);
                 try
                 {
-                    // TODO - why is the next line causing an error but actually still working?
-                    ParatextProjects.AddRange(projects);
+                    TinyMapper.Bind<ParatextProject, ParatextProjectDisplay>();
+                    foreach (var project in projects)
+                    {
+                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectDisplay>(project));
+                    }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
 
+                // get all the Paratext Resources (LWC)
+                ParatextResources.Clear();
+                List<ParatextProject> resources = paratextUtils.GetParatextResources();
+                try
+                {
+                    TinyMapper.Bind<ParatextProject, ParatextProjectDisplay>();
+                    foreach (var resource in resources)
+                    {
+                        ParatextResources.Add(TinyMapper.Map<ParatextProjectDisplay>(resource));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
 
-            // get all the Paratext Resources (LWC)
-            // TODO
+
 
 
 
@@ -143,5 +163,21 @@ namespace ClearDashboard.Wpf.ViewModels
                 ButtonEnabled = true;
             }
         }
+
+    }
+
+    public class ParatextProjectDisplay : ParatextProject
+    {
+        private bool _inUse;
+        public bool InUse
+        {
+            get => _inUse;
+            set
+            {
+                _inUse = value;
+                OnPropertyChanged(nameof(InUse));
+            }
+        }
+
     }
 }

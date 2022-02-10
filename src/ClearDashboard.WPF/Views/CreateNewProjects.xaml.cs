@@ -135,7 +135,7 @@ namespace ClearDashboard.Wpf.Views
                             var btProjs = _vm.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
                             foreach (var btProject in btProjs)
                             {
-                                t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
+                                t = _BackTransProject.Where(p => p.Name == btProject.Name).ToList();
                                 if (t.Count() == 0)
                                 {
                                     _BackTransProject.Add(btProject);
@@ -145,13 +145,15 @@ namespace ClearDashboard.Wpf.Views
                         break;
                     case eDropZones.BackTranslation:
                         text.Text = "BACKTRANSLATION";
-                        t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
-                        if (t.Count() == 0)
+                        if (project.ProjectType == ParatextProject.eProjectType.BackTranslation)
                         {
-                            _BackTransProject.Add(project);
+                            t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
+                            if (t.Count() == 0)
+                            {
+                                _BackTransProject.Add(project);
+                            }
                         }
                         break;
-
                 }
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 text.VerticalAlignment = VerticalAlignment.Center;
@@ -891,18 +893,5 @@ namespace ClearDashboard.Wpf.Views
         }
     }
 
-    //public class ParatextProjectDisplay : ParatextProject
-    //{
-    //    private bool _inUse;
-    //    public bool InUse
-    //    {
-    //        get => _inUse;
-    //        set
-    //        {
-    //            _inUse = value;
-    //            OnPropertyChanged(nameof(InUse));
-    //        }
-    //    }
 
-    //}
 }

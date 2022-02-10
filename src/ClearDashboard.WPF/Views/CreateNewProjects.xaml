@@ -69,15 +69,15 @@
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
+                            <!--<materialDesign:PackIcon
                                 Width="32"
                                 Height="32"
                                 VerticalAlignment="Center"
-                                Kind="ImageArea" />
+                                Kind="ImageArea" />-->
                             <TextBlock
                                 Margin="8,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                                 Text="{Binding}" />
                         </StackPanel>
                     </DataTemplate>
@@ -165,22 +165,23 @@
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
+                            <!--<materialDesign:PackIcon
                                 Width="32"
                                 Height="32"
                                 VerticalAlignment="Center"
-                                Kind="ImageArea" />
+                                Kind="ImageArea" />-->
                             <TextBlock
                                 Margin="8,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                                 Text="{Binding}" />
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <ListView
+                    x:Name="resourcesLV"
                     Margin="5"
-                    ItemsSource="{Binding ParatextProjects}"
+                    ItemsSource="{Binding ParatextResources}"
                     PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
                     PreviewMouseMove="listview_PreviewMouseMove"
                     Style="{StaticResource MaterialDesignListBox}">
@@ -202,37 +203,14 @@
 
                                         <!--  PROJECT TEXT  -->
                                         <StackPanel Background="{StaticResource SecondaryHueMidBrush}" Orientation="Vertical">
-                                            <Border Background="{StaticResource SecondaryHueMidBrush}" CornerRadius="3">
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock
-                                                        Margin="2"
-                                                        HorizontalAlignment="Left"
-                                                        FontWeight="Bold"
-                                                        Text="{Binding Name}"
-                                                        TextWrapping="Wrap" />
-                                                    <TextBlock
-                                                        Width="250"
-                                                        Margin="2"
-                                                        HorizontalAlignment="Left"
-                                                        Text="{Binding FullName}"
-                                                        TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Border>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Vertical">
                                                 <TextBlock
-                                                    Width="100"
-                                                    Margin="2"
-                                                    HorizontalAlignment="Left"
-                                                    FontSize="11"
-                                                    Text="{Binding TranslationInfo.projectType}"
+                                                    Margin="20 2 0 2"
+                                                    HorizontalAlignment="Center"
+                                                    FontWeight="Bold"
+                                                    Text="{Binding Name}"
+                                                    Width="{Binding ActualWidth, ElementName=resourcesLV}"
                                                     TextWrapping="Wrap" />
-                                                <TextBlock
-                                                    Margin="2"
-                                                    HorizontalAlignment="Left"
-                                                    FontSize="11"
-                                                    Text="{Binding Language}"
-                                                    TextWrapping="Wrap" />
-
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
