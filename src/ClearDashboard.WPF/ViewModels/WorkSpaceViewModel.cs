@@ -71,11 +71,30 @@ namespace ClearDashboard.Wpf.ViewModels
                 // toggle the light theme for AvalonDock
                 this.SelectedTheme = Themes[1];
             }
+
+
+            // subscribe to change events in the parent's theme
+            (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+        }
+
+        private void WorkSpaceViewModel_ThemeChanged()
+        {
+            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
+            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            {
+                // toggle the Dark theme for AvalonDock
+                this.SelectedTheme = Themes[0];
+            }
+            else
+            {
+                // toggle the light theme for AvalonDock
+                this.SelectedTheme = Themes[1];
+            }
         }
 
         public void Init()
         {
-            //throw new NotImplementedException();
+            
         }
 
         #endregion //Constructor

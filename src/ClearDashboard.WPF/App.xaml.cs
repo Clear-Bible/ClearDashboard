@@ -1,15 +1,13 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.Views;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using ClearDashboard.Wpf.ViewModels;
-using ClearDashboard.Wpf.Views;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using ILogger = Serilog.ILogger;
 using Settings = ClearDashboard.Wpf.Properties.Settings;
 
@@ -22,6 +20,27 @@ namespace ClearDashboard.Wpf
     {
         private readonly IHost _host;
         public readonly ILogger _logger;
+        public event Action ThemeChanged;
+
+
+
+        private MaterialDesignThemes.Wpf.BaseTheme _theme;
+        public MaterialDesignThemes.Wpf.BaseTheme Theme
+        {
+            get { return _theme; }
+            set
+            {
+                _theme = value;
+                OnThemeChanged();
+            }
+        }
+
+        // trigger the event
+        private void OnThemeChanged()
+        {
+            ThemeChanged?.Invoke();
+        }
+
 
         protected override async void OnStartup(StartupEventArgs e)
         {
