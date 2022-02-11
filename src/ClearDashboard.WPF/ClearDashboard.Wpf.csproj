@@ -33,7 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.60.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.60.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.60.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.60.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.60.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.60.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />

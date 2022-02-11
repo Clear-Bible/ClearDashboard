@@ -159,22 +159,38 @@ namespace ClearDashboard.Wpf.Views
                         layoutSerializer.Serialize(@".\AvalonDock.Layout.config");
                         break;
                     case "BIBLICALTERMS":
-                        var windowPane = dockManager.Layout.Descendents().OfType<LayoutAnchorable>().Single(a => a.ContentId == "BIBLICALTERMS");
-                        if (windowPane.IsAutoHidden)
-                        {
-                            windowPane.Hide(false);
-                        }
-                        
-                        if (windowPane.IsHidden)
-                            windowPane.Show();
-                        else if (windowPane.IsVisible)
-                            windowPane.IsActive = true;
-                        else
-                            windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom | AnchorableShowStrategy.Most);
+                        UnHideWindow(menuItem.Tag.ToString().ToUpper());
                         break;
-
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Unhide window
+        /// </summary>
+        /// <param name="windowTag"></param>
+        private void UnHideWindow(string windowTag)
+        {
+            var windowPane = dockManager.Layout.Descendents()
+                .OfType<LayoutAnchorable>()
+                .SingleOrDefault(a => a.ContentId == windowTag);
+
+            if (windowPane != null)
+            {
+                            if (windowPane.IsAutoHidden)
+            {
+                windowPane.Hide(false);
+            }
+
+            if (windowPane.IsHidden)
+                windowPane.Show();
+            else if (windowPane.IsVisible)
+                windowPane.IsActive = true;
+            else
+                windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom | AnchorableShowStrategy.Most);
+            }
+
         }
     }
 }
