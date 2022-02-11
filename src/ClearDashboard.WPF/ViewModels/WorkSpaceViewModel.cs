@@ -8,7 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
+using ClearDashboard.Wpf.Helpers;
 using Serilog;
 
 
@@ -100,6 +103,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Constructor
 
         #region Methods
+
+
+
 
         #endregion // Methods
     }

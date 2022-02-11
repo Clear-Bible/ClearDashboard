@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf
             }
         }
 
-        // trigger the event
+        // trigger the change event
         private void OnThemeChanged()
         {
             ThemeChanged?.Invoke();
