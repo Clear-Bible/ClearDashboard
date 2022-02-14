@@ -32,87 +32,87 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
 
-            // Add in a toolpane
-            var leftAnchorGroup = dockManager.Layout.LeftSide.Children.FirstOrDefault();
-            if (leftAnchorGroup == null)
-            {
-                leftAnchorGroup = new LayoutAnchorGroup();
-                dockManager.Layout.LeftSide.Children.Add(leftAnchorGroup);
-            }
+            //// Add in a toolpane
+            //var leftAnchorGroup = dockManager.Layout.LeftSide.Children.FirstOrDefault();
+            //if (leftAnchorGroup == null)
+            //{
+            //    leftAnchorGroup = new LayoutAnchorGroup();
+            //    dockManager.Layout.LeftSide.Children.Add(leftAnchorGroup);
+            //}
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "BIBLICALTERMS",
-                Title = "BIBLICAL TERMS",
-                Content = new Button{ Content = "BIBLICAL TERMS", Margin=new Thickness(10, 0, 10, 0)},
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "BIBLICALTERMS",
+            //    Title = "BIBLICAL TERMS",
+            //    Content = new Button{ Content = "BIBLICAL TERMS", Margin=new Thickness(10, 0, 10, 0)},
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "WORDMEANINGS",
-                Title = "WORD MEANINGS",
-                Content = new Button { Content = "WORD MEANINGS", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "WORDMEANINGS",
+            //    Title = "WORD MEANINGS",
+            //    Content = new Button { Content = "WORD MEANINGS", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "SOURCECONTEXT",
-                Title = "SOURCE CONTEXT",
-                Content = new Button { Content = "SOURCE CONTEXT", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "SOURCECONTEXT",
+            //    Title = "SOURCE CONTEXT",
+            //    Content = new Button { Content = "SOURCE CONTEXT", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "TARGETCONTEXT",
-                Title = "TARGET CONTEXT",
-                Content = new Button { Content = "TARGET CONTEXT", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "TARGETCONTEXT",
+            //    Title = "TARGET CONTEXT",
+            //    Content = new Button { Content = "TARGET CONTEXT", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "NOTES",
-                Title = "NOTES",
-                Content = new Button { Content = "NOTES", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "NOTES",
+            //    Title = "NOTES",
+            //    Content = new Button { Content = "NOTES", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "PINS",
-                Title = "PINS",
-                Content = new Button { Content = "PINS", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "PINS",
+            //    Title = "PINS",
+            //    Content = new Button { Content = "PINS", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            leftAnchorGroup.Children.Add(new LayoutAnchorable()
-            {
-                ContentId = "TEXTCOLLECTIONS",
-                Title = "TEXT COLLECTIONS",
-                Content = new Button { Content = "TEXT COLLECTIONS", Margin = new Thickness(10, 0, 10, 0) },
-                AutoHideMinWidth = 400,
-            });
+            //leftAnchorGroup.Children.Add(new LayoutAnchorable()
+            //{
+            //    ContentId = "TEXTCOLLECTIONS",
+            //    Title = "TEXT COLLECTIONS",
+            //    Content = new Button { Content = "TEXT COLLECTIONS", Margin = new Thickness(10, 0, 10, 0) },
+            //    AutoHideMinWidth = 400,
+            //});
 
-            var firstDocumentPane = dockManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            if (firstDocumentPane != null)
-            {
-                LayoutDocument doc = new LayoutDocument
-                {
-                    ContentId = "TREEDOWN",
-                    Title = "TREEDOWN"
-                };
-                firstDocumentPane.Children.Add(doc);
+            //var firstDocumentPane = dockManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            //if (firstDocumentPane != null)
+            //{
+            //    LayoutDocument doc = new LayoutDocument
+            //    {
+            //        ContentId = "TREEDOWN",
+            //        Title = "TREEDOWN"
+            //    };
+            //    firstDocumentPane.Children.Add(doc);
 
-                LayoutDocument doc2 = new LayoutDocument
-                {
-                    ContentId = "ALIGNMENT",
-                    Title = "ALIGNMENT"
-                };
-                firstDocumentPane.Children.Add(doc2);
-            }
+            //    LayoutDocument doc2 = new LayoutDocument
+            //    {
+            //        ContentId = "ALIGNMENT",
+            //        Title = "ALIGNMENT"
+            //    };
+            //    firstDocumentPane.Children.Add(doc2);
+            //}
 
         }
 

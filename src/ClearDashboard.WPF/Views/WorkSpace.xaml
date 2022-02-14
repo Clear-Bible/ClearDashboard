@@ -92,31 +92,34 @@
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
                 <userControls:PanesTemplateSelector>
-                    <userControls:PanesTemplateSelector.FileViewTemplate>
+                    <userControls:PanesTemplateSelector.StartPageViewTemplate>
                         <DataTemplate>
-                            <TextBox
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}" />
+                            <local:StartPage />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.FileViewTemplate>
-                    <userControls:PanesTemplateSelector.FileStatsViewTemplate>
+                    </userControls:PanesTemplateSelector.StartPageViewTemplate>
+                    <userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate>
-                            <Border Padding="5">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding FileSize, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="{Binding LastModified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox IsReadOnly="True" Text="{Binding FilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox IsReadOnly="True" Text="{Binding FileName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </Border>
+                            <StackPanel>
+                                <Button Width="200" Height="50">SOME BUTTON</Button>
+                                <!--<userControls:BiblicalTermsControl
+                                    Width="200"
+                                    Height="100"
+                                    Background="Beige" />-->
+                            </StackPanel>
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.FileStatsViewTemplate>
+                    </userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                 </userControls:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>
 
             <DockingManager.LayoutItemContainerStyleSelector>
                 <userControls:PanesStyleSelector>
+                    <userControls:PanesStyleSelector.StartPageStyle>
+                        <Style TargetType="{x:Type LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                        </Style>
+                    </userControls:PanesStyleSelector.StartPageStyle>
                     <userControls:PanesStyleSelector.ToolStyle>
                         <Style TargetType="{x:Type LayoutAnchorableItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />

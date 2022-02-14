@@ -4,6 +4,7 @@ using ClearDashboard.DAL;
 using MvvmHelpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,10 +31,42 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
+        private BiblicalTermsViewModel _biblicalTerms = null;
+        public BiblicalTermsViewModel BiblicalTerms
+        {
+            get
+            {
+                if (_biblicalTerms == null)
+                {
+                    _biblicalTerms = new BiblicalTermsViewModel("BIBILICAL TERMS NEW");
+                }
+
+                return _biblicalTerms;
+            }
+        }
+
+
+        private ToolViewModel[] _tools = null;
+        public IEnumerable<ToolViewModel> Tools
+        {
+            get
+            {
+                return _tools;
+            }
+        }
+
         #endregion //Public Properties
 
         #region Observable Properties
 
+        ObservableCollection<PaneViewModel> _files = null;
+        public ObservableCollection<PaneViewModel> Files
+        {
+            get
+            {
+                return _files;
+            }
+        }
         public List<Tuple<string, Theme>> Themes { get; set; }
 
         private Tuple<string, Theme> selectedTheme;
@@ -82,6 +115,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // subscribe to change events in the parent's theme
             (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+
+
+            if (_tools == null)
+                _tools = new ToolViewModel[] { BiblicalTerms };
+
+            _files = new ObservableCollection<PaneViewModel>();
+            _files.Add(new StartPageViewModel());
         }
 
         private void WorkSpaceViewModel_ThemeChanged()

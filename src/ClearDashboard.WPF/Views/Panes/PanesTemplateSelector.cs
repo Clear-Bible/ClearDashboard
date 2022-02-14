@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.UserControls
 {
@@ -18,13 +19,13 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
 
-        public DataTemplate FileViewTemplate
+        public DataTemplate BiblicalTermsViewTemplate
         {
             get;
             set;
         }
 
-        public DataTemplate FileStatsViewTemplate
+        public DataTemplate StartPageViewTemplate
         {
             get;
             set;
@@ -34,11 +35,13 @@ namespace ClearDashboard.Wpf.UserControls
         {
             var itemAsLayoutContent = item as LayoutContent;
 
-            //if (item is FileViewModel)
-            //    return FileViewTemplate;
+            if (item is BiblicalTermsControl)
+            {
+                return BiblicalTermsViewTemplate;
+            }
 
-            //if (item is FileStatsViewModel)
-            //    return FileStatsViewTemplate;
+            if (item is StartPageViewModel)
+                return StartPageViewTemplate;
 
             return base.SelectTemplate(item, container);
         }

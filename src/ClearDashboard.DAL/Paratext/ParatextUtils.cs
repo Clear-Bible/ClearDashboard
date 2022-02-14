@@ -106,15 +106,15 @@ namespace ClearDashboard.DAL.Paratext
                     // read in settings.xml file
                     if (File.Exists(sSettingFilePath))
                     {
-                        ParatextProject.eDirType dirType;
-                        if (folderType == eFolderType.Projects)
-                        {
-                            dirType = ParatextProject.eDirType.Project;
-                        }
-                        else
-                        {
-                            dirType = ParatextProject.eDirType.Resources;
-                        }
+                        //ParatextProject.eDirType dirType;
+                        //if (folderType == eFolderType.Projects)
+                        //{
+                        //    dirType = ParatextProject.eDirType.Project;
+                        //}
+                        //else
+                        //{
+                        //    dirType = ParatextProject.eDirType.Resources;
+                        //}
 
                         var project = GetSettingFileInfo(sSettingFilePath, ParatextProject.eDirType.Project);
                         if (project.FullName != "")
@@ -392,19 +392,14 @@ namespace ClearDashboard.DAL.Paratext
                     {
                         return ParatextProject.eProjectType.Resource;
                     }
-                    break;
                 case "BACKTRANSLATION":
                     return ParatextProject.eProjectType.BackTranslation;
-                    break;
                 case "AUXILIARY":
                     return ParatextProject.eProjectType.Auxiliary;
-                    break;
                 case "DAUGHTER":
                     return ParatextProject.eProjectType.Daughter;
-                    break;
                 case "MARBLERESOURCE":
                     return ParatextProject.eProjectType.MarbleResource;
-                    break;
             }
 
             return ParatextProject.eProjectType.Unknown;
