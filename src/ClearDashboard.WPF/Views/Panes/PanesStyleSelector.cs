@@ -17,19 +17,7 @@ namespace ClearDashboard.Wpf.UserControls
         // ====================
         //        DOCUMENTS
         // ====================
-        public Style StartPageStyle
-        {
-            get;
-            set;
-        }
-
-        public Style AlignmentPageStyle
-        {
-            get;
-            set;
-        }
-
-        public Style TreeDownPageStyle
+        public Style DocumentStyle
         {
             get;
             set;
@@ -50,31 +38,63 @@ namespace ClearDashboard.Wpf.UserControls
             set;
         }
 
-        public Style FileStyle
-        {
-            get;
-            set;
-        }
+
 
         #endregion
 
 
         public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
         {
-            if (item is ToolViewModel)
-                return ToolStyle;
-
-            if (item is FileViewModel)
-                return FileStyle;
-
+            // ====================
+            //   DOCUMENTS
+            // ====================
             if (item is StartPageViewModel)
-                return StartPageStyle;
-            
-            if(item is AlignmentToolViewModel)
-                return AlignmentPageStyle;
+                return DocumentStyle;
+
+            if (item is AlignmentToolViewModel)
+                return DocumentStyle;
 
             if (item is TreeDownViewModel)
-                return TreeDownPageStyle;
+                return DocumentStyle;
+
+
+            // ====================
+            //   TOOLS
+            // ====================
+            if (item is BiblicalTermsViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is WordMeaningsViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is SourceContextViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is TargetContextViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is NotesViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is PinsViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is TextCollectionViewModel)
+            {
+                return ToolStyle;
+            }
 
             return base.SelectStyle(item, container);
         }

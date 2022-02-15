@@ -40,6 +40,10 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
+        public BiblicalTermsViewModel(string name) : base(name)
+        {
+
+        }
 
         #endregion //Constructor
 
@@ -47,9 +51,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion // Methods
 
-        public BiblicalTermsViewModel(string name) : base(name)
-        {
 
-        }
     }
 }

@@ -31,30 +31,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-        private BiblicalTermsViewModel _biblicalTerms = null;
-        public BiblicalTermsViewModel BiblicalTerms
-        {
-            get
-            {
-                if (_biblicalTerms == null)
-                {
-                    _biblicalTerms = new BiblicalTermsViewModel("BIBILICAL TERMS NEW");
-                }
-
-                return _biblicalTerms;
-            }
-        }
-
-
-        //private ToolViewModel[] _tools = null;
-        //public IEnumerable<ToolViewModel> Tools
-        //{
-        //    get
-        //    {
-        //        return _tools;
-        //    }
-        //}
-
         #endregion //Public Properties
 
         #region Observable Properties
@@ -126,17 +102,23 @@ namespace ClearDashboard.Wpf.ViewModels
             // subscribe to change events in the parent's theme
             (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
-
-            //if (_tools == null)
-            //    _tools = new ToolViewModel[] { BiblicalTerms };
-
-            _tools = new ObservableCollection<ToolViewModel>();
-            _tools.Add(new BiblicalTermsViewModel("Biblical Terms"));
-
+            // add in the document panes
             _files = new ObservableCollection<PaneViewModel>();
             _files.Add(new StartPageViewModel());
             _files.Add(new AlignmentToolViewModel());
             _files.Add(new TreeDownViewModel());
+
+            // add in the tool panes
+            _tools = new ObservableCollection<ToolViewModel>();
+            _tools.Add(new BiblicalTermsViewModel("BIBLICAL TERMS"));
+            _tools.Add(new WordMeaningsViewModel("WORD MEANINGS"));
+            _tools.Add(new SourceContextViewModel("SOURCE CONTEXT"));
+            _tools.Add(new TargetContextViewModel("TARGET CONTEXT"));
+            _tools.Add(new NotesViewModel("NOTES"));
+            _tools.Add(new PinsViewModel("PINS"));
+            _tools.Add(new TextCollectionViewModel("TEXT COLLECTIONS"));
+
+
         }
 
         private void WorkSpaceViewModel_ThemeChanged()

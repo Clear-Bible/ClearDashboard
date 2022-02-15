@@ -18,13 +18,9 @@ namespace ClearDashboard.Wpf.UserControls
 
         }
 
-
-        public DataTemplate BiblicalTermsViewTemplate
-        {
-            get;
-            set;
-        }
-
+        // ====================
+        //   DOCUMENTS
+        // ====================
         public DataTemplate StartPageViewTemplate
         {
             get;
@@ -43,15 +39,58 @@ namespace ClearDashboard.Wpf.UserControls
             set;
         }
 
+        // ====================
+        //        TOOLS
+        // ====================
+        public DataTemplate BiblicalTermsViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate WordMeaningsViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate SourceContextViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate TargetContextViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate NotesViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate PinsViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate TextCollectionViewTemplate
+        {
+            get;
+            set;
+        }
+
         public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
         {
             var itemAsLayoutContent = item as LayoutContent;
 
-            if (item is BiblicalTermsViewModel)
-            {
-                return BiblicalTermsViewTemplate;
-            }
-
+            // ====================
+            //   DOCUMENTS
+            // ====================
             if (item is StartPageViewModel)
                 return StartPageViewTemplate;
 
@@ -61,6 +100,44 @@ namespace ClearDashboard.Wpf.UserControls
 
             if (item is TreeDownViewModel)
                 return TreeDownViewTemplate;
+
+            // ====================
+            //        TOOLS
+            // ====================
+            if (item is BiblicalTermsViewModel)
+            {
+                return BiblicalTermsViewTemplate;
+            }
+
+            if (item is WordMeaningsViewModel)
+            {
+                return WordMeaningsViewTemplate;
+            }
+
+            if (item is SourceContextViewModel)
+            {
+                return SourceContextViewTemplate;
+            }
+
+            if (item is TargetContextViewModel)
+            {
+                return TargetContextViewTemplate;
+            }
+
+            if (item is NotesViewModel)
+            {
+                return NotesViewTemplate;
+            }
+
+            if (item is PinsViewModel)
+            {
+                return PinsViewTemplate;
+            }
+
+            if (item is TextCollectionViewModel)
+            {
+                return TextCollectionViewTemplate;
+            }
 
             return base.SelectTemplate(item, container);
         }

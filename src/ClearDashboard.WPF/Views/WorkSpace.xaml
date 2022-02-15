@@ -118,38 +118,58 @@
                             <local:BiblicalTerms />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
+
+                    <userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        <DataTemplate>
+                            <local:WordMeanings />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
+
+                    <userControls:PanesTemplateSelector.SourceContextViewTemplate>
+                        <DataTemplate>
+                            <local:SourceContext />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.SourceContextViewTemplate>
+
+                    <userControls:PanesTemplateSelector.TargetContextViewTemplate>
+                        <DataTemplate>
+                            <local:TargetContext />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.TargetContextViewTemplate>
+
+                    <userControls:PanesTemplateSelector.NotesViewTemplate>
+                        <DataTemplate>
+                            <local:Notes />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.NotesViewTemplate>
+
+                    <userControls:PanesTemplateSelector.PinsViewTemplate>
+                        <DataTemplate>
+                            <local:PINS />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.PinsViewTemplate>
+
+                    <userControls:PanesTemplateSelector.TextCollectionViewTemplate>
+                        <DataTemplate>
+                            <local:TextCollections />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.TextCollectionViewTemplate>
+
                 </userControls:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>
 
             <DockingManager.LayoutItemContainerStyleSelector>
                 <userControls:PanesStyleSelector>
                     <!--  DOCUMENTS  -->
-                    <userControls:PanesStyleSelector.AlignmentPageStyle>
+                    <userControls:PanesStyleSelector.DocumentStyle>
                         <Style TargetType="{x:Type LayoutItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />
                             <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                             <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
-                    </userControls:PanesStyleSelector.AlignmentPageStyle>
-
-                    <userControls:PanesStyleSelector.TreeDownPageStyle>
-                        <Style TargetType="{x:Type LayoutItem}">
-                            <Setter Property="Title" Value="{Binding Model.Title}" />
-                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
-                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                        </Style>
-                    </userControls:PanesStyleSelector.TreeDownPageStyle>
-
-                    <userControls:PanesStyleSelector.StartPageStyle>
-                        <Style TargetType="{x:Type LayoutItem}">
-                            <Setter Property="Title" Value="{Binding Model.Title}" />
-                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
-                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                        </Style>
-                    </userControls:PanesStyleSelector.StartPageStyle>
+                    </userControls:PanesStyleSelector.DocumentStyle>
 
                     <!--  TOOLS  -->
-
                     <userControls:PanesStyleSelector.ToolStyle>
                         <Style TargetType="{x:Type LayoutAnchorableItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />
@@ -161,15 +181,7 @@
                             <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
                         </Style>
                     </userControls:PanesStyleSelector.ToolStyle>
-                    <userControls:PanesStyleSelector.FileStyle>
-                        <Style TargetType="{x:Type LayoutItem}">
-                            <Setter Property="Title" Value="{Binding Model.Title}" />
-                            <Setter Property="ToolTip" Value="{Binding Model.FilePath}" />
-                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
-                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
-                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                        </Style>
-                    </userControls:PanesStyleSelector.FileStyle>
+
                 </userControls:PanesStyleSelector>
             </DockingManager.LayoutItemContainerStyleSelector>
             <DockingManager.LayoutUpdateStrategy>
