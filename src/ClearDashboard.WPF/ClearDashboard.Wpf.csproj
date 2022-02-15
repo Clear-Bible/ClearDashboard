@@ -29,6 +29,7 @@
     <Folder Include="DB\" />
     <Folder Include="Fonts\" />
     <Folder Include="Stores\" />
+    <Folder Include="UserControls\" />
   </ItemGroup>
 
   <ItemGroup>

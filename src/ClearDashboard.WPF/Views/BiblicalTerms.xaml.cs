@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.UserControls
+namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for BiblicalTermsControl.xaml
+    /// Interaction logic for BiblicalTerms.xaml
     /// </summary>
-    public partial class BiblicalTermsControl : UserControl
+    public partial class BiblicalTerms : UserControl
     {
-        public BiblicalTermsControl()
+        public BiblicalTerms()
         {
             InitializeComponent();
         }

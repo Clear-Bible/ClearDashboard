@@ -99,13 +99,7 @@
                     </userControls:PanesTemplateSelector.StartPageViewTemplate>
                     <userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <Button Width="200" Height="50">SOME BUTTON</Button>
-                                <!--<userControls:BiblicalTermsControl
-                                    Width="200"
-                                    Height="100"
-                                    Background="Beige" />-->
-                            </StackPanel>
+                            <local:BiblicalTerms/>
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                 </userControls:PanesTemplateSelector>
