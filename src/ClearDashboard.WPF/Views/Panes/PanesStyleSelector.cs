@@ -12,6 +12,38 @@ namespace ClearDashboard.Wpf.UserControls
 
     public class PanesStyleSelector : StyleSelector
     {
+
+        #region Pages - Documents
+        // ====================
+        //        DOCUMENTS
+        // ====================
+        public Style StartPageStyle
+        {
+            get;
+            set;
+        }
+
+        public Style AlignmentPageStyle
+        {
+            get;
+            set;
+        }
+
+        public Style TreeDownPageStyle
+        {
+            get;
+            set;
+        }
+
+        #endregion
+
+
+
+
+        #region Tools
+        // ====================
+        //        TOOLS
+        // ====================
         public Style ToolStyle
         {
             get;
@@ -24,11 +56,8 @@ namespace ClearDashboard.Wpf.UserControls
             set;
         }
 
-        public Style StartPageStyle
-        {
-            get;
-            set;
-        }
+        #endregion
+
 
         public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
         {
@@ -40,6 +69,12 @@ namespace ClearDashboard.Wpf.UserControls
 
             if (item is StartPageViewModel)
                 return StartPageStyle;
+            
+            if(item is AlignmentToolViewModel)
+                return AlignmentPageStyle;
+
+            if (item is TreeDownViewModel)
+                return TreeDownPageStyle;
 
             return base.SelectStyle(item, container);
         }

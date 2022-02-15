@@ -135,6 +135,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
             _files = new ObservableCollection<PaneViewModel>();
             _files.Add(new StartPageViewModel());
+            _files.Add(new AlignmentToolViewModel());
+            _files.Add(new TreeDownViewModel());
         }
 
         private void WorkSpaceViewModel_ThemeChanged()

@@ -92,14 +92,30 @@
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
                 <userControls:PanesTemplateSelector>
+                    <!--  DOCUMENTS  -->
+                    <userControls:PanesTemplateSelector.AlignmentToolViewTemplate>
+                        <DataTemplate>
+                            <local:AlignmentTool />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.AlignmentToolViewTemplate>
+
+                    <userControls:PanesTemplateSelector.TreeDownViewTemplate>
+                        <DataTemplate>
+                            <local:TreeDown />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.TreeDownViewTemplate>
+
                     <userControls:PanesTemplateSelector.StartPageViewTemplate>
                         <DataTemplate>
                             <local:StartPage />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.StartPageViewTemplate>
+
+                    <!--  TOOLS  -->
+
                     <userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate>
-                            <local:BiblicalTerms/>
+                            <local:BiblicalTerms />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                 </userControls:PanesTemplateSelector>
@@ -107,6 +123,23 @@
 
             <DockingManager.LayoutItemContainerStyleSelector>
                 <userControls:PanesStyleSelector>
+                    <!--  DOCUMENTS  -->
+                    <userControls:PanesStyleSelector.AlignmentPageStyle>
+                        <Style TargetType="{x:Type LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                        </Style>
+                    </userControls:PanesStyleSelector.AlignmentPageStyle>
+
+                    <userControls:PanesStyleSelector.TreeDownPageStyle>
+                        <Style TargetType="{x:Type LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                        </Style>
+                    </userControls:PanesStyleSelector.TreeDownPageStyle>
+
                     <userControls:PanesStyleSelector.StartPageStyle>
                         <Style TargetType="{x:Type LayoutItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />
@@ -114,6 +147,9 @@
                             <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
                     </userControls:PanesStyleSelector.StartPageStyle>
+
+                    <!--  TOOLS  -->
+
                     <userControls:PanesStyleSelector.ToolStyle>
                         <Style TargetType="{x:Type LayoutAnchorableItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />

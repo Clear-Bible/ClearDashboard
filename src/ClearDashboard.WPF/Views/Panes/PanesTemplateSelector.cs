@@ -31,6 +31,18 @@ namespace ClearDashboard.Wpf.UserControls
             set;
         }
 
+        public DataTemplate AlignmentToolViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate TreeDownViewTemplate
+        {
+            get;
+            set;
+        }
+
         public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
         {
             var itemAsLayoutContent = item as LayoutContent;
@@ -42,6 +54,13 @@ namespace ClearDashboard.Wpf.UserControls
 
             if (item is StartPageViewModel)
                 return StartPageViewTemplate;
+
+            if (item is AlignmentToolViewModel)
+                return AlignmentToolViewTemplate;
+
+
+            if (item is TreeDownViewModel)
+                return TreeDownViewTemplate;
 
             return base.SelectTemplate(item, container);
         }
