@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.UserControls
         {
             var itemAsLayoutContent = item as LayoutContent;
 
-            if (item is BiblicalTermsControl)
+            if (item is BiblicalTermsViewModel)
             {
                 return BiblicalTermsViewTemplate;
             }

@@ -46,8 +46,21 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private ToolViewModel[] _tools = null;
-        public IEnumerable<ToolViewModel> Tools
+        //private ToolViewModel[] _tools = null;
+        //public IEnumerable<ToolViewModel> Tools
+        //{
+        //    get
+        //    {
+        //        return _tools;
+        //    }
+        //}
+
+        #endregion //Public Properties
+
+        #region Observable Properties
+
+        ObservableCollection<ToolViewModel> _tools = null;
+        public ObservableCollection<ToolViewModel> Tools
         {
             get
             {
@@ -55,9 +68,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        #endregion //Public Properties
-
-        #region Observable Properties
 
         ObservableCollection<PaneViewModel> _files = null;
         public ObservableCollection<PaneViewModel> Files
@@ -86,7 +96,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public WorkSpaceViewModel()
         {
             // grab a copy of the current logger from the App.xaml.cs
-            _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+            _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
 
             this.Themes = new List<Tuple<string, Theme>>
             {
@@ -117,8 +127,11 @@ namespace ClearDashboard.Wpf.ViewModels
             (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
 
-            if (_tools == null)
-                _tools = new ToolViewModel[] { BiblicalTerms };
+            //if (_tools == null)
+            //    _tools = new ToolViewModel[] { BiblicalTerms };
+
+            _tools = new ObservableCollection<ToolViewModel>();
+            _tools.Add(new BiblicalTermsViewModel("Biblical Terms"));
 
             _files = new ObservableCollection<PaneViewModel>();
             _files.Add(new StartPageViewModel());
