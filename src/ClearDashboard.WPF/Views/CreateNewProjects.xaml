@@ -241,7 +241,14 @@
             <Canvas
                 x:Name="DrawCanvas"
                 Grid.Row="0"
-                Grid.RowSpan="2"
+                Grid.Column="1"
+                Margin="5"
+                AllowDrop="True"
+                PreviewDrop="Canvas_PreviewDrop" />
+
+            <Canvas
+                x:Name="DrawCanvasLower"
+                Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
                 AllowDrop="True"

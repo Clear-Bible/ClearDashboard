@@ -237,13 +237,13 @@ namespace ClearDashboard.Wpf.Views
                         rect.Stroke = Application.Current.FindResource("BlueDarkBrush") as Brush;
                         text.Foreground = Application.Current.FindResource("BlueDarkBrush") as Brush;
                         point.X = _boxWidth;
-                        text.Text = "LWC(s)";
+                        text.Text = "Target";
                         break;
                     case 2:
                         rect.Stroke = Application.Current.FindResource("PurpleDarkBrush") as Brush;
                         text.Foreground = Application.Current.FindResource("PurpleDarkBrush") as Brush;
                         point.X = _boxWidth * 2;
-                        text.Text = "Target";
+                        text.Text = "LWC(s)";
                         break;
                     case 3:
                         rect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
