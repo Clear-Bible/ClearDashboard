@@ -28,7 +28,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public WordMeaningsViewModel(string name) : base(name)
         {
-
+            this.Title = name;
+            this.ContentId = "{WordMeanings_ContentId}";
         }
 
         #endregion //Constructor

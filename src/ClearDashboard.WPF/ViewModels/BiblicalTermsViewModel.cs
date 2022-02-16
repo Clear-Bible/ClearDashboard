@@ -42,7 +42,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public BiblicalTermsViewModel(string name) : base(name)
         {
-
+            this.Title = name;
+            this.ContentId = "{BiblicalTerms_ContentId}";
         }
 
         #endregion //Constructor

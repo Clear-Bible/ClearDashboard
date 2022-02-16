@@ -26,6 +26,7 @@ namespace ClearDashboard.Wpf.Views
     {
         private WorkSpaceViewModel _vm;
 
+
         #region Startup
 
         public WorkSpace()
@@ -134,24 +135,34 @@ namespace ClearDashboard.Wpf.Views
                 switch (menuItem.Tag.ToString().ToUpper())
                 {
                     case "LOAD":
-                        //TODO
+                        // remove all existing windows
+                        dockManager.AnchorablesSource = null;
+                        dockManager.DocumentsSource = null;
                         var layoutSerializer = new XmlLayoutSerializer(dockManager);
 
-                        // Here I've implemented the LayoutSerializationCallback just to show
-                        //  a way to feed layout desarialization with content loaded at runtime
-                        // Actually I could in this case let AvalonDock to attach the contents
-                        // from current layout using the content ids
-                        // LayoutSerializationCallback should anyway be handled to attach contents
-                        // not currently loaded
-                        layoutSerializer.LayoutSerializationCallback += (s, e) =>
-                        {
-                            //if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
-                            //    e.Content = Workspace.This.FileStats;
-                            //else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
-                            //    File.Exists(e.Model.ContentId))
-                            //    e.Content = Workspace.This.Open(e.Model.ContentId);
-                        };
-                        layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
+                        _vm.LoadLayout(layoutSerializer);
+
+                        //// Here I've implemented the LayoutSerializationCallback just to show
+                        ////  a way to feed layout desarialization with content loaded at runtime
+                        //// Actually I could in this case let AvalonDock to attach the contents
+                        //// from current layout using the content ids
+                        //// LayoutSerializationCallback should anyway be handled to attach contents
+                        //// not currently loaded
+                        //layoutSerializer.LayoutSerializationCallback += (s, e) =>
+                        //{
+                        //    if (e.Model.ContentId == StartPageViewModel)
+                        //    {
+                        //        e.Content = WorkSpace.this.E
+                        //    }
+
+
+                        //    //if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
+                        //    //    e.Content = Workspace.This.FileStats;
+                        //    //else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
+                        //    //    File.Exists(e.Model.ContentId))
+                        //    //    e.Content = Workspace.This.Open(e.Model.ContentId);
+                        //};
+                        //layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
                         break;
                     case "SAVE":
                         //TODO

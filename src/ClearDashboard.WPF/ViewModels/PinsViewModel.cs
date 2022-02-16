@@ -26,7 +26,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public PinsViewModel(string name) : base(name)
         {
-
+            this.Title = name;
+            this.ContentId = "{Pins_ContentId}";
         }
 
         #endregion //Constructor

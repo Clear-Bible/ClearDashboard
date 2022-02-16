@@ -26,7 +26,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public NotesViewModel(string name) : base(name)
         {
-
+            this.Title = name;
+            this.ContentId = "{Notes_ContentId}";
         }
 
         #endregion //Constructor

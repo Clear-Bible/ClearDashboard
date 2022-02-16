@@ -112,7 +112,6 @@
                     </userControls:PanesTemplateSelector.StartPageViewTemplate>
 
                     <!--  TOOLS  -->
-
                     <userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate>
                             <local:BiblicalTerms />

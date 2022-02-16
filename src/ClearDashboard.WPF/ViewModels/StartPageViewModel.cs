@@ -31,7 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public StartPageViewModel()
         {
-            this.Title = "Start Page";
+            this.Title = "START PAGE";
             this.ContentId = "{StartPage_ContentId}";
         }
         #endregion //Constructor

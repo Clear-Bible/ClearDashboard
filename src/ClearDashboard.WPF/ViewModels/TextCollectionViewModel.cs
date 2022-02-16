@@ -26,7 +26,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public TextCollectionViewModel(string name) : base(name)
         {
-
+            this.Title = name;
+            this.ContentId = "{TextCollection_ContentId}";
         }
 
         #endregion //Constructor

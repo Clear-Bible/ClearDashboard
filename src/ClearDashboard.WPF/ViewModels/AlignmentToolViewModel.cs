@@ -16,6 +16,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
+        public string ContentID => this.ContentID;
 
         #endregion //Public Properties
 
@@ -34,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public AlignmentToolViewModel()
         {
-            this.Title = "Alignment Tool";
+            this.Title = "ALIGNMENT TOOL";
             this.ContentId = "{AlignmentTool_ContentId}";
         }
     }
