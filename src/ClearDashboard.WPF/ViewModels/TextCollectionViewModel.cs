@@ -24,9 +24,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public TextCollectionViewModel(string name) : base(name)
+        public TextCollectionViewModel()
         {
-            this.Title = name;
+            this.Title = "🗐 TEXT COLLECTION";
             this.ContentId = "{TextCollection_ContentId}";
         }
 

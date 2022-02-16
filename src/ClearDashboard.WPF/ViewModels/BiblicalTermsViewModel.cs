@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -40,9 +41,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public BiblicalTermsViewModel(string name) : base(name)
+        public BiblicalTermsViewModel()
         {
-            this.Title = name;
+            this.Title = "🕮 BIBLICAL TERMS";
             this.ContentId = "{BiblicalTerms_ContentId}";
         }
 

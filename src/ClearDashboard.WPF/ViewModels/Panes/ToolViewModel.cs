@@ -43,10 +43,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public ToolViewModel(string name)
+        public ToolViewModel()
         {
-            Name = name;
-            Title = name;
+
         }
         #endregion //Constructor
 

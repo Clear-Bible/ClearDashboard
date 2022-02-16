@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public AlignmentToolViewModel()
         {
-            this.Title = "ALIGNMENT TOOL";
+            this.Title = "⳼ ALIGNMENT TOOL";
             this.ContentId = "{AlignmentTool_ContentId}";
         }
     }

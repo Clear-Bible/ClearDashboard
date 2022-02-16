@@ -24,9 +24,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public SourceContextViewModel(string name) : base(name)
+        public SourceContextViewModel()
         {
-            this.Title = name;
+            this.Title = "⬒ SOURCE CONTEXT";
             this.ContentId = "{SourceContext_ContentId}";
         }
 

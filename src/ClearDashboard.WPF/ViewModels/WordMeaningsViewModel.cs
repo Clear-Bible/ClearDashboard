@@ -26,9 +26,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public WordMeaningsViewModel(string name) : base(name)
+        public WordMeaningsViewModel()
         {
-            this.Title = name;
+            this.Title = "⌺ WORD MEANINGS";
             this.ContentId = "{WordMeanings_ContentId}";
         }
 

@@ -33,6 +33,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        public ImageSource IconSource { get; protected set; }
+
         public string ContentId
         {
             get => _contentId;

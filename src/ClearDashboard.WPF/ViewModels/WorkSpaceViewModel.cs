@@ -102,14 +102,14 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
+                new Tuple<string, Theme>(nameof(Vs2013LightTheme),new Vs2013LightTheme()),
                 new Tuple<string, Theme>(nameof(AeroTheme),new AeroTheme()),
-                //new Tuple<string, Theme>(nameof(Vs2013LightTheme),new Vs2013LightTheme()),
-                //new Tuple<string, Theme>(nameof(Vs2013BlueTheme),new Vs2013BlueTheme()),
-                //new Tuple<string, Theme>(nameof(GenericTheme), new GenericTheme()),
-                //new Tuple<string, Theme>(nameof(ExpressionDarkTheme),new ExpressionDarkTheme()),
-                //new Tuple<string, Theme>(nameof(ExpressionLightTheme),new ExpressionLightTheme()),
-                //new Tuple<string, Theme>(nameof(MetroTheme),new MetroTheme()),
-                //new Tuple<string, Theme>(nameof(VS2010Theme),new VS2010Theme()),
+                new Tuple<string, Theme>(nameof(Vs2013BlueTheme),new Vs2013BlueTheme()),
+                new Tuple<string, Theme>(nameof(GenericTheme), new GenericTheme()),
+                new Tuple<string, Theme>(nameof(ExpressionDarkTheme),new ExpressionDarkTheme()),
+                new Tuple<string, Theme>(nameof(ExpressionLightTheme),new ExpressionLightTheme()),
+                new Tuple<string, Theme>(nameof(MetroTheme),new MetroTheme()),
+                new Tuple<string, Theme>(nameof(VS2010Theme),new VS2010Theme()),
             };
 
             if (Properties.Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
@@ -135,13 +135,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // add in the tool panes
             _tools = new ObservableCollection<ToolViewModel>();
-            _tools.Add(new BiblicalTermsViewModel("BIBLICAL TERMS"));
-            _tools.Add(new WordMeaningsViewModel("WORD MEANINGS"));
-            _tools.Add(new SourceContextViewModel("SOURCE CONTEXT"));
-            _tools.Add(new TargetContextViewModel("TARGET CONTEXT"));
-            _tools.Add(new NotesViewModel("NOTES"));
-            _tools.Add(new PinsViewModel("PINS"));
-            _tools.Add(new TextCollectionViewModel("TEXT COLLECTIONS"));
+            _tools.Add(new BiblicalTermsViewModel());
+            _tools.Add(new WordMeaningsViewModel());
+            _tools.Add(new SourceContextViewModel());
+            _tools.Add(new TargetContextViewModel());
+            _tools.Add(new NotesViewModel());
+            _tools.Add(new PinsViewModel());
+            _tools.Add(new TextCollectionViewModel());
         }
 
         private void WorkSpaceViewModel_ThemeChanged()
@@ -183,25 +183,25 @@ namespace ClearDashboard.Wpf.ViewModels
                 switch (e.Model.ContentId)
                 {
                     case "{BiblicalTerms_ContentId}":
-                        e.Content = new BiblicalTermsViewModel("BIBLICAL TERMS");
+                        e.Content = new BiblicalTermsViewModel();
                         break;
                     case "{WordMeanings_ContentId}":
-                        e.Content = new WordMeaningsViewModel("WORD MEANINGS");
+                        e.Content = new WordMeaningsViewModel();
                         break;
                     case "{SourceContext_ContentId}":
-                        e.Content = new SourceContextViewModel("SOURCE CONTEXT");
+                        e.Content = new SourceContextViewModel();
                         break;
                     case "{TargetContext_ContentId}":
-                        e.Content = new TargetContextViewModel("TARGET CONTEXT");
+                        e.Content = new TargetContextViewModel();
                         break;
                     case "{Notes_ContentId}":
-                        e.Content = new NotesViewModel("NOTES");
+                        e.Content = new NotesViewModel();
                         break;
                     case "{Pins_ContentId}":
-                        e.Content = new PinsViewModel("PINS");
+                        e.Content = new PinsViewModel();
                         break;
                     case "{TextCollection_ContentId}":
-                        e.Content = new TextCollectionViewModel("TEXT COLLECTION");
+                        e.Content = new TextCollectionViewModel();
                         break;
                     case "{StartPage_ContentId}":
                         e.Content = new StartPageViewModel();

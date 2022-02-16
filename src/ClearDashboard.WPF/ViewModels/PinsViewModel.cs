@@ -24,9 +24,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public PinsViewModel(string name) : base(name)
+        public PinsViewModel()
         {
-            this.Title = name;
+            this.Title = "⍒ PINS";
             this.ContentId = "{Pins_ContentId}";
         }
 

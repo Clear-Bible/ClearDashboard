@@ -24,9 +24,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public NotesViewModel(string name) : base(name)
+        public NotesViewModel()
         {
-            this.Title = name;
+            this.Title = "⌨ NOTES";
             this.ContentId = "{Notes_ContentId}";
         }
 
