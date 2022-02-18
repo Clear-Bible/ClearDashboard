@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.Wpf.Helpers
 {
@@ -35,6 +36,14 @@ namespace ClearDashboard.Wpf.Helpers
         {
             get { return (Uri)GetValue(NavUriProperty); }
             set { SetValue(NavUriProperty, value); }
+        }
+
+        public static readonly DependencyProperty DashboardProjectProperty =
+            DependencyProperty.Register("DashboardProject", typeof(DashboardProject), typeof(NavButton), new PropertyMetadata(null));
+        public DashboardProject DashboardProject
+        {
+            get { return (DashboardProject)GetValue(DashboardProjectProperty); }
+            set { SetValue(DashboardProjectProperty, value); }
         }
 
         #endregion

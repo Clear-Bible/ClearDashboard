@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            DrawTheCanvas();
+            DrawTheTopCanvas();
 
 
             if (this.DataContext is CreateNewProjectsViewModel)
@@ -143,17 +143,17 @@ namespace ClearDashboard.Wpf.Views
                             }
                         }
                         break;
-                    case eDropZones.BackTranslation:
-                        text.Text = "BACKTRANSLATION";
-                        if (project.ProjectType == ParatextProject.eProjectType.BackTranslation)
-                        {
-                            t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
-                            if (t.Count() == 0)
-                            {
-                                _BackTransProject.Add(project);
-                            }
-                        }
-                        break;
+                    //case eDropZones.BackTranslation:
+                    //    text.Text = "BACKTRANSLATION";
+                    //    if (project.ProjectType == ParatextProject.eProjectType.BackTranslation)
+                    //    {
+                    //        t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
+                    //        if (t.Count() == 0)
+                    //        {
+                    //            _BackTransProject.Add(project);
+                    //        }
+                    //    }
+                    //    break;
                 }
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 text.VerticalAlignment = VerticalAlignment.Center;
@@ -163,7 +163,7 @@ namespace ClearDashboard.Wpf.Views
 
                 _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
 
-                DrawTheCanvas();
+                DrawTheTopCanvas();
             }
         }
 
@@ -175,30 +175,30 @@ namespace ClearDashboard.Wpf.Views
             }
             if (pt.X > _boxWidth && pt.X < _boxWidth * 2)
             {
-                return eDropZones.LWC;
-            }
-            if (pt.X > _boxWidth * 2 && pt.X < _boxWidth * 3)
-            {
                 return eDropZones.Target;
             }
-            return eDropZones.BackTranslation;
+            //if (pt.X > _boxWidth * 2 && pt.X < _boxWidth * 3)
+            //{
+            //    return eDropZones.LWC;
+            //}
+            return eDropZones.LWC;
         }
 
 
-        private void DrawTheCanvas()
+        private void DrawTheTopCanvas()
         {
-            _boxWidth = DrawCanvas.ActualWidth / 4; //width of each box
+            _boxWidth = DrawCanvas.ActualWidth / 3; //width of each box
             _boxHeight = DrawCanvas.ActualHeight;  // Height of each box
 
             const int cornerRadius = 8;
-            int projectBoxWidth = (int)(_boxWidth * 0.5);
+            int projectBoxWidth = (int)(_boxWidth * 0.33);
             const int projectBoxHeight = 40;
 
             DrawCanvas.Children.Clear();
             // ========================
             // BUILD THE HEADERS AND DROP BOXES
             // ========================
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
                 TextBlock text = new TextBlock();
                 text.FontSize = 20;
@@ -245,12 +245,12 @@ namespace ClearDashboard.Wpf.Views
                         point.X = _boxWidth * 2;
                         text.Text = "LWC(s)";
                         break;
-                    case 3:
-                        rect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("TealDarkBrush") as Brush;
-                        point.X = _boxWidth * 3;
-                        text.Text = "Back Translation";
-                        break;
+                    //case 3:
+                    //    rect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
+                    //    text.Foreground = Application.Current.FindResource("TealDarkBrush") as Brush;
+                    //    point.X = _boxWidth * 3;
+                    //    text.Text = "Back Translation";
+                    //    break;
                 }
 
                 Canvas.SetLeft(rect, point.X);
@@ -287,13 +287,13 @@ namespace ClearDashboard.Wpf.Views
                 DrawLWCBoxes(projectBoxWidth, projectBoxHeight);
             }
 
-            // ========================
-            // Draw the Back Translation Box(es)
-            // ========================
-            if (_BackTransProject.Count > 0)
-            {
-                DrawBackTransBoxes(projectBoxWidth, projectBoxHeight);
-            }
+            //// ========================
+            //// Draw the Back Translation Box(es)
+            //// ========================
+            //if (_BackTransProject.Count > 0)
+            //{
+            //    DrawBackTransBoxes(projectBoxWidth, projectBoxHeight);
+            //}
 
             // ========================
             // Draw the ConnectionLines
@@ -540,7 +540,7 @@ namespace ClearDashboard.Wpf.Views
                 // Draw the LWC Boxes
                 // ========================
                 Point point = new Point();
-                point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 2);
+                point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 6);
                 point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset;
 
                 Rectangle targetRect = new Rectangle();
@@ -670,7 +670,7 @@ namespace ClearDashboard.Wpf.Views
             // Draw the Target Box
             // ========================
             Point point = new Point();
-            point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 4);
+            point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 3);
             point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
 
             Rectangle targetRect = new Rectangle();
@@ -811,7 +811,7 @@ namespace ClearDashboard.Wpf.Views
                 _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
             }
 
-            DrawTheCanvas();
+            DrawTheTopCanvas();
         }
 
 
@@ -889,7 +889,7 @@ namespace ClearDashboard.Wpf.Views
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DrawTheCanvas();
+            DrawTheTopCanvas();
         }
     }
 

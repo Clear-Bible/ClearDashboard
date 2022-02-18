@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
+using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels;
 
@@ -25,13 +26,15 @@ namespace ClearDashboard.Wpf.Views
     public partial class WorkSpace : Page
     {
         private WorkSpaceViewModel _vm;
-
+        private DashboardProject dashboardProject;
 
         #region Startup
 
         public WorkSpace()
         {
             InitializeComponent();
+
+            _vm = this.DataContext as WorkSpaceViewModel;
 
             //// Add in a toolpane
             //var leftAnchorGroup = dockManager.Layout.LeftSide.Children.FirstOrDefault();
@@ -119,8 +122,6 @@ namespace ClearDashboard.Wpf.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            _vm = this.DataContext as WorkSpaceViewModel;
-
             _vm.Init();
         }
 
@@ -142,27 +143,6 @@ namespace ClearDashboard.Wpf.Views
 
                         _vm.LoadLayout(layoutSerializer);
 
-                        //// Here I've implemented the LayoutSerializationCallback just to show
-                        ////  a way to feed layout desarialization with content loaded at runtime
-                        //// Actually I could in this case let AvalonDock to attach the contents
-                        //// from current layout using the content ids
-                        //// LayoutSerializationCallback should anyway be handled to attach contents
-                        //// not currently loaded
-                        //layoutSerializer.LayoutSerializationCallback += (s, e) =>
-                        //{
-                        //    if (e.Model.ContentId == StartPageViewModel)
-                        //    {
-                        //        e.Content = WorkSpace.this.E
-                        //    }
-
-
-                        //    //if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
-                        //    //    e.Content = Workspace.This.FileStats;
-                        //    //else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
-                        //    //    File.Exists(e.Model.ContentId))
-                        //    //    e.Content = Workspace.This.Open(e.Model.ContentId);
-                        //};
-                        //layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
                         break;
                     case "SAVE":
                         //TODO

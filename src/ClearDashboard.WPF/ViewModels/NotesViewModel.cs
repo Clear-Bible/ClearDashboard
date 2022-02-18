@@ -26,7 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public NotesViewModel()
         {
-            this.Title = "⌨ NOTES";
+            this.Title = "🖉 NOTES";
             this.ContentId = "{Notes_ContentId}";
         }
 

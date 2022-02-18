@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.Wpf.ViewModels
 {
-    public class AlignmentToolViewModel: PaneViewModel
+    public class ConcordanceViewModel : PaneViewModel
     {
         #region Member Variables
 
@@ -25,10 +25,10 @@
 
         #endregion // Methods
 
-        public AlignmentToolViewModel()
+        public ConcordanceViewModel()
         {
-            this.Title = "⳼ ALIGNMENT TOOL";
-            this.ContentId = "{AlignmentTool_ContentId}";
+            this.Title = "🆎 CONCORDANCE";
+            this.ContentId = "{Concordance_ContentId}";
         }
     }
 }

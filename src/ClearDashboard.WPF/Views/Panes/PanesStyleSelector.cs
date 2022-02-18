@@ -49,14 +49,29 @@ namespace ClearDashboard.Wpf.UserControls
             //   DOCUMENTS
             // ====================
             if (item is StartPageViewModel)
+            {
                 return DocumentStyle;
+            }
 
             if (item is AlignmentToolViewModel)
+            {
                 return DocumentStyle;
+            }
 
             if (item is TreeDownViewModel)
+            {
                 return DocumentStyle;
+            }
 
+            if (item is ConcordanceViewModel)
+            {
+                return DocumentStyle;
+            }
+
+            if (item is DashboardViewModel)
+            {
+                return DocumentStyle;
+            }
 
             // ====================
             //   TOOLS

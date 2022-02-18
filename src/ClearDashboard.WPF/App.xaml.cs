@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Common.Models;
 using ILogger = Serilog.ILogger;
 using Settings = ClearDashboard.Wpf.Properties.Settings;
 
@@ -20,9 +21,18 @@ namespace ClearDashboard.Wpf
     {
         private readonly IHost _host;
         public readonly ILogger _logger;
+
+        private DashboardProject _selectedDashboardProject = new DashboardProject();
+        public DashboardProject SelectedDashboardProject
+        {
+            get { return _selectedDashboardProject; }
+            set { _selectedDashboardProject = value; }
+        }
+
+
+
+        // Theme related
         public event Action ThemeChanged;
-
-
 
         private MaterialDesignThemes.Wpf.BaseTheme _theme;
         public MaterialDesignThemes.Wpf.BaseTheme Theme

@@ -39,6 +39,18 @@ namespace ClearDashboard.Wpf.UserControls
             set;
         }
 
+        public DataTemplate DashboardViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate ConcordanceViewTemplate
+        {
+            get;
+            set;
+        }
+
         // ====================
         //        TOOLS
         // ====================
@@ -100,6 +112,12 @@ namespace ClearDashboard.Wpf.UserControls
 
             if (item is TreeDownViewModel)
                 return TreeDownViewTemplate;
+
+            if (item is DashboardViewModel)
+                return DashboardViewTemplate;
+
+            if (item is ConcordanceViewModel)
+                return ConcordanceViewTemplate;
 
             // ====================
             //        TOOLS

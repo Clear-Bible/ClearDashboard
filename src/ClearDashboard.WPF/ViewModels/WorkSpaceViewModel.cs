@@ -1,21 +1,14 @@
-﻿using ClearDashboard.Common;
+﻿using AvalonDock.Layout.Serialization;
+using AvalonDock.Themes;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL;
 using MvvmHelpers;
+using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using AvalonDock.Layout.Serialization;
-using AvalonDock.Themes;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Views;
-using Serilog;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -30,6 +23,10 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly ILogger _logger;
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
+
+        public DashboardProject DashboardProject { get; set; }
+
+        private DashboardViewModel _dashboardViewModel;
 
         #endregion //Member Variables
 
@@ -58,22 +55,24 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        ObservableCollection<ToolViewModel> _tools = null;
+        ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
         public ObservableCollection<ToolViewModel> Tools
         {
-            get
+            get=> _tools;
+            set
             {
-                return _tools;
+                SetProperty(ref _tools, value, nameof(Tools));
             }
         }
 
 
-        ObservableCollection<PaneViewModel> _files = null;
+        ObservableCollection<PaneViewModel> _files = new ObservableCollection<PaneViewModel>();
         public ObservableCollection<PaneViewModel> Files
         {
-            get
+            get => _files;
+            set
             {
-                return _files;
+                SetProperty(ref _files, value, nameof(Files));
             }
         }
         public List<Tuple<string, Theme>> Themes { get; set; }
@@ -87,6 +86,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 SetProperty(ref selectedTheme, value, nameof(selectedTheme));
             }
         }
+
 
         #endregion //Observable Properties
 
@@ -127,21 +127,11 @@ namespace ClearDashboard.Wpf.ViewModels
             // subscribe to change events in the parent's theme
             (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
-            // add in the document panes
-            _files = new ObservableCollection<PaneViewModel>();
-            _files.Add(new StartPageViewModel());
-            _files.Add(new AlignmentToolViewModel());
-            _files.Add(new TreeDownViewModel());
-
-            // add in the tool panes
-            _tools = new ObservableCollection<ToolViewModel>();
-            _tools.Add(new BiblicalTermsViewModel());
-            _tools.Add(new WordMeaningsViewModel());
-            _tools.Add(new SourceContextViewModel());
-            _tools.Add(new TargetContextViewModel());
-            _tools.Add(new NotesViewModel());
-            _tools.Add(new PinsViewModel());
-            _tools.Add(new TextCollectionViewModel());
+            if (Application.Current is ClearDashboard.Wpf.App)
+            {
+                _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+                DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+            }
         }
 
         private void WorkSpaceViewModel_ThemeChanged()
@@ -161,7 +151,30 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void Init()
         {
-            
+            // add in the document panes
+            _files.Clear();
+
+            Debug.WriteLine(DashboardProject.Name);
+            _dashboardViewModel = new DashboardViewModel();
+            _files.Add(_dashboardViewModel);
+            _files.Add(new ConcordanceViewModel());
+            _files.Add(new StartPageViewModel());
+            _files.Add(new AlignmentToolViewModel());
+            // trigger property changed event
+            Files.Add(new TreeDownViewModel());
+
+
+            // add in the tool panes
+            _tools.Clear();
+            _tools.Add(new BiblicalTermsViewModel());
+            _tools.Add(new WordMeaningsViewModel());
+            _tools.Add(new SourceContextViewModel());
+            _tools.Add(new TargetContextViewModel());
+            _tools.Add(new NotesViewModel());
+            _tools.Add(new PinsViewModel());
+            // trigger property changed event
+            Tools.Add(new TextCollectionViewModel());
+
         }
 
         #endregion //Constructor
@@ -177,11 +190,15 @@ namespace ClearDashboard.Wpf.ViewModels
             // not currently loaded
             layoutSerializer.LayoutSerializationCallback += (s, e) =>
             {
-                Debug.WriteLine(e.Model?.ContentId?.ToString());
-
-
+                // Debug.WriteLine(e.Model?.ContentId?.ToString());
                 switch (e.Model.ContentId)
                 {
+                    case "{Dashboard_ContentId}":
+                        e.Content = _dashboardViewModel;
+                        break;
+                    case "{Concordance_ContentId}":
+                        e.Content = new ConcordanceViewModel();
+                        break;
                     case "{BiblicalTerms_ContentId}":
                         e.Content = new BiblicalTermsViewModel();
                         break;

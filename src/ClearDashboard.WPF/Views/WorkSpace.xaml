@@ -93,6 +93,18 @@
             <DockingManager.LayoutItemTemplateSelector>
                 <userControls:PanesTemplateSelector>
                     <!--  DOCUMENTS  -->
+                    <userControls:PanesTemplateSelector.ConcordanceViewTemplate>
+                        <DataTemplate>
+                            <local:Concordance />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.ConcordanceViewTemplate>
+
+                    <userControls:PanesTemplateSelector.DashboardViewTemplate>
+                        <DataTemplate>
+                            <local:Dashboard />
+                        </DataTemplate>
+                    </userControls:PanesTemplateSelector.DashboardViewTemplate>
+
                     <userControls:PanesTemplateSelector.AlignmentToolViewTemplate>
                         <DataTemplate>
                             <local:AlignmentTool />
