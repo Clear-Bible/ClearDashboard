@@ -95,7 +95,7 @@
                 <Menu.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                         <TextBlock
-                            Margin="0 10 0 0"
+                            Margin="0,10,0,0"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             Text="{Binding Header}" />

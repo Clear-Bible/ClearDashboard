@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public SourceContextViewModel()
         {
             this.Title = "⬒ SOURCE CONTEXT";
-            this.ContentId = "{SourceContext_ContentId}";
+            this.ContentId = "SOURCECONTEXT";
         }
 
         #endregion //Constructor

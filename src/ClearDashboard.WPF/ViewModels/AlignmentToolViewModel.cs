@@ -28,7 +28,7 @@
         public AlignmentToolViewModel()
         {
             this.Title = "⳼ ALIGNMENT TOOL";
-            this.ContentId = "{AlignmentTool_ContentId}";
+            this.ContentId = "ALIGNMENTTOOL";
         }
     }
 }

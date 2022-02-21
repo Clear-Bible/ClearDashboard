@@ -25,7 +25,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public TreeDownViewModel()
         {
             this.Title = "⯭ TREEDOWN";
-            this.ContentId = "{TreeDown_ContentId}";
+            this.ContentId = "TREEDOWN";
         }
         #endregion //Constructor
 

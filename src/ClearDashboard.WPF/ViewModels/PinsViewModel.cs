@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public PinsViewModel()
         {
             this.Title = "⍒ PINS";
-            this.ContentId = "{Pins_ContentId}";
+            this.ContentId = "PINS";
         }
 
         #endregion //Constructor

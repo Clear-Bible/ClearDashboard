@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,16 @@ namespace ClearDashboard.Wpf.Views
             InitializeComponent();
 
             _vm = this.DataContext as WorkSpaceViewModel;
+
+            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                // listen for the menu changes
+                if (args.PropertyName.Equals("WindowIDToLoad"))
+                    UnHideWindow(args.ToString());
+                    return;
+            };
+
 
             //// Add in a toolpane
             //var leftAnchorGroup = dockManager.Layout.LeftSide.Children.FirstOrDefault();
@@ -163,9 +174,10 @@ namespace ClearDashboard.Wpf.Views
         /// <param name="windowTag"></param>
         private void UnHideWindow(string windowTag)
         {
+            // find the pane in the dockmanager with this contentID
             var windowPane = dockManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
-                .SingleOrDefault(a => a.ContentId.ToUpper() == ("{" + windowTag + "_ContentID}").ToUpper());
+                .SingleOrDefault(a => a.ContentId.ToUpper() == windowTag.ToUpper());
 
             if (windowPane != null)
             {
@@ -181,12 +193,28 @@ namespace ClearDashboard.Wpf.Views
                 {
                     windowPane.IsActive = true;
                 }
-                else
+            }
+            else
+            {
+                // window has been closed so reload it
+                windowPane = new LayoutAnchorable();
+                windowPane.ContentId = windowTag;
+
+                // setup the right ViewModel for the pane
+                var obj = _vm.LoadWindow(windowTag);
+                windowPane.Content = obj.vm;
+                windowPane.Title = obj.title;
+                windowPane.IsActive = true;
+                // set where it will doc on layout
+                if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                 {
-                    windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom | AnchorableShowStrategy.Most);
+                    windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom);
+                } 
+                else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                {
+                    windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Left);
                 }
             }
-
         }
     }
 }

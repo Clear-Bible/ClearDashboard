@@ -27,8 +27,8 @@
 
         public ConcordanceViewModel()
         {
-            this.Title = "🆎 CONCORDANCE";
-            this.ContentId = "{Concordance_ContentId}";
+            this.Title = "🆎 CONCORDANCE TOOL";
+            this.ContentId = "CONCORDANCETOOL";
         }
     }
 }

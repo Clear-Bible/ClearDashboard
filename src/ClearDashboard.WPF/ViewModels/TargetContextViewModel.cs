@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public TargetContextViewModel()
         {
             this.Title = "⬓ TARGET CONTEXT";
-            this.ContentId = "{TargetContext_ContentId}";
+            this.ContentId = "TARGETCONTEXT";
         }
 
         #endregion //Constructor

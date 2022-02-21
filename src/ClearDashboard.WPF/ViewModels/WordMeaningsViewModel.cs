@@ -29,7 +29,8 @@ namespace ClearDashboard.Wpf.ViewModels
         public WordMeaningsViewModel()
         {
             this.Title = "⌺ WORD MEANINGS";
-            this.ContentId = "{WordMeanings_ContentId}";
+            this.ContentId = "WORDMEANINGS";
+            this.DockSide = EDockSide.Left;
         }
 
         #endregion //Constructor

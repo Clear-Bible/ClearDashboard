@@ -10,6 +10,13 @@ namespace ClearDashboard.Wpf.ViewModels
     /// </summary>
     public class PaneViewModel : ObservableObject
     {
+        public enum EDockSide
+        {
+            Left,
+            Bottom,
+        }
+
+
         #region Member Variables
         private string _title = null;
         private string _contentId = null;
@@ -19,6 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
+        public EDockSide DockSide = EDockSide.Bottom;
 
         public string Title
         {

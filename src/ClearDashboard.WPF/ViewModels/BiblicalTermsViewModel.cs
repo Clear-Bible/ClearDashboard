@@ -44,7 +44,8 @@ namespace ClearDashboard.Wpf.ViewModels
         public BiblicalTermsViewModel()
         {
             this.Title = "🕮 BIBLICAL TERMS";
-            this.ContentId = "{BiblicalTerms_ContentId}";
+            this.ContentId = "BIBLICALTERMS";
+            this.DockSide = EDockSide.Left;
         }
 
         #endregion //Constructor

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Wpf.ViewModels;
 using MvvmHelpers;
 
 namespace ClearDashboard.Wpf.Models.Menus
@@ -18,6 +20,15 @@ namespace ClearDashboard.Wpf.Models.Menus
         {
             _command = new CommandViewModel(Execute);
         }
+
+        private WorkSpaceViewModel _workSpaceViewModel;
+
+        public WorkSpaceViewModel ViewModel
+        {
+            get { return _workSpaceViewModel; }
+            set { _workSpaceViewModel = value; }
+        }
+
 
 
         private bool _isChecked = false;
@@ -56,7 +67,49 @@ namespace ClearDashboard.Wpf.Models.Menus
 
         private void Execute()
         {
-            MessageBox.Show("Clicked at " + Id);
+            if (ViewModel != null)
+            {
+
+                Debug.WriteLine(Id);
+                switch (Id)
+                {
+                    case "LayoutID":
+                        break;
+                    case "AlignmentToolID":
+                        ViewModel.WindowIDToLoad = "ALIGNMENTTOOL";
+                        break;
+                    case "BiblicalTermsID":
+                        ViewModel.WindowIDToLoad = "BIBLICALTERMS";
+                        break;
+                    case "ConcordanceToolID":
+                        ViewModel.WindowIDToLoad = "CONCORDANCETOOL";
+                        break;
+                    case "DashboardID":
+                        ViewModel.WindowIDToLoad = "DASHBOARD";
+                        break;
+                    case "NotesID":
+                        ViewModel.WindowIDToLoad = "NOTES";
+                        break;
+                    case "PINSID":
+                        ViewModel.WindowIDToLoad = "PINS";
+                        break;
+                    case "WordMeaningsID":
+                        ViewModel.WindowIDToLoad = "WORDMEANINGS";
+                        break;
+                    case "SourceContextID":
+                        ViewModel.WindowIDToLoad = "SOURCECONTEXT";
+                        break;
+                    case "StartPageID":
+                        ViewModel.WindowIDToLoad = "STARTPAGE";
+                        break;
+                    case "TargetContextID":
+                        ViewModel.WindowIDToLoad = "TARGETCONTEXT";
+                        break;
+                    case "TextCollectionID":
+                        ViewModel.WindowIDToLoad = "TEXTCOLLECTION";
+                        break;
+                }
+            }
         }
     }
 }

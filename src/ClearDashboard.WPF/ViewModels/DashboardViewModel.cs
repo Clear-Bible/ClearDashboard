@@ -36,7 +36,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardViewModel()
         {
             this.Title = "📐 DASHBOARD";
-            this.ContentId = "Dashboard_ContentId";
+            this.ContentId = "DASHBOARD";
 
             if (Application.Current is ClearDashboard.Wpf.App)
             {
