@@ -7,8 +7,12 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Models.Menus;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -23,6 +27,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly ILogger _logger;
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
+
+
 
         public DashboardProject DashboardProject { get; set; }
 
@@ -54,6 +60,20 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion  //Commands
 
         #region Observable Properties
+
+
+        private ObservableCollection<MenuItemViewModel> _menuItems = new ObservableCollection<MenuItemViewModel>
+        {
+            new MenuItemViewModel{ Header="Layouts"},
+            new MenuItemViewModel{ Header="Windows"},
+            new MenuItemViewModel{ Header="Help"},
+        };
+        public ObservableCollection<MenuItemViewModel> MenuItems
+        {
+            get => _menuItems;
+            set { SetProperty(ref _menuItems, value, nameof(MenuItems)); }
+        }
+
 
         ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
         public ObservableCollection<ToolViewModel> Tools
@@ -123,14 +143,17 @@ namespace ClearDashboard.Wpf.ViewModels
                 this.SelectedTheme = Themes[1];
             }
 
-
-            // subscribe to change events in the parent's theme
-            (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
-
-            if (Application.Current is ClearDashboard.Wpf.App)
+            // check if we are in design mode or not
+            if (Application.Current != null)
             {
-                _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                // subscribe to change events in the parent's theme
+                (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+
+                if (Application.Current is ClearDashboard.Wpf.App)
+                {
+                    _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+                    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                }
             }
         }
 
@@ -151,12 +174,38 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void Init()
         {
+            // initiate the menu system
+            MenuItems.Clear();
+            MenuItems = new ObservableCollection<MenuItemViewModel>
+            {
+                new MenuItemViewModel { Header = "Layouts", Id="LayoutID" },
+                new MenuItemViewModel { Header = "Windows", Id="WindowID",
+                    MenuItems = new ObservableCollection<MenuItemViewModel>
+                    {
+                        new MenuItemViewModel { Header = "Alignment Tool",  Id="AlignmentToolID", },
+                        new MenuItemViewModel { Header = "Biblical Terms",  Id="BiblicalTermsID", },
+                        new MenuItemViewModel { Header = "Concordance Tool",  Id="ConcordanceToolID", },
+                        new MenuItemViewModel { Header = "Dashboard",  Id="DashboardID", },
+                        new MenuItemViewModel { Header = "Notes",  Id="NotesID", },
+                        new MenuItemViewModel { Header = "PINS",  Id="PINSID", },
+                        new MenuItemViewModel { Header = "Word Meanings",  Id="WordMeaningsID", },
+                        new MenuItemViewModel { Header = "Source Context",  Id="SourceContextID", },
+                        new MenuItemViewModel { Header = "Start Page",  Id="StartPageID", },
+                        new MenuItemViewModel { Header = "Target Context",  Id="TargetContextID", },
+                        new MenuItemViewModel { Header = "Text Collection",  Id="TextCollectionID", },
+                    }
+                },
+                new MenuItemViewModel { Header = "Help",  Id="HelpID" }
+            };
+
+
             // add in the document panes
             _files.Clear();
 
             Debug.WriteLine(DashboardProject.Name);
             _dashboardViewModel = new DashboardViewModel();
             _files.Add(_dashboardViewModel);
+
             _files.Add(new ConcordanceViewModel());
             _files.Add(new StartPageViewModel());
             _files.Add(new AlignmentToolViewModel());
@@ -174,6 +223,9 @@ namespace ClearDashboard.Wpf.ViewModels
             _tools.Add(new PinsViewModel());
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
+
+
+
 
         }
 
@@ -194,7 +246,14 @@ namespace ClearDashboard.Wpf.ViewModels
                 switch (e.Model.ContentId)
                 {
                     case "{Dashboard_ContentId}":
-                        e.Content = _dashboardViewModel;
+                        if (_dashboardViewModel is null)
+                        {
+                            e.Content = new DashboardViewModel();
+                        }
+                        else
+                        {
+                            e.Content = _dashboardViewModel;
+                        }
                         break;
                     case "{Concordance_ContentId}":
                         e.Content = new ConcordanceViewModel();

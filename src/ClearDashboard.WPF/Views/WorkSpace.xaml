@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.Models.Menus"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
@@ -74,10 +75,34 @@
                     </MenuItem>
                 </Menu>
                 <ComboBox
+                    VerticalContentAlignment="Center"
                     DisplayMemberPath="Item1"
                     ItemsSource="{Binding Themes}"
                     SelectedItem="{Binding SelectedTheme}" />
+
+
             </WrapPanel>
+
+
+            <Menu ItemsSource="{Binding MenuItems}">
+                <Menu.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Icon" Value="{Binding IconSource}" />
+                        <Setter Property="Command" Value="{Binding Command}" />
+                    </Style>
+                </Menu.ItemContainerStyle>
+
+                <Menu.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                        <TextBlock
+                            Margin="0 10 0 0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            Text="{Binding Header}" />
+                    </HierarchicalDataTemplate>
+                </Menu.ItemTemplate>
+            </Menu>
+
         </StackPanel>
 
 

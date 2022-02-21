@@ -198,6 +198,32 @@ namespace ClearDashboard.DAL.Paratext
             return projects;
         }
 
+        public string GetCurrentParatextUser()
+        {
+            if (paratextResourcesPath == "")
+            {
+                GetParatextProjectsPath();
+            }
+
+            string user = "USER NOT DETERMINED";
+            string userfile = Path.Combine(this.paratextProjectPath, "localUsers.txt");
+            if (File.Exists(userfile))
+            {
+                var tmp = File.ReadAllText(userfile);
+                var users = tmp.Split("\r\n");
+                if (users.Length > 0)
+                {
+                    return users[0];
+                }
+            }
+            else
+            {
+                return "USER UNKNOWN";
+            }
+
+            return user;
+        }
+
         public List<ParatextProject> GetParatextResources()
         {
             if (paratextResourcesPath == "")

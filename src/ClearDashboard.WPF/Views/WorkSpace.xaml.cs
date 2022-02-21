@@ -165,21 +165,26 @@ namespace ClearDashboard.Wpf.Views
         {
             var windowPane = dockManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
-                .SingleOrDefault(a => a.ContentId == windowTag);
+                .SingleOrDefault(a => a.ContentId.ToUpper() == ("{" + windowTag + "_ContentID}").ToUpper());
 
             if (windowPane != null)
             {
-                            if (windowPane.IsAutoHidden)
-            {
-                windowPane.Hide(false);
-            }
-
-            if (windowPane.IsHidden)
-                windowPane.Show();
-            else if (windowPane.IsVisible)
-                windowPane.IsActive = true;
-            else
-                windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom | AnchorableShowStrategy.Most);
+                if (windowPane.IsAutoHidden)
+                {
+                    windowPane.ToggleAutoHide();
+                }
+                else if (windowPane.IsHidden)
+                {
+                    windowPane.Show();
+                }
+                else if (windowPane.IsVisible)
+                {
+                    windowPane.IsActive = true;
+                }
+                else
+                {
+                    windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom | AnchorableShowStrategy.Most);
+                }
             }
 
         }

@@ -1,7 +1,10 @@
 ﻿using ClearDashboard.Common.Models;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
+using ClearDashboard.Wpf.Helpers;
 using Serilog;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -26,6 +29,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion //Observable Properties
 
+
+
         #region Constructor
 
         public DashboardViewModel()
@@ -38,6 +43,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
                 DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
             }
+
         }
 
         internal void Init()
@@ -51,6 +57,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Constructor
 
         #region Methods
+
 
         #endregion // Methods
 
