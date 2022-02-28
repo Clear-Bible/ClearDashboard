@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Views
             {
                 // listen for the menu changes
                 if (args.PropertyName.Equals("WindowIDToLoad"))
-                    UnHideWindow(args.ToString());
+                    UnHideWindow(_vm.WindowIDToLoad);
                     return;
             };
 
