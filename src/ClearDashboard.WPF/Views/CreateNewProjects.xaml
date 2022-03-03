@@ -239,7 +239,7 @@
 
 
             <Canvas
-                x:Name="DrawCanvas"
+                x:Name="DrawCanvasTop"
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="5"
@@ -247,7 +247,7 @@
                 PreviewDrop="Canvas_PreviewDrop" />
 
             <Canvas
-                x:Name="DrawCanvasLower"
+                x:Name="DrawCanvasBottom"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
