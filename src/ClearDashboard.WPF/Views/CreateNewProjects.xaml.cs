@@ -1,29 +1,23 @@
-﻿using System;
+﻿using ClearDashboard.Common.Models;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ClearDashboard.Common.Models;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.ViewModels;
-using MvvmHelpers;
-using Newtonsoft.Json;
 
 namespace ClearDashboard.Wpf.Views
 {
     public partial class CreateNewProjects : Page
     {
+        #region props
+
         CreateNewProjectsViewModel _vm;
 
         private bool _IsDraging = false;
@@ -32,26 +26,33 @@ namespace ClearDashboard.Wpf.Views
         private double _boxWidth;
         private double _boxHeight;
 
-        ParatextProject _targetProject;
+        private ParatextProject _targetProject;
         private List<ParatextProject> _LWCproject = new List<ParatextProject>();
         private List<ParatextProject> _BackTransProject = new List<ParatextProject>();
+        private ParatextProject _interlinearizerProject;
 
         // variables that hold the arrow connection points
         private Point _SourceConnectionPt = new Point(0, 0);
         private List<Point> _LWCconnectionPtsLeft = new List<Point>();
         private Point _TargetConnectionPtLeft = new Point(0, 0);
         private Point _TargetConnectionPtRight = new Point(0, 0);
-        private List<Point> _BTconnectionPtsLeft = new List<Point>();
-        private List<Point> _BTconnectionPtsRight = new List<Point>();
+        private Point _TargetConnectionPtBottom = new Point(0, 0);
+        private Point _INconnectionPtsLeft = new Point(0, 0);
 
         private enum eDropZones
         {
             Source,
             LWC,
             Target,
-            BackTranslation
+            BackTranslation,
+            Interlinearizer,
+            Blank
         }
 
+        #endregion
+
+
+        #region Startup
 
         public CreateNewProjects()
         {
@@ -70,6 +71,10 @@ namespace ClearDashboard.Wpf.Views
                 _vm.Init();
             }
         }
+
+        #endregion
+
+        #region Methods
 
         private void listview_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -97,7 +102,7 @@ namespace ClearDashboard.Wpf.Views
             }
         }
 
-        private void Canvas_PreviewDrop(object sender, DragEventArgs e)
+        private void Canvas_PreviewDropTop(object sender, DragEventArgs e)
         {
             var data = e.Data;
             Point p = e.GetPosition(DrawCanvasTop);
@@ -142,17 +147,6 @@ namespace ClearDashboard.Wpf.Views
                             }
                         }
                         break;
-                        //case eDropZones.BackTranslation:
-                        //    text.Text = "BACKTRANSLATION";
-                        //    if (project.ProjectType == ParatextProject.eProjectType.BackTranslation)
-                        //    {
-                        //        t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
-                        //        if (t.Count() == 0)
-                        //        {
-                        //            _BackTransProject.Add(project);
-                        //        }
-                        //    }
-                        //    break;
                 }
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 text.VerticalAlignment = VerticalAlignment.Center;
@@ -160,12 +154,59 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(text, p.X);
                 DrawCanvasTop.Children.Add(text);
 
+                // TODO Update with Interlinearizer
                 _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
 
                 DrawTheCanvas();
             }
         }
 
+        private void Canvas_PreviewDropBottom(object sender, DragEventArgs e)
+        {
+            var data = e.Data;
+            Point p = e.GetPosition(DrawCanvasBottom);
+
+            var dropZone = GetDropZoneBottom(p);
+
+            if (data.GetDataPresent(typeof(ParatextProject)))
+            {
+                var project = data.GetData(typeof(ParatextProject)) as ParatextProject;
+
+                TextBlock text = new TextBlock();
+
+                switch (dropZone)
+                {
+                    case eDropZones.BackTranslation:
+                        text.Text = "BACK TRANSLATION";
+                        // look for linked back translations
+                        var t = _BackTransProject.Where(p => p.Name == project.Name).ToList();
+                        if (t.Count() == 0)
+                        {
+                            _BackTransProject.Add(project);
+                        }
+                        break;
+                    case eDropZones.Blank:
+                        break;
+                    case eDropZones.Interlinearizer:
+                        text.Text = "INTERLINEARIZER";
+                        if (project.ProjectType == ParatextProject.eProjectType.Resource)
+                        {
+                            _interlinearizerProject = project;
+                        }
+                        break;
+                }
+                text.HorizontalAlignment = HorizontalAlignment.Center;
+                text.VerticalAlignment = VerticalAlignment.Center;
+                Canvas.SetTop(text, p.Y);
+                Canvas.SetLeft(text, p.X);
+                DrawCanvasBottom.Children.Add(text);
+
+                // TODO Update with Interlinearizer
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
+
+                DrawTheCanvas();
+            }
+        }
         private eDropZones GetDropZone(Point pt)
         {
             if (pt.X < _boxWidth)
@@ -176,132 +217,37 @@ namespace ClearDashboard.Wpf.Views
             {
                 return eDropZones.Target;
             }
-            //if (pt.X > _boxWidth * 2 && pt.X < _boxWidth * 3)
-            //{
-            //    return eDropZones.LWC;
-            //}
             return eDropZones.LWC;
         }
 
+        private eDropZones GetDropZoneBottom(Point pt)
+        {
+            if (pt.X < _boxWidth)
+            {
+                return eDropZones.BackTranslation;
+            }
+            if (pt.X > _boxWidth && pt.X < _boxWidth * 2)
+            {
+                return eDropZones.Blank;
+            }
+            return eDropZones.Interlinearizer;
+        }
 
         private void DrawTheCanvas()
         {
             _boxWidth = DrawCanvasTop.ActualWidth / 3; //width of each box
             _boxHeight = DrawCanvasTop.ActualHeight;  // Height of each box
 
-            const int cornerRadius = 8;
             int projectBoxWidth = (int)(_boxWidth * 0.33);
             const int projectBoxHeight = 40;
 
             DrawCanvasTop.Children.Clear();
             DrawCanvasBottom.Children.Clear();
 
-            // ========================
-            // BUILD THE HEADERS AND DROP BOXES
-            // ========================
-            for (int i = 0; i < 3; i++)
-            {
-                TextBlock text = new TextBlock();
-                text.FontSize = 20;
-                text.FontWeight = FontWeights.Bold;
-                text.HorizontalAlignment = HorizontalAlignment.Center;
-                text.Width = _boxWidth;
-
-                Rectangle rect = new Rectangle();
-                rect.Height = DrawCanvasTop.ActualHeight;
-                rect.Width = _boxWidth - 2;
-                rect.RadiusX = cornerRadius;
-                rect.RadiusY = cornerRadius;
-                rect.StrokeThickness = 3;
-                //rect.Opacity = 0.5;
-                //rect.Fill = Application.Current.FindResource("MaterialDesignCardBackground") as Brush;
-                rect.Fill = Brushes.Transparent;
-                rect.Effect =
-                    new DropShadowEffect
-                    {
-                        BlurRadius = 2,
-                        ShadowDepth = 2,
-                        Opacity = 0.75
-                    };
-
-                Point point = new Point();
-                point.Y = 0;
-                switch (i)
-                {
-                    case 0:
-                        rect.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("TealDarkBrush") as Brush;
-                        point.X = 0;
-                        text.Text = "Manuscript";
-                        break;
-                    case 1:
-                        rect.Stroke = Application.Current.FindResource("BlueDarkBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("BlueDarkBrush") as Brush;
-                        point.X = _boxWidth;
-                        text.Text = "Target";
-                        break;
-                    case 2:
-                        rect.Stroke = Application.Current.FindResource("OrangeDarkBrush") as Brush;
-                        text.Foreground = Application.Current.FindResource("OrangeDarkBrush") as Brush;
-                        point.X = _boxWidth * 2;
-                        text.Text = "LWC(s)";
-                        break;
-                }
-
-                Canvas.SetLeft(rect, point.X);
-                Canvas.SetTop(rect, point.Y);
-                DrawCanvasTop.Children.Add(rect);
-
-                // center the text in the block
-                Size sz = DrawingUtils.MeasureString(text.Text, text);
-                var additionalX = (_boxWidth - sz.Width) / 2;
-                Canvas.SetLeft(text, point.X + additionalX);
-                Canvas.SetTop(text, 10);
-                DrawCanvasTop.Children.Add(text);
-            }
-
-            // ===============================
-            // Draw the Interlineariser Box
-            // ===============================
-            var text2 = new TextBlock();
-            text2.FontSize = 20;
-            text2.FontWeight = FontWeights.Bold;
-            text2.HorizontalAlignment = HorizontalAlignment.Center;
-            text2.Width = _boxWidth;
-
-            Rectangle rect2 = new Rectangle();
-            rect2.Height = DrawCanvasTop.ActualHeight;
-            rect2.Width = _boxWidth - 2;
-            rect2.RadiusX = cornerRadius;
-            rect2.RadiusY = cornerRadius;
-            rect2.StrokeThickness = 3;
-            rect2.Fill = Brushes.Transparent;
-            rect2.Effect =
-                new DropShadowEffect
-                {
-                    BlurRadius = 2,
-                    ShadowDepth = 2,
-                    Opacity = 0.75
-                };
-
-            Point point2 = new Point();
-            point2.Y = 0;
-            rect2.Stroke = Application.Current.FindResource("TealDarkBrush") as Brush;
-            text2.Foreground = Application.Current.FindResource("TealDarkBrush") as Brush;
-            point2.X = _boxWidth * 2;
-            text2.Text = "Back Translation";
-
-            Canvas.SetLeft(rect2, point2.X);
-            Canvas.SetTop(rect2, point2.Y);
-            DrawCanvasBottom.Children.Add(rect2);
-
-            // center the text in the block
-            Size sz2 = DrawingUtils.MeasureString(text2.Text, text2);
-            var additionalX2 = (_boxWidth - sz2.Width) / 2;
-            Canvas.SetLeft(text2, point2.X + additionalX2);
-            Canvas.SetTop(text2, 10);
-            DrawCanvasBottom.Children.Add(text2);
-
+            // ===========================================
+            // Draw the Box Outlines and header label
+            // ===========================================
+            DrawAllTheBoxes();
 
 
             // ===============================
@@ -331,6 +277,14 @@ namespace ClearDashboard.Wpf.Views
             if (_BackTransProject.Count > 0)
             {
                 DrawBackTransBoxes(projectBoxWidth, projectBoxHeight);
+            }
+
+            // =============================================
+            // Draw the Interlinearizer Contents
+            // =============================================
+            if (_interlinearizerProject != null)
+            {
+                DrawInterlinearizerBox(projectBoxWidth, projectBoxHeight);
             }
 
             // ===============================
@@ -363,21 +317,155 @@ namespace ClearDashboard.Wpf.Views
             }
 
 
-            //// connection lines between target and BTs
-            //if (_targetProject != null && _BackTransProject.Count > 0)
-            //{
-            //    // 
-            //    for (int i = 0; i < _BackTransProject.Count; i++)
-            //    {
-            //        var leftPt = new Point(_TargetConnectionPtRight.X + 6, _TargetConnectionPtRight.Y + 2);
-            //        var rightPt = new Point(_BTconnectionPtsLeft[i].X - 6, _BTconnectionPtsLeft[i].Y + 2);
-            //        Point controlPtSource = new Point(_TargetConnectionPtRight.X + 20, _TargetConnectionPtRight.Y);
-            //        Point controlPtTarget = new Point(_BTconnectionPtsLeft[i].X - 20, _BTconnectionPtsLeft[i].Y);
-            //        Path path = GenerateLine(leftPt, rightPt, controlPtSource, controlPtTarget);
-            //        DrawCanvasTop.Children.Add(path);
-            //    }
-            //}
+            // connection lines between target and Intelinear
+            if (_targetProject != null && _interlinearizerProject != null)
+            {
+                var bottomPt = new Point(_TargetConnectionPtBottom.X, _TargetConnectionPtBottom.Y + 6);
+                var leftPt = new Point(_INconnectionPtsLeft.X - 6, _INconnectionPtsLeft.Y + 10 + DrawCanvasTop.ActualHeight);
+                Point controlPtSource = new Point(_TargetConnectionPtBottom.X, _TargetConnectionPtBottom.Y + (DrawCanvasTop.ActualHeight / 3));
+                Point controlPtTarget = new Point(_INconnectionPtsLeft.X - (DrawCanvasTop.ActualHeight / 3), _INconnectionPtsLeft.Y + DrawCanvasTop.ActualHeight);
+                Path path = GenerateLine(bottomPt,  leftPt, controlPtSource, controlPtTarget);
+                DrawCanvasTop.Children.Add(path);
+            }
 
+        }
+
+        private void DrawAllTheBoxes()
+        {
+            const int cornerRadius = 8;
+
+            // =======================================================
+            // BUILD THE HEADERS AND DROP BOXES - UPPER CANVAS
+            // =======================================================
+            for (int i = 0; i < 3; i++)
+            {
+                TextBlock text = new TextBlock();
+                text.FontSize = 20;
+                text.FontWeight = FontWeights.Bold;
+                text.HorizontalAlignment = HorizontalAlignment.Center;
+                text.Width = _boxWidth;
+
+                Rectangle rect = new Rectangle();
+                rect.Height = DrawCanvasTop.ActualHeight;
+                rect.Width = _boxWidth - 2;
+                rect.RadiusX = cornerRadius;
+                rect.RadiusY = cornerRadius;
+                rect.StrokeThickness = 3;
+                rect.Fill = Brushes.Transparent;
+                rect.Effect =
+                    new DropShadowEffect
+                    {
+                        BlurRadius = 2,
+                        ShadowDepth = 2,
+                        Opacity = 0.75
+                    };
+
+                Point point = new Point();
+                point.Y = 0;
+                switch (i)
+                {
+                    case 0:
+                        rect.Stroke = Application.Current.FindResource("TealVeryDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("TealVeryDarkBrush") as Brush;
+                        point.X = 0;
+                        text.Text = "Manuscript";
+                        break;
+                    case 1:
+                        rect.Stroke = Application.Current.FindResource("BlueDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("BlueDarkBrush") as Brush;
+                        point.X = _boxWidth;
+                        text.Text = "Target";
+                        break;
+                    case 2:
+                        rect.Stroke = Application.Current.FindResource("OrangeDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("OrangeDarkBrush") as Brush;
+                        point.X = _boxWidth * 2;
+                        text.Text = "LWC(s)";
+                        break;
+                }
+
+                Canvas.SetLeft(rect, point.X);
+                Canvas.SetTop(rect, point.Y);
+                DrawCanvasTop.Children.Add(rect);
+
+                // center the text in the block
+                Size sz = DrawingUtils.MeasureString(text.Text, text);
+                var additionalX = (_boxWidth - sz.Width) / 2;
+                Canvas.SetLeft(text, point.X + additionalX);
+                Canvas.SetTop(text, 10);
+                DrawCanvasTop.Children.Add(text);
+            }
+
+            // =======================================================
+            // BUILD THE HEADERS AND DROP BOXES - LOWER CANVAS
+            // =======================================================
+            for (int i = 0; i < 3; i++)
+            {
+                TextBlock text = new TextBlock();
+                text.FontSize = 20;
+                text.FontWeight = FontWeights.Bold;
+                text.HorizontalAlignment = HorizontalAlignment.Center;
+                text.Width = _boxWidth;
+
+                Rectangle rect = new Rectangle();
+                rect.Height = DrawCanvasBottom.ActualHeight;
+                rect.Width = _boxWidth - 2;
+                rect.RadiusX = cornerRadius;
+                rect.RadiusY = cornerRadius;
+                rect.StrokeThickness = 3;
+                rect.Fill = Brushes.Transparent;
+                rect.Effect =
+                    new DropShadowEffect
+                    {
+                        BlurRadius = 2,
+                        ShadowDepth = 2,
+                        Opacity = 0.75
+                    };
+
+                Point point = new Point();
+                point.Y = 0;
+                switch (i)
+                {
+                    case 0:
+                        rect.Stroke = Application.Current.FindResource("PurpleMidBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("PurpleMidBrush") as Brush;
+                        point.X = 0;
+                        text.Text = "Back Translation(s)";
+
+                        Canvas.SetLeft(rect, point.X);
+                        Canvas.SetTop(rect, point.Y);
+                        DrawCanvasBottom.Children.Add(rect);
+
+                        // center the text in the block
+                        Size sz = DrawingUtils.MeasureString(text.Text, text);
+                        var additionalX = (_boxWidth - sz.Width) / 2;
+                        Canvas.SetLeft(text, point.X + additionalX);
+                        Canvas.SetTop(text, 10);
+                        DrawCanvasBottom.Children.Add(text);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        rect.Stroke = Application.Current.FindResource("OrangeDarkBrush") as Brush;
+                        text.Foreground = Application.Current.FindResource("OrangeDarkBrush") as Brush;
+                        point.X = _boxWidth * 2;
+                        text.Text = "Interlinearizer";
+
+                        Canvas.SetLeft(rect, point.X);
+                        Canvas.SetTop(rect, point.Y);
+                        DrawCanvasBottom.Children.Add(rect);
+
+                        // center the text in the block
+                        sz = DrawingUtils.MeasureString(text.Text, text);
+                        additionalX = (_boxWidth - sz.Width) / 2;
+                        Canvas.SetLeft(text, point.X + additionalX);
+                        Canvas.SetTop(text, 10);
+                        DrawCanvasBottom.Children.Add(text);
+                        break;
+                }
+
+
+            }
         }
 
 
@@ -403,6 +491,118 @@ namespace ClearDashboard.Wpf.Views
             return path;
         }
 
+        #region Box Contents Drawing
+
+        private void DrawInterlinearizerBox(int projectBoxWidth, int projectBoxHeight)
+        {
+            const double separation = 75;
+            double offset = 0;
+
+
+            // ==================================
+            // Draw the Interlinearizer Boxes
+            // ==================================
+            Point point = new Point();
+            point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 6);
+            point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset;
+
+            Rectangle targetRect = new Rectangle();
+            targetRect.Width = projectBoxWidth;
+            targetRect.Height = projectBoxHeight;
+            targetRect.Fill = Application.Current.FindResource("OrangeMidBrush") as Brush;
+            targetRect.RadiusX = 3;
+            targetRect.RadiusY = 3;
+            targetRect.Effect =
+                new DropShadowEffect
+                {
+                    BlurRadius = 5,
+                    ShadowDepth = 2,
+                    Opacity = 0.75
+                };
+            Canvas.SetTop(targetRect, point.Y);
+            Canvas.SetLeft(targetRect, point.X);
+            DrawCanvasBottom.Children.Add(targetRect);
+
+            // draw the 'Source' word
+            TextBlock text = new TextBlock();
+            text.FontSize = 16;
+            text.FontWeight = FontWeights.Bold;
+            text.HorizontalAlignment = HorizontalAlignment.Center;
+            text.Width = _boxWidth;
+            text.Text = _interlinearizerProject.Name;
+            Size sz = DrawingUtils.MeasureString(text.Text, text);
+            var additionalX = (projectBoxWidth - sz.Width) / 2;
+            Canvas.SetLeft(text, point.X + additionalX);
+            var additionalY = (projectBoxHeight - sz.Height) / 3;
+            Canvas.SetTop(text, point.Y + additionalY);
+            DrawCanvasBottom.Children.Add(text);
+
+
+            // Draw circle at connect point (right side)
+            Point rPt = new Point(point.X, point.Y + offset);
+            rPt.X += projectBoxWidth;
+            rPt.Y += projectBoxHeight / 2 - offset;
+
+            Ellipse circlePt = new Ellipse();
+            SolidColorBrush brushCircle = new SolidColorBrush();
+            brushCircle.Color = Colors.AliceBlue;
+            circlePt.Fill = brushCircle;
+            circlePt.StrokeThickness = 1;
+            circlePt.Stroke = Brushes.Black;
+
+            // Set the width and height of the Ellipse.
+            circlePt.Width = 8;
+            circlePt.Height = 8;
+
+            // How to set center of ellipse
+            Canvas.SetTop(circlePt, rPt.Y - 2.5);
+            Canvas.SetLeft(circlePt, rPt.X - 2.5);
+            DrawCanvasBottom.Children.Add(circlePt);
+
+            // Draw circle at connect point (left side)
+            Point lPt = new Point(point.X, point.Y);
+            lPt.Y += projectBoxHeight / 2;
+
+            circlePt = new Ellipse();
+            brushCircle = new SolidColorBrush();
+            brushCircle.Color = Colors.AliceBlue;
+            circlePt.Fill = brushCircle;
+            circlePt.StrokeThickness = 1;
+            circlePt.Stroke = Brushes.Black;
+
+            // Set the width and height of the Ellipse.
+            circlePt.Width = 8;
+            circlePt.Height = 8;
+
+            // How to set center of ellipse
+            Canvas.SetTop(circlePt, lPt.Y - 2.5);
+            Canvas.SetLeft(circlePt, lPt.X - 5);
+            DrawCanvasBottom.Children.Add(circlePt);
+            _INconnectionPtsLeft = new Point(lPt.X, lPt.Y);
+
+            // draw the remove button
+            Button btn = new Button();
+            btn.Style = (Style)Application.Current.TryFindResource("MaterialDesignIconButton");
+            btn.Content = new MaterialDesignThemes.Wpf.PackIcon
+            { Kind = MaterialDesignThemes.Wpf.PackIconKind.CloseCircle };
+            btn.Width = 25;
+            btn.Height = 25;
+            btn.Click += RemoveItem_Click;
+            btn.Uid = "IN:" + _interlinearizerProject.Name;
+            btn.Foreground = Brushes.Red;
+            btn.Effect =
+                new DropShadowEffect
+                {
+                    BlurRadius = 5,
+                    ShadowDepth = 2,
+                    Opacity = 0.75
+                };
+
+            Canvas.SetTop(btn, point.Y - btn.Height / 2);
+            Canvas.SetLeft(btn, point.X + projectBoxWidth - btn.Width / 2);
+            DrawCanvasBottom.Children.Add(btn);
+        }
+
         /// <summary>
         /// Draw the LWC boxes
         /// </summary>
@@ -411,9 +611,6 @@ namespace ClearDashboard.Wpf.Views
         /// <exception cref="NotImplementedException"></exception>
         private void DrawBackTransBoxes(int projectBoxWidth, int projectBoxHeight)
         {
-            _BTconnectionPtsRight.Clear();
-            _BTconnectionPtsLeft.Clear();
-
             const double separation = 75;
             double offset = 0;
             if (_BackTransProject.Count > 1)
@@ -427,13 +624,13 @@ namespace ClearDashboard.Wpf.Views
                 // Draw the Back Translation Boxes
                 // ========================
                 Point point = new Point();
-                point.X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 6);
-                point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset;
+                point.X = (_boxWidth / 2) - (projectBoxWidth / 2);
+                point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
 
                 Rectangle targetRect = new Rectangle();
                 targetRect.Width = projectBoxWidth;
                 targetRect.Height = projectBoxHeight;
-                targetRect.Fill = Application.Current.FindResource("TealMidBrush") as Brush;
+                targetRect.Fill = Application.Current.FindResource("PurpleLightBrush") as Brush;
                 targetRect.RadiusX = 3;
                 targetRect.RadiusY = 3;
                 targetRect.Effect =
@@ -445,7 +642,7 @@ namespace ClearDashboard.Wpf.Views
                     };
                 Canvas.SetTop(targetRect, point.Y);
                 Canvas.SetLeft(targetRect, point.X);
-                DrawCanvasTop.Children.Add(targetRect);
+                DrawCanvasBottom.Children.Add(targetRect);
 
                 // draw the 'Source' word
                 TextBlock text = new TextBlock();
@@ -459,51 +656,49 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(text, point.X + additionalX);
                 var additionalY = (projectBoxHeight - sz.Height) / 3;
                 Canvas.SetTop(text, point.Y + additionalY);
-                DrawCanvasTop.Children.Add(text);
+                DrawCanvasBottom.Children.Add(text);
 
 
-                // Draw circle at connect point (right side)
-                Point rPt = new Point(point.X, point.Y + offset);
-                rPt.X += projectBoxWidth;
-                rPt.Y += projectBoxHeight / 2 - offset;
+                //// Draw circle at connect point (right side)
+                //Point rPt = new Point(point.X, point.Y + offset);
+                //rPt.X += projectBoxWidth;
+                //rPt.Y += projectBoxHeight / 2 - offset;
 
-                Ellipse circlePt = new Ellipse();
-                SolidColorBrush brushCircle = new SolidColorBrush();
-                brushCircle.Color = Colors.AliceBlue;
-                circlePt.Fill = brushCircle;
-                circlePt.StrokeThickness = 1;
-                circlePt.Stroke = Brushes.Black;
+                //Ellipse circlePt = new Ellipse();
+                //SolidColorBrush brushCircle = new SolidColorBrush();
+                //brushCircle.Color = Colors.AliceBlue;
+                //circlePt.Fill = brushCircle;
+                //circlePt.StrokeThickness = 1;
+                //circlePt.Stroke = Brushes.Black;
 
-                // Set the width and height of the Ellipse.
-                circlePt.Width = 8;
-                circlePt.Height = 8;
+                //// Set the width and height of the Ellipse.
+                //circlePt.Width = 8;
+                //circlePt.Height = 8;
 
-                // How to set center of ellipse
-                Canvas.SetTop(circlePt, rPt.Y - 2.5);
-                Canvas.SetLeft(circlePt, rPt.X - 2.5);
-                DrawCanvasTop.Children.Add(circlePt);
-                _BTconnectionPtsRight.Add(new Point(rPt.X, rPt.Y));
+                //// How to set center of ellipse
+                //Canvas.SetTop(circlePt, rPt.Y - 2.5);
+                //Canvas.SetLeft(circlePt, rPt.X - 2.5);
+                //DrawCanvasBottom.Children.Add(circlePt);
 
-                // Draw circle at connect point (left side)
-                Point lPt = new Point(point.X, point.Y);
-                lPt.Y += projectBoxHeight / 2;
+                //// Draw circle at connect point (left side)
+                //Point lPt = new Point(point.X, point.Y);
+                //lPt.Y += projectBoxHeight / 2;
 
-                circlePt = new Ellipse();
-                brushCircle = new SolidColorBrush();
-                brushCircle.Color = Colors.AliceBlue;
-                circlePt.Fill = brushCircle;
-                circlePt.StrokeThickness = 1;
-                circlePt.Stroke = Brushes.Black;
+                //circlePt = new Ellipse();
+                //brushCircle = new SolidColorBrush();
+                //brushCircle.Color = Colors.AliceBlue;
+                //circlePt.Fill = brushCircle;
+                //circlePt.StrokeThickness = 1;
+                //circlePt.Stroke = Brushes.Black;
 
-                // Set the width and height of the Ellipse.
-                circlePt.Width = 8;
-                circlePt.Height = 8;
+                //// Set the width and height of the Ellipse.
+                //circlePt.Width = 8;
+                //circlePt.Height = 8;
 
-                // How to set center of ellipse
-                Canvas.SetTop(circlePt, lPt.Y - 2.5);
-                Canvas.SetLeft(circlePt, lPt.X - 5);
-                DrawCanvasTop.Children.Add(circlePt);
-                _BTconnectionPtsLeft.Add(new Point(lPt.X, lPt.Y));
+                //// How to set center of ellipse
+                //Canvas.SetTop(circlePt, lPt.Y - 2.5);
+                //Canvas.SetLeft(circlePt, lPt.X - 5);
+                //DrawCanvasBottom.Children.Add(circlePt);
 
                 // draw the remove button
                 Button btn = new Button();
@@ -525,7 +720,7 @@ namespace ClearDashboard.Wpf.Views
 
                 Canvas.SetTop(btn, point.Y - btn.Height / 2);
                 Canvas.SetLeft(btn, point.X + projectBoxWidth - btn.Width / 2);
-                DrawCanvasTop.Children.Add(btn);
+                DrawCanvasBottom.Children.Add(btn);
 
                 offset -= separation * 2;
             }
@@ -564,7 +759,7 @@ namespace ClearDashboard.Wpf.Views
                 {
                     point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
                 }
-                
+
 
                 Rectangle targetRect = new Rectangle();
                 targetRect.Width = projectBoxWidth;
@@ -717,6 +912,8 @@ namespace ClearDashboard.Wpf.Views
             DrawCanvasTop.Children.Add(circlePt);
             _TargetConnectionPtRight = rPt;
 
+
+
             // Draw circle at connect point (left side)
             Point lPt = new Point(point.X, point.Y);
             lPt.Y += projectBoxHeight / 2;
@@ -737,6 +934,31 @@ namespace ClearDashboard.Wpf.Views
             Canvas.SetLeft(circlePt, lPt.X - 5);
             DrawCanvasTop.Children.Add(circlePt);
             _TargetConnectionPtLeft = lPt;
+
+
+
+            // Draw circle at connect point (bottom side)
+            Point bPt = new Point(point.X, point.Y);
+            bPt.Y += projectBoxHeight;
+            bPt.X = point.X + (projectBoxWidth / 2);
+
+            circlePt = new Ellipse();
+            brushCircle = new SolidColorBrush();
+            brushCircle.Color = Colors.AliceBlue;
+            circlePt.Fill = brushCircle;
+            circlePt.StrokeThickness = 1;
+            circlePt.Stroke = Brushes.Black;
+
+            // Set the width and height of the Ellipse.
+            circlePt.Width = 8;
+            circlePt.Height = 8;
+
+            // How to set center of ellipse
+            Canvas.SetTop(circlePt, bPt.Y - 2.5);
+            Canvas.SetLeft(circlePt, bPt.X - 5);
+            DrawCanvasTop.Children.Add(circlePt);
+            _TargetConnectionPtBottom = bPt;
+
 
             // draw the remove button
             Button btn = new Button();
@@ -759,6 +981,82 @@ namespace ClearDashboard.Wpf.Views
             Canvas.SetLeft(btn, point.X + projectBoxWidth - btn.Width / 2);
             DrawCanvasTop.Children.Add(btn);
         }
+
+        /// <summary>
+        /// Draw the source box
+        /// </summary>
+        /// <param name="projectBoxWidth"></param>
+        /// <param name="projectBoxHeight"></param>
+        private void DrawSourceBox(int projectBoxWidth, int projectBoxHeight)
+        {
+            TextBlock text;
+            Size sz;
+            double additionalX;
+            // ========================
+            // Draw the Source Box
+            // ========================
+            Point point = new Point();
+            point.X = (_boxWidth / 2) - (projectBoxWidth / 2);
+            point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
+
+            // draw the 'Source' word
+            text = new TextBlock();
+            text.FontSize = 12;
+            text.FontWeight = FontWeights.Bold;
+            text.HorizontalAlignment = HorizontalAlignment.Center;
+            text.Width = _boxWidth;
+            text.Text = "MANUSCRIPT";
+            sz = DrawingUtils.MeasureString(text.Text, text);
+            additionalX = (projectBoxWidth - sz.Width) / 2;
+            Canvas.SetLeft(text, point.X + additionalX);
+            var additionalY = (projectBoxHeight - sz.Height) / 3;
+            Canvas.SetTop(text, point.Y + additionalY);
+
+            Rectangle sourceRect = new Rectangle();
+            sourceRect.Width = projectBoxWidth;
+            sourceRect.Height = projectBoxHeight;
+            sourceRect.Fill = Application.Current.FindResource("TealDarkBrush") as Brush;
+            sourceRect.RadiusX = 3;
+            sourceRect.RadiusY = 3;
+            sourceRect.Effect =
+                new DropShadowEffect
+                {
+                    BlurRadius = 5,
+                    ShadowDepth = 2,
+                    Opacity = 0.75
+                };
+            Canvas.SetTop(sourceRect, point.Y);
+            Canvas.SetLeft(sourceRect, point.X);
+            DrawCanvasTop.Children.Add(sourceRect);
+
+
+            DrawCanvasTop.Children.Add(text);
+
+
+            // Draw circle at connect point
+            Point lPt = new Point(point.X, point.Y);
+            lPt.X += projectBoxWidth;
+            lPt.Y += projectBoxHeight / 2;
+
+            Ellipse circlePt = new Ellipse();
+            SolidColorBrush brushCircle = new SolidColorBrush();
+            brushCircle.Color = Colors.AliceBlue;
+            circlePt.Fill = brushCircle;
+            circlePt.StrokeThickness = 1;
+            circlePt.Stroke = Brushes.Black;
+
+            // Set the width and height of the Ellipse.
+            circlePt.Width = 8;
+            circlePt.Height = 8;
+
+            // How to set center of ellipse
+            Canvas.SetTop(circlePt, lPt.Y - 2.5);
+            Canvas.SetLeft(circlePt, lPt.X - 2.5);
+            DrawCanvasTop.Children.Add(circlePt);
+            _SourceConnectionPt = lPt;
+        }
+
+        #endregion
 
         private void RemoveItem_Click(object sender, RoutedEventArgs e)
         {
@@ -803,84 +1101,12 @@ namespace ClearDashboard.Wpf.Views
         }
 
 
-        /// <summary>
-        /// Draw the source box
-        /// </summary>
-        /// <param name="projectBoxWidth"></param>
-        /// <param name="projectBoxHeight"></param>
-        private void DrawSourceBox(int projectBoxWidth, int projectBoxHeight)
-        {
-            TextBlock text;
-            Size sz;
-            double additionalX;
-            // ========================
-            // Draw the Source Box
-            // ========================
-            Point point = new Point();
-            point.X = (_boxWidth / 2) - (projectBoxWidth / 2);
-            point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
-
-            // draw the 'Source' word
-            text = new TextBlock();
-            text.FontSize = 12;
-            text.FontWeight = FontWeights.Bold;
-            text.HorizontalAlignment = HorizontalAlignment.Center;
-            text.Width = _boxWidth;
-            text.Text = "MANUSCRIPT";
-            sz = DrawingUtils.MeasureString(text.Text, text);
-            additionalX = (projectBoxWidth - sz.Width) / 2;
-            Canvas.SetLeft(text, point.X + additionalX);
-            var additionalY = (projectBoxHeight - sz.Height) / 3;
-            Canvas.SetTop(text, point.Y + additionalY);
-
-            Rectangle sourceRect = new Rectangle();
-            sourceRect.Width = projectBoxWidth;
-            sourceRect.Height = projectBoxHeight;
-            sourceRect.Fill = Application.Current.FindResource("TealMidBrush") as Brush;
-            sourceRect.RadiusX = 3;
-            sourceRect.RadiusY = 3;
-            sourceRect.Effect =
-                new DropShadowEffect
-                {
-                    BlurRadius = 5,
-                    ShadowDepth = 2,
-                    Opacity = 0.75
-                };
-            Canvas.SetTop(sourceRect, point.Y);
-            Canvas.SetLeft(sourceRect, point.X);
-            DrawCanvasTop.Children.Add(sourceRect);
-
-
-            DrawCanvasTop.Children.Add(text);
-
-
-            // Draw circle at connect point
-            Point lPt = new Point(point.X, point.Y);
-            lPt.X += projectBoxWidth;
-            lPt.Y += projectBoxHeight / 2;
-
-            Ellipse circlePt = new Ellipse();
-            SolidColorBrush brushCircle = new SolidColorBrush();
-            brushCircle.Color = Colors.AliceBlue;
-            circlePt.Fill = brushCircle;
-            circlePt.StrokeThickness = 1;
-            circlePt.Stroke = Brushes.Black;
-
-            // Set the width and height of the Ellipse.
-            circlePt.Width = 8;
-            circlePt.Height = 8;
-
-            // How to set center of ellipse
-            Canvas.SetTop(circlePt, lPt.Y - 2.5);
-            Canvas.SetLeft(circlePt, lPt.X - 2.5);
-            DrawCanvasTop.Children.Add(circlePt);
-            _SourceConnectionPt = lPt;
-        }
-
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             DrawTheCanvas();
         }
+
+        #endregion
     }
 
 
