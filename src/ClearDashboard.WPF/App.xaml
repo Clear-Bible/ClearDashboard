@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:System="clr-namespace:System;assembly=System.Runtime"
     xmlns:local="clr-namespace:ClearDashboard.Wpf"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    StartupUri="Views/MainWindow.xaml">
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <!--  StartupUri="Views/MainWindow.xaml"  -->
 
     <Application.Resources>
         <ResourceDictionary>
@@ -13,7 +13,7 @@
                 <!--  Note: I have intentionally omitted the Light/Dark theme dictionary as that is being set in code  -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Purple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
 
                 <!--<materialDesign:BundledTheme
                     BaseTheme="Dark"
@@ -23,34 +23,52 @@
 
                 <ResourceDictionary>
                     <!--  Additional Design Colors - DARK  -->
-                    <Brush x:Key="PurpleLightBrush">#DEA5E8</Brush>
-                    <Brush x:Key="PurpleMidBrush">#AC5CD9</Brush>
-                    <Brush x:Key="PurpleDarkBrush">#6500CD</Brush>
-
                     <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
                     <Brush x:Key="BlueMidBrush">#5B8DEE</Brush>
                     <Brush x:Key="BlueDarkBrush">#0063F8</Brush>
-                    <Brush x:Key="BlueVeryDarkBrush">#0063FF</Brush>
+                    <Brush x:Key="BlueVeryDarkBrush">#002D74</Brush>
 
                     <Brush x:Key="RedLightBrush">#FE807F</Brush>
                     <Brush x:Key="RedMidBrush">#FF5C5C</Brush>
                     <Brush x:Key="RedDarkBrush">#FF3A3B</Brush>
+                    <Brush x:Key="RedVeryDarkBrush">#880000</Brush>
 
                     <Brush x:Key="GreenLightBrush">#57EBA3</Brush>
                     <Brush x:Key="GreenMidBrush">#39DA8A</Brush>
                     <Brush x:Key="GreenDarkBrush">#05C270</Brush>
+                    <Brush x:Key="GreenVeryDarkBrush">#027843</Brush>
 
                     <Brush x:Key="OrangeLightBrush">#FCCC76</Brush>
                     <Brush x:Key="OrangeMidBrush">#FDAC41</Brush>
                     <Brush x:Key="OrangeDarkBrush">#FF8801</Brush>
+                    <Brush x:Key="OrangeVeryDarkBrush">#AE5E00</Brush>
 
                     <Brush x:Key="YellowLightBrush">#FEED73</Brush>
                     <Brush x:Key="YellowMidBrush">#FEDD49</Brush>
                     <Brush x:Key="YellowDarkBrush">#FFCC00</Brush>
+                    <Brush x:Key="YellowVeryDarkBrush">#967800</Brush>
+
 
                     <Brush x:Key="TealLightBrush">#A9EFF3</Brush>
                     <Brush x:Key="TealMidBrush">#74E0E6</Brush>
                     <Brush x:Key="TealDarkBrush">#00CFDD</Brush>
+                    <Brush x:Key="TealVeryDarkBrush">#00737C</Brush>
+
+                    <Brush x:Key="BlueVioletLightBrush">#879BCE</Brush>
+                    <Brush x:Key="BlueVioletMidBrush">#6783C2</Brush>
+                    <Brush x:Key="BlueVioletDarkBrush">#436FB6</Brush>
+
+                    <Brush x:Key="IndigoLightBrush">#6600FF</Brush>
+                    <Brush x:Key="IndigoMidBrush">#5200CC</Brush>
+                    <Brush x:Key="IndigoDarkBrush">#3C0099</Brush>
+
+                    <Brush x:Key="PurpleLightBrush">#DEA5E8</Brush>
+                    <Brush x:Key="PurpleMidBrush">#AC5CD9</Brush>
+                    <Brush x:Key="PurpleDarkBrush">#6500CD</Brush>
+
+                    <Brush x:Key="MauveLightBrush">#AC8BC0</Brush>
+                    <Brush x:Key="MauveMidBrush">#9A6DB0</Brush>
+                    <Brush x:Key="MauveDarkBrush">#8750A1</Brush>
 
                     <Style
                         x:Key="RedLightButton"

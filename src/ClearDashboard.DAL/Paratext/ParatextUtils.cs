@@ -16,16 +16,23 @@ namespace ClearDashboard.DAL.Paratext
     {
         private string paratextProjectPath = "";
         private string paratextInstallPath = "";
+        private string paratextResourcesPath = "";
+
+        public enum eFolderType
+        {
+            Projects,
+            Resources,
+        }
 
         /// <summary>
         /// Returns if paratext is installed on the computer or not
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> IsParatextInstalledAsync()
+        public bool IsParatextInstalled()
         {
 
-            await GetParatextProjectsPath();
-            await GetParatextInstallPath();
+            GetParatextProjectsPath();
+            GetParatextInstallPath();
 
             if (string.IsNullOrEmpty(paratextProjectPath))
             {
@@ -35,7 +42,7 @@ namespace ClearDashboard.DAL.Paratext
             return true;
         }
 
-        private async Task GetParatextInstallPath()
+        private void GetParatextInstallPath()
         {
             paratextInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Paratext9_Full_Release_AppPath", null);
 
@@ -47,7 +54,7 @@ namespace ClearDashboard.DAL.Paratext
             }
         }
 
-        private async Task GetParatextProjectsPath()
+        private void GetParatextProjectsPath()
         {
             paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
             // check if directory exists
@@ -56,107 +63,190 @@ namespace ClearDashboard.DAL.Paratext
                 // directory doesn't exist so null this out
                 paratextProjectPath = "";
             }
+            else
+            {
+                paratextResourcesPath = Path.Combine(paratextProjectPath, "_Resources");
+            }
         }
 
-        public List<ParatextProject> GetParatextProjects()
+        /// <summary>
+        /// Obtain the installed Paratext Projects and Resources
+        /// </summary>
+        /// <param name="folderType"></param>
+        /// <returns></returns>
+        public async Task<List<ParatextProject>> GetParatextProjectsOrResources(eFolderType folderType = eFolderType.Projects)
         {
             if (paratextProjectPath == "")
             {
                 GetParatextProjectsPath();
             }
 
+            string searchPath = "";
+            if (folderType == eFolderType.Projects)
+            {
+                searchPath = paratextProjectPath;
+            } 
+            else if (folderType == eFolderType.Resources)
+            {
+                searchPath = paratextResourcesPath;
+            }
+
             // look through these folders for files which are called "unique.id"
-            string[] directories = Directory.GetDirectories(paratextProjectPath);
+            string[] directories = Directory.GetDirectories(searchPath);
 
             List<ParatextProject> projects = new List<ParatextProject>();
-            foreach (var directory in directories)
+
+            await Task.Run(() =>
             {
-
-                // look for settings.xml file
-                string sSettingFilePath = Path.Combine(directory, "settings.xml");
-
-                Debug.WriteLine(sSettingFilePath);
-
-                if (sSettingFilePath == @"d:\My Paratext 9 Projects\CSPI1\settings.xml")
+                foreach (var directory in directories)
                 {
-                    Debug.WriteLine("");
-                }
+                    // look for settings.xml file
+                    string sSettingFilePath = Path.Combine(directory, "settings.xml");
 
-                // read in settings.xml file
-                if (File.Exists(sSettingFilePath))
-                {
-                    var project = GetSettingFileInfo(sSettingFilePath, ParatextProject.eDirType.Project);
-                    if (project.FullName != "")
+                    // read in settings.xml file
+                    if (File.Exists(sSettingFilePath))
                     {
-                        // get the books
-                        project.BooksList = GetBookList(project, directory);
+                        //ParatextProject.eDirType dirType;
+                        //if (folderType == eFolderType.Projects)
+                        //{
+                        //    dirType = ParatextProject.eDirType.Project;
+                        //}
+                        //else
+                        //{
+                        //    dirType = ParatextProject.eDirType.Resources;
+                        //}
 
-
-                        // check for custom VRS file
-                        string sCusteomVRSfilePath = Path.Combine(directory, "custom.vrs");
-                        if (File.Exists(sCusteomVRSfilePath))
+                        var project = GetSettingFileInfo(sSettingFilePath, ParatextProject.eDirType.Project);
+                        if (project.FullName != "")
                         {
-                            project.HasCustomVRSfile = true;
-                            project.CustomVRSfilePath = sCusteomVRSfilePath;
-                        }
+                            // get the books
+                            project.BooksList = GetBookList(project, directory);
 
-                        // read in booknames.xml file
-                        string sBookNamesPath = Path.Combine(directory, "booknames.xml");
-                        if (File.Exists(sBookNamesPath))
-                        {
-                            var xmlString = File.ReadAllText(sBookNamesPath);
 
-                            int iRow = 1;
-                            // Create an XmlReader
-                            using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+                            // check for custom VRS file
+                            string sCusteomVRSfilePath = Path.Combine(directory, "custom.vrs");
+                            if (File.Exists(sCusteomVRSfilePath))
                             {
-                                while (reader.Read())
+                                project.HasCustomVRSfile = true;
+                                project.CustomVRSfilePath = sCusteomVRSfilePath;
+                            }
+
+                            // read in booknames.xml file
+                            string sBookNamesPath = Path.Combine(directory, "booknames.xml");
+                            if (File.Exists(sBookNamesPath))
+                            {
+                                var xmlString = File.ReadAllText(sBookNamesPath);
+
+                                int iRow = 1;
+                                // Create an XmlReader
+                                using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
                                 {
-                                    reader.ReadToFollowing("book");
-                                    reader.MoveToFirstAttribute();
-                                    string code = reader.Value;
-                                    reader.MoveToNextAttribute();
-                                    string abbr = reader.Value;
-                                    reader.MoveToNextAttribute();
-                                    string shortname = reader.Value;
-                                    reader.MoveToNextAttribute();
-                                    string longname = reader.Value;
-
-                                    iRow++;
-                                    if (iRow == 40)
+                                    while (reader.Read())
                                     {
-                                        iRow = 41;
-                                    }
+                                        reader.ReadToFollowing("book");
+                                        reader.MoveToFirstAttribute();
+                                        string code = reader.Value;
+                                        reader.MoveToNextAttribute();
+                                        string abbr = reader.Value;
+                                        reader.MoveToNextAttribute();
+                                        string shortname = reader.Value;
+                                        reader.MoveToNextAttribute();
+                                        string longname = reader.Value;
 
-                                    if (project.BookNames.ContainsKey(iRow))
-                                    {
-                                        var temp = project.BookNames[iRow];
-
-                                        if (temp.code == code)
+                                        iRow++;
+                                        if (iRow == 40)
                                         {
-                                            temp.abbr = abbr;
-                                            temp.shortname = shortname;
-                                            temp.longname = longname;
-
-                                            // replace key
-                                            project.BookNames.Remove(iRow);
-                                            project.BookNames.Add(iRow, temp);
+                                            iRow = 41;
                                         }
 
-                                    }
-                                    
-                                    // exit after revelation
-                                    if (iRow == 67)
-                                    {
-                                        break;
+                                        if (project.BookNames.ContainsKey(iRow))
+                                        {
+                                            var temp = project.BookNames[iRow];
+
+                                            if (temp.code == code)
+                                            {
+                                                temp.abbr = abbr;
+                                                temp.shortname = shortname;
+                                                temp.longname = longname;
+
+                                                // replace key
+                                                project.BookNames.Remove(iRow);
+                                                project.BookNames.Add(iRow, temp);
+                                            }
+
+                                        }
+
+                                        // exit after revelation
+                                        if (iRow == 67)
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        projects.Add(project);
-                    }
-                }
 
+                            projects.Add(project);
+                        }
+                    }
+
+                }
+            }).ConfigureAwait(false);
+
+            // alphabetize the list by the short name
+            projects.Sort((a, b) => a.Name.CompareTo(b.Name));
+
+            return projects;
+        }
+
+        public string GetCurrentParatextUser()
+        {
+            if (paratextResourcesPath == "")
+            {
+                GetParatextProjectsPath();
+            }
+
+            string user = "USER NOT DETERMINED";
+            string userfile = Path.Combine(this.paratextProjectPath, "localUsers.txt");
+            if (File.Exists(userfile))
+            {
+                var tmp = File.ReadAllText(userfile);
+                var users = tmp.Split("\r\n");
+                if (users.Length > 0)
+                {
+                    return users[0];
+                }
+            }
+            else
+            {
+                return "USER UNKNOWN";
+            }
+
+            return user;
+        }
+
+        public List<ParatextProject> GetParatextResources()
+        {
+            if (paratextResourcesPath == "")
+            {
+                GetParatextProjectsPath();
+            }
+
+            string searchPath = paratextResourcesPath;
+            
+
+            // look through these folders for files which are called "unique.id"
+            string[] files = Directory.GetFiles(searchPath, "*.p8z");
+
+            List<ParatextProject> projects = new List<ParatextProject>();
+            foreach (var file in files)
+            {
+                FileInfo fileInfo = new FileInfo(file);
+                projects.Add(new ParatextProject
+                {
+                    Name = fileInfo.Name.Replace(fileInfo.Extension, ""),
+                    ProjectType = ParatextProject.eProjectType.Resource,
+                    DirType = ParatextProject.eDirType.Resources
+                });
             }
 
             // alphabetize the list by the short name
@@ -253,7 +343,7 @@ namespace ClearDashboard.DAL.Paratext
 
                         if (obj.LeftToRight != null)
                         {
-                            if (obj.LeftToRight.ToUpper() == "F")
+                            if (obj.LeftToRight.ToUpper() == "T")
                             {
                                 p.IsRTL = true;
                             }
@@ -304,9 +394,6 @@ namespace ClearDashboard.DAL.Paratext
                 Console.WriteLine(e);
             }
 
-
-
-
             return p;
         }
 
@@ -331,19 +418,14 @@ namespace ClearDashboard.DAL.Paratext
                     {
                         return ParatextProject.eProjectType.Resource;
                     }
-                    break;
                 case "BACKTRANSLATION":
                     return ParatextProject.eProjectType.BackTranslation;
-                    break;
                 case "AUXILIARY":
                     return ParatextProject.eProjectType.Auxiliary;
-                    break;
                 case "DAUGHTER":
                     return ParatextProject.eProjectType.Daughter;
-                    break;
                 case "MARBLERESOURCE":
                     return ParatextProject.eProjectType.MarbleResource;
-                    break;
             }
 
             return ParatextProject.eProjectType.Unknown;

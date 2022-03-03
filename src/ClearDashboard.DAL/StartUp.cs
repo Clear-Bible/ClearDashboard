@@ -12,7 +12,7 @@ namespace ClearDashboard.DAL
 
         public StartUp()
         {
-            // connect to paratext via named pipes
+            // TODO connect to paratext via named pipes
 
 
             GetParatextUserName();
@@ -20,8 +20,14 @@ namespace ClearDashboard.DAL
 
         public void GetParatextUserName()
         {
+            // TODO this is a hack that reads the first user in the Paratext project's directory
+            // from the localUsers.txt file.  This needs to be changed to the user we get from 
+            // the Paratext API
+            Paratext.ParatextUtils paratextUtils = new Paratext.ParatextUtils();
+            var user = paratextUtils.GetCurrentParatextUser();
+
             // raise the paratext username event
-            ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs("Dirk Kaiser"));
+            ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
 
     }

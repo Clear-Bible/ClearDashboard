@@ -18,7 +18,6 @@ namespace ClearDashboard.Wpf.ViewModels
         {
 
             observableCollection.Add(new ItemInfo() { ImagePath = @"D:\Projects-GBI\ClearDashboard\src\ClearDashboard.Wpf\Resources\NewProject_Icon_96.png", ImageName = "NEW" });
-
             observableCollection.Add(new ItemInfo() { ImagePath = @"D:\Projects-GBI\ClearDashboard\src\ClearDashboard.Wpf\Resources\settings_logo_96.png", ImageName = "SETTINGS" });
         }
     }
