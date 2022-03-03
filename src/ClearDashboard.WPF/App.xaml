@@ -23,38 +23,36 @@
 
                 <ResourceDictionary>
                     <!--  Additional Design Colors - DARK  -->
+                    <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
+                    <Brush x:Key="BlueMidBrush">#5B8DEE</Brush>
+                    <Brush x:Key="BlueDarkBrush">#0063F8</Brush>
+                    <Brush x:Key="BlueVeryDarkBrush">#002D74</Brush>
+
                     <Brush x:Key="RedLightBrush">#FE807F</Brush>
                     <Brush x:Key="RedMidBrush">#FF5C5C</Brush>
                     <Brush x:Key="RedDarkBrush">#FF3A3B</Brush>
-
-                    <Brush x:Key="OrangeLightBrush">#FCCC76</Brush>
-                    <Brush x:Key="OrangeMidBrush">#FDAC41</Brush>
-                    <Brush x:Key="OrangeDarkBrush">#FF8801</Brush>
-
-                    <Brush x:Key="YellowLightBrush">#FEED73</Brush>
-                    <Brush x:Key="YellowMidBrush">#FEDD49</Brush>
-                    <Brush x:Key="YellowDarkBrush">#FFCC00</Brush>
-
-                    <Brush x:Key="YellowGreenLightBrush">#C1DD89</Brush>
-                    <Brush x:Key="YellowGreenMidBrush">#AED361</Brush>
-                    <Brush x:Key="YellowGreenDarkBrush">#9BCA3C</Brush>
+                    <Brush x:Key="RedVeryDarkBrush">#880000</Brush>
 
                     <Brush x:Key="GreenLightBrush">#57EBA3</Brush>
                     <Brush x:Key="GreenMidBrush">#39DA8A</Brush>
                     <Brush x:Key="GreenDarkBrush">#05C270</Brush>
+                    <Brush x:Key="GreenVeryDarkBrush">#027843</Brush>
 
-                    <Brush x:Key="BlueGreenLightBrush">#ABDAC6</Brush>
-                    <Brush x:Key="BlueGreenMidBrush">#8ED0B5</Brush>
-                    <Brush x:Key="BlueGreenDarkBrush">#70C5A4</Brush>
+                    <Brush x:Key="OrangeLightBrush">#FCCC76</Brush>
+                    <Brush x:Key="OrangeMidBrush">#FDAC41</Brush>
+                    <Brush x:Key="OrangeDarkBrush">#FF8801</Brush>
+                    <Brush x:Key="OrangeVeryDarkBrush">#AE5E00</Brush>
+
+                    <Brush x:Key="YellowLightBrush">#FEED73</Brush>
+                    <Brush x:Key="YellowMidBrush">#FEDD49</Brush>
+                    <Brush x:Key="YellowDarkBrush">#FFCC00</Brush>
+                    <Brush x:Key="YellowVeryDarkBrush">#967800</Brush>
+
 
                     <Brush x:Key="TealLightBrush">#A9EFF3</Brush>
                     <Brush x:Key="TealMidBrush">#74E0E6</Brush>
                     <Brush x:Key="TealDarkBrush">#00CFDD</Brush>
-
-                    <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
-                    <Brush x:Key="BlueMidBrush">#5B8DEE</Brush>
-                    <Brush x:Key="BlueDarkBrush">#0063F8</Brush>
-                    <Brush x:Key="BlueVeryDarkBrush">#0063FF</Brush>
+                    <Brush x:Key="TealVeryDarkBrush">#00737C</Brush>
 
                     <Brush x:Key="BlueVioletLightBrush">#879BCE</Brush>
                     <Brush x:Key="BlueVioletMidBrush">#6783C2</Brush>
