@@ -179,7 +179,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject)
+        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject, ParatextProject _interlinearizerProject)
         {
             _LWCprojects = new List<ParatextProject>(lWCproject);
             _TargetProject = targetProject;

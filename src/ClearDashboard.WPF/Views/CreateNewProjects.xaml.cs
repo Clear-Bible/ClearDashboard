@@ -154,8 +154,8 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(text, p.X);
                 DrawCanvasTop.Children.Add(text);
 
-                // TODO Update with Interlinearizer
-                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
+                // update the ViewModel with the current set
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject, _interlinearizerProject);
 
                 DrawTheCanvas();
             }
@@ -201,8 +201,8 @@ namespace ClearDashboard.Wpf.Views
                 Canvas.SetLeft(text, p.X);
                 DrawCanvasBottom.Children.Add(text);
 
-                // TODO Update with Interlinearizer
-                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
+                // update the ViewModel with the current set
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject, _interlinearizerProject);
 
                 DrawTheCanvas();
             }
@@ -613,10 +613,11 @@ namespace ClearDashboard.Wpf.Views
         /// <exception cref="NotImplementedException"></exception>
         private void DrawBackTransBoxes(int projectBoxWidth, int projectBoxHeight)
         {
-            const double separation = 75;
-            double offset = 0;
+            double separation = 0;
+            double offset = 30;
             if (_BackTransProject.Count > 1)
             {
+                separation = 30;
                 offset = _BackTransProject.Count * separation / 2;
             }
 
@@ -627,7 +628,14 @@ namespace ClearDashboard.Wpf.Views
                 // ========================
                 Point point = new Point();
                 point.X = (_boxWidth / 2) - (projectBoxWidth / 2);
-                point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
+                if (_BackTransProject.Count > 1)
+                {
+                    point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset + 30;
+                }
+                else
+                {
+                    point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
+                }
 
                 Rectangle targetRect = new Rectangle();
                 targetRect.Width = projectBoxWidth;
