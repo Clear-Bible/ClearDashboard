@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
-using ClearDashboard.Common.Models;
+﻿using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.Paratext;
 using ClearDashboard.Wpf.Helpers;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -22,11 +22,14 @@ namespace ClearDashboard.Wpf.ViewModels
         public bool ShowWaitingIcon = true;
 
 
-        private FlowDocument _helpText;
-        public FlowDocument HelpText
+        private string _helpText;
+        public string HelpText
         {
             get => _helpText;
-            set { SetProperty(ref _helpText, value, nameof(HelpText)); }
+            set
+            {
+                SetProperty(ref _helpText, value, nameof(HelpText));
+            }
         }
 
 
@@ -49,7 +52,37 @@ namespace ClearDashboard.Wpf.ViewModels
         public ObservableRangeCollection<ParatextProjectDisplay> ParatextResources { get; set; } =
             new ObservableRangeCollection<ParatextProjectDisplay>();
 
+
+        private Task TextXamlChangeEvent;
+        public string _textXaml;
+        public string TextXaml
+        {
+            get { return _textXaml; }
+            set
+            {
+                if (_textXaml == value) return;
+                _textXaml = value;
+                if (TextXamlChangeEvent == null || TextXamlChangeEvent.Status >= TaskStatus.RanToCompletion)
+                {
+                    TextXamlChangeEvent = Task.Run(() =>
+                    {
+                        Task.Delay(100);
+                        retry:
+                        var oldVal = _textXaml;
+
+                        Thread.MemoryBarrier();
+                        SetProperty(ref _textXaml, value, nameof(TextXaml));
+
+                        Thread.MemoryBarrier();
+                        if (oldVal != _textXaml) goto retry;
+                    });
+                }
+            }
+        }
+
         #endregion
+
+        #region commands
         private ICommand createNewProjectCommand { get; set; }
         public ICommand CreateNewProjectCommand
         {
@@ -62,42 +95,29 @@ namespace ClearDashboard.Wpf.ViewModels
                 createNewProjectCommand = value;
             }
         }
-        #region commands
-
 
         #endregion
+
+        #region Startup
 
         public CreateNewProjectsViewModel()
         {
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
-        public void CreateNewProject(object obj)
-        {
-            if (_TargetProject == null)
-            {
-                // unlikely to be true
-                return;
-            }
-
-            DashboardProject dashboardProject = new DashboardProject();
-            dashboardProject.TargetProject = _TargetProject;
-            dashboardProject.LWCProjects = _LWCprojects;
-            dashboardProject.BTProjects = _BackTransProjects;
-            dashboardProject.CreationDate = DateTime.Now;
-            dashboardProject.ParatextUser = "";
-        }
-
         public async Task Init()
         {
             // get the right help text
             // TODO Work on the help regionalization
-            ResourceDictionary dict = new ResourceDictionary { Source = new Uri("/HelpFiles/NewProjectHelp_us.xaml", UriKind.Relative) };
-            var text = dict["helpText_us"] as FlowDocument;
-            if (text != null)
+            FileInfo fi = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var helpFile = Path.Combine(fi.Directory.ToString(), @"HelpFiles\NewProjectHelp_us.md");
+
+            if (File.Exists(helpFile))
             {
-                HelpText = text;
+                string markdownTxt = File.ReadAllText(helpFile);
+                HelpText = String.Join("\r\n", Regex.Split(markdownTxt, "\r?\n").Select(ln => ln.TrimStart()));
             }
+
 
             // detect if Paratext is installed
             ParatextUtils paratextUtils = new ParatextUtils();
@@ -138,14 +158,28 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
+        }
 
+        #endregion
 
+        public void CreateNewProject(object obj)
+        {
+            if (_TargetProject == null)
+            {
+                // unlikely to be true
+                return;
+            }
 
-
+            DashboardProject dashboardProject = new DashboardProject();
+            dashboardProject.TargetProject = _TargetProject;
+            dashboardProject.LWCProjects = _LWCprojects;
+            dashboardProject.BTProjects = _BackTransProjects;
+            dashboardProject.CreationDate = DateTime.Now;
+            dashboardProject.ParatextUser = "";
 
         }
 
-        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject)
+        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject, ParatextProject _interlinearizerProject)
         {
             _LWCprojects = new List<ParatextProject>(lWCproject);
             _TargetProject = targetProject;

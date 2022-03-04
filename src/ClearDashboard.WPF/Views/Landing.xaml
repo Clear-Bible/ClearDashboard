@@ -74,7 +74,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="White" BorderThickness="1">
+                            <Border BorderBrush="Gray" BorderThickness="1">
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
 
