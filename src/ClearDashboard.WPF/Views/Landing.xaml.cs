@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -30,7 +31,30 @@ namespace ClearDashboard.Wpf.Views
         {
             var ClickedButton = e.OriginalSource as NavButton;
 
+            (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject =
+                new Common.Models.DashboardProject { Name = "TEST ME" };
             NavigationService.Navigate(ClickedButton.NavUri);
+
+
+            //if (ClickedButton.DashboardProject != null)
+            //{
+            //    if (Application.Current is ClearDashboard.Wpf.App)
+            //    {
+            //        (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject = ClickedButton.DashboardProject;
+            //    }
+
+            //    //NavigationService.Navigate(ClickedButton.NavUri, ClickedButton.DashboardProject);
+            //    WorkSpace workspace = new WorkSpace(ClickedButton.DashboardProject);
+            //    NavigationService.Navigate(workspace);
+            //}
+            //else
+            //{
+            //    (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject =
+            //        new Common.Models.DashboardProject {Name="TEST ME" };
+            //    NavigationService.Navigate(ClickedButton.NavUri);
+            //}
+            
         }
+
     }
 }

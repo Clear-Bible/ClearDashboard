@@ -11,8 +11,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Add in colored text to the RichTextBox
         /// </summary>
-        /// <param name="text">Text to add</param>
-        /// <param name="color">Color of text</param>
+        /// <param abbr="text">Text to add</param>
+        /// <param abbr="color">Color of text</param>
         public static void AppendText(string text, Color color, RichTextBox rtb)
         {
             //check for threading issues
@@ -45,8 +45,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <summary>
         /// Add in colored text to the RichTextBox
         /// </summary>
-        /// <param name="text">Text to add</param>
-        /// <param name="color">Color of text</param>
+        /// <param abbr="text">Text to add</param>
+        /// <param abbr="color">Color of text</param>
         public static void AppendTextDelegateFontSize(string text, Color color, float iFontSize, RichTextBox rtb)
         {
             //check for threading issues

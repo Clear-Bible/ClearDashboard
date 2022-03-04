@@ -1,5 +1,5 @@
 ﻿
-namespace ClearDashboard.ParatextPlugin
+namespace ClearDashboardPlugin
 {
 	partial class MainWindow
 	{

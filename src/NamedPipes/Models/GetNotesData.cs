@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using ClearDashboard.Common.Models;
+using MvvmHelpers;
 
 namespace ClearDashboard.NamedPipes.Models
 {
-    public class GetNotesData : BindableBase
+    public class GetNotesData : ObservableObject
     {
         private int _bookID;
         [JsonProperty]

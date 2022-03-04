@@ -14,14 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\ClearDashboard.WPF\Resources\ClearDashboard_logo_128.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SIL.Scripture" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <Reference Include="PresentationFramework">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

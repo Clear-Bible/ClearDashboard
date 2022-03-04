@@ -1,4 +1,4 @@
-﻿using ClearDashboard.Common.Models;
+﻿using MvvmHelpers;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Documents;
@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ColorStylesViewModel: BindableBase
+    public class ColorStylesViewModel: ObservableObject
     {
 
         private ObservableCollection<Inline> _InlinesText;
