@@ -1104,7 +1104,7 @@ namespace ClearDashboard.Wpf.Views
                         Debug.WriteLine(exception);
                     }
                 }
-                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject);
+                _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject, _interlinearizerProject);
             }
 
             DrawTheCanvas();
