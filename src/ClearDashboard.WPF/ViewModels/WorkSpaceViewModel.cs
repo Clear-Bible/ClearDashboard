@@ -160,8 +160,8 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 // TODO
 
-                //// subscribe to change events in the parent's theme
-                //(Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+                // subscribe to change events in the parent's theme
+                (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
                 //if (Application.Current is ClearDashboard.Wpf.App)
                 //{
@@ -175,17 +175,17 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             // TODO
 
-            //var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
-            //if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            //{
-            //    // toggle the Dark theme for AvalonDock
-            //    this.SelectedTheme = Themes[0];
-            //}
-            //else
-            //{
-            //    // toggle the light theme for AvalonDock
-            //    this.SelectedTheme = Themes[1];
-            //}
+            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
+            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            {
+                // toggle the Dark theme for AvalonDock
+                this.SelectedTheme = Themes[0];
+            }
+            else
+            {
+                // toggle the light theme for AvalonDock
+                this.SelectedTheme = Themes[1];
+            }
         }
 
         public void Init()

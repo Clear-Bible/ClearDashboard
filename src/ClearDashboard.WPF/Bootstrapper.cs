@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
 
-                .PerRequest<MainWindowViewModel>();
+                .PerRequest<ShellViewModel>();
 
 
 
@@ -74,7 +74,7 @@ namespace ClearDashboard.Wpf
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            await DisplayRootViewForAsync<MainWindowViewModel>();
+            await DisplayRootViewForAsync<ShellViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

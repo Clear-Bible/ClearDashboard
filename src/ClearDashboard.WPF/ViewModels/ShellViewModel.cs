@@ -11,7 +11,7 @@ using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: Screen
+    public class ShellViewModel: Screen
     {
         #region Props
 
@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
-        public MainWindowViewModel()
+        public ShellViewModel()
         {
             // default one for the XAML page
         }
@@ -90,11 +90,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public MainWindowViewModel(ILog logger)
+        public ShellViewModel(ILog logger)
         {
             _logger = logger;
 
-            _logger.Info("In MainWindowViewModel ctor");
+            _logger.Info("In ShellViewModel ctor");
 
             //get the assembly version
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;

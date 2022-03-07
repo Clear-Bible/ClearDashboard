@@ -9,14 +9,14 @@ using ClearDashboard.Wpf.ViewModels;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindowView.xaml
+    /// Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class MainWindowView : Window
+    public partial class ShellView : Window
     {
         //NavigationCommands
 
 
-        public MainWindowView()
+        public ShellView()
         {
             InitializeComponent();
 
@@ -54,7 +54,7 @@ namespace ClearDashboard.Wpf.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var vm = (MainWindowViewModel)this.DataContext;
+            var vm = (ShellViewModel)this.DataContext;
             this.Title = "ClearDashboard " + vm.Version;
         }
 
