@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Views;
-using MvvmHelpers;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class SettingsViewModel: ObservableObject
+    public class SettingsViewModel: PropertyChangedBase
     {
 
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();

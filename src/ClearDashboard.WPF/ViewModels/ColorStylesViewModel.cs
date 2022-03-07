@@ -3,10 +3,11 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ColorStylesViewModel: ObservableObject
+    public class ColorStylesViewModel: PropertyChangedBase
     {
 
         private ObservableCollection<Inline> _InlinesText;
@@ -14,7 +15,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public ObservableCollection<Inline> InlinesText
         {
             get => _InlinesText;
-            set { SetProperty(ref _InlinesText, value); }
+            set
+            {
+                _InlinesText = value;
+                NotifyOfPropertyChange(() => InlinesText);
+            }
         }
 
         public ColorStylesViewModel()

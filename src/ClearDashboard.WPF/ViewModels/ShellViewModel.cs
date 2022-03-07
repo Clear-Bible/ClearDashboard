@@ -3,19 +3,19 @@ using Newtonsoft.Json;
 using System;
 using System.Reflection;
 using System.Windows.Input;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
-using Microsoft.Extensions.Logging;
-using ILogger = Serilog.ILogger;
+
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: ObservableObject
+    public class ShellViewModel: Screen
     {
         #region Props
 
-        private readonly ILogger<MainWindowViewModel> _logger;
+        private readonly ILog _logger;
 
 
         //Connection to the DAL
@@ -25,7 +25,12 @@ namespace ClearDashboard.Wpf.ViewModels
         public string ParatextUserName
         {
             get => _paratextUserName;
-            set { SetProperty(ref _paratextUserName, value); }
+
+            set
+            {
+                _paratextUserName = value;
+                NotifyOfPropertyChange(() => ParatextUserName);
+            }
         }
 
 
@@ -33,7 +38,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public string Version
         {
             get => _version;
-            set { SetProperty(ref _version, value); }
+            set
+            {
+                _version = value;
+                NotifyOfPropertyChange(() => Version);
+            }
         }
 
         #endregion
@@ -74,7 +83,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
-        public MainWindowViewModel()
+        public ShellViewModel()
         {
             // default one for the XAML page
         }
@@ -83,9 +92,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public MainWindowViewModel(ILogger<MainWindowViewModel> logger)
+        public ShellViewModel(ILog logger)
         {
             _logger = logger;
+
+            _logger.Info("In ShellViewModel ctor");
 
             //get the assembly version
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;

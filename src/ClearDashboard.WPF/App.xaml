@@ -10,6 +10,13 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!--  Caliburn Micro BootStrapper  -->
+                <ResourceDictionary>
+                    <local:Bootstrapper x:Key="Bootstrapper" />
+                    <SolidColorBrush x:Key="BackgroundBrush" Color="#FF225378" />
+                </ResourceDictionary>
+
+
                 <!--  Note: I have intentionally omitted the Light/Dark theme dictionary as that is being set in code  -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />

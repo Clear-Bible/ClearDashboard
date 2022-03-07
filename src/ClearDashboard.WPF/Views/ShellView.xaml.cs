@@ -6,17 +6,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.ViewModels;
 
-namespace ClearDashboard.Wpf
+namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ShellView : Window
     {
         //NavigationCommands
 
 
-        public MainWindow()
+        public ShellView()
         {
             InitializeComponent();
 
@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf
             this.Left = userPrefs.WindowLeft;
             this.WindowState = userPrefs.WindowState;
 
-            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            if (Properties.Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
                 Toggle.IsChecked = true;
             }
@@ -54,7 +54,7 @@ namespace ClearDashboard.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var vm = (MainWindowViewModel)this.DataContext;
+            var vm = (ShellViewModel)this.DataContext;
             this.Title = "ClearDashboard " + vm.Version;
         }
 
@@ -66,16 +66,16 @@ namespace ClearDashboard.Wpf
         {
             if (Toggle.IsChecked == true)
             {
-                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
+                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
             }
             else
             {
-                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
+                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
             }
 
-            Settings.Default.Save();
-            ((App)Application.Current).SetTheme(Settings.Default.Theme);
-            (Application.Current as ClearDashboard.Wpf.App).Theme = Settings.Default.Theme;
+            Properties.Settings.Default.Save();
+            ((App)Application.Current).SetTheme(Properties.Settings.Default.Theme);
+            (Application.Current as ClearDashboard.Wpf.App).Theme = Properties.Settings.Default.Theme;
         }
     }
 }
