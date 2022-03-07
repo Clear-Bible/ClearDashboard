@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Reflection;
 using System.Windows.Input;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
@@ -11,7 +12,7 @@ using ILogger = Serilog.ILogger;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class MainWindowViewModel: ObservableObject
+    public class MainWindowViewModel: Screen
     {
         #region Props
 
@@ -25,7 +26,12 @@ namespace ClearDashboard.Wpf.ViewModels
         public string ParatextUserName
         {
             get => _paratextUserName;
-            set { SetProperty(ref _paratextUserName, value); }
+
+            set
+            {
+                NotifyOfPropertyChange(() => ParatextUserName);
+                //SetProperty(ref _paratextUserName, value);
+            }
         }
 
 
@@ -33,7 +39,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public string Version
         {
             get => _version;
-            set { SetProperty(ref _version, value); }
+            set
+            {
+                NotifyOfPropertyChange(() => Version);
+                //SetProperty(ref _version, value);
+            }
         }
 
         #endregion

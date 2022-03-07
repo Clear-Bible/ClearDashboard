@@ -6,17 +6,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.ViewModels;
 
-namespace ClearDashboard.Wpf
+namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindowView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindowView : Window
     {
         //NavigationCommands
 
 
-        public MainWindow()
+        public MainWindowView()
         {
             InitializeComponent();
 
@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf
             this.Left = userPrefs.WindowLeft;
             this.WindowState = userPrefs.WindowState;
 
-            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            if (Properties.Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
                 Toggle.IsChecked = true;
             }
@@ -66,16 +66,16 @@ namespace ClearDashboard.Wpf
         {
             if (Toggle.IsChecked == true)
             {
-                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
+                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
             }
             else
             {
-                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
+                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
             }
 
-            Settings.Default.Save();
-            ((App)Application.Current).SetTheme(Settings.Default.Theme);
-            (Application.Current as ClearDashboard.Wpf.App).Theme = Settings.Default.Theme;
+            Properties.Settings.Default.Save();
+            //((App)Application.Current).SetTheme(Settings.Default.Theme);
+            //(Application.Current as ClearDashboard.Wpf.App).Theme = Settings.Default.Theme;
         }
     }
 }

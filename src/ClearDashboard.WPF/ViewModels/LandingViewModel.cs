@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // grab a copy of the current logger from the App.xaml.cs
             if (Application.Current is ClearDashboard.Wpf.App)
             {
-                _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+                //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
             }
 
             // get the clearsuite projects

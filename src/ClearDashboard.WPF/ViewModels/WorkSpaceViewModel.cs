@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.ViewModels
             _this = this;
 
             // grab a copy of the current logger from the App.xaml.cs
-            _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
+           // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
 
             this.Themes = new List<Tuple<string, Theme>>
             {
@@ -158,30 +158,34 @@ namespace ClearDashboard.Wpf.ViewModels
             // check if we are in design mode or not
             if (Application.Current != null)
             {
-                // subscribe to change events in the parent's theme
-                (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+                // TODO
 
-                if (Application.Current is ClearDashboard.Wpf.App)
-                {
-                    _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
-                }
+                //// subscribe to change events in the parent's theme
+                //(Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+
+                //if (Application.Current is ClearDashboard.Wpf.App)
+                //{
+                //    _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+                //    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                //}
             }
         }
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
-            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
-            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                // toggle the Dark theme for AvalonDock
-                this.SelectedTheme = Themes[0];
-            }
-            else
-            {
-                // toggle the light theme for AvalonDock
-                this.SelectedTheme = Themes[1];
-            }
+            // TODO
+
+            //var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
+            //if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            //{
+            //    // toggle the Dark theme for AvalonDock
+            //    this.SelectedTheme = Themes[0];
+            //}
+            //else
+            //{
+            //    // toggle the light theme for AvalonDock
+            //    this.SelectedTheme = Themes[1];
+            //}
         }
 
         public void Init()

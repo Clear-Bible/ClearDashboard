@@ -31,8 +31,8 @@ namespace ClearDashboard.Wpf.Views
         {
             var ClickedButton = e.OriginalSource as NavButton;
 
-            (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject =
-                new Common.Models.DashboardProject { Name = "TEST ME" };
+            //(Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject =
+            //    new Common.Models.DashboardProject { Name = "TEST ME" };
             NavigationService.Navigate(ClickedButton.NavUri);
 
 

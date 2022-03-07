@@ -40,8 +40,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (Application.Current is ClearDashboard.Wpf.App)
             {
-                _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
+                //DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
             }
 
         }
