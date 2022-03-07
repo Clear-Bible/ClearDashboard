@@ -4,10 +4,7 @@ using ClearDashboard.Wpf.ViewModels;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 using Action = System.Action;
@@ -18,7 +15,7 @@ namespace ClearDashboard.Wpf
     {
         #region Props
 
-        private SimpleContainer container;
+        private SimpleContainer _container;
 
         // Theme related
         public event Action ThemeChanged;
@@ -94,15 +91,25 @@ namespace ClearDashboard.Wpf
 
         protected override void Configure()
         {
-            //container = new SimpleContainer();
+            _container = new SimpleContainer();
+            _container.Instance(_container);
+            _container.Singleton<ILog, Log>();
 
-            //container.Instance(container);
+            _container
+                .Singleton<IWindowManager, WindowManager>()
+                .Singleton<IEventAggregator, EventAggregator>()
 
-            //container
+                .PerRequest<MainWindowViewModel>();
+
+
+
+            //_container.Instance(_container);
+
+            //_container
             //    .Singleton<IWindowManager, WindowManager>()
             //    .Singleton<IEventAggregator, EventAggregator>();
 
-            //container
+            //_container
             //    .PerRequest<ShellViewModel>()
             //    .PerRequest<MenuViewModel>()
             //    .PerRequest<BindingsViewModel>()
@@ -117,33 +124,25 @@ namespace ClearDashboard.Wpf
             //    .PerRequest<NavigationTargetViewModel>();
         }
 
-        //protected override IEnumerable<Assembly> SelectAssemblies()
-        //{
-        //    var assemblies = base.SelectAssemblies().ToList();
-        //    assemblies.Add(typeof(ClearDashboard.Wpf.Views.MainWindowView ).Assembly);
-
-        //    return assemblies;
-        //}
-
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             await DisplayRootViewForAsync<MainWindowViewModel>();
         }
 
-        //protected override object GetInstance(Type service, string key)
-        //{
-        //    return container.GetInstance(service, key);
-        //}
+        protected override object GetInstance(Type service, string key)
+        {
+            return _container.GetInstance(service, key);
+        }
 
-        //protected override IEnumerable<object> GetAllInstances(Type service)
-        //{
-        //    return container.GetAllInstances(service);
-        //}
+        protected override IEnumerable<object> GetAllInstances(Type service)
+        {
+            return _container.GetAllInstances(service);
+        }
 
-        //protected override void BuildUp(object instance)
-        //{
-        //    container.BuildUp(instance);
-        //}
+        protected override void BuildUp(object instance)
+        {
+            _container.BuildUp(instance);
+        }
 
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {

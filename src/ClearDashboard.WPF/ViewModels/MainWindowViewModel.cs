@@ -7,8 +7,7 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
-using Microsoft.Extensions.Logging;
-using ILogger = Serilog.ILogger;
+
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -16,7 +15,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Props
 
-        private readonly ILogger<MainWindowViewModel> _logger;
+        private readonly ILog _logger;
 
 
         //Connection to the DAL
@@ -93,9 +92,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public MainWindowViewModel(ILogger<MainWindowViewModel> logger)
+        public MainWindowViewModel(ILog logger)
         {
             _logger = logger;
+
+            _logger.Info("In MainWindowViewModel ctor");
 
             //get the assembly version
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;

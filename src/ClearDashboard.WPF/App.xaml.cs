@@ -1,16 +1,5 @@
-﻿using ClearDashboard.Wpf.ViewModels;
-using ClearDashboard.Wpf.Views;
-using MaterialDesignThemes.Wpf;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using MaterialDesignThemes.Wpf;
 using System.Windows;
-using ClearDashboard.Common.Models;
-using ILogger = Serilog.ILogger;
-using Settings = ClearDashboard.Wpf.Properties.Settings;
 
 namespace ClearDashboard.Wpf
 {
