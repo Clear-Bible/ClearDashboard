@@ -74,8 +74,8 @@ namespace ClearDashboard.Wpf.Views
             }
 
             Properties.Settings.Default.Save();
-            //((App)Application.Current).SetTheme(Settings.Default.Theme);
-            //(Application.Current as ClearDashboard.Wpf.App).Theme = Settings.Default.Theme;
+            ((App)Application.Current).SetTheme(Properties.Settings.Default.Theme);
+            (Application.Current as ClearDashboard.Wpf.App).Theme = Properties.Settings.Default.Theme;
         }
     }
 }

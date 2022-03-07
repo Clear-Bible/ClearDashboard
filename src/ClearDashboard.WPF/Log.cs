@@ -16,7 +16,6 @@ namespace ClearDashboard.Wpf
             logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.File(@"ClearDashboard.log", rollingInterval: RollingInterval.Day).CreateLogger();
-
         }
         #endregion
 
