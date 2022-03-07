@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_isVisible != value)
                 {
                     _isVisible = value;
-                    SetProperty(ref _isVisible, value, nameof(IsVisible));
+                    NotifyOfPropertyChange(() => IsVisible);
                 }
             }
         }

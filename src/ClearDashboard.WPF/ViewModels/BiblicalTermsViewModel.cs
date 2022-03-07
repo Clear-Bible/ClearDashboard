@@ -34,7 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
             set
             {
                 _biblicalTerms = value;
-                SetProperty(ref _biblicalTerms, value, nameof(BiblicalTerms));
+                NotifyOfPropertyChange(() => BiblicalTerms);
             }
         }
 

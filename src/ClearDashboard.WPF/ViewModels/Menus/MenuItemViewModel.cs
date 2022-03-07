@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Caliburn.Micro;
+using ClearDashboard.Wpf.ViewModels;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.Wpf.ViewModels;
-using MvvmHelpers;
 
 namespace ClearDashboard.Wpf.Models.Menus
 {
-    public class MenuItemViewModel : ObservableObject
+    public class MenuItemViewModel : PropertyChangedBase
     {
         private readonly ICommand _command;
 
@@ -35,7 +29,11 @@ namespace ClearDashboard.Wpf.Models.Menus
         public bool IsChecked
         {
             get => _isChecked;
-            set { SetProperty(ref _isChecked, value, nameof(IsChecked)); }
+            set
+            {
+                _isChecked = value;
+                NotifyOfPropertyChange(() => IsChecked);
+            }
         }
 
 
@@ -44,7 +42,11 @@ namespace ClearDashboard.Wpf.Models.Menus
         public string Id
         {
             get => _Id;
-            set { SetProperty(ref _Id, value, nameof(Id)); }
+            set
+            {
+                _Id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
         }
 
 
@@ -52,7 +54,11 @@ namespace ClearDashboard.Wpf.Models.Menus
         public string Header
         {
             get => _header;
-            set { SetProperty(ref _header, value, nameof(Header)); }
+            set
+            {
+                _header = value;
+                NotifyOfPropertyChange(() => Header);
+            }
         }
 
         public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }

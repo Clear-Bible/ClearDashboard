@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Helpers;
-using MvvmHelpers;
 using Serilog;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class LandingViewModel: ObservableObject
+    public class LandingViewModel: PropertyChangedBase
     {
         #region   Member Variables
 
-        public ILogger _logger { get; set; }
+        public ILog _log { get; set; }
 
         #endregion
 
@@ -40,8 +36,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // get the clearsuite projects
             DashboardProjects = LoadExistingProjects();
-
-
         }
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using ClearDashboard.Common.Models;
-using MvvmHelpers;
-using Newtonsoft.Json;
+﻿using Caliburn.Micro;
 using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -8,7 +6,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class PaneViewModel : ObservableObject
+    public class PaneViewModel : PropertyChangedBase
     {
         public enum EDockSide
         {
@@ -36,7 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_title != value)
                 {
                     _title = value;
-                    SetProperty(ref _title, value, nameof(Title));
+                    NotifyOfPropertyChange(() => Title);
                 }
             }
         }
@@ -51,7 +49,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_contentId != value)
                 {
                     _contentId = value;
-                    SetProperty(ref _contentId, value, nameof(ContentId));
+                    NotifyOfPropertyChange(() => ContentId);
                 }
             }
         }
@@ -64,7 +62,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_isSelected != value)
                 {
                     _isSelected = value;
-                    SetProperty(ref _isSelected, value, nameof(IsSelected));
+                    NotifyOfPropertyChange(() => IsSelected);
                 }
             }
         }
@@ -77,7 +75,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_isActive != value)
                 {
                     _isActive = value;
-                    SetProperty(ref _isActive, value, nameof(IsActive));
+                    NotifyOfPropertyChange(() => IsActive);
                 }
             }
         }

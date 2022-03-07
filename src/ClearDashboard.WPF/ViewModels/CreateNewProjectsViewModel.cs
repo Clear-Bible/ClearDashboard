@@ -11,11 +11,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Caliburn.Micro;
 using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class CreateNewProjectsViewModel : ObservableObject
+    public class CreateNewProjectsViewModel : PropertyChangedBase
     {
         #region props
         public bool ParatextVisible = false;
@@ -28,7 +29,8 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _helpText;
             set
             {
-                SetProperty(ref _helpText, value, nameof(HelpText));
+                _helpText = value;
+                NotifyOfPropertyChange(() => HelpText);
             }
         }
 
@@ -37,7 +39,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public bool ButtonEnabled
         {
             get => _ButtonEnabled;
-            set { SetProperty(ref _ButtonEnabled, value, nameof(ButtonEnabled)); }
+            set
+            {
+                _ButtonEnabled = value;
+                NotifyOfPropertyChange(() => ButtonEnabled);
+            }
         }
 
 
@@ -71,7 +77,8 @@ namespace ClearDashboard.Wpf.ViewModels
                         var oldVal = _textXaml;
 
                         Thread.MemoryBarrier();
-                        SetProperty(ref _textXaml, value, nameof(TextXaml));
+                        _textXaml = value;
+                        NotifyOfPropertyChange(() => TextXaml);
 
                         Thread.MemoryBarrier();
                         if (oldVal != _textXaml) goto retry;

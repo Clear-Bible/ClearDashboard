@@ -58,13 +58,13 @@
         <Border
             Grid.Row="1"
             Margin="5"
-            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="2">
             <StackPanel Orientation="Vertical">
                 <TextBlock
                     Margin="15,5,5,0"
                     FontSize="20"
-                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                    Foreground="{StaticResource PrimaryHueDarkBrush}"
                     Text="Dashboard Projects" />
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
@@ -74,7 +74,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="Gray" BorderThickness="1">
+                            <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
 
@@ -88,6 +88,7 @@
                                                     HorizontalAlignment="Left"
                                                     FontSize="16"
                                                     FontWeight="Bold"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                     Text="{Binding ProjectName}" />
 
                                                 <StackPanel Orientation="Horizontal">

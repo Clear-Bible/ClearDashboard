@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             set
             {
+                _paratextUserName = value;
                 NotifyOfPropertyChange(() => ParatextUserName);
             }
         }
@@ -39,6 +40,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _version;
             set
             {
+                _version = value;
                 NotifyOfPropertyChange(() => Version);
             }
         }

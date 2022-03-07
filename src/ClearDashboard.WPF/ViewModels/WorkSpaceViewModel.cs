@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Caliburn.Micro;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models.Menus;
 
@@ -21,7 +22,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class WorkSpaceViewModel : ObservableObject
+    public class WorkSpaceViewModel : PropertyChangedBase
     {
         #region Member Variables
 
@@ -69,7 +70,8 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _WindowIDToLoad;
             set
             {
-                SetProperty(ref _WindowIDToLoad, value, nameof(WindowIDToLoad)); 
+                _WindowIDToLoad = value;
+                NotifyOfPropertyChange(() => WindowIDToLoad);
                 OnPropertyChanged("WindowIDToLoad");
             }
         }
@@ -83,7 +85,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public ObservableCollection<MenuItemViewModel> MenuItems
         {
             get => _menuItems;
-            set { SetProperty(ref _menuItems, value, nameof(MenuItems)); }
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => MenuItems);
+            }
         }
 
 
@@ -93,7 +99,8 @@ namespace ClearDashboard.Wpf.ViewModels
             get=> _tools;
             set
             {
-                SetProperty(ref _tools, value, nameof(Tools));
+                _tools = value;
+                NotifyOfPropertyChange(() => Tools);
             }
         }
 
@@ -104,18 +111,20 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _files;
             set
             {
-                SetProperty(ref _files, value, nameof(Files));
+                _files = value;
+                NotifyOfPropertyChange(() => Files);
             }
         }
         public List<Tuple<string, Theme>> Themes { get; set; }
 
-        private Tuple<string, Theme> selectedTheme;
+        private Tuple<string, Theme> _selectedTheme;
         public Tuple<string, Theme> SelectedTheme
         {
-            get { return selectedTheme; }
+            get { return _selectedTheme; }
             set
             {
-                SetProperty(ref selectedTheme, value, nameof(selectedTheme));
+                _selectedTheme = value;
+                NotifyOfPropertyChange(() => SelectedTheme);
             }
         }
 
@@ -354,9 +363,9 @@ namespace ClearDashboard.Wpf.ViewModels
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public override event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        private void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

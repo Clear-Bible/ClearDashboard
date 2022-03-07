@@ -51,9 +51,14 @@
                     Orientation="Horizontal">
                     <TextBlock
                         Margin="0,0,5,0"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                         VerticalAlignment="Center"
-                        d:Text="Paratext User"
-                        Text="{Binding ParatextUserName, StringFormat='Paratext User: {0}'}" />
+                        Text="Paratext User" />
+                    <TextBlock
+                        x:Name="ParatextUserName"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        d:Text="Joe Schmoe" />
 
                 </StackPanel>
 
@@ -62,7 +67,7 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
                     <Border
-                        BorderBrush="{StaticResource BlueDarkBrush}"
+                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                         BorderThickness="2"
                         CornerRadius="10">
                         <Grid>
