@@ -163,11 +163,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 // subscribe to change events in the parent's theme
                 (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
-                //if (Application.Current is ClearDashboard.Wpf.App)
-                //{
-                //    _logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                //    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
-                //}
+                if (Application.Current is ClearDashboard.Wpf.App)
+                {
+                    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                }
             }
         }
 

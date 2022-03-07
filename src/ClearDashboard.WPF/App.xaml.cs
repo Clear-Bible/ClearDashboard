@@ -1,6 +1,7 @@
 ﻿using System;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
+using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.Wpf
 {
@@ -9,6 +10,14 @@ namespace ClearDashboard.Wpf
     /// </summary>
     public partial class App : Application
     {
+        private DashboardProject _selectedDashboardProject = new DashboardProject();
+        public DashboardProject SelectedDashboardProject
+        {
+            get { return _selectedDashboardProject; }
+            set { _selectedDashboardProject = value; }
+        }
+
+
         // Theme related
         public event Action ThemeChanged;
 
