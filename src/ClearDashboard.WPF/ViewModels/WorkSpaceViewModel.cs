@@ -26,7 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
 
@@ -133,9 +133,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
-        public WorkSpaceViewModel()
+        public WorkSpaceViewModel(ILog log)
         {
             _this = this;
+            _logger = log;
 
             // grab a copy of the current logger from the App.xaml.cs
            // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
@@ -227,7 +228,7 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Clear();
 
             Debug.WriteLine(DashboardProject.Name);
-            _dashboardViewModel = new DashboardViewModel();
+            _dashboardViewModel = new DashboardViewModel(_logger);
             _files.Add(_dashboardViewModel);
 
             _files.Add(new ConcordanceViewModel());
@@ -272,7 +273,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     case "DASHBOARD":
                         if (_dashboardViewModel is null)
                         {
-                            e.Content = new DashboardViewModel();
+                            e.Content = new DashboardViewModel(_logger);
                         }
                         else
                         {
@@ -327,7 +328,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     var vm = new BiblicalTermsViewModel();
                     return (vm, vm.Title, vm.DockSide);
                 case "DASHBOARD":
-                    var vm1 = new DashboardViewModel();
+                    var vm1 = new DashboardViewModel(_logger);
                     return (vm1, vm1.Title, vm1.DockSide);
                 case "CONCORDANCETOOL":
                     var vm2 = new ConcordanceViewModel();

@@ -47,7 +47,8 @@ namespace ClearDashboard.Wpf
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
 
-                .PerRequest<ShellViewModel>();
+                .PerRequest<ShellViewModel>()
+                .PerRequest<WorkSpaceViewModel>();
 
 
 

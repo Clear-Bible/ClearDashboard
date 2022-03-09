@@ -2,10 +2,13 @@
 using Newtonsoft.Json;
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Input;
+using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 
 
@@ -49,6 +52,30 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region ObservableProps
 
+        private LanguageTypeValue _selectedLanguage;
+        public LanguageTypeValue SelectedLanguage
+        {
+            get { return _selectedLanguage; }
+            set
+            {
+                _selectedLanguage = value;
+                NotifyOfPropertyChange(() => SelectedLanguage);
+
+                TranslationSource.Instance.Language = EnumHelper.GetDescription(_selectedLanguage);
+                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+            }
+        }
+
+        private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                NotifyOfPropertyChange(() => Message);
+            }
+        }
 
         #endregion
 
@@ -85,8 +112,59 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ShellViewModel()
         {
-            // default one for the XAML page
+            // set the combobox based on the current UI Thread Culture
+            var culture = Thread.CurrentThread.CurrentUICulture.Name;
+            switch (culture)
+            {
+                case "am":
+                    SelectedLanguage = LanguageTypeValue.am;
+                    break;
+                case "de":
+                    SelectedLanguage = LanguageTypeValue.de;
+                    break;
+                case "en-US":
+                    SelectedLanguage = LanguageTypeValue.enUS;
+                    break;
+                case "es":
+                    SelectedLanguage = LanguageTypeValue.es;
+                    break;
+                case "fr":
+                    SelectedLanguage = LanguageTypeValue.fr;
+                    break;
+                case "hi":
+                    SelectedLanguage = LanguageTypeValue.hi;
+                    break;
+                case "id":
+                    SelectedLanguage = LanguageTypeValue.id;
+                    break;
+                case "km":
+                    SelectedLanguage = LanguageTypeValue.km;
+                    break;
+                case "pt":
+                    SelectedLanguage = LanguageTypeValue.pt;
+                    break;
+                case "pt-BR":
+                    SelectedLanguage = LanguageTypeValue.ptBR;
+                    break;
+                case "ro":
+                    SelectedLanguage = LanguageTypeValue.ro;
+                    break;
+                case "ru-RU":
+                    SelectedLanguage = LanguageTypeValue.ruRU;
+                    break;
+                case "vi":
+                    SelectedLanguage = LanguageTypeValue.vi;
+                    break;
+                case "zh-CN":
+                    SelectedLanguage = LanguageTypeValue.zhCN;
+                    break;
+                case "zh-TW":
+                    SelectedLanguage = LanguageTypeValue.zhTW;
+                    break;
+            }
         }
+
+
 
         /// <summary>
         /// Overload for DI of the logger

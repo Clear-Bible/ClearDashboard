@@ -7,11 +7,15 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:ClearDashboard.Wpf.Models"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    x:Uid="Window_1"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel}"
     d:DesignHeight="800"
     d:DesignWidth="1200"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -24,38 +28,42 @@
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <viewModels:ShellViewModel />
+        <viewModels:ShellViewModel x:Uid="viewModels:ShellViewModel_1" />
     </Window.DataContext>
 
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
+            <RowDefinition x:Uid="RowDefinition_1" Height="40" />
+            <RowDefinition x:Uid="RowDefinition_2" Height="*" />
         </Grid.RowDefinitions>
 
 
         <Border
+            x:Uid="Border_1"
             Grid.Row="0"
             BorderBrush="{StaticResource BlueDarkBrush}"
             BorderThickness="2"
             CornerRadius="3">
-            <Grid>
+            <Grid x:Uid="Grid_2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition x:Uid="ColumnDefinition_1" />
+                    <ColumnDefinition x:Uid="ColumnDefinition_2" />
                 </Grid.ColumnDefinitions>
                 <StackPanel
+                    x:Uid="StackPanel_1"
                     Grid.Column="0"
                     Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
                     <TextBlock
+                        x:Uid="ShellView_ParatextUser"
                         Margin="0,0,5,0"
-                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                         VerticalAlignment="Center"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                         Text="Paratext User" />
                     <TextBlock
                         x:Name="ParatextUserName"
+                        x:Uid="ParatextUserName"
                         Margin="0,0,5,0"
                         VerticalAlignment="Center"
                         d:Text="Joe Schmoe" />
@@ -63,26 +71,48 @@
                 </StackPanel>
 
                 <StackPanel
+                    x:Uid="StackPanel_2"
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
+
+                    <TextBlock
+                        Margin="0,0,15,0"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Foreground="{DynamicResource OrangeMidBrush}"
+                        Text="{helpers:Loc language}" />
+
+                    <ComboBox
+                        x:Name="SelectedLanguage"
+                        x:Uid="SelectedLanguage"
+                        MinWidth="120"
+                        Margin="0,0,5,0"
+                        VerticalContentAlignment="Center"
+                        FontSize="12"
+                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
+                        SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+
                     <Border
+                        x:Uid="Border_2"
                         BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                         BorderThickness="2"
                         CornerRadius="10">
-                        <Grid>
+                        <Grid x:Uid="Grid_3">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_4" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_5" />
                             </Grid.ColumnDefinitions>
                             <materialDesign:PackIcon
+                                x:Uid="materialDesign:PackIcon_1"
                                 Grid.Column="0"
                                 Width="16"
                                 VerticalAlignment="Center"
                                 Foreground="White"
                                 Kind="CheckboxBlankCircle" />
                             <materialDesign:PackIcon
+                                x:Uid="materialDesign:PackIcon_2"
                                 Grid.Column="0"
                                 Width="16"
                                 VerticalAlignment="Center"
@@ -90,25 +120,30 @@
 
                             <ToggleButton
                                 x:Name="Toggle"
+                                x:Uid="Toggle"
                                 Grid.Column="1"
                                 Margin="5,0,5,0"
                                 Checked="Toggle_Checked"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                 Unchecked="Toggle_Unchecked" />
                             <materialDesign:PackIcon
+                                x:Uid="materialDesign:PackIcon_3"
                                 Grid.Column="2"
                                 VerticalAlignment="Center"
                                 Foreground="Black"
                                 Kind="CheckboxBlankCircle" />
 
                             <materialDesign:PackIcon
+                                x:Uid="materialDesign:PackIcon_4"
                                 Grid.Column="0"
                                 Width="16"
                                 VerticalAlignment="Center"
                                 Kind="CheckboxBlankCircleOutline" />
                         </Grid>
                     </Border>
+
                     <Button
+                        x:Uid="Button_1"
                         Width="110"
                         Height="25"
                         Margin="8,0,20,0"
@@ -123,6 +158,7 @@
         </Border>
 
         <Frame
+            x:Uid="Frame_1"
             Grid.Row="1"
             NavigationUIVisibility="Hidden"
             Source="/Views/Landing.xaml" />

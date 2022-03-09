@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    x:Uid="Page_1"
     Title="LandingViewModel"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -21,30 +22,36 @@
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <viewModels:LandingViewModel />
+        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel_1" />
     </Page.DataContext>
 
-    <Grid ButtonBase.Click="Grid_Click">
+    <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="*" />
+            <RowDefinition x:Uid="RowDefinition_1" Height="100" />
+            <RowDefinition x:Uid="RowDefinition_2" Height="*" />
         </Grid.RowDefinitions>
 
-        <WrapPanel Grid.Row="0" Margin="5">
+        <WrapPanel
+            x:Uid="WrapPanel_1"
+            Grid.Row="0"
+            Margin="5">
             <helpers:NavButton
+                x:Uid="helpers:NavButton_1"
                 Width="128"
                 Height="128"
                 ImageSource="/Resources/NewProject_Icon_128.png"
                 NavUri="/Views/CreateNewProjects.xaml"
                 Text="New Project" />
             <helpers:NavButton
+                x:Uid="helpers:NavButton_2"
                 Width="128"
                 Height="128"
                 ImageSource="/Resources/settings_logo_128.png"
                 NavUri="/Views/Settings.xaml"
                 Text="Settings" />
             <helpers:NavButton
+                x:Uid="helpers:NavButton_3"
                 Width="128"
                 Height="128"
                 ImageSource="/Resources/settings_logo_128.png"
@@ -56,32 +63,42 @@
         <!--  PROJECT'S GRID  -->
         <!--  ==========================  -->
         <Border
+            x:Uid="Border_1"
             Grid.Row="1"
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="2">
-            <StackPanel Orientation="Vertical">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
                 <TextBlock
+                    x:Uid="TextBlock_1"
                     Margin="15,5,5,0"
                     FontSize="20"
                     Foreground="{StaticResource PrimaryHueDarkBrush}"
                     Text="Dashboard Projects" />
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
+                    x:Uid="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
                     ItemsSource="{Binding DashboardProjects}"
                     Style="{StaticResource MaterialDesignListBox}">
 
                     <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
-                                <StackPanel Orientation="Vertical">
-                                    <StackPanel Orientation="Horizontal">
+                        <DataTemplate x:Uid="DataTemplate_1">
+                            <Border
+                                x:Uid="Border_2"
+                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                BorderThickness="1">
+                                <StackPanel x:Uid="StackPanel_2" Orientation="Vertical">
+                                    <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
 
                                         <!--  PROJECT TEXT  -->
-                                        <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
-                                            <StackPanel Orientation="Vertical">
+                                        <StackPanel
+                                            x:Uid="StackPanel_4"
+                                            Margin="15,0,0,0"
+                                            Orientation="Horizontal">
+                                            <StackPanel x:Uid="StackPanel_5" Orientation="Vertical">
                                                 <TextBlock
+                                                    x:Uid="TextBlock_2"
                                                     Grid.Row="0"
                                                     Width="370"
                                                     Margin="10,15,0,0"
@@ -91,13 +108,15 @@
                                                     Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                     Text="{Binding ProjectName}" />
 
-                                                <StackPanel Orientation="Horizontal">
+                                                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
                                                     <TextBlock
+                                                        x:Uid="TextBlock_3"
                                                         Grid.Row="1"
                                                         Width="217"
                                                         Margin="10,0,0,0"
                                                         Text="{Binding ShortFilePath}" />
                                                     <TextBlock
+                                                        x:Uid="TextBlock_4"
                                                         Grid.Row="2"
                                                         Margin="25,0,0,0"
                                                         FontStyle="Italic"
@@ -113,37 +132,44 @@
                                     <!--  ==========================  -->
                                     <!--  TOOL BUTTONS  -->
                                     <!--  ==========================  -->
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
 
                                         <Button
+                                            x:Uid="Button_1"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
-                                                    <Setter Property="Padding" Value="0,3,0,3" />
+                                                <Style
+                                                    x:Uid="Style_1"
+                                                    BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                                                    TargetType="Button">
+                                                    <Setter x:Uid="Setter_1" Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
                                                 <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_1"
                                                     Width="36"
                                                     Height="36"
                                                     Margin="-15,0,0,0"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="Dictionary" />
-                                                <TextBlock VerticalAlignment="Center">ClearConcordance</TextBlock>
+                                                <TextBlock x:Uid="TextBlock_5" VerticalAlignment="Center">ClearConcordance</TextBlock>
                                             </StackPanel>
                                         </Button>
 
 
                                         <Button
+                                            x:Uid="Button_2"
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
                                             Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
                                                 <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_2"
                                                     Width="30"
                                                     Height="30"
                                                     Margin="-15,0,0,0"
@@ -151,36 +177,48 @@
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="ChartSankeyVariant">
                                                     <materialDesign:PackIcon.RenderTransform>
-                                                        <RotateTransform Angle="270" CenterX="15" CenterY="15" />
+                                                        <RotateTransform x:Uid="RotateTransform_1" Angle="270" CenterX="15" CenterY="15" />
                                                     </materialDesign:PackIcon.RenderTransform>
                                                 </materialDesign:PackIcon>
-                                                <TextBlock VerticalAlignment="Center">ClearAligner</TextBlock>
+                                                <TextBlock x:Uid="TextBlock_6" VerticalAlignment="Center">ClearAligner</TextBlock>
                                             </StackPanel>
                                         </Button>
 
                                         <Button
+                                            x:Uid="Button_3"
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
                                             Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel Margin="-15,0,0,0" Orientation="Horizontal">
+                                            <StackPanel
+                                                x:Uid="StackPanel_10"
+                                                Margin="-15,0,0,0"
+                                                Orientation="Horizontal">
                                                 <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_3"
                                                     Width="30"
                                                     Height="30"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="MonitorEye" />
-                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">View Alignment</TextBlock>
+                                                <TextBlock
+                                                    x:Uid="TextBlock_7"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center">
+                                                    View Alignment
+                                                </TextBlock>
                                             </StackPanel>
                                         </Button>
 
                                         <Button
+                                            x:Uid="Button_4"
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
                                             Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal">
                                                 <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_4"
                                                     Width="30"
                                                     Height="30"
                                                     Margin="-15,0,0,0"
@@ -188,10 +226,15 @@
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="CallSplit">
                                                     <materialDesign:PackIcon.RenderTransform>
-                                                        <RotateTransform Angle="180" CenterX="15" CenterY="15" />
+                                                        <RotateTransform x:Uid="RotateTransform_2" Angle="180" CenterX="15" CenterY="15" />
                                                     </materialDesign:PackIcon.RenderTransform>
                                                 </materialDesign:PackIcon>
-                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">ClearSuggester</TextBlock>
+                                                <TextBlock
+                                                    x:Uid="TextBlock_8"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center">
+                                                    ClearSuggester
+                                                </TextBlock>
                                             </StackPanel>
                                         </Button>
 
