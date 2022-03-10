@@ -38,6 +38,9 @@ namespace ClearDashboard.Wpf
         {
             _log = new Log();
 
+            // put a reference into the App
+            ((App)Application.Current).Log = _log;
+
 
             _container = new SimpleContainer();
             _container.Instance(_container);
@@ -48,6 +51,8 @@ namespace ClearDashboard.Wpf
                 .Singleton<IEventAggregator, EventAggregator>()
 
                 .PerRequest<ShellViewModel>()
+                .PerRequest<CreateNewProjectsViewModel>()
+                .PerRequest<SettingsViewModel>()
                 .PerRequest<WorkSpaceViewModel>();
 
 

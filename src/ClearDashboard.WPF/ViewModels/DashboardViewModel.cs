@@ -34,19 +34,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
-        public DashboardViewModel(ILog logger)
+        public DashboardViewModel()
         {
             this.Title = "📐 DASHBOARD";
             this.ContentId = "DASHBOARD";
 
-            _logger = logger;
+            _logger = ((App)Application.Current).Log;
 
-
-            if (Application.Current is ClearDashboard.Wpf.App)
-            {
-                //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                //DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
-            }
 
         }
 

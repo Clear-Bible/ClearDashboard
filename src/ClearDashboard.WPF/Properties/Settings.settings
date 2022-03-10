@@ -20,5 +20,8 @@
     <Setting Name="Theme" Type="MaterialDesignThemes.Wpf.BaseTheme" Scope="User">
       <Value Profile="(Default)">Inherit</Value>
     </Setting>
+    <Setting Name="language_code" Type="System.String" Scope="User">
+      <Value Profile="(Default)">en</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

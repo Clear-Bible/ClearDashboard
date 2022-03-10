@@ -112,58 +112,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ShellViewModel()
         {
-            // set the combobox based on the current UI Thread Culture
-            var culture = Thread.CurrentThread.CurrentUICulture.Name;
-            switch (culture)
-            {
-                case "am":
-                    SelectedLanguage = LanguageTypeValue.am;
-                    break;
-                case "de":
-                    SelectedLanguage = LanguageTypeValue.de;
-                    break;
-                case "en-US":
-                    SelectedLanguage = LanguageTypeValue.enUS;
-                    break;
-                case "es":
-                    SelectedLanguage = LanguageTypeValue.es;
-                    break;
-                case "fr":
-                    SelectedLanguage = LanguageTypeValue.fr;
-                    break;
-                case "hi":
-                    SelectedLanguage = LanguageTypeValue.hi;
-                    break;
-                case "id":
-                    SelectedLanguage = LanguageTypeValue.id;
-                    break;
-                case "km":
-                    SelectedLanguage = LanguageTypeValue.km;
-                    break;
-                case "pt":
-                    SelectedLanguage = LanguageTypeValue.pt;
-                    break;
-                case "pt-BR":
-                    SelectedLanguage = LanguageTypeValue.ptBR;
-                    break;
-                case "ro":
-                    SelectedLanguage = LanguageTypeValue.ro;
-                    break;
-                case "ru-RU":
-                    SelectedLanguage = LanguageTypeValue.ruRU;
-                    break;
-                case "vi":
-                    SelectedLanguage = LanguageTypeValue.vi;
-                    break;
-                case "zh-CN":
-                    SelectedLanguage = LanguageTypeValue.zhCN;
-                    break;
-                case "zh-TW":
-                    SelectedLanguage = LanguageTypeValue.zhTW;
-                    break;
-            }
+
         }
 
+        protected override void OnViewLoaded(object view)
+        {
+            SetLanguage();
+        }
 
 
         /// <summary>
@@ -204,5 +159,62 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion
+
+        public void SetLanguage()
+        {
+            // set the combobox based on the current UI Thread Culture
+            //var culture = Thread.CurrentThread.CurrentUICulture.Name;
+
+            var culture = Properties.Settings.Default.language_code;
+
+            switch (culture)
+            {
+                case "am":
+                    SelectedLanguage = LanguageTypeValue.am;
+                    break;
+                case "de":
+                    SelectedLanguage = LanguageTypeValue.de;
+                    break;
+                case "en":
+                    SelectedLanguage = LanguageTypeValue.en;
+                    break;
+                case "es":
+                    SelectedLanguage = LanguageTypeValue.es;
+                    break;
+                case "fr":
+                    SelectedLanguage = LanguageTypeValue.fr;
+                    break;
+                case "hi":
+                    SelectedLanguage = LanguageTypeValue.hi;
+                    break;
+                case "id":
+                    SelectedLanguage = LanguageTypeValue.id;
+                    break;
+                case "km":
+                    SelectedLanguage = LanguageTypeValue.km;
+                    break;
+                case "pt":
+                    SelectedLanguage = LanguageTypeValue.pt;
+                    break;
+                case "pt-BR":
+                    SelectedLanguage = LanguageTypeValue.ptBR;
+                    break;
+                case "ro":
+                    SelectedLanguage = LanguageTypeValue.ro;
+                    break;
+                case "ru-RU":
+                    SelectedLanguage = LanguageTypeValue.ruRU;
+                    break;
+                case "vi":
+                    SelectedLanguage = LanguageTypeValue.vi;
+                    break;
+                case "zh-CN":
+                    SelectedLanguage = LanguageTypeValue.zhCN;
+                    break;
+                case "zh-TW":
+                    SelectedLanguage = LanguageTypeValue.zhTW;
+                    break;
+            }
+        }
     }
 }

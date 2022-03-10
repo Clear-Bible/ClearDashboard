@@ -1,64 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -117,7 +58,244 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Joshua" xml:space="preserve">
+    <value>                      约书亚记</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>以赛亚书</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>利未记</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>以弗所书</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1彼得</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>以西结书</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>西番雅书</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>法官</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>加拉太人</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>使徒行传</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>申命记</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>歌曲歌曲</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>约翰福音</value>
+  </data>
+  <data name="2 Samuel" xml:space="preserve">
+    <value>塞缪尔</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>                      撒母耳记上</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 John.</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>玛拉基</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Chinese [zh-cn]</value>
+  </data>
+  <data name="Proverbs" xml:space="preserve">
+    <value>箴言</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2彼得</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>约珥书</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1个帖撒罗尼亚人</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>犹大书</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>路得记</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>路加福音</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>民数记</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>撒迦利亚书</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>约伯记</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>马太福音</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 John.</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>诗篇</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>以斯拉记</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>以斯帖记</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>蒂莫西2</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>弥迦书</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>出漏</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>提多书</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>历代志上</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>罗马书</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>腓立比岛</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>哀歌</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>创世纪</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>约翰</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>阿摩司书</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>耶利米书</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>俄巴底亚书</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>但以理书</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1蒂莫西</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>约拿书</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>列王纪上</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>马可福音</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>那鸿书</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>尼希米</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>雅各书</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>腓利门书 </value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>莫萨斯人</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>哈巴谷书</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>教会</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>希伯来书</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2哥林多前书</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>帖撒罗尼迦后书</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>何西阿书</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>哈该书</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1哥林多前书</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>历代志下</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>启示录</value>
+  </data>
   <data name="language" xml:space="preserve">
     <value>简体中文</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>列王纪下</value>
   </data>
 </root>

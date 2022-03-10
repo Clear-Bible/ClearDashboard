@@ -1,64 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -117,7 +58,244 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Joshua" xml:space="preserve">
+    <value>យ៉ូស្វេ</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>អេសាយ</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>លេវីវិន័យ</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>អេភេសូរ</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 ពេត្រុស</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>អេសេគាល</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>សេផានា</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>ចយស</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>កាឡាទី</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>ការបហ្ចេញអាេយដឹង</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>បុក / ករ</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>សកម្មភាព</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>ចោទិយយថា</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>ចម្រៀងចម្រៀង</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>ចន</value>
+  </data>
+  <data name="2 Samuel" xml:space="preserve">
+    <value>2 សាំយូអែល</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 សាំយូអែល</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>ចន 1</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>ម៉ាឡាគី</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Khmer [km]</value>
+  </data>
+  <data name="Proverbs" xml:space="preserve">
+    <value>យកចារវិស័យ</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2 ពេត្រុស</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>ចូអែល</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>ថែស្សាឡូនីចទី 1</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>យន្ដផ័យ</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>រូស្លីវិញ</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>របៅបេលរសច</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>ផ្លេលកខេ</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>សរេង្គាហ</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>លេខ</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>សាការី</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>អាចីវកម្ផ</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>ម៉ាថាយ</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>ចន 3</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>ទំនុកតម្លាវ</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>ហេហេរ៉ា</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>ដេលលក់បាន</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>ធីម៉ូថេទី 2</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>សាយ</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>ចម្edeតោហ</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>ទីតុស</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>គម្រោង​ថ្មី</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>របាក្សត្រ 1</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>រ៉ូម</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>ភីលីព</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>ធេវីអាេយយរមយរ</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>បរិទេវ</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>បិនិត្យ</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>ាំងលោអៀងខាងលិច</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>ចន 2</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>អេម៉ុស</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>យេរេមា</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>គម្រោង</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>ដេសាដយ</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>ដានីយ៉ែល</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>ធីម៉ូថេ 1</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>យ៉ូណាស</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 ស្តេច</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>កុសសមកាល់</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>ណាហ៊ុមនោម</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>នេហេមា</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>យ៉ាកនាម</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>នាយ</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>កូល៉ុស</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>អ្នក​ប្រើ</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>ហាបាគុក</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>សាស្ដា</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>ហេព្រើរ</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>បង្កើត</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 កូរិនថូស 2 នាក់</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>ថែស្សាឡូនីចទី 2</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>ហូសេ</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>ហាកាយ</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 កូរិនថូស</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>របាក្សត្រទី 2</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>កមរោង</value>
+  </data>
   <data name="language" xml:space="preserve">
     <value>ខ្មែរ</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>ស្តេច 2 អង្គ</value>
   </data>
 </root>

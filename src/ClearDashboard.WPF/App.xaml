@@ -9,11 +9,11 @@
     <!--  StartupUri="Views/MainWindow.xaml"  -->
 
     <Application.Resources>
-        <ResourceDictionary x:Uid="ResourceDictionary_1">
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!--  Caliburn Micro BootStrapper  -->
                 <ResourceDictionary x:Uid="ResourceDictionary_2">
-                    <local:Bootstrapper x:Key="Bootstrapper" x:Uid="local:Bootstrapper_1" />
+                    <local:Bootstrapper x:Key="Bootstrapper" />
                     <SolidColorBrush
                         x:Key="BackgroundBrush"
                         x:Uid="SolidColorBrush_1"
@@ -22,9 +22,9 @@
 
 
                 <!--  Note: I have intentionally omitted the Light/Dark theme dictionary as that is being set in code  -->
-                <ResourceDictionary x:Uid="ResourceDictionary_3" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_4" Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_5" Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
 
                 <!--<materialDesign:BundledTheme
                     BaseTheme="Dark"
@@ -32,9 +32,9 @@
                     SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
 
-                <ResourceDictionary x:Uid="ResourceDictionary_6">
+                <ResourceDictionary>
                     <!--  Additional Design Colors - DARK  -->
-                    <Brush x:Key="BlueLightBrush" x:Uid="Brush_1">#9DBFF8</Brush>
+                    <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
                     <Brush x:Key="BlueMidBrush" x:Uid="Brush_2">#5B8DEE</Brush>
                     <Brush x:Key="BlueDarkBrush" x:Uid="Brush_3">#0063F8</Brush>
                     <Brush x:Key="BlueVeryDarkBrush" x:Uid="Brush_4">#002D74</Brush>

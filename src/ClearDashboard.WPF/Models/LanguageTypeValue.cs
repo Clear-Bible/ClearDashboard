@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Models
         [Description("de"), DefaultValue("Deutsche Sprache")]
         de,
         [Description("en-US"), DefaultValue("English Language")]
-        enUS,
+        en,
         [Description("es"), DefaultValue("Lengua española")]
         es,
         [Description("fr"), DefaultValue("Langue française")]
