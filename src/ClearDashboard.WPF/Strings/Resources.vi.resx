@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Joshua" xml:space="preserve">
+    <value>Joshua.</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Ê-sai</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Leviticus.</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Ê-phê-sô</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 Peter.</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Ezekiel.</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Zephaniah.</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>Ban giám khảo</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>Galatians.</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Khải huyền</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Thêm vào</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Hủy bỏ</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>Hành vi</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>Phục truyền luật lệ ký</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>Bài hát của bài hát</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="2 Samuel" xml:space="preserve">
+    <value>2 samuel.</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 samuel.</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 john.</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>Malachi.</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Vietnamese [vi]</value>
+  </data>
+  <data name="Proverbs" xml:space="preserve">
+    <value>Châm ngôn.</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2 Peter.</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>Joel.</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1 Thessalonia</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Jude.</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>Ruth.</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Xóa bỏ</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Luke.</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Tiết kiệm</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Zechariah.</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Công việc</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Matthew.</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 john.</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>Thi thiên</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra.</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>Esther.</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>2 Timothy.</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>Micah.</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Cuộc di cư</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Titus.</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Dự án mới</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 Biên niên sử</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Người La Mã.</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>Phi Phi.</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Lời than vãn</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Biên tập</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Genesis.</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 John.</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Amos.</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Jeremiah.</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Dự án.</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah.</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Daniel.</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1 Timothy.</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Jonah.</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 vua</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>dấu</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Nahum.</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>Nehemiah.</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>James.</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>Philemon.</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Colossians.</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Người sử dụng</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Habakkuk.</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Giáo hội</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Hebrews.</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Tạo ra</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 Cô-rinh-tô</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 Thessalonia</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>Hosea.</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>Haggai.</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 Cô-rinh-tô</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 Biên niên sử</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Ngôn ngữ tiếng Việt</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 Kings.</value>
+  </data>
+</root>

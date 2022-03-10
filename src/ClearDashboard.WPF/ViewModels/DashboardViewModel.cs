@@ -5,14 +5,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using ClearDashboard.Wpf.Helpers;
-using Serilog;
+using Caliburn.Micro;
+
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class DashboardViewModel : PaneViewModel
     {
         #region Member Variables
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private bool _firstLoad;
 
         #endregion //Member Variables
@@ -38,11 +39,8 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "📐 DASHBOARD";
             this.ContentId = "DASHBOARD";
 
-            if (Application.Current is ClearDashboard.Wpf.App)
-            {
-                //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
-                //DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
-            }
+            _logger = ((App)Application.Current).Log;
+
 
         }
 

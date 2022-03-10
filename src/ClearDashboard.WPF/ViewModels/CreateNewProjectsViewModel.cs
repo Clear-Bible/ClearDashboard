@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
 using MdXaml;
@@ -19,6 +20,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : PropertyChangedBase
     {
         #region props
+        private readonly ILog _logger;
+
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
@@ -109,6 +112,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public CreateNewProjectsViewModel()
         {
+            _logger = ((App)Application.Current).Log;
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 

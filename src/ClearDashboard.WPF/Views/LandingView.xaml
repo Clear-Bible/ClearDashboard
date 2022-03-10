@@ -1,0 +1,262 @@
+﻿<Page
+    x:Class="ClearDashboard.Wpf.Views.LandingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
+    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    x:Uid="Page_1"
+    Title="LandingViewModel"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel_1" />
+    </Page.DataContext>
+
+    <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
+
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="100" />
+            <RowDefinition x:Uid="RowDefinition_2" Height="*" />
+        </Grid.RowDefinitions>
+
+        <WrapPanel
+            x:Uid="WrapPanel_1"
+            Grid.Row="0"
+            Margin="5">
+            <helpers:NavButton
+                x:Uid="helpers:NavButton_1"
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/NewProject_Icon_128.png"
+                NavUri="/Views/CreateNewProjectsView.xaml"
+                Text="{helpers:Loc Landing_newproject}" />
+            <helpers:NavButton
+                x:Uid="helpers:NavButton_2"
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/settings_logo_128.png"
+                NavUri="/Views/SettingsView.xaml"
+                Text="{helpers:Loc Landing_settings}" />
+            <helpers:NavButton
+                x:Uid="helpers:NavButton_3"
+                Width="128"
+                Height="128"
+                ImageSource="/Resources/settings_logo_128.png"
+                NavUri="/Views/WorkSpaceView.xaml"
+                Text="{helpers:Loc Landing_project}" />
+        </WrapPanel>
+
+        <!--  ==========================  -->
+        <!--  PROJECT'S GRID  -->
+        <!--  ==========================  -->
+        <Border
+            x:Uid="Border_1"
+            Grid.Row="1"
+            Margin="5"
+            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+            BorderThickness="2">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
+                <TextBlock
+                    x:Uid="TextBlock_1"
+                    Margin="15,5,5,0"
+                    FontSize="20"
+                    Foreground="{StaticResource PrimaryHueDarkBrush}">
+                    <Run Text="Dashboard " />
+                    <Run Text="{helpers:Loc Landing_projects}" />
+                </TextBlock>
+                <ListView
+                    x:Name="RadioButtonGroupChoiceChipOutline"
+                    x:Uid="RadioButtonGroupChoiceChipOutline"
+                    Margin="5"
+                    ItemsSource="{Binding DashboardProjects}"
+                    Style="{StaticResource MaterialDesignListBox}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Uid="DataTemplate_1">
+                            <Border
+                                x:Uid="Border_2"
+                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                BorderThickness="1">
+                                <StackPanel x:Uid="StackPanel_2" Orientation="Vertical">
+                                    <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+
+                                        <!--  PROJECT TEXT  -->
+                                        <StackPanel
+                                            x:Uid="StackPanel_4"
+                                            Margin="15,0,0,0"
+                                            Orientation="Horizontal">
+                                            <StackPanel x:Uid="StackPanel_5" Orientation="Vertical">
+                                                <TextBlock
+                                                    x:Uid="TextBlock_2"
+                                                    Grid.Row="0"
+                                                    Width="370"
+                                                    Margin="10,15,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    FontSize="16"
+                                                    FontWeight="Bold"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Text="{Binding ProjectName}" />
+
+                                                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        x:Uid="TextBlock_3"
+                                                        Grid.Row="1"
+                                                        Width="217"
+                                                        Margin="10,0,0,0"
+                                                        Text="{Binding ShortFilePath}" />
+                                                    <TextBlock
+                                                        x:Uid="TextBlock_4"
+                                                        Grid.Row="2"
+                                                        Margin="25,0,0,0"
+                                                        FontStyle="Italic"
+                                                        Text="{Binding LastChanged}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+
+
+
+                                    </StackPanel>
+
+                                    <!--  ==========================  -->
+                                    <!--  TOOL BUTTONS  -->
+                                    <!--  ==========================  -->
+                                    <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
+
+                                        <Button
+                                            x:Uid="Button_1"
+                                            Width="165"
+                                            Margin="15,8,12,12"
+                                            IsEnabled="True">
+                                            <Button.Style>
+                                                <Style
+                                                    x:Uid="Style_1"
+                                                    BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                                                    TargetType="Button">
+                                                    <Setter x:Uid="Setter_1" Property="Padding" Value="0,3,0,3" />
+                                                </Style>
+                                            </Button.Style>
+                                            <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_1"
+                                                    Width="36"
+                                                    Height="36"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="Dictionary" />
+                                                <TextBlock x:Uid="TextBlock_5" VerticalAlignment="Center">ClearConcordance</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+
+                                        <Button
+                                            x:Uid="Button_2"
+                                            Width="165"
+                                            Margin="8"
+                                            IsEnabled="True"
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                            <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_2"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="ChartSankeyVariant">
+                                                    <materialDesign:PackIcon.RenderTransform>
+                                                        <RotateTransform x:Uid="RotateTransform_1" Angle="270" CenterX="15" CenterY="15" />
+                                                    </materialDesign:PackIcon.RenderTransform>
+                                                </materialDesign:PackIcon>
+                                                <TextBlock x:Uid="TextBlock_6" VerticalAlignment="Center">ClearAligner</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <Button
+                                            x:Uid="Button_3"
+                                            Width="165"
+                                            Margin="8"
+                                            IsEnabled="True"
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                            <StackPanel
+                                                x:Uid="StackPanel_10"
+                                                Margin="-15,0,0,0"
+                                                Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_3"
+                                                    Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="MonitorEye" />
+                                                <TextBlock
+                                                    x:Uid="TextBlock_7"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center">
+                                                    View Alignment
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <Button
+                                            x:Uid="Button_4"
+                                            Width="165"
+                                            Margin="8"
+                                            IsEnabled="True"
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                            <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    x:Uid="materialDesign:PackIcon_4"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="CallSplit">
+                                                    <materialDesign:PackIcon.RenderTransform>
+                                                        <RotateTransform x:Uid="RotateTransform_2" Angle="180" CenterX="15" CenterY="15" />
+                                                    </materialDesign:PackIcon.RenderTransform>
+                                                </materialDesign:PackIcon>
+                                                <TextBlock
+                                                    x:Uid="TextBlock_8"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center">
+                                                    ClearSuggester
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                    </StackPanel>
+
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+
+                </ListView>
+
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>
