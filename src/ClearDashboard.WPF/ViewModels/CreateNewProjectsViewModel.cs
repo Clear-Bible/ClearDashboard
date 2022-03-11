@@ -116,6 +116,8 @@ namespace ClearDashboard.Wpf.ViewModels
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
+
+        // NB:  GERFEN - calling Init here, instead of in the view.
         protected override async  void OnViewAttached(object view, object context)
         {
             await Init();
