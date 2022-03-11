@@ -17,7 +17,7 @@ using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class CreateNewProjectsViewModel : PropertyChangedBase
+    public class CreateNewProjectsViewModel : Screen
     {
         #region props
         private readonly ILog _logger;
@@ -114,6 +114,12 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             _logger = ((App)Application.Current).Log;
             createNewProjectCommand = new RelayCommand(CreateNewProject);
+        }
+
+        protected override async  void OnViewAttached(object view, object context)
+        {
+            await Init();
+            base.OnViewAttached(view, context);
         }
 
         public async Task Init()

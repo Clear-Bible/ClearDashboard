@@ -6,11 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf
 {
+
+
     public class Bootstrapper : BootstrapperBase
     {
         #region Props
@@ -26,7 +30,6 @@ namespace ClearDashboard.Wpf
         {
             Initialize();
 
-
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
@@ -37,6 +40,8 @@ namespace ClearDashboard.Wpf
         protected override void Configure()
         {
             _log = new Log();
+
+            _log.Info("Configuring dependency injection for the application.");
 
             // put a reference into the App
             ((App)Application.Current).Log = _log;
@@ -53,29 +58,10 @@ namespace ClearDashboard.Wpf
                 .PerRequest<ShellViewModel>()
                 .PerRequest<CreateNewProjectsViewModel>()
                 .PerRequest<SettingsViewModel>()
-                .PerRequest<WorkSpaceViewModel>();
-
-
-
-            //_container.Instance(_container);
-
-            //_container
-            //    .Singleton<IWindowManager, WindowManager>()
-            //    .Singleton<IEventAggregator, EventAggregator>();
-
-            //_container
-            //    .PerRequest<ShellViewModel>()
-            //    .PerRequest<MenuViewModel>()
-            //    .PerRequest<BindingsViewModel>()
-            //    .PerRequest<ActionsViewModel>()
-            //    .PerRequest<CoroutineViewModel>()
-            //    .PerRequest<ExecuteViewModel>()
-            //    .PerRequest<EventAggregationViewModel>()
-            //    .PerRequest<DesignTimeViewModel>()
-            //    .PerRequest<ConductorViewModel>()
-            //    .PerRequest<BubblingViewModel>()
-            //    .PerRequest<NavigationSourceViewModel>()
-            //    .PerRequest<NavigationTargetViewModel>();
+                .PerRequest<WorkSpaceViewModel>()
+                .PerRequest<LandingViewModel>();
+             
+            
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
@@ -107,7 +93,7 @@ namespace ClearDashboard.Wpf
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            
+
             // write to the log file
             _log.Error(e.Exception);
             MessageBox.Show(e.Exception.Message, "An error as occurred", MessageBoxButton.OK);

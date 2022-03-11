@@ -24,9 +24,9 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <viewModels:WorkSpaceViewModel x:Uid="viewModels:WorkSpaceViewModel_1" />
-    </Page.DataContext>
+    </Page.DataContext>-->
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" x:Uid="converters:ActiveDocumentConverter_1" />
         <system:Boolean x:Key="TRUE" x:Uid="system:Boolean_1">True</system:Boolean>

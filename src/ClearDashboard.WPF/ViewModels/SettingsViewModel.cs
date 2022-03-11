@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class SettingsViewModel: PropertyChangedBase
+    public class SettingsViewModel : Screen
     {
         private readonly ILog _logger;
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();

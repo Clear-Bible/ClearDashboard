@@ -5,15 +5,20 @@ using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class LandingViewModel: PropertyChangedBase
+    public class LandingViewModel: Screen
     {
         #region   Member Variables
 
         public ILog _log { get; set; }
+
+        private readonly INavigationService _navigationService;
 
         #endregion
 
@@ -26,7 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
-        public LandingViewModel()
+        public LandingViewModel(ILog log,  INavigationService navigationService)
         {
             // grab a copy of the current logger from the App.xaml.cs
             if (Application.Current is ClearDashboard.Wpf.App)
@@ -34,14 +39,42 @@ namespace ClearDashboard.Wpf.ViewModels
                 //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
             }
 
+            _log = log;
+      
+            _navigationService = navigationService;
+
+          
             // get the clearsuite projects
             DashboardProjects = LoadExistingProjects();
+
+            log.Info("LandingViewModel constructor called.");
         }
 
         #endregion
 
 
+
         #region Methods
+
+        public void CreateNewProject()
+        {
+            _log.Info("CreateNewProject called.");
+            _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
+        }
+
+        public void Workspace()
+        {
+            _log.Info("Workspace called.");
+            _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
+            
+        }
+
+        public void Settings()
+        {
+            _log.Info("Settings called.");
+            _navigationService.NavigateToViewModel<SettingsViewModel>();
+
+        }
 
         /// <summary>
         /// Get a listing of all the existing projects in the /Projects

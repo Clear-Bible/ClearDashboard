@@ -22,7 +22,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class WorkSpaceViewModel : PropertyChangedBase
+    public class WorkSpaceViewModel : Screen
     {
         #region Member Variables
 
