@@ -54,28 +54,6 @@ namespace ClearDashboard.Wpf
                 .PerRequest<CreateNewProjectsViewModel>()
                 .PerRequest<SettingsViewModel>()
                 .PerRequest<WorkSpaceViewModel>();
-
-
-
-            //_container.Instance(_container);
-
-            //_container
-            //    .Singleton<IWindowManager, WindowManager>()
-            //    .Singleton<IEventAggregator, EventAggregator>();
-
-            //_container
-            //    .PerRequest<ShellViewModel>()
-            //    .PerRequest<MenuViewModel>()
-            //    .PerRequest<BindingsViewModel>()
-            //    .PerRequest<ActionsViewModel>()
-            //    .PerRequest<CoroutineViewModel>()
-            //    .PerRequest<ExecuteViewModel>()
-            //    .PerRequest<EventAggregationViewModel>()
-            //    .PerRequest<DesignTimeViewModel>()
-            //    .PerRequest<ConductorViewModel>()
-            //    .PerRequest<BubblingViewModel>()
-            //    .PerRequest<NavigationSourceViewModel>()
-            //    .PerRequest<NavigationTargetViewModel>();
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)

@@ -24,7 +24,7 @@
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel_1" />
+        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel" />
     </Page.DataContext>
 
     <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
