@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace NamedPipes
 {
+    [Serializable]
     public class NamedPipeMessage
     {
         public enum ActionType
@@ -12,17 +11,21 @@ namespace NamedPipes
             OnConnected,
             OnDisconnected,
 
+            ServerClosed,
+
+            SendText,
+
             GetBibilicalTerms,
             GetSourceVerses,
             GetTargetVerses,
             GetChapter,
             GetNotes,
 
-            BiblicalTerms,
-            ServerClosed,
-            SourceVerseText,
-            TargetVerseText,
-            NotesObject,
+            SetBiblicalTerms,
+            SetSourceVerseText,
+            SetTargetVerseText,
+            SetNotesObject,
+
             CurrentVerse,
         }
 

@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using H.Pipes;
 
 namespace ClearDashboardPlugin
 {
@@ -34,7 +35,7 @@ namespace ClearDashboardPlugin
         private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
         private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
 
-        private ServerPipe _serverPipe;
+        //private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
         private NLog.ILogger _logger;
 
@@ -44,6 +45,13 @@ namespace ClearDashboardPlugin
         private StringBuilder _sb = new StringBuilder();
 
         private Form _parentForm;
+
+
+        // Named Pipe Props
+        private const string PipeName = "ClearDashboard";
+        private PipeServer<PipeMessage> _PipeServer { get; }
+        private ISet<string> Clients { get; } = new HashSet<string>();
+
 
         public enum MsgColor
         {
@@ -79,10 +87,6 @@ namespace ClearDashboardPlugin
             {
                 if (_clearSuitePath != string.Empty)
                 {
-                    _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
-                    _serverPipe.DataReceived += ServerPipeOnDataReceived;
-                    AppendText(MsgColor.Green, "Server Pipe Created");
-
                     // launch ClearEngineController
                     try
                     {
@@ -109,6 +113,50 @@ namespace ClearDashboardPlugin
                 // TODO Do some alert now that ClearSuite is NOT installed
             }
 
+
+            Load += OnLoad;
+
+            _PipeServer = new PipeServer<PipeMessage>(PipeName);
+            _PipeServer.ClientConnected += async (o, args) =>
+            {
+                Clients.Add(args.Connection.PipeName);
+                UpdateClientList();
+
+                AddLine($"{args.Connection.PipeName} connected!");
+
+                try
+                {
+                    await args.Connection.WriteAsync(new PipeMessage
+                    {
+                        Action = NamedPipeMessage.ActionType.SendText,
+                        Text = "Welcome! You are now connected to the server."
+                    }).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    OnExceptionOccurred(exception);
+                }
+            };
+            _PipeServer.ClientDisconnected += (o, args) =>
+            {
+                Clients.Remove(args.Connection.PipeName);
+                UpdateClientList();
+
+                AddLine($"{args.Connection.PipeName} disconnected!");
+            };
+            //_PipeServer.MessageReceived += (o, args) =>
+            //{
+            //    AddLine($"{args.Connection.PipeName}: {args.Message}");
+            //};
+
+            _PipeServer.MessageReceived += (sender, args) =>
+            {
+                if (args.Message != null)
+                {
+                    OnMessageReceivedAsync(args.Message);
+                }
+            };
+            _PipeServer.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
         }
 
         /// <summary>
@@ -121,24 +169,87 @@ namespace ClearDashboardPlugin
             // this user control is closing - clean up pipe
             NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.ServerClosed, "", "");
             var msgSend = msgOut.CreateMessage();
-            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+
+            try
+            {
+                await _PipeServer.WriteAsync(new PipeMessage
+                {
+                    Action = NamedPipeMessage.ActionType.SendText,
+                    Text = "Connection Closed"
+                }).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
 
             // we need a delay before closing to ensure that the message is received on the client
             await Task.Delay(2000).ConfigureAwait(true);
 
-            UnhookPipe();
+            // unhook the pipe
+            await _PipeServer.DisposeAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Disconnect the named pipe
-        /// </summary>
-        private void UnhookPipe()
+        private void OnMessageReceivedAsync(PipeMessage message)
         {
-            // unhook the pipe
-            _serverPipe.Close();
-            _serverPipe.DataReceived -= ServerPipeOnDataReceived;
-            _serverPipe = null;
+            AddLine(message.Text);
+
+            //switch (message.Action)
+            //{
+            //    case ActionType.SendText:
+            //        MessageBox.Show(message.Text);
+            //        break;
+            //    default:
+            //        MessageBox.Show($"Method {message.Action} not implemented");
+            //        break;
+            //}
         }
+
+
+        private async void OnLoad(object sender, EventArgs eventArgs)
+        {
+
+            try
+            {
+                AddLine("_PipeServer starting...");
+
+                await _PipeServer.StartAsync().ConfigureAwait(false);
+
+                AddLine("_PipeServer is started!");
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
+        }
+
+        private void OnExceptionOccurred(Exception exception)
+        {
+            AddLine($"Exception: {exception}");
+        }
+
+        private void AddLine(string text)
+        {
+
+
+            rtb.Invoke(new Action(delegate
+            {
+                rtb.Text += $@"{text}{Environment.NewLine}";
+            }));
+        }
+
+        private void UpdateClientList()
+        {
+            listBoxClients.Invoke(new Action(() =>
+            {
+                listBoxClients.Items.Clear();
+                foreach (var client in Clients)
+                {
+                    listBoxClients.Items.Add(client);
+                }
+            }));
+        }
+
 
         #endregion
 
@@ -205,6 +316,7 @@ namespace ClearDashboardPlugin
 
         }
 
+
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
             SetProject(newProject);
@@ -239,55 +351,55 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
-        {
-            NamedPipeMessage msg = null;
-            try
-            {
-                msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
-            }
-            catch (Exception exception)
-            {
-                msg = null;
-                _logger.Log(LogLevel.Error, exception);
-                return;
-            }
+        //private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
+        //{
+        //    NamedPipeMessage msg = null;
+        //    try
+        //    {
+        //        msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        msg = null;
+        //        _logger.Log(LogLevel.Error, exception);
+        //        return;
+        //    }
 
-            // Do the command's action
-            switch (msg.actionType)
-            {
-                case "GetBibilicalTerms":
-                    await GetBibilicalTerms(msg);
-                    break;
-                case "GetTargetVerses":
-                    await ShowUSXScripture().ConfigureAwait(false);
-                    break;
-                case "GetNotes":
-                    await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
-                    break;
-                case "OnConnected":
-                    AppendText(MsgColor.Green, "ClearDashboard Connected");
+        //    // Do the command's action
+        //    switch (msg.actionType)
+        //    {
+        //        case "GetBibilicalTerms":
+        //            await GetBibilicalTerms(msg);
+        //            break;
+        //        case "GetTargetVerses":
+        //            await ShowUSXScripture().ConfigureAwait(false);
+        //            break;
+        //        case "GetNotes":
+        //            await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
+        //            break;
+        //        case "OnConnected":
+        //            AppendText(MsgColor.Green, "ClearDashboard Connected");
 
-                    // send the current BCV location of Paratext
-                    var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
-                    var msgSend = msgOut.CreateMessage();
+        //            // send the current BCV location of Paratext
+        //            var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
+        //            var msgSend = msgOut.CreateMessage();
 
-                    await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-                    AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
+        //            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
 
-                    await ShowUSXScripture().ConfigureAwait(false);
+        //            await ShowUSXScripture().ConfigureAwait(false);
 
-                    await GetBibilicalTerms(msg);
-                    break;
-                case "OnDisconnected":
-                    AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+        //            await GetBibilicalTerms(msg);
+        //            break;
+        //        case "OnDisconnected":
+        //            AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
 
-                    await Task.Delay(2000).ConfigureAwait(true);
+        //            await Task.Delay(2000).ConfigureAwait(true);
 
-                    btnRestart_Click(null, null);
-                    break;
-            }
-        }
+        //            btnRestart_Click(null, null);
+        //            break;
+        //    }
+        //}
 
         private async Task GetBibilicalTerms(NamedPipeMessage msg)
         {
@@ -306,12 +418,26 @@ namespace ClearDashboardPlugin
                     });
             }).ConfigureAwait(true);
 
-            NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.BiblicalTerms, "", dataPayload);
+            NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetBiblicalTerms, "", dataPayload);
             var msgSend = msgOut.CreateMessage();
 
-            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
+            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+            //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+
+            try
+            {
+                await _PipeServer.WriteAsync(new PipeMessage
+                {
+                    Action = NamedPipeMessage.ActionType.SendText,
+                    Text = "Biblical Terms Sent"
+                }).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
+
 
             _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: msgSend sent");
             AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
@@ -376,10 +502,23 @@ namespace ClearDashboardPlugin
                     AppendText(MsgColor.Red, e.Message);
                 }
 
-                NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.NotesObject, "", dataPayload);
+                NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetNotesObject, "", dataPayload);
                 var msgSend = msgOut.CreateMessage();
 
-                await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+                //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+
+                try
+                {
+                    await _PipeServer.WriteAsync(new PipeMessage
+                    {
+                        Action = NamedPipeMessage.ActionType.SendText,
+                        Text = "Notes Sent"
+                    }).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    OnExceptionOccurred(exception);
+                }
 
             }
         }
@@ -395,15 +534,27 @@ namespace ClearDashboardPlugin
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
 
-                var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.TargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
+                var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
                 var msgSend = msgOut.CreateMessage();
 
                 _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
                 AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
+                _logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-                await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+                //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+                try
+                {
+                    await _PipeServer.WriteAsync(new PipeMessage
+                    {
+                        Action = NamedPipeMessage.ActionType.SendText,
+                        Text = "Verse Text Sent"
+                    }).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    OnExceptionOccurred(exception);
+                }
 
                 _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
                 AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
@@ -470,14 +621,14 @@ namespace ClearDashboardPlugin
         /// <param name="e"></param>
         private async void btnRestart_Click(object sender, EventArgs e)
         {
-            // disconnect the pipe
-            UnhookPipe();
+            //// disconnect the pipe
+            //UnhookPipe();
 
-            await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
+            //await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
 
-            // reconnect the pipe
-            _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
-            _serverPipe.DataReceived += ServerPipeOnDataReceived;
+            //// reconnect the pipe
+            //_serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
+            //_serverPipe.DataReceived += ServerPipeOnDataReceived;
 
             // clear out the existing data
             if (rtb.InvokeRequired)
@@ -490,7 +641,7 @@ namespace ClearDashboardPlugin
             }
 
             AppendText(MsgColor.Green, DateTime.Now.ToShortTimeString());
-            AppendText(MsgColor.Green, "Server Pipe Restarted");
+            AppendText(MsgColor.Green, "_PipeServer Pipe Restarted");
 
         }
 
@@ -507,6 +658,11 @@ namespace ClearDashboardPlugin
                 });
 
             _ = GetNoteList("", dataPayload);
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
         }
 
 

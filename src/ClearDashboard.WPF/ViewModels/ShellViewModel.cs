@@ -1,13 +1,18 @@
 ﻿using MvvmHelpers;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
-
+using Action = System.Action;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -19,7 +24,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         //Connection to the DAL
-        DAL.StartUp _startup;
+        //DAL.StartUp _startup;
+        private readonly DAL.StartUp _DAL;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -108,12 +114,33 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // listen for username changes in Paratext
             DAL.StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            _startup = new DAL.StartUp();
+            _DAL = new DAL.StartUp();
+
+            _DAL.NamedPipeChanged += HandleEvent;
         }
 
         #endregion
 
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+        {
+            _DAL.OnClosing();
+
+            return base.CanCloseAsync(cancellationToken);
+        }
+
+
         #region Methods
+
+        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        {
+            Debug.WriteLine($"{args.Text}");
+
+            //Application.Current.Dispatcher.Invoke(
+            //    System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
+            //    {
+            //        rtb.AppendText($"{args.Text}{Environment.NewLine}");
+            //    });
+        }
 
         /// <summary>
         /// Show the ColorStyles form
