@@ -40,6 +40,23 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
+        public event EventHandler ActiveDocumentChanged;
+        private FileViewModel _activeDocument = null;
+        public FileViewModel ActiveDocument
+        {
+            get => _activeDocument;
+            set
+            {
+                if (_activeDocument != value)
+                {
+                    _activeDocument = value;
+                    NotifyOfPropertyChange(() => MenuItems);
+                    if (ActiveDocumentChanged != null)
+                        ActiveDocumentChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+
         #endregion //Public Properties
 
         #region Commands

@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.ViewModels
 	using System.Windows.Input;
 	using System.Windows.Media;
 
-	class FileViewModel : PaneViewModel
+	public class FileViewModel : PaneViewModel
 	{
 		#region fields
 		private static ImageSourceConverter ISC = new ImageSourceConverter();

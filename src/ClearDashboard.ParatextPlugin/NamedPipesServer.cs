@@ -2,13 +2,14 @@
 using H.Pipes.Args;
 using NamedPipes;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ClearDashboard.ParatextPlugin
 {
     public class NamedPipesServer : IDisposable
     {
-        const string PIPE_NAME = "ClearDashboard";
+        private const string PIPE_NAME = "ClearDashboard";
 
         private PipeServer<PipeMessage> server;
 
@@ -32,17 +33,24 @@ namespace ClearDashboard.ParatextPlugin
         private async Task OnClientConnectedAsync(ConnectionEventArgs<PipeMessage> args)
         {
             Console.WriteLine($"Client {args.Connection.ServerName} is now connected!");
-
-            await args.Connection.WriteAsync(new PipeMessage
+            try
             {
-                Action = NamedPipeMessage.ActionType.SendText,
-                Text = "Hi from server"
-            });
+                await args.Connection.WriteAsync(new PipeMessage
+                {
+                    Action = NamedPipeMessage.ActionType.SendText,
+                    Text = "Hi from server"
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
         }
 
         private void OnClientDisconnected(ConnectionEventArgs<PipeMessage> args)
         {
-            Console.WriteLine($"Client {args.Connection.ServerName} disconnected");
+            Debug.WriteLine($"Client {args.Connection.ServerName} disconnected");
         }
 
         private void OnMessageReceived(PipeMessage message)
@@ -53,18 +61,18 @@ namespace ClearDashboard.ParatextPlugin
             switch (message.Action)
             {
                 case NamedPipeMessage.ActionType.SendText:
-                    Console.WriteLine($"Text from client: {message.Text}");
+                    Debug.WriteLine($"Text from client: {message.Text}");
                     break;
 
                 default:
-                    Console.WriteLine($"Unknown Action Type: {message.Action}");
+                    Debug.WriteLine($"Unknown Action Type: {message.Action}");
                     break;
             }
         }
 
         private void OnExceptionOccurred(Exception ex)
         {
-            Console.WriteLine($"Exception occured in pipe: {ex}");
+            Debug.WriteLine($"Exception occured in pipe: {ex}");
         }
 
         public void Dispose()
