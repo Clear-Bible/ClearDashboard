@@ -1,15 +1,13 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
-using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+//using Microsoft.Extensions.Http;
 using System.Windows.Threading;
-using Action = System.Action;
+
 
 namespace ClearDashboard.Wpf
 {
@@ -21,6 +19,7 @@ namespace ClearDashboard.Wpf
 
         private SimpleContainer _container;
         private Log _log;
+
 
         #endregion
 
@@ -36,32 +35,34 @@ namespace ClearDashboard.Wpf
 
         #endregion
 
-
         protected override void Configure()
         {
             _log = new Log();
-
             _log.Info("Configuring dependency injection for the application.");
-
             // put a reference into the App
             ((App)Application.Current).Log = _log;
 
-
             _container = new SimpleContainer();
             _container.Instance(_container);
-            _container.Singleton<ILog, Log>();
 
+            // register the instance of ILog with the container.
+            _container.RegisterInstance(typeof(ILog), null, _log);
+
+            // wire up the interfaces required by Caliburn.Micro
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IEventAggregator, EventAggregator>();
 
-                .PerRequest<ShellViewModel>()
-                .PerRequest<CreateNewProjectsViewModel>()
-                .PerRequest<SettingsViewModel>()
-                .PerRequest<WorkSpaceViewModel>()
-                .PerRequest<LandingViewModel>();
-             
-            
+              
+            // wire up all of the view models in the project.
+            GetType().Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith("ViewModel"))
+                .ToList()
+                .ForEach(viewModelType => _container.RegisterPerRequest(
+                    viewModelType, null, viewModelType));
+
+
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
