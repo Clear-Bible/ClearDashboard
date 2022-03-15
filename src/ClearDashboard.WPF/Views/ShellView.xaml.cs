@@ -50,6 +50,14 @@ namespace ClearDashboard.Wpf.Views
             userPrefs.WindowState = this.WindowState;
 
             userPrefs.Save();
+
+            var language = SelectedLanguage.SelectedItem.ToString();
+            if (language != "")
+            {
+                Properties.Settings.Default.language_code = language.ToString();
+                Properties.Settings.Default.Save();
+            }
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -77,5 +85,6 @@ namespace ClearDashboard.Wpf.Views
             ((App)Application.Current).SetTheme(Properties.Settings.Default.Theme);
             (Application.Current as ClearDashboard.Wpf.App).Theme = Properties.Settings.Default.Theme;
         }
+
     }
 }

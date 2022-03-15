@@ -26,7 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
 
@@ -136,9 +136,10 @@ namespace ClearDashboard.Wpf.ViewModels
         public WorkSpaceViewModel()
         {
             _this = this;
+            _logger = ((App)Application.Current).Log;
 
             // grab a copy of the current logger from the App.xaml.cs
-           // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
+            // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
 
             this.Themes = new List<Tuple<string, Theme>>
             {

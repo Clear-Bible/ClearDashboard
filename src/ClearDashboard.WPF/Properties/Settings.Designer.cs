@@ -12,7 +12,7 @@ namespace ClearDashboard.Wpf.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -86,12 +86,24 @@ namespace ClearDashboard.Wpf.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Inherit")]
-        public MaterialDesignThemes.Wpf.BaseTheme Theme {
+        public global::MaterialDesignThemes.Wpf.BaseTheme Theme {
             get {
-                return ((MaterialDesignThemes.Wpf.BaseTheme)(this["Theme"]));
+                return ((global::MaterialDesignThemes.Wpf.BaseTheme)(this["Theme"]));
             }
             set {
                 this["Theme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("en")]
+        public string language_code {
+            get {
+                return ((string)(this["language_code"]));
+            }
+            set {
+                this["language_code"] = value;
             }
         }
     }
