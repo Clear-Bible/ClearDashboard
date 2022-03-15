@@ -1,4 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using ConsoleAppNamedPipes;
+
 Console.WriteLine("Hello, World!");
 const string DefaultPipeName = "ClearDashboard";
 
