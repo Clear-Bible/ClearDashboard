@@ -63,13 +63,13 @@ namespace ClearDashboard.Wpf.Views
         {
             DrawTheCanvas();
 
+            // NG:  GERFEN - move this call to CreateNewProjectViewModel.OnViewAttached();
+            //if (this.DataContext is CreateNewProjectsViewModel)
+            //{
+            //    _vm = (CreateNewProjectsViewModel)this.DataContext;
 
-            if (this.DataContext is CreateNewProjectsViewModel)
-            {
-                _vm = (CreateNewProjectsViewModel)this.DataContext;
-
-                _vm.Init();
-            }
+            //    //_vm.Init();
+            //}
         }
 
         #endregion

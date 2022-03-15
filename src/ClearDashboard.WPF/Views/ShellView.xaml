@@ -10,6 +10,7 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:cm="http://caliburnmicro.com"
     x:Uid="Window_1"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel}"
@@ -27,9 +28,9 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewModels:ShellViewModel x:Uid="viewModels:ShellViewModel_1" />
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Grid>
         <Grid.RowDefinitions>
@@ -139,9 +140,8 @@
             </Grid>
         </Border>
 
-        <Frame
-            Grid.Row="1"
-            NavigationUIVisibility="Hidden"
-            Source="/Views/LandingView.xaml" />
+        <!-- Wire up the NavigationService to the DI container by calling RegisterFrame in the ShellViewModel -->
+        <Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)"  Grid.Row="1" NavigationUIVisibility="Hidden" />
+
     </Grid>
 </Window>

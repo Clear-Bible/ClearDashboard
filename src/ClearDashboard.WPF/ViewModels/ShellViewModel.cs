@@ -1,8 +1,7 @@
-﻿using MvvmHelpers;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Input;
 using AvalonDock.Properties;
 using Caliburn.Micro;
@@ -11,15 +10,13 @@ using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 
-
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel: Screen
+    public class ShellViewModel : ApplicationScreen
     {
         #region Props
 
-        private readonly ILog _logger;
-
+     
 
         //Connection to the DAL
         DAL.StartUp _startup;
@@ -79,6 +76,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        private INavigationService _navigationService;
+        private SimpleContainer _container;
+
+
         #region Commands
 
         private ICommand _colorStylesCommand;
@@ -110,29 +111,18 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
-        public ShellViewModel()
-        {
-
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            SetLanguage();
-        }
-
-
         /// <summary>
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(ILog logger)
+        public ShellViewModel(ILog logger, SimpleContainer container) : base(logger)
         {
-            _logger = logger;
+            _container = container;
 
-            _logger.Info("In ShellViewModel ctor");
+            Logger.Info("In ShellViewModel ctor");
 
             //get the assembly version
-            Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
 
@@ -144,9 +134,22 @@ namespace ClearDashboard.Wpf.ViewModels
             _startup = new DAL.StartUp();
         }
 
+
+        protected override void OnViewLoaded(object view)
+        {
+            SetLanguage();
+        }
+
         #endregion
 
         #region Methods
+
+        public void RegisterFrame(Frame frame)
+        {
+            _navigationService = new FrameAdapter(frame);
+            _container.Instance(_navigationService); 
+            _navigationService.NavigateToViewModel(typeof(LandingViewModel));
+        }
 
         /// <summary>
         /// Show the ColorStyles form

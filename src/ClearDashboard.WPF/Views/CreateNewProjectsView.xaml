@@ -17,9 +17,9 @@
     SizeChanged="Page_SizeChanged"
     mc:Ignorable="d">
 
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <viewModels:CreateNewProjectsViewModel x:Uid="viewModels:CreateNewProjectsViewModel_1" />
-    </Page.DataContext>
+    </Page.DataContext>-->
 
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
