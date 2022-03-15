@@ -1,9 +1,10 @@
 ﻿using H.Pipes;
 using H.Pipes.Args;
-using NamedPipes;
+//using NamedPipes;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Pipes_Shared;
 
 namespace ClearDashboard.ParatextPlugin
 {
@@ -33,18 +34,18 @@ namespace ClearDashboard.ParatextPlugin
         private async Task OnClientConnectedAsync(ConnectionEventArgs<PipeMessage> args)
         {
             Console.WriteLine($"Client {args.Connection.ServerName} is now connected!");
-            try
-            {
-                await args.Connection.WriteAsync(new PipeMessage
-                {
-                    Action = NamedPipeMessage.ActionType.SendText,
-                    Text = "Hi from server"
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
+            //try
+            //{
+            //    await args.Connection.WriteAsync(new PipeMessage
+            //    {
+            //        Action = NamedPipeMessage.ActionType.SendText,
+            //        Text = "Hi from server"
+            //    });
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.WriteLine(e);
+            //}
 
         }
 
@@ -58,16 +59,16 @@ namespace ClearDashboard.ParatextPlugin
             if (message == null)
                 return;
 
-            switch (message.Action)
-            {
-                case NamedPipeMessage.ActionType.SendText:
-                    Debug.WriteLine($"Text from client: {message.Text}");
-                    break;
+            //switch (message.Action)
+            //{
+            //    case NamedPipeMessage.ActionType.SendText:
+            //        Debug.WriteLine($"Text from client: {message.Text}");
+            //        break;
 
-                default:
-                    Debug.WriteLine($"Unknown Action Type: {message.Action}");
-                    break;
-            }
+            //    default:
+            //        Debug.WriteLine($"Unknown Action Type: {message.Action}");
+            //        break;
+            //}
         }
 
         private void OnExceptionOccurred(Exception ex)

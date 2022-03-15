@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NamedPipes\NamedPipes.csproj" />
+    <ProjectReference Include="..\pipes_shared\pipes_shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
