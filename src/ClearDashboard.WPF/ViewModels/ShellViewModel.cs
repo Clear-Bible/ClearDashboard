@@ -1,21 +1,16 @@
-﻿using MvvmHelpers;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Windows;
-using System.Threading;
-using System.Windows.Input;
-using AvalonDock.Properties;
+﻿using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
-using Action = System.Action;
-using System.Threading.Tasks;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
