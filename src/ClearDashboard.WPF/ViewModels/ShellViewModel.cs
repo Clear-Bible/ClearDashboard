@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
-        #region Props
+        #region Properties
 
      
 
@@ -110,6 +110,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #region Startup
+
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
+        public ShellViewModel()
+        {
+
+        }
 
         /// <summary>
         /// Overload for DI of the logger

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for Notes.xaml
+    /// Interaction logic for PINS.xaml
     /// </summary>
-    public partial class Notes : UserControl
+    public partial class PinsView : UserControl
     {
-        public Notes()
+        public PinsView()
         {
             InitializeComponent();
         }

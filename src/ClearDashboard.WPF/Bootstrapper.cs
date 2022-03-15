@@ -5,14 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-//using Microsoft.Extensions.Http;
 using System.Windows.Threading;
 
 
 namespace ClearDashboard.Wpf
 {
-
-
     public class Bootstrapper : BootstrapperBase
     {
         #region Props

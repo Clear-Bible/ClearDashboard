@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for TextCollections.xaml
+    /// Interaction logic for WordMeanings.xaml
     /// </summary>
-    public partial class TextCollections : UserControl
+    public partial class WordMeaningsView : UserControl
     {
-        public TextCollections()
+        public WordMeaningsView()
         {
             InitializeComponent();
         }

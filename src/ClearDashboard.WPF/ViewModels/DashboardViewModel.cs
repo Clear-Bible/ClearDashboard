@@ -36,16 +36,23 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public DashboardViewModel()
         {
-            this.Title = "📐 DASHBOARD";
-            this.ContentId = "DASHBOARD";
+            Initialize();
+        }
 
-            _logger = ((App)Application.Current).Log;
 
+        public DashboardViewModel(ILog logger)
+        {
+            _logger = logger;
+            Initialize();
 
         }
 
-        internal void Init()
+        internal void Initialize()
         {
+
+            this.Title = "📐 DASHBOARD";
+            this.ContentId = "DASHBOARD";
+
             if (!_firstLoad)
             {
                 Debug.WriteLine("Not the first load");

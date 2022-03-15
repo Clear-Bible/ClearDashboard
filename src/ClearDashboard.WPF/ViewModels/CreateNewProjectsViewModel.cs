@@ -107,13 +107,27 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        #region Startup
+
+        # region Constructors
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
+        public CreateNewProjectsViewModel()
+        {
+            
+        }
 
         public CreateNewProjectsViewModel(ILog logger) : base(logger)
         {
-          
+
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
+
+        #endregion
+        #region Startup
+
+
 
 
         // NB:  GERFEN - calling Init here, instead of in the view.

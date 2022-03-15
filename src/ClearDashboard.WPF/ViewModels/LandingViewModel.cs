@@ -31,6 +31,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
+        /// <summary>
+        /// Required for design-time support.
+        /// </summary>
+        public LandingViewModel()
+        {
+
+        }
+
         public LandingViewModel(ILog logger,  INavigationService navigationService): base(logger)
         {
             // grab a copy of the current logger from the App.xaml.cs

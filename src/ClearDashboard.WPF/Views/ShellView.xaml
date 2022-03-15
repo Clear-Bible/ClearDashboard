@@ -13,7 +13,6 @@
     xmlns:cm="http://caliburnmicro.com"
     x:Uid="Window_1"
     Title="ClearDashboard"
-    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel}"
     d:DesignHeight="800"
     d:DesignWidth="1200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -26,19 +25,13 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
-
-    <!--<Window.DataContext>
-        <viewModels:ShellViewModel x:Uid="viewModels:ShellViewModel_1" />
-    </Window.DataContext>-->
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-
         <Border
             Grid.Row="0"
             BorderBrush="{StaticResource BlueDarkBrush}"

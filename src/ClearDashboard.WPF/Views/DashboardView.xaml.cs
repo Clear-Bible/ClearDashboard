@@ -8,19 +8,19 @@ namespace ClearDashboard.Wpf.Views
     /// <summary>
     /// Interaction logic for Dashboard.xaml
     /// </summary>
-    public partial class Dashboard : UserControl
+    public partial class DashboardView : UserControl
     {
 
-        public Dashboard()
+        public DashboardView()
         {
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DashboardViewModel vm = this.DataContext as DashboardViewModel;
+            //DashboardViewModel vm = this.DataContext as DashboardViewModel;
 
-            Debug.WriteLine(vm.DashboardProject.Name);
+            //Debug.WriteLine(vm.DashboardProject.Name);
         }
     }
 }
