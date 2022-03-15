@@ -21,11 +21,9 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:LandingViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
-    <!--<Page.DataContext>
-        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel_1" />
-    </Page.DataContext>-->
 
     <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
 
