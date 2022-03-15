@@ -141,7 +141,7 @@
         </Border>
 
         <!-- Wire up the NavigationService to the DI container by calling RegisterFrame in the ShellViewModel -->
-        <Frame cm:Message.Attach="RegisterFrame($source)"  Grid.Row="1" NavigationUIVisibility="Hidden" />
+        <Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)"  Grid.Row="1" NavigationUIVisibility="Hidden" />
 
     </Grid>
 </Window>
