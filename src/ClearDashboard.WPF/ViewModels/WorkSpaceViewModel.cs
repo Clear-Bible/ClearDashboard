@@ -133,6 +133,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
+        public WorkSpaceViewModel() 
+        {
+
+        }
+
         public WorkSpaceViewModel(ILog logger) : base(logger)
         {
             _this = this;
@@ -179,6 +187,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+
+        #endregion //Constructor
+
+        #region Methods
+
         private void WorkSpaceViewModel_ThemeChanged()
         {
             // TODO
@@ -202,24 +216,28 @@ namespace ClearDashboard.Wpf.ViewModels
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
-                new MenuItemViewModel { Header = "Layouts", Id="LayoutID", ViewModel=this, },
-                new MenuItemViewModel { Header = "Windows", Id="WindowID", ViewModel=this,
+                new MenuItemViewModel { Header = "Layouts", Id = "LayoutID", ViewModel = this, },
+                new MenuItemViewModel
+                {
+                    Header = "Windows", Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new MenuItemViewModel { Header = "Alignment Tool",  Id="AlignmentToolID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Biblical Terms",  Id="BiblicalTermsID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Concordance Tool",  Id="ConcordanceToolID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Dashboard",  Id="DashboardID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Notes",  Id="NotesID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "PINS",  Id="PINSID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Word Meanings",  Id="WordMeaningsID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Source Context",  Id="SourceContextID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Start Page",  Id="StartPageID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Target Context",  Id="TargetContextID", ViewModel=this,},
-                        new MenuItemViewModel { Header = "Text Collection",  Id="TextCollectionID", ViewModel=this,},
+                        new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        new MenuItemViewModel
+                            { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
+                        new MenuItemViewModel
+                            { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
                     }
                 },
-                new MenuItemViewModel { Header = "Help",  Id="HelpID", ViewModel=this,}
+                new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
             };
 
 
@@ -248,14 +266,11 @@ namespace ClearDashboard.Wpf.ViewModels
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
 
-
-
-
         }
 
-        #endregion //Constructor
 
-        #region Methods
+
+
         public void LoadLayout(XmlLayoutSerializer layoutSerializer)
         {
             // Here I've implemented the LayoutSerializationCallback just to show
@@ -268,48 +283,41 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 // Debug.WriteLine(e.Model?.ContentId?.ToString());
                 switch (e.Model.ContentId.ToUpper())
-                {
-                    case "DASHBOARD":
-                        if (_dashboardViewModel is null)
-                        {
-                            e.Content = new DashboardViewModel();
-                        }
-                        else
-                        {
-                            e.Content = _dashboardViewModel;
-                        }
+                { 
+                    case WorkspaceLayoutNames.Dashboard:
+                        e.Content = _dashboardViewModel ?? new DashboardViewModel();
                         break;
-                    case "CONCORDANCETOOL":
+                    case WorkspaceLayoutNames.ConcordanceTool:
                         e.Content = new ConcordanceViewModel();
                         break;
-                    case "BIBLICALTERMS":
+                    case WorkspaceLayoutNames.BiblicalTerms:
                         e.Content = new BiblicalTermsViewModel();
                         break;
-                    case "WORDMEANINGS":
+                    case WorkspaceLayoutNames.WordMeanings:
                         e.Content = new WordMeaningsViewModel();
                         break;
-                    case "SOURCECONTEXT":
+                    case WorkspaceLayoutNames.SourceContext:
                         e.Content = new SourceContextViewModel();
                         break;
-                    case "TARGETCONTEXT":
+                    case WorkspaceLayoutNames.TargetContext:
                         e.Content = new TargetContextViewModel();
                         break;
-                    case "NOTES":
+                    case WorkspaceLayoutNames.Notes:
                         e.Content = new NotesViewModel();
                         break;
-                    case "PINS":
+                    case WorkspaceLayoutNames.Pins:
                         e.Content = new PinsViewModel();
                         break;
-                    case "TEXTCOLLECTION":
+                    case WorkspaceLayoutNames.TextCollection:
                         e.Content = new TextCollectionViewModel();
                         break;
-                    case "STARTPAGE":
+                    case WorkspaceLayoutNames.StartPage:
                         e.Content = new StartPageViewModel();
                         break;
-                    case "ALIGNMENTTOOL":
+                    case WorkspaceLayoutNames.AlignmentTool:
                         e.Content = new AlignmentToolViewModel();
                         break;
-                    case "TREEDOWN":
+                    case WorkspaceLayoutNames.TreeDown:
                         e.Content = new TreeDownViewModel();
                         break;
 
@@ -323,40 +331,40 @@ namespace ClearDashboard.Wpf.ViewModels
             // window has been closed so we need to reopen it
             switch (windowTag)
             {
-                case "BIBLICALTERMS":
+                case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = new BiblicalTermsViewModel();
                     return (vm, vm.Title, vm.DockSide);
-                case "DASHBOARD":
+                case WorkspaceLayoutNames.Dashboard:
                     var vm1 = new DashboardViewModel();
                     return (vm1, vm1.Title, vm1.DockSide);
-                case "CONCORDANCETOOL":
+                case WorkspaceLayoutNames.ConcordanceTool:
                     var vm2 = new ConcordanceViewModel();
                     return (vm2, vm2.Title, vm2.DockSide);
-                case "WORDMEANINGS":
+                case WorkspaceLayoutNames.WordMeanings:
                     var vm3 = new WordMeaningsViewModel();
                     return (vm3, vm3.Title, vm3.DockSide);
-                case "SOURCECONTEXT":
+                case WorkspaceLayoutNames.SourceContext:
                     var vm4 = new SourceContextViewModel();
                     return (vm4, vm4.Title, vm4.DockSide);
-                case "TARGETCONTEXT":
+                case WorkspaceLayoutNames.TargetContext:
                     var vm5 = new TargetContextViewModel();
                     return (vm5, vm5.Title, vm5.DockSide);
-                case "NOTES":
+                case WorkspaceLayoutNames.Notes:
                     var vm6 = new NotesViewModel();
                     return (vm6, vm6.Title, vm6.DockSide);
-                case "PINS":
+                case WorkspaceLayoutNames.Pins:
                     var vm7 = new PinsViewModel();
                     return (vm7, vm7.Title, vm7.DockSide);
-                case "TEXTCOLLECTION":
+                case WorkspaceLayoutNames.TextCollection:
                     var vm8 = new TextCollectionViewModel();
                     return (vm8, vm8.Title, vm8.DockSide);
-                case "STARTPAGE":
+                case WorkspaceLayoutNames.StartPage:
                     var vm9 = new StartPageViewModel();
                     return (vm9, vm9.Title, vm9.DockSide);
-                case "ALIGNMENTTOOL":
+                case WorkspaceLayoutNames.AlignmentTool:
                     var vm10 = new AlignmentToolViewModel();
                     return (vm10, vm10.Title, vm10.DockSide);
-                case "TREEDOWN":
+                case WorkspaceLayoutNames.TreeDown:
                     var vm11 = new TreeDownViewModel();
                     return (vm11, vm11.Title, vm11.DockSide);
             }
@@ -371,5 +379,22 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion // Methods
+    }
+
+    public class WorkspaceLayoutNames
+    {
+        public const string AlignmentTool = "ALIGNMENTTOOL";
+        public const string BiblicalTerms = "BIBLICALTERMS";
+        public const string ConcordanceTool = "CONCORDANCETOOL";
+        public const string Dashboard = "DASHBOARD";
+        public const string Notes = "NOTES";
+        public const string Pins = "PINS";
+        public const string SourceContext = "SOURCECONTEXT";
+        public const string StartPage = "STARTPAGE";
+        public const string TargetContext = "TARGETCONTEXT";
+        public const string TextCollection = "TEXTCOLLECTION";
+        public const string TreeDown = "TREEDOWN";
+        public const string WordMeanings = "WORDMEANINGS";
+
     }
 }

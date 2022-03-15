@@ -11,6 +11,15 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();
 
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
+        public SettingsViewModel()
+        {
+            
+        }
+
         public SettingsViewModel(ILog logger): base(logger)
         {
            observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/NewProject_Icon_96.png", ImageName = "NEW" });

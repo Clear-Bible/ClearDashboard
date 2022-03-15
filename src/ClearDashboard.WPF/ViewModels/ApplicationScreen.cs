@@ -11,6 +11,11 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         protected ILog Logger { get; private set; }
 
+        public ApplicationScreen()
+        {
+
+        }
+
         public ApplicationScreen(ILog logger)
         {
             Logger = logger;
