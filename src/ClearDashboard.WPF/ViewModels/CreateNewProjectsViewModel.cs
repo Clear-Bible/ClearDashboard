@@ -17,11 +17,10 @@ using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class CreateNewProjectsViewModel : Screen
+    public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region props
-        private readonly ILog _logger;
-
+      
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
@@ -110,9 +109,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
-        public CreateNewProjectsViewModel()
+        public CreateNewProjectsViewModel(ILog logger) : base(logger)
         {
-            _logger = ((App)Application.Current).Log;
+          
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 

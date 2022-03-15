@@ -12,11 +12,11 @@ using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class LandingViewModel: Screen
+    public class LandingViewModel: ApplicationScreen
     {
         #region   Member Variables
 
-        public ILog _log { get; set; }
+        
 
         private readonly INavigationService _navigationService;
 
@@ -31,7 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
-        public LandingViewModel(ILog log,  INavigationService navigationService)
+        public LandingViewModel(ILog logger,  INavigationService navigationService): base(logger)
         {
             // grab a copy of the current logger from the App.xaml.cs
             if (Application.Current is ClearDashboard.Wpf.App)
@@ -39,7 +39,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 //_logger = (Application.Current as ClearDashboard.Wpf.App)._logger;
             }
 
-            _log = log;
       
             _navigationService = navigationService;
 
@@ -47,7 +46,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // get the clearsuite projects
             DashboardProjects = LoadExistingProjects();
 
-            log.Info("LandingViewModel constructor called.");
+            Logger.Info("LandingViewModel constructor called.");
         }
 
         #endregion
@@ -58,20 +57,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void CreateNewProject()
         {
-            _log.Info("CreateNewProject called.");
+            Logger.Info("CreateNewProject called.");
             _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
         }
 
         public void Workspace()
         {
-            _log.Info("Workspace called.");
+           Logger.Info("Workspace called.");
             _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
             
         }
 
         public void Settings()
         {
-            _log.Info("Settings called.");
+            Logger.Info("Settings called.");
             _navigationService.NavigateToViewModel<SettingsViewModel>();
 
         }

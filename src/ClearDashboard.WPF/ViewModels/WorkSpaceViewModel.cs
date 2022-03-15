@@ -22,7 +22,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class WorkSpaceViewModel : Screen
+    public class WorkSpaceViewModel : ApplicationScreen
     {
         #region Member Variables
 
@@ -133,11 +133,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
 
-        public WorkSpaceViewModel()
+        public WorkSpaceViewModel(ILog logger) : base(logger)
         {
             _this = this;
-            _logger = ((App)Application.Current).Log;
-
+            
             // grab a copy of the current logger from the App.xaml.cs
             // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
 

@@ -12,12 +12,11 @@ using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel : Screen 
+    public class ShellViewModel : ApplicationScreen
     {
         #region Props
 
-        private readonly ILog _logger;
-
+     
 
         //Connection to the DAL
         DAL.StartUp _startup;
@@ -116,14 +115,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(ILog logger, SimpleContainer container)
+        public ShellViewModel(ILog logger, SimpleContainer container) : base(logger)
         {
-            //Items.Add(landingViewModel);
-            //ActiveItem = Items[0];
-            _logger = logger;
             _container = container;
 
-            _logger.Info("In ShellViewModel ctor");
+            Logger.Info("In ShellViewModel ctor");
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
