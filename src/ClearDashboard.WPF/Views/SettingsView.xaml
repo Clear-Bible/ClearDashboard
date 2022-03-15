@@ -21,9 +21,9 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <viewModels:SettingsViewModel x:Uid="viewModels:SettingsViewModel_1" />
-    </Page.DataContext>
+    </Page.DataContext>-->
 
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>

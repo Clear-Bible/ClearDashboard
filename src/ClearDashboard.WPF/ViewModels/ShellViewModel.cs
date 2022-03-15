@@ -1,25 +1,23 @@
-﻿using AvalonDock.Properties;
+﻿using System;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Input;
+using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel: Screen
+    public class ShellViewModel : ApplicationScreen
     {
-        #region Props
+        #region Properties
 
-        private readonly ILog _logger;
-
+     
 
         //Connection to the DAL
         //DAL.StartUp _startup;
@@ -80,6 +78,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        private INavigationService _navigationService;
+        private SimpleContainer _container;
+
+
         #region Commands
 
         private ICommand _colorStylesCommand;
@@ -111,29 +113,27 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
         public ShellViewModel()
         {
 
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            SetLanguage();
-        }
-
-
         /// <summary>
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(ILog logger)
+        public ShellViewModel(ILog logger, SimpleContainer container) : base(logger)
         {
-            _logger = logger;
+            _container = container;
 
-            _logger.Info("In ShellViewModel ctor");
+            Logger.Info("In ShellViewModel ctor");
 
             //get the assembly version
-            Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
 
@@ -145,6 +145,12 @@ namespace ClearDashboard.Wpf.ViewModels
             _DAL = new DAL.StartUp();
 
             _DAL.NamedPipeChanged += HandleEvent;
+        }
+
+
+        protected override void OnViewLoaded(object view)
+        {
+            SetLanguage();
         }
 
         #endregion
@@ -168,6 +174,13 @@ namespace ClearDashboard.Wpf.ViewModels
             //    {
             //        rtb.AppendText($"{args.Text}{Environment.NewLine}");
             //    });
+        }
+        
+        public void RegisterFrame(Frame frame)
+        {
+            _navigationService = new FrameAdapter(frame);
+            _container.Instance(_navigationService); 
+            _navigationService.NavigateToViewModel(typeof(LandingViewModel));
         }
 
         /// <summary>

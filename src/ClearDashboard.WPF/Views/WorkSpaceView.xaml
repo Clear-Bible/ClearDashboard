@@ -23,15 +23,13 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
-    <Page.DataContext>
-        <viewModels:WorkSpaceViewModel x:Uid="viewModels:WorkSpaceViewModel_1" />
-    </Page.DataContext>
-    <Page.Resources>
+   <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" x:Uid="converters:ActiveDocumentConverter_1" />
         <system:Boolean x:Key="TRUE" x:Uid="system:Boolean_1">True</system:Boolean>
         <system:Boolean x:Key="FALSE" x:Uid="system:Boolean_2">False</system:Boolean>
-        <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" x:Uid="BoolToVisibilityConverter_1" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" x:Uid="BoolToVisibilityConverter_1" />
     </Page.Resources>
 
     <Grid x:Uid="Grid_1">
@@ -140,7 +138,7 @@
 
                     <userControls:PanesTemplateSelector.DashboardViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_2">
-                            <local:Dashboard x:Uid="local:Dashboard_1" />
+                            <local:DashboardView x:Uid="local:Dashboard_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.DashboardViewTemplate>
 
@@ -152,13 +150,13 @@
 
                     <userControls:PanesTemplateSelector.TreeDownViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_4">
-                            <local:TreeDown x:Uid="local:TreeDown_1" />
+                            <local:TreeDownView x:Uid="local:TreeDown_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.TreeDownViewTemplate>
 
                     <userControls:PanesTemplateSelector.StartPageViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_5">
-                            <local:StartPage x:Uid="local:StartPage_1" />
+                            <local:StartPageView x:Uid="local:StartPage_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.StartPageViewTemplate>
 
@@ -171,37 +169,37 @@
 
                     <userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_7">
-                            <local:WordMeanings x:Uid="local:WordMeanings_1" />
+                            <local:WordMeaningsView x:Uid="local:WordMeanings_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
 
                     <userControls:PanesTemplateSelector.SourceContextViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_8">
-                            <local:SourceContext x:Uid="local:SourceContext_1" />
+                            <local:SourceContextView x:Uid="local:SourceContext_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.SourceContextViewTemplate>
 
                     <userControls:PanesTemplateSelector.TargetContextViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_9">
-                            <local:TargetContext x:Uid="local:TargetContext_1" />
+                            <local:TargetContextView x:Uid="local:TargetContext_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.TargetContextViewTemplate>
 
                     <userControls:PanesTemplateSelector.NotesViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_10">
-                            <local:Notes x:Uid="local:Notes_1" />
+                            <local:NotesView x:Uid="local:Notes_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.NotesViewTemplate>
 
                     <userControls:PanesTemplateSelector.PinsViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_11">
-                            <local:PINS x:Uid="local:PINS_1" />
+                            <local:PinsView x:Uid="local:PINS_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.PinsViewTemplate>
 
                     <userControls:PanesTemplateSelector.TextCollectionViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_12">
-                            <local:TextCollections x:Uid="local:TextCollections_1" />
+                            <local:TextCollectionsView x:Uid="local:TextCollections_1" />
                         </DataTemplate>
                     </userControls:PanesTemplateSelector.TextCollectionViewTemplate>
 

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for SourceContext.xaml
+    /// Interaction logic for TreeDown.xaml
     /// </summary>
-    public partial class SourceContext : UserControl
+    public partial class TreeDownView : UserControl
     {
-        public SourceContext()
+        public TreeDownView()
         {
             InitializeComponent();
         }

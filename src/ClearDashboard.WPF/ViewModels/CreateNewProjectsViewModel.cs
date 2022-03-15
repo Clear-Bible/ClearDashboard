@@ -17,11 +17,10 @@ using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class CreateNewProjectsViewModel : PropertyChangedBase
+    public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region props
-        private readonly ILog _logger;
-
+      
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
@@ -108,12 +107,34 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        #region Startup
 
+        # region Constructors
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
         public CreateNewProjectsViewModel()
         {
-            _logger = ((App)Application.Current).Log;
+            
+        }
+
+        public CreateNewProjectsViewModel(ILog logger) : base(logger)
+        {
+
             createNewProjectCommand = new RelayCommand(CreateNewProject);
+        }
+
+        #endregion
+        #region Startup
+
+
+
+
+        // NB:  GERFEN - calling Init here, instead of in the view.
+        protected override async  void OnViewAttached(object view, object context)
+        {
+            await Init();
+            base.OnViewAttached(view, context);
         }
 
         public async Task Init()

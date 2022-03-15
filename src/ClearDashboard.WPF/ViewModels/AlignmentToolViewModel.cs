@@ -18,6 +18,11 @@
         #endregion //Observable Properties
 
         #region Constructor
+        public AlignmentToolViewModel()
+        {
+            this.Title = "⳼ ALIGNMENT TOOL";
+            this.ContentId = "ALIGNMENTTOOL";
+        }
 
         #endregion //Constructor
 
@@ -25,10 +30,6 @@
 
         #endregion // Methods
 
-        public AlignmentToolViewModel()
-        {
-            this.Title = "⳼ ALIGNMENT TOOL";
-            this.ContentId = "ALIGNMENTTOOL";
-        }
+
     }
 }

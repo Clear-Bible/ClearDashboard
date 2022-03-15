@@ -1,13 +1,12 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
-using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
-using Action = System.Action;
+
 
 namespace ClearDashboard.Wpf
 {
@@ -18,6 +17,7 @@ namespace ClearDashboard.Wpf
         private SimpleContainer _container;
         private Log _log;
 
+
         #endregion
 
         #region Startup
@@ -26,56 +26,40 @@ namespace ClearDashboard.Wpf
         {
             Initialize();
 
-
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
 
         #endregion
 
-
         protected override void Configure()
         {
             _log = new Log();
-
+            _log.Info("Configuring dependency injection for the application.");
             // put a reference into the App
             ((App)Application.Current).Log = _log;
 
-
             _container = new SimpleContainer();
             _container.Instance(_container);
-            _container.Singleton<ILog, Log>();
 
+            // register the instance of ILog with the container.
+            _container.RegisterInstance(typeof(ILog), null, _log);
+
+            // wire up the interfaces required by Caliburn.Micro
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IEventAggregator, EventAggregator>();
 
-                .PerRequest<ShellViewModel>()
-                .PerRequest<CreateNewProjectsViewModel>()
-                .PerRequest<SettingsViewModel>()
-                .PerRequest<WorkSpaceViewModel>();
+              
+            // wire up all of the view models in the project.
+            GetType().Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith("ViewModel"))
+                .ToList()
+                .ForEach(viewModelType => _container.RegisterPerRequest(
+                    viewModelType, null, viewModelType));
 
 
-
-            //_container.Instance(_container);
-
-            //_container
-            //    .Singleton<IWindowManager, WindowManager>()
-            //    .Singleton<IEventAggregator, EventAggregator>();
-
-            //_container
-            //    .PerRequest<ShellViewModel>()
-            //    .PerRequest<MenuViewModel>()
-            //    .PerRequest<BindingsViewModel>()
-            //    .PerRequest<ActionsViewModel>()
-            //    .PerRequest<CoroutineViewModel>()
-            //    .PerRequest<ExecuteViewModel>()
-            //    .PerRequest<EventAggregationViewModel>()
-            //    .PerRequest<DesignTimeViewModel>()
-            //    .PerRequest<ConductorViewModel>()
-            //    .PerRequest<BubblingViewModel>()
-            //    .PerRequest<NavigationSourceViewModel>()
-            //    .PerRequest<NavigationTargetViewModel>();
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
@@ -107,7 +91,7 @@ namespace ClearDashboard.Wpf
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            
+
             // write to the log file
             _log.Error(e.Exception);
             MessageBox.Show(e.Exception.Message, "An error as occurred", MessageBoxButton.OK);

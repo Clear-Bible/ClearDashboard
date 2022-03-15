@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ClearDashboard.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for TargetContext.xaml
+    /// Interaction logic for StartPage.xaml
     /// </summary>
-    public partial class TargetContext : UserControl
+    public partial class StartPageView : UserControl
     {
-        public TargetContext()
+        public StartPageView()
         {
             InitializeComponent();
         }
