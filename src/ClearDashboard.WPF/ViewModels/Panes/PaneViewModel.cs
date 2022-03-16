@@ -1,7 +1,7 @@
-﻿using Caliburn.Micro;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using Caliburn.Micro;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.Wpf.ViewModels.Panes
 {
     /// <summary>
     /// 

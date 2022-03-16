@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using ClearDashboard.Wpf.Helpers;
 using Caliburn.Micro;
+using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 
 

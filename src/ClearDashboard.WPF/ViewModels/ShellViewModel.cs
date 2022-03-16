@@ -1,6 +1,5 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
-using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
@@ -9,6 +8,8 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Events;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -17,7 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Properties
 
         //Connection to the DAL
-        DAL.StartUp _startup;
+        StartUp _startup;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -132,13 +133,13 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
-            DAL.StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            _startup = new DAL.StartUp();
+            StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            _startup = new StartUp();
         }
 
         protected override void Dispose(bool disposing)
         {
-            DAL.StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
             base.Dispose(disposing);
         }
 
