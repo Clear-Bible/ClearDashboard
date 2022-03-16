@@ -7,7 +7,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace ClearDashboard.Wpf
 {
@@ -18,6 +21,9 @@ namespace ClearDashboard.Wpf
         private FrameSet _frameSet;
         private Log _log;
         private SimpleContainer _container;
+
+        protected IServiceCollection ServiceCollection { get; private set; }
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         #endregion
 
@@ -41,20 +47,21 @@ namespace ClearDashboard.Wpf
             // put a reference into the App
             ((App)Application.Current).Log = _log;
 
-            _container = new SimpleContainer();
-            _container.Instance(_container);
+            
+            
+            ServiceCollection = new ServiceCollection();
 
             // register the instance of ILog with the container.
-            _container.RegisterInstance(typeof(ILog), null, _log);
+            ServiceCollection.AddSingleton<ILog>(sp => _log);
+
 
             // wire up the interfaces required by Caliburn.Micro
-            _container
-                .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+            ServiceCollection.AddSingleton<IWindowManager, WindowManager>();
+            ServiceCollection.AddSingleton<IEventAggregator, EventAggregator>();
 
             // Register the FrameAdapter which wraps a Frame as INavigationService
             _frameSet = new FrameSet();
-            _container.RegisterInstance(typeof(INavigationService), null, _frameSet.NavigationService);
+            ServiceCollection.AddSingleton<INavigationService>(sp=> _frameSet.NavigationService);
 
 
             // wire up all of the view models in the project.
@@ -62,10 +69,11 @@ namespace ClearDashboard.Wpf
                 .Where(type => type.IsClass)
                 .Where(type => type.Name.EndsWith("ViewModel"))
                 .ToList()
-                .ForEach(viewModelType => _container.RegisterPerRequest(
-                    viewModelType, null, viewModelType));
+                .ForEach(viewModelType => ServiceCollection.AddScoped(viewModelType));
 
 
+            ServiceProvider = ServiceCollection.BuildServiceProvider();
+            //SetupLogging();
         }
 
         #endregion
@@ -108,19 +116,40 @@ namespace ClearDashboard.Wpf
 
         protected override object GetInstance(Type service, string key)
         {
-            return _container.GetInstance(service, key);
+            return ServiceProvider.GetService(service);
         }
 
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return _container.GetAllInstances(service);
+            return ServiceProvider.GetServices(service);
         }
 
         protected override void BuildUp(object instance)
         {
-            _container.BuildUp(instance);
+            //no-op
         }
 
+        #endregion
+
+        #region Logging
+        private void SetupLogging()
+        {
+
+            var fullPath = $"\\Logs\\ClearDashboard.log";
+            Console.WriteLine($"Log file located: {fullPath}");
+            var level = LogEventLevel.Information;
+#if DEBUG
+            level = LogEventLevel.Verbose;
+#endif
+
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Is(level)
+                .WriteTo.File(@"ClearDashboard.log", rollingInterval: RollingInterval.Day)
+                //.WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}", restrictedToMinimumLevel: level)
+                .CreateLogger();
+            var loggerFactory = ServiceProvider.GetService<ILoggerFactory>();
+            loggerFactory.AddSerilog(log);
+        }
         #endregion
 
         #region Global error handling
