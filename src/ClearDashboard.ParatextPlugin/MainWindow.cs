@@ -1,11 +1,12 @@
 ﻿//using ClearDashboard.NamedPipes.Models;
 using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using H.Pipes;
 using Microsoft.Win32;
 //using NamedPipes;
 using Newtonsoft.Json;
-using NLog;
 using Paratext.PluginInterfaces;
+using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,8 +15,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using H.Pipes;
-using Pipes_Shared;
 
 namespace ClearDashboardPlugin
 {
@@ -38,7 +37,6 @@ namespace ClearDashboardPlugin
 
         //private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
-        private NLog.ILogger _logger;
 
         private delegate void AppendTextDelegate(string text, StringBuilder sb);
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
@@ -78,41 +76,38 @@ namespace ClearDashboardPlugin
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
 
-            // hook up a logger
-            _logger = NLog.LogManager.GetCurrentClassLogger();
+            //bool showErrorMessage = true;
 
-            bool showErrorMessage = true;
+            //// check to see if ClearSuite is installed
+            //if (CheckIfClearSuiteInstalledAsync())
+            //{
+            //    if (_clearSuitePath != string.Empty)
+            //    {
+            //        // launch ClearEngineController
+            //        try
+            //        {
+            //            //using (Process proc = new Process())
+            //            //{
+            //            //    proc.StartInfo.FileName = _clearSuitePath;
+            //            //    proc.StartInfo.UseShellExecute = true;
+            //            //    proc.Start();
+            //            //}
 
-            // check to see if ClearSuite is installed
-            if (CheckIfClearSuiteInstalledAsync())
-            {
-                if (_clearSuitePath != string.Empty)
-                {
-                    // launch ClearEngineController
-                    try
-                    {
-                        //using (Process proc = new Process())
-                        //{
-                        //    proc.StartInfo.FileName = _clearSuitePath;
-                        //    proc.StartInfo.UseShellExecute = true;
-                        //    proc.Start();
-                        //}
-
-                        showErrorMessage = false;
-                    }
-                    catch (Exception)
-                    {
-                        showErrorMessage = true;
-                        AppendText(MsgColor.Red, "ClearSuite Not Detected ERROR");
-                    }
-                }
-            }
+            //            showErrorMessage = false;
+            //        }
+            //        catch (Exception)
+            //        {
+            //            showErrorMessage = true;
+            //            AppendText(MsgColor.Red, "ClearSuite Not Detected ERROR");
+            //        }
+            //    }
+            //}
 
 
-            if (showErrorMessage)
-            {
-                // TODO Do some alert now that ClearSuite is NOT installed
-            }
+            //if (showErrorMessage)
+            //{
+            //    // TODO Do some alert now that ClearSuite is NOT installed
+            //}
 
 
             Load += OnLoad;
@@ -133,12 +128,6 @@ namespace ClearDashboardPlugin
                         Id = new Guid(),
                         Text = "Welcome! You are now connected to the server."
                     }).ConfigureAwait(false);
-
-                    //await args.Connection.WriteAsync(new PipeMessage
-                    //{
-                    //    Action = NamedPipeMessage.ActionType.SendText,
-                    //    Text = "Welcome! You are now connected to the server."
-                    //}).ConfigureAwait(false);
                 }
                 catch (Exception exception)
                 {
@@ -164,6 +153,7 @@ namespace ClearDashboardPlugin
                     OnMessageReceivedAsync(args.Message);
                 }
             };
+
             _PipeServer.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
         }
 
@@ -219,11 +209,11 @@ namespace ClearDashboardPlugin
 
             try
             {
-                AddLine("_PipeServer starting...");
+                AddLine("PipeServer starting...");
 
                 await _PipeServer.StartAsync().ConfigureAwait(false);
 
-                AddLine("_PipeServer is started!");
+                AddLine("PipeServer is started!");
             }
             catch (Exception exception)
             {
@@ -238,8 +228,6 @@ namespace ClearDashboardPlugin
 
         private void AddLine(string text)
         {
-
-
             rtb.Invoke(new Action(delegate
             {
                 rtb.Text += $@"{text}{Environment.NewLine}";
@@ -290,7 +278,7 @@ namespace ClearDashboardPlugin
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
             parent.ProjectChanged += ProjectChanged;
-            parent.VerseRefChanged += VerseRefChanged;
+            //parent.VerseRefChanged += VerseRefChanged;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -299,7 +287,7 @@ namespace ClearDashboardPlugin
             m_project = parent.CurrentState.Project;
             m_parent = parent;
 
-            parent.VerseRefChanged += VerseRefChanged;
+            //parent.VerseRefChanged += VerseRefChanged;
         }
 
 
@@ -341,15 +329,15 @@ namespace ClearDashboardPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        {
+        //private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        //{
 
-            if (newReference != m_verseRef)
-            {
-                m_verseRef = newReference;
-                await ShowUSXScripture().ConfigureAwait(true);
-            }
-        }
+        //    if (newReference != m_verseRef)
+        //    {
+        //        m_verseRef = newReference;
+        //        await ShowUSXScripture().ConfigureAwait(true);
+        //    }
+        //}
 
         #endregion overrides - standard functions
 
@@ -455,23 +443,23 @@ namespace ClearDashboardPlugin
         /// Does a registry check to ensure that ClearSuite is reachable
         /// </summary>
         /// <returns></returns>
-        public bool CheckIfClearSuiteInstalledAsync()
-        {
-            //Here we peek into the registry to see if they even have clear engine controller installed
-            var clearEngineControllerPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Clear\ClearSuite", "Path", null);
+        //public bool CheckIfClearSuiteInstalledAsync()
+        //{
+        //    //Here we peek into the registry to see if they even have clear engine controller installed
+        //    var clearEngineControllerPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Clear\ClearSuite", "Path", null);
 
-            if (Directory.Exists(clearEngineControllerPath))
-            {
-                // file doesn't exist so null this out
-                if (File.Exists(Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe")))
-                {
-                    _clearSuitePath = Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe");
-                    return true;
-                }
-            }
+        //    if (Directory.Exists(clearEngineControllerPath))
+        //    {
+        //        // file doesn't exist so null this out
+        //        if (File.Exists(Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe")))
+        //        {
+        //            _clearSuitePath = Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe");
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         //private async Task GetNoteList(string actionCommand, string jsonPayload)
         //{
@@ -531,43 +519,41 @@ namespace ClearDashboardPlugin
         //    }
         //}
 
-        private async Task ShowUSXScripture()
-        {
-            var temp = m_project.GetUSX(m_verseRef.BookNum);
-            if (temp != null)
-            {
-                var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+        //private async Task ShowUSXScripture()
+        //{
+        //    var temp = m_project.GetUSX(m_verseRef.BookNum);
+        //    if (temp != null)
+        //    {
+        //        var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
+        //            new JsonSerializerSettings()
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //            });
 
-                //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
-                //var msgSend = msgOut.CreateMessage();
+        //        //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
+        //        //var msgSend = msgOut.CreateMessage();
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-                AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
+        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
 
-                //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
+        //        //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-                //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-                //try
-                //{
-                //    await _PipeServer.WriteAsync(new PipeMessage
-                //    {
-                //        Action = NamedPipeMessage.ActionType.SendText,
-                //        Text = "Verse Text Sent"
-                //    }).ConfigureAwait(false);
-                //}
-                //catch (Exception exception)
-                //{
-                //    OnExceptionOccurred(exception);
-                //}
+        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //        //try
+        //        //{
+        //        //    await _PipeServer.WriteAsync(new PipeMessage
+        //        //    {
+        //        //        Action = NamedPipeMessage.ActionType.SendText,
+        //        //        Text = "Verse Text Sent"
+        //        //    }).ConfigureAwait(false);
+        //        //}
+        //        //catch (Exception exception)
+        //        //{
+        //        //    OnExceptionOccurred(exception);
+        //        //}
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-                AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-            }
-        }
+        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
+        //    }
+        //}
 
         /// <summary>
         /// Append colored text to the rich text box

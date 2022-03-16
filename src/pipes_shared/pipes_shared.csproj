@@ -2,7 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	  <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.8-beta" />
+	</ItemGroup>
 
 </Project>

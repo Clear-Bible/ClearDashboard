@@ -1,6 +1,6 @@
 set ProjectName="ClearDashboardPlugin"
-set TargetPath=.\bin\Debug\net48
-set NamedPipesPath=.\..\NamedPipes\bin\Debug\net48
+set TargetPath=.\bin\Debug\net472
+rem set NamedPipesPath=.\..\NamedPipes\bin\Debug\net48
 
 if exist "%ParatextInstallDir%\plugins\%ProjectName%"\ (
   del /F /Q "%ParatextInstallDir%\plugins\%ProjectName%"\*.*
@@ -17,4 +17,4 @@ rename "%ParatextInstallDir%\plugins\%ProjectName%\ClearDashboard.ParatextPlugin
 
 
 @echo Copying Named Pipes dll files to %ParatextInstallDir%\plugins\%ProjectName%
-xcopy "%NamedPipesPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
+rem xcopy "%NamedPipesPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i

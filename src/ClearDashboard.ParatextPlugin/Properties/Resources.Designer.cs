@@ -59,15 +59,5 @@ namespace ClearDashboard.ParatextPlugin.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ClearLogo_800 {
-            get {
-                object obj = ResourceManager.GetObject("ClearLogo_800", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
