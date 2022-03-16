@@ -153,13 +153,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        public void RegisterFrame(Frame frame)
-        {
-            _navigationService = new FrameAdapter(frame);
-            _container.Instance(_navigationService); 
-            _navigationService.NavigateToViewModel(typeof(LandingViewModel));
-        }
-
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>

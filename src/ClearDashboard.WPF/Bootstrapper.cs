@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 
@@ -16,6 +17,8 @@ namespace ClearDashboard.Wpf
 
         private SimpleContainer _container;
         private Log _log;
+
+        private FrameSet _frameSet;
 
 
         #endregion
@@ -50,7 +53,10 @@ namespace ClearDashboard.Wpf
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>();
 
-              
+            _frameSet = new FrameSet();
+            _container.RegisterInstance(typeof(INavigationService), null, _frameSet.NavigationService);
+
+
             // wire up all of the view models in the project.
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)
@@ -65,6 +71,28 @@ namespace ClearDashboard.Wpf
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             await DisplayRootViewForAsync<ShellViewModel>();
+            AddFrameToMainWindow(_frameSet.Frame);
+
+            _frameSet.NavigationService.NavigateToViewModel(typeof(LandingViewModel));
+        }
+
+        private void AddFrameToMainWindow(Frame frame)
+        {
+            var mainWindow = Application.MainWindow;
+            if (mainWindow == null)
+            {
+                throw new NullReferenceException("'Application.MainWindow' is null.");
+            }
+
+
+            if (mainWindow.Content is not Grid grid)
+            {
+                throw new NullReferenceException("The grid on 'Application.MainWindow' is null.");
+            }
+
+            Grid.SetRow(frame, 1);
+            Grid.SetColumn(frame, 0);
+            grid.Children.Add(frame);
         }
 
         protected override object GetInstance(Type service, string key)
