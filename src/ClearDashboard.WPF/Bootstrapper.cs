@@ -152,11 +152,13 @@ namespace ClearDashboard.Wpf
         }
         #endregion
 
+        #region Application exit
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger.LogInformation("ClearDashboard application is exiting.");
             base.OnExit(sender, e);
         }
+        #endregion
 
         #region Global error handling
         /// <summary>
