@@ -1,22 +1,20 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Input;
-using AvalonDock.Properties;
+﻿using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
         #region Properties
-
-     
 
         //Connection to the DAL
         DAL.StartUp _startup;
@@ -76,10 +74,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        private INavigationService _navigationService;
-        private SimpleContainer _container;
-
-
         #region Commands
 
         private ICommand _colorStylesCommand;
@@ -124,11 +118,10 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(ILog logger, SimpleContainer container) : base(logger)
+        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger) : base(navigationService, logger)
         {
-            _container = container;
-
-            Logger.Info("In ShellViewModel ctor");
+           
+            Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
@@ -141,6 +134,12 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen for username changes in Paratext
             DAL.StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             _startup = new DAL.StartUp();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            DAL.StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            base.Dispose(disposing);
         }
 
 

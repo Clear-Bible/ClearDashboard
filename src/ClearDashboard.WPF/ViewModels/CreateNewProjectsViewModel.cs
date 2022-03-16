@@ -1,6 +1,8 @@
-﻿using ClearDashboard.Common.Models;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.Paratext;
 using ClearDashboard.Wpf.Helpers;
+using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
@@ -10,10 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using Caliburn.Micro;
-using MdXaml;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -118,7 +117,7 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
-        public CreateNewProjectsViewModel(ILog logger) : base(logger)
+        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger) : base(navigationService, logger)
         {
 
             createNewProjectCommand = new RelayCommand(CreateNewProject);
@@ -126,16 +125,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
         #region Startup
-
-
-
-
-        // NB:  GERFEN - calling Init here, instead of in the view.
-        protected override async  void OnViewAttached(object view, object context)
-        {
-            await Init();
-            base.OnViewAttached(view, context);
-        }
 
         public async Task Init()
         {

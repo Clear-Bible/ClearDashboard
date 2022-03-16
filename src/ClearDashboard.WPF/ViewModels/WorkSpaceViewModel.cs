@@ -1,20 +1,17 @@
 ﻿using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using MvvmHelpers;
-using Newtonsoft.Json;
-using Serilog;
+using ClearDashboard.Wpf.Models.Menus;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Models.Menus;
+using ClearDashboard.Wpf.ViewModels.Panes;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -26,7 +23,6 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILog _logger;
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
 
@@ -39,7 +35,22 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Member Variables
 
         #region Public Properties
-
+        public event EventHandler ActiveDocumentChanged;
+        private FileViewModel _activeDocument = null;
+        public FileViewModel ActiveDocument
+        {
+            get => _activeDocument;
+            set
+            {
+                if (_activeDocument != value)
+                {
+                    _activeDocument = value;
+                    NotifyOfPropertyChange(() => MenuItems);
+                    if (ActiveDocumentChanged != null)
+                        ActiveDocumentChanged(this, EventArgs.Empty);
+                }
+            }
+        }
         #endregion //Public Properties
 
         #region Commands
@@ -141,7 +152,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(ILog logger) : base(logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger) : base(navigationService, logger)
         {
             _this = this;
             

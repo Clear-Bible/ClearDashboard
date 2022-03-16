@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(ILog logger,  INavigationService navigationService): base(logger)
+        public LandingViewModel(INavigationService navigationService, ILogger<LandingViewModel> logger): base(navigationService, logger)
         {
             // grab a copy of the current logger from the App.xaml.cs
             if (Application.Current is ClearDashboard.Wpf.App)
@@ -54,7 +55,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // get the clearsuite projects
             DashboardProjects = LoadExistingProjects();
 
-            Logger.Info("LandingViewModel constructor called.");
+            Logger.LogInformation("LandingViewModel constructor called.");
         }
 
         #endregion
@@ -65,20 +66,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void CreateNewProject()
         {
-            Logger.Info("CreateNewProject called.");
-            _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
+           Logger.LogInformation("CreateNewProject called.");
+           _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
         }
 
         public void Workspace()
         {
-           Logger.Info("Workspace called.");
-            _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
-            
+           Logger.LogInformation("Workspace called.");
+           _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 
         public void Settings()
         {
-            Logger.Info("Settings called.");
+            Logger.LogInformation("Settings called.");
             _navigationService.NavigateToViewModel<SettingsViewModel>();
 
         }
