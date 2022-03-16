@@ -35,13 +35,13 @@ namespace ClearDashboardPlugin
         private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
         private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
 
-        //private ServerPipe _serverPipe;
+        ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
 
         private delegate void AppendTextDelegate(string text, StringBuilder sb);
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
 
-        private StringBuilder _sb = new StringBuilder();
+        //private StringBuilder _sb = new StringBuilder();
 
         private Form _parentForm;
 
