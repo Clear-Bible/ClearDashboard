@@ -5,21 +5,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="UserControl_1"
+    d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
     <Grid x:Uid="Grid_1">
-        <TextBlock
-            x:Uid="TextBlock_1"
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="20"
-            VerticalAlignment="Top"
-            Background="Olive"
-            FontSize="64"
-            Text="PINS" />
+        <userControls:PINScontrol />
     </Grid>
 </UserControl>
