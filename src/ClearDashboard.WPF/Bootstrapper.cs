@@ -13,17 +13,15 @@ namespace ClearDashboard.Wpf
 {
     public class Bootstrapper : BootstrapperBase
     {
-        #region Props
-
-        private SimpleContainer _container;
-        private Log _log;
+        #region Properties
 
         private FrameSet _frameSet;
-
+        private Log _log;
+        private SimpleContainer _container;
 
         #endregion
 
-        #region Startup
+        #region Contructor
 
         public Bootstrapper()
         {
@@ -35,6 +33,7 @@ namespace ClearDashboard.Wpf
 
         #endregion
 
+        #region Configure
         protected override void Configure()
         {
             _log = new Log();
@@ -53,6 +52,7 @@ namespace ClearDashboard.Wpf
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>();
 
+            // Register the FrameAdapter which wraps a Frame as INavigationService
             _frameSet = new FrameSet();
             _container.RegisterInstance(typeof(INavigationService), null, _frameSet.NavigationService);
 
@@ -68,11 +68,18 @@ namespace ClearDashboard.Wpf
 
         }
 
+        #endregion
+
+        #region Startup
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            // Allow the ShellView to be created.
             await DisplayRootViewForAsync<ShellViewModel>();
+
+            // Now add the Frame to be added to the Grid in ShellView
             AddFrameToMainWindow(_frameSet.Frame);
 
+            // Navigate to the LandingView.
             _frameSet.NavigationService.NavigateToViewModel(typeof(LandingViewModel));
         }
 
@@ -95,6 +102,10 @@ namespace ClearDashboard.Wpf
             grid.Children.Add(frame);
         }
 
+        #endregion
+
+        #region DependencyInjection
+
         protected override object GetInstance(Type service, string key)
         {
             return _container.GetInstance(service, key);
@@ -110,7 +121,9 @@ namespace ClearDashboard.Wpf
             _container.BuildUp(instance);
         }
 
+        #endregion
 
+        #region Global error handling
         /// <summary>
         /// Handle the system wide exceptions
         /// </summary>
@@ -124,5 +137,6 @@ namespace ClearDashboard.Wpf
             _log.Error(e.Exception);
             MessageBox.Show(e.Exception.Message, "An error as occurred", MessageBoxButton.OK);
         }
+        #endregion 
     }
 }
