@@ -6,7 +6,6 @@ using Microsoft.Win32;
 //using NamedPipes;
 using Newtonsoft.Json;
 using Paratext.PluginInterfaces;
-using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -124,7 +123,7 @@ namespace ClearDashboardPlugin
                 {
                     await args.Connection.WriteAsync(new PipeMessage
                     {
-                        Action = Pipes_Shared.ActionType.SendText,
+                        Action = ActionType.SendText,
                         Id = new Guid(),
                         Text = "Welcome! You are now connected to the server."
                     }).ConfigureAwait(false);
@@ -154,7 +153,11 @@ namespace ClearDashboardPlugin
                 }
             };
 
-            _PipeServer.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
+            _PipeServer.ExceptionOccurred += (o, args) =>
+            {
+
+                OnExceptionOccurred(args.Exception);
+            };
         }
 
         /// <summary>

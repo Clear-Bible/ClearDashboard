@@ -41,6 +41,9 @@
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
+		<PackageReference Include="H.Formatters" Version="2.0.34" />
+		<PackageReference Include="H.Formatters.BinaryFormatter" Version="2.0.34" />
+		<PackageReference Include="H.Pipes" Version="2.0.34" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
 		<PackageReference Include="MdXaml" Version="1.13.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />

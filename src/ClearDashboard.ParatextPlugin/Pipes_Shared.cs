@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Pipes_Shared
+namespace ClearDashboard.ParatextPlugin
 {
     [Serializable]
-    public class PipeMessage 
+    public class PipeMessage
     {
         public PipeMessage()
         {

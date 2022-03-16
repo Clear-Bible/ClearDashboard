@@ -5,17 +5,19 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Formatters.BinaryFormatter" Version="2.0.31" />
-    <PackageReference Include="H.Formatters.Newtonsoft.Json" Version="12.0.34" />
-    <PackageReference Include="H.Formatters.System.Text.Json" Version="12.0.34" />
-    <PackageReference Include="H.Pipes" Version="2.0.31" />
+    <PackageReference Include="H.Formatters" Version="2.0.34" />
+    <PackageReference Include="H.Formatters.BinaryFormatter" Version="2.0.34" />
+    <PackageReference Include="H.Pipes" Version="2.0.34" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\pipes_shared\pipes_shared.csproj" />
   </ItemGroup>
+
 
 </Project>
