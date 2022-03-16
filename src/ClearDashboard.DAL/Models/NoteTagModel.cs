@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using ClearDashboard.DataAccessLayer.Dapper;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 
-namespace ClearDashboard.DAL.Models
+namespace ClearDashboard.DataAccessLayer.Models
 {
     /// <summary>
     /// Data Model for the Note Tag objects.
