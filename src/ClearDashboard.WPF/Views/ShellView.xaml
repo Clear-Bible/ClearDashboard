@@ -28,7 +28,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid>
+    <Grid x:Name="ShellViewGRid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
@@ -134,12 +134,11 @@
             </Grid>
         </Border>
 
-        <!--  Wire up the NavigationService to the DI container by calling RegisterFrame in the ShellViewModel  -->
-        <Frame
-            x:Name="mainFrame"
-            Grid.Row="1"
-            cm:Message.Attach="RegisterFrame($source)"
-            NavigationUIVisibility="Hidden" />
+        <!-- 
+            NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be 
+            added to the DI container at the appropriate time.
+        -->
+        <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)"  Grid.Row="1" NavigationUIVisibility="Hidden" />-->
 
     </Grid>
 </Window>
