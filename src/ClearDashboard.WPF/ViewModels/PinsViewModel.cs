@@ -81,7 +81,6 @@ namespace ClearDashboard.Wpf.ViewModels
             set
             {
                 _projects = value;
-
                 NotifyOfPropertyChange(() => Projects);
             }
         }
@@ -135,13 +134,28 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
+
+            
+        }
+
+        protected override async void OnViewAttached(object view, object context)
+        {
+            await PT_version_selected();
+            base.OnViewAttached(view, context);
+        }
+
+
+        protected override async void OnViewLoaded(object view)
+        {
+            await PT_version_selected();
+            base.OnViewLoaded(view);
         }
 
         #endregion //Constructor
 
         #region Methods
 
-        private void PT_version_selected()
+        private async Task PT_version_selected()
         {
             // Find all "Lexicon.xml" files in ProjectDir
             lexiconfiles = Directory.GetFiles(_paratextProjectPath, "Lexicon.xml", SearchOption.AllDirectories).ToList();
