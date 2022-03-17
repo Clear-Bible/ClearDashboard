@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
-namespace ClearDashboard.DAL.Models
+namespace ClearDashboard.DataAccessLayer.Models
 {
     /// <summary>
     /// Contains the list of notes and tags as well as queries for building the db table and basic select query.

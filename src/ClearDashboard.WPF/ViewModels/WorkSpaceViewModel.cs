@@ -2,7 +2,6 @@
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.Wpf.Models.Menus;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 
 
