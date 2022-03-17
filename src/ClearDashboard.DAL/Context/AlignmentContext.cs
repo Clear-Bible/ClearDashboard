@@ -275,6 +275,8 @@ namespace ClearDashboard.DataAccessLayer.Context
 
             modelBuilder.Entity<ParallelVerse>(entity =>
             {
+                entity.ToTable("ParallelVerse");
+
                 entity.HasIndex(e => e.SourceVerseId, "IX_ParallelVerses_SourceVerseId")
                     .IsUnique();
 

@@ -112,7 +112,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ParallelVerses",
+                name: "ParallelVerse",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
@@ -122,11 +122,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParallelVerses", x => x.Id);
-                    table.UniqueConstraint("AK_ParallelVerses_SourceVerseId", x => x.SourceVerseId);
-                    table.UniqueConstraint("AK_ParallelVerses_TargetVerseId", x => x.TargetVerseId);
+                    table.PrimaryKey("PK_ParallelVerse", x => x.Id);
+                    table.UniqueConstraint("AK_ParallelVerse_SourceVerseId", x => x.SourceVerseId);
+                    table.UniqueConstraint("AK_ParallelVerse_TargetVerseId", x => x.TargetVerseId);
                     table.ForeignKey(
-                        name: "FK_ParallelVerses_ParallelCorpus_ParallelCorpusId",
+                        name: "FK_ParallelVerse_ParallelCorpus_ParallelCorpusId",
                         column: x => x.ParallelCorpusId,
                         principalTable: "ParallelCorpus",
                         principalColumn: "Id");
@@ -238,14 +238,14 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                         principalTable: "Corpus",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Verse_ParallelVerses_Id",
+                        name: "FK_Verse_ParallelVerse_Id",
                         column: x => x.Id,
-                        principalTable: "ParallelVerses",
+                        principalTable: "ParallelVerse",
                         principalColumn: "SourceVerseId");
                     table.ForeignKey(
-                        name: "FK_Verse_ParallelVerses_Id1",
+                        name: "FK_Verse_ParallelVerse_Id1",
                         column: x => x.Id,
-                        principalTable: "ParallelVerses",
+                        principalTable: "ParallelVerse",
                         principalColumn: "TargetVerseId");
                     table.ForeignKey(
                         name: "FK_Verse_Token_Id",
@@ -395,31 +395,31 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerses_ParallelCorpusId",
-                table: "ParallelVerses",
+                name: "IX_ParallelVerse_ParallelCorpusId",
+                table: "ParallelVerse",
                 column: "ParallelCorpusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParallelVerses_SourceVerseId",
-                table: "ParallelVerses",
+                table: "ParallelVerse",
                 column: "SourceVerseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParallelVerses_TargetVerseId",
-                table: "ParallelVerses",
+                table: "ParallelVerse",
                 column: "TargetVerseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "Unq_ParallelVerses_SourceVerseId",
-                table: "ParallelVerses",
+                table: "ParallelVerse",
                 column: "SourceVerseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "Unq_ParallelVerses_TargetVerseId",
-                table: "ParallelVerses",
+                table: "ParallelVerse",
                 column: "TargetVerseId",
                 unique: true);
 
@@ -483,7 +483,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Corpus");
 
             migrationBuilder.DropTable(
-                name: "ParallelVerses");
+                name: "ParallelVerse");
 
             migrationBuilder.DropTable(
                 name: "CorpusType");

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    [Migration("20220317000051_InitialMigration")]
+    [Migration("20220317001430_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -279,7 +279,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.HasIndex(new[] { "TargetVerseId" }, "Unq_ParallelVerses_TargetVerseId")
                         .IsUnique();
 
-                    b.ToTable("ParallelVerses");
+                    b.ToTable("ParallelVerse", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
@@ -530,7 +530,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                         .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Verse", "Id")
                         .HasPrincipalKey("ClearDashboard.DataAccessLayer.Models.ParallelVerse", "TargetVerseId")
                         .IsRequired()
-                        .HasConstraintName("FK_Verse_ParallelVerses_Id1");
+                        .HasConstraintName("FK_Verse_ParallelVerse_Id1");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Verse2")
                         .WithOne("Verse")
