@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Pipes_Shared;
 
 namespace ClearDashboardPlugin
 {
@@ -112,6 +113,7 @@ namespace ClearDashboardPlugin
             Load += OnLoad;
 
             _PipeServer = new PipeServer<PipeMessage>(PipeName);
+            _ = new PipeMessage();
             _PipeServer.ClientConnected += async (o, args) =>
             {
                 Clients.Add(args.Connection.PipeName);
@@ -140,11 +142,6 @@ namespace ClearDashboardPlugin
 
                 AddLine($"{args.Connection.PipeName} disconnected!");
             };
-            //_PipeServer.MessageReceived += (o, args) =>
-            //{
-            //    AddLine($"{args.Connection.PipeName}: {args.Message}");
-            //};
-
             _PipeServer.MessageReceived += (sender, args) =>
             {
                 if (args.Message != null)
@@ -193,17 +190,15 @@ namespace ClearDashboardPlugin
 
         private void OnMessageReceivedAsync(PipeMessage message)
         {
-            AddLine(message.Text);
-
-            //switch (message.Action)
-            //{
-            //    case ActionType.SendText:
-            //        MessageBox.Show(message.Text);
-            //        break;
-            //    default:
-            //        MessageBox.Show($"Method {message.Action} not implemented");
-            //        break;
-            //}
+            switch (message.Action)
+            {
+                case ActionType.SendText:
+                    AddLine(message.Text);
+                    break;
+                default:
+                    AddLine($"Method {message.Action} not implemented");
+                    break;
+            }
         }
 
 
@@ -213,7 +208,7 @@ namespace ClearDashboardPlugin
             try
             {
                 AddLine("PipeServer starting...");
-
+                _ = new PipeMessage();
                 await _PipeServer.StartAsync().ConfigureAwait(false);
 
                 AddLine("PipeServer is started!");

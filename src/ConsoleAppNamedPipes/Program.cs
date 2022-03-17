@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using ConsoleAppNamedPipes;
+using Pipes_Shared;
 
 Console.WriteLine("Hello, World!");
 const string DefaultPipeName = "ClearDashboard";
@@ -15,5 +16,7 @@ if (args.Any())
 }
 else
 {
-    await MyClient.RunAsync(pipeName).ConfigureAwait(false);
+
+    _ = new PipeMessage();
+    await PipesClient.RunAsync(pipeName).ConfigureAwait(false);
 }

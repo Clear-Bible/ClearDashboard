@@ -3,7 +3,7 @@ using H.Pipes;
 
 namespace ConsoleAppNamedPipes
 {
-    public static class MyClient
+    public static class PipesClient
     {
         private static void OnExceptionOccurred(Exception exception)
         {
@@ -19,7 +19,6 @@ namespace ConsoleAppNamedPipes
                 Console.WriteLine($"Running in CLIENT mode. PipeName: {pipeName}");
                 Console.WriteLine("Enter 'q' to exit");
 
-                //await using var client = new PipeClient<MyMessage>(pipeName);
                 await using var client = new PipeClient<PipeMessage>(pipeName);
                 client.Disconnected += (o, args) => Console.WriteLine("Disconnected from server");
                 client.Connected += (o, args) => Console.WriteLine("Connected to server");

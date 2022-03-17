@@ -4,6 +4,7 @@ using H.Pipes.Args;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Pipes_Shared;
 
 namespace ClearDashboard.ParatextPlugin
 {
