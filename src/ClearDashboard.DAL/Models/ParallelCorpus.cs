@@ -10,13 +10,13 @@ namespace ClearDashboard.DataAccessLayer.Models
             ParallelVerses = new HashSet<ParallelVerse>();
         }
 
-        public long SourceCorpusId { get; set; }
-        public long TargetCorpusId { get; set; }
+        public int SourceCorpusId { get; set; }
+        public int TargetCorpusId { get; set; }
 
-        public long? AlignmentType { get; set; }
-        public byte[] CreationDate { get; set; }
-        public byte[] LastGenerated { get; set; }
-        public long Id { get; set; }
+        public int? AlignmentTypeId { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastGenerated { get; set; }
+        public int Id { get; set; }
 
         public virtual Corpus CorpusCorpus { get; set; }
         public virtual Corpus CorpusCorpusNavigation { get; set; }

@@ -10,12 +10,12 @@ namespace ClearDashboard.DataAccessLayer.Models
             Verses = new HashSet<Verse>();
         }
 
-        public long Id { get; set; }
-        public byte[] IsRtl { get; set; }
+        public int Id { get; set; }
+        public bool IsRtl { get; set; }
         public string Name { get; set; }
-        public long? Language { get; set; }
+        public int? Language { get; set; }
         public string ParatextGuid { get; set; }
-        public long? CorpusTypeId { get; set; }
+        public int? CorpusTypeId { get; set; }
 
         public virtual ParallelCorpus ParallelCorpus { get; set; }
         public virtual ParallelCorpus CorpusNavigation { get; set; }

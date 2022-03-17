@@ -13,8 +13,9 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "AlignmentType",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    Description = table.Column<string>(type: "varchar(100)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,8 +26,9 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "CorpusType",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "integer", nullable: false),
-                    Description = table.Column<long>(type: "integer", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,12 +39,13 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "ParallelCorpus",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    SourceCorpusId = table.Column<long>(type: "integer", nullable: false),
-                    TargetCorpusId = table.Column<long>(type: "integer", nullable: false),
-                    AlignmentType = table.Column<long>(type: "integer", nullable: true),
-                    CreationDate = table.Column<byte[]>(type: "datetime", nullable: true),
-                    LastGenerated = table.Column<byte[]>(type: "datetime", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SourceCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TargetCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AlignmentTypeId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastGenerated = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,11 +58,12 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "ProjectInfo",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "integer", nullable: false),
-                    ProjectName = table.Column<string>(type: "text", nullable: true),
-                    CreationDate = table.Column<byte[]>(type: "datetime", nullable: true),
-                    IsRTL = table.Column<byte[]>(type: "bit", nullable: true),
-                    LastContentWordLevel = table.Column<long>(type: "integer", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProjectName = table.Column<string>(type: "TEXT", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsRTL = table.Column<bool>(type: "bit", nullable: false),
+                    LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,12 +88,12 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Corpus",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "integer", nullable: false),
-                    IsRTL = table.Column<byte[]>(type: "bit", nullable: true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsRTL = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Language = table.Column<long>(type: "integer", nullable: true),
+                    Language = table.Column<int>(type: "INTEGER", nullable: true),
                     ParatextGUID = table.Column<string>(type: "varchar(250)", nullable: true),
-                    CorpusTypeId = table.Column<long>(type: "integer", nullable: true)
+                    CorpusTypeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,10 +119,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "ParallelVerse",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    SourceVerseId = table.Column<long>(type: "bigint", nullable: false),
-                    TargetVerseId = table.Column<long>(type: "bigint", nullable: false),
-                    ParallelCorpusId = table.Column<long>(type: "integer", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SourceVerseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TargetVerseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ParallelCorpusId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -136,10 +141,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Adornment",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    TokenId = table.Column<long>(type: "bigint", nullable: true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
                     Lemma = table.Column<string>(type: "varchar(50)", nullable: true),
-                    POS = table.Column<string>(type: "varchar(15)", nullable: false),
+                    PartsOfSpeech = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
                     Strong = table.Column<string>(type: "varchar(15)", nullable: true)
                 },
                 constraints: table =>
@@ -151,12 +157,13 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Alignment",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    SourceTokenId = table.Column<long>(type: "integer", nullable: false),
-                    TargetTokenId = table.Column<long>(type: "integer", nullable: false),
-                    Score = table.Column<byte[]>(type: "decimal(3)", nullable: true),
-                    AlignmentVersionId = table.Column<long>(type: "bigint", nullable: true),
-                    AlignmentTypeId = table.Column<long>(type: "integer", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SourceTokenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TargetTokenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(3)", nullable: false),
+                    AlignmentVersionId = table.Column<int>(type: "INTEGER", nullable: true),
+                    AlignmentTypeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,17 +181,16 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Token",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    WordId = table.Column<long>(type: "integer", nullable: false),
-                    PartId = table.Column<long>(type: "integer", nullable: false),
-                    VerseId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    WordId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PartId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VerseId = table.Column<int>(type: "INTEGER", nullable: false),
                     Text = table.Column<string>(type: "varchar(250)", nullable: true),
                     FirstLetter = table.Column<string>(type: "varchar(2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Token", x => new { x.Id, x.WordId, x.PartId, x.VerseId });
-                    table.UniqueConstraint("AK_Token_Id", x => x.Id);
+                    table.PrimaryKey("PK_Token", x => x.Id);
                     table.UniqueConstraint("AK_Token_VerseId", x => x.VerseId);
                     table.ForeignKey(
                         name: "FK_Token_Alignment_Id",
@@ -202,11 +208,12 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "InterlinearNotes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    TokenId = table.Column<long>(type: "bigint", nullable: true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
                     Note = table.Column<string>(type: "varchar(600)", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    CreationDate = table.Column<byte[]>(type: "datetime", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -223,11 +230,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Verse",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
                     BookId = table.Column<string>(type: "varchar(2)", nullable: true),
                     VerseText = table.Column<string>(type: "text", nullable: true),
-                    LastChanged = table.Column<byte[]>(type: "datetime", nullable: true),
-                    CorpusId = table.Column<long>(type: "integer", nullable: true)
+                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CorpusId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -258,9 +265,9 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
                     ParatextUsername = table.Column<string>(type: "varchar(100)", nullable: true),
-                    LastAlignmentLevelId = table.Column<long>(type: "bigint", nullable: true)
+                    LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -276,10 +283,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "AlignmentVersion",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    CreateDate = table.Column<byte[]>(type: "datetime", nullable: true),
-                    UserId = table.Column<long>(type: "integer", nullable: true),
-                    IsDirty = table.Column<byte[]>(type: "bit", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
+                    IsDirty = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,13 +300,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "pk_Adornments",
-                table: "Adornment",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "unq_Adornments_TokenId",
+                name: "IX_Adornment_TokenId",
                 table: "Adornment",
                 column: "TokenId",
                 unique: true);
@@ -326,18 +328,6 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "Unq_Alignment_SourceTokenId",
-                table: "Alignment",
-                column: "SourceTokenId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_Alignment_TargetTokenId",
-                table: "Alignment",
-                column: "TargetTokenId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AlignmentVersion_UserId",
                 table: "AlignmentVersion",
                 column: "UserId");
@@ -348,18 +338,12 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 column: "CorpusTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "Pk_CorpusType_CorpusTypeId",
-                table: "CorpusType",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_InterlinearNotes_TokenId",
                 table: "InterlinearNotes",
                 column: "TokenId");
 
             migrationBuilder.CreateIndex(
-                name: "unq_InterlinearNotes_UserId",
+                name: "IX_InterlinearNotes_UserId",
                 table: "InterlinearNotes",
                 column: "UserId",
                 unique: true);
@@ -377,66 +361,24 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "Pk_ParallelCorpus_ParallelCorpusId",
-                table: "ParallelCorpus",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_ParallelCorpus_SourceCorpusId",
-                table: "ParallelCorpus",
-                column: "SourceCorpusId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_ParallelCorpus_TargetCorpusId",
-                table: "ParallelCorpus",
-                column: "TargetCorpusId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ParallelVerse_ParallelCorpusId",
                 table: "ParallelVerse",
                 column: "ParallelCorpusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerses_SourceVerseId",
+                name: "IX_ParallelVerse_SourceVerseId",
                 table: "ParallelVerse",
                 column: "SourceVerseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerses_TargetVerseId",
-                table: "ParallelVerse",
-                column: "TargetVerseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_ParallelVerses_SourceVerseId",
-                table: "ParallelVerse",
-                column: "SourceVerseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_ParallelVerses_TargetVerseId",
+                name: "IX_ParallelVerse_TargetVerseId",
                 table: "ParallelVerse",
                 column: "TargetVerseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Token_VerseId",
-                table: "Token",
-                column: "VerseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_Token_TokenId",
-                table: "Token",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Unq_Token_VerseId",
                 table: "Token",
                 column: "VerseId",
                 unique: true);

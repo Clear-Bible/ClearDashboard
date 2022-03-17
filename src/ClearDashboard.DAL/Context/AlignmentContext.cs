@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.DataAccessLayer.Context
@@ -12,6 +13,11 @@ namespace ClearDashboard.DataAccessLayer.Context
         public AlignmentContext(DbContextOptions<AlignmentContext> options)
             : base(options)
         {
+        }
+
+        protected AlignmentContext(string databasePath)
+        {
+            DatabasePath = databasePath;
         }
 
         public virtual DbSet<Adornment> Adornments { get; set; }
@@ -29,13 +35,46 @@ namespace ClearDashboard.DataAccessLayer.Context
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Verse> Verses { get; set; }
 
+
+        protected string DatabasePath { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("data source=alignment.sqlite");
+                optionsBuilder.UseSqlite($"Filename={DatabasePath}");
             }
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlite("data source=alignment.sqlite");
+        //    }
+        //}
+
+        public static AlignmentContext Create(string databasePath)
+        {
+            var dbContext = new AlignmentContext(databasePath);
+            Console.WriteLine($"AlignmentContext created at {databasePath}");
+
+            try
+            {
+                // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
+                // we want to call Database.Migrate(), not Database.EnsureCreated().
+                // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
+                dbContext.Database.Migrate();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Could not apply database migrations: {e.Message}");
+            }
+
+            return dbContext;
+        }
+
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,29 +82,25 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("Adornment");
 
-                entity.HasIndex(e => e.Id, "pk_Adornments")
-                    .IsUnique();
+                entity.HasKey(e => e.Id);
 
-                entity.HasIndex(e => e.TokenId, "unq_Adornments_TokenId")
-                    .IsUnique();
+                entity.HasIndex(e => e.TokenId).IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.TokenId);
 
-                entity.Property(e => e.Lemma).HasColumnType("varchar(50)");
+                entity.Property(e => e.Lemma)
+                    .HasColumnType("varchar(50)");
 
-                entity.Property(e => e.Pos)
+                entity.Property(e => e.PartsOfSpeech)
                     .IsRequired()
                     .HasColumnType("varchar(15)")
-                    .HasColumnName("POS");
+                    .HasMaxLength(15);
+                   
 
-                entity.Property(e => e.Strong).HasColumnType("varchar(15)");
-
-                entity.Property(e => e.TokenId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("TokenId");
-
+                entity.Property(e => e.Strong)
+                    .HasColumnType("varchar(15)");
+               
+                   
                 entity.HasOne(d => d.Token)
                     .WithOne(p => p.Adornment)
                     .HasPrincipalKey<Token>(p => p.Id)
@@ -76,39 +111,17 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("Alignment");
 
-                entity.HasIndex(e => e.SourceTokenId, "IX_Alignment_SourceTokenId")
-                    .IsUnique();
+                entity.HasKey(e => e.Id);
 
-                entity.HasIndex(e => e.TargetTokenId, "IX_Alignment_TargetTokenId")
-                    .IsUnique();
+                entity.HasIndex(e => e.SourceTokenId).IsUnique();
+                entity.HasIndex(e => e.TargetTokenId).IsUnique();
 
-                entity.HasIndex(e => e.SourceTokenId, "Unq_Alignment_SourceTokenId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.TargetTokenId, "Unq_Alignment_TargetTokenId")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.AlignmentTypeId)
-                    .HasColumnType("integer")
-                    .HasColumnName("AlignmentTypeId");
-
-                entity.Property(e => e.AlignmentVersionId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("AlignmentVersionId");
-
-                entity.Property(e => e.Score).HasColumnType("decimal(3)");
-
-                entity.Property(e => e.SourceTokenId)
-                    .HasColumnType("integer")
-                    .HasColumnName("SourceTokenId");
-
-                entity.Property(e => e.TargetTokenId)
-                    .HasColumnType("integer")
-                    .HasColumnName("TargetTokenId");
+                entity.Property(e => e.AlignmentTypeId);
+                entity.Property(e => e.AlignmentVersionId);
+                entity.Property(e => e.Score)
+                    .HasColumnType("decimal(3)");
+                entity.Property(e => e.SourceTokenId);
+                entity.Property(e => e.TargetTokenId);
 
                 entity.HasOne(d => d.AlignmentType)
                     .WithMany(p => p.Alignments)
@@ -123,26 +136,24 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("AlignmentType");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Description).HasColumnType("varchar(100)");
+                entity.HasKey(e => e.Id);
+               
+                entity.Property(e => e.Description)
+                    .HasMaxLength(100)
+                    .HasColumnType("varchar(100)");
             });
 
             modelBuilder.Entity<AlignmentVersion>(entity =>
             {
                 entity.ToTable("AlignmentVersion");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
-
-                entity.Property(e => e.IsDirty).HasColumnType("bit");
-
-                entity.Property(e => e.UserId).HasColumnType("integer");
+                entity.HasKey(e => e.Id);
+               
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime");
+                entity.Property(e => e.IsDirty)
+                    .HasColumnType("bit");
+                entity.Property(e => e.UserId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AlignmentVersions)
@@ -154,23 +165,19 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.ToTable("Corpus");
 
                 entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("integer")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CorpusTypeId)
-                    .HasColumnType("integer")
-                    .HasColumnName("CorpusTypeId");
-
-                entity.Property(e => e.IsRtl)
+                
+                entity.Property(e => e.CorpusTypeId);
+                   entity.Property(e => e.IsRtl)
                     .HasColumnType("bit")
                     .HasColumnName("IsRTL");
 
-                entity.Property(e => e.Language).HasColumnType("integer");
+                entity.Property(e => e.Language); 
 
-                entity.Property(e => e.Name).HasColumnType("varchar(100)");
+                entity.Property(e => e.Name)
+                    .HasColumnType("varchar(100)");
 
+
+                // CODEREVIEW:  Is this really GUID? Should we adjust the length of the varchar?  Should we just make it a GUID?
                 entity.Property(e => e.ParatextGuid)
                     .HasColumnType("varchar(250)")
                     .HasColumnName("ParatextGUID");
@@ -196,38 +203,27 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("CorpusType");
 
-                entity.HasIndex(e => e.Id, "Pk_CorpusType_CorpusTypeId")
-                    .IsUnique();
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("integer")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Description).HasColumnType("integer");
+                // CODE-REVIEW: Should this be a string?
+                entity.Property(e => e.Description);
             });
 
             modelBuilder.Entity<InterlinearNote>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasIndex(e => e.UserId, "unq_InterlinearNotes_UserId")
-                    .IsUnique();
+                entity.HasIndex(e => e.UserId).IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.Note).HasColumnType("varchar(600)");
 
-                entity.Property(e => e.TokenId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("TokenId");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("UserId");
+                entity.Property(e => e.TokenId);
+           
+                entity.Property(e => e.UserId);
+                  
 
                 entity.HasOne(d => d.Token)
                     .WithMany(p => p.InterlinearNotes)
@@ -237,73 +233,32 @@ namespace ClearDashboard.DataAccessLayer.Context
 
             modelBuilder.Entity<ParallelCorpus>(entity =>
             {
+                entity.ToTable("ParallelCorpus");
+
                 entity.HasKey(e => e.Id);
-
-                entity.HasIndex(e => e.SourceCorpusId, "IX_ParallelCorpus_SourceCorpusId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.TargetCorpusId, "IX_ParallelCorpus_TargetCorpusId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Id, "Pk_ParallelCorpus_ParallelCorpusId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.SourceCorpusId, "Unq_ParallelCorpus_SourceCorpusId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.TargetCorpusId, "Unq_ParallelCorpus_TargetCorpusId")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.AlignmentType).HasColumnType("integer");
-
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.LastGenerated).HasColumnType("datetime");
-
-                entity.Property(e => e.SourceCorpusId)
-                    .HasColumnType("integer")
-                    .HasColumnName("SourceCorpusId");
-
-                entity.Property(e => e.TargetCorpusId)
-                    .HasColumnType("integer")
-                    .HasColumnName("TargetCorpusId");
+                entity.HasIndex(e => e.SourceCorpusId).IsUnique();
+                entity.HasIndex(e => e.TargetCorpusId).IsUnique();
+                entity.Property(e => e.AlignmentTypeId);
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime");
+                entity.Property(e => e.LastGenerated)
+                    .HasColumnType("datetime");
+                entity.Property(e => e.SourceCorpusId);
+                entity.Property(e => e.TargetCorpusId);
             });
 
             modelBuilder.Entity<ParallelVerse>(entity =>
             {
                 entity.ToTable("ParallelVerse");
 
-                entity.HasIndex(e => e.SourceVerseId, "IX_ParallelVerses_SourceVerseId")
-                    .IsUnique();
+                entity.HasKey(e => e.Id);
 
-                entity.HasIndex(e => e.TargetVerseId, "IX_ParallelVerses_TargetVerseId")
-                    .IsUnique();
+                entity.HasIndex(e => e.SourceVerseId).IsUnique();
+                entity.HasIndex(e => e.TargetVerseId).IsUnique();
 
-                entity.HasIndex(e => e.SourceVerseId, "Unq_ParallelVerses_SourceVerseId")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.TargetVerseId, "Unq_ParallelVerses_TargetVerseId")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.ParallelCorpusId)
-                    .HasColumnType("integer")
-                    .HasColumnName("ParallelCorpusId");
-
-                entity.Property(e => e.SourceVerseId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("SourceVerseId");
-
-                entity.Property(e => e.TargetVerseId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("TargetVerseId");
+                entity.Property(e => e.ParallelCorpusId);
+                entity.Property(e => e.SourceVerseId);
+                entity.Property(e => e.TargetVerseId);
 
                 entity.HasOne(d => d.ParallelCorpus)
                     .WithMany(p => p.ParallelVerses)
@@ -314,61 +269,44 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("ProjectInfo");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("integer")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.IsRtl)
                     .HasColumnType("bit")
                     .HasColumnName("IsRTL");
 
-                entity.Property(e => e.LastContentWordLevel).HasColumnType("integer");
+                entity.Property(e => e.LastContentWordLevel);
 
-                entity.Property(e => e.ProjectName).HasColumnType("text");
+                entity.Property(e => e.ProjectName);
             });
 
             modelBuilder.Entity<QuestionGroup>(entity =>
             {
+                // CODE-REVIEW:  Should a primary key be added?
                 entity.HasNoKey();
-
                 entity.ToTable("QuestionGroup");
             });
 
             modelBuilder.Entity<Token>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.WordId, e.PartId, e.VerseId });
 
                 entity.ToTable("Token");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.VerseId).IsUnique();
 
-                entity.HasIndex(e => e.VerseId, "IX_Token_VerseId")
-                    .IsUnique();
+                entity.Property(e => e.WordId);
+                entity.Property(e => e.PartId);
+                entity.Property(e => e.VerseId);
 
-                entity.HasIndex(e => e.Id, "Unq_Token_TokenId")
-                    .IsUnique();
 
-                entity.HasIndex(e => e.VerseId, "Unq_Token_VerseId")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint");
-
-                entity.Property(e => e.WordId)
-                    .HasColumnType("integer")
-                    .HasColumnName("WordId");
-
-                entity.Property(e => e.PartId)
-                    .HasColumnType("integer")
-                    .HasColumnName("PartId");
-
-                entity.Property(e => e.VerseId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("VerseId");
-
-                entity.Property(e => e.FirstLetter).HasColumnType("varchar(2)");
-
-                entity.Property(e => e.Text).HasColumnType("varchar(250)");
+                // CODE-REVIEW:  Should this be varchar(1)?
+                entity.Property(e => e.FirstLetter)
+                    .HasColumnType("varchar(2)");
+                entity.Property(e => e.Text)
+                    .HasColumnType("varchar(250)");
 
                 entity.HasOne(d => d.TokenNavigation)
                     .WithOne(p => p.TokenTokenNavigation)
@@ -387,15 +325,11 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.LastAlignmentLevelId)
-                    .HasColumnType("bigint")
-                    .HasColumnName("LastAlignmentLevelId");
-
-                entity.Property(e => e.ParatextUsername).HasColumnType("varchar(100)");
+                entity.Property(e => e.LastAlignmentLevelId);
+                entity.Property(e => e.ParatextUsername)
+                    .HasColumnType("varchar(100)");
 
                 entity.HasOne(d => d.UserNavigation)
                     .WithOne(p => p.User)
@@ -408,17 +342,20 @@ namespace ClearDashboard.DataAccessLayer.Context
             {
                 entity.ToTable("Verse");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.BookId).HasColumnType("varchar(2)");
+                //CODE-REVIEW: is this correct length?
+                entity.Property(e => e.BookId)
+                    .HasColumnType("varchar(2)");
 
-                entity.Property(e => e.CorpusId).HasColumnType("integer");
+                entity.Property(e => e.CorpusId);
 
-                entity.Property(e => e.LastChanged).HasColumnType("datetime");
+                entity.Property(e => e.LastChanged)
+                    .HasColumnType("datetime");
 
-                entity.Property(e => e.VerseText).HasColumnType("text");
+                //CODE-REVIEW:  Is there any size limit?
+                entity.Property(e => e.VerseText)
+                    .HasColumnType("text");
 
                 entity.HasOne(d => d.Corpus)
                     .WithMany(p => p.Verses)

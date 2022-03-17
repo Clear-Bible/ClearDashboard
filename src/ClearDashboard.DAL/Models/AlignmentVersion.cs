@@ -10,10 +10,10 @@ namespace ClearDashboard.DataAccessLayer.Models
             Alignments = new HashSet<Alignment>();
         }
 
-        public long Id { get; set; }
-        public byte[] CreateDate { get; set; }
-        public long? UserId { get; set; }
-        public byte[] IsDirty { get; set; }
+        public int Id { get; set; }
+        public DateTime Created { get; set; }
+        public int? UserId { get; set; }
+        public bool IsDirty { get; set; }
 
         public virtual User User { get; set; }
         public virtual ICollection<Alignment> Alignments { get; set; }

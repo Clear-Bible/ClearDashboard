@@ -10,9 +10,9 @@ namespace ClearDashboard.DataAccessLayer.Models
             AlignmentVersions = new HashSet<AlignmentVersion>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string ParatextUsername { get; set; }
-        public long? LastAlignmentLevelId { get; set; }
+        public int? LastAlignmentLevelId { get; set; }
 
         public virtual InterlinearNote UserNavigation { get; set; }
         public virtual ICollection<AlignmentVersion> AlignmentVersions { get; set; }

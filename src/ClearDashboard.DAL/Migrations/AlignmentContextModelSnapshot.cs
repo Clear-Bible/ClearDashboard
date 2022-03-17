@@ -19,30 +19,27 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Lemma")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Pos")
+                    b.Property<string>("PartsOfSpeech")
                         .IsRequired()
-                        .HasColumnType("varchar(15)")
-                        .HasColumnName("POS");
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<string>("Strong")
                         .HasColumnType("varchar(15)");
 
-                    b.Property<long?>("TokenId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("TokenId");
+                    b.Property<int?>("TokenId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "pk_Adornments")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "TokenId" }, "unq_Adornments_TokenId")
+                    b.HasIndex("TokenId")
                         .IsUnique();
 
                     b.ToTable("Adornment", (string)null);
@@ -50,27 +47,24 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("AlignmentTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("AlignmentTypeId");
+                    b.Property<int?>("AlignmentTypeId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("AlignmentVersionId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("AlignmentVersionId");
+                    b.Property<int?>("AlignmentVersionId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("Score")
+                    b.Property<decimal>("Score")
                         .HasColumnType("decimal(3)");
 
-                    b.Property<long>("SourceTokenId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SourceTokenId");
+                    b.Property<int>("SourceTokenId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long>("TargetTokenId")
-                        .HasColumnType("integer")
-                        .HasColumnName("TargetTokenId");
+                    b.Property<int>("TargetTokenId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -78,16 +72,10 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
                     b.HasIndex("AlignmentVersionId");
 
-                    b.HasIndex(new[] { "SourceTokenId" }, "IX_Alignment_SourceTokenId")
+                    b.HasIndex("SourceTokenId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "TargetTokenId" }, "IX_Alignment_TargetTokenId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "SourceTokenId" }, "Unq_Alignment_SourceTokenId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "TargetTokenId" }, "Unq_Alignment_TargetTokenId")
+                    b.HasIndex("TargetTokenId")
                         .IsUnique();
 
                     b.ToTable("Alignment", (string)null);
@@ -95,10 +83,12 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentType", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
@@ -108,17 +98,18 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("CreateDate")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
-                    b.Property<byte[]>("IsDirty")
+                    b.Property<bool>("IsDirty")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -129,19 +120,18 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("integer");
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("CorpusTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("CorpusTypeId");
+                    b.Property<int?>("CorpusTypeId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("IsRtl")
+                    b.Property<bool>("IsRtl")
                         .HasColumnType("bit")
                         .HasColumnName("IsRTL");
 
-                    b.Property<long?>("Language")
-                        .HasColumnType("integer");
+                    b.Property<int?>("Language")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(100)");
@@ -159,44 +149,41 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.CorpusType", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("integer");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("Description")
-                        .HasColumnType("integer");
+                    b.Property<int?>("Description")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Id" }, "Pk_CorpusType_CorpusTypeId")
-                        .IsUnique();
 
                     b.ToTable("CorpusType", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.InterlinearNote", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("CreationDate")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Note")
                         .HasColumnType("varchar(600)");
 
-                    b.Property<long?>("TokenId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("TokenId");
+                    b.Property<int?>("TokenId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TokenId");
 
-                    b.HasIndex(new[] { "UserId" }, "unq_InterlinearNotes_UserId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("InterlinearNotes");
@@ -204,77 +191,59 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("AlignmentType")
-                        .HasColumnType("integer");
+                    b.Property<int?>("AlignmentTypeId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("CreationDate")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
-                    b.Property<byte[]>("LastGenerated")
+                    b.Property<DateTime>("LastGenerated")
                         .HasColumnType("datetime");
 
-                    b.Property<long>("SourceCorpusId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SourceCorpusId");
+                    b.Property<int>("SourceCorpusId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long>("TargetCorpusId")
-                        .HasColumnType("integer")
-                        .HasColumnName("TargetCorpusId");
+                    b.Property<int>("TargetCorpusId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "SourceCorpusId" }, "IX_ParallelCorpus_SourceCorpusId")
+                    b.HasIndex("SourceCorpusId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "TargetCorpusId" }, "IX_ParallelCorpus_TargetCorpusId")
+                    b.HasIndex("TargetCorpusId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Id" }, "Pk_ParallelCorpus_ParallelCorpusId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "SourceCorpusId" }, "Unq_ParallelCorpus_SourceCorpusId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "TargetCorpusId" }, "Unq_ParallelCorpus_TargetCorpusId")
-                        .IsUnique();
-
-                    b.ToTable("ParallelCorpus");
+                    b.ToTable("ParallelCorpus", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVerse", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("ParallelCorpusId")
-                        .HasColumnType("integer")
-                        .HasColumnName("ParallelCorpusId");
+                    b.Property<int?>("ParallelCorpusId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long>("SourceVerseId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("SourceVerseId");
+                    b.Property<int>("SourceVerseId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long>("TargetVerseId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("TargetVerseId");
+                    b.Property<int>("TargetVerseId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ParallelCorpusId");
 
-                    b.HasIndex(new[] { "SourceVerseId" }, "IX_ParallelVerses_SourceVerseId")
+                    b.HasIndex("SourceVerseId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "TargetVerseId" }, "IX_ParallelVerses_TargetVerseId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "SourceVerseId" }, "Unq_ParallelVerses_SourceVerseId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "TargetVerseId" }, "Unq_ParallelVerses_TargetVerseId")
+                    b.HasIndex("TargetVerseId")
                         .IsUnique();
 
                     b.ToTable("ParallelVerse", (string)null);
@@ -282,21 +251,22 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("integer");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("CreationDate")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
-                    b.Property<byte[]>("IsRtl")
+                    b.Property<bool>("IsRtl")
                         .HasColumnType("bit")
                         .HasColumnName("IsRTL");
 
-                    b.Property<long?>("LastContentWordLevel")
-                        .HasColumnType("integer");
+                    b.Property<int?>("LastContentWordLevel")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ProjectName")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -325,36 +295,27 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("WordId")
-                        .HasColumnType("integer")
-                        .HasColumnName("WordId");
-
-                    b.Property<long>("PartId")
-                        .HasColumnType("integer")
-                        .HasColumnName("PartId");
-
-                    b.Property<long>("VerseId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("VerseId");
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstLetter")
                         .HasColumnType("varchar(2)");
 
+                    b.Property<int>("PartId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Text")
                         .HasColumnType("varchar(250)");
 
-                    b.HasKey("Id", "WordId", "PartId", "VerseId");
+                    b.Property<int>("VerseId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex(new[] { "VerseId" }, "IX_Token_VerseId")
-                        .IsUnique();
+                    b.Property<int>("WordId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex(new[] { "Id" }, "Unq_Token_TokenId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
-                    b.HasIndex(new[] { "VerseId" }, "Unq_Token_VerseId")
+                    b.HasIndex("VerseId")
                         .IsUnique();
 
                     b.ToTable("Token", (string)null);
@@ -362,12 +323,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("LastAlignmentLevelId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("LastAlignmentLevelId");
+                    b.Property<int?>("LastAlignmentLevelId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ParatextUsername")
                         .HasColumnType("varchar(100)");
@@ -379,16 +339,16 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("BookId")
                         .HasColumnType("varchar(2)");
 
-                    b.Property<long?>("CorpusId")
-                        .HasColumnType("integer");
+                    b.Property<int?>("CorpusId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("LastChanged")
+                    b.Property<DateTime>("LastChanged")
                         .HasColumnType("datetime");
 
                     b.Property<string>("VerseText")
@@ -405,8 +365,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
                         .WithOne("Adornment")
-                        .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Adornment", "TokenId")
-                        .HasPrincipalKey("ClearDashboard.DataAccessLayer.Models.Token", "Id");
+                        .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Adornment", "TokenId");
 
                     b.Navigation("Token");
                 });
@@ -465,8 +424,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
                         .WithMany("InterlinearNotes")
-                        .HasForeignKey("TokenId")
-                        .HasPrincipalKey("Id");
+                        .HasForeignKey("TokenId");
 
                     b.Navigation("Token");
                 });

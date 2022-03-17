@@ -10,10 +10,10 @@ namespace ClearDashboard.DataAccessLayer.Models
             InterlinearNotes = new HashSet<InterlinearNote>();
         }
 
-        public long Id { get; set; }
-        public long WordId { get; set; }
-        public long PartId { get; set; }
-        public long VerseId { get; set; }
+        public int Id { get; set; }
+        public int WordId { get; set; }
+        public int PartId { get; set; }
+        public int VerseId { get; set; }
         public string Text { get; set; }
         public string FirstLetter { get; set; }
 

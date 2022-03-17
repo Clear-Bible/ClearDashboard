@@ -10,8 +10,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             Corpa = new HashSet<Corpus>();
         }
 
-        public long Id { get; set; }
-        public long? Description { get; set; }
+        public int Id { get; set; }
+        public int? Description { get; set; }
 
         public virtual ICollection<Corpus> Corpa { get; set; }
     }
