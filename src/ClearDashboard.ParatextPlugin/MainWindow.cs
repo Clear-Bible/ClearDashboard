@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using H.Formatters;
 using Pipes_Shared;
 
 namespace ClearDashboardPlugin
@@ -112,7 +114,11 @@ namespace ClearDashboardPlugin
 
             Load += OnLoad;
 
-            _PipeServer = new PipeServer<PipeMessage>(PipeName);
+            var formatter = new BinaryFormatter();
+            formatter.InternalFormatter.Binder = new CustomizedBinder();
+            _PipeServer = new PipeServer<PipeMessage>(PipeName, formatter: formatter);
+
+            //_PipeServer = new PipeServer<PipeMessage>(PipeName);
             _ = new PipeMessage();
             _PipeServer.ClientConnected += async (o, args) =>
             {
@@ -155,6 +161,28 @@ namespace ClearDashboardPlugin
 
                 OnExceptionOccurred(args.Exception);
             };
+        }
+
+        sealed class CustomizedBinder : SerializationBinder
+        {
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                Type returntype = null;
+                string sharedAssemblyName = "pipes_shared, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null";
+                assemblyName = Assembly.GetExecutingAssembly().FullName;
+                typeName = typeName.Replace(sharedAssemblyName, assemblyName);
+                returntype =
+                    Type.GetType(String.Format("{0}, {1}",
+                        typeName, assemblyName));
+
+                return returntype;
+            }
+
+            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            {
+                base.BindToName(serializedType, out assemblyName, out typeName);
+                assemblyName = "SharedAssembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+            }
         }
 
         /// <summary>

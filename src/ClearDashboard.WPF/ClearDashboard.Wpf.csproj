@@ -41,9 +41,6 @@
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
-		<PackageReference Include="H.Formatters" Version="2.0.34" />
-		<PackageReference Include="H.Formatters.BinaryFormatter" Version="2.0.34" />
-		<PackageReference Include="H.Pipes" Version="2.0.34" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
 		<PackageReference Include="MdXaml" Version="1.13.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
@@ -63,6 +60,15 @@
 		</Reference>
 		<Reference Include="Caliburn.Micro.Platform">
 			<HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+		</Reference>
+		<Reference Include="H.Formatters">
+		  <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Formatters.dll</HintPath>
+		</Reference>
+		<Reference Include="H.Formatters.BinaryFormatter">
+		  <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Formatters.BinaryFormatter.dll</HintPath>
+		</Reference>
+		<Reference Include="H.Pipes">
+		  <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Pipes.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 

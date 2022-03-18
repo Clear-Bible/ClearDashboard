@@ -17,9 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Formatters" Version="2.0.34" />
-    <PackageReference Include="H.Formatters.BinaryFormatter" Version="2.0.34" />
-    <PackageReference Include="H.Pipes" Version="2.0.34" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.9" />
@@ -29,6 +26,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\pipes_shared\pipes_shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="H.Formatters">
+      <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Formatters.dll</HintPath>
+    </Reference>
+    <Reference Include="H.Formatters.BinaryFormatter">
+      <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Formatters.BinaryFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="H.Pipes">
+      <HintPath>..\..\..\..\DotNET_Proj\H.Pipes\src\libs\H.Pipes\bin\Debug\netstandard2.0\H.Pipes.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
