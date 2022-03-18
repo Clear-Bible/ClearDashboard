@@ -6,7 +6,6 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels.Panes
 {
 
-
 	public class FileViewModel : PaneViewModel
 	{
 		#region fields

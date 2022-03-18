@@ -13,9 +13,6 @@ namespace ClearDashboard.Wpf.Views
     /// </summary>
     public partial class ShellView : Window
     {
-        //NavigationCommands
-
-
         public ShellView()
         {
             InitializeComponent();
@@ -51,7 +48,7 @@ namespace ClearDashboard.Wpf.Views
 
             userPrefs.Save();
 
-            var language = SelectedLanguage.SelectedItem.ToString();
+            var language = this.SelectedLanguage.SelectedItem.ToString();
             if (language != "")
             {
                 Properties.Settings.Default.language_code = language.ToString();

@@ -5,11 +5,16 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
+using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -43,6 +48,19 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => Version);
             }
         }
+
+        private bool _connected;
+
+        public bool Connected
+        {
+            get { return _connected; }
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
+
 
         #endregion
 
@@ -135,11 +153,14 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen for username changes in Paratext
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             _startup = new StartUp();
+            _startup.NamedPipeChanged += HandleEvent;
         }
 
         protected override void Dispose(bool disposing)
         {
             StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            _startup.NamedPipeChanged -= HandleEvent;
+
             base.Dispose(disposing);
         }
 
@@ -151,8 +172,35 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+        {
+            _startup.OnClosing();
+
+            return base.CanCloseAsync(cancellationToken);
+        }
+
+
         #region Methods
 
+        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        {
+            if (args == null) return;
+
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.OnConnected:
+                    this.Connected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    this.Connected = false;
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
+        }
+        
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>
