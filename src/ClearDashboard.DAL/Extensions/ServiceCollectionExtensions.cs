@@ -15,5 +15,10 @@ namespace ClearDashboard.DataAccessLayer.Extensions
         {
             serviceCollection.AddScoped<AlignmentContext>(sp => AlignmentContext.Create(connectionString));
         }
+
+        public static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<ProjectNameDbContextFactory>();
+        }
     }
 }
