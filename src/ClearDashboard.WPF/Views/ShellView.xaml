@@ -48,25 +48,20 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
-
-                    <materialDesign:PackIcon
-                        Width="25"
-                        Height="25"
-                        VerticalAlignment="Center">
-                        <materialDesign:PackIcon.Style>
-                            <Style TargetType="materialDesign:PackIcon">
-                                <Setter Property="Kind" Value="LanDisconnect" />
-                                <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                    <Image>
+                        <Image.Style>
+                            <Style>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Connected}" Value="True">
-                                        <Setter Property="Kind" Value="LanConnect" />
-                                        <Setter Property="Foreground" Value="{DynamicResource GreenMidBrush}" />
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Connected}" Value="False">
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </materialDesign:PackIcon.Style>
-                    </materialDesign:PackIcon>
-
+                        </Image.Style>
+                    </Image>
                     <TextBlock
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
