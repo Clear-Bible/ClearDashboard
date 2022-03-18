@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Caliburn.Micro;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -135,7 +137,13 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
 
-            
+            PT_version_selected();
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            Debug.WriteLine("");
+            return base.OnActivateAsync(cancellationToken);
         }
 
         protected override async void OnViewAttached(object view, object context)
@@ -507,7 +515,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 lex = "missing";
             }
         }
-
     }
 
     #endregion // Methods
