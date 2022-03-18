@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pipes_shared\pipes_shared.csproj" />
+    <ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

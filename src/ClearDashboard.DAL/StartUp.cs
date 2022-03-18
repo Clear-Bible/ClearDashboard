@@ -1,4 +1,7 @@
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer.Events;
 
 namespace ClearDashboard.DataAccessLayer

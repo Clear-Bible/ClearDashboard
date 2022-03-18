@@ -33,19 +33,19 @@ namespace ClearDashboard.ParatextPlugin
 
         private async Task OnClientConnectedAsync(ConnectionEventArgs<PipeMessage> args)
         {
-            Console.WriteLine($"Client {args.Connection.ServerName} is now connected!");
-            //try
-            //{
-            //    await args.Connection.WriteAsync(new PipeMessage
-            //    {
-            //        Action = NamedPipeMessage.ActionType.SendText,
-            //        Text = "Hi from server"
-            //    });
-            //}
-            //catch (Exception e)
-            //{
-            //    Debug.WriteLine(e);
-            //}
+            Debug.WriteLine($"Client {args.Connection.ServerName} is now connected!");
+            try
+            {
+                await args.Connection.WriteAsync(new PipeMessage
+                {
+                    Action = ActionType.SendText,
+                    Text = "Hi from server"
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
 
         }
 

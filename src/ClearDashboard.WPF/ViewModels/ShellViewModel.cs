@@ -5,9 +5,13 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
 
@@ -153,7 +157,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            _DAL.OnClosing();
+            _startup.OnClosing();
 
             return base.CanCloseAsync(cancellationToken);
         }
@@ -172,13 +176,6 @@ namespace ClearDashboard.Wpf.ViewModels
             //    });
         }
         
-        public void RegisterFrame(Frame frame)
-        {
-            _navigationService = new FrameAdapter(frame);
-            _container.Instance(_navigationService); 
-            _navigationService.NavigateToViewModel(typeof(LandingViewModel));
-        }
-
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>
