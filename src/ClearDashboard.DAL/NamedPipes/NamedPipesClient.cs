@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using H.Pipes;
-using NamedPipes;
+using Pipes_Shared;
 
 
 namespace ClearDashboard.DAL.NamedPipes
@@ -16,16 +16,16 @@ namespace ClearDashboard.DAL.NamedPipes
 
         public class PipeEventArgs : EventArgs
     {
-        private readonly string _text;
+        private readonly PipeMessage _pm;
 
-        public PipeEventArgs(string text)
+        public PipeEventArgs(PipeMessage pm)
         {
-            this._text = text;
+            this._pm = pm;
         }
 
-        public string Text
+        public PipeMessage PM
         {
-            get { return this._text; }
+            get { return this._pm; }
         }
     }
 
@@ -35,7 +35,7 @@ namespace ClearDashboard.DAL.NamedPipes
 
     public event PipesEventHandler NamedPipeChanged;
 
-    private void RaisePipesChangedEvent(string s)
+    private void RaisePipesChangedEvent(PipeMessage s)
     {
         PipeEventArgs args = new PipeEventArgs(s);
         NamedPipeChanged?.Invoke(this, args);
@@ -85,7 +85,11 @@ namespace ClearDashboard.DAL.NamedPipes
                 OnMessageReceivedAsync(args.Message);
             }
         };
-        client.Disconnected += (o, args) => HandleEvents("Disconnected from server");
+        client.Disconnected += (o, args) => HandleEvents(new PipeMessage
+        {
+            Action = ActionType.OnDisconnected,
+            Text = "Disconnected from server",
+        });
         client.Connected += (o, args) => Debug.WriteLine("Connected to server");
         client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
 
@@ -93,14 +97,14 @@ namespace ClearDashboard.DAL.NamedPipes
 
         await client.WriteAsync(new PipeMessage
         {
-            Action = NamedPipeMessage.ActionType.SendText,
+            Action = ActionType.SendText,
             Text = "Hello from client",
         });
     }
 
-    public void HandleEvents(string s)
+    public void HandleEvents(PipeMessage pm)
     {
-        RaisePipesChangedEvent(s);
+        RaisePipesChangedEvent(pm);
     }
 
 
@@ -108,11 +112,14 @@ namespace ClearDashboard.DAL.NamedPipes
     {
         switch (message.Action)
         {
-            case NamedPipeMessage.ActionType.SendText:
-                HandleEvents(message.Text);
+            case ActionType.OnConnected:
+                HandleEvents(message);
+                break;
+            case ActionType.SendText:
+                HandleEvents(message);
                 break;
             default:
-                HandleEvents($"Method {message.Action} not implemented");
+                HandleEvents(message);
                 break;
         }
     }
@@ -134,7 +141,7 @@ namespace ClearDashboard.DAL.NamedPipes
     {
         await client.WriteAsync(new PipeMessage
         {
-            Action = NamedPipeMessage.ActionType.SendText,
+            Action = ActionType.SendText,
             Text = message,
         });
     }

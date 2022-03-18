@@ -14,6 +14,7 @@ using System.Windows.Input;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
+using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -47,6 +48,19 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => Version);
             }
         }
+
+        private bool _connected;
+
+        public bool Connected
+        {
+            get { return _connected; }
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
+
 
         #endregion
 
@@ -139,11 +153,14 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen for username changes in Paratext
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             _startup = new StartUp();
+            _startup.NamedPipeChanged += HandleEvent;
         }
 
         protected override void Dispose(bool disposing)
         {
             StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            _startup.NamedPipeChanged -= HandleEvent;
+
             base.Dispose(disposing);
         }
 
@@ -167,13 +184,21 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
         {
-            Debug.WriteLine($"{args.Text}");
+            if (args == null) return;
 
-            //Application.Current.Dispatcher.Invoke(
-            //    System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
-            //    {
-            //        rtb.AppendText($"{args.Text}{Environment.NewLine}");
-            //    });
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.OnConnected:
+                    this.Connected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    this.Connected = false;
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
         }
         
         /// <summary>

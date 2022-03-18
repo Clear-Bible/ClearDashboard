@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer.Events;
+using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -16,10 +17,9 @@ namespace ClearDashboard.DataAccessLayer
 
 
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
-
-        private void RaisePipesChangedEvent(string s)
+        private void RaisePipesChangedEvent(PipeMessage pm)
         {
-            NamedPipesClient.PipeEventArgs args = new NamedPipesClient.PipeEventArgs(s);
+            NamedPipesClient.PipeEventArgs args = new NamedPipesClient.PipeEventArgs(pm);
             NamedPipeChanged?.Invoke(this, args);
         }
 
@@ -57,12 +57,12 @@ namespace ClearDashboard.DataAccessLayer
 
         private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
         {
-            RaisePipesChangedEvent(args.Text);
+            RaisePipesChangedEvent(args.PM);
         }
 
         public void GetParatextUserName()
         {
-            // TODO this is a hack that reads the first user in the Paratext project's directory
+            // TODO this is a hack that reads the first user in the Paratext project'pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
             Paratext.ParatextUtils paratextUtils = new Paratext.ParatextUtils();

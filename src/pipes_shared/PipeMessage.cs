@@ -13,11 +13,30 @@ namespace Pipes_Shared
         public Guid Id { get; set; }
         public ActionType Action { get; set; }
         public string Text { get; set; } = string.Empty;
+
+        public object Payload { get; set; } = null;
     }
 
     public enum ActionType
     {
-        Unknown,
+        OnConnected,
+        OnDisconnected,
+
+        ServerClosed,
+
         SendText,
+
+        GetBibilicalTerms,
+        GetSourceVerses,
+        GetTargetVerses,
+        GetChapter,
+        GetNotes,
+
+        SetBiblicalTerms,
+        SetSourceVerseText,
+        SetTargetVerseText,
+        SetNotesObject,
+
+        CurrentVerse,
     }
 }

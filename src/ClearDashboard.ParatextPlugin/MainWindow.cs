@@ -78,7 +78,7 @@ namespace ClearDashboardPlugin
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
 
-            //bool showErrorMessage = true;
+            bool showErrorMessage = true;
 
             //// check to see if ClearSuite is installed
             //if (CheckIfClearSuiteInstalledAsync())
@@ -125,15 +125,16 @@ namespace ClearDashboardPlugin
                 Clients.Add(args.Connection.PipeName);
                 UpdateClientList();
 
-                AddLine($"{args.Connection.PipeName} connected!");
+                AppendText(MsgColor.Green, $"{args.Connection.PipeName} connected!");
 
                 try
                 {
+                    AppendText(MsgColor.Green, "Sending OnConnected Message to Client");
                     await args.Connection.WriteAsync(new PipeMessage
                     {
-                        Action = ActionType.SendText,
-                        Id = new Guid(),
-                        Text = "Welcome! You are now connected to the server."
+                        Action = ActionType.OnConnected,
+                        Text = "Connected to Paratext",
+                        Payload = null
                     }).ConfigureAwait(false);
                 }
                 catch (Exception exception)
@@ -146,7 +147,7 @@ namespace ClearDashboardPlugin
                 Clients.Remove(args.Connection.PipeName);
                 UpdateClientList();
 
-                AddLine($"{args.Connection.PipeName} disconnected!");
+                AppendText(MsgColor.Green, $"{args.Connection.PipeName} disconnected!");
             };
             _PipeServer.MessageReceived += (sender, args) =>
             {
@@ -158,11 +159,16 @@ namespace ClearDashboardPlugin
 
             _PipeServer.ExceptionOccurred += (o, args) =>
             {
-
                 OnExceptionOccurred(args.Exception);
             };
         }
 
+        /// <summary>
+        /// A custom serialization binder to make sure that we are processing the correct
+        /// Pipes_Shared library.
+        ///
+        /// Note: MUST HAVE THE CORRECT VERSION NUMBER IN THE STRING BELOW
+        /// </summary>
         sealed class CustomizedBinder : SerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)
@@ -186,16 +192,15 @@ namespace ClearDashboardPlugin
         private async void MainWindow_Disposed(object sender, EventArgs e)
         {
             // this user control is closing - clean up pipe
-            //NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.ServerClosed, "", "");
-            //var msgSend = msgOut.CreateMessage();
 
             try
             {
-                //await _PipeServer.WriteAsync(new PipeMessage
-                //{
-                //    Action = NamedPipeMessage.ActionType.SendText,
-                //    Text = "Connection Closed"
-                //}).ConfigureAwait(false);
+                await _PipeServer.WriteAsync(new PipeMessage
+                {
+                    Action = ActionType.OnDisconnected,
+                    Text = "Connection Closed",
+                    Payload = null,
+                }).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -203,7 +208,7 @@ namespace ClearDashboardPlugin
             }
 
             // we need a delay before closing to ensure that the message is received on the client
-            await Task.Delay(2000).ConfigureAwait(true);
+            await Task.Delay(500).ConfigureAwait(true);
 
             // unhook the pipe
             await _PipeServer.DisposeAsync().ConfigureAwait(false);
@@ -214,10 +219,10 @@ namespace ClearDashboardPlugin
             switch (message.Action)
             {
                 case ActionType.SendText:
-                    AddLine(message.Text);
+                    AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;
                 default:
-                    AddLine($"Method {message.Action} not implemented");
+                    AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
                     break;
             }
         }
@@ -225,32 +230,24 @@ namespace ClearDashboardPlugin
 
         private async void OnLoad(object sender, EventArgs eventArgs)
         {
-
             try
             {
-                AddLine("PipeServer starting...");
+                AppendText(MsgColor.Green, "PipeServer starting...");
                 _ = new PipeMessage();
                 await _PipeServer.StartAsync().ConfigureAwait(false);
 
-                AddLine("PipeServer is started!");
+                AppendText(MsgColor.Green, "PipeServer is started!");
             }
             catch (Exception exception)
             {
+                AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
                 OnExceptionOccurred(exception);
             }
         }
 
         private void OnExceptionOccurred(Exception exception)
         {
-            AddLine($"Exception: {exception}");
-        }
-
-        private void AddLine(string text)
-        {
-            rtb.Invoke(new Action(delegate
-            {
-                rtb.Text += $@"{text}{Environment.NewLine}";
-            }));
+            AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
         }
 
         private void UpdateClientList()
@@ -608,22 +605,22 @@ namespace ClearDashboardPlugin
             }
             else
             {
+                sMsg += $"{Environment.NewLine}";
                 switch (color)
                 {
                     case MsgColor.Blue:
-                        cRTB.AppendText(sMsg + "\n", Color.Blue, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Blue, this.rtb);
                         break;
                     case MsgColor.Red:
-                        cRTB.AppendText(sMsg + "\n", Color.Red, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Red, this.rtb);
                         break;
                     case MsgColor.Green:
-                        cRTB.AppendText(sMsg + "\n", Color.Green, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Green, this.rtb);
                         break;
                     case MsgColor.Orange:
-                        cRTB.AppendText(sMsg + "\n", Color.Orange, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Orange, this.rtb);
                         break;
                 }
-
             }
         }
 
@@ -679,87 +676,80 @@ namespace ClearDashboardPlugin
         }
 
 
-        //private async Task ShowUSFMScripture()
-        //{
-        //    IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
-        //    List<string> lines = new List<string>();
-        //    foreach (var token in tokens)
-        //    {
-        //        if (token is IUSFMMarkerToken marker)
-        //        {
-        //            switch (marker.Type)
-        //            {
-        //                case MarkerType.Verse:
-        //                    lines.Add($"v {marker.Data}");
-        //                    break;
-        //                case MarkerType.Book:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Chapter:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Character:
-        //                    lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Milestone:
-        //                    lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.MilestoneEnd:
-        //                    lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.End:
-        //                    lines.Add($"Marker End: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Note:
-        //                    lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Unknown:
-        //                    lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Paragraph:
-        //                    lines.Add($" {marker.Marker} {marker.Data}");
-        //                    break;
-        //            }
-        //        }
-        //        else if (token is IUSFMTextToken textToken)
-        //        {
-        //            if (lines.Count > 0)
-        //            {
-        //                lines[lines.Count - 1] += (textToken.Text);
-        //            }
-        //            else
-        //            {
-        //                lines.Add(textToken.Text);
-        //            }
-        //        }
-        //        else if (token is IUSFMAttributeToken)
-        //        {
-        //            lines.Add("Attribute Token: " + token.ToString());
-        //        }
-        //        else
-        //        {
-        //            lines.Add("Unexpected token type: " + token.ToString());
-        //        }
-        //    }
+        private async Task ShowUSFMScripture()
+        {
+            IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
+            List<string> lines = new List<string>();
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    switch (marker.Type)
+                    {
+                        case MarkerType.Verse:
+                            lines.Add($"v {marker.Data}");
+                            break;
+                        case MarkerType.Book:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Chapter:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Character:
+                            lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Milestone:
+                            lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.MilestoneEnd:
+                            lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.End:
+                            lines.Add($"Marker End: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Note:
+                            lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Unknown:
+                            lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Paragraph:
+                            lines.Add($" {marker.Marker} {marker.Data}");
+                            break;
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (lines.Count > 0)
+                    {
+                        lines[lines.Count - 1] += (textToken.Text);
+                    }
+                    else
+                    {
+                        lines.Add(textToken.Text);
+                    }
+                }
+                else if (token is IUSFMAttributeToken)
+                {
+                    lines.Add("Attribute Token: " + token.ToString());
+                }
+                else
+                {
+                    lines.Add("Unexpected token type: " + token.ToString());
+                }
+            }
 
-        //    var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
-        //        new JsonSerializerSettings()
-        //        {
-        //            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //        });
+            var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
 
-        //    NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.TargetVerseText, "", dataPayload);
-        //    var msgSend = msgOut.CreateMessage();
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-        //    AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
-
-        //    await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-        //    AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-        //}
+            //PipeMessage msgOut = new PipeMessage(ActionType.SetTargetVerseText, "", dataPayload);
+            //var msgSend = msgOut.CreateMessage();
+            //AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
+            //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+            //AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
+        }
     }
 }

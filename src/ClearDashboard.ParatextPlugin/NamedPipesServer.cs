@@ -38,8 +38,9 @@ namespace ClearDashboard.ParatextPlugin
             {
                 await args.Connection.WriteAsync(new PipeMessage
                 {
-                    Action = ActionType.SendText,
-                    Text = "Hi from server"
+                    Action = ActionType.OnDisconnected,
+                    Text = "Server Disconnecting",
+                    Payload = null
                 });
             }
             catch (Exception e)

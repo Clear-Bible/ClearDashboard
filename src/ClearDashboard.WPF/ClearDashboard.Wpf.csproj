@@ -43,6 +43,7 @@
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
 		<PackageReference Include="MdXaml" Version="1.13.0" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
@@ -107,6 +108,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+		<ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

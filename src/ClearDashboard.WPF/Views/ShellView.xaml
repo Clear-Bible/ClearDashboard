@@ -48,8 +48,27 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
+
+                    <materialDesign:PackIcon
+                        Width="25"
+                        Height="25"
+                        VerticalAlignment="Center">
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="materialDesign:PackIcon">
+                                <Setter Property="Kind" Value="LanDisconnect" />
+                                <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Connected}" Value="True">
+                                        <Setter Property="Kind" Value="LanConnect" />
+                                        <Setter Property="Foreground" Value="{DynamicResource GreenMidBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+
                     <TextBlock
-                        Margin="0,0,5,0"
+                        Margin="5,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
@@ -134,8 +153,8 @@
             </Grid>
         </Border>
 
-        <!-- 
-            NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be 
+        <!--
+            NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be
             added to the DI container at the appropriate time.
         -->
         <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->

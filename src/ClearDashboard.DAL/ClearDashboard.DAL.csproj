@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
     <ProjectReference Include="..\NamedPipes\NamedPipes.csproj" />
+    <ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

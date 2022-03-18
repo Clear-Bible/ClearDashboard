@@ -79,7 +79,20 @@ namespace ConsoleAppNamedPipes
 
         private static void OnMessageReceivedAsync(PipeMessage message)
         {
-            Console.WriteLine(message.Text);
+            switch (message.Action)
+            {
+                case ActionType.SendText:
+                    Console.WriteLine(message.Text);
+                    break;
+                case ActionType.OnConnected:
+                    Console.WriteLine(message.Action.ToString() + ": " + message.Text);
+                    break;
+                default:
+                    Console.WriteLine(message.Action.ToString() + ": " + message.Text);
+                    break;
+            }
+
+            //Console.WriteLine(message.Text);
         }
     }
 }
