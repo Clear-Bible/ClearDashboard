@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using System.Windows.Input;
+using System.Windows.Media;
 using ClearDashboard.Wpf.Helpers;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.Wpf.ViewModels.Panes
 {
-	using System.IO;
-	using System.Windows.Input;
-	using System.Windows.Media;
 
 	public class FileViewModel : PaneViewModel
 	{

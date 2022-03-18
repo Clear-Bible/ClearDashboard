@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ClearDashboard.DAL.Models
+namespace ClearDashboard.DataAccessLayer.Models
 {
     public static class ENums
     {

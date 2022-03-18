@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using ClearDashboard.Wpf.Helpers;
 using Caliburn.Micro;
+using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -13,7 +15,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class DashboardViewModel : PaneViewModel
     {
         #region Member Variables
-        private readonly ILog _logger;
+        private readonly ILogger<DashboardViewModel> _logger;
         private bool _firstLoad;
 
         #endregion //Member Variables
@@ -40,7 +42,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public DashboardViewModel(ILog logger)
+        public DashboardViewModel(ILogger<DashboardViewModel> logger)
         {
             _logger = logger;
             Initialize();

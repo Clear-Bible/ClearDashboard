@@ -1,15 +1,4 @@
-﻿using ClearDashboard.Common;
-using ClearDashboard.Common.Models;
-using ClearDashboard.DAL;
-using MvvmHelpers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClearDashboard.Wpf.ViewModels
+﻿namespace ClearDashboard.Wpf.ViewModels.Panes
 {
     /// <summary>
     /// 

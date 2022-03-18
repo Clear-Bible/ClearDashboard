@@ -1,11 +1,9 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using ClearDashboard.Common;
+using Dapper;
 
-namespace ClearDashboard.DAL
+namespace ClearDashboard.DataAccessLayer.Dapper
 {
     /// <summary>
     /// Used by Dapper to convert datatypes between the db and POCOs.

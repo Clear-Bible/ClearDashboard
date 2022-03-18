@@ -1,12 +1,7 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.Events;
-using ClearDashboard.DAL.NamedPipes;
+using ClearDashboard.DataAccessLayer.Events;
 
-namespace ClearDashboard.DAL
+namespace ClearDashboard.DataAccessLayer
 {
     public class StartUp
     {

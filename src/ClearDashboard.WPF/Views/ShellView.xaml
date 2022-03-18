@@ -138,7 +138,7 @@
             NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be 
             added to the DI container at the appropriate time.
         -->
-        <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)"  Grid.Row="1" NavigationUIVisibility="Hidden" />-->
+        <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
 
     </Grid>
 </Window>

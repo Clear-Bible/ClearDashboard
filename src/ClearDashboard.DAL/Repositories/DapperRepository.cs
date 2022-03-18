@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ClearDashboard.DataAccessLayer.Dapper;
 
-namespace ClearDashboard.DAL.Repositories
+namespace ClearDashboard.DataAccessLayer.Repositories
 {
     /// <summary>
     /// This parent class should be inherited by any class that you use to hold a list of data from the DB.
@@ -21,7 +21,7 @@ namespace ClearDashboard.DAL.Repositories
 
         internal string DatabaseFilePathName { get; set; }
 
-        internal Dapper.DapperDataProvider Db { get; set; }
+        internal DapperDataProvider Db { get; set; }
 
         /// <summary>
         /// Allows for easy change of the table abbr. We want developers to be able to save objects in different tables.
