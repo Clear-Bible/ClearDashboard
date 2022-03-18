@@ -18,6 +18,7 @@ using AvalonDock.Layout.Serialization;
 using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.Views
 {

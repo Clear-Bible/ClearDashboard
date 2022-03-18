@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.Wpf.ViewModels
+﻿using ClearDashboard.Wpf.ViewModels.Panes;
+
+namespace ClearDashboard.Wpf.ViewModels
 {
     public class AlignmentToolViewModel: PaneViewModel
     {

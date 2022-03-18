@@ -6,8 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
-using ClearDashboard.Common.Models;
+using ClearDashboard.Wpf.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using AvalonDock.Layout;
 
-namespace ClearDashboard.Wpf.UserControls
+namespace ClearDashboard.Wpf.Views.Panes
 {
-    using System.Linq;
-    using AvalonDock.Layout;
-
     public class LayoutInitializer : ILayoutUpdateStrategy
     {
         public bool BeforeInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableToShow, ILayoutContainer destinationContainer)

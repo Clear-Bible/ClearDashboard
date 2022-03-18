@@ -1,9 +1,7 @@
 using System;
-using System.ComponentModel;
-using System.Threading.Channels;
-using ClearDashboard.DAL.Events;
+using ClearDashboard.DataAccessLayer.Events;
 
-namespace ClearDashboard.DAL
+namespace ClearDashboard.DataAccessLayer
 {
     public class StartUp
     {

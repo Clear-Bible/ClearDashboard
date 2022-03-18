@@ -1,15 +1,14 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Models;
-using ClearDashboard.DAL.Dapper;
+using ClearDashboard.DataAccessLayer.Models;
+using Dapper;
 
-namespace ClearDashboard.DAL.Dapper
+namespace ClearDashboard.DataAccessLayer.Dapper
 {
     /// <summary>
     /// An adapter for the Sqlite DB that allows any Plain Old C Object (POCO) to be filled

@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using ClearDashboard.Common;
-using ClearDashboard.DAL.Models;
+using ClearDashboard.DataAccessLayer.Models;
 
-namespace ClearDashboard.DAL.Repositories
+namespace ClearDashboard.DataAccessLayer.Repositories
 {
     public class NoteTagListRepository : DapperRepository
     {

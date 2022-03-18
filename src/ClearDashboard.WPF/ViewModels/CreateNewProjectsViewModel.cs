@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL.Paratext;
 using ClearDashboard.Wpf.Helpers;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
@@ -13,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Paratext;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

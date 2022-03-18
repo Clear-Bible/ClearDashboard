@@ -13,7 +13,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Context;
 using Microsoft.Extensions.Configuration;
+using ClearDashboard.DataAccessLayer.Extensions;
 
 namespace ClearDashboard.Wpf
 {
@@ -39,16 +41,28 @@ namespace ClearDashboard.Wpf
                 .Build();
 
             SetupLogging();
+            EnsureDatabase();
+
             Initialize();
 
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
+
+        private void EnsureDatabase()
+        {
+            // Ask for the database context.  This will create the database
+            // and apply migrations if required.
+            _ = Host.Services.GetService<AlignmentContext>();
+        }
+
         #endregion
 
         #region Configure
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
+
+            serviceCollection.AddAlignmentDatabase("alignment.sqlite");
 
             // wire up the interfaces required by Caliburn.Micro
             serviceCollection.AddSingleton<IWindowManager, WindowManager>();
@@ -152,11 +166,13 @@ namespace ClearDashboard.Wpf
         }
         #endregion
 
+        #region Application exit
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger.LogInformation("ClearDashboard application is exiting.");
             base.OnExit(sender, e);
         }
+        #endregion
 
         #region Global error handling
         /// <summary>

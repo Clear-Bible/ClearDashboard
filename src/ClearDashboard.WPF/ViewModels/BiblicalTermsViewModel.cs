@@ -1,6 +1,5 @@
 ﻿using ClearDashboard.Common;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL;
 using MvvmHelpers;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using ClearDashboard.Wpf.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

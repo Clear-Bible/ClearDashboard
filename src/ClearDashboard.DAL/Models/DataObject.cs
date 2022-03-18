@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ClearDashboard.DAL.Models
+namespace ClearDashboard.DataAccessLayer.Models
 {
     /// <summary>
     /// Abstract class to be inherited by data object classes so that the CRUD statements can be called for any data object in a uniform manner.
