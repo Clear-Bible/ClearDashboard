@@ -34,11 +34,8 @@ namespace ClearDashboard.DAL.Tests
             //Allow the database files to be create.
             await Task.Delay(TimeSpan.FromSeconds(30));
 
-
             File.Delete(databaseName);
             Directory.Delete(projectDirectory);
-
-
         }
     }
 }
