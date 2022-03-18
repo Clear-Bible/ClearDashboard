@@ -180,7 +180,7 @@ namespace ClearDashboardPlugin
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
                 base.BindToName(serializedType, out assemblyName, out typeName);
-                assemblyName = "Pipes_Shared, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null";
+                assemblyName = "Pipes_Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
             }
         }
 
