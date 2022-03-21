@@ -7,6 +7,8 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
+
+
     public class StartUp
     {
         #region Events
@@ -35,10 +37,6 @@ namespace ClearDashboard.DataAccessLayer
                 TaskContinuationOptions.OnlyOnFaulted);
 
             NamedPipesClient.Instance.NamedPipeChanged += HandleEvent;
-
-
-
-            GetParatextUserName();
         }
 
         #endregion

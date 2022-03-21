@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Properties
 
         //Connection to the DAL
-        StartUp _startup;
+        private StartUp _DAL;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -137,9 +137,8 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger) : base(navigationService, logger)
+        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
-           
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
@@ -151,15 +150,18 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
+            _DAL = dal;
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            _startup = new StartUp();
-            _startup.NamedPipeChanged += HandleEvent;
+            //_DAL = new StartUp();
+            _DAL.NamedPipeChanged += HandleEvent;
+
+            _DAL.GetParatextUserName();
         }
 
         protected override void Dispose(bool disposing)
         {
             StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            _startup.NamedPipeChanged -= HandleEvent;
+            _DAL.NamedPipeChanged -= HandleEvent;
 
             base.Dispose(disposing);
         }
@@ -174,7 +176,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            _startup.OnClosing();
+            _DAL.OnClosing();
 
             return base.CanCloseAsync(cancellationToken);
         }
