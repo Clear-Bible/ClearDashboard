@@ -1,10 +1,9 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.Wpf.ViewModels;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using Caliburn.Micro;
 
-namespace ClearDashboard.Wpf.Models.Menus
+namespace ClearDashboard.Wpf.ViewModels.Menus
 {
     public class MenuItemViewModel : PropertyChangedBase
     {

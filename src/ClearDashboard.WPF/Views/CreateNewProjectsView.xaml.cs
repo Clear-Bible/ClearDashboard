@@ -57,18 +57,18 @@ namespace ClearDashboard.Wpf.Views
         public CreateNewProjectsView()
         {
             InitializeComponent();
+
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             DrawTheCanvas();
 
-
+            // NG:  GERFEN - move this call to CreateNewProjectViewModel.OnViewAttached();
             if (this.DataContext is CreateNewProjectsViewModel)
             {
                 _vm = (CreateNewProjectsViewModel)this.DataContext;
-
-                _vm.Init();
+                await _vm.Init();
             }
         }
 

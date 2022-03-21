@@ -1,82 +1,180 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
-using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
-using Action = System.Action;
+using ClearDashboard.DataAccessLayer.Context;
+using Microsoft.Extensions.Configuration;
+using ClearDashboard.DataAccessLayer.Extensions;
 
 namespace ClearDashboard.Wpf
 {
     public class Bootstrapper : BootstrapperBase
     {
-        #region Props
+        #region Properties
 
-        private SimpleContainer _container;
-        private Log _log;
+        protected FrameSet FrameSet { get; private set; }
+        public static IHost Host { get; private set; }
+        protected ILogger<Bootstrapper> Logger { get; private set; }
 
         #endregion
 
-        #region Startup
+        #region Contructor
 
         public Bootstrapper()
         {
-            Initialize();
+            Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    ConfigureServices(services);
+                })
+                .Build();
 
+            SetupLogging();
+            EnsureDatabase();
+
+            Initialize();
 
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
 
+        private void EnsureDatabase()
+        {
+            // Ask for the database context.  This will create the database
+            // and apply migrations if required.
+            _ = Host.Services.GetService<AlignmentContext>();
+        }
+
         #endregion
 
-
-        protected override void Configure()
+        #region Configure
+        protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
-            _log = new Log();
 
-            // put a reference into the App
-            ((App)Application.Current).Log = _log;
+            serviceCollection.AddAlignmentDatabase("alignment.sqlite");
 
+            // wire up the interfaces required by Caliburn.Micro
+            serviceCollection.AddSingleton<IWindowManager, WindowManager>();
+            serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
 
-            _container = new SimpleContainer();
-            _container.Instance(_container);
-            _container.Singleton<ILog, Log>();
+            // Register the FrameAdapter which wraps a Frame as INavigationService
+            FrameSet = new FrameSet();
+            serviceCollection.AddSingleton<INavigationService>(sp=> FrameSet.NavigationService);
+            
+            // wire up all of the view models in the project.
+            GetType().Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith("ViewModel"))
+                .ToList()
+                .ForEach(viewModelType => serviceCollection.AddScoped(viewModelType));
 
-            _container
-                .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>()
+            serviceCollection.AddLogging();
 
-                .PerRequest<ShellViewModel>()
-                .PerRequest<CreateNewProjectsViewModel>()
-                .PerRequest<SettingsViewModel>()
-                .PerRequest<WorkSpaceViewModel>();
+            
         }
 
+        #endregion
+
+        #region Startup
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            Logger.LogInformation("ClearDashboard application is starting.");
+
+            // Allow the ShellView to be created.
             await DisplayRootViewForAsync<ShellViewModel>();
+
+            // Now add the Frame to be added to the Grid in ShellView
+            AddFrameToMainWindow(FrameSet.Frame);
+
+            // Navigate to the LandingView.
+            FrameSet.NavigationService.NavigateToViewModel(typeof(LandingViewModel));
         }
+
+        /// <summary>
+        /// Adds the Frame to the Grid control on the ShellView
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <exception cref="NullReferenceException"></exception>
+        private void AddFrameToMainWindow(Frame frame)
+        {
+            Logger.LogInformation("Adding Frame to ShellView grid control.");
+
+            var mainWindow = Application.MainWindow;
+            if (mainWindow == null)
+            {
+                throw new NullReferenceException("'Application.MainWindow' is null.");
+            }
+
+
+            if (mainWindow.Content is not Grid grid)
+            {
+                throw new NullReferenceException("The grid on 'Application.MainWindow' is null.");
+            }
+
+            Grid.SetRow(frame, 1);
+            Grid.SetColumn(frame, 0);
+            grid.Children.Add(frame);
+        }
+
+        #endregion
+
+        #region DependencyInjection
 
         protected override object GetInstance(Type service, string key)
         {
-            return _container.GetInstance(service, key);
+            return Host.Services.GetService(service);
         }
 
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return _container.GetAllInstances(service);
+            return Host.Services.GetServices(service);
         }
+        #endregion
 
-        protected override void BuildUp(object instance)
+        #region Logging
+        private void SetupLogging()
         {
-            _container.BuildUp(instance);
+
+            var fullPath = Path.Combine(Environment.CurrentDirectory, "Logs\\ClearDashboard.log");
+            var level = LogEventLevel.Information;
+#if DEBUG
+            level = LogEventLevel.Verbose;
+#endif
+            var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
+
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Is(level)
+                .WriteTo.File(fullPath, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
+                .WriteTo.Debug(outputTemplate: outputTemplate)
+                .CreateLogger();
+
+            var loggerFactory = Host.Services.GetService<ILoggerFactory>();
+            loggerFactory.AddSerilog(log);
+
+            Logger = Host.Services.GetService<ILogger<Bootstrapper>>();
         }
+        #endregion
 
+        #region Application exit
+        protected override void OnExit(object sender, EventArgs e)
+        {
+            Logger.LogInformation("ClearDashboard application is exiting.");
+            base.OnExit(sender, e);
+        }
+        #endregion
 
+        #region Global error handling
         /// <summary>
         /// Handle the system wide exceptions
         /// </summary>
@@ -85,10 +183,11 @@ namespace ClearDashboard.Wpf
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            
+
             // write to the log file
-            _log.Error(e.Exception);
+            Logger.LogError(e.Exception, "An unhandled error as occurred");
             MessageBox.Show(e.Exception.Message, "An error as occurred", MessageBoxButton.OK);
         }
+        #endregion 
     }
 }

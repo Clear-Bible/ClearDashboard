@@ -1,20 +1,29 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.Wpf.Views;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class SettingsViewModel: PropertyChangedBase
+    public class SettingsViewModel : ApplicationScreen
     {
-        private readonly ILog _logger;
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();
 
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
         public SettingsViewModel()
         {
-            _logger = ((App)Application.Current).Log;
-            observableCollection.Add(new ItemInfo() { ImagePath = @"D:\Projects-GBI\ClearDashboard\src\ClearDashboard.Wpf\Resources\NewProject_Icon_96.png", ImageName = "NEW" });
-            observableCollection.Add(new ItemInfo() { ImagePath = @"D:\Projects-GBI\ClearDashboard\src\ClearDashboard.Wpf\Resources\settings_logo_96.png", ImageName = "SETTINGS" });
+
+        }
+
+        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger) : base(navigationService, logger)
+        {
+            observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/NewProject_Icon_96.png", ImageName = "NEW" });
+            observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/settings_logo_96.png", ImageName = "SETTINGS" });
         }
     }
 }

@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Views.ShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -12,7 +13,8 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     x:Uid="Window_1"
     Title="ClearDashboard"
-    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="800"
     d:DesignWidth="1200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -26,18 +28,11 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-
-    <Window.DataContext>
-        <viewModels:ShellViewModel x:Uid="viewModels:ShellViewModel_1" />
-    </Window.DataContext>
-
-    <Grid>
+    <Grid x:Name="ShellViewGRid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-
         <Border
             Grid.Row="0"
             BorderBrush="{StaticResource BlueDarkBrush}"
@@ -53,8 +48,22 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
+                    <Image>
+                        <Image.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Connected}" Value="True">
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Connected}" Value="False">
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                     <TextBlock
-                        Margin="0,0,5,0"
+                        Margin="5,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
@@ -139,9 +148,11 @@
             </Grid>
         </Border>
 
-        <Frame
-            Grid.Row="1"
-            NavigationUIVisibility="Hidden"
-            Source="/Views/LandingView.xaml" />
+        <!--
+            NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be
+            added to the DI container at the appropriate time.
+        -->
+        <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
+
     </Grid>
 </Window>

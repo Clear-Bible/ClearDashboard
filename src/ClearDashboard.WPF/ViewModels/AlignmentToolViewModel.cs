@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.Wpf.ViewModels
+﻿using ClearDashboard.Wpf.ViewModels.Panes;
+
+namespace ClearDashboard.Wpf.ViewModels
 {
     public class AlignmentToolViewModel: PaneViewModel
     {
@@ -18,6 +20,11 @@
         #endregion //Observable Properties
 
         #region Constructor
+        public AlignmentToolViewModel()
+        {
+            this.Title = "⳼ ALIGNMENT TOOL";
+            this.ContentId = "ALIGNMENTTOOL";
+        }
 
         #endregion //Constructor
 
@@ -25,10 +32,6 @@
 
         #endregion // Methods
 
-        public AlignmentToolViewModel()
-        {
-            this.Title = "⳼ ALIGNMENT TOOL";
-            this.ContentId = "ALIGNMENTTOOL";
-        }
+
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClearDashboard.Wpf.Models.Menus
+namespace ClearDashboard.Wpf.ViewModels.Menus
 {
     public class CommandViewModel : ICommand
     {

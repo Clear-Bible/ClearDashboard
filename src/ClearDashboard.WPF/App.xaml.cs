@@ -1,7 +1,6 @@
 ﻿using System;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
-using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using Action = System.Action;
 
@@ -12,7 +11,7 @@ namespace ClearDashboard.Wpf
     /// </summary>
     public partial class App : Application
     {
-        public ILog Log { get; set; }
+       // public ILog Log { get; set; }
 
 
         private DashboardProject _selectedDashboardProject = new DashboardProject();

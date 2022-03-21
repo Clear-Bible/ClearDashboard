@@ -18,6 +18,7 @@ using AvalonDock.Layout.Serialization;
 using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -35,16 +36,21 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
 
-            _vm = this.DataContext as WorkSpaceViewModel;
+            //---------------------------------------------------------------------------------------------------------
+            // NB;  GERFEN - moved the follwoing code to Page_Loaded so that CM can complete the DataContext wire up.
 
-            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) =>
-            {
-                // listen for the menu changes
-                if (args.PropertyName.Equals("WindowIDToLoad"))
-                    UnHideWindow(_vm.WindowIDToLoad);
-                    return;
-            };
+            //_vm = this.DataContext as WorkSpaceViewModel;
+
+            //INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            //viewModel.PropertyChanged += (sender, args) =>
+            //{
+            //    // listen for the menu changes
+            //    if (args.PropertyName.Equals("WindowIDToLoad"))
+            //        UnHideWindow(_vm.WindowIDToLoad);
+            //        return;
+            //};
+
+            //----------------------------------------------------------------------------------------------------------
 
 
             //// Add in a toolpane
@@ -131,9 +137,27 @@ namespace ClearDashboard.Wpf.Views
 
         }
 
+     
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+
+
+            _vm = this.DataContext as WorkSpaceViewModel;
+
+            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                // listen for the menu changes
+                if (args.PropertyName.Equals("WindowIDToLoad"))
+                    UnHideWindow(_vm.WindowIDToLoad);
+                return;
+            };
+
             _vm.Init();
+
+
+
         }
 
         #endregion

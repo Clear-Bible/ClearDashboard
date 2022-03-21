@@ -21,11 +21,9 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:LandingViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
-    <Page.DataContext>
-        <viewModels:LandingViewModel x:Uid="viewModels:LandingViewModel" />
-    </Page.DataContext>
 
     <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
 
@@ -39,25 +37,25 @@
             Grid.Row="0"
             Margin="5">
             <helpers:NavButton
-                x:Uid="helpers:NavButton_1"
                 Width="128"
                 Height="128"
+                x:Name="CreateNewProject"
                 ImageSource="/Resources/NewProject_Icon_128.png"
-                NavUri="/Views/CreateNewProjectsView.xaml"
-                Text="{helpers:Loc Landing_newproject}" />
+               Text="{helpers:Loc Landing_newproject}"/>
             <helpers:NavButton
                 x:Uid="helpers:NavButton_2"
                 Width="128"
                 Height="128"
+                x:Name="Settings"
                 ImageSource="/Resources/settings_logo_128.png"
-                NavUri="/Views/SettingsView.xaml"
                 Text="{helpers:Loc Landing_settings}" />
             <helpers:NavButton
                 x:Uid="helpers:NavButton_3"
                 Width="128"
                 Height="128"
+                x:Name="Workspace"
                 ImageSource="/Resources/settings_logo_128.png"
-                NavUri="/Views/WorkSpaceView.xaml"
+               
                 Text="{helpers:Loc Landing_project}" />
         </WrapPanel>
 

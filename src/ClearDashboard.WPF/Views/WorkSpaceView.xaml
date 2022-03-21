@@ -7,10 +7,10 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:ClearDashboard.Wpf.Models.Menus"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.ViewModels.Menus"
+    xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
     x:Uid="Page_1"
     Title="WorkSpaceView"
     d:DesignHeight="450"
@@ -23,15 +23,13 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
-    <Page.DataContext>
-        <viewModels:WorkSpaceViewModel x:Uid="viewModels:WorkSpaceViewModel_1" />
-    </Page.DataContext>
-    <Page.Resources>
+   <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" x:Uid="converters:ActiveDocumentConverter_1" />
         <system:Boolean x:Key="TRUE" x:Uid="system:Boolean_1">True</system:Boolean>
         <system:Boolean x:Key="FALSE" x:Uid="system:Boolean_2">False</system:Boolean>
-        <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" x:Uid="BoolToVisibilityConverter_1" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" x:Uid="BoolToVisibilityConverter_1" />
     </Page.Resources>
 
     <Grid x:Uid="Grid_1">
@@ -130,97 +128,97 @@
             DocumentsSource="{Binding Files}"
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
-                <userControls:PanesTemplateSelector x:Uid="userControls:PanesTemplateSelector_1">
+                <panes:PanesTemplateSelector x:Uid="userControls:PanesTemplateSelector_1">
                     <!--  DOCUMENTS  -->
-                    <userControls:PanesTemplateSelector.ConcordanceViewTemplate>
+                    <panes:PanesTemplateSelector.ConcordanceViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_1">
                             <local:Concordance x:Uid="local:Concordance_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.ConcordanceViewTemplate>
+                    </panes:PanesTemplateSelector.ConcordanceViewTemplate>
 
-                    <userControls:PanesTemplateSelector.DashboardViewTemplate>
+                    <panes:PanesTemplateSelector.DashboardViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_2">
-                            <local:Dashboard x:Uid="local:Dashboard_1" />
+                            <local:DashboardView x:Uid="local:Dashboard_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.DashboardViewTemplate>
+                    </panes:PanesTemplateSelector.DashboardViewTemplate>
 
-                    <userControls:PanesTemplateSelector.AlignmentToolViewTemplate>
+                    <panes:PanesTemplateSelector.AlignmentToolViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_3">
                             <local:AlignmentTool x:Uid="local:AlignmentTool_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.AlignmentToolViewTemplate>
+                    </panes:PanesTemplateSelector.AlignmentToolViewTemplate>
 
-                    <userControls:PanesTemplateSelector.TreeDownViewTemplate>
+                    <panes:PanesTemplateSelector.TreeDownViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_4">
-                            <local:TreeDown x:Uid="local:TreeDown_1" />
+                            <local:TreeDownView x:Uid="local:TreeDown_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.TreeDownViewTemplate>
+                    </panes:PanesTemplateSelector.TreeDownViewTemplate>
 
-                    <userControls:PanesTemplateSelector.StartPageViewTemplate>
+                    <panes:PanesTemplateSelector.StartPageViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_5">
-                            <local:StartPage x:Uid="local:StartPage_1" />
+                            <local:StartPageView x:Uid="local:StartPage_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.StartPageViewTemplate>
+                    </panes:PanesTemplateSelector.StartPageViewTemplate>
 
                     <!--  TOOLS  -->
-                    <userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
+                    <panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_6">
                             <local:BiblicalTerms x:Uid="local:BiblicalTerms_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.BiblicalTermsViewTemplate>
+                    </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
-                    <userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
+                    <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_7">
-                            <local:WordMeanings x:Uid="local:WordMeanings_1" />
+                            <local:WordMeaningsView x:Uid="local:WordMeanings_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.WordMeaningsViewTemplate>
+                    </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
 
-                    <userControls:PanesTemplateSelector.SourceContextViewTemplate>
+                    <panes:PanesTemplateSelector.SourceContextViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_8">
-                            <local:SourceContext x:Uid="local:SourceContext_1" />
+                            <local:SourceContextView x:Uid="local:SourceContext_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.SourceContextViewTemplate>
+                    </panes:PanesTemplateSelector.SourceContextViewTemplate>
 
-                    <userControls:PanesTemplateSelector.TargetContextViewTemplate>
+                    <panes:PanesTemplateSelector.TargetContextViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_9">
-                            <local:TargetContext x:Uid="local:TargetContext_1" />
+                            <local:TargetContextView x:Uid="local:TargetContext_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.TargetContextViewTemplate>
+                    </panes:PanesTemplateSelector.TargetContextViewTemplate>
 
-                    <userControls:PanesTemplateSelector.NotesViewTemplate>
+                    <panes:PanesTemplateSelector.NotesViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_10">
-                            <local:Notes x:Uid="local:Notes_1" />
+                            <local:NotesView x:Uid="local:Notes_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.NotesViewTemplate>
+                    </panes:PanesTemplateSelector.NotesViewTemplate>
 
-                    <userControls:PanesTemplateSelector.PinsViewTemplate>
+                    <panes:PanesTemplateSelector.PinsViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_11">
-                            <local:PINS x:Uid="local:PINS_1" />
+                            <local:PinsView x:Uid="local:PINS_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.PinsViewTemplate>
+                    </panes:PanesTemplateSelector.PinsViewTemplate>
 
-                    <userControls:PanesTemplateSelector.TextCollectionViewTemplate>
+                    <panes:PanesTemplateSelector.TextCollectionViewTemplate>
                         <DataTemplate x:Uid="DataTemplate_12">
-                            <local:TextCollections x:Uid="local:TextCollections_1" />
+                            <local:TextCollectionsView x:Uid="local:TextCollections_1" />
                         </DataTemplate>
-                    </userControls:PanesTemplateSelector.TextCollectionViewTemplate>
+                    </panes:PanesTemplateSelector.TextCollectionViewTemplate>
 
-                </userControls:PanesTemplateSelector>
+                </panes:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>
 
             <DockingManager.LayoutItemContainerStyleSelector>
-                <userControls:PanesStyleSelector x:Uid="userControls:PanesStyleSelector_1">
+                <panes:PanesStyleSelector x:Uid="userControls:PanesStyleSelector_1">
                     <!--  DOCUMENTS  -->
-                    <userControls:PanesStyleSelector.DocumentStyle>
+                    <panes:PanesStyleSelector.DocumentStyle>
                         <Style x:Uid="Style_2" TargetType="{x:Type LayoutItem}">
                             <Setter x:Uid="Setter_3" Property="Title" Value="{Binding Model.Title}" />
                             <Setter x:Uid="Setter_4" Property="IconSource" Value="{Binding Model.IconSource}" />
                             <Setter x:Uid="Setter_5" Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
-                    </userControls:PanesStyleSelector.DocumentStyle>
+                    </panes:PanesStyleSelector.DocumentStyle>
 
                     <!--  TOOLS  -->
-                    <userControls:PanesStyleSelector.ToolStyle>
+                    <panes:PanesStyleSelector.ToolStyle>
                         <Style x:Uid="Style_3" TargetType="{x:Type LayoutAnchorableItem}">
                             <Setter x:Uid="Setter_6" Property="Title" Value="{Binding Model.Title}" />
                             <Setter x:Uid="Setter_7" Property="CanClose" Value="True" />
@@ -230,12 +228,12 @@
                             <Setter x:Uid="Setter_11" Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
                             <Setter x:Uid="Setter_12" Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
                         </Style>
-                    </userControls:PanesStyleSelector.ToolStyle>
+                    </panes:PanesStyleSelector.ToolStyle>
 
-                </userControls:PanesStyleSelector>
+                </panes:PanesStyleSelector>
             </DockingManager.LayoutItemContainerStyleSelector>
             <DockingManager.LayoutUpdateStrategy>
-                <userControls:LayoutInitializer x:Uid="userControls:LayoutInitializer_1" />
+                <panes:LayoutInitializer x:Uid="userControls:LayoutInitializer_1" />
             </DockingManager.LayoutUpdateStrategy>
 
             <LayoutRoot x:Uid="LayoutRoot_1">

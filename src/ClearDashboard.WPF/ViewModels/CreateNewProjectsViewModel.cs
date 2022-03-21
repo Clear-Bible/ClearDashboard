@@ -1,6 +1,7 @@
-﻿using ClearDashboard.Common.Models;
-using ClearDashboard.DAL.Paratext;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Helpers;
+using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
@@ -10,18 +11,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using Caliburn.Micro;
-using MdXaml;
+using ClearDashboard.DataAccessLayer.Paratext;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class CreateNewProjectsViewModel : PropertyChangedBase
+    public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region props
-        private readonly ILog _logger;
-
+      
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
@@ -108,13 +106,25 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        #region Startup
 
+        # region Constructors
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
         public CreateNewProjectsViewModel()
         {
-            _logger = ((App)Application.Current).Log;
+            
+        }
+
+        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger) : base(navigationService, logger)
+        {
+
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
+
+        #endregion
+        #region Startup
 
         public async Task Init()
         {

@@ -1,28 +1,29 @@
-﻿using MvvmHelpers;
-using Newtonsoft.Json;
-using System;
-using System.Reflection;
-using System.Threading;
-using System.Windows.Input;
-using AvalonDock.Properties;
+﻿using AvalonDock.Properties;
 using Caliburn.Micro;
-using ClearDashboard.DAL.Events;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
-
+using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Input;
+using ClearDashboard.DAL.NamedPipes;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Events;
+using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel: Screen
+    public class ShellViewModel : ApplicationScreen
     {
-        #region Props
-
-        private readonly ILog _logger;
-
+        #region Properties
 
         //Connection to the DAL
-        DAL.StartUp _startup;
+        StartUp _startup;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -47,6 +48,19 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => Version);
             }
         }
+
+        private bool _connected;
+
+        public bool Connected
+        {
+            get { return _connected; }
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
+
 
         #endregion
 
@@ -110,29 +124,26 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Startup
 
+
+        /// <summary>
+        /// Required for design-time support
+        /// </summary>
         public ShellViewModel()
         {
 
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            SetLanguage();
-        }
-
-
         /// <summary>
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(ILog logger)
+        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger) : base(navigationService, logger)
         {
-            _logger = logger;
-
-            _logger.Info("In ShellViewModel ctor");
+           
+            Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
-            Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
 
@@ -140,14 +151,56 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
-            DAL.StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            _startup = new DAL.StartUp();
+            StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            _startup = new StartUp();
+            _startup.NamedPipeChanged += HandleEvent;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            _startup.NamedPipeChanged -= HandleEvent;
+
+            base.Dispose(disposing);
+        }
+
+
+        protected override void OnViewLoaded(object view)
+        {
+            SetLanguage();
         }
 
         #endregion
 
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+        {
+            _startup.OnClosing();
+
+            return base.CanCloseAsync(cancellationToken);
+        }
+
+
         #region Methods
 
+        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        {
+            if (args == null) return;
+
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.OnConnected:
+                    this.Connected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    this.Connected = false;
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
+        }
+        
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>

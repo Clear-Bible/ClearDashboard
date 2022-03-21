@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using AvalonDock.Layout;
 using ClearDashboard.Wpf.ViewModels;
 
-namespace ClearDashboard.Wpf.UserControls
+namespace ClearDashboard.Wpf.Views.Panes
 {
-    using AvalonDock.Layout;
-
     class PanesTemplateSelector : DataTemplateSelector
     {
         public PanesTemplateSelector()

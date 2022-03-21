@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>H.Formatters.BinaryFormatter</name>
+    </assembly>
+    <members>
+        <member name="T:H.Formatters.BinaryFormatter">
+            <summary>
+            A formatter that uses <see cref="T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter"/> inside for serialization/deserialization
+            </summary>
+        </member>
+    </members>
+</doc>

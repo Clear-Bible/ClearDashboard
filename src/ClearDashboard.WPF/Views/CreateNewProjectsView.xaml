@@ -15,11 +15,9 @@
     d:DesignWidth="800"
     Loaded="Page_Loaded"
     SizeChanged="Page_SizeChanged"
+    d:DataContext="{d:DesignInstance Type=viewModels:CreateNewProjectsViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
-    <Page.DataContext>
-        <viewModels:CreateNewProjectsViewModel x:Uid="viewModels:CreateNewProjectsViewModel_1" />
-    </Page.DataContext>
 
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
