@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Context;
 using Microsoft.Extensions.Configuration;
 using ClearDashboard.DataAccessLayer.Extensions;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf
 {
@@ -26,6 +27,8 @@ namespace ClearDashboard.Wpf
         protected FrameSet FrameSet { get; private set; }
         public static IHost Host { get; private set; }
         protected ILogger<Bootstrapper> Logger { get; private set; }
+
+        public StartUp DAL { get; set; }
 
         #endregion
 
@@ -67,6 +70,10 @@ namespace ClearDashboard.Wpf
             // wire up the interfaces required by Caliburn.Micro
             serviceCollection.AddSingleton<IWindowManager, WindowManager>();
             serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
+
+            // add in the DAL
+            serviceCollection.AddSingleton<StartUp>();
+
 
             // Register the FrameAdapter which wraps a Frame as INavigationService
             FrameSet = new FrameSet();
