@@ -541,32 +541,32 @@ namespace ClearDashboard.Wpf.Views
 
 
             // Draw circle at connect point (right side)
-            Point rPt = new Point(point.X, point.Y + offset);
-            rPt.X += projectBoxWidth;
-            rPt.Y += projectBoxHeight / 2 - offset;
+            //Point rPt = new Point(point.X, point.Y + offset);
+            //rPt.X += projectBoxWidth;
+            //rPt.Y += projectBoxHeight / 2 - offset;
 
-            Ellipse circlePt = new Ellipse();
-            SolidColorBrush brushCircle = new SolidColorBrush();
-            brushCircle.Color = Colors.AliceBlue;
-            circlePt.Fill = brushCircle;
-            circlePt.StrokeThickness = 1;
-            circlePt.Stroke = Brushes.Black;
+            //Ellipse circlePt = new Ellipse();
+            //SolidColorBrush brushCircle = new SolidColorBrush();
+            //brushCircle.Color = Colors.AliceBlue;
+            //circlePt.Fill = brushCircle;
+            //circlePt.StrokeThickness = 1;
+            //circlePt.Stroke = Brushes.Black;
 
-            // Set the width and height of the Ellipse.
-            circlePt.Width = 8;
-            circlePt.Height = 8;
+            //// Set the width and height of the Ellipse.
+            //circlePt.Width = 8;
+            //circlePt.Height = 8;
 
-            // How to set center of ellipse
-            Canvas.SetTop(circlePt, rPt.Y - 2.5);
-            Canvas.SetLeft(circlePt, rPt.X - 2.5);
-            DrawCanvasBottom.Children.Add(circlePt);
+            //// How to set center of ellipse
+            //Canvas.SetTop(circlePt, rPt.Y - 2.5);
+            //Canvas.SetLeft(circlePt, rPt.X - 2.5);
+            //DrawCanvasBottom.Children.Add(circlePt);
 
             // Draw circle at connect point (left side)
             Point lPt = new Point(point.X, point.Y);
             lPt.Y += projectBoxHeight / 2;
 
-            circlePt = new Ellipse();
-            brushCircle = new SolidColorBrush();
+            var circlePt = new Ellipse();
+            var brushCircle = new SolidColorBrush();
             brushCircle.Color = Colors.AliceBlue;
             circlePt.Fill = brushCircle;
             circlePt.StrokeThickness = 1;
@@ -1103,6 +1103,10 @@ namespace ClearDashboard.Wpf.Views
                     {
                         Debug.WriteLine(exception);
                     }
+                }
+                else if (btn.Uid.StartsWith("IN:"))
+                {
+                    _interlinearizerProject = null;
                 }
                 _vm.SetProjects(_LWCproject, _targetProject, _BackTransProject, _interlinearizerProject);
             }
