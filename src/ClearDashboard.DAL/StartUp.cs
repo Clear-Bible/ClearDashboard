@@ -1,8 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
+using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer.Events;
+using Microsoft.Extensions.Logging;
 using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
@@ -11,6 +14,12 @@ namespace ClearDashboard.DataAccessLayer
 
     public class StartUp
     {
+        #region props
+
+        private readonly ILogger _logger;
+
+        #endregion
+
         #region Events
 
 
@@ -19,6 +28,8 @@ namespace ClearDashboard.DataAccessLayer
 
 
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
+        public string ParatextUserName { get; set; } = "";
+
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
             NamedPipesClient.PipeEventArgs args = new NamedPipesClient.PipeEventArgs(pm);
@@ -29,8 +40,11 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public StartUp()
+        public StartUp(ILogger<StartUp> logger)
         {
+            _logger = logger;
+            _logger.LogInformation("'DAL.Startup' ctor called.");
+
             // Wire up named pipes
             NamedPipesClient.Instance.InitializeAsync().ContinueWith(t =>
                     Debug.WriteLine($"Error while connecting to pipe server: {t.Exception}"),
@@ -66,6 +80,8 @@ namespace ClearDashboard.DataAccessLayer
             Paratext.ParatextUtils paratextUtils = new Paratext.ParatextUtils();
             var user = paratextUtils.GetCurrentParatextUser();
 
+            ParatextUserName = user;
+
             // raise the paratext username event
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
@@ -80,6 +96,31 @@ namespace ClearDashboard.DataAccessLayer
         #endregion
 
 
+        public async Task CreateNewProject(DashboardProject dashboardProject)
+        {
+            // create the new folder
+            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            appPath = Path.Combine(appPath, "ClearDashboard_Projects");
 
+            //check to see if the directory exists already
+            string newDir = Path.Combine(appPath, dashboardProject.ProjectName);
+            if (!Directory.Exists(newDir))
+            {
+                try
+                {
+                    Directory.CreateDirectory(newDir);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"'DAL.CreateNewProject: {ex.Message}");
+                    return;
+                }
+            }
+
+            dashboardProject.ProjectPath = newDir;
+
+            // PASS THIS DOWN TO MICHAEL FOR DATABASE CREATION
+
+        }
     }
 }
