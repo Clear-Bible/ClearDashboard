@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using MvvmHelpers;
 
-namespace ClearDashboard.NamedPipes.Models
+namespace ClearDashboard.Pipes_Shared.Models
 {
     internal class NotesObject : ObservableObject
     {

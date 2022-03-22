@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using MvvmHelpers;
 
-namespace ClearDashboard.NamedPipes.Models
+namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Language : ObservableObject
     {

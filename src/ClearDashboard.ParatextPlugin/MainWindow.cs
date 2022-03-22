@@ -1,22 +1,21 @@
-﻿//using ClearDashboard.NamedPipes.Models;
+﻿using Serilog;
 using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using H.Formatters;
 using H.Pipes;
-using Microsoft.Win32;
-//using NamedPipes;
 using Newtonsoft.Json;
 using Paratext.PluginInterfaces;
+using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using H.Formatters;
-using Pipes_Shared;
+using Pipes_Shared.Models;
+using Serilog.Core;
 
 namespace ClearDashboardPlugin
 {
@@ -71,7 +70,17 @@ namespace ClearDashboardPlugin
         {
             InitializeComponent();
 
-            // set the version information
+            // configure serilog
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .WriteTo.File("Plugin.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            // set instance to global logger
+            Log.Logger = log;
+
+
+            // get the version information
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             lblVersion.Text = string.Format("Plugin Version: {0}", version);
 
@@ -136,6 +145,26 @@ namespace ClearDashboardPlugin
                         Text = "Connected to Paratext",
                         Payload = null
                     }).ConfigureAwait(false);
+
+                    await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.OnConnected }).ConfigureAwait(false);
+
+                    Project proj = BuildProjectObject();
+
+                    var payload = JsonConvert.SerializeObject(proj, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                    await OnMessageReceivedAsync(new PipeMessage
+                    {
+                        Action = ActionType.GetProject,
+                        Text = "Project Object",
+                        Payload = payload
+                    });
+
+
+
                 }
                 catch (Exception exception)
                 {
@@ -161,6 +190,47 @@ namespace ClearDashboardPlugin
             {
                 OnExceptionOccurred(args.Exception);
             };
+        }
+
+        private Project BuildProjectObject()
+        {
+            Project project = new Project();
+            project.ID = m_project.ID;
+            project.LanguageName = m_project.LanguageName;
+            project.ShortName = m_project.ShortName;
+            project.LongName = m_project.LongName;
+            foreach (var users in m_project.NonObserverUsers)
+            {
+                project.NonObservers.Add(users.Name);
+            }
+
+            foreach (var book in m_project.AvailableBooks)
+            {
+                project.AvailableBooks.Add(new BookInfo
+                {
+                    Code = book.Code,
+                    InProjectScope = book.InProjectScope,
+                    Number = book.Number,
+                });
+            }
+
+            project.Language = new ScrLanguageWrapper
+            {
+                FontFamily = m_project.Language.Font.FontFamily,
+                IsRtol = m_project.Language.IsRtoL,
+            };
+
+            switch (m_project.Type)
+            {
+                case Paratext.PluginInterfaces.ProjectType.Standard:
+                    project.Type = Project.ProjectType.Standard;
+                    break;
+                default:
+                    project.Type = Project.ProjectType.NotSelected;
+                    break;
+            }
+
+            return project;
         }
 
         /// <summary>
@@ -214,12 +284,70 @@ namespace ClearDashboardPlugin
             await _PipeServer.DisposeAsync().ConfigureAwait(false);
         }
 
-        private void OnMessageReceivedAsync(PipeMessage message)
+        private async Task OnMessageReceivedAsync(PipeMessage message)
         {
+
+            //PipeMessage msg = null;
+            //try
+            //{
+            //    msg = JsonConvert.DeserializeObject<PipeMessage>(e.String);
+            //}
+            //catch (Exception exception)
+            //{
+            //    msg = null;
+            //    Log.Logger.Error(exception.Message);
+            //    return;
+            //}
+
+
+            // Do the command's action
             switch (message.Action)
             {
                 case ActionType.SendText:
                     AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                    break;
+                case ActionType.GetBibilicalTerms:
+                    //await GetBibilicalTerms(msg);
+                    break;
+                case ActionType.GetTargetVerses:
+                    await ShowUSXScripture().ConfigureAwait(false);
+                    break;
+                case ActionType.GetNotes:
+                    //await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
+                    break;
+                case ActionType.GetProject:
+                    AppendText(MsgColor.Green, "Sending Project Information");
+                    await WriteMessageToPipeAsync(message).ConfigureAwait(false);
+                    AppendText(MsgColor.Green, String.Format($"Project Sent: {m_project.LongName}"));
+                    break;
+                case ActionType.OnConnected:
+                    AppendText(MsgColor.Green, "ClearDashboard Connected");
+
+                    // send the current BCV location of Paratext
+                    var msgOut = new PipeMessage
+                    {
+                        Action = ActionType.CurrentVerse,
+                        Text = m_verseRef.BBBCCCVVV.ToString(),
+                    };
+
+                    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
+                    AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {m_verseRef.ToString()}"));
+
+                    //send out the project
+                    // m_project
+
+
+
+                    //await ShowUSXScripture().ConfigureAwait(false);
+
+                    //await GetBibilicalTerms(msg);
+                    break;
+                case ActionType.OnDisconnected:
+                    AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+
+                    await Task.Delay(2000).ConfigureAwait(true);
+
+                    btnRestart_Click(null, null);
                     break;
                 default:
                     AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
@@ -227,6 +355,17 @@ namespace ClearDashboardPlugin
             }
         }
 
+        private async Task WriteMessageToPipeAsync(PipeMessage msgOut)
+        {
+            try
+            {
+                await _PipeServer.WriteAsync(msgOut).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
+        }
 
         private async void OnLoad(object sender, EventArgs eventArgs)
         {
@@ -235,7 +374,6 @@ namespace ClearDashboardPlugin
                 AppendText(MsgColor.Green, "PipeServer starting...");
                 _ = new PipeMessage();
                 await _PipeServer.StartAsync().ConfigureAwait(false);
-
                 AppendText(MsgColor.Green, "PipeServer is started!");
             }
             catch (Exception exception)
@@ -247,6 +385,8 @@ namespace ClearDashboardPlugin
 
         private void OnExceptionOccurred(Exception exception)
         {
+            // write to Serilog
+            Log.Error($"OnLoad {exception.Message}");
             AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
         }
 
@@ -294,7 +434,7 @@ namespace ClearDashboardPlugin
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
             parent.ProjectChanged += ProjectChanged;
-            //parent.VerseRefChanged += VerseRefChanged;
+            parent.VerseRefChanged += VerseRefChanged;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -302,8 +442,6 @@ namespace ClearDashboardPlugin
             m_host = host;
             m_project = parent.CurrentState.Project;
             m_parent = parent;
-
-            //parent.VerseRefChanged += VerseRefChanged;
         }
 
 
@@ -345,15 +483,15 @@ namespace ClearDashboardPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        //private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        //{
+        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        {
 
-        //    if (newReference != m_verseRef)
-        //    {
-        //        m_verseRef = newReference;
-        //        await ShowUSXScripture().ConfigureAwait(true);
-        //    }
-        //}
+            if (newReference != m_verseRef)
+            {
+                m_verseRef = newReference;
+                await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.CurrentVerse }).ConfigureAwait(false);
+            }
+        }
 
         #endregion overrides - standard functions
 
@@ -365,10 +503,10 @@ namespace ClearDashboardPlugin
         /// <param name="e"></param>
         //private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
         //{
-        //    NamedPipeMessage msg = null;
+        //    PipeMessage msg = null;
         //    try
         //    {
-        //        msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
+        //        msg = JsonConvert.DeserializeObject<PipeMessage>(e.String);
         //    }
         //    catch (Exception exception)
         //    {
@@ -397,7 +535,7 @@ namespace ClearDashboardPlugin
         //            var msgSend = msgOut.CreateMessage();
 
         //            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
+        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}", m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
 
         //            await ShowUSXScripture().ConfigureAwait(false);
 
@@ -535,41 +673,41 @@ namespace ClearDashboardPlugin
         //    }
         //}
 
-        //private async Task ShowUSXScripture()
-        //{
-        //    var temp = m_project.GetUSX(m_verseRef.BookNum);
-        //    if (temp != null)
-        //    {
-        //        var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
-        //            new JsonSerializerSettings()
-        //            {
-        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //            });
+        private async Task ShowUSXScripture()
+        {
+            var temp = m_project.GetUSX(m_verseRef.BookNum);
+            if (temp != null)
+            {
+                var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
 
-        //        //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
-        //        //var msgSend = msgOut.CreateMessage();
+                //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
+                //var msgSend = msgOut.CreateMessage();
 
-        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
+                AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
 
-        //        //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
+                //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-        //        //try
-        //        //{
-        //        //    await _PipeServer.WriteAsync(new PipeMessage
-        //        //    {
-        //        //        Action = NamedPipeMessage.ActionType.SendText,
-        //        //        Text = "Verse Text Sent"
-        //        //    }).ConfigureAwait(false);
-        //        //}
-        //        //catch (Exception exception)
-        //        //{
-        //        //    OnExceptionOccurred(exception);
-        //        //}
+                //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+                //try
+                //{
+                //    await _PipeServer.WriteAsync(new PipeMessage
+                //    {
+                //        Action = NamedPipeMessage.ActionType.SendText,
+                //        Text = "Verse Text Sent"
+                //    }).ConfigureAwait(false);
+                //}
+                //catch (Exception exception)
+                //{
+                //    OnExceptionOccurred(exception);
+                //}
 
-        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-        //    }
-        //}
+                AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
+            }
+        }
 
         /// <summary>
         /// Append colored text to the rich text box
@@ -621,6 +759,9 @@ namespace ClearDashboardPlugin
                         cRTB.AppendText(sMsg, Color.Orange, this.rtb);
                         break;
                 }
+
+                // write to Serilog
+                Log.Information(sMsg);
             }
         }
 

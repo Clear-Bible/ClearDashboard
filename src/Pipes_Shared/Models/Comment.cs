@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using MvvmHelpers;
 
-namespace ClearDashboard.NamedPipes.Models
+namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Comment : ObservableObject
     {
