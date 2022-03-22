@@ -19,14 +19,14 @@ namespace ClearDashboard.DAL.Tests
         public async Task TestMultipleProjects()
         {
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
-            const string projectName = "Project1";
+            const string projectName = "Project5";
 
             Assert.NotNull(factory);
 
-            var context1 = factory.Create(projectName);
+            var context1 = await factory.Create(projectName);
 
             Assert.NotNull(context1);
-            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\{projectName}";
+            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\CLEAR_Projects\\{projectName}";
             var databaseName = $"{projectDirectory}\\{projectName}.sqlite";
             Assert.True(File.Exists(databaseName));
 

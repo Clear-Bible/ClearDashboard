@@ -27,6 +27,7 @@ namespace ClearDashboard.DAL.Tests
         protected virtual void SetupDependencyInjection()
         {
            Services.AddProjectNameDatabaseContextFactory();
+           Services.AddLogging();
         }
     }
 }
