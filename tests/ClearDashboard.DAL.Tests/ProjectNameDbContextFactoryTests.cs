@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Tests
             var context1 = await factory.Create(projectName);
 
             Assert.NotNull(context1);
-            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\CLEAR_Projects\\{projectName}";
+            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
             var databaseName = $"{projectDirectory}\\{projectName}.sqlite";
             Assert.True(File.Exists(databaseName));
 

@@ -93,7 +93,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ObservableCollection<DashboardProject> projectList = new ObservableCollection<DashboardProject>();
 
             string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            appPath = Path.Combine(appPath, "CLEAR_Projects");
+            appPath = Path.Combine(appPath, "ClearDashboard_Projects");
             if (!Directory.Exists(appPath))
             {
                 // need to create that directory
