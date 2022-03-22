@@ -191,7 +191,7 @@ namespace ClearDashboard.DataAccessLayer.Dapper
                 fileName = $"{dbFileNameStr}.sqlite";
             }
 
-            string manDbPath = Path.Combine(appPath, "CLEAR_Projects", "data", fileName);
+            string manDbPath = Path.Combine(appPath, "ClearDashboard_Projects", "data", fileName);
 
             CreateConnection(manDbPath, createFile);
         }
