@@ -1,19 +1,22 @@
-﻿using ClearDashboard.NamedPipes.Models;
+﻿//using ClearDashboard.NamedPipes.Models;
 using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using H.Pipes;
 using Microsoft.Win32;
-using NamedPipes;
+//using NamedPipes;
 using Newtonsoft.Json;
-using NLog;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using H.Formatters;
+using Pipes_Shared;
 
 namespace ClearDashboardPlugin
 {
@@ -34,16 +37,22 @@ namespace ClearDashboardPlugin
         private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
         private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
 
-        private ServerPipe _serverPipe;
+        ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
-        private NLog.ILogger _logger;
 
         private delegate void AppendTextDelegate(string text, StringBuilder sb);
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
 
-        private StringBuilder _sb = new StringBuilder();
+        //private StringBuilder _sb = new StringBuilder();
 
         private Form _parentForm;
+
+
+        // Named Pipe Props
+        private const string PipeName = "ClearDashboard";
+        private PipeServer<PipeMessage> _PipeServer { get; }
+        private ISet<string> Clients { get; } = new HashSet<string>();
+
 
         public enum MsgColor
         {
@@ -69,46 +78,110 @@ namespace ClearDashboardPlugin
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
 
-            // hook up a logger
-            _logger = NLog.LogManager.GetCurrentClassLogger();
-
             bool showErrorMessage = true;
 
-            // check to see if ClearSuite is installed
-            if (CheckIfClearSuiteInstalledAsync())
+            //// check to see if ClearSuite is installed
+            //if (CheckIfClearSuiteInstalledAsync())
+            //{
+            //    if (_clearSuitePath != string.Empty)
+            //    {
+            //        // launch ClearEngineController
+            //        try
+            //        {
+            //            //using (Process proc = new Process())
+            //            //{
+            //            //    proc.StartInfo.FileName = _clearSuitePath;
+            //            //    proc.StartInfo.UseShellExecute = true;
+            //            //    proc.Start();
+            //            //}
+
+            //            showErrorMessage = false;
+            //        }
+            //        catch (Exception)
+            //        {
+            //            showErrorMessage = true;
+            //            AppendText(MsgColor.Red, "ClearSuite Not Detected ERROR");
+            //        }
+            //    }
+            //}
+
+
+            //if (showErrorMessage)
+            //{
+            //    // TODO Do some alert now that ClearSuite is NOT installed
+            //}
+
+
+            Load += OnLoad;
+
+            var formatter = new BinaryFormatter();
+            formatter.InternalFormatter.Binder = new CustomizedBinder();
+            _PipeServer = new PipeServer<PipeMessage>(PipeName, formatter: formatter);
+
+            //_PipeServer = new PipeServer<PipeMessage>(PipeName);
+            _ = new PipeMessage();
+            _PipeServer.ClientConnected += async (o, args) =>
             {
-                if (_clearSuitePath != string.Empty)
+                Clients.Add(args.Connection.PipeName);
+                UpdateClientList();
+
+                AppendText(MsgColor.Green, $"{args.Connection.PipeName} connected!");
+
+                try
                 {
-                    _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
-                    _serverPipe.DataReceived += ServerPipeOnDataReceived;
-                    AppendText(MsgColor.Green, "Server Pipe Created");
-
-                    // launch ClearEngineController
-                    try
+                    AppendText(MsgColor.Green, "Sending OnConnected Message to Client");
+                    await args.Connection.WriteAsync(new PipeMessage
                     {
-                        //using (Process proc = new Process())
-                        //{
-                        //    proc.StartInfo.FileName = _clearSuitePath;
-                        //    proc.StartInfo.UseShellExecute = true;
-                        //    proc.Start();
-                        //}
-
-                        showErrorMessage = false;
-                    }
-                    catch (Exception)
-                    {
-                        showErrorMessage = true;
-                        AppendText(MsgColor.Red, "ClearSuite Not Detected ERROR");
-                    }
+                        Action = ActionType.OnConnected,
+                        Text = "Connected to Paratext",
+                        Payload = null
+                    }).ConfigureAwait(false);
                 }
-            }
-
-
-            if (showErrorMessage)
+                catch (Exception exception)
+                {
+                    OnExceptionOccurred(exception);
+                }
+            };
+            _PipeServer.ClientDisconnected += (o, args) =>
             {
-                // TODO Do some alert now that ClearSuite is NOT installed
+                Clients.Remove(args.Connection.PipeName);
+                UpdateClientList();
+
+                AppendText(MsgColor.Green, $"{args.Connection.PipeName} disconnected!");
+            };
+            _PipeServer.MessageReceived += (sender, args) =>
+            {
+                if (args.Message != null)
+                {
+                    OnMessageReceivedAsync(args.Message);
+                }
+            };
+
+            _PipeServer.ExceptionOccurred += (o, args) =>
+            {
+                OnExceptionOccurred(args.Exception);
+            };
+        }
+
+        /// <summary>
+        /// A custom serialization binder to make sure that we are processing the correct
+        /// Pipes_Shared library.
+        ///
+        /// Note: MUST HAVE THE CORRECT VERSION NUMBER IN THE STRING BELOW
+        /// </summary>
+        sealed class CustomizedBinder : SerializationBinder
+        {
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                Type returntype = Type.GetType(String.Format("{0}, {1}", typeName, assemblyName));
+                return returntype;
             }
 
+            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            {
+                base.BindToName(serializedType, out assemblyName, out typeName);
+                assemblyName = "Pipes_Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+            }
         }
 
         /// <summary>
@@ -119,26 +192,76 @@ namespace ClearDashboardPlugin
         private async void MainWindow_Disposed(object sender, EventArgs e)
         {
             // this user control is closing - clean up pipe
-            NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.ServerClosed, "", "");
-            var msgSend = msgOut.CreateMessage();
-            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+
+            try
+            {
+                await _PipeServer.WriteAsync(new PipeMessage
+                {
+                    Action = ActionType.OnDisconnected,
+                    Text = "Connection Closed",
+                    Payload = null,
+                }).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
 
             // we need a delay before closing to ensure that the message is received on the client
-            await Task.Delay(2000).ConfigureAwait(true);
+            await Task.Delay(500).ConfigureAwait(true);
 
-            UnhookPipe();
-        }
-
-        /// <summary>
-        /// Disconnect the named pipe
-        /// </summary>
-        private void UnhookPipe()
-        {
             // unhook the pipe
-            _serverPipe.Close();
-            _serverPipe.DataReceived -= ServerPipeOnDataReceived;
-            _serverPipe = null;
+            await _PipeServer.DisposeAsync().ConfigureAwait(false);
         }
+
+        private void OnMessageReceivedAsync(PipeMessage message)
+        {
+            switch (message.Action)
+            {
+                case ActionType.SendText:
+                    AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                    break;
+                default:
+                    AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
+                    break;
+            }
+        }
+
+
+        private async void OnLoad(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                AppendText(MsgColor.Green, "PipeServer starting...");
+                _ = new PipeMessage();
+                await _PipeServer.StartAsync().ConfigureAwait(false);
+
+                AppendText(MsgColor.Green, "PipeServer is started!");
+            }
+            catch (Exception exception)
+            {
+                AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
+                OnExceptionOccurred(exception);
+            }
+        }
+
+        private void OnExceptionOccurred(Exception exception)
+        {
+            AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
+        }
+
+        private void UpdateClientList()
+        {
+            listBoxClients.Invoke(new Action(() =>
+            {
+                listBoxClients.Items.Clear();
+                foreach (var client in Clients)
+                {
+                    listBoxClients.Items.Add(client);
+                }
+            }));
+        }
+
 
         #endregion
 
@@ -171,7 +294,7 @@ namespace ClearDashboardPlugin
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
             parent.ProjectChanged += ProjectChanged;
-            parent.VerseRefChanged += VerseRefChanged;
+            //parent.VerseRefChanged += VerseRefChanged;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -180,7 +303,7 @@ namespace ClearDashboardPlugin
             m_project = parent.CurrentState.Project;
             m_parent = parent;
 
-            parent.VerseRefChanged += VerseRefChanged;
+            //parent.VerseRefChanged += VerseRefChanged;
         }
 
 
@@ -205,6 +328,7 @@ namespace ClearDashboardPlugin
 
         }
 
+
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
             SetProject(newProject);
@@ -221,15 +345,15 @@ namespace ClearDashboardPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        {
+        //private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        //{
 
-            if (newReference != m_verseRef)
-            {
-                m_verseRef = newReference;
-                await ShowUSXScripture().ConfigureAwait(true);
-            }
-        }
+        //    if (newReference != m_verseRef)
+        //    {
+        //        m_verseRef = newReference;
+        //        await ShowUSXScripture().ConfigureAwait(true);
+        //    }
+        //}
 
         #endregion overrides - standard functions
 
@@ -239,176 +363,213 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
-        {
-            NamedPipeMessage msg = null;
-            try
-            {
-                msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
-            }
-            catch (Exception exception)
-            {
-                msg = null;
-                _logger.Log(LogLevel.Error, exception);
-                return;
-            }
+        //private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
+        //{
+        //    NamedPipeMessage msg = null;
+        //    try
+        //    {
+        //        msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        msg = null;
+        //        _logger.Log(LogLevel.Error, exception);
+        //        return;
+        //    }
 
-            // Do the command's action
-            switch (msg.actionType)
-            {
-                case "GetBibilicalTerms":
-                    await GetBibilicalTerms(msg);
-                    break;
-                case "GetTargetVerses":
-                    await ShowUSXScripture().ConfigureAwait(false);
-                    break;
-                case "GetNotes":
-                    await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
-                    break;
-                case "OnConnected":
-                    AppendText(MsgColor.Green, "ClearDashboard Connected");
+        //    // Do the command's action
+        //    switch (msg.actionType)
+        //    {
+        //        case "GetBibilicalTerms":
+        //            await GetBibilicalTerms(msg);
+        //            break;
+        //        case "GetTargetVerses":
+        //            await ShowUSXScripture().ConfigureAwait(false);
+        //            break;
+        //        case "GetNotes":
+        //            await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
+        //            break;
+        //        case "OnConnected":
+        //            AppendText(MsgColor.Green, "ClearDashboard Connected");
 
-                    // send the current BCV location of Paratext
-                    var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
-                    var msgSend = msgOut.CreateMessage();
+        //            // send the current BCV location of Paratext
+        //            var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.CurrentVerse, m_verseRef.BBBCCCVVV.ToString(), "");
+        //            var msgSend = msgOut.CreateMessage();
 
-                    await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-                    AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
+        //            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
 
-                    await ShowUSXScripture().ConfigureAwait(false);
+        //            await ShowUSXScripture().ConfigureAwait(false);
 
-                    await GetBibilicalTerms(msg);
-                    break;
-                case "OnDisconnected":
-                    AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+        //            await GetBibilicalTerms(msg);
+        //            break;
+        //        case "OnDisconnected":
+        //            AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
 
-                    await Task.Delay(2000).ConfigureAwait(true);
+        //            await Task.Delay(2000).ConfigureAwait(true);
 
-                    btnRestart_Click(null, null);
-                    break;
-            }
-        }
+        //            btnRestart_Click(null, null);
+        //            break;
+        //    }
+        //}
 
-        private async Task GetBibilicalTerms(NamedPipeMessage msg)
-        {
-            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
-            AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
-            string dataPayload = "";
+        //private async Task GetBibilicalTerms(NamedPipeMessage msg)
+        //{
+        //    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
+        //    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
+        //    string dataPayload = "";
 
-            await Task.Run(() => { 
-                GetBibilicalTerms bt = new GetBibilicalTerms(ProjectList, m_project, m_host);
-                List<BiblicalTermsData> biblicalTermList = bt.ProcessBiblicalTerms(m_project);
+        //    await Task.Run(() => { 
+        //        GetBibilicalTerms bt = new GetBibilicalTerms(ProjectList, m_project, m_host);
+        //        List<BiblicalTermsData> biblicalTermList = bt.ProcessBiblicalTerms(m_project);
 
-                dataPayload = JsonConvert.SerializeObject(biblicalTermList, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
-            }).ConfigureAwait(true);
+        //        dataPayload = JsonConvert.SerializeObject(biblicalTermList, Formatting.None,
+        //            new JsonSerializerSettings()
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //            });
+        //    }).ConfigureAwait(true);
 
-            NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.BiblicalTerms, "", dataPayload);
-            var msgSend = msgOut.CreateMessage();
+        //    NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetBiblicalTerms, "", dataPayload);
+        //    var msgSend = msgOut.CreateMessage();
 
-            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
+        //    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //    //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
 
-            _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: msgSend sent");
-            AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
-        }
+        //    try
+        //    {
+        //        await _PipeServer.WriteAsync(new PipeMessage
+        //        {
+        //            Action = NamedPipeMessage.ActionType.SendText,
+        //            Text = "Biblical Terms Sent"
+        //        }).ConfigureAwait(false);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        OnExceptionOccurred(exception);
+        //    }
+
+
+        //    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: msgSend sent");
+        //    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
+        //}
 
         /// <summary>
         /// Does a registry check to ensure that ClearSuite is reachable
         /// </summary>
         /// <returns></returns>
-        public bool CheckIfClearSuiteInstalledAsync()
-        {
-            //Here we peek into the registry to see if they even have clear engine controller installed
-            var clearEngineControllerPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Clear\ClearSuite", "Path", null);
+        //public bool CheckIfClearSuiteInstalledAsync()
+        //{
+        //    //Here we peek into the registry to see if they even have clear engine controller installed
+        //    var clearEngineControllerPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Clear\ClearSuite", "Path", null);
 
-            if (Directory.Exists(clearEngineControllerPath))
-            {
-                // file doesn't exist so null this out
-                if (File.Exists(Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe")))
-                {
-                    _clearSuitePath = Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe");
-                    return true;
-                }
-            }
+        //    if (Directory.Exists(clearEngineControllerPath))
+        //    {
+        //        // file doesn't exist so null this out
+        //        if (File.Exists(Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe")))
+        //        {
+        //            _clearSuitePath = Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe");
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        private async Task GetNoteList(string actionCommand, string jsonPayload)
-        {
-            var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
+        //private async Task GetNoteList(string actionCommand, string jsonPayload)
+        //{
+        //    var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
 
-            if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
-            {
-                m_booknum = m_project.AvailableBooks[data.BookID].Number;
-                int chapter = data.ChapterID;
-                // include resolved notes
-                bool onlyUnresolved = !data.IncludeResolved;
-                m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
-                AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
+        //    if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
+        //    {
+        //        m_booknum = m_project.AvailableBooks[data.BookID].Number;
+        //        int chapter = data.ChapterID;
+        //        // include resolved notes
+        //        bool onlyUnresolved = !data.IncludeResolved;
+        //        m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
+        //        AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
 
-                var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
-                    });
+        //        var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
+        //            new JsonSerializerSettings()
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+        //                TypeNameHandling = TypeNameHandling.Auto,
+        //                NullValueHandling = NullValueHandling.Ignore,
+        //                Formatting = Formatting.None,
+        //            });
 
-                try
-                {
-                    var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
-                    });
-                }
-                catch (Exception e)
-                {
-                    AppendText(MsgColor.Red, e.Message);
-                }
+        //        try
+        //        {
+        //            var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+        //                TypeNameHandling = TypeNameHandling.Auto,
+        //                NullValueHandling = NullValueHandling.Ignore,
+        //                Formatting = Formatting.None,
+        //            });
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            AppendText(MsgColor.Red, e.Message);
+        //        }
 
-                NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.NotesObject, "", dataPayload);
-                var msgSend = msgOut.CreateMessage();
+        //        NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetNotesObject, "", dataPayload);
+        //        var msgSend = msgOut.CreateMessage();
 
-                await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
 
-            }
-        }
+        //        try
+        //        {
+        //            await _PipeServer.WriteAsync(new PipeMessage
+        //            {
+        //                Action = NamedPipeMessage.ActionType.SendText,
+        //                Text = "Notes Sent"
+        //            }).ConfigureAwait(false);
+        //        }
+        //        catch (Exception exception)
+        //        {
+        //            OnExceptionOccurred(exception);
+        //        }
 
-        private async Task ShowUSXScripture()
-        {
-            var temp = m_project.GetUSX(m_verseRef.BookNum);
-            if (temp != null)
-            {
-                var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+        //    }
+        //}
 
-                var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.TargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
-                var msgSend = msgOut.CreateMessage();
+        //private async Task ShowUSXScripture()
+        //{
+        //    var temp = m_project.GetUSX(m_verseRef.BookNum);
+        //    if (temp != null)
+        //    {
+        //        var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
+        //            new JsonSerializerSettings()
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //            });
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-                AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
+        //        //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
+        //        //var msgSend = msgOut.CreateMessage();
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
+        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
 
-                await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //        //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
 
-                _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-                AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-            }
-        }
+        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+        //        //try
+        //        //{
+        //        //    await _PipeServer.WriteAsync(new PipeMessage
+        //        //    {
+        //        //        Action = NamedPipeMessage.ActionType.SendText,
+        //        //        Text = "Verse Text Sent"
+        //        //    }).ConfigureAwait(false);
+        //        //}
+        //        //catch (Exception exception)
+        //        //{
+        //        //    OnExceptionOccurred(exception);
+        //        //}
+
+        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
+        //    }
+        //}
 
         /// <summary>
         /// Append colored text to the rich text box
@@ -444,22 +605,22 @@ namespace ClearDashboardPlugin
             }
             else
             {
+                sMsg += $"{Environment.NewLine}";
                 switch (color)
                 {
                     case MsgColor.Blue:
-                        cRTB.AppendText(sMsg + "\n", Color.Blue, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Blue, this.rtb);
                         break;
                     case MsgColor.Red:
-                        cRTB.AppendText(sMsg + "\n", Color.Red, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Red, this.rtb);
                         break;
                     case MsgColor.Green:
-                        cRTB.AppendText(sMsg + "\n", Color.Green, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Green, this.rtb);
                         break;
                     case MsgColor.Orange:
-                        cRTB.AppendText(sMsg + "\n", Color.Orange, this.rtb);
+                        cRTB.AppendText(sMsg, Color.Orange, this.rtb);
                         break;
                 }
-
             }
         }
 
@@ -470,14 +631,14 @@ namespace ClearDashboardPlugin
         /// <param name="e"></param>
         private async void btnRestart_Click(object sender, EventArgs e)
         {
-            // disconnect the pipe
-            UnhookPipe();
+            //// disconnect the pipe
+            //UnhookPipe();
 
-            await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
+            //await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
 
-            // reconnect the pipe
-            _serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
-            _serverPipe.DataReceived += ServerPipeOnDataReceived;
+            //// reconnect the pipe
+            //_serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
+            //_serverPipe.DataReceived += ServerPipeOnDataReceived;
 
             // clear out the existing data
             if (rtb.InvokeRequired)
@@ -490,107 +651,105 @@ namespace ClearDashboardPlugin
             }
 
             AppendText(MsgColor.Green, DateTime.Now.ToShortTimeString());
-            AppendText(MsgColor.Green, "Server Pipe Restarted");
+            AppendText(MsgColor.Green, "_PipeServer Pipe Restarted");
 
         }
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            GetNotesData data = new GetNotesData();
-            data.BookID = 5;
-            data.ChapterID = 1;
-            data.IncludeResolved = true;
-            var dataPayload = JsonConvert.SerializeObject(data, Formatting.None,
+            //GetNotesData data = new GetNotesData();
+            //data.BookID = 5;
+            //data.ChapterID = 1;
+            //data.IncludeResolved = true;
+            //var dataPayload = JsonConvert.SerializeObject(data, Formatting.None,
+            //    new JsonSerializerSettings()
+            //    {
+            //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //    });
+
+            //_ = GetNoteList("", dataPayload);
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private async Task ShowUSFMScripture()
+        {
+            IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
+            List<string> lines = new List<string>();
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    switch (marker.Type)
+                    {
+                        case MarkerType.Verse:
+                            lines.Add($"v {marker.Data}");
+                            break;
+                        case MarkerType.Book:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Chapter:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Character:
+                            lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Milestone:
+                            lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.MilestoneEnd:
+                            lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.End:
+                            lines.Add($"Marker End: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Note:
+                            lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Unknown:
+                            lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Paragraph:
+                            lines.Add($" {marker.Marker} {marker.Data}");
+                            break;
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (lines.Count > 0)
+                    {
+                        lines[lines.Count - 1] += (textToken.Text);
+                    }
+                    else
+                    {
+                        lines.Add(textToken.Text);
+                    }
+                }
+                else if (token is IUSFMAttributeToken)
+                {
+                    lines.Add("Attribute Token: " + token.ToString());
+                }
+                else
+                {
+                    lines.Add("Unexpected token type: " + token.ToString());
+                }
+            }
+
+            var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
                 new JsonSerializerSettings()
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
 
-            _ = GetNoteList("", dataPayload);
+            //PipeMessage msgOut = new PipeMessage(ActionType.SetTargetVerseText, "", dataPayload);
+            //var msgSend = msgOut.CreateMessage();
+            //AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
+            //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+            //AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
         }
-
-
-        //private async Task ShowUSFMScripture()
-        //{
-        //    IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
-        //    List<string> lines = new List<string>();
-        //    foreach (var token in tokens)
-        //    {
-        //        if (token is IUSFMMarkerToken marker)
-        //        {
-        //            switch (marker.Type)
-        //            {
-        //                case MarkerType.Verse:
-        //                    lines.Add($"v {marker.Data}");
-        //                    break;
-        //                case MarkerType.Book:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Chapter:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Character:
-        //                    lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Milestone:
-        //                    lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.MilestoneEnd:
-        //                    lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.End:
-        //                    lines.Add($"Marker End: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Note:
-        //                    lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Unknown:
-        //                    lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Paragraph:
-        //                    lines.Add($" {marker.Marker} {marker.Data}");
-        //                    break;
-        //            }
-        //        }
-        //        else if (token is IUSFMTextToken textToken)
-        //        {
-        //            if (lines.Count > 0)
-        //            {
-        //                lines[lines.Count - 1] += (textToken.Text);
-        //            }
-        //            else
-        //            {
-        //                lines.Add(textToken.Text);
-        //            }
-        //        }
-        //        else if (token is IUSFMAttributeToken)
-        //        {
-        //            lines.Add("Attribute Token: " + token.ToString());
-        //        }
-        //        else
-        //        {
-        //            lines.Add("Unexpected token type: " + token.ToString());
-        //        }
-        //    }
-
-        //    var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
-        //        new JsonSerializerSettings()
-        //        {
-        //            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //        });
-
-        //    NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.TargetVerseText, "", dataPayload);
-        //    var msgSend = msgOut.CreateMessage();
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-        //    AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.BiblicalTerms.ToString());
-
-        //    await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-
-        //    _logger.Log(LogLevel.Info, "VerseTextSent: msgSend sent");
-        //    AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-        //}
     }
 }

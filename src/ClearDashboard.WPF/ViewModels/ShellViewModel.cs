@@ -5,11 +5,16 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
+using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -18,7 +23,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Properties
 
         //Connection to the DAL
-        StartUp _startup;
+        private StartUp _DAL;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -43,6 +48,19 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => Version);
             }
         }
+
+        private bool _connected;
+
+        public bool Connected
+        {
+            get { return _connected; }
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
+
 
         #endregion
 
@@ -119,9 +137,8 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger) : base(navigationService, logger)
+        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
-           
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
@@ -133,13 +150,19 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
+            _DAL = dal;
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            _startup = new StartUp();
+            //_DAL = new StartUp();
+            _DAL.NamedPipeChanged += HandleEvent;
+
+            _DAL.GetParatextUserName();
         }
 
         protected override void Dispose(bool disposing)
         {
             StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            _DAL.NamedPipeChanged -= HandleEvent;
+
             base.Dispose(disposing);
         }
 
@@ -151,8 +174,35 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+        {
+            _DAL.OnClosing();
+
+            return base.CanCloseAsync(cancellationToken);
+        }
+
+
         #region Methods
 
+        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        {
+            if (args == null) return;
+
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.OnConnected:
+                    this.Connected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    this.Connected = false;
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
+        }
+        
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>
