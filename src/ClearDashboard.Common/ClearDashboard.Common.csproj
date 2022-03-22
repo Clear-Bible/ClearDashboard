@@ -11,6 +11,7 @@
     <PackageIcon>ClearDashboard_logo_128.png</PackageIcon>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
