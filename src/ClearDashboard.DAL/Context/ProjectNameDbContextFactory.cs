@@ -15,6 +15,12 @@ namespace ClearDashboard.DataAccessLayer.Context
     }
     public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public ProjectNameDbContextFactory(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
         public AlignmentContext Create(string projectName)
         {
             var directoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\{projectName}";
