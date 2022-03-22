@@ -121,6 +121,10 @@ namespace ClearDashboard.DataAccessLayer
 
             // PASS THIS DOWN TO MICHAEL FOR DATABASE CREATION
 
+
+            // remove compiler warning
+            await Task.CompletedTask;
+
         }
     }
 }
