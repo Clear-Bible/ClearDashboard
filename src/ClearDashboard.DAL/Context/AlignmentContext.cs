@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ namespace ClearDashboard.DataAccessLayer.Context
         public virtual DbSet<Verse> Verses { get; set; }
 
 
-        protected string DatabasePath { get; set; }
+        public string DatabasePath { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,35 +47,21 @@ namespace ClearDashboard.DataAccessLayer.Context
             }
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlite("data source=alignment.sqlite");
-        //    }
-        //}
-
-        public static AlignmentContext Create(string databasePath)
+        public async Task Migrate()
         {
-            var dbContext = new AlignmentContext(databasePath);
-            Console.WriteLine($"AlignmentContext created at {databasePath}");
-
             try
             {
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
-                dbContext.Database.Migrate();
+                await Database.MigrateAsync();
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Could not apply database migrations: {e.Message}");
             }
-
-            return dbContext;
         }
-
-       
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
