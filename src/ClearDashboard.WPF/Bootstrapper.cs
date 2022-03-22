@@ -44,7 +44,7 @@ namespace ClearDashboard.Wpf
                 .Build();
 
             SetupLogging();
-            EnsureDatabase();
+            //EnsureDatabase();
 
             Initialize();
 
@@ -52,12 +52,12 @@ namespace ClearDashboard.Wpf
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
 
-        private void EnsureDatabase()
-        {
-            // Ask for the database context.  This will create the database
-            // and apply migrations if required.
-            _ = Host.Services.GetService<AlignmentContext>();
-        }
+        //private void EnsureDatabase()
+        //{
+        //    // Ask for the database context.  This will create the database
+        //    // and apply migrations if required.
+        //    _ = Host.Services.GetService<AlignmentContext>();
+        //}
 
         #endregion
 
@@ -65,7 +65,9 @@ namespace ClearDashboard.Wpf
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
 
-            serviceCollection.AddAlignmentDatabase("alignment.sqlite");
+            //serviceCollection.AddAlignmentDatabase("alignment.sqlite");
+
+            serviceCollection.AddProjectNameDatabaseContextFactory();
 
             // wire up the interfaces required by Caliburn.Micro
             serviceCollection.AddSingleton<IWindowManager, WindowManager>();
