@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipes_Shared", "pipes_share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNamedPipes", "ConsoleAppNamedPipes\ConsoleAppNamedPipes.csproj", "{0352CF7A-FA07-485C-94D3-F519A2C15CB2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NamedPipes", "NamedPipes\NamedPipes.csproj", "{62846857-D660-4A2E-BAB5-5D1A16FE6FCF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "..\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
@@ -105,6 +103,14 @@ Global
 		{0352CF7A-FA07-485C-94D3-F519A2C15CB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0352CF7A-FA07-485C-94D3-F519A2C15CB2}.Release|x64.ActiveCfg = Release|Any CPU
 		{0352CF7A-FA07-485C-94D3-F519A2C15CB2}.Release|x64.Build.0 = Release|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|x64.Build.0 = Debug|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Release|x64.ActiveCfg = Release|Any CPU
+		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
