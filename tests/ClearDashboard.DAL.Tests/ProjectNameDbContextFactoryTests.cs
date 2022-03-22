@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Tests
         }
 
         [Fact]
-        public async Task TestMultipleProjects()
+        public async Task TestProjectDatabaseCreation()
         {
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             const string projectName = "Project5";
@@ -31,9 +31,9 @@ namespace ClearDashboard.DAL.Tests
             Assert.True(File.Exists(databaseName));
 
 
-            //Allow the database files to be create.
-            //await Task.Delay(TimeSpan.FromSeconds(30));
-
+            // NB:  My 'Documents' folder is set with in my OneDrive folder 
+            // which places a lock on the file so I'm not able to 
+            // programmatically delete the database file.
             //File.Delete(databaseName);
             //Directory.Delete(projectDirectory, true);
         }
