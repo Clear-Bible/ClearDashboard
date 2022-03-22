@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Paratext;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -19,7 +20,9 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region props
-      
+        //Connection to the DAL
+        private StartUp _DAL;
+
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
 
@@ -90,6 +93,26 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        #region observable props
+
+        private string _projectName;
+
+        public string ProjectName
+        {
+            get { return _projectName; }
+            set
+            {
+                _projectName = value;
+                NotifyOfPropertyChange(() => ProjectName);
+
+                SetProjects(null, null,null,null);
+            }
+        }
+
+
+
+        #endregion
+
         #region commands
         private ICommand createNewProjectCommand { get; set; }
         public ICommand CreateNewProjectCommand
@@ -117,9 +140,9 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
-        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger) : base(navigationService, logger)
+        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
-
+            _DAL = dal;
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
@@ -195,28 +218,50 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        public void CreateNewProject(object obj)
+        public async void CreateNewProject(object obj)
         {
             if (_TargetProject == null)
             {
-                // unlikely to be true
+                // unlikely ever to be true but just in case
                 return;
             }
 
             DashboardProject dashboardProject = new DashboardProject();
+            dashboardProject.ProjectName = ProjectName;
             dashboardProject.TargetProject = _TargetProject;
             dashboardProject.LWCProjects = _LWCprojects;
             dashboardProject.BTProjects = _BackTransProjects;
             dashboardProject.CreationDate = DateTime.Now;
-            dashboardProject.ParatextUser = "";
+            dashboardProject.ParatextUser = _DAL.ParatextUserName;
 
+            await _DAL.CreateNewProject(dashboardProject).ConfigureAwait(false);
         }
 
-        internal void SetProjects(List<ParatextProject> lWCproject, ParatextProject targetProject, List<ParatextProject> backTransProject, ParatextProject _interlinearizerProject)
+        internal void SetProjects(List<ParatextProject> lWCproject = null, 
+            ParatextProject targetProject = null, 
+            List<ParatextProject> backTransProject = null, 
+            ParatextProject _interlinearizerProject = null)
         {
-            _LWCprojects = new List<ParatextProject>(lWCproject);
-            _TargetProject = targetProject;
-            _BackTransProjects = new List<ParatextProject>(backTransProject);
+            if (lWCproject is not null)
+            {
+                _LWCprojects = new List<ParatextProject>(lWCproject);
+            }
+
+            if (targetProject is not null)
+            {
+                _TargetProject = targetProject;
+            }
+
+            if (backTransProject is not null)
+            {
+                _BackTransProjects = new List<ParatextProject>(backTransProject);
+            }
+
+            if (ProjectName == "" || ProjectName is null)
+            {
+                ButtonEnabled = false;
+                return;
+            }
 
             // check to see if we have at least a target project
             if (_TargetProject is null)

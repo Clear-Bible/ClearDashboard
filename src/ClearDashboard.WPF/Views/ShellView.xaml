@@ -48,8 +48,22 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
+                    <Image>
+                        <Image.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Connected}" Value="True">
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Connected}" Value="False">
+                                        <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                     <TextBlock
-                        Margin="0,0,5,0"
+                        Margin="5,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />

@@ -7,7 +7,7 @@ namespace ClearDashboard.ParatextPlugin
 {
     public class ClearDashboardPlugin : IParatextWindowPlugin
     {
-        public const string pluginName = "ClearSuite Plugin";
+        public const string pluginName = "ClearDashboard Plugin";
         public string Name => pluginName;
         public Version Version => new Version(0, 0, 0, 2);
         public string VersionString => Version.ToString();
@@ -16,7 +16,7 @@ namespace ClearDashboard.ParatextPlugin
 
         public string GetDescription(string locale)
         {
-            return "A plugin used for communication between Paratext 9.2+ and ClearSuite";
+            return "A plugin used for communication between Paratext 9.2+ and ClearDashboard";
         }
 
         public IEnumerable<WindowPluginMenuEntry> PluginMenuEntries
@@ -37,7 +37,7 @@ namespace ClearDashboard.ParatextPlugin
         /// </summary>
         private void Run(IWindowPluginHost host, IParatextChildState windowState)
         {
-           // host.ShowEmbeddedUi(new MainWindow(), windowState.Project);
+           host.ShowEmbeddedUi(new MainWindow(), windowState.Project);
         }
 
     }

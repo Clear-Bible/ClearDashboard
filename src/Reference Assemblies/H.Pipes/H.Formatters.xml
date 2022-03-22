@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>H.Formatters</name>
+    </assembly>
+    <members>
+        <member name="T:H.Formatters.AsyncFormatterBase">
+            <summary>
+            A base async formatter class.
+            </summary>
+        </member>
+        <member name="M:H.Formatters.AsyncFormatterBase.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:H.Formatters.AsyncFormatterBase.DeserializeAsync``1(System.Byte[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:H.Formatters.FormatterBase">
+            <summary>
+            A base formatter class.
+            </summary>
+        </member>
+        <member name="M:H.Formatters.FormatterBase.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:H.Formatters.FormatterBase.Deserialize``1(System.Byte[])">
+            <inheritdoc/>
+        </member>
+        <member name="T:H.Formatters.IAsyncFormatter">
+            <summary>
+            A async formatter interface for serialization/deserialization
+            </summary>
+        </member>
+        <member name="M:H.Formatters.IAsyncFormatter.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Serializes to bytes.
+            </summary>
+            <param name="obj"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:H.Formatters.IAsyncFormatter.DeserializeAsync``1(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Deserializes from bytes.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="bytes"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:H.Formatters.IFormatter">
+            <summary>
+            A formatter interface for serialization/deserialization
+            </summary>
+        </member>
+        <member name="M:H.Formatters.IFormatter.Serialize(System.Object)">
+            <summary>
+            Serializes to bytes.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:H.Formatters.IFormatter.Deserialize``1(System.Byte[])">
+            <summary>
+            Deserializes from bytes.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="T:H.Formatters.Utilities.ArrayUtilities">
+            <summary>
+            Full Array support for net40.
+            <![CDATA[Version: 1.0.0.0]]> <br/>
+            </summary>
+        </member>
+        <member name="M:H.Formatters.Utilities.ArrayUtilities.Empty``1">
+            <summary>
+            System.Array.Empty or new T[0].
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
