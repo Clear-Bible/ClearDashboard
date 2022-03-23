@@ -6,16 +6,15 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="UserControl_1"
+    d:DataContext="{d:DesignInstance Type=viewModels:DashboardViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance Type=viewModels:DashboardViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
-    <Grid x:Uid="Grid_1">
-        <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
+    <Grid>
+        <StackPanel Orientation="Vertical">
             <TextBlock
-                x:Uid="TextBlock_1"
                 Margin="20"
                 VerticalAlignment="Top"
                 Background="Brown"
@@ -23,13 +22,12 @@
                 Text="DASHBOARD" />
 
             <TextBlock
-                x:Uid="TextBlock_2"
                 Margin="20"
                 VerticalAlignment="Top"
                 Background="Brown"
                 FontSize="64"
                 Text="{Binding DashboardProject.Name}" />
-            <Button x:Uid="Button_1" Click="Button_Click">Click Me</Button>
+            <Button Click="Button_Click">Click Me</Button>
         </StackPanel>
     </Grid>
 </UserControl>

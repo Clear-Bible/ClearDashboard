@@ -6,13 +6,12 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="UserControl_1"
     d:DataContext="{d:DesignInstance Type=viewModels:WordMeaningsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid x:Uid="Grid_1">
+    <Grid >
         <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
                 <ListView

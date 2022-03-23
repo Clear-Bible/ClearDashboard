@@ -8,21 +8,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="UserControl_1"
     d:DataContext="{d:DesignInstance Type=viewModels:BiblicalTermsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid x:Uid="Grid_1">
-        <ScrollViewer
-            x:Uid="ScrollViewer_1"
-            HorizontalScrollBarVisibility="Visible"
-            VerticalScrollBarVisibility="Visible">
-            <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <StackPanel Orientation="Vertical">
 
                 <Button
-                    x:Uid="Button_1"
                     Width="350"
                     Margin="20,5,20,5"
                     HorizontalAlignment="Left"
@@ -32,7 +27,6 @@
 
                 <DataGrid
                     x:Name="gridVerses"
-                    x:Uid="gridVerses"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -45,27 +39,23 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
                     ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.ColumnHeaderStyle>
-                        <Style x:Uid="Style_1" TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter x:Uid="Setter_1" Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.RowStyle>
-                        <Style x:Uid="Style_2" TargetType="{x:Type DataGridRow}">
-                            <Setter x:Uid="Setter_2" Property="Height" Value="{x:Static sys:Double.NaN}" />
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Height" Value="{x:Static sys:Double.NaN}" />
                         </Style>
                     </DataGrid.RowStyle>
 
                     <DataGrid.Columns>
                         <!--  rendering note button  -->
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_1"
-                            Width="20"
-                            Header="">
+                        <DataGridTemplateColumn Width="20" Header="">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_1">
+                                <DataTemplate>
                                     <Button
-                                        x:Uid="Button_2"
                                         Width="20"
                                         Height="15"
                                         Margin="-15,0,0,0"
@@ -74,7 +64,6 @@
                                         Style="{DynamicResource MaterialDesignIconButton}"
                                         ToolTip="Note">
                                         <materialDesign:PackIcon
-                                            x:Uid="materialDesign:PackIcon_1"
                                             Width="12"
                                             Height="12"
                                             Foreground="Wheat"
@@ -84,14 +73,10 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!--  star button  -->
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_2"
-                            Width="20"
-                            Header="*">
+                        <DataGridTemplateColumn Width="20" Header="*">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_2">
+                                <DataTemplate>
                                     <Button
-                                        x:Uid="Button_3"
                                         Width="20"
                                         Height="15"
                                         Margin="-15,0,0,0"
@@ -100,7 +85,6 @@
                                         Style="{DynamicResource MaterialDesignIconButton}"
                                         ToolTip="Add Biblical Term">
                                         <materialDesign:PackIcon
-                                            x:Uid="materialDesign:PackIcon_2"
                                             Width="12"
                                             Height="12"
                                             Foreground="Wheat"
@@ -110,42 +94,30 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_3"
-                            Width="80"
-                            Header="Term">
+                        <DataGridTemplateColumn Width="80" Header="Term">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_3">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_1"
                                         Width="150"
                                         Height="15"
                                         Text="{Binding Lemma}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_4"
-                            Width="100"
-                            Header="Category">
+                        <DataGridTemplateColumn Width="100" Header="Category">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_4">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_2"
                                         Width="150"
                                         Height="15"
                                         Text="{Binding SemanticDomain}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_5"
-                            Width="200"
-                            Header="English">
+                        <DataGridTemplateColumn Width="200" Header="English">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_5">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_3"
                                         Width="150"
                                         Height="15"
                                         Margin="5,0,0,0"
@@ -154,57 +126,42 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_6"
-                            Width="20"
-                            Header="Counts">
+                        <DataGridTemplateColumn Width="20" Header="Counts">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_6">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_4"
                                         Width="20"
                                         Height="15"
                                         Text="{Binding Renderings.Count}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_7"
-                            Width="20"
-                            Header="Found">
+                        <DataGridTemplateColumn Width="20" Header="Found">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_7">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_5"
                                         Width="20"
                                         Height="15"
                                         Text="{Binding Renderings.Count}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn
-                            x:Uid="DataGridTemplateColumn_8"
-                            Width="200"
-                            Header="Renderings">
+                        <DataGridTemplateColumn Width="200" Header="Renderings">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Uid="DataTemplate_8">
+                                <DataTemplate>
                                     <TextBlock
-                                        x:Uid="TextBlock_6"
                                         Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
                                         Height="15"
                                         Margin="5,0,0,0"
                                         HorizontalAlignment="Left"
                                         Text="{Binding RenderingString}">
                                         <TextBlock.Style>
-                                            <Style x:Uid="Style_3" TargetType="TextBlock">
-                                                <Setter x:Uid="Setter_3" Property="Background" Value="DimGray" />
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Background" Value="DimGray" />
 
                                                 <Style.Triggers>
-                                                    <DataTrigger
-                                                        x:Uid="DataTrigger_1"
-                                                        Binding="{Binding RenderingString}"
-                                                        Value="{x:Null}">
-                                                        <Setter x:Uid="Setter_4" Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
+                                                    <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
+                                                        <Setter Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>

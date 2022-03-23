@@ -6,7 +6,6 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="Window_1"
     d:DataContext="{d:DesignInstance Type=viewModels:ColorStylesViewModel}"
     d:DesignHeight="850"
     d:DesignWidth="800"
@@ -18,92 +17,80 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid x:Uid="Grid_1" ButtonBase.Click="Grid_Click">
+    <Grid  ButtonBase.Click="Grid_Click">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Uid="ColumnDefinition_1" />
-            <ColumnDefinition x:Uid="ColumnDefinition_2" />
+            <ColumnDefinition  />
+            <ColumnDefinition  />
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Uid="StackPanel_1" Grid.Column="0">
+        <StackPanel  Grid.Column="0">
             <Button
-                x:Uid="Button_1"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueLightBrush}"
                 Content="PrimaryHueLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_2"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueLightForegroundBrush}"
                 Content="PrimaryHueLightForegroundBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_3"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueMidBrush}"
                 Content="PrimaryHueMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_4"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueMidForegroundBrush}"
                 Content="PrimaryHueMidForegroundBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_5"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueDarkBrush}"
                 Content="PrimaryHueDarkBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_6"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PrimaryHueDarkForegroundBrush}"
                 Content="PrimaryHueDarkForegroundBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_7"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueLightBrush}"
                 Content="SecondaryHueLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_8"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueLightForegroundBrush}"
                 Content="SecondaryHueLightForegroundBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_9"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueMidBrush}"
                 Content="SecondaryHueMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_10"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueMidForegroundBrush}"
                 Content="SecondaryHueMidForegroundBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_11"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueDarkBrush}"
                 Content="SecondaryHueDarkBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_12"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource SecondaryHueDarkForegroundBrush}"
@@ -111,21 +98,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_13"
                 Height="20"
                 Margin="2,30,2,2"
                 Background="{DynamicResource PurpleLightBrush}"
                 Content="PurpleLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_14"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PurpleMidBrush}"
                 Content="PurpleMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_15"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource PurpleDarkBrush}"
@@ -133,21 +117,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_16"
                 Height="20"
                 Margin="2,2,2,2"
                 Background="{DynamicResource BlueLightBrush}"
                 Content="BlueLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_17"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource BlueMidBrush}"
                 Content="BlueMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_18"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource BlueDarkBrush}"
@@ -155,21 +136,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_19"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource RedLightBrush}"
                 Content="RedLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_20"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource RedMidBrush}"
                 Content="RedeMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_21"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource RedDarkBrush}"
@@ -177,21 +155,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_22"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource GreenLightBrush}"
                 Content="GreenLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_23"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource GreenMidBrush}"
                 Content="GreenMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_24"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource GreenDarkBrush}"
@@ -199,21 +174,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_25"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource OrangeLightBrush}"
                 Content="OrangeLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_26"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource OrangeMidBrush}"
                 Content="OrangeMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_27"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource OrangeDarkBrush}"
@@ -221,21 +193,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_28"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource YellowLightBrush}"
                 Content="YellowLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_29"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource YellowMidBrush}"
                 Content="YellowMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_30"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource YellowDarkBrush}"
@@ -243,21 +212,18 @@
                 FontSize="10" />
 
             <Button
-                x:Uid="Button_31"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource TealLightBrush}"
                 Content="TealLightBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_32"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource TealMidBrush}"
                 Content="TealMidBrush"
                 FontSize="10" />
             <Button
-                x:Uid="Button_33"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource TealDarkBrush}"
@@ -266,170 +232,146 @@
 
         </StackPanel>
 
-        <StackPanel x:Uid="StackPanel_2" Grid.Column="1">
+        <StackPanel  Grid.Column="1">
             <Button
-                x:Uid="Button_34"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignBackground}"
                 Content="MaterialDesignBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_35"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignPaper}"
                 Content="MaterialDesignPaper"
                 FontSize="10" />
             <Button
-                x:Uid="Button_36"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignCardBackground}"
                 Content="MaterialDesignCardBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_37"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignToolBarBackground}"
                 Content="MaterialDesignToolBarBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_38"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignBody}"
                 Content="MaterialDesignBody"
                 FontSize="10" />
             <Button
-                x:Uid="Button_39"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignBodyLight}"
                 Content="MaterialDesignBodyLight"
                 FontSize="10" />
             <Button
-                x:Uid="Button_40"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignColumnHeader}"
                 Content="MaterialDesignColumnHeader"
                 FontSize="10" />
             <Button
-                x:Uid="Button_41"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignCheckBoxOff}"
                 Content="MaterialDesignCheckBoxOff"
                 FontSize="10" />
             <Button
-                x:Uid="Button_42"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignCheckBoxDisabled}"
                 Content="MaterialDesignCheckBoxDisabled"
                 FontSize="10" />
             <Button
-                x:Uid="Button_43"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextBoxBorder}"
                 Content="MaterialDesignTextBoxBorder"
                 FontSize="10" />
             <Button
-                x:Uid="Button_44"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignDivider}"
                 Content="MaterialDesignDivider"
                 FontSize="10" />
             <Button
-                x:Uid="Button_45"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignSelection}"
                 Content="MaterialDesignSelection"
                 FontSize="10" />
             <Button
-                x:Uid="Button_46"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignFlatButtonClick}"
                 Content="MaterialDesignFlatButtonClick"
                 FontSize="10" />
             <Button
-                x:Uid="Button_47"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignFlatButtonRipple}"
                 Content="MaterialDesignFlatButtonRipple"
                 FontSize="10" />
             <Button
-                x:Uid="Button_48"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignToolTipBackground}"
                 Content="MaterialDesignToolTipBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_49"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignChipBackground}"
                 Content="MaterialDesignChipBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_50"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignSnackbarBackground}"
                 Content="MaterialDesignSnackbarBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_51"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignSnackbarMouseOver}"
                 Content="MaterialDesignSnackbarMouseOver"
                 FontSize="10" />
             <Button
-                x:Uid="Button_52"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignSnackbarRipple}"
                 Content="MaterialDesignSnackbarRipple"
                 FontSize="10" />
             <Button
-                x:Uid="Button_53"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                 Content="MaterialDesignTextFieldBoxBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_54"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}"
                 Content="MaterialDesignTextFieldBoxHoverBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_55"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextFieldBoxDisabledBackground}"
                 Content="MaterialDesignTextFieldBoxDisabledBackground"
                 FontSize="10" />
             <Button
-                x:Uid="Button_56"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextAreaBorder}"
                 Content="MaterialDesignTextAreaBorder"
                 FontSize="10" />
             <Button
-                x:Uid="Button_57"
                 Height="20"
                 Margin="2"
                 Background="{DynamicResource MaterialDesignTextAreaInactiveBorder}"
@@ -438,15 +380,13 @@
 
 
             <Label
-                x:Uid="Label_1"
                 Margin="0,20,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
                 BUTTONS
             </Label>
-            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_58"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -454,7 +394,6 @@
                     FontSize="10"
                     Style="{DynamicResource PurpleLightButton}" />
                 <Button
-                    x:Uid="Button_59"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -462,7 +401,6 @@
                     FontSize="10"
                     Style="{DynamicResource PurpleMidButton}" />
                 <Button
-                    x:Uid="Button_60"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -471,9 +409,8 @@
                     Style="{DynamicResource PurpleDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_61"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -481,7 +418,6 @@
                     FontSize="10"
                     Style="{DynamicResource BlueLightButton}" />
                 <Button
-                    x:Uid="Button_62"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -489,7 +425,6 @@
                     FontSize="10"
                     Style="{DynamicResource BlueMidButton}" />
                 <Button
-                    x:Uid="Button_63"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -498,9 +433,8 @@
                     Style="{DynamicResource BlueDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_64"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -508,7 +442,6 @@
                     FontSize="10"
                     Style="{DynamicResource RedLightButton}" />
                 <Button
-                    x:Uid="Button_65"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -516,7 +449,6 @@
                     FontSize="10"
                     Style="{DynamicResource RedMidButton}" />
                 <Button
-                    x:Uid="Button_66"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -525,9 +457,8 @@
                     Style="{DynamicResource RedDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_67"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -535,7 +466,6 @@
                     FontSize="10"
                     Style="{DynamicResource GreenLightButton}" />
                 <Button
-                    x:Uid="Button_68"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -543,7 +473,6 @@
                     FontSize="10"
                     Style="{DynamicResource GreenMidButton}" />
                 <Button
-                    x:Uid="Button_69"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -552,9 +481,8 @@
                     Style="{DynamicResource GreenDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_70"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -562,7 +490,6 @@
                     FontSize="10"
                     Style="{DynamicResource OrangeLightButton}" />
                 <Button
-                    x:Uid="Button_71"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -570,7 +497,6 @@
                     FontSize="10"
                     Style="{DynamicResource OrangeMidButton}" />
                 <Button
-                    x:Uid="Button_72"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -579,9 +505,8 @@
                     Style="{DynamicResource OrangeDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_73"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -589,7 +514,6 @@
                     FontSize="10"
                     Style="{DynamicResource YellowLightButton}" />
                 <Button
-                    x:Uid="Button_74"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -597,7 +521,6 @@
                     FontSize="10"
                     Style="{DynamicResource YellowMidButton}" />
                 <Button
-                    x:Uid="Button_75"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -606,9 +529,8 @@
                     Style="{DynamicResource YellowDarkButton}" />
             </StackPanel>
 
-            <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Button
-                    x:Uid="Button_76"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -616,7 +538,6 @@
                     FontSize="10"
                     Style="{DynamicResource TealLightButton}" />
                 <Button
-                    x:Uid="Button_77"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -624,7 +545,6 @@
                     FontSize="10"
                     Style="{DynamicResource TealMidButton}" />
                 <Button
-                    x:Uid="Button_78"
                     Width="120"
                     Height="20"
                     Margin="2"
@@ -632,21 +552,18 @@
                     FontSize="10"
                     Style="{DynamicResource TealDarkButton}" />
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_10" Orientation="Vertical">
+            <StackPanel  Orientation="Vertical">
                 <Label
-                    x:Uid="Label_2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                     BINDABLE INLINES EXAMPLE
                 </Label>
                 <helpers:BindableTextBlock
-                    x:Uid="helpers:BindableTextBlock_1"
                     Margin="5"
                     HorizontalAlignment="Center"
                     InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
-                    x:Uid="Button_79"
                     MaxWidth="120"
                     Margin="8,2,8,2"
                     FontSize="12">
