@@ -18,6 +18,8 @@ namespace ClearDashboard.DataAccessLayer
 
         private readonly ILogger _logger;
 
+        public bool IsPipeConnected { get; set; }
+
         public enum PipeAction
         {
             OnConnected,
@@ -74,6 +76,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void OnClosing()
         {
+            IsPipeConnected = false;
             NamedPipesClient.Instance.Dispose();
         }
 
@@ -84,7 +87,18 @@ namespace ClearDashboard.DataAccessLayer
 
         private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
         {
-            RaisePipesChangedEvent(args.PM);
+            PipeMessage pm = args.PM;
+
+            if (pm.Action == ActionType.OnConnected)
+            {
+                this.IsPipeConnected = true;
+            } 
+            else if (pm.Action == ActionType.OnDisconnected)
+            {
+                this.IsPipeConnected= false;
+            }
+
+            RaisePipesChangedEvent(pm);
         }
 
         public void GetParatextUserName()

@@ -1,0 +1,3802 @@
+<?xml version="1.0"?>
+<Lexicon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Lexicon_Entry Id="003480000000000" Lemma="ξαίνω" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes />
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>In {S:04000602800024} the Sinaiticus manuscript has an interesting reading, οὐ ξένουσιν (= οὐ ξαίνουσιν), thus providing three processes or activities involving cloth rather than two. However, in view of the relatively limited support for this reading, most translators follow the text which has αὐξάνουσιν they grow.</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="pt" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>Em Mt 6.28, o Códice Sinaítico tem esta interessante leitura, a saber, οὐ ξένουσιν (= οὐ ξαίνουσιν), apresentando, desta forma, três processos ou atividades envolvendo pano ou tecido, e não apenas duas. No entanto, devido ao reduzido apoio a esta leitura ou forma do texto, a maioria dos tradutores prefere traduzir o texto que traz αὐξάνουσιν, “crescem”.</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="zhT" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>在{S:04000602800024}，《西奈抄本》 的讀文很有趣，作οὐ ξένουσιν（= οὐ ξαίνουσιν），從而提供了關於衣裳的三個處理過程或活動而不是兩個。然而，考慮到這個讀文的支持較少，大多數翻譯者均按照αὐξάνουσιν「它們長起來」的文本。</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="zhS" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>在{S:04000602800024}，《西奈抄本》的读文很有趣，作οὐ ξένουσιν（= οὐ ξαίνουσιν），从而提供了关于衣裳的三个处理过程或活动而不是两个。然而，考虑到这个读文的支持较少，大多数翻译者均按照αὐξάνουσιν“它们长起来”的文本。</Content>
+      </Note>
+    </Notes>
+    <Localizations />
+    <Dates />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003480001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003480001001000" IsBiblicalTerm="Y" EntryCode="48.1" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Activities Involving Cloth</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>to comb wool as an initial step in the making of wool thread{N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>to comb wool</Gloss>
+                </Glosses>
+                <Comments>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν ‘they do not comb wool, spin, or work hard’ {S:04000602800024} (apparatus)</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>pentear a lã como passo inicial na confecção do fio de lã</DefinitionShort>
+                <Glosses>
+                  <Gloss>pentear a lã</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-01-07 06:39:46" LastEditedBy="user3">
+                <DefinitionLong />
+                <DefinitionShort>梳理羊毛，這是製作羊毛線的第一個步驟 {N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>梳毛</Gloss>
+                </Glosses>
+                <Comments>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν「它們不梳毛，不紡織，也不辛勤工作」{S:04000602800024}（校勘欄）。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>peinar la lana como un paso inicial en la confección de hilo de lana {N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>peinar lana</Gloss>
+                </Glosses>
+                <Comments>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν "no peinan lana, hilan o trabajan duro" {S:04000602800024} (aparato)</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ऊन धागा के निर्माण में एक प्रारंभिक कदम के रूप में ऊन कंघी करना {N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>ऊन कंघी करना</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>കമ്പിളി ത്രെഡ് {: 001 വ} സൃഷ്ടിയിൽ ആദ്യപടി പഞ്ഞിപോലെ ചീകാനോ</DefinitionShort>
+                <Glosses>
+                  <Gloss>കമ്പിളി ത്രെഡ് {: 001 വ} സൃഷ്ടിയിൽ ആദ്യപടി പഞ്ഞിപോലെ ചീകാനോ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 13:31:49" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>peigner la laine comme première étape dans la fabrication du fil de laine {N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>peiner la laine</Gloss>
+                </Glosses>
+                <Comments>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν "ils ne peignent pas la laine, ni ne filent ou travaillent dur" {S:04000602800024} (apparat)
+</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>梳理羊毛，这是制作羊毛线的第一个步骤 {N:001}</DefinitionShort>
+                <Glosses>
+                  <Gloss>梳毛</Gloss>
+                </Glosses>
+                <Comments>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν“它们不梳毛，不纺织，也不辛勤工作”{S:04000602800024}（校勘栏）。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξαίνω" EntryCode="48.1" Source="apparatus">
+                <ILLReferences>
+                  <ILLReference>04000602800024</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>οὐ ξαίνουσιν οὐδὲ νήθουσιν οὐδὲ κοπιῶσιν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘they do not comb wool, spin, or work hard’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「它們既不梳毛、不勞動，也不紡線」（經文校勘欄）</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“它们既不梳毛、不劳动，也不纺线”（校勘栏）</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04000602800024</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003481000000000" Lemma="ξενία" Version="0" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3578</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>04402802300020</Reference>
+          <Reference>05700102200012</Reference>
+        </References>
+        <Content>It is also possible to interpret ξενία in both {S:04402802300020} and {S:05700102200012} as hospitality or the activity involved in receiving a guest (see {D:34.57}). This is the more common meaning of ξενία, but it fits less well in the two contexts in which ξενία occurs in the NT.</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="pt" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>04402802300020</Reference>
+          <Reference>05700102200012</Reference>
+        </References>
+        <Content>Também se pode interpretar ξενία, tanto em {S:04402802300020} quanto em {S:05700102200012}, como hospitalidade ou a atividade ligada à recepção de um convidado (veja 34.57). Este é o sentido mais comum de ξενία, mas não se encaixa tão bem nos dois contextos em que ξενία aparece no NT.</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="zhT" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>在{S:04402802300020}和{S:05700102200012}，ξενία也可以理解為熱情款待或者接待客人的活動（見{D:34.57}）。這是ξενία比較常見的意思，但是不太適合ξενία在《新約》中出現的兩處上下文。</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="sp" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>NEW NOTE sp</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="zhS" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>在{S:04402802300020}和{S:05700102200012}，ξενία也可以理解为热情款待或者接待客人的活动（见{D:34.57}）。这是ξενία比较常见的意思，但是不太适合ξενία在新约中出现的两处上下文。</Content>
+      </Note>
+    </Notes>
+    <Localizations />
+    <Dates>
+      <Date>2020-01-30 03:29:05 sl</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003481001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun, f.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξενία" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-ας</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξενίζω</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003481001001000" IsBiblicalTerm="Y" EntryCode="7.31" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Constructions</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Parts and Areas of Buildings</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>a place of temporary lodging for a person away from home</DefinitionShort>
+                <Glosses>
+                  <Gloss>guestroom</Gloss>
+                  <Gloss>lodging for guest</Gloss>
+                  <Gloss>place to stay in</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>um lugar onde a pessoa que está longe de casa pode se hospedar por algum tempo</DefinitionShort>
+                <Glosses>
+                  <Gloss>quarto de hóspedes</Gloss>
+                  <Gloss>alojamento para um hóspede</Gloss>
+                  <Gloss>lugar onde alguém pode ficar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-04-20 15:56:13" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>供離家出門的人暫住的地方</DefinitionShort>
+                <Glosses>
+                  <Gloss>客房；客人住宿的地方；住處</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>un lugar de alojamiento temporal para una persona fuera de casa</DefinitionShort>
+                <Glosses>
+                  <Gloss>posada</Gloss>
+                  <Gloss>alojamiento para invitados</Gloss>
+                  <Gloss>lugar para quedarse</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>एक व्यक्ति घर से दूर के लिए अस्थायी आवास की एक जगह</DefinitionShort>
+                <Glosses>
+                  <Gloss>अतिथि - कमरा</Gloss>
+                  <Gloss>अतिथि के लिए अस्थायी आवास</Gloss>
+                  <Gloss>में रहने के लिए जगह</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ഒരു വ്യക്തി താൽക്കാലിക ഒതുങ്ങുന്ന ഒരു സ്ഥലം വീട്ടിൽ നിന്നും</DefinitionShort>
+                <Glosses>
+                  <Gloss>ഒരു വ്യക്തി താൽക്കാലിക ഒതുങ്ങുന്ന ഒരു സ്ഥലം വീട്ടിൽ നിന്നും</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 13:34:32" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>un lieu de logement temporaire pour une personne éloigné de la maison </DefinitionShort>
+                <Glosses>
+                  <Gloss>chambre d'invité, hébérgement pour invité, endroit où loger</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مكان إقامة مؤقتة لشخص بعيد عن البيت</DefinitionShort>
+                <Glosses>
+                  <Gloss>غرفة الضيافة؛ منزل مؤقت للزائر؛ مكان للإقامة فيه</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>供离家出门的人暂住的地方</DefinitionShort>
+                <Glosses>
+                  <Gloss>客房；客人住宿的地方；住处</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξενία" EntryCode="7.31" Source="">
+                <ILLReferences>
+                  <ILLReference>04402802300020{N:001}</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἡμέραν ἦλθον πρὸς αὐτὸν εἰς τὴν ξενίαν πλείονες</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘a large number of them came that day to him where he was staying’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「那天，有許多人到他的住處來」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“那天，有许多人到他的住处来”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+              <LEXIllustration Lemma="ξενία" EntryCode="7.31" Source="">
+                <ILLReferences>
+                  <ILLReference>05700102200012{N:001}</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἑτοίμαζέ μοι ξενίαν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘prepare a room for me to stay in’ or ‘... a place for me to stay in’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「替我預備一個房間」或「為我預備一個住的地方」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“替我预备一个房间”或“为我预备一个住的地方”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04402802300020{N:001}</LEXReference>
+              <LEXReference>05700102200012{N:001}</LEXReference>
+            </LEXReferences>
+            <LEXLinks>
+              <LEXLink>realia:3.1.6.9</LEXLink>
+            </LEXLinks>
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003481001002000" IsBiblicalTerm="Y" EntryCode="34.57" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Association</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Show Hospitality</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>hospitality to a stranger, that is, someone who is not regarded as a member of the extended family or a close friend</DefinitionShort>
+                <Glosses>
+                  <Gloss>hospitality</Gloss>
+                </Glosses>
+                <Comments>To receive a stranger as a guest is sometimes expressed idiomatically as ‘to let a stranger sit at one’s table,’ ‘to offer a bed to a stranger,’ or ‘to let a stranger enter one’s house.’|For another interpretation of {L:ξενία&lt;SDBG:ξενία:000000&gt;} in {S:05700102200012}, see {D:7.31}. </Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>receber e dar hospedagem a um estranho, ou seja, alguém que não é amigo chegado ou um membro da família estendida</DefinitionShort>
+                <Glosses>
+                  <Gloss>ser hospitaleiro</Gloss>
+                  <Gloss>acolher um estranho como hóspede</Gloss>
+                  <Gloss>hospedagem</Gloss>
+                </Glosses>
+                <Comments>Às vezes, receber um estranho como hóspede pode ser expresso idiomaticamente como “deixar que um estranho se assente à nossa mesa”, ou “oferecer uma cama a um estranho” ou “deixar que um forasteiro entre em nossa casa”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2020-03-06 02:50:17" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被視為大家庭成員或親密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>顯示熱情好客；接待陌生人；熱情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些語言是採用習語來表達：「讓陌生人同桌用膳」，「給陌生人提供一張牀」，或「讓陌生人進屋」。|關於 {L:ξενία&lt;SDBG:ξενία:000000&gt;} 在 {S:05700102200012} 中的另一種解釋，見 {D:7.31}。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>recibir y mostrar hospitalidad a un forastero, es decir, a alguien que no es considerado miembro de la familia extendida o un amigo cercano</DefinitionShort>
+                <Glosses>
+                  <Gloss>mostrar hospitalidad</Gloss>
+                  <Gloss>recibir a un extranjero como invitado</Gloss>
+                  <Gloss>hospitalidad</Gloss>
+                </Glosses>
+                <Comments>Recibir a un extraño como invitado a veces se expresa idiomáticamente como "dejar que un extraño se siente en la mesa de uno", "ofrecerle una cama a un extraño" o "dejar que un extraño entre en la casa". &lt;br&gt; Para otra interpretación de {L:ξενία &lt;SDBG: ξενία: 000000&gt;} en {S:05700102200012}, ver {D:7.31}. Ver también la nota al pie de página 7 en el Domain 7.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>प्राप्त करते हैं और एक अजनबी के लिए आतिथ्य दिखाने के लिए, कि है, के लिए कोई है जो बड़े परिवार के एक सदस्य या एक करीबी दोस्त के रूप में नहीं माना जाता है</DefinitionShort>
+                <Glosses>
+                  <Gloss>आतिथ्य दिखाने के लिए</Gloss>
+                  <Gloss>अतिथि के रूप में एक अजनबी प्राप्त करने के लिए</Gloss>
+                  <Gloss>सत्कार</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</DefinitionShort>
+                <Glosses>
+                  <Gloss>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被视为大家庭成员或亲密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>显示热情好客；接待陌生人；热情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些语言是采用习语来表达：“让陌生人同桌用膳”，“给陌生人提供一张床”，或“让陌生人进屋”。|关于 {L:ξενία&lt;SDBG:ξενία:000000&gt;} 在 {S:05700102200012} 中的另一种解释，见 {D:7.31}。</Comments>
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξενία" EntryCode="34.57" Source="">
+                <ILLReferences>
+                  <ILLReference>05700102200012</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἑτοίμαζέ μοι ξενίαν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘prepare hospitality for me’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「準備接待我」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“准备接待我”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>05700102200012</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003482000000000" Lemma="ξενίζω" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3579</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma>ξενίζομαι</AlternateLemma>
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-09-12 21:00:23 sarah</Date>
+      <Date>2018-06-03 09:14:31 sl</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003482001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξενία</Word>
+          </RelatedLemma>
+          <RelatedLemma>
+            <Word>ξενοδοχέω</Word>
+          </RelatedLemma>
+          <RelatedLemma>
+            <Word>ξένος</Word>
+          </RelatedLemma>
+          <RelatedLemma>
+            <Word>φιλοξενία</Word>
+          </RelatedLemma>
+          <RelatedLemma>
+            <Word>φιλόξενος</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003482001001000" IsBiblicalTerm="Y" EntryCode="34.57" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Association</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Show Hospitality</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>to receive and show hospitality to a stranger, that is, someone who is not regarded as a member of the extended family or a close friend</DefinitionShort>
+                <Glosses>
+                  <Gloss>to show hospitality</Gloss>
+                  <Gloss>to receive a stranger as a guest</Gloss>
+                  <Gloss>hospitality</Gloss>
+                </Glosses>
+                <Comments>To receive a stranger as a guest is sometimes expressed idiomatically as ‘to let a stranger sit at one’s table,’ ‘to offer a bed to a stranger,’ or ‘to let a stranger enter one’s house.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>receber e dar hospedagem a um estranho, ou seja, alguém que não é amigo chegado ou um membro da família estendida</DefinitionShort>
+                <Glosses>
+                  <Gloss>ser hospitaleiro</Gloss>
+                  <Gloss>acolher um estranho como hóspede</Gloss>
+                  <Gloss>hospedagem</Gloss>
+                </Glosses>
+                <Comments>Às vezes, receber um estranho como hóspede pode ser expresso idiomaticamente como “deixar que um estranho se assente à nossa mesa”, ou “oferecer uma cama a um estranho” ou “deixar que um forasteiro entre em nossa casa”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-12-07 15:03:11" LastEditedBy="user4">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被視為大家庭成員或親密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>顯示熱情好客；接待陌生人；熱情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些語言是採用習語來表達：「讓陌生人同桌用膳」，「給陌生人提供一張牀」，或「讓陌生人進屋」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>recibir y mostrar hospitalidad a un forastero, es decir, a alguien que no es considerado miembro de la familia extendida o un amigo cercano</DefinitionShort>
+                <Glosses>
+                  <Gloss>mostrar hospitalidad</Gloss>
+                  <Gloss>recibir a un extranjero como invitado</Gloss>
+                  <Gloss>hospitalidad</Gloss>
+                </Glosses>
+                <Comments>Recibir a un extraño como invitado a veces se expresa idiomáticamente como "dejar que un extraño se siente en la mesa de uno", "ofrecer una cama a un extraño" o "dejar que un extraño entre en la casa".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>प्राप्त करते हैं और एक अजनबी के लिए आतिथ्य दिखाने के लिए, कि है, के लिए कोई है जो बड़े परिवार के एक सदस्य या एक करीबी दोस्त के रूप में नहीं माना जाता है</DefinitionShort>
+                <Glosses>
+                  <Gloss>आतिथ्य दिखाने के लिए</Gloss>
+                  <Gloss>अतिथि के रूप में एक अजनबी प्राप्त करने के लिए</Gloss>
+                  <Gloss>सत्कार</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</DefinitionShort>
+                <Glosses>
+                  <Gloss>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 13:41:43" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>recevoir et montrer hospitalité envers un étranger, qui est, quelqu'un qui n'est pas perçu comme un membre d'une grande famille ou un ami proche
+</DefinitionShort>
+                <Glosses>
+                  <Gloss>montrer hospitalité, recevoir un étranger comme un invité, hospitalité</Gloss>
+                </Glosses>
+                <Comments>Accueillir un étranger en tant qu’invité s’exprime parfois de façon idiomatique: "laisser un étranger s'asseoir à sa table", "offrir un lit à un étranger" ou "laisser un étranger entrer dans sa maison".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被视为大家庭成员或亲密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>显示热情好客；接待陌生人；热情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些语言是采用习语来表达：“让陌生人同桌用膳”，“给陌生人提供一张床”，或“让陌生人进屋”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξενίζω" EntryCode="34.57" Source="">
+                <ILLReferences>
+                  <ILLReference>04402800700044</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ὃς ἀναδεξάμενος ἡμᾶς τρεῖς ἡμέρας φιλοφρόνως ἐξένισεν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘he welcomed us and for three days he treated us kindly as his guests’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「他歡迎我們，親切地招待了我們三天」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“他欢迎我们，亲切地招待了我们三天”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04401000600004</LEXReference>
+              <LEXReference>04401001800020</LEXReference>
+              <LEXReference>04401002300008</LEXReference>
+              <LEXReference>04401003200024</LEXReference>
+              <LEXReference>04402101600026</LEXReference>
+              <LEXReference>04402800700044</LEXReference>
+              <LEXReference>05801300200020</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003482001002000" IsBiblicalTerm="Y" EntryCode="25.206" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Attitudes and Emotions</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Surprise, Astonish</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>ξενίζομαι</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(compare {L:ξένος&lt;SDBG:ξένος:000000&gt;} ‘unknown, surprising,’ {D:28.34}) to experience a sudden feeling of unexpected wonder</DefinitionShort>
+                <Glosses>
+                  <Gloss>to be surprised</Gloss>
+                </Glosses>
+                <Comments>The experience of ‘surprise’ may be expressed idiomatically in some languages, for example, ‘to be left with one’s mouth open’ or ‘to have one’s eyes made wide open.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(confira {L:ξένος&lt;SDBG:ξένος:000000&gt;}, “desconhecido, surpreendente”, {D:28.34}) experimentar um repentino sentimento de inesperada admiração</DefinitionShort>
+                <Glosses>
+                  <Gloss>ficar admirado</Gloss>
+                  <Gloss>estranhar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2020-04-06 14:30:19" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（比較 {L:ξένος&lt;SDBG:ξένος:000000&gt;}「未知的，令人驚訝的」{D:28.34}）經歷出乎意外的突然感覺</DefinitionShort>
+                <Glosses>
+                  <Gloss>覺得奇怪；驚奇</Gloss>
+                </Glosses>
+                <Comments>有些語言用習語來表達「驚奇」這種感受，比如：「張大嘴巴不能說話」，或「眼睛睜得老大」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(compare ξένος desconocido, sorprendente, {D:28.34}) experimentar un repentino sentimiento de asombro inesperado</DefinitionShort>
+                <Glosses>
+                  <Gloss>estar sorprendido</Gloss>
+                </Glosses>
+                <Comments>La experiencia de "sorpresa" puede expresarse de forma idiomática en algunos idiomas, por ejemplo, "quedarse con la boca abierta" o "tener los ojos bien abiertos".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(अज्ञात, आश्चर्य की बात, {D:28.34} ξένος तुलना) अप्रत्याशित आश्चर्य की अचानक भावना का अनुभव करने के</DefinitionShort>
+                <Glosses>
+                  <Gloss>हैरान होना</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>അപ്രതീക്ഷിത അത്ഭുതവും പെട്ടെന്ന് തോന്നൽ അനുഭവിക്കാൻ: (ξένος അജ്ഞാത, അതിശയിക്കാനില്ല, {28.34 ഡി} താരതമ്യം)</DefinitionShort>
+                <Glosses>
+                  <Gloss>അപ്രതീക്ഷിത അത്ഭുതവും പെട്ടെന്ന് തോന്നൽ അനുഭവിക്കാൻ: (ξένος അജ്ഞാത, അതിശയിക്കാനില്ല, {28.34 ഡി} താരതമ്യം)</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 13:42:56" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>(comparez {ξένος} ‘inconnu, surprenant’ ’{D:28.34}) pour ressentir un soudain émerveillement inattendu</DefinitionShort>
+                <Glosses>
+                  <Gloss>être surpris</Gloss>
+                </Glosses>
+                <Comments>L’expérience de "surprise" peut être exprimée de manière idiomatique dans certaines langues, par exemple, "être laissé bouche bée" ou «avoir les yeux grands ouverts".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort> يمكن المقارنة مع 28.34  ξένος {مجهول، مفاجئ}. أن ينتاب المرء شعور مفاجئ  من دهشة غير متوقعة </DefinitionShort>
+                <Glosses>
+                  <Gloss>يستغرب</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（比较 {L:ξένος&lt;SDBG:ξένος:000000&gt;}“未知的，令人惊讶的”{D:28.34}）经历出乎意外的突然感觉</DefinitionShort>
+                <Glosses>
+                  <Gloss>觉得奇怪；惊奇</Gloss>
+                </Glosses>
+                <Comments>有些语言用习语来表达“惊奇”这种感受，比如：“张大嘴巴不能说话”，或“眼睛睁得老大”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξενίζω" EntryCode="25.206" Source="">
+                <ILLReferences>
+                  <ILLReference>06000401200006</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>μὴ ξενίζεσθε τῇ ἐν ὑμῖν πυρώσει πρὸς πειρασμὸν ὑμῖν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘do not be surprised at the painful testing you are suffering’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「有火般的試驗臨到你們，不要覺得奇怪」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“有火般的试验临到你们，不要觉得奇怪”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04401702000002</LEXReference>
+              <LEXReference>06000400400006</LEXReference>
+              <LEXReference>06000401200006</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003483000000000" Lemma="ξενοδοχέω" Version="0" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3580</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-09-12 20:59:34 sarah</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003483001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs>
+          <Construct Lemma="ξενοδοχέω" BaseFormIndex="1">
+            <WordMeaningSet>
+              <Word>ξενίζω</Word>
+            </WordMeaningSet>
+            <WordMeaningSet>
+              <Word>δέχομαι</Word>
+            </WordMeaningSet>
+          </Construct>
+        </Constructs>
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003483001001000" IsBiblicalTerm="Y" EntryCode="34.57" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Association</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Show Hospitality</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>to receive and show hospitality to a stranger, that is, someone who is not regarded as a member of the extended family or a close friend</DefinitionShort>
+                <Glosses>
+                  <Gloss>to show hospitality</Gloss>
+                  <Gloss>to receive a stranger as a guest</Gloss>
+                  <Gloss>hospitality</Gloss>
+                </Glosses>
+                <Comments>To receive a stranger as a guest is sometimes expressed idiomatically as ‘to let a stranger sit at one’s table,’ ‘to offer a bed to a stranger,’ or ‘to let a stranger enter one’s house.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>receber e dar hospedagem a um estranho, ou seja, alguém que não é amigo chegado ou um membro da família estendida</DefinitionShort>
+                <Glosses>
+                  <Gloss>ser hospitaleiro</Gloss>
+                  <Gloss>acolher um estranho como hóspede</Gloss>
+                  <Gloss>hospedagem</Gloss>
+                </Glosses>
+                <Comments>Às vezes, receber um estranho como hóspede pode ser expresso idiomaticamente como “deixar que um estranho se assente à nossa mesa”, ou “oferecer uma cama a um estranho” ou “deixar que um forasteiro entre em nossa casa”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-12-07 15:02:54" LastEditedBy="user4">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被視為大家庭成員或親密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>顯示熱情好客；接待陌生人；熱情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些語言是採用習語來表達：「讓陌生人同桌用膳」，「給陌生人提供一張牀」，或「讓陌生人進屋」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>recibir y mostrar hospitalidad a un forastero, es decir, a alguien que no es considerado miembro de la familia extendida o un amigo cercano</DefinitionShort>
+                <Glosses>
+                  <Gloss>mostrar hospitalidad</Gloss>
+                  <Gloss>recibir a un extranjero como invitado</Gloss>
+                  <Gloss>hospitalidad</Gloss>
+                </Glosses>
+                <Comments>Recibir a un extraño como invitado a veces se expresa idiomáticamente como "dejar que un extraño se siente en la mesa de uno", "ofrecer una cama a un extraño" o "dejar que un extraño entre en la casa".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>प्राप्त करते हैं और एक अजनबी के लिए आतिथ्य दिखाने के लिए, कि है, के लिए कोई है जो बड़े परिवार के एक सदस्य या एक करीबी दोस्त के रूप में नहीं माना जाता है</DefinitionShort>
+                <Glosses>
+                  <Gloss>आतिथ्य दिखाने के लिए</Gloss>
+                  <Gloss>अतिथि के रूप में एक अजनबी प्राप्त करने के लिए</Gloss>
+                  <Gloss>सत्कार</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</DefinitionShort>
+                <Glosses>
+                  <Gloss>അതിഥിയായിരുന്നു സ്വീകരിക്കാനോ, ഹോസ്പിറ്റാലിറ്റി കാണിക്കാൻ, ആ, കുടുംബത്തിലെ അംഗമായ ഒരു സുഹൃത്ത് പരിഗണിക്കപ്പെടുന്നത് ആരെയും ആണ്</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 13:49:05" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>recevoir et montrer l'hospitalité à un étranger, c'est-à-dire quelqu'un qui n'est pas considéré comme un membre de la famille élargie ou un ami proche</DefinitionShort>
+                <Glosses>
+                  <Gloss>faire preuve d'hospitalité</Gloss>
+                  <Gloss>recevoir un étranger en tant qu'invité</Gloss>
+                  <Gloss>hospitalité</Gloss>
+                </Glosses>
+                <Comments>Accueillir un étranger en tant qu’invité s’exprime parfois de façon idiomatique: "laisser un étranger s'asseoir à sa table", "offrir un lit à un étranger" ou "laisser un étranger entrer dans sa maison".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>接待和款待陌生人，即不被视为大家庭成员或亲密朋友的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>显示热情好客；接待陌生人；热情款待</Gloss>
+                </Glosses>
+                <Comments>接待陌生人到家中做客，有些语言是采用习语来表达：“让陌生人同桌用膳”，“给陌生人提供一张床”，或“让陌生人进屋”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξενοδοχέω" EntryCode="34.57" Source="">
+                <ILLReferences>
+                  <ILLReference>05400501000016</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>εἰ ἐξενοδόχησεν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘if she receives guests’ or ‘if she is hospitable’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「接待客旅」或「熱情好客」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“接待客旅”或“热情好客”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>05400501000016</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003484000000000" Lemma="ξένος" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3581</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma />
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-03-28 03:22:04 administrator</Date>
+      <Date>2017-05-09 22:18:46 sarah</Date>
+      <Date>2018-06-03 09:13:57 sl</Date>
+      <Date>2020-05-19 05:13:25 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003484001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>adjc.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξένος" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-η, ον</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξενίζω</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003484001001000" IsBiblicalTerm="Y" EntryCode="28.34" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Know</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Well Known, Clearly Shown, Revealed</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm />
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>pertaining to not being previously known and hence unheard of and unfamiliar</DefinitionShort>
+                <Glosses>
+                  <Gloss>unknown</Gloss>
+                  <Gloss>unheard of</Gloss>
+                  <Gloss>unfamiliar</Gloss>
+                  <Gloss>surprising</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>relativo a não ser previamente conhecido e, portanto, de que não se ouviu falar ou que não é familiar</DefinitionShort>
+                <Glosses>
+                  <Gloss>desconhecido</Gloss>
+                  <Gloss>fora do comum</Gloss>
+                  <Gloss>inaudito</Gloss>
+                  <Gloss>surpreendente</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2018-08-28 09:09:17" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>relatif à ce qui n'était pas connu auparavant et donc inédit et inhabituel</DefinitionShort>
+                <Glosses>
+                  <Gloss>inconnu</Gloss>
+                  <Gloss>inédit</Gloss>
+                  <Gloss>inhabituel</Gloss>
+                  <Gloss>surprenant</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2020-04-06 14:33:39" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>先前不為人所知的，因此是未曾聽聞和不熟悉的</DefinitionShort>
+                <Glosses>
+                  <Gloss>未知的；未曾聽聞的；不熟悉的；令人驚訝的；不尋常的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>perteneciente a no ser conocido previamente y, por lo tanto, poco conocido y desconocido.</DefinitionShort>
+                <Glosses>
+                  <Gloss>desconocido</Gloss>
+                  <Gloss>inaudito</Gloss>
+                  <Gloss>sorprendente</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>पहले से जाना जाता है और इसलिए अनसुना और अपरिचित नहीं किया जा रहा से संबंधित</DefinitionShort>
+                <Glosses>
+                  <Gloss>अनजान</Gloss>
+                  <Gloss>अनसुना</Gloss>
+                  <Gloss>अपरिचित</Gloss>
+                  <Gloss>चौंका देने वाला</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>മുമ്പ് അറിഞ്ഞും അതുകൊണ്ടുതന്നെ -കൊടുമുടികൾ ആൻഡ് അപരിചിതമായ സാധ്യതകളിലേക്ക് അല്ല സംബന്ധിച്ച</DefinitionShort>
+                <Glosses>
+                  <Gloss>മുമ്പ് അറിഞ്ഞും അതുകൊണ്ടുതന്നെ -കൊടുമുടികൾ ആൻഡ് അപരിചിതമായ സാധ്യതകളിലേക്ക് അല്ല സംബന്ധിച്ച</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>يتعلق بكونه لم يكن معروفاً من قبل و بالتالي هو غير مألوف و  لم يُسمَع به </DefinitionShort>
+                <Glosses>
+                  <Gloss>غريب، غير مألوف، غير معروف، لم يُسمَع به</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>先前不为人所知的，因此是未曾听闻和不熟悉的</DefinitionShort>
+                <Glosses>
+                  <Gloss>未知的；未曾听闻的；不熟悉的；令人惊讶的；不寻常的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξένος" EntryCode="28.34" Source="">
+                <ILLReferences>
+                  <ILLReference>06000401200026</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ὡς ξένου ὑμῖν συμβαίνοντος</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘as though something unknown before were happening to you’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「好像遭遇到奇怪的事似的」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“好像遭遇到奇怪的事似的”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04002700700028</LEXReference>
+              <LEXReference>04401701800046</LEXReference>
+              <LEXReference>05801300900008</LEXReference>
+              <LEXReference>06000401200026</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+      <BaseForm Id="003484002000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>adjc.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξένος" BaseFormIndex="2">
+            <Form />
+            <Realizations>
+              <Realization>-ου</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξενίζω</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003484002001000" IsBiblicalTerm="M" EntryCode="11.73" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Groups and Classes of Persons and Members of Such Groups and Classes</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Socio-Political</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm />
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>a person belonging to a socio-political group other than the reference group</DefinitionShort>
+                <Glosses>
+                  <Gloss>stranger</Gloss>
+                  <Gloss>foreigner</Gloss>
+                </Glosses>
+                <Comments>Terms for ‘stranger’ or ‘foreigner’ are often based upon geographical differences or upon lack of previous knowledge. For example, ‘I was a stranger’ may be rendered as ‘I came from another country’ or ‘I was not known to any of you.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-03-06 07:16:44" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>不屬於所提到的社會政治群體的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>陌生人；異鄉人</Gloss>
+                </Glosses>
+                <Comments>使用「異鄉人」或「外國人」等詞，往往是基於地理差異或先前缺乏了解，例如：「我是異鄉人」可以翻譯為：「我來自另一個國家」，或「你們誰也不認識我」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>uma pessoa que pertence a um grupo sociopolítico diferente do grupo de referência</DefinitionShort>
+                <Glosses>
+                  <Gloss>estrangeiro</Gloss>
+                  <Gloss>forasteiro</Gloss>
+                </Glosses>
+                <Comments>Termos que designam “estrangeiro” ou “forasteiro” muitas vezes se baseiam em diferenças geográficas ou falta de conhecimento prévio. Por exemplo, “eu era estrangeiro” pode ser traduzido por “eu vim de outro país” ou “eu não era conhecido de nenhum de vós”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:04:31" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>personne qui appartient à une groupe socio-politique autre que le groupe de référence</DefinitionShort>
+                <Glosses>
+                  <Gloss>étranger</Gloss>
+                  <Gloss>inconnu</Gloss>
+                </Glosses>
+                <Comments>Les termes "étranger" ou "non-résidant" sont souvent basés sur des différences géographiques ou un manque de connaissance préalable. Par exemple, "j'étais étranger" peut être traduit par "je viens d'un autre pays" ou par "je ne vous connaissais pas".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>una persona que pertenece a un grupo sociopolítico distinto del grupo de referencia</DefinitionShort>
+                <Glosses>
+                  <Gloss>forastero</Gloss>
+                  <Gloss>extranjero</Gloss>
+                </Glosses>
+                <Comments>Los términos para "forastero" o "extranjero" a menudo se basan en diferencias geográficas o en la falta de conocimiento previo. Por ejemplo, "Yo era un forastero" se puede interpretar como "vine de otro país" o "no me conocían".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>एक व्यक्ति एक सामाजिक-राजनीतिक संदर्भ समूह के अलावा अन्य समूह से संबंधित</DefinitionShort>
+                <Glosses>
+                  <Gloss>अजनबी</Gloss>
+                  <Gloss>परदेशी</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>റഫറൻസ് ഗ്രൂപ്പുമല്ലാതെയുള്ളവര് ഒരു സാമൂഹിക-രാഷ്ട്രീയ വിഭാഗമായി ഒരു വ്യക്തി</DefinitionShort>
+                <Glosses>
+                  <Gloss>റഫറൻസ് ഗ്രൂപ്പുമല്ലാതെയുള്ളവര് ഒരു സാമൂഹിക-രാഷ്ട്രീയ വിഭാഗമായി ഒരു വ്യക്തി</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>شخص لا ينتمي للمجموعة الاجتماعية السياسية المشار إليها</DefinitionShort>
+                <Glosses>
+                  <Gloss>غريب، اجنبي</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>不属于所提到的社会政治群体的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>陌生人；异乡人</Gloss>
+                </Glosses>
+                <Comments>使用“异乡人”或“外国人”等词，往往是基于地理差异或先前缺乏了解，例如：“我是异乡人”可以翻译为：“我来自另一个国家”，或“你们谁也不认识我”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξένος" EntryCode="11.73" Source="">
+                <ILLReferences>
+                  <ILLReference>04002503500022</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ξένος ἤμην καὶ συνηγάγετέ με</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘I was a stranger and you welcomed me in your homes’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「我流落異鄉，你們收留我」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“我流落异乡，你们收留我”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04002503500022</LEXReference>
+              <LEXReference>04002503800010</LEXReference>
+              <LEXReference>04002504300002</LEXReference>
+              <LEXReference>04002504400028</LEXReference>
+              <LEXReference>04401702100014</LEXReference>
+              <LEXReference>04900201200028</LEXReference>
+              <LEXReference>04900201900010</LEXReference>
+              <LEXReference>05801101300038</LEXReference>
+              <LEXReference>06400100500024</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003484002002000" IsBiblicalTerm="Y" EntryCode="34.60" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Association</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Show Hospitality</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>(ου m)</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>a person who shows hospitality to guests</DefinitionShort>
+                <Glosses>
+                  <Gloss>host</Gloss>
+                </Glosses>
+                <Comments>In rendering ‘host’ it may be necessary to employ a phrase, for example, ‘who welcomed and took care of us in his home.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>alguém que é hospitaleiro para com outras pessoas</DefinitionShort>
+                <Glosses>
+                  <Gloss>hospedeiro</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-02-18 06:23:44" LastEditedBy="user3">
+                <DefinitionLong />
+                <DefinitionShort>熱情地接待客人的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>東道主；主人家</Gloss>
+                </Glosses>
+                <Comments>翻譯「東道主」可能需要採用一個短語，例如「歡迎我們進入他家並照顧我們的那個人」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:02:31" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>personne qui fait preuve d'hospitalité pour les visiteurs</DefinitionShort>
+                <Glosses>
+                  <Gloss>hôte</Gloss>
+                </Glosses>
+                <Comments>En traduisant "hôte" cela peut être nécessaire d'employer une phrase, par exemple, "celui qui nous a accueilli et qui nous assisté chez lui". </Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>una persona que muestra hospitalidad a los huéspedes</DefinitionShort>
+                <Glosses>
+                  <Gloss>hospedador</Gloss>
+                </Glosses>
+                <Comments>Al traducir "anfitrión", puede ser necesario emplear una frase, por ejemplo, "que nos recibió y nos cuidó en su casa".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>एक व्यक्ति जो मेहमानों के लिए आतिथ्य से पता चलता</DefinitionShort>
+                <Glosses>
+                  <Gloss>मेज़बान</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>അതിഥികൾക്ക് ആതിഥ്യമരുളാൻ കാണിക്കുന്ന ഒരു വ്യക്തി</DefinitionShort>
+                <Glosses>
+                  <Gloss>അതിഥികൾക്ക് ആതിഥ്യമരുളാൻ കാണിക്കുന്ന ഒരു വ്യക്തി</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>热情地接待客人的人</DefinitionShort>
+                <Glosses>
+                  <Gloss>东道主；主人家</Gloss>
+                </Glosses>
+                <Comments>翻译“东道主”可能需要采用一个短语，例如“欢迎我们进入他家并照顾我们的那个人”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξένος" EntryCode="34.60" Source="">
+                <ILLReferences>
+                  <ILLReference>04501602300010</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἀσπάζεται ὑμᾶς Γάϊος ὁ ξένος μου</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘Gaius my host greets you’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「接待我的該猶問候你們」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“接待我的该犹问候你们”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04501602300010</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003485000000000" Lemma="ξέστης" Version="0" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3582</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003485001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun, m.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξέστης" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-ου</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003485001001000" IsBiblicalTerm="Y" EntryCode="6.126" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Artifacts</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Containers</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(a borrowing based on Latin sextarius, a Roman measure equal to about a half liter, one pint) a kind of small pitcher or jar</DefinitionShort>
+                <Glosses>
+                  <Gloss>pitcher</Gloss>
+                  <Gloss>jar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(um empréstimo baseado no latim \it sextarius,\it* que era uma medida romana equivalente a mais ou menos meio litro) um tipo de jarro pequeno</DefinitionShort>
+                <Glosses>
+                  <Gloss>jarro</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-02-09 09:15:06" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（拉丁語 sextarius 的借用詞，該詞是指一種羅馬液量，約等於半公升，即一品脫）一種小罐或小壺</DefinitionShort>
+                <Glosses>
+                  <Gloss>罐；壺</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(un préstamo basado en sextarius latin, una medida romana igual a aproximadamente medio litro, una pinta) una especie de frasco o jarra pequeña</DefinitionShort>
+                <Glosses>
+                  <Gloss>jarro</Gloss>
+                  <Gloss>cántaro</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>छोटे घड़े या जार का एक प्रकार (एक उधार लैटिन sextarius, एक रोमन उपाय एक आधा लीटर के बारे में के बराबर है, एक पिंट के आधार पर)</DefinitionShort>
+                <Glosses>
+                  <Gloss>मटकी</Gloss>
+                  <Gloss>जार</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(ഒരു കടം വാങ്ങൽ ലാറ്റിൻ സെക്സതരിഉസ് അടിസ്ഥാനമാക്കി, ഒരു അര ലിറ്റർ ഏകദേശം തുല്യമായ റോമൻ അളവു ഒരു അരക്കുപ്പി) ചെറിയ പാത്രത്തിലെ അല്ലെങ്കിൽ തുരുത്തി ഒരു തരം</DefinitionShort>
+                <Glosses>
+                  <Gloss>(ഒരു കടം വാങ്ങൽ ലാറ്റിൻ സെക്സതരിഉസ് അടിസ്ഥാനമാക്കി, ഒരു അര ലിറ്റർ ഏകദേശം തുല്യമായ റോമൻ അളവു ഒരു അരക്കുപ്പി) ചെറിയ പാത്രത്തിലെ അല്ലെങ്കിൽ തുരുത്തി ഒരു തരം</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:05:53" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>(un emprunt basé sur le latin sextarius, une mesure romaine égale à un demi-litre, une pinte) une sorte de petit pichet ou bocal</DefinitionShort>
+                <Glosses>
+                  <Gloss>pichet ou bocal</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مستعار من الكلمة اللاتينية sextarius و التي هي مكيال روماني يساوي حوالي نصف اللتر . نوع من الأباريق او القوارير الصغيرة </DefinitionShort>
+                <Glosses>
+                  <Gloss>إبريق؛ قنينة</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（拉丁语 sextarius 的借用词，该词是指一种罗马液量，约等于半公升，即一品脱）一种小罐或小壶</DefinitionShort>
+                <Glosses>
+                  <Gloss>罐；壶</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξέστης" EntryCode="6.126" Source="">
+                <ILLReferences>
+                  <ILLReference>04100700400038</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>βαπτισμοὺς ποτηρίων καὶ ξεστῶν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘the washing of cups and pitchers’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「洗杯、罐」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“洗杯、罐”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04100700400038</LEXReference>
+            </LEXReferences>
+            <LEXLinks>
+              <LEXLink>realia:5.12</LEXLink>
+            </LEXLinks>
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003486000000000" Lemma="ξηραίνω" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3583</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma>ξηραίνομαι</AlternateLemma>
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-09-08 14:24:02 sarah</Date>
+      <Date>2018-06-03 09:11:52 sl</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003486001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξηραίνω" BaseFormIndex="1">
+            <Form>aor.</Form>
+            <Realizations>
+              <Realization>ἐξήρανα</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+          <Inflection Lemma="ξηραίνω" BaseFormIndex="1">
+            <Form>aor.pass.</Form>
+            <Realizations>
+              <Realization>ἐξηράνθην</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+          <Inflection Lemma="ξηραίνω" BaseFormIndex="1">
+            <Form>pf.pass.</Form>
+            <Realizations>
+              <Realization>ἐξήραμμαι</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξηρός</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003486001001000" IsBiblicalTerm="M" EntryCode="79.82" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Features of Objects</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wet, Dry</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>to cause something to become dry</DefinitionShort>
+                <Glosses>
+                  <Gloss>to dry out</Gloss>
+                  <Gloss>to dry up</Gloss>
+                  <Gloss>to wither</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>fazer com que algo seque</DefinitionShort>
+                <Glosses>
+                  <Gloss>secar</Gloss>
+                  <Gloss>tornar seco</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2018-08-28 09:18:59" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>faire qu'une chose devienne sèche</DefinitionShort>
+                <Glosses>
+                  <Gloss>dessécher</Gloss>
+                  <Gloss>sécher</Gloss>
+                  <Gloss>faner</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>hacer que algo se seque</DefinitionShort>
+                <Glosses>
+                  <Gloss>secar</Gloss>
+                  <Gloss>marchitar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-01-26 02:14:46" LastEditedBy="user4">
+                <DefinitionLong />
+                <DefinitionShort>使某物變乾</DefinitionShort>
+                <Glosses>
+                  <Gloss>變乾；乾涸；枯乾；枯萎；凋謝</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>कुछ पैदा करने के लिए सूखी बनने के लिए</DefinitionShort>
+                <Glosses>
+                  <Gloss>बाहर शुष्क करने के लिए</Gloss>
+                  <Gloss>सूख करने के लिए</Gloss>
+                  <Gloss>सूख करने के लिए</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ഉണങ്ങി എന്തെങ്കിലും കാരണമാകുന്നതായി</DefinitionShort>
+                <Glosses>
+                  <Gloss>ഉണങ്ങി എന്തെങ്കിലും കാരണമാകുന്നതായി</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>使某物变干</DefinitionShort>
+                <Glosses>
+                  <Gloss>变干；干涸；枯干；枯萎；凋谢</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="79.82" Source="">
+                <ILLReferences>
+                  <ILLReference>05900101100018</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἀνέτειλεν γὰρ ὁ ἥλιος σὺν τῷ καύσωνι καὶ ἐξήρανεν τὸν χόρτον</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘for the sun comes up with its heat and withers the grass’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「太陽出來，熱風颳起，草就枯乾」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“太阳出来，热风刮起，草就枯干”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04001300600022</LEXReference>
+              <LEXReference>04002101900064</LEXReference>
+              <LEXReference>04002102000018</LEXReference>
+              <LEXReference>04200800600018</LEXReference>
+              <LEXReference>05900101100018</LEXReference>
+              <LEXReference>06000102400026</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003486001002000" IsBiblicalTerm="M" EntryCode="79.81" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Features of Objects</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wet, Dry</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>ξηραίνομαι[a]</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivative of {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a] ‘dry,’ {D:79.80}) to become dry</DefinitionShort>
+                <Glosses>
+                  <Gloss>to dry up</Gloss>
+                </Glosses>
+                <Comments>It may be more appropriate in a number of languages to translate this clause in {S:04100502900006} as ‘and immediately her menstrual bleeding stopped.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivação de {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a], “seco”, {D:79.80}) ficar seco</DefinitionShort>
+                <Glosses>
+                  <Gloss>secar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-01-26 02:17:12" LastEditedBy="user4">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]「乾的」{D:79.80} 的衍生詞）變乾</DefinitionShort>
+                <Glosses>
+                  <Gloss>變乾；枯萎；枯乾；乾了；止住</Gloss>
+                </Glosses>
+                <Comments>在一些語言中，{S:04100502900006} 中的這個從句最好譯作：「她月經出血的情況立刻停止了」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:07:17" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>(dérivé de ξηρός[a] "sec", {D:79.80}) devenir sec</DefinitionShort>
+                <Glosses>
+                  <Gloss>sécher</Gloss>
+                </Glosses>
+                <Comments>Il serait peut-être plus approprié, dans un certain nombre de langues, de traduire cette clause en {S:04100502900006} comme suit: "et immédiatement ses saignements menstruels ont cessé".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(derivado de ξηρός [a] seco, {D:79.80}) secarse</DefinitionShort>
+                <Glosses>
+                  <Gloss>secar</Gloss>
+                </Glosses>
+                <Comments>Puede ser más apropiado en varios idiomas traducir esta cláusula en {S:04100502900006} como "e inmediatamente se detuvo su sangrado menstrual".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηρός के व्युत्पन्न [एक] सूखी, {D:79.80}) सूखी बनने के लिए</DefinitionShort>
+                <Glosses>
+                  <Gloss>सूख करने के लिए</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>വരണ്ട ആകാൻ: (ξηρός നിന്നും കലാസൃഷ്ടി [ഒരു] ഉണങ്ങിയ, {79,80 ഡി})</DefinitionShort>
+                <Glosses>
+                  <Gloss>വരണ്ട ആകാൻ: (ξηρός നിന്നും കലാസൃഷ്ടി [ഒരു] ഉണങ്ങിയ, {79,80 ഡി})</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]“干的”{D:79.80} 的衍生词）变干</DefinitionShort>
+                <Glosses>
+                  <Gloss>变干；枯萎；枯干；干了；止住</Gloss>
+                </Glosses>
+                <Comments>在一些语言中，{S:04100502900006} 中的这个从句最好译作：“她月经出血的情况立刻停止了”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="79.81" Source="">
+                <ILLReferences>
+                  <ILLReference>04100502900006</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>καὶ εὐθὺς ἐξηράνθη ἡ πηγὴ τοῦ αἵματος αὐτῆς</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘and immediately the flow of her blood dried up’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「她的流血立刻止住」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“她的流血立刻止住”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="79.81" Source="">
+                <ILLReferences>
+                  <ILLReference>04301500600026</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἐβλήθη ἔξω ὡς τὸ κλῆμα καὶ ἐξηράνθη</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘it is thrown out like a branch and dries up’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「就像枝子被丟在外面，枯乾了」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“就像枝子被丢在外面，枯干了”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="79.81" Source="">
+                <ILLReferences>
+                  <ILLReference>06601601200032</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἐξηράνθη τὸ ὕδωρ</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘the river dried up’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「河水就乾了」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“河水就干了”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04100400600026</LEXReference>
+              <LEXReference>04100502900006</LEXReference>
+              <LEXReference>04101102000014</LEXReference>
+              <LEXReference>04101102100026</LEXReference>
+              <LEXReference>04301500600026</LEXReference>
+              <LEXReference>06601601200032</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003486001003000" IsBiblicalTerm="M" EntryCode="23.198" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Physiological Processes and States</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Ripen, Produce Fruit, Bear Seed</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>ξηραίνομαι[b]</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivative of {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a] ‘dry,’ {D:79.80}) to become ripe, with reference to grain which dries in the process of ripening</DefinitionShort>
+                <Glosses>
+                  <Gloss>to become ripe</Gloss>
+                  <Gloss>to be ripe</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivação de {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a], “seco”, {D:79.80}) amadurecer, com referência a cereais que secam no processo de amadurecimento</DefinitionShort>
+                <Glosses>
+                  <Gloss>amadurecer</Gloss>
+                  <Gloss>estar maduro</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2018-08-28 09:20:46" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>(dérivé de ξηρός[a] sec, {D:79.80}) devenir mûr, renvoyant au grain qui sèche lors du processus de maturation</DefinitionShort>
+                <Glosses>
+                  <Gloss>devenir mûr</Gloss>
+                  <Gloss>être mûr</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-11-15 02:43:13" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]「乾的」{D:79.80} 的衍生詞）成熟了，指穀物在成熟的過程中變乾</DefinitionShort>
+                <Glosses>
+                  <Gloss>成熟了；已經熟了</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(derivado de ξηρός [a] seco, {D:79.80}) madurar, con referencia al grano que se seca en el proceso de maduración</DefinitionShort>
+                <Glosses>
+                  <Gloss>madurar</Gloss>
+                  <Gloss>estar maduro</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηρός के व्युत्पन्न [एक] सूखी, {D:79.80}) अनाज जो पकने की प्रक्रिया में सूख जाता है करने के लिए परिपक्व बनने के लिए, संदर्भ के साथ</DefinitionShort>
+                <Glosses>
+                  <Gloss>परिपक्व बनने के लिए</Gloss>
+                  <Gloss>परिपक्व होने के लिए</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηρός നിന്നും കലാസൃഷ്ടി [ഒരു] ഉണങ്ങിയ, {ഡി: 79,80}) കായ്കൾ പ്രക്രിയയിൽ ഇതില് ഏത് ധാന്യം സംബന്ധിച്ചോ പഴുത്ത ആകുവാൻ</DefinitionShort>
+                <Glosses>
+                  <Gloss>(Ξηρός നിന്നും കലാസൃഷ്ടി [ഒരു] ഉണങ്ങിയ, {ഡി: 79,80}) കായ്കൾ പ്രക്രിയയിൽ ഇതില് ഏത് ധാന്യം സംബന്ധിച്ചോ പഴുത്ത ആകുവാൻ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مشتق من  79.80  ξηρός {جاف}. أن يصبح ناضجاً، إشارة إلى الحبوب التي تتيبس خلال عملية النضوج </DefinitionShort>
+                <Glosses>
+                  <Gloss>ينضج، ناضج، تَيبُس الحصاد</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]“干的”{D:79.80} 的衍生词）成熟了，指谷物在成熟的过程中变干</DefinitionShort>
+                <Glosses>
+                  <Gloss>成熟了；已经熟了</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="23.198" Source="">
+                <ILLReferences>
+                  <ILLReference>06601401500058</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἐξηράνθη ὁ θερισμὸς τῆς γῆς</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘the harvest of the earth is ripe’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「地上的莊稼已經熟透了」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“地上的庄稼已经熟透了”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>06601401500058</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003486001004000" IsBiblicalTerm="M" EntryCode="23.172" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Physiological Processes and States</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Sickness, Disease, Weakness</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>ξηραίνομαι[c]</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(a figurative extension of meaning of ξηραίνομαι[a] ‘to dry up,’ {D:79.81}) to become stiff to the point of not being able to move</DefinitionShort>
+                <Glosses>
+                  <Gloss>to be stiff</Gloss>
+                  <Gloss>to be paralyzed</Gloss>
+                </Glosses>
+                <Comments>In some languages one may express the meaning of ‘to be stiff all over’ as ‘not able to move any part of the body.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(ampliação metafórica do significado de ξηραίνομαι[a], “secar”, {D:79.81}) endurecer ou enrijecer-se ao ponto de não mais poder se mover</DefinitionShort>
+                <Glosses>
+                  <Gloss>estar paralisado</Gloss>
+                  <Gloss>ficar enrijecido</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-11-15 02:46:06" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（{ξηραίνομαι}[a]「變乾」{D:79.81} 的引申喻意）變得僵硬，無法動彈</DefinitionShort>
+                <Glosses>
+                  <Gloss>僵硬；癱瘓；枯萎；枯乾；萎縮</Gloss>
+                </Glosses>
+                <Comments>有些語言可以把「全身僵硬」的意思表達為：「身體各個肢體都不能動彈」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:07:46" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>(sens élargi au figuré de ξηραίνομαι[a] "sécher", {D:79.81}) devenir raide au point de ne plus pouvoir bouger</DefinitionShort>
+                <Glosses>
+                  <Gloss>être raide</Gloss>
+                  <Gloss>être paralysé</Gloss>
+                </Glosses>
+                <Comments>Dans certaines langues, on peut exprimer le sens de "être raide partout» comme «impossible de bouger aucune partie du corps".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(una extensión figurativa del significado de ξηραίνομαι [a] secarse, {D:79.81}) volverse rígido hasta el punto de no poder moverse</DefinitionShort>
+                <Glosses>
+                  <Gloss>estar rígido</Gloss>
+                  <Gloss>estar paralizado</Gloss>
+                </Glosses>
+                <Comments>En algunos idiomas, uno puede expresar el significado de "estar rígido en todas partes" como "no poder mover ninguna parte del cuerpo".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηραίνομαι [एक] के अर्थ का एक आलंकारिक विस्तार, {D:79.81} सूख करने के लिए) ले जाने के लिए सक्षम नहीं होने की बात करने के कठोर बनने के लिए</DefinitionShort>
+                <Glosses>
+                  <Gloss>कठोर हो, झोले के मारे जा करने के लिए</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηραίνομαι അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു], {ഡി: 79,81} വറ്റിപ്പോയാൽ) നീക്കാൻ കഴിയാതിരിക്കുക അളവോളം ദുശ്ശാഠ്യവും ആകാൻ</DefinitionShort>
+                <Glosses>
+                  <Gloss>(Ξηραίνομαι അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു], {ഡി: 79,81} വറ്റിപ്പോയാൽ) നീക്കാൻ കഴിയാതിരിക്കുക അളവോളം ദുശ്ശാഠ്യവും ആകാൻ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مشتق من 79.81 ξηραίνομαι[ {يجف}. يصبح مُتيبساً لدرجة عدم القدرة على الحركة </DefinitionShort>
+                <Glosses>
+                  <Gloss>يتيبس، ينشل</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{ξηραίνομαι}[a]“变干”{D:79.81} 的引申喻意）变得僵硬，无法动弹</DefinitionShort>
+                <Glosses>
+                  <Gloss>僵硬；瘫痪；枯萎；枯干；萎缩</Gloss>
+                </Glosses>
+                <Comments>有些语言可以把“全身僵硬”的意思表达为：“身体各个肢体都不能动弹”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηραίνω" EntryCode="23.172" Source="">
+                <ILLReferences>
+                  <ILLReference>04100901800030</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>τρίζει τοὺς ὀδόντας καὶ ξηραίνεται</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘he grits his teeth and becomes stiff all over’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「牙關緊鎖，身體僵硬」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“牙关紧锁，身体僵硬”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04100300100022</LEXReference>
+              <LEXReference>04100901800030</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003487000000000" Lemma="ξηρός" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3584</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma>ξηρά</AlternateLemma>
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-01-29 17:23:01 administrator</Date>
+      <Date>2020-05-09 12:17:19 sl</Date>
+      <Date>2020-05-19 03:25:57 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003487001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>adjc.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξηρός" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-ά, -όν</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξηραίνω</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003487001001000" IsBiblicalTerm="Y" EntryCode="79.80" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Features of Objects</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wet, Dry</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>pertaining to being dry</DefinitionShort>
+                <Glosses>
+                  <Gloss>dry</Gloss>
+                  <Gloss>withered</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>relativo a estar seco</DefinitionShort>
+                <Glosses>
+                  <Gloss>seco</Gloss>
+                  <Gloss>enxuto</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2018-08-28 09:23:29" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>relatif à ce qui est sec</DefinitionShort>
+                <Glosses>
+                  <Gloss>sec</Gloss>
+                  <Gloss>flétri</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>perteneciente a estar seco</DefinitionShort>
+                <Glosses>
+                  <Gloss>seco</Gloss>
+                  <Gloss>marchitado</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-01-26 02:17:55" LastEditedBy="user4">
+                <DefinitionLong />
+                <DefinitionShort>形容是乾的</DefinitionShort>
+                <Glosses>
+                  <Gloss>乾的；枯萎的；枯乾的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>सूखी जा रहा से संबंधित</DefinitionShort>
+                <Glosses>
+                  <Gloss>सूखी</Gloss>
+                  <Gloss>मुरझाया हुआ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>വരണ്ട ഒരാളായി സര്വേ</DefinitionShort>
+                <Glosses>
+                  <Gloss>വരണ്ട ഒരാളായി സര്വേ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>形容是干的</DefinitionShort>
+                <Glosses>
+                  <Gloss>干的；枯萎的；枯干的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηρός" EntryCode="79.80" Source="">
+                <ILLReferences>
+                  <ILLReference>04202303100022</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἐν τῷ ξηρῷ τί γένηται;</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘what will it be like when (the wood) is dry?’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「在[樹木]枯乾的時候將會怎麼樣呢」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“在[树木]枯干的时候将会怎么样呢”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+              <LEXIllustration Lemma="ξηρός" EntryCode="79.80" Source="">
+                <ILLReferences>
+                  <ILLReference>05801102900016</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>διέβησαν τὴν Ἐρυθρὰν Θάλασσαν ὡς διὰ ξηρᾶς γῆς</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘they crossed the Red Sea as if on dry ground’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「他們過紅海如行乾地」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“他们过红海如行干地”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04202303100022</LEXReference>
+              <LEXReference>05801102900016</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003487001002000" IsBiblicalTerm="M" EntryCode="23.173" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Physiological Processes and States</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Sickness, Disease, Weakness</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(a figurative extension of meaning of {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a] ‘dry, withered,’ {D:79.80}) pertaining to a shrunken, withered, and hence immobile part of the body</DefinitionShort>
+                <Glosses>
+                  <Gloss>withered</Gloss>
+                  <Gloss>paralyzed</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(ampliação metafórica do significado de {L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a], “seco, ressequido”, {D:79.80}) relativo a um membro ou uma parte do corpo que encolheu, secou e, em razão disto, se tornou imóvel</DefinitionShort>
+                <Glosses>
+                  <Gloss>ressequido</Gloss>
+                  <Gloss>paralisado</Gloss>
+                  <Gloss>aleijado</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-01-14 09:01:45" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>(sens élargi au figuré de ξηρός[a] "sec, flétri", {D:79.80}) realtif à une partie du corps qui est réduite, atrophiée et donc immobilisée</DefinitionShort>
+                <Glosses>
+                  <Gloss>atrophié</Gloss>
+                  <Gloss>paralysé</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-11-15 07:04:22" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]「乾的；枯萎的」{D:79.80} 的引申喻意）因萎縮、枯乾而不能活動的身體部分</DefinitionShort>
+                <Glosses>
+                  <Gloss>萎縮的；枯萎的；枯乾的；癱瘓的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(una extensión figurativa del significado de ξηρός [a] seco, marchitado, {D:79.80}) relativa a una parte del cuerpo encogida, marchitada y, por lo tanto, inmóvil</DefinitionShort>
+                <Glosses>
+                  <Gloss>marchitado</Gloss>
+                  <Gloss>paralizado</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>([एक] सूखी, मुरझाया, {D:79.80} ξηρός के अर्थ का एक आलंकारिक विस्तार) शरीर के एक, सिकुड़ा हुआ मुरझाया, और इसलिए स्थिर भाग से संबंधित</DefinitionShort>
+                <Glosses>
+                  <Gloss>मुरझाया हुआ</Gloss>
+                  <Gloss>स्तंभित</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξηρός അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു] ഉണങ്ങിയ ഉണങ്ങിയും {ഡി: 79,80}) ശരീരത്തിന്റെ ഒരു, ചുരുക്കിയ ഉണങ്ങിപ്പോയി, അതുകൊണ്ട് ഇംമൊബിലെ ഭാഗം സര്വേ</DefinitionShort>
+                <Glosses>
+                  <Gloss>(Ξηρός അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു] ഉണങ്ങിയ ഉണങ്ങിയും {ഡി: 79,80}) ശരീരത്തിന്റെ ഒരു, ചുരുക്കിയ ഉണങ്ങിപ്പോയി, അതുകൊണ്ട് ഇംമൊബിലെ ഭാഗം സര്വേ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مشتق من 79.80  ξηρός {جاف، ذابل}. يتعلق بعضو  منكمش و ضعيف و بالتالي غير متحرك  من أعضاء الجسم  </DefinitionShort>
+                <Glosses>
+                  <Gloss>يابس، مشلول</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξηρός&lt;SDBG:ξηρός:000000&gt;}[a]“干的；枯萎的”{D:79.80} 的引申喻意）因萎缩、枯干而不能活动的身体部分</DefinitionShort>
+                <Glosses>
+                  <Gloss>萎缩的；枯萎的；枯干的；瘫痪的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηρός" EntryCode="23.173" Source="">
+                <ILLReferences>
+                  <ILLReference>04001201000012</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἄνθρωπος χεῖρα ἔχων ξηράν</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘a man who had a hand that was shrunken and paralyzed’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「一隻手萎縮了的人」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“一只手萎缩了的人”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04001201000012</LEXReference>
+              <LEXReference>04100300300014</LEXReference>
+              <LEXReference>04200600600048</LEXReference>
+              <LEXReference>04200600800024</LEXReference>
+              <LEXReference>04300500300018</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003487001003000" IsBiblicalTerm="Y" EntryCode="1.60" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Geographical Objects and Features</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Land in Contrast With the Sea</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms>
+              <LEXForm>ξηρά (ᾶς f)</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>dry land, in contrast with the sea</DefinitionShort>
+                <Glosses>
+                  <Gloss>land</Gloss>
+                </Glosses>
+                <Comments>In a number of languages a clear distinction is made between terms which designate land in contrast with water and those which designate cultivated land. Even in English the normal term for land close to water is ‘shore’ or ‘coast,’ and therefore one may translate {S:04001402400018} as ‘the boat was already far away from the shore.’ Similarly, in {S:04402702700042} one may translate ‘we were getting close to shore.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>terra seca, em contraste com o mar</DefinitionShort>
+                <Glosses>
+                  <Gloss>terra</Gloss>
+                </Glosses>
+                <Comments>Em várias línguas, faz-se uma distinção clara entre termos que designam terra em contraste com a água e termos que designam terra cultivada. Em português, o termo normal para terra próxima da água é “costa” ou “litoral”. Portanto, pode-se traduzir Mt 14.24 por “o barco já estava bem longe do litoral”. Do mesmo modo, em At 27.27 pode-se traduzir por “chegando perto do litoral” ou “chegando perto da costa”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-08-31 08:55:27" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>旱地，對比於海</DefinitionShort>
+                <Glosses>
+                  <Gloss>陸地</Gloss>
+                </Glosses>
+                <Comments>許多語言會清楚區分陸地的不同用語，如相對於水的陸地，以及用作耕地的陸地。中文會把靠近水的陸地稱為「岸」或「海岸」，因此，{S:04001402400018} 可以譯作「船離岸已經很遠」《現中》。同樣，{S:04402702700042} 可以譯作「我們已靠近岸邊」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:08:50" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>terre sèche, par contraste avec la mer</DefinitionShort>
+                <Glosses>
+                  <Gloss>terre</Gloss>
+                </Glosses>
+                <Comments>Dans un certain nombre de langues, une distinction claire est faite entre les termes qui désignent une terre par opposition à l’eau et ceux qui désignent une terre cultivée. Même en anglais, le terme habituel pour les terres proches de l'eau est "côte" ou "côte" et on peut donc traduire {S:04001402400018} par "le bateau était déjà loin de la côte". De même, dans {S:04402702700042 } on peut traduire "nous approchions de la côte".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>tierra seca, en contraste con el mar</DefinitionShort>
+                <Glosses>
+                  <Gloss>tierra</Gloss>
+                </Glosses>
+                <Comments>En varios idiomas se hace una distinción clara entre los términos que designan la tierra en contraste con el agua y los que designan la tierra cultivada. Incluso en español, el término normal para la tierra cerca del agua es "orilla" o "costa", y por lo tanto, uno puede traducir {S:04001402400018} como "el barco ya estaba lejos de la costa". De manera similar, en {S:04402702700042 } uno puede traducir "nos estábamos acercando a la orilla".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>शुष्क भूमि, समुद्र के साथ विपरीत में</DefinitionShort>
+                <Glosses>
+                  <Gloss>भूमि</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ഉണങ്ങിയ നിലം, കടലിൽ വ്യത്യസ്ഥവുമാണ്</DefinitionShort>
+                <Glosses>
+                  <Gloss>ഉണങ്ങിയ നിലം, കടലിൽ വ്യത്യസ്ഥവുമാണ്</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>الأرض اليابسة كنقيض للبحر </DefinitionShort>
+                <Glosses>
+                  <Gloss>البَرّ</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>旱地，对比于海</DefinitionShort>
+                <Glosses>
+                  <Gloss>陆地</Gloss>
+                </Glosses>
+                <Comments>许多语言会清楚区分陆地的不同用语，如相对于水的陆地，以及用作耕地的陆地。中文会把靠近水的陆地称为“岸”或“海岸”，因此，{S:04001402400018} 可以译作“船离岸已经很远”《现中》。同样，{S:04402702700042} 可以译作“我们已靠近岸边”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξηρός" EntryCode="1.60" Source="">
+                <ILLReferences>
+                  <ILLReference>04002301500026</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>περιάγετε τὴν θάλασσαν καὶ τὴν ξηρὰν ποιῆσαι ἕνα προσήλυτον</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘you cross sea and land to make one convert’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「你們走遍海洋陸地，為使一個人入教」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“你们走遍海洋陆地，为使一个人入教”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04002301500026</LEXReference>
+              <LEXReference>05801102900016</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003488000000000" Lemma="ξύλινος" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3585</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-10-09 16:30:41 sarah</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003488001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>adjc.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξύλινος" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-η, -ον</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξύλον</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003488001001000" IsBiblicalTerm="Y" EntryCode="3.62" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Plants</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wood and Wood Products</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivative of {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a] ‘wood,’ {D:3.60}) pertaining to being made or consisting of wood</DefinitionShort>
+                <Glosses>
+                  <Gloss>of wood</Gloss>
+                  <Gloss>wooden</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(derivação de {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a], “madeira”, {D:3.60}) relativo ao que é feito ou consiste em madeira</DefinitionShort>
+                <Glosses>
+                  <Gloss>de madeira</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-05-07 23:52:45" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a]「木」{D:3.60} 的衍生詞）指木製的或由木頭組成的</DefinitionShort>
+                <Glosses>
+                  <Gloss>木的；木製的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(derivado de ξύλον [a] madera, {D:3.60}) relacionado con estar hecho o compuesto de madera</DefinitionShort>
+                <Glosses>
+                  <Gloss>de madera</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξύλον के व्युत्पन्न [एक] लकड़ी, {D:3.60}) बनाया जा रहा से संबंधित या लकड़ी से मिलकर</DefinitionShort>
+                <Glosses>
+                  <Gloss>लकड़ी का</Gloss>
+                  <Gloss>लकड़ी का</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξύλον നിന്നും കലാസൃഷ്ടി [ഒരു] മരം, {ഡി: 3.60}) വരുത്തിയ സര്വേ, തടി അടങ്ങുന്ന</DefinitionShort>
+                <Glosses>
+                  <Gloss>(Ξύλον നിന്നും കലാസൃഷ്ടി [ഒരു] മരം, {ഡി: 3.60}) വരുത്തിയ സര്വേ, തടി അടങ്ങുന്ന</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:10:28" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>(dérivé de {ξύλον}[a]  "bois" {D:3.60}) relatif à être fait ou être constitué de bois </DefinitionShort>
+                <Glosses>
+                  <Gloss>de bois, en bois</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>مشتق من D:3.60  ξύλον ’الخشب‘ يتعلق بكونه مصنوعاً او مؤلفاً من الخشب</DefinitionShort>
+                <Glosses>
+                  <Gloss>من الخشب؛ خشبي</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a]“木”{D:3.60} 的衍生词）指木制的或由木头组成的</DefinitionShort>
+                <Glosses>
+                  <Gloss>木的；木制的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(kizalika cha {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a] ‘mbao,’ {D:3.60}) kinachohusiana na kutengenezwa au kuwa cha mbao</DefinitionShort>
+                <Glosses>
+                  <Gloss>cha mbao</Gloss>
+                  <Gloss>chenye hali ya mbao</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλινος" EntryCode="3.62" Source="">
+                <ILLReferences>
+                  <ILLReference>05500202000028</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>καὶ ἀργυρᾶ ἀλλὰ καὶ ξύλινα καὶ ὀστράκινα</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘some are made of silver, some of wood, and some of clay’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「有……銀器，也有木器、瓦器」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“有……银器，也有木器、瓦器”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>05500202000028</LEXReference>
+              <LEXReference>06600902000084</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003489000000000" Lemma="ξύλον" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3586</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates>
+      <Date>2017-01-27 18:21:18 administrator</Date>
+      <Date>2017-11-23 11:03:00 sarah</Date>
+      <Date>2018-09-18 09:54:35 sl</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003489001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>noun, n.</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections>
+          <Inflection Lemma="ξύλον" BaseFormIndex="1">
+            <Form />
+            <Realizations>
+              <Realization>-ου</Realization>
+            </Realizations>
+            <Comments />
+          </Inflection>
+        </Inflections>
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ξύλινος</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003489001001000" IsBiblicalTerm="M" EntryCode="3.60" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Plants</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wood and Wood Products</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>wood as a substance</DefinitionShort>
+                <Glosses>
+                  <Gloss>wood</Gloss>
+                </Glosses>
+                <Comments>A number of languages make a clear distinction between wood as a substance used in artifacts and constructions and wood used for heating or cooking. A further distinction may be made between durable wood (not readily subject to rot or to the effects of termites and borers) and less durable and therefore relatively unsatisfactory wood.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>madeira como uma substância</DefinitionShort>
+                <Glosses>
+                  <Gloss>madeira</Gloss>
+                </Glosses>
+                <Comments>Em bom número de línguas, faz-se nítida distinção entre madeira como substância usada para fazer objetos e construções e madeira usada para produzir calor, ao ser queimada, ou para cozinhar. Pode-se ainda fazer distinção entre madeira durável (que não apodrece facilmente e é mais resistente à ação do cupim e outras pragas) e madeira menos durável e por isso menos valiosa.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-09-15 03:26:45" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>木材，作為一種物質或材料</DefinitionShort>
+                <Glosses>
+                  <Gloss>木</Gloss>
+                </Glosses>
+                <Comments>許多語言會清楚區分不同的木材，分成用於手工藝品和建築物的木材，以及用來取暖和煮食的木柴。可能還進一步區分耐用的木材（不易腐爛或不易被白蟻和蛀蟲破壞的），與較不耐用和較差的木材。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:12:05" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>bois en tant que matière</DefinitionShort>
+                <Glosses>
+                  <Gloss>bois</Gloss>
+                </Glosses>
+                <Comments>Un certain nombre de langues font une distinction claire entre le bois en tant que substance utilisée dans les artefacts et les constructions et le bois utilisé pour le chauffage ou la cuisine. Une autre distinction peut être faite entre le bois durable (peu sujet à la pourriture ou aux effets des termites et des foreurs) et le bois moins durable et donc relativement peu satisfaisant.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>la madera como sustancia</DefinitionShort>
+                <Glosses>
+                  <Gloss>madera</Gloss>
+                </Glosses>
+                <Comments>Varios idiomas hacen una clara distinción entre la madera como sustancia utilizada en artefactos y construcciones y la madera utilizada para calentar o cocinar. Se puede hacer una distinción adicional entre la madera duradera (no sujeta fácilmente a la putrefacción o los efectos de las termitas y perforadores) y la madera menos duradera y, por lo tanto, relativamente insatisfactoria.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>एक पदार्थ के रूप में लकड़ी</DefinitionShort>
+                <Glosses>
+                  <Gloss>लकड़ी</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ഒരു സത്തയുമാണെന്ന് മരം</DefinitionShort>
+                <Glosses>
+                  <Gloss>ഒരു സത്തയുമാണെന്ന് മരം</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>الخشب كمادة من المواد </DefinitionShort>
+                <Glosses>
+                  <Gloss>الخشب</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>木材，作为一种物质或材料</DefinitionShort>
+                <Glosses>
+                  <Gloss>木</Gloss>
+                </Glosses>
+                <Comments>许多语言会清楚区分不同的木材，分成用于手工艺品和建筑物的木材，以及用来取暖和煮食的木柴。可能还进一步区分耐用的木材（不易腐烂或不易被白蚁和蛀虫破坏的），与较不耐用和较差的木材。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mbao kama kiini</DefinitionShort>
+                <Glosses>
+                  <Gloss>mbao</Gloss>
+                </Glosses>
+                <Comments>Lugha kadhaa hufanya utofautishaji bayana kati ya mbao kama kitu kinachotumika katika vyombo vilivyobuniwa na shughuli za ujenzi na mbao hutumika kwa kuleta joto au kupikia. Utofautishaji zaidi huweza kufanywa kati ya mbao inayodumu (ambayo haiozi wala kuliwa na mchwa na wadudu wapekechao) na ambayo hudumu kwa muda mfupi zaidi na hivyo kuwa mbao isiyoridhisha kabisa.</Comments>
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="3.60" Source="">
+                <ILLReferences>
+                  <ILLReference>06601801200040</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>πᾶν σκεῦος ἐκ ξύλου τιμιωτάτου</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘all kinds of objects made of valuable wood’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「各樣用貴重木料……製造的器具」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“各样用贵重木料……制造的器具”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04600301200024</LEXReference>
+              <LEXReference>06601801200040</LEXReference>
+              <LEXReference>06601801200060</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003489001002000" IsBiblicalTerm="Y" EntryCode="3.61" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Plants</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Wood and Wood Products</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>wood as a substance used to burn for heat</DefinitionShort>
+                <Glosses>
+                  <Gloss>firewood</Gloss>
+                </Glosses>
+                <Comments>{L:ξύλον&lt;SDBG:ξύλον:000000&gt;} in {S:04202303100012} may also be interpreted as a live green tree (see {D:3.4}). If one assumes that the meaning here is ‘firewood,’ then it may be necessary to translate ‘wood which has not had an opportunity to dry out’ or ‘wood which is still green’ or ‘… which is still wet with sap.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>madeira como uma substância que é queimada para produzir calor</DefinitionShort>
+                <Glosses>
+                  <Gloss>lenha</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-09-15 03:42:21" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>用作燃燒發熱的木材</DefinitionShort>
+                <Glosses>
+                  <Gloss>木柴</Gloss>
+                </Glosses>
+                <Comments>在 {S:04202303100012} 中，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;} 也可以被解作活的青翠樹木（參 {D:3.4}）。若是認為此處的意思是「木柴」，則需要譯作：「還沒有乾透的木」，或「仍發青的木」，或「仍有汁液的木」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:13:12" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>bois en tant que matiériau utilisé pour se chauffer en le brûlant</DefinitionShort>
+                <Glosses>
+                  <Gloss>bois (de chauffage)</Gloss>
+                </Glosses>
+                <Comments>ξύλον in {S:04202303100012} peut également être interprété comme un arbre vert vivant (voir {D:3.4}). Si l’on suppose que le sens ici est "bois de chauffage", il peut être nécessaire de traduire "bois qui n’a pas eu la chance de sécher» ou «bois encore vert" ou "… encore humide de sève".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>la madera como sustancia utilizada para quemar para producir calor</DefinitionShort>
+                <Glosses>
+                  <Gloss>leña</Gloss>
+                </Glosses>
+                <Comments>ξύλον en {S:04202303100012} también se puede interpretar como un árbol verde vivo (ver {D:3.4}). Si se asume que el significado aquí es "leña", entonces puede ser necesario traducir "madera que no ha tenido la oportunidad de secarse" o "madera que aún es verde" o "que todavía está húmeda con savia".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>गर्मी के लिए जलाने के लिए इस्तेमाल किया एक पदार्थ के रूप में लकड़ी</DefinitionShort>
+                <Glosses>
+                  <Gloss>जलाऊ लकड़ी</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>ചൂട് ദഹിപ്പിക്കേണം ഉപയോഗിക്കുന്ന ഒരു പദാർത്ഥം ആയി മരം</DefinitionShort>
+                <Glosses>
+                  <Gloss>ചൂട് ദഹിപ്പിക്കേണം ഉപയോഗിക്കുന്ന ഒരു പദാർത്ഥം ആയി മരം</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>الخشب كمادة تستعمل للحرق من اجل الحرارة </DefinitionShort>
+                <Glosses>
+                  <Gloss>حطب</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>用作燃烧发热的木材</DefinitionShort>
+                <Glosses>
+                  <Gloss>木柴</Gloss>
+                </Glosses>
+                <Comments>在 {S:04202303100012} 中，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;} 也可以被解作活的青翠树木（参 {D:3.4}）。若是认为此处的意思是“木柴”，则需要译作：“还没有干透的木”，或“仍发青的木”，或“仍有汁液的木”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mbao kama kitu kinachotumika kwa kuchoma na kuleta joto</DefinitionShort>
+                <Glosses>
+                  <Gloss>kuni</Gloss>
+                </Glosses>
+                <Comments>ξύλον katika {S:04202303100012} linaweza pia kufafanuliwa kama mti hai wa kijani (tazama {D:3.4}). Ikiwa mtu atachukulia kwamba maana hiyo hapa ni ‘kuni,’ basi inaweza kuwa lazima kutafsiri kama ‘mbao ambayo haijapata nafasi ya kukauka’ au ‘mbao ambayo bado ni kijani’ au ‘… ambayo bado ina unyevu kutokana na utomvu.’</Comments>
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="3.61" Source="">
+                <ILLReferences>
+                  <ILLReference>04202303100012</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>εἰ ἐν τῷ ὑγρῷ ξύλῳ ταῦτα ποιοῦσιν, ἐν τῷ ξηρῷ τί γένηται;</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘if they do these things to moist firewood, what will happen in the case of dry firewood?’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「他們在木材潮濕的時候尚且這樣做；在枯乾的時候又如何呢？」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“他们在木材潮湿的时候尚且这样做；在枯干的时候又如何呢？”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04202303100012</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003489001003000" IsBiblicalTerm="M" EntryCode="3.4" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Plants</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Trees</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>large perennial plant, usually having a woody central stem, called a trunk, with secondary branches growing from it.</DefinitionShort>
+                <Glosses>
+                  <Gloss>tree</Gloss>
+                </Glosses>
+                <Comments>It is also possible to understand {L:ξύλον&lt;SDBG:ξύλον:000000&gt;} in {S:04202303100012} as ‘firewood.’ One may therefore translate the first part of this conditional sentence as ‘if they do these things to firewood which has recently been cut’ or ‘if they do these things to firewood which hasn’t dried out’ (see {D:3.61}).|In {S:06600200700036} and {S:06602200200024} {L:ξύλον&lt;SDBG:ξύλον:000000&gt;} τῆς ζωῆς ‘tree of life’ may cause certain complications if the passage is translated more or less literally ‘I will give him to eat of the tree of life.’ In some languages a literal rendering would mean ‘to gnaw on the tree of life,’ that is to say, to eat the wood or the bark. It may therefore be necessary to translate ‘to eat the fruit of the tree of life’ or ‘… the fruit from the tree that causes life’ or ‘… causes people to live.’</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses>
+                  <Gloss>árvore</Gloss>
+                </Glosses>
+                <Comments>Em Ap 2.7 e 22.2, ξύλον τῆς ζωῆς, “árvore da vida”, pode trazer certas dificuldades, caso a passagem for traduzida de forma mais ou menos literal, “lhe darei de comer da árvore da vida”. Em algumas línguas uma tradução literal daria o sentido de “comer a árvore da vida”, ou seja, comer a madeira ou a lenha. Diante disso, é possível que se tenha que traduzir por “comer o fruto da árvore da vida”, ou “comer o fruto da árvore que dá vida” ou “comer o fruto que faz com que as pessoas vivam”.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-09-15 04:48:55" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>高大的多年生植物，通常有木質的主莖，稱為樹幹，從其上長出次生樹枝</DefinitionShort>
+                <Glosses>
+                  <Gloss>樹</Gloss>
+                </Glosses>
+                <Comments>{S:04202303100012} 中的 {L:ξύλον&lt;SDBG:ξύλον:000000&gt;} 也可以解作「木柴」。因此，這個條件句的前一部分可以譯成：「如果這些事行在那些剛被砍下來的木柴上」，或「如果這些事行在還沒乾透的木柴上」（參 {D:3.61}）。|在 {S:06600200700036} 和 {S:06602200200024} 中，如果比較字面地把句子直譯作「我要把生命樹賜給他吃」，那麼，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;} τῆς ζωῆς「生命樹」可能會引起一些難題。在某些語言中，字面翻譯的意思會是「啃那生命樹」，即吃那樹的木或樹皮。因此，翻譯者需要把這句譯作：「吃生命樹上的果子」，或「吃那棵帶來生命的樹上的果子」，或「吃那棵使人活著的樹上的果子」。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:19:05" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>grande plante pérenne, ayant généralement une souche centrale, appelée tronc sur lequel poussent des branches auxiliaires</DefinitionShort>
+                <Glosses>
+                  <Gloss>arbre</Gloss>
+                </Glosses>
+                <Comments>Il est également possible de comprendre ξύλον dans {S:04202303100012} comme "bois de chauffage". On peut donc traduire la première partie de cette phrase conditionnelle par "s’ils font ces choses au bois de chauffage récemment coupé" ou "s’ils le font des choses au bois de chauffage qui n'a pas séché" (voir {D:3.61}). &lt;br&gt; Dans {S:06600200700036} et {S:06602200200024} ξύλον τῆς ζωῆς "arbre de vie" peut causer certaines complications si le passage est traduit plus ou moins littéralement "je lui donnerai à manger de l'arbre de la vie". Dans certaines langues, un rendu littéral signifierait "ronger l'arbre de la vie", c'est-à-dire manger du bois ou de l'écorce. Il peut donc être nécessaire de traduire "manger le fruit de l’arbre de vie" ou "… le fruit de l’arbre qui fait la vie" ou "… fait vivre les gens".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>planta perenne grande, generalmente con un tallo central leñoso, llamado tronco, con ramas secundarias que crecen en el</DefinitionShort>
+                <Glosses>
+                  <Gloss>árbol</Gloss>
+                </Glosses>
+                <Comments>También es posible entender ξύλον en {S:04202303100012} como leña. Por lo tanto, se puede traducir la primera parte de esta oración condicional como "si hacen estas cosas a la leña que se ha cortado recientemente' o 'si hacen estas cosas a la leña que no se han secado '(ver {D:3.61}). &lt;br&gt; En {S:06600200700036} y {S:06602200200024} ξύλον τῆς ζωῆς "árbol de la vida" puede causar ciertas complicaciones si el pasaje es traducido más o menos literalmente "le daré a comer del árbol de la vida". En algunos idiomas, una interpretación literal significaría "roer el árbol de la vida", es decir, comer la madera o la corteza. Por lo tanto, puede ser necesario traducir "comer el fruto del árbol de la vida" o "...el fruto del árbol que causa la vida" o "... que causa que la gente viva".</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>बड़े बारहमासी संयंत्र, आम तौर पर एक वुडी केंद्रीय स्टेम होने, एक ट्रंक बुलाया इसे से बढ़ रही माध्यमिक शाखाओं के साथ।</DefinitionShort>
+                <Glosses>
+                  <Gloss>पेड़</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>വലിയ വറ്റാത്ത പ്ലാന്റ്, സാധാരണയായി ഒരു മരംപോലെ കേന്ദ്ര ബ്രൈൻ ഇല്ലാതെ, ഒരു തുമ്പിക്കൈ, സെക്കൻഡറി ശാഖകളും നിന്ന് വളരുന്ന വിളിച്ചു.</DefinitionShort>
+                <Glosses>
+                  <Gloss>വലിയ വറ്റാത്ത പ്ലാന്റ്, സാധാരണയായി ഒരു മരംപോലെ കേന്ദ്ര ബ്രൈൻ ഇല്ലാതെ, ഒരു തുമ്പിക്കൈ, സെക്കൻഡറി ശാഖകളും നിന്ന് വളരുന്ന വിളിച്ചു.</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>نبات كبير مُعَمِّر، عادة له جذع خشبي مركزي و يسمى الساق و ينمو منها أغصان فرعية </DefinitionShort>
+                <Glosses>
+                  <Gloss>شجرة</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>高大的多年生植物，通常有木质的主茎，称为树干，从其上长出次生树枝</DefinitionShort>
+                <Glosses>
+                  <Gloss>树</Gloss>
+                </Glosses>
+                <Comments>{S:04202303100012} 中的 {L:ξύλον&lt;SDBG:ξύλον:000000&gt;} 也可以解作“木柴”。因此，这个条件句的前一部分可以译成：“如果这些事行在那些刚被砍下来的木柴上”，或“如果这些事行在还没干透的木柴上”（参 {D:3.61}）。|在 {S:06600200700036} 和 {S:06602200200024} 中，如果比较字面地把句子直译作“我要把生命树赐给他吃”，那么，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;} τῆς ζωῆς“生命树”可能会引起一些难题。在某些语言中，字面翻译的意思会是“啃那生命树”，即吃那树的木或树皮。因此，翻译者需要把这句译作：“吃生命树上的果子”，或“吃那棵带来生命的树上的果子”，或“吃那棵使人活着的树上的果子”。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mmea mkubwa unaodumu zaidi ya miaka miwili, kwa kawaida wenye sehemu ya kati yenye hali ya mbao, iitwayo shina, lenye matawi ya  pili yaotayo kwenye shina hilo.</DefinitionShort>
+                <Glosses>
+                  <Gloss>mti</Gloss>
+                </Glosses>
+                <Comments>Inawezekana pia kuelewa It is also possible to understand ξύλον katika in {S:04202303100012} kama as ‘kunifirewood.’ Kwa hiyo mtu anaweza kutafsiri sehemu ya kwanza One may therefore translate the first part of this conditional sentence as ‘if they do these things to firewood which has recently been cut’ or ‘if they do these things to firewood which hasn’t dried out’ (see {D:3.61}).&lt;br&gt;In {S:06600200700036} and {S:06602200200024} ξύλον τῆς ζωῆς ‘tree of life’ may cause certain complications if the passage is translated more or less literally ‘I will give him to eat of the tree of life.’ In some languages a literal rendering would mean ‘to gnaw on the tree of life,’ that is to say, to eat the wood or the bark. It may therefore be necessary to translate ‘to eat the fruit of the tree of life’ or ‘… the fruit from the tree that causes life’ or ‘… causes people to live.’</Comments>
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="3.4" Source="">
+                <ILLReferences>
+                  <ILLReference>04202303100012</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>εἰ ἐν τῷ ὑγρῷ ξύλῳ ταῦτα ποιοῦσιν, ἐν τῷ ξηρῷ τί γένηται;</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘if they do these things to a green tree, what will happen in the case of a dry one?’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「他們若在樹木青綠的時候做這些事，那麼在枯乾的時候將會怎麼樣呢？」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“他们若在树木青绿的时候做这些事，那么在枯干的时候将会怎么样呢？”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04202303100012</LEXReference>
+              <LEXReference>04800301300040</LEXReference>
+              <LEXReference>06600200700036</LEXReference>
+              <LEXReference>06602200200024</LEXReference>
+              <LEXReference>06602200200056</LEXReference>
+              <LEXReference>06602201400028</LEXReference>
+              <LEXReference>06602201900042</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003489001004000" IsBiblicalTerm="M" EntryCode="6.31" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Artifacts</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Weapons and Armor</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>a heavy stick used in fighting</DefinitionShort>
+                <Glosses>
+                  <Gloss>club</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-04-16 08:28:17" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>用來打架的大木棍</DefinitionShort>
+                <Glosses>
+                  <Gloss>棒</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>um pedaço de madeira pesado, usado como arma</DefinitionShort>
+                <Glosses>
+                  <Gloss>porrete</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-02-08 09:30:27" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>lourd bâton utilisé au combat</DefinitionShort>
+                <Glosses>
+                  <Gloss>bâton</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>un palo pesado usado en luchas</DefinitionShort>
+                <Glosses>
+                  <Gloss>palo</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>एक भारी लड़ाई में इस्तेमाल किया छड़ी</DefinitionShort>
+                <Glosses>
+                  <Gloss>क्लब</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>യുദ്ധം ഉപയോഗിക്കുന്ന ഒരു കനത്ത സ്റ്റിക്ക്</DefinitionShort>
+                <Glosses>
+                  <Gloss>യുദ്ധം ഉപയോഗിക്കുന്ന ഒരു കനത്ത സ്റ്റിക്ക്</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>عصا غليظة تستخدم في القتال </DefinitionShort>
+                <Glosses>
+                  <Gloss>عصا</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>用来打架的大木棍</DefinitionShort>
+                <Glosses>
+                  <Gloss>棒</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="6.31" Source="">
+                <ILLReferences>
+                  <ILLReference>04101404300036</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ὄχλος μετὰ μαχαιρῶν καὶ ξύλων</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘a crowd with swords and clubs’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「一群拿著刀棒的人」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“一群拿着刀棒的人”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04002604700038</LEXReference>
+              <LEXReference>04002605500034</LEXReference>
+              <LEXReference>04101404300036</LEXReference>
+              <LEXReference>04101404800028</LEXReference>
+              <LEXReference>04202205200046</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003489001005000" IsBiblicalTerm="M" EntryCode="6.21" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Artifacts</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Instruments Used in Binding and Fastening</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>an instrument consisting of heavy blocks of wood through which the legs were placed and then securely fastened</DefinitionShort>
+                <Glosses>
+                  <Gloss>stocks</Gloss>
+                </Glosses>
+                <Comments>Stocks were employed primarily as an instrument for imprisonment, but also as a means of punishment.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>um instrumento consistindo em dois pesados blocos de madeira entre os quais eram colocados os pés ou as pernas, para que ficassem presos com segurança</DefinitionShort>
+                <Glosses>
+                  <Gloss>tronco</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-02-09 09:18:22" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>由沉重的木塊做成的工具，雙腿會穿過木塊，然後被牢牢地固定住</DefinitionShort>
+                <Glosses>
+                  <Gloss>木狗；木枷</Gloss>
+                </Glosses>
+                <Comments>木枷主要用作囚禁用具，也作為一種刑具。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:14:07" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>instrument composé de lourds blocs de bois dans lesquels on plaçait les jambes pour ensuite les attacher solidement</DefinitionShort>
+                <Glosses>
+                  <Gloss>entraves</Gloss>
+                </Glosses>
+                <Comments>Entraves étaient employés principalement comme instrument d'emprisonnement, mais aussi comme moyen de punition.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>un instrumento que consiste en bloques pesados ​​de madera a través de los cuales se colocaron las piernas y luego se sujetaron firmemente</DefinitionShort>
+                <Glosses>
+                  <Gloss>cepo</Gloss>
+                </Glosses>
+                <Comments>Los cepos se emplearon principalmente como un instrumento para el encarcelamiento, pero también como un medio de castigo.</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>लकड़ी की भारी ब्लॉकों से मिलकर एक साधन है जिसके माध्यम पैर रखा गया था और उसके बाद सुरक्षित रूप से बांधा</DefinitionShort>
+                <Glosses>
+                  <Gloss>शेयरों</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>കാലുകൾ സ്ഥാപിച്ചത് തുടർന്ന് സുരക്ഷിതമായി ബന്ധിച്ചിരിക്കുന്നു അതിലൂടെ മരം കനത്ത ബ്ലോക്കുകളിൽ അടങ്ങുന്ന ഒരു ഉപകരണം</DefinitionShort>
+                <Glosses>
+                  <Gloss>കാലുകൾ സ്ഥാപിച്ചത് തുടർന്ന് സുരക്ഷിതമായി ബന്ധിച്ചിരിക്കുന്നു അതിലൂടെ മരം കനത്ത ബ്ലോക്കുകളിൽ അടങ്ങുന്ന ഒരു ഉപകരണം</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>أداة تتألف من كتل ثقيلة من الخشب حيث يتم وضع الرجلين فيها و تثبت بإحكام. </DefinitionShort>
+                <Glosses>
+                  <Gloss>مِقطَرة</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>由沉重的木块做成的工具，双腿会穿过木块，然后被牢牢地固定住</DefinitionShort>
+                <Glosses>
+                  <Gloss>木狗；木枷</Gloss>
+                </Glosses>
+                <Comments>木枷主要用作囚禁用具，也作为一种刑具。</Comments>
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="6.21" Source="">
+                <ILLReferences>
+                  <ILLReference>04401602400036</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>τοὺς πόδας ἠσφαλίσατο αὐτῶν εἰς τὸ ξύλον</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘he fastened their feet in stocks’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「把他們的兩腳鎖在木枷上」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“把他们的两脚锁在木枷上”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04401602400036</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+          <LEXMeaning Id="003489001006000" IsBiblicalTerm="M" EntryCode="6.28" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Artifacts</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Instruments Used in Punishment and Execution</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(a figurative extension of meaning of {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a] ‘wood,’ {D:3.60}) an instrument of execution. Outside the NT {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[f] often refers to a gallows, but in the NT contexts speaking of capital punishment, the reference is to the cross on which Jesus was crucified.</DefinitionShort>
+                <Glosses>
+                  <Gloss>cross</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(ampliação metafórica do significado de {L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a], “madeira”, {D:3.60}) um instrumento para executar alguém</DefinitionShort>
+                <Glosses>
+                  <Gloss>cruz</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2019-02-09 09:20:31" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a]「木」{D:3.60} 的引申喻意）一種死刑的刑具。在新約以外，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[f] 通常指絞刑架，但在論到死刑的新約經文中，這詞是指用來釘死耶穌的十字架。</DefinitionShort>
+                <Glosses>
+                  <Gloss>十字架；木架</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-02-08 09:30:27" LastEditedBy="philippe">
+                <DefinitionLong />
+                <DefinitionShort>(sens élargi au figuré de ξύλον[a] bois, {D:3.60}) instrument de supplice. Hors du NT ξύλον[f] désigne souvent la potence, mais pour le NT dans les cas parlant de la peine capitale, la mention renvoie à la croix sur laquelle Jésus a été crucifié</DefinitionShort>
+                <Glosses>
+                  <Gloss>croix</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>(una extensión figurativa del significado de ξύλον [a] madera, {D:3.60}) un instrumento de ejecución. Fuera del NT ξύλον [f] a menudo se refiere a una horca, pero en los contextos del NT que hablan de la pena capital, la referencia es a la cruz en la que Jesús fue crucificado.</DefinitionShort>
+                <Glosses>
+                  <Gloss>cruz</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξύλον के अर्थ [एक] लकड़ी, {D:3.60} का एक आलंकारिक विस्तार) निष्पादन का एक साधन। NT ξύλον बाहर [च] अक्सर एक फांसी को संदर्भित करता है, लेकिन मौत की सज़ा की बात NT संदर्भों में, संदर्भ पार जिस पर यीशु क्रूस पर चढ़ाया गया है।</DefinitionShort>
+                <Glosses>
+                  <Gloss>पार करना</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>(Ξύλον അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു] മരം, {ഡി: 3.60}) വധശിക്ഷ ഉപകരണമായി. എൻ.ടി. ξύλον പുറത്ത് [F] പലപ്പോഴും ഒരു കഴുമരം സൂചിപ്പിക്കുന്നു, എന്നാൽ വധശിക്ഷയുടെ സംസാരിക്കുന്ന എൻ.ടി. സന്ദർഭങ്ങളിലും, റഫറൻസ് ഏത് യേശുവിനെ ക്രൂശിച്ച ക്രോസ് ആണ്.</DefinitionShort>
+                <Glosses>
+                  <Gloss>(Ξύλον അർത്ഥം ഒരു ആലങ്കാരിക വിപുലീകരണം [ഒരു] മരം, {ഡി: 3.60}) വധശിക്ഷ ഉപകരണമായി. എൻ.ടി. ξύλον പുറത്ത് [F] പലപ്പോഴും ഒരു കഴുമരം സൂചിപ്പിക്കുന്നു, എന്നാൽ വധശിക്ഷയുടെ സംസാരിക്കുന്ന എൻ.ടി. സന്ദർഭങ്ങളിലും, റഫറൻസ് ഏത് യേശുവിനെ ക്രൂശിച്ച ക്രോസ് ആണ്.</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>امتداد بلاغي لمعنى 3.60 ξύλον  ’الخشب‘. وسيلة إعدام.  خارج العهد الجديد تشير  ξύλον غالباً للمشنقة، لكن في سياقات العهد الجديد التي تتحدث عن أقصى العقوبة فإن الإشارة هي للصليب الذي صُلب عليه يسوع. </DefinitionShort>
+                <Glosses>
+                  <Gloss>خشبة الصليب</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>（{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[a]“木”{D:3.60} 的引申喻意）一种死刑的刑具。在新约以外，{L:ξύλον&lt;SDBG:ξύλον:000000&gt;}[f] 通常指绞刑架，但在论到死刑的新约经文中，这词是指用来钉死耶稣的十字架。</DefinitionShort>
+                <Glosses>
+                  <Gloss>十字架；木架</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξύλον" EntryCode="6.28" Source="">
+                <ILLReferences>
+                  <ILLReference>04400503000026</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>Ἰησοῦν ὃν ὑμεῖς διεχειρίσασθε κρεμάσαντες ἐπὶ ξύλου</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘Jesus, whom you had killed by nailing him to a cross’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「你們掛在十字架上殺害的耶穌」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“你们挂在十字架上杀害的耶稣”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04400503000026</LEXReference>
+              <LEXReference>04401003900042</LEXReference>
+              <LEXReference>04401302900024</LEXReference>
+              <LEXReference>06000202400026</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="003490000000000" Lemma="ξυράω" Version="0" HasAramaic="false" InLXX="true" AlphaPos="">
+    <StrongCodes>
+      <Strong>G3587</Strong>
+    </StrongCodes>
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma>ξυράομαι</AlternateLemma>
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="003490001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>verb</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="003490001001000" IsBiblicalTerm="Y" EntryCode="19.24" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Physical Impact</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>Pierce, Cut</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>to shave the head or beard</DefinitionShort>
+                <Glosses>
+                  <Gloss>to shave</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>rapar a cabeça ou a barba</DefinitionShort>
+                <Glosses>
+                  <Gloss>rapar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhT" LastEdited="2018-10-27 08:05:49" LastEditedBy="user2">
+                <DefinitionLong />
+                <DefinitionShort>剃頭髮或剃鬍子</DefinitionShort>
+                <Glosses>
+                  <Gloss>剃</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2019-02-18 11:10:43" LastEditedBy="marcos">
+                <DefinitionLong />
+                <DefinitionShort>afeitarse la cabeza o la barba</DefinitionShort>
+                <Glosses>
+                  <Gloss>afeitar</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="hi" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>सिर या दाढ़ी दाढ़ी बनाने के लिए</DefinitionShort>
+                <Glosses>
+                  <Gloss>दाढ़ी बनाने के लिए</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ml" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>തല താടിയിലോ സഭവം</DefinitionShort>
+                <Glosses>
+                  <Gloss>തല താടിയിലോ സഭവം</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-08-16 14:19:42" LastEditedBy="williane">
+                <DefinitionLong />
+                <DefinitionShort>raser la tête ou barbe </DefinitionShort>
+                <Glosses>
+                  <Gloss>raser</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="ar" LastEdited="2021-04-19 01:01:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>يحلق شعر الرأس أو الذقن</DefinitionShort>
+                <Glosses>
+                  <Gloss>يحلق</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhS" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>剃头发或剃胡子</DefinitionShort>
+                <Glosses>
+                  <Gloss>剃</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations>
+              <LEXIllustration Lemma="ξυράω" EntryCode="19.24" Source="">
+                <ILLReferences>
+                  <ILLReference>04601100500042</ILLReference>
+                </ILLReferences>
+                <ILLSourceText>ἓν γάρ ἐστιν καὶ τὸ αὐτὸ τῇ ἐξυρημένῃ</ILLSourceText>
+                <ILLTranslations>
+                  <ILLTranslation LanguageCode="en">
+                    <Meaning>‘for it is one and the same as for a woman who has her head shaved’</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhT">
+                    <Meaning>「這樣的女人和剃了頭髮的女人沒有什麼區別」</Meaning>
+                  </ILLTranslation>
+                  <ILLTranslation LanguageCode="zhS">
+                    <Meaning>“这样的女人和剃了头发的女人没有什么区别”</Meaning>
+                  </ILLTranslation>
+                </ILLTranslations>
+              </LEXIllustration>
+            </LEXIllustrations>
+            <LEXReferences>
+              <LEXReference>04402102400022</LEXReference>
+              <LEXReference>04601100500042</LEXReference>
+              <LEXReference>04601100600030</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings />
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+</Lexicon>

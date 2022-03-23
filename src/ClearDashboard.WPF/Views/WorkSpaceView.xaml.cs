@@ -154,9 +154,7 @@ namespace ClearDashboard.Wpf.Views
                 return;
             };
 
-            _vm.Init();
-
-
+            //_vm.Init();
 
         }
 

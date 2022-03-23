@@ -51,7 +51,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private bool _connected;
-
         public bool Connected
         {
             get { return _connected; }
@@ -156,7 +155,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // listen for username changes in Paratext
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            //_DAL = new StartUp();
+
             _DAL.NamedPipeChanged += HandleEvent;
 
             _DAL.GetParatextUserName();

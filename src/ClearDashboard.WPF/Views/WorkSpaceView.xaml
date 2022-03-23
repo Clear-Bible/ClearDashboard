@@ -38,8 +38,15 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="40" />
+            </Grid.ColumnDefinitions>
             <Button
+                Grid.Column="0"
                 Margin="5,5,0,0"
                 Padding="3"
                 HorizontalAlignment="Left"
@@ -49,7 +56,7 @@
                 <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
-            <WrapPanel Margin="5,0,0,0">
+            <WrapPanel Grid.Column="1">
                 <Menu VerticalAlignment="Center">
                     <MenuItem Header="Layout">
                         <MenuItem
@@ -81,7 +88,7 @@
             </WrapPanel>
 
 
-            <Menu ItemsSource="{Binding MenuItems}">
+            <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">
                         <Setter Property="Icon" Value="{Binding IconSource}" />
@@ -100,7 +107,31 @@
                 </Menu.ItemTemplate>
             </Menu>
 
-        </StackPanel>
+
+
+            <Image
+                Grid.Column="3"
+                Width="32"
+                Height="32">
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Connected}" Value="True">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Connected}" Value="False">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <TextBlock
+                Grid.Column="3"
+                Foreground="Pink"
+                Text="{Binding Connected}" />
+        </Grid>
 
 
         <!--  AnchorablesSource="{Binding Tools}" DocumentsSource="{Binding Files}"  -->

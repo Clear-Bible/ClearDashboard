@@ -11,6 +11,8 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     x:Uid="Page_1"
     Title="LandingViewModel"
+    d:DataContext="{d:DesignInstance Type=viewModels:LandingViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -21,7 +23,6 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    d:DataContext="{d:DesignInstance Type=viewModels:LandingViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
 
@@ -37,25 +38,24 @@
             Grid.Row="0"
             Margin="5">
             <helpers:NavButton
+                x:Name="CreateNewProject"
                 Width="128"
                 Height="128"
-                x:Name="CreateNewProject"
                 ImageSource="/Resources/NewProject_Icon_128.png"
-               Text="{helpers:Loc Landing_newproject}"/>
+                Text="{helpers:Loc Landing_newproject}" />
             <helpers:NavButton
+                x:Name="Settings"
                 x:Uid="helpers:NavButton_2"
                 Width="128"
                 Height="128"
-                x:Name="Settings"
                 ImageSource="/Resources/settings_logo_128.png"
                 Text="{helpers:Loc Landing_settings}" />
             <helpers:NavButton
+                x:Name="Workspace"
                 x:Uid="helpers:NavButton_3"
                 Width="128"
                 Height="128"
-                x:Name="Workspace"
                 ImageSource="/Resources/settings_logo_128.png"
-               
                 Text="{helpers:Loc Landing_project}" />
         </WrapPanel>
 

@@ -16,9 +16,9 @@ EndProject
 Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Program Files\Paratext 9\Paratext.exe", "{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}"
 	ProjectSection(DebuggerProjectSystem) = preProject
 		PortSupplier = 00000000-0000-0000-0000-000000000000
-		Executable = d:\Program Files\Paratext 9\Paratext.exe
-		RemoteMachine = GTT-BEAST
-		StartingDirectory = d:\Program Files\Paratext 9
+		Executable = %ParatextInstallDir%\Paratext.exe
+		RemoteMachine = 
+		StartingDirectory = %ParatextInstallDir%
 		Environment = Default
 		LaunchingEngine = fb0d4648-f776-4980-95f8-bb7f36ebc1ee
 		UseLegacyDebugEngines = No

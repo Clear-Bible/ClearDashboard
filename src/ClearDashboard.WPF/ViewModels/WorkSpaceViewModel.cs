@@ -10,9 +10,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using Pipes_Shared;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -79,6 +81,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private bool _connected;
+        public bool Connected
+        {
+            get { return _connected; }
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
 
         private string _WindowIDToLoad;
         public string WindowIDToLoad
@@ -152,16 +164,21 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Required for design-time support
         /// </summary>
-        public WorkSpaceViewModel() 
-        {
+        //public WorkSpaceViewModel() 
+        //{
 
-        }
+        //}
 
         public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;
             _DAL = dal;
+
+            this.Connected = _DAL.IsPipeConnected;
+
+            _DAL.NamedPipeChanged += HandleEvent;
+
 
             _this = this;
             
@@ -204,29 +221,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-
-
-        #endregion //Constructor
-
-        #region Methods
-
-        private void WorkSpaceViewModel_ThemeChanged()
-        {
-            // TODO
-
-            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
-            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                // toggle the Dark theme for AvalonDock
-                this.SelectedTheme = Themes[0];
-            }
-            else
-            {
-                // toggle the light theme for AvalonDock
-                this.SelectedTheme = Themes[1];
-            }
-        }
-
         public void Init()
         {
             // initiate the menu system
@@ -241,8 +235,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
                         new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
-                        new MenuItemViewModel
-                            { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
                         new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
                         new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
                         new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
@@ -285,7 +278,38 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+            Init();
+        }
 
+        protected override void Dispose(bool disposing)
+        {
+            _DAL.NamedPipeChanged -= HandleEvent;
+            base.Dispose(disposing);
+        }
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private void WorkSpaceViewModel_ThemeChanged()
+        {
+            // TODO
+
+            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
+            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            {
+                // toggle the Dark theme for AvalonDock
+                this.SelectedTheme = Themes[0];
+            }
+            else
+            {
+                // toggle the light theme for AvalonDock
+                this.SelectedTheme = Themes[1];
+            }
+        }
 
 
         public void LoadLayout(XmlLayoutSerializer layoutSerializer)
@@ -388,12 +412,34 @@ namespace ClearDashboard.Wpf.ViewModels
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
 
+
+        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        {
+            if (args == null) return;
+
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.OnConnected:
+                    this.Connected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    this.Connected = false;
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
+        }
+
         public override event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+
 
         #endregion // Methods
     }
