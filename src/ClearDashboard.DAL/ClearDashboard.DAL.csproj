@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>ClearDashboard.DataAccessLayer</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-    <ProjectReference Include="..\NamedPipes\NamedPipes.csproj" />
     <ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
   </ItemGroup>
 

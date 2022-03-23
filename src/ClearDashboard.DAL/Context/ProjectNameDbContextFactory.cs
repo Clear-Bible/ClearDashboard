@@ -25,7 +25,7 @@ namespace ClearDashboard.DataAccessLayer.Context
 
         public async Task<AlignmentContext> Create(string projectName)
         {
-            var directoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\CLEAR_Projects\\{projectName}";
+            var directoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
             if (!Directory.Exists(directoryPath))
             {
                 _logger.LogInformation($"Creating project directory {directoryPath}.");
