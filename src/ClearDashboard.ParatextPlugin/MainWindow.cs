@@ -260,6 +260,15 @@ namespace ClearDashboardPlugin
             // Do the command's action
             switch (message.Action)
             {
+                case ActionType.GetCurrentVerse:
+                    // send the current BCV location of Paratext
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.CurrentVerse,
+                        Text = m_verseRef.BBBCCCVVV.ToString(),
+                    }).ConfigureAwait(false);
+
+                    break;
                 case ActionType.SendText:
                     AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;

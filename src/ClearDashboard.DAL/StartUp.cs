@@ -32,6 +32,7 @@ namespace ClearDashboard.DataAccessLayer
             GetTargetVerses,
             GetNotes,
             GetProject,
+            GetCurrentVerse,
         }
 
 
@@ -125,6 +126,9 @@ namespace ClearDashboard.DataAccessLayer
                     break;
                 case PipeAction.OnDisconnected:
                     message.Action = ActionType.OnDisconnected;
+                    break;
+                case PipeAction.GetCurrentVerse:
+                    message.Action = ActionType.GetCurrentVerse;
                     break;
                 case PipeAction.SendText:
                     message.Action = ActionType.SendText;

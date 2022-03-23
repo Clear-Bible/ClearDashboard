@@ -16,6 +16,6 @@
         <wpf:WebView2
             Name="treeViewBrowser"
             DockPanel.Dock="Top"
-            Source="https://localhost:3000" />
+            Source="https://globaltech.team" />
     </Grid>
 </UserControl>

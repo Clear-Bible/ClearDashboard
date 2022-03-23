@@ -24,17 +24,49 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="BigButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Height" Value="80" />
+            <Setter Property="Width" Value="65" />
+            <Setter Property="Foreground" Value="{DynamicResource OrangeLightBrush}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="border"
+                            Background="{StaticResource MaterialDesignDarkBackground}"
+                            CornerRadius="5">
+                            <StackPanel>
+                                <Image
+                                    Height="50"
+                                    Margin="5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Source="{TemplateBinding Tag}" />
+                                <ContentPresenter
+                                    x:Name="ButtonContentPresenter"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
 
     <Grid ButtonBase.Click="Grid_Click">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
-            <RowDefinition  Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <WrapPanel
-            Grid.Row="0"
-            Margin="5">
+        <WrapPanel Grid.Row="0" Margin="5">
             <helpers:NavButton
                 x:Name="CreateNewProject"
                 Width="128"
@@ -47,12 +79,22 @@
                 Height="128"
                 ImageSource="/Resources/settings_logo_128.png"
                 Text="{helpers:Loc Landing_settings}" />
-            <helpers:NavButton
+            <!--<helpers:NavButton
                 x:Name="Workspace"
                 Width="128"
                 Height="128"
                 ImageSource="/Resources/settings_logo_128.png"
-                Text="{helpers:Loc Landing_project}" />
+                Text="{helpers:Loc Landing_project}" />-->
+
+            <Button
+                x:Name="Workspace"
+                Content="PROJECT"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/settings_logo_128.png</ImageSource>
+                </Button.Tag>
+            </Button>
+
         </WrapPanel>
 
         <!--  ==========================  -->
@@ -63,7 +105,7 @@
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="2">
-            <StackPanel  Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
                 <TextBlock
                     Margin="15,5,5,0"
                     FontSize="20"
@@ -78,17 +120,13 @@
                     Style="{StaticResource MaterialDesignListBox}">
 
                     <ListView.ItemTemplate>
-                        <DataTemplate >
-                            <Border
-                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                                BorderThickness="1">
+                        <DataTemplate>
+                            <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
                                 <StackPanel Orientation="Vertical">
-                                    <StackPanel  Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
                                         <!--  PROJECT TEXT  -->
-                                        <StackPanel
-                                            Margin="15,0,0,0"
-                                            Orientation="Horizontal">
+                                        <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock
                                                     Width="370"
@@ -126,13 +164,11 @@
                                             Margin="15,8,12,12"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style
-                                                    BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
-                                                    TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
-                                            <StackPanel  Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="36"
                                                     Height="36"
@@ -140,7 +176,7 @@
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="Dictionary" />
-                                                <TextBlock  VerticalAlignment="Center">ClearConcordance</TextBlock>
+                                                <TextBlock VerticalAlignment="Center">ClearConcordance</TextBlock>
                                             </StackPanel>
                                         </Button>
 
@@ -150,7 +186,7 @@
                                             Margin="8"
                                             IsEnabled="True"
                                             Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel  Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="30"
                                                     Height="30"
@@ -171,18 +207,14 @@
                                             Margin="8"
                                             IsEnabled="True"
                                             Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel
-                                                Margin="-15,0,0,0"
-                                                Orientation="Horizontal">
+                                            <StackPanel Margin="-15,0,0,0" Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="30"
                                                     Height="30"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="MonitorEye" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    VerticalAlignment="Center">
+                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
                                                     View Alignment
                                                 </TextBlock>
                                             </StackPanel>
@@ -202,12 +234,10 @@
                                                     Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="CallSplit">
                                                     <materialDesign:PackIcon.RenderTransform>
-                                                        <RotateTransform  Angle="180" CenterX="15" CenterY="15" />
+                                                        <RotateTransform Angle="180" CenterX="15" CenterY="15" />
                                                     </materialDesign:PackIcon.RenderTransform>
                                                 </materialDesign:PackIcon>
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    VerticalAlignment="Center">
+                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
                                                     ClearSuggester
                                                 </TextBlock>
                                             </StackPanel>

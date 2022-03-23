@@ -17,13 +17,13 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid  ButtonBase.Click="Grid_Click">
+    <Grid ButtonBase.Click="Grid_Click">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition  />
-            <ColumnDefinition  />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel  Grid.Column="0">
+        <StackPanel Grid.Column="0">
             <Button
                 Height="20"
                 Margin="2"
@@ -232,7 +232,7 @@
 
         </StackPanel>
 
-        <StackPanel  Grid.Column="1">
+        <StackPanel Grid.Column="1">
             <Button
                 Height="20"
                 Margin="2"
@@ -385,7 +385,7 @@
                 VerticalAlignment="Center">
                 BUTTONS
             </Label>
-            <StackPanel  Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="20"
@@ -409,7 +409,7 @@
                     Style="{DynamicResource PurpleDarkButton}" />
             </StackPanel>
 
-            <StackPanel  Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="20"
@@ -457,7 +457,7 @@
                     Style="{DynamicResource RedDarkButton}" />
             </StackPanel>
 
-            <StackPanel  Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="20"
@@ -505,7 +505,7 @@
                     Style="{DynamicResource OrangeDarkButton}" />
             </StackPanel>
 
-            <StackPanel  Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="20"
@@ -529,7 +529,7 @@
                     Style="{DynamicResource YellowDarkButton}" />
             </StackPanel>
 
-            <StackPanel  Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="20"
@@ -552,7 +552,7 @@
                     FontSize="10"
                     Style="{DynamicResource TealDarkButton}" />
             </StackPanel>
-            <StackPanel  Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
                 <Label
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"

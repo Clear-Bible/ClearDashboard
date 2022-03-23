@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
@@ -81,16 +82,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private bool _connected;
-        public bool Connected
+        private string _verseRef;
+
+        public string VerseRef
         {
-            get { return _connected; }
+            get { return _verseRef; }
             set
             {
-                _connected = value;
-                NotifyOfPropertyChange(() => Connected);
+                _verseRef = value; 
+                NotifyOfPropertyChange(() => VerseRef);
             }
         }
+
+
 
         private string _WindowIDToLoad;
         public string WindowIDToLoad
@@ -175,10 +179,7 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService = navigationService;
             _DAL = dal;
 
-            this.Connected = _DAL.IsPipeConnected;
-
             _DAL.NamedPipeChanged += HandleEvent;
-
 
             _this = this;
             
@@ -221,7 +222,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        public void Init()
+        public async Task Init()
         {
             // initiate the menu system
             MenuItems.Clear();
@@ -275,6 +276,9 @@ namespace ClearDashboard.Wpf.ViewModels
             _tools.Add(IoC.Get<PinsViewModel>());
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
+
+
+            await _DAL.SendPipeMessage(StartUp.PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -421,11 +425,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
             switch (pipeMessage.Action)
             {
+                case ActionType.CurrentVerse:
+                    this.VerseRef = pipeMessage.Text;
+                    break;
                 case ActionType.OnConnected:
-                    this.Connected = true;
                     break;
                 case ActionType.OnDisconnected:
-                    this.Connected = false;
                     break;
             }
 

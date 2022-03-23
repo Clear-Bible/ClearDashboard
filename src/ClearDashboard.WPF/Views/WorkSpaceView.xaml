@@ -41,9 +41,10 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" MinWidth="250" />
+                <ColumnDefinition Width="*" MinWidth="250" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
@@ -107,30 +108,23 @@
                 </Menu.ItemTemplate>
             </Menu>
 
-
-
-            <Image
-                Grid.Column="3"
-                Width="32"
-                Height="32">
-                <Image.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Connected}" Value="True">
-                                <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Connected}" Value="False">
-                                <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
-
             <TextBlock
                 Grid.Column="3"
+                Width="250"
+                Height="24"
+                Margin="0,0,29,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="LawnGreen"
+                Foreground="HotPink"
+                TextAlignment="Center">
+                Placeholder for Verse Ref Control
+            </TextBlock>
+
+            <TextBlock
+                Grid.Column="4"
                 Foreground="Pink"
-                Text="{Binding Connected}" />
+                Text="{Binding VerseRef}" />
         </Grid>
 
 
