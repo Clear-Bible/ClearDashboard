@@ -6,7 +6,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
     /// <summary>
     /// 
     /// </summary>
-    public class PaneViewModel : PropertyChangedBase
+    public class PaneViewModel : ApplicationScreen
     {
         public enum EDockSide
         {

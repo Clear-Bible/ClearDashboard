@@ -279,7 +279,7 @@ namespace ClearDashboard.Wpf.ViewModels
             _tools.Add(new SourceContextViewModel());
             _tools.Add(new TargetContextViewModel());
             _tools.Add(new NotesViewModel());
-            _tools.Add(new PinsViewModel());
+            _tools.Add(IoC.Get<PinsViewModel>());
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
 

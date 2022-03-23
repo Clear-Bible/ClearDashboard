@@ -149,6 +149,18 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
         #region Startup
 
+
+        protected override async void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+        }
+        protected override async void OnViewLoaded(object view)
+        {
+            await Init();
+
+            base.OnViewLoaded(view);
+        }
+
         public async Task Init()
         {
             // get the right help text

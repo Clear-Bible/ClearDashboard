@@ -78,8 +78,6 @@
                     DisplayMemberPath="Item1"
                     ItemsSource="{Binding Themes}"
                     SelectedItem="{Binding SelectedTheme}" />
-
-
             </WrapPanel>
 
 
