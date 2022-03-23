@@ -18,6 +18,21 @@ namespace ClearDashboard.DataAccessLayer
 
         private readonly ILogger _logger;
 
+        public enum PipeAction
+        {
+            OnConnected,
+            OnDisconnected,
+
+            SendText,
+
+            GetBibilicalTerms,
+            GetSourceVerses,
+            GetTargetVerses,
+            GetNotes,
+            GetProject,
+        }
+
+
         #endregion
 
         #region Events
@@ -86,9 +101,37 @@ namespace ClearDashboard.DataAccessLayer
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
 
-        public async Task SendMessage(string message)
+        public async Task SendPipeMessage(PipeAction action, string text = "")
         {
-            message = message.Trim() + " through the DAL";
+            PipeMessage message = new PipeMessage();
+            switch (action)
+            {
+                case PipeAction.OnConnected:
+                    message.Action = ActionType.OnConnected;
+                    break;
+                case PipeAction.OnDisconnected:
+                    message.Action = ActionType.OnDisconnected;
+                    break;
+                case PipeAction.SendText:
+                    message.Action = ActionType.SendText;
+                    message.Text = text;
+                    break;
+                case PipeAction.GetBibilicalTerms:
+                    message.Action = ActionType.GetBibilicalTerms;
+                    break;
+                case PipeAction.GetSourceVerses:
+                    message.Action = ActionType.GetSourceVerses;
+                    break;
+                case PipeAction.GetTargetVerses:
+                    message.Action= ActionType.GetTargetVerses;
+                    break;
+                case PipeAction.GetNotes:
+                    message.Action = ActionType.GetNotes;
+                    break;
+                case PipeAction.GetProject:
+                    message.Action = ActionType.GetProject;
+                    break;
+            }
 
             await NamedPipesClient.Instance.WriteAsync(message);
         }

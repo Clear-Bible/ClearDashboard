@@ -22,7 +22,8 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Properties
 
-        //Connection to the DAL
+        private ILogger Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
         private StartUp _DAL;
 
         private string _paratextUserName;
@@ -139,6 +140,10 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <param name="logger"></param>
         public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
+            Logger = logger;
+            NavigationService = navigationService;
+            _DAL = dal;
+
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
@@ -150,7 +155,6 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
-            _DAL = dal;
             StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             //_DAL = new StartUp();
             _DAL.NamedPipeChanged += HandleEvent;

@@ -22,20 +22,18 @@ namespace Pipes_Shared
         OnConnected,
         OnDisconnected,
 
-        ServerClosed,
-
         SendText,
 
         GetBibilicalTerms,
         GetSourceVerses,
         GetTargetVerses,
-        GetChapter,
         GetNotes,
         GetProject,
 
         SetBiblicalTerms,
         SetSourceVerseText,
-        SetTargetVerseText,
+        SetUSX,
+        SetUSFM,
         SetNotesObject,
 
         CurrentVerse,

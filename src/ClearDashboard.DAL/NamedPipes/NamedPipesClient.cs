@@ -137,13 +137,9 @@ namespace ClearDashboard.DAL.NamedPipes
 
     #endregion
 
-    public async Task WriteAsync(string message)
+    public async Task WriteAsync(PipeMessage message)
     {
-        await client.WriteAsync(new PipeMessage
-        {
-            Action = ActionType.SendText,
-            Text = message,
-        });
+        await client.WriteAsync(message);
     }
 }
 }

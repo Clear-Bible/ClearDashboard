@@ -23,11 +23,11 @@ namespace ClearDashboard.ParatextPlugin.Actions
         public override string ToString() => label;
     }
 
-    public class GetBibilicalTerms
+    public class BibilicalTerms
     {
         public IBiblicalTermList BiblicalTermList { get; set; }
 
-        public GetBibilicalTerms(ListType listType, IProject project, IWindowPluginHost host)
+        public BibilicalTerms(ListType listType, IProject project, IWindowPluginHost host)
         {
             IBiblicalTermList biblicalTermList;
 

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 
@@ -31,6 +32,10 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
 
         private DashboardViewModel _dashboardViewModel;
+
+        private ILogger Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
+        private StartUp _DAL;
 
         #endregion //Member Variables
 
@@ -152,13 +157,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger) : base(navigationService, logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, StartUp dal) : base(navigationService, logger)
         {
+            Logger = logger;
+            NavigationService = navigationService;
+            _DAL = dal;
+
             _this = this;
             
-            // grab a copy of the current logger from the App.xaml.cs
-            // _logger = (Application.Current as ClearDashboard.Wpf.App)?._logger;
-
             this.Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
