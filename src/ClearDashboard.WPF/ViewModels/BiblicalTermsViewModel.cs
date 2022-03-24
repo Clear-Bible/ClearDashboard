@@ -131,8 +131,16 @@ namespace ClearDashboard.Wpf.ViewModels
                             }
 
                             NotifyOfPropertyChange(() => BiblicalTerms);
+
+
                         }
                     });
+
+                    await Task.Run(() =>
+                    {
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    }).ConfigureAwait(false);
+                    System.Windows.Forms.Application.DoEvents();
                     break;
             }
 
@@ -182,14 +190,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     ProgressBarVisibility = Visibility.Visible;
                 }).ConfigureAwait(false);
+                System.Windows.Forms.Application.DoEvents();
                 
-                await Task.Delay(500);
                 await _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTerms).ConfigureAwait(false);
-
-                await Task.Run(() =>
-                {
-                    ProgressBarVisibility = Visibility.Collapsed;
-                }).ConfigureAwait(false);
             }
         }
 
