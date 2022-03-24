@@ -26,6 +26,9 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 
         public EDockSide DockSide = EDockSide.Bottom;
 
+        #endregion //Public Properties
+
+        #region Observable Properties
         public string Title
         {
             get => _title;
@@ -79,9 +82,6 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
                 }
             }
         }
-		#endregion //Public Properties
-
-		#region Observable Properties
 
 		#endregion //Observable Properties
 

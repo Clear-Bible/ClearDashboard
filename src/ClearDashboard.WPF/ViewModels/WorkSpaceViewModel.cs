@@ -89,7 +89,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get { return _verseRef; }
             set
             {
-                _verseRef = value; 
+                _verseRef = value;
                 NotifyOfPropertyChange(() => VerseRef);
             }
         }
@@ -128,7 +128,7 @@ namespace ClearDashboard.Wpf.ViewModels
         ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
         public ObservableCollection<ToolViewModel> Tools
         {
-            get=> _tools;
+            get => _tools;
             set
             {
                 _tools = value;
@@ -179,10 +179,10 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService = navigationService;
             _DAL = dal;
 
-            _DAL.NamedPipeChanged += HandleEvent;
+            _DAL.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
-            
+
             this.Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
@@ -256,23 +256,23 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Clear();
 
             Debug.WriteLine(DashboardProject.Name);
-            _dashboardViewModel = new DashboardViewModel();
+            _dashboardViewModel = IoC.Get<DashboardViewModel>();
             _files.Add(_dashboardViewModel);
 
-            _files.Add(new ConcordanceViewModel());
-            _files.Add(new StartPageViewModel());
-            _files.Add(new AlignmentToolViewModel());
+            _files.Add(IoC.Get<ConcordanceViewModel>());
+            _files.Add(IoC.Get<StartPageViewModel>());
+            _files.Add(IoC.Get<AlignmentToolViewModel>());
             // trigger property changed event
-            Files.Add(new TreeDownViewModel());
+            Files.Add(IoC.Get<TreeDownViewModel>());
 
 
             // add in the tool panes
             _tools.Clear();
-            _tools.Add(new BiblicalTermsViewModel());
-            _tools.Add(new WordMeaningsViewModel());
-            _tools.Add(new SourceContextViewModel());
-            _tools.Add(new TargetContextViewModel());
-            _tools.Add(new NotesViewModel());
+            _tools.Add(IoC.Get<BiblicalTermsViewModel>());
+            _tools.Add(IoC.Get<WordMeaningsViewModel>());
+            _tools.Add(IoC.Get<SourceContextViewModel>());
+            _tools.Add(IoC.Get<TargetContextViewModel>());
+            _tools.Add(IoC.Get<NotesViewModel>());
             _tools.Add(IoC.Get<PinsViewModel>());
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
@@ -290,7 +290,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            _DAL.NamedPipeChanged -= HandleEvent;
+            _DAL.NamedPipeChanged -= HandleEventAsync;
             base.Dispose(disposing);
         }
 
@@ -328,7 +328,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 // Debug.WriteLine(e.Model?.ContentId?.ToString());
                 switch (e.Model.ContentId.ToUpper())
-                { 
+                {
                     case WorkspaceLayoutNames.Dashboard:
                         e.Content = _dashboardViewModel ?? new DashboardViewModel();
                         break;
@@ -336,7 +336,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         e.Content = new ConcordanceViewModel();
                         break;
                     case WorkspaceLayoutNames.BiblicalTerms:
-                        e.Content = new BiblicalTermsViewModel();
+                        e.Content = IoC.Get<BiblicalTermsViewModel>();
                         break;
                     case WorkspaceLayoutNames.WordMeanings:
                         e.Content = new WordMeaningsViewModel();
@@ -377,7 +377,7 @@ namespace ClearDashboard.Wpf.ViewModels
             switch (windowTag)
             {
                 case WorkspaceLayoutNames.BiblicalTerms:
-                    var vm = new BiblicalTermsViewModel();
+                    var vm = IoC.Get<BiblicalTermsViewModel>();
                     return (vm, vm.Title, vm.DockSide);
                 case WorkspaceLayoutNames.Dashboard:
                     var vm1 = new DashboardViewModel();
@@ -417,7 +417,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleEventAsync(object sender, NamedPipesClient.PipeEventArgs args)
         {
             if (args == null) return;
 

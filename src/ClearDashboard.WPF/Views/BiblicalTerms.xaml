@@ -16,14 +16,22 @@
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        x:Name="ReloadBiblicalTerms"
+                        Width="350"
+                        Margin="20,5,20,5"
+                        HorizontalAlignment="Left"
+                        Style="{DynamicResource MaterialDesignButton}">
+                        Reload
+                    </Button>
 
-                <Button
-                    Width="350"
-                    Margin="20,5,20,5"
-                    HorizontalAlignment="Left"
-                    Style="{DynamicResource MaterialDesignButton}">
-                    Reload
-                </Button>
+                    <ProgressBar
+                        IsIndeterminate="True"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Visibility="{Binding ProgressBarVisibility}"
+                        Value="0" />
+                </StackPanel>
 
                 <DataGrid
                     x:Name="gridVerses"
