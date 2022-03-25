@@ -24,7 +24,8 @@ namespace Pipes_Shared
 
         SendText,
 
-        GetBibilicalTerms,
+        GetBibilicalTermsAll,
+        GetBibilicalTermsProject,
         GetSourceVerses,
         GetTargetVerses,
         GetNotes,

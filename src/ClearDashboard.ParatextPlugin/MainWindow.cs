@@ -37,6 +37,9 @@ namespace ClearDashboardPlugin
         private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
         private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
 
+        private IBiblicalTermList m_listProject;
+        private IBiblicalTermList m_listAll;
+
         ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
 
@@ -60,6 +63,7 @@ namespace ClearDashboardPlugin
             Green,
             Blue,
             Orange,
+            Purple,
         }
 
         #endregion
@@ -243,7 +247,8 @@ namespace ClearDashboardPlugin
 
         private async Task OnMessageReceivedAsync(PipeMessage message)
         {
-
+            AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
+            
             //PipeMessage msg = null;
             //try
             //{
@@ -269,10 +274,38 @@ namespace ClearDashboardPlugin
                     }).ConfigureAwait(false);
 
                     break;
+                case ActionType.CurrentVerse:
+
+                    break;
                 case ActionType.SendText:
                     AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;
-                case ActionType.GetBibilicalTerms:
+                case ActionType.GetBibilicalTermsAll:
+
+                    List<BiblicalTermsData> termsList;
+                    if (m_list == null)
+                    {
+                        m_list = m_host.GetBiblicalTermList(BiblicalTermListType.All);
+
+                        BibilicalTerms btAll = new BibilicalTerms(AllList, m_project, m_host);
+                        termsList = btAll.ProcessBiblicalTerms(m_project);
+                    }
+
+                    var payloadBTAll = JsonConvert.SerializeObject(m_list, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.SetBiblicalTerms,
+                        Text = "Project Object",
+                        Payload = payloadBTAll
+                    }).ConfigureAwait(false);
+
+                    break;
+                case ActionType.GetBibilicalTermsProject:
                     BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
                     var btList = bt.ProcessBiblicalTerms(m_project);
 
@@ -787,6 +820,9 @@ namespace ClearDashboardPlugin
                         break;
                     case MsgColor.Orange:
                         cRTB.AppendText(sMsg, Color.Orange, this.rtb);
+                        break;
+                    case MsgColor.Purple:
+                        cRTB.AppendText(sMsg, Color.Purple, this.rtb);
                         break;
                 }
 

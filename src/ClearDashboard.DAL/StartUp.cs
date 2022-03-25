@@ -27,7 +27,8 @@ namespace ClearDashboard.DataAccessLayer
 
             SendText,
 
-            GetBibilicalTerms,
+            GetBibilicalTermsAll,
+            GetBibilicalTermsProject,
             GetSourceVerses,
             GetTargetVerses,
             GetNotes,
@@ -134,8 +135,11 @@ namespace ClearDashboard.DataAccessLayer
                     message.Action = ActionType.SendText;
                     message.Text = text;
                     break;
-                case PipeAction.GetBibilicalTerms:
-                    message.Action = ActionType.GetBibilicalTerms;
+                case PipeAction.GetBibilicalTermsAll:
+                    message.Action = ActionType.GetBibilicalTermsAll;
+                    break;
+                case PipeAction.GetBibilicalTermsProject:
+                    message.Action = ActionType.GetBibilicalTermsProject;
                     break;
                 case PipeAction.GetSourceVerses:
                     message.Action = ActionType.GetSourceVerses;

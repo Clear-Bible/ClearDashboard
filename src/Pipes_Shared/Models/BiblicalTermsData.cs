@@ -87,6 +87,16 @@ namespace ClearDashboard.Pipes_Shared.Models
             }
         }
 
+        private List<string> _referencesListLong = new List<string>();
+        [JsonProperty]
+        public List<string> ReferencesLong
+        {
+            get => _referencesListLong;
+            set
+            {
+                SetProperty(ref _referencesListLong, value);
+            }
+        }
 
         private List<string> _renderings = new List<string>();
         [JsonProperty]
@@ -111,4 +121,5 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
     }
+
 }

@@ -114,12 +114,15 @@ namespace ClearDashboard.ParatextPlugin.Actions
 
 
                 List<string> VerseRef = new List<string>();
+                List<string> VerseRefLong = new List<string>();
                 foreach (var occurrence in biblicalTerm.Occurrences)
                 {
                     VerseRef.Add(occurrence.BBBCCCVVV.ToString());
+                    VerseRefLong.Add($"{occurrence.BookCode} {occurrence.ChapterNum}:{occurrence.VerseNum}");
                 }
 
                 bterm.References = VerseRef;
+                bterm.ReferencesLong = VerseRefLong;
                 btList.Add(bterm);
             }
 

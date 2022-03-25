@@ -31,15 +31,34 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
+        public enum SelectedBTtype
+        {
+            OptionAll,
+            OptionProject
+        }
+
         public ILogger Logger { get; set; }
         public INavigationService NavigationService { get; set; }
         public StartUp _DAL { get; set; }
         private string _currentVerse = "";
 
-        Dictionary<string, object> filters = new Dictionary<string, object>();
+        //Dictionary<string, object> filters = new Dictionary<string, object>();
         #endregion //Member Variables
 
         #region Public Properties
+
+        private string _gloss;
+
+        public string Gloss
+        {
+            get { return _gloss; }
+            set
+            {
+                _gloss = value; 
+                NotifyOfPropertyChange(() => Gloss);
+            }
+        }
+
 
         private BindableCollection<string> _domains;
         public BindableCollection<string> Domains
@@ -53,7 +72,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private string _selectedDomain = string.Empty;
-
         public string SelectedDomain
         {
             get { return _selectedDomain; }
@@ -67,10 +85,39 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private SelectedBTtype _lastSelectedBTtype = SelectedBTtype.OptionProject;
+
+        private SelectedBTtype _selectedBiblicalTermsType = SelectedBTtype.OptionProject;
+        public SelectedBTtype SelectedBiblicalTermsType
+        {
+            get { return _selectedBiblicalTermsType; }
+            set
+            {
+                _selectedBiblicalTermsType = value;
+                NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
+
+                if (_lastSelectedBTtype != _selectedBiblicalTermsType)
+                {
+                    if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
+                    {
+                        _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsProject);
+                    }
+                    else
+                    {
+                        _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsAll);
+                    }
+
+                    _lastSelectedBTtype = _selectedBiblicalTermsType;
+                }
+            }
+        }
+
 
         #endregion //Public Properties
 
         #region Observable Properties
+
+
 
         public ICollectionView BiblicalTermsCollectionView { get; }
 
@@ -82,6 +129,40 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 _biblicalTerms = value;
                 NotifyOfPropertyChange(() => BiblicalTerms);
+            }
+        }
+
+        private BiblicalTermsData _selectedBiblicalTermsData;
+        public BiblicalTermsData SelectedBiblicalTermsData
+        {
+            get { return _selectedBiblicalTermsData; }
+            set
+            {
+                _selectedBiblicalTermsData = value;
+                NotifyOfPropertyChange(() => SelectedBiblicalTermsData);
+                UpdateSelectedTerm(SelectedBiblicalTermsData);
+            }
+        }
+
+        private ObservableCollection<Verse> _selectedItemVerses = new ObservableCollection<Verse>();
+        public ObservableCollection<Verse> SelectedItemVerses
+        {
+            get { return _selectedItemVerses; }
+            set
+            {
+                _selectedItemVerses = value; 
+                NotifyOfPropertyChange(() => SelectedItemVerses);
+            }
+        }
+
+        private ObservableCollection<string> _renderings = new ObservableCollection<string>();
+        public ObservableCollection<string> Renderings
+        {
+            get { return _renderings; }
+            set
+            {
+                _renderings = value;
+                NotifyOfPropertyChange(() => Renderings);
             }
         }
 
@@ -137,7 +218,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await _DAL.SendPipeMessage((StartUp.PipeAction)ActionType.GetBibilicalTerms)
+                        await _DAL.SendPipeMessage((StartUp.PipeAction)ActionType.GetBibilicalTermsProject)
                             .ConfigureAwait(false);
                     }
 
@@ -161,7 +242,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                         if (biblicalTermsList.Count > 0)
                         {
-                            for (int i = 0; i < 200; i++)
+                            for (int i = 0; i < biblicalTermsList.Count; i++)
                             {
                                 _biblicalTerms.Add(biblicalTermsList[i]);
 
@@ -175,10 +256,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     });
 
-                    await Task.Run(() =>
-                    {
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    }).ConfigureAwait(false);
+                    ProgressBarVisibility = Visibility.Collapsed;
                     System.Windows.Forms.Application.DoEvents();
                     break;
             }
@@ -218,6 +296,34 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// On BiblicalTerms Click - these are the bottom verse/verse references
+        /// </summary>
+        /// <param name="selectedBiblicalTermsData"></param>
+        private void UpdateSelectedTerm(BiblicalTermsData selectedBiblicalTermsData)
+        {
+            SelectedItemVerses.Clear();
+            Renderings.Clear();
+            if (selectedBiblicalTermsData is not null)
+            {
+                Gloss = selectedBiblicalTermsData.Gloss;
+
+                foreach (var reference in selectedBiblicalTermsData.ReferencesLong)
+                {
+                    string verseRef = reference;
+                    _selectedItemVerses.Add(new Verse { VerseID = reference });
+                }
+
+                foreach (var render in selectedBiblicalTermsData.Renderings)
+                {
+                    _renderings.Add(render);
+                }
+            }
+
+            NotifyOfPropertyChange(() => SelectedItemVerses);
+            NotifyOfPropertyChange(() => Renderings);
+        }
+
         private bool FilterTerms(object obj)
         {
             if (obj is BiblicalTermsData bt)
@@ -252,7 +358,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }).ConfigureAwait(false);
                 System.Windows.Forms.Application.DoEvents();
                 
-                await _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTerms).ConfigureAwait(false);
+                await _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
             }
         }
 

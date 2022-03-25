@@ -114,6 +114,18 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+        private List<string> _referencesLong = new List<string>();
+        [JsonProperty]
+        public List<string> ReferencesLong
+        {
+            get => _referencesLong;
+            set
+            {
+                _referencesLong = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private List<string> _renderings = new List<string>();
         [JsonProperty]
