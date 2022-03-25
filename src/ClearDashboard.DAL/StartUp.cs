@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
@@ -10,8 +9,6 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
-
-
     public class StartUp
     {
         #region props
@@ -23,11 +20,8 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Events
 
-
         // event handler to be raised when the Paratext Username changes
         public static event EventHandler ParatextUserNameEventHandler;
-
-
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
 
@@ -47,12 +41,6 @@ namespace ClearDashboard.DataAccessLayer
             _logger.LogInformation("'DAL.Startup' ctor called.");
 
             _namedPipesClient = namedPipeClient;
-
-            // Wire up named pipes
-            //NamedPipesClient.Instance.InitializeAsync().ContinueWith(t =>
-            //        Debug.WriteLine($"Error while connecting to pipe server: {t.Exception}"),
-            //    TaskContinuationOptions.OnlyOnFaulted);
-
             _namedPipesClient.NamedPipeChanged += HandleEvent;
         }
 
@@ -102,11 +90,11 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
             // create the new folder
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             appPath = Path.Combine(appPath, "ClearDashboard_Projects");
 
             //check to see if the directory exists already
-            string newDir = Path.Combine(appPath, dashboardProject.ProjectName);
+            var newDir = Path.Combine(appPath, dashboardProject.ProjectName);
             if (!Directory.Exists(newDir))
             {
                 try
