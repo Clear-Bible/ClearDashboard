@@ -13,10 +13,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer.Context;
-using Microsoft.Extensions.Configuration;
 using ClearDashboard.DataAccessLayer.Extensions;
-using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Extensions;
+
 
 namespace ClearDashboard.Wpf
 {
@@ -28,8 +27,7 @@ namespace ClearDashboard.Wpf
         public static IHost Host { get; private set; }
         protected ILogger<Bootstrapper> Logger { get; private set; }
 
-        public StartUp DAL { get; set; }
-
+        
         #endregion
 
         #region Contructor
@@ -44,43 +42,32 @@ namespace ClearDashboard.Wpf
                 .Build();
 
             SetupLogging();
-            //EnsureDatabase();
-
             Initialize();
 
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
 
-        //private void EnsureDatabase()
-        //{
-        //    // Ask for the database context.  This will create the database
-        //    // and apply migrations if required.
-        //    _ = Host.Services.GetService<AlignmentContext>();
-        //}
-
         #endregion
 
         #region Configure
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
+            FrameSet = new FrameSet();
+            serviceCollection.AddCaliburnMicro(FrameSet);
+            serviceCollection.AddClearDashboardDataAccessLayer();
 
-            //serviceCollection.AddAlignmentDatabase("alignment.sqlite");
+            serviceCollection.AddLogging();
 
-            serviceCollection.AddProjectNameDatabaseContextFactory();
 
             // wire up the interfaces required by Caliburn.Micro
             serviceCollection.AddSingleton<IWindowManager, WindowManager>();
             serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
 
-            // add in the DAL
-            serviceCollection.AddSingleton<StartUp>();
-
-
             // Register the FrameAdapter which wraps a Frame as INavigationService
             FrameSet = new FrameSet();
-            serviceCollection.AddSingleton<INavigationService>(sp=> FrameSet.NavigationService);
-            
+            serviceCollection.AddSingleton<INavigationService>(sp => FrameSet.NavigationService);
+
             // wire up all of the view models in the project.
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)
@@ -88,9 +75,7 @@ namespace ClearDashboard.Wpf
                 .ToList()
                 .ForEach(viewModelType => serviceCollection.AddScoped(viewModelType));
 
-            serviceCollection.AddLogging();
 
-            
         }
 
         #endregion

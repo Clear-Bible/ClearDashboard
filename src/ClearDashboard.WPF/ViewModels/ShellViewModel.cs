@@ -11,9 +11,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleEvent(object sender, PipeEventArgs args)
         {
             if (args == null) return;
 

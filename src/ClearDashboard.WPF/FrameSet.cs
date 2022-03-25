@@ -2,19 +2,22 @@
 using System.Windows.Navigation;
 using Caliburn.Micro;
 
-namespace ClearDashboard.Wpf;
-
-public class FrameSet
+namespace ClearDashboard.Wpf
 {
-    public FrameSet()
+
+    public class FrameSet
     {
-        Frame = new Frame
+        public FrameSet()
         {
-            NavigationUIVisibility = NavigationUIVisibility.Hidden
-        };
-        FrameAdapter = new FrameAdapter(Frame);
+            Frame = new Frame
+            {
+                NavigationUIVisibility = NavigationUIVisibility.Hidden
+            };
+            FrameAdapter = new FrameAdapter(Frame);
+        }
+
+        public Frame Frame { get; private set; }
+        public FrameAdapter FrameAdapter { get; private set; }
+        public INavigationService NavigationService => FrameAdapter as INavigationService;
     }
-    public Frame Frame { get; private set; }
-    public FrameAdapter FrameAdapter { get; private set; }
-    public INavigationService NavigationService => FrameAdapter as INavigationService;
 }
