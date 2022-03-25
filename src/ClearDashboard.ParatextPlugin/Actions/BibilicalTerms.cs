@@ -27,6 +27,10 @@ namespace ClearDashboard.ParatextPlugin.Actions
 
     public class BibilicalTerms
     {
+        private string _lastBookCode = "";
+        private int _lastChapterNum;
+        private List<string> _lastScript = new List<string>();
+
         public IBiblicalTermList BiblicalTermList { get; set; }
 
         public BibilicalTerms(ListType listType, IProject project, IWindowPluginHost host)
@@ -124,18 +128,77 @@ namespace ClearDashboard.ParatextPlugin.Actions
 
                 List<string> VerseRef = new List<string>();
                 List<string> VerseRefLong = new List<string>();
+                List<string> VerseRefText = new List<string>();
                 foreach (var occurrence in biblicalTerm.Occurrences)
                 {
                     VerseRef.Add(occurrence.BBBCCCVVV.ToString());
                     VerseRefLong.Add($"{occurrence.BookCode} {occurrence.ChapterNum}:{occurrence.VerseNum}");
+
+                    VerseRefText.Add(LookupVerseText(m_project, occurrence.BookNum, occurrence.ChapterNum, occurrence.VerseNum));
                 }
 
                 bterm.References = VerseRef;
                 bterm.ReferencesLong = VerseRefLong;
+                bterm.ReferencesListText = VerseRefText;
                 btList.Add(bterm);
             }
 
             return btList;
+        }
+
+        private string LookupVerseText(IProject mProject, int BookNum, int ChapterNum, int VerseNum)
+        {
+            _lastBookCode = "";
+            _lastChapterNum = 0;
+            _lastScript = new List<string>();
+
+            IEnumerable<IUSFMToken> tokens = mProject.GetUSFMTokens(BookNum, ChapterNum);
+            if (tokens is null)
+            {
+                return "";
+            }
+
+            List<string> lines = new List<string>();
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    if (marker.Type == MarkerType.Verse)
+                    {
+                        // skip if the verses are beyond what we are looking for
+                        if (Convert.ToInt16(marker.Data) > VerseNum)
+                        {
+                            break;
+                        }
+
+                        lines.Add($"Verse [{marker.Data}]");
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    lines.Add("Text Token: " + textToken.Text);
+                }
+            }
+
+            string sText = "";
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (lines[i].Contains($"Verse [{VerseNum}]"))
+                {
+                    // get the next lines until the next verse
+                    for (int j = i; j < lines.Count; j++)
+                    {
+                        if (lines[j].StartsWith("Text Token: "))
+                        {
+                            sText += lines[j].Substring(12);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            return sText;
         }
     }
 }

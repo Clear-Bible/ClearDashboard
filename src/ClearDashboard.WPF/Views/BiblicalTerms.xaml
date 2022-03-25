@@ -74,7 +74,7 @@
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
             </StackPanel>
-            <TextBlock Margin="10,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
+            <TextBlock Margin="20,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
             <ComboBox
                 x:Name="Domains"
                 MinWidth="150"
@@ -106,8 +106,9 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -232,16 +233,20 @@
 
         <Border
             Grid.Row="2"
-            Padding="5"
+            Margin="5"
             BorderBrush="{DynamicResource PrimaryHueLightBrush}"
             BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="Gloss: " />
+                    <TextBlock
+                        Margin="5,0,5,0"
+                        Foreground="{DynamicResource PrimaryHueLightBrush}"
+                        Text="Gloss:" />
                     <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
                 </StackPanel>
                 <ListBox
                     x:Name="SelectedItemVerseRenderings"
+                    Margin="5"
                     VerticalAlignment="Top"
                     materialDesign:ListBoxItemAssist.ShowSelection="False"
                     ItemsSource="{Binding Renderings}" />
@@ -250,11 +255,12 @@
 
         <Border
             Grid.Row="3"
-            Padding="5"
+            Margin="5"
             BorderBrush="{DynamicResource PrimaryHueLightBrush}"
             BorderThickness="1">
             <ListView
                 x:Name="SelectedItemVerses"
+                Margin="5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding SelectedItemVerses}">
                 <ListView.View>
@@ -264,9 +270,14 @@
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
+
                         <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
-                        <GridViewColumn DisplayMemberBinding="{Binding VerseText}">
-                            <TextBlock />
+                        <GridViewColumn Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding VerseText}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>

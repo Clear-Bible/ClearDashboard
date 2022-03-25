@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -49,7 +50,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get { return _gloss; }
             set
             {
-                _gloss = value; 
+                _gloss = value;
                 NotifyOfPropertyChange(() => Gloss);
             }
         }
@@ -72,7 +73,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get { return _selectedDomain; }
             set
             {
-                _selectedDomain = value; 
+                _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
 
                 //refresh the biblicalterms collection
@@ -143,7 +144,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get { return _selectedItemVerses; }
             set
             {
-                _selectedItemVerses = value; 
+                _selectedItemVerses = value;
                 NotifyOfPropertyChange(() => SelectedItemVerses);
             }
         }
@@ -159,6 +160,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private ObservableCollection<string> _renderingsText = new ObservableCollection<string>();
+        public ObservableCollection<string> RenderingsText
+        {
+            get { return _renderingsText; }
+            set
+            {
+                _renderingsText = value;
+                NotifyOfPropertyChange(() => RenderingsText);
+            }
+        }
 
 
         private Visibility _progressBarVisibility = Visibility.Collapsed;
@@ -302,12 +313,20 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 Gloss = selectedBiblicalTermsData.Gloss;
 
-                foreach (var reference in selectedBiblicalTermsData.ReferencesLong)
+                for (int i = 0; i < selectedBiblicalTermsData.ReferencesLong.Count; i++)
                 {
-                    // todo add in full verse text
+                    string verseRef = selectedBiblicalTermsData.ReferencesLong[i];
+                    string verseText = "";
+                    if (i < selectedBiblicalTermsData.ReferencesListText.Count)
+                    {
+                        verseText = selectedBiblicalTermsData.ReferencesListText[i];
+                    }
 
-                    string verseRef = reference;
-                    _selectedItemVerses.Add(new Verse { VerseID = reference });
+                    _selectedItemVerses.Add(new Verse
+                    {
+                        VerseID = verseRef,
+                        VerseText = verseText
+                    });
                 }
 
                 foreach (var render in selectedBiblicalTermsData.Renderings)
@@ -316,8 +335,49 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
+
+            // create inlines of the selected word
+            foreach (var verse in _selectedItemVerses)
+            {
+                var verseText = verse.VerseText;
+                List<Point> points = new List<Point>();
+                foreach (var render in selectedBiblicalTermsData.Renderings)
+                {
+                    try
+                    {
+                        Regex regexObj = new Regex(@"\W*((?i)" + render + @"(?-i))\W*");
+                        Match matchResults = regexObj.Match(verseText);
+                        while (matchResults.Success)
+                        {
+                            // matched text: matchResults.Value
+                            // match start: matchResults.Index
+                            // match length: matchResults.Length
+                            Point point = new Point(matchResults.Index, matchResults.Index + matchResults.Length - 1);
+                            points.Add(point);
+
+                            matchResults = matchResults.NextMatch();
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        // Syntax error in the regular expression
+                    }
+
+                    // interate through in reverse
+                    for (int i = points.Count - 1; i >= 0; i--)
+                    {
+                        string endPart = verseText.Substring((int)points[i].Y - 1);
+                        string startPart = verseText.Substring(0, (int)points[i].Y - 1);
+                    }
+
+                    string sTmp = verse.VerseText;
+                }
+            }
+
+
             NotifyOfPropertyChange(() => SelectedItemVerses);
             NotifyOfPropertyChange(() => Renderings);
+            NotifyOfPropertyChange(() => RenderingsText);
         }
 
         private bool FilterTerms(object obj)
@@ -353,7 +413,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     ProgressBarVisibility = Visibility.Visible;
                 }).ConfigureAwait(false);
                 System.Windows.Forms.Application.DoEvents();
-                
+
                 await _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
             }
         }

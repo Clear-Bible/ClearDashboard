@@ -98,6 +98,17 @@ namespace ClearDashboard.Pipes_Shared.Models
             }
         }
 
+        private List<string> _referencesListText = new List<string>();
+        [JsonProperty]
+        public List<string> ReferencesListText
+        {
+            get => _referencesListText;
+            set
+            {
+                SetProperty(ref _referencesListText, value);
+            }
+        }
+
         private List<string> _renderings = new List<string>();
         [JsonProperty]
         public List<string> Renderings
