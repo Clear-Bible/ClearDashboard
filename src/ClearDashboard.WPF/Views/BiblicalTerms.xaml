@@ -36,7 +36,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="45" />
             <RowDefinition Height="*" />
             <RowDefinition Height="80" />
             <RowDefinition Height="150" />
@@ -44,7 +44,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button
                 x:Name="ReloadBiblicalTerms"
-                Width="350"
+                Width="100"
                 Margin="20,5,20,5"
                 HorizontalAlignment="Left"
                 Style="{DynamicResource MaterialDesignButton}">
@@ -56,17 +56,24 @@
                 Style="{StaticResource MaterialDesignCircularProgressBar}"
                 Visibility="{Binding ProgressBarVisibility}"
                 Value="0" />
+            <StackPanel
+                Margin="5,0,0,5"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <RadioButton
+                    Content="PROJECT"
+                    Foreground="{DynamicResource PrimaryHueLightBrush}"
+                    GroupName="BTType"
+                    IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
+                    Style="{StaticResource MaterialDesignLightRadioButton}" />
 
-            <RadioButton
-                Content="Project"
-                IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
-                Style="{StaticResource MaterialDesignAccentRadioButton}" />
-
-            <RadioButton
-                Content="All"
-                IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
-                Style="{StaticResource MaterialDesignAccentRadioButton}" />
-
+                <RadioButton
+                    Content="ALL"
+                    Foreground="{DynamicResource PrimaryHueLightBrush}"
+                    GroupName="BTType"
+                    IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
+                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+            </StackPanel>
             <TextBlock Margin="10,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
             <ComboBox
                 x:Name="Domains"
@@ -257,7 +264,7 @@
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
-                        <GridViewColumn DisplayMemberBinding="{Binding VerseID}" />
+                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
                         <GridViewColumn DisplayMemberBinding="{Binding VerseText}">
                             <TextBlock />
                         </GridViewColumn>

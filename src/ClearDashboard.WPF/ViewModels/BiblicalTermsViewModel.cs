@@ -1,18 +1,5 @@
-﻿using ClearDashboard.Common;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using MvvmHelpers;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.Interfaces;
@@ -20,6 +7,14 @@ using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pipes_Shared;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -116,8 +111,6 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Public Properties
 
         #region Observable Properties
-
-
 
         public ICollectionView BiblicalTermsCollectionView { get; }
 
@@ -225,7 +218,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
                 case ActionType.SetBiblicalTerms:
                     // invoke to get it to run in STA mode
-                    Application.Current.Dispatcher.Invoke((Action)delegate
+                    Application.Current.Dispatcher.Invoke(delegate
                     {
                         _biblicalTerms.Clear();
 
@@ -248,7 +241,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                                 foreach (var rendering in biblicalTermsList[i].Renderings)
                                 {
-                                    _biblicalTerms[i].RenderingString += rendering.ToString() + " ";
+                                    _biblicalTerms[i].RenderingString += rendering + " ";
                                 }
                             }
 
@@ -304,12 +297,15 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             SelectedItemVerses.Clear();
             Renderings.Clear();
+            Gloss = "";
             if (selectedBiblicalTermsData is not null)
             {
                 Gloss = selectedBiblicalTermsData.Gloss;
 
                 foreach (var reference in selectedBiblicalTermsData.ReferencesLong)
                 {
+                    // todo add in full verse text
+
                     string verseRef = reference;
                     _selectedItemVerses.Add(new Verse { VerseID = reference });
                 }

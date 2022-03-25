@@ -1,6 +1,8 @@
-﻿using ClearDashboard.Pipes_Shared.Models;
+﻿using System;
+using ClearDashboard.Pipes_Shared.Models;
 using Paratext.PluginInterfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -41,7 +43,7 @@ namespace ClearDashboard.ParatextPlugin.Actions
             }
         }
 
-        internal List<BiblicalTermsData> ProcessBiblicalTerms(IProject m_project)
+        public List<BiblicalTermsData> ProcessBiblicalTerms(IProject m_project)
         {
             var biblicalTermList = this.BiblicalTermList.ToList();
 
@@ -80,13 +82,20 @@ namespace ClearDashboard.ParatextPlugin.Actions
                                 }
                                 break;
                             case "CategoryIds":
-                                //foreach (var t in (List<string>)termProperty.GetValue(term, null))
-                                //{
-                                //    Debug.WriteLine("CategoryIds:" + t);
-                                //}
+                                foreach (var t in (List<string>)termProperty.GetValue(term, null))
+                                {
+                                    //Debug.WriteLine("CategoryIds:" + t);
+                                }
                                 break;
                             case "LocalGloss":
-                                bterm.LocalGloss = termProperty.GetValue(term, null).ToString();
+                                try
+                                {
+                                    bterm.LocalGloss = termProperty.GetValue(term, null).ToString();
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.WriteLine(e);
+                                }
                                 break;
                             case "Gloss":
                                 bterm.Gloss = termProperty.GetValue(term, null).ToString();

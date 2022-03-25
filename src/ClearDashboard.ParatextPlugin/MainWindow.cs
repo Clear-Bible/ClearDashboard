@@ -30,7 +30,7 @@ namespace ClearDashboardPlugin
         private IReadOnlyList<IProjectNote> m_noteList;
 
         private IWindowPluginHost m_host;
-        private IBiblicalTermList m_list;
+        private List<BiblicalTermsData> _allTermsList;
         IPluginChildWindow m_parent;
 
         private ListType ProjectList = new ListType("Project", true, BiblicalTermListType.All);
@@ -272,26 +272,23 @@ namespace ClearDashboardPlugin
                         Action = ActionType.CurrentVerse,
                         Text = m_verseRef.BBBCCCVVV.ToString(),
                     }).ConfigureAwait(false);
-
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
                     break;
                 case ActionType.CurrentVerse:
 
                     break;
                 case ActionType.SendText:
-                    AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                    AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;
                 case ActionType.GetBibilicalTermsAll:
 
-                    List<BiblicalTermsData> termsList;
-                    if (m_list == null)
+                    if (_allTermsList == null)
                     {
-                        m_list = m_host.GetBiblicalTermList(BiblicalTermListType.All);
-
                         BibilicalTerms btAll = new BibilicalTerms(AllList, m_project, m_host);
-                        termsList = btAll.ProcessBiblicalTerms(m_project);
+                        _allTermsList = btAll.ProcessBiblicalTerms(m_project);
                     }
 
-                    var payloadBTAll = JsonConvert.SerializeObject(m_list, Formatting.None,
+                    var payloadBTAll = JsonConvert.SerializeObject(_allTermsList, Formatting.None,
                         new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -303,7 +300,7 @@ namespace ClearDashboardPlugin
                         Text = "Project Object",
                         Payload = payloadBTAll
                     }).ConfigureAwait(false);
-
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
                     break;
                 case ActionType.GetBibilicalTermsProject:
                     BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
@@ -321,7 +318,7 @@ namespace ClearDashboardPlugin
                         Text = "Project Object",
                         Payload = payloadBT
                     }).ConfigureAwait(false);
-
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
                     break;
                 case ActionType.GetTargetVerses:
                     await GetUSXScripture().ConfigureAwait(false);
@@ -330,9 +327,9 @@ namespace ClearDashboardPlugin
                     //await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
                     break;
                 case ActionType.GetProject:
-                    AppendText(MsgColor.Green, "Sending Project Information");
+                    AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
                     await WriteMessageToPipeAsync(message).ConfigureAwait(false);
-                    AppendText(MsgColor.Green, String.Format($"Project Sent: {m_project.LongName}"));
+                    AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
                     break;
                 case ActionType.OnConnected:
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
@@ -345,7 +342,7 @@ namespace ClearDashboardPlugin
                     };
 
                     await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-                    AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {m_verseRef.ToString()}"));
+                    AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef.ToString()}");
 
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
