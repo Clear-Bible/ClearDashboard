@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
 using Microsoft.Extensions.Logging;
 using Pipes_Shared;
 
@@ -17,6 +17,7 @@ namespace ClearDashboard.DataAccessLayer
         #region props
 
         private readonly ILogger _logger;
+        private readonly NamedPipesClient _namedPipesClient;
 
         #endregion
 
@@ -32,7 +33,7 @@ namespace ClearDashboard.DataAccessLayer
 
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
-            NamedPipesClient.PipeEventArgs args = new NamedPipesClient.PipeEventArgs(pm);
+            var args = new PipeEventArgs(pm);
             NamedPipeChanged?.Invoke(this, args);
         }
 
@@ -40,17 +41,19 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public StartUp(ILogger<StartUp> logger)
+        public StartUp(NamedPipesClient namedPipeClient, ILogger<StartUp> logger)
         {
             _logger = logger;
             _logger.LogInformation("'DAL.Startup' ctor called.");
 
-            // Wire up named pipes
-            NamedPipesClient.Instance.InitializeAsync().ContinueWith(t =>
-                    Debug.WriteLine($"Error while connecting to pipe server: {t.Exception}"),
-                TaskContinuationOptions.OnlyOnFaulted);
+            _namedPipesClient = namedPipeClient;
 
-            NamedPipesClient.Instance.NamedPipeChanged += HandleEvent;
+            // Wire up named pipes
+            //NamedPipesClient.Instance.InitializeAsync().ContinueWith(t =>
+            //        Debug.WriteLine($"Error while connecting to pipe server: {t.Exception}"),
+            //    TaskContinuationOptions.OnlyOnFaulted);
+
+            _namedPipesClient.NamedPipeChanged += HandleEvent;
         }
 
         #endregion
@@ -59,7 +62,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void OnClosing()
         {
-            NamedPipesClient.Instance.Dispose();
+            _namedPipesClient.Dispose();
         }
 
         #endregion
@@ -67,7 +70,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Methods
 
-        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleEvent(object sender, PipeEventArgs args)
         {
             RaisePipesChangedEvent(args.PM);
         }
@@ -90,7 +93,7 @@ namespace ClearDashboard.DataAccessLayer
         {
             message = message.Trim() + " through the DAL";
 
-            await NamedPipesClient.Instance.WriteAsync(message);
+            await _namedPipesClient.WriteAsync(message);
         }
 
         #endregion
