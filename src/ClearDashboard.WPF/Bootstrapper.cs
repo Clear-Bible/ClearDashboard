@@ -28,7 +28,7 @@ namespace ClearDashboard.Wpf
         public static IHost Host { get; private set; }
         protected ILogger<Bootstrapper> Logger { get; private set; }
 
-        public StartUp DAL { get; set; }
+        public ProjectManager DAL { get; set; }
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace ClearDashboard.Wpf
             serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
 
             // add in the DAL
-            serviceCollection.AddSingleton<StartUp>();
+            serviceCollection.AddSingleton<ProjectManager>();
 
 
             // Register the FrameAdapter which wraps a Frame as INavigationService

@@ -15,8 +15,11 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
-using Action = System.Action;
+using System.Windows.Documents;
+using System.Windows.Media;
+using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -35,7 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ILogger Logger { get; set; }
         public INavigationService NavigationService { get; set; }
-        public StartUp _DAL { get; set; }
+        public ProjectManager _DAL { get; set; }
         private string _currentVerse = "";
 
         //Dictionary<string, object> filters = new Dictionary<string, object>();
@@ -96,11 +99,11 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
                     {
-                        _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsProject);
+                        _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject);
                     }
                     else
                     {
-                        _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsAll);
+                        _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll);
                     }
 
                     _lastSelectedBTtype = _selectedBiblicalTermsType;
@@ -188,7 +191,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, StartUp dal)
+        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager dal)
         {
             this.NavigationService = navigationService;
             this.Logger = logger;
@@ -222,7 +225,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await _DAL.SendPipeMessage((StartUp.PipeAction)ActionType.GetBibilicalTermsProject)
+                        await _DAL.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
                             .ConfigureAwait(false);
                     }
 
@@ -339,6 +342,8 @@ namespace ClearDashboard.Wpf.ViewModels
             // create inlines of the selected word
             foreach (var verse in _selectedItemVerses)
             {
+                TextBlock tb = new TextBlock();
+
                 var verseText = verse.VerseText;
                 List<Point> points = new List<Point>();
                 foreach (var render in selectedBiblicalTermsData.Renderings)
@@ -363,17 +368,66 @@ namespace ClearDashboard.Wpf.ViewModels
                         // Syntax error in the regular expression
                     }
 
+                    tb = new TextBlock();
+
+
+                    // interate through in while loop
+                    int index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
+                    while (true)
+                    {
+                        tb.Inlines.AddRange(new Inline[] {
+                            new Run(verseText.Substring(0, index)),
+                            new Run(verseText.Substring(index, render.Length)) {FontWeight = FontWeights.Bold,
+                                Foreground = Brushes.Orange}
+                        });
+
+                        verseText = verseText.Substring(index + render.Length);
+                        index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
+
+                        if (index < 0)
+                        {
+                            tb.Inlines.Add(new Run(verseText));
+                            break;
+                        }
+                    }
+
+
                     // interate through in reverse
                     for (int i = points.Count - 1; i >= 0; i--)
                     {
-                        string endPart = verseText.Substring((int)points[i].Y - 1);
-                        string startPart = verseText.Substring(0, (int)points[i].Y - 1);
+                        tb = new TextBlock();
+                        try
+                        {
+                            string endPart = verseText.Substring((int)points[i].Y - 1);
+                            string startPart = verseText.Substring(0, (int)points[i].Y - 1 - render.Length);
+
+                            var a = new Run(startPart) { FontWeight = FontWeights.Normal };
+                            tb.Inlines.Add(new Run(render) { FontWeight = FontWeights.Bold, Foreground= Brushes.Orange });
+                            tb.Inlines.Add(new Run(endPart) { FontWeight = FontWeights.Normal });
+
+                            // check if this was the last one
+                            if (i == 1)
+                            {
+                                tb.Inlines.Add(new Run(startPart) { FontWeight = FontWeights.Normal });
+                            }
+                            else
+                            {
+                                verseText = verseText.Substring(0, verseText.Length - render.Length);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
                     }
 
-                    string sTmp = verse.VerseText;
+                    
                 }
-            }
 
+                //verse.VerseText = tb.Inlines;
+            }
+            
 
             NotifyOfPropertyChange(() => SelectedItemVerses);
             NotifyOfPropertyChange(() => Renderings);
@@ -414,7 +468,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }).ConfigureAwait(false);
                 System.Windows.Forms.Application.DoEvents();
 
-                await _DAL.SendPipeMessage(StartUp.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
+                await _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
             }
         }
 

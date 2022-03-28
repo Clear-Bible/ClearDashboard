@@ -12,7 +12,7 @@ namespace ClearDashboard.DataAccessLayer
 {
 
 
-    public class StartUp
+    public class ProjectManager
     {
         #region props
 
@@ -59,7 +59,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public StartUp(ILogger<StartUp> logger)
+        public ProjectManager(ILogger<ProjectManager> logger)
         {
             _logger = logger;
             _logger.LogInformation("'DAL.Startup' ctor called.");

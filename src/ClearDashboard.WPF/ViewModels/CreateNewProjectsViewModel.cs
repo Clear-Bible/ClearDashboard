@@ -21,7 +21,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region props
         //Connection to the DAL
-        private StartUp _DAL;
+        private ProjectManager _DAL;
 
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
@@ -140,7 +140,7 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
-        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, StartUp dal) : base(navigationService, logger)
+        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager dal) : base(navigationService, logger)
         {
             _DAL = dal;
             createNewProjectCommand = new RelayCommand(CreateNewProject);

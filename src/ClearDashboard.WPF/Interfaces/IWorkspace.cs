@@ -15,7 +15,7 @@ namespace ClearDashboard.Wpf.Interfaces
     {
         ILogger Logger { get; set; }
         INavigationService NavigationService { get; set; }
-        StartUp _DAL { get; set; }
+        ProjectManager _DAL { get; set; }
 
         void HandleEventAsync(object sender, NamedPipesClient.PipeEventArgs args);
         //void OnViewAttached(object view, object context);

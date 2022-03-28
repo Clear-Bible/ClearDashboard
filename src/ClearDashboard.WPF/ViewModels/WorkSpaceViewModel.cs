@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private ILogger Logger { get; set; }
         private INavigationService NavigationService { get; set; }
-        private StartUp _DAL;
+        private ProjectManager _DAL;
 
         #endregion //Member Variables
 
@@ -173,7 +173,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         //}
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, StartUp dal) : base(navigationService, logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager dal) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;
@@ -278,7 +278,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await _DAL.SendPipeMessage(StartUp.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            await _DAL.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -297,6 +297,11 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Constructor
 
         #region Methods
+
+        public void MYBUTTON()
+        {
+            Console.WriteLine();
+        }
 
         private void WorkSpaceViewModel_ThemeChanged()
         {

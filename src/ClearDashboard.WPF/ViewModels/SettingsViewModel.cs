@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private ILogger Logger { get; set; }
         private INavigationService NavigationService { get; set; }
-        private StartUp _DAL;
+        private ProjectManager _DAL;
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, StartUp dal) : base(navigationService, logger)
+        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, ProjectManager dal) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;

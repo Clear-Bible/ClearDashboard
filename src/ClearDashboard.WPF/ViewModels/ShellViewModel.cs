@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private ILogger Logger { get; set; }
         private INavigationService NavigationService { get; set; }
-        private StartUp _DAL;
+        private ProjectManager _DAL;
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -137,7 +137,7 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, StartUp dal) : base(navigationService, logger)
+        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager dal) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;
@@ -154,7 +154,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
-            StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
 
             _DAL.NamedPipeChanged += HandleEvent;
 
@@ -163,7 +163,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
             _DAL.NamedPipeChanged -= HandleEvent;
 
             base.Dispose(disposing);
