@@ -9,7 +9,7 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
-    public class StartUp
+    public class ProjectManager
     {
         #region props
 
@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer
         #region Events
 
         // event handler to be raised when the Paratext Username changes
-        public static event EventHandler ParatextUserNameEventHandler;
+        public event EventHandler ParatextUserNameEventHandler;
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
 
@@ -35,13 +35,13 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public StartUp(NamedPipesClient namedPipeClient, ILogger<StartUp> logger)
+        public ProjectManager(NamedPipesClient namedPipeClient, ILogger<ProjectManager> logger)
         {
             _logger = logger;
-            _logger.LogInformation("'DAL.Startup' ctor called.");
+            _logger.LogInformation("'ProjectManager' ctor called.");
 
             _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleEvent;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Methods
 
-        private void HandleEvent(object sender, PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             RaisePipesChangedEvent(args.PM);
         }
@@ -68,7 +68,7 @@ namespace ClearDashboard.DataAccessLayer
             // TODO this is a hack that reads the first user in the Paratext project'pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            Paratext.ParatextUtils paratextUtils = new Paratext.ParatextUtils();
+            var paratextUtils = new Paratext.ParatextUtils();
             var user = paratextUtils.GetCurrentParatextUser();
 
             ParatextUserName = user;
