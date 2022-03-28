@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Context;
+﻿using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Extensions
 {
@@ -23,8 +18,7 @@ namespace ClearDashboard.DataAccessLayer.Extensions
         {
             serviceCollection.AddLogging();
 
-            // add in the DAL
-            serviceCollection.AddSingleton<StartUp>();
+            serviceCollection.AddSingleton<ProjectManager>();
             serviceCollection.AddSingleton<NamedPipesClient>(sp =>
             {
                 var logger = sp.GetService<ILogger<NamedPipesClient>>();
