@@ -11,6 +11,8 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.ViewModels.Menus"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     x:Uid="Page_1"
     Title="WorkSpaceView"
     d:DesignHeight="450"
@@ -24,6 +26,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel, IsDesignTimeCreatable=True}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
    <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" x:Uid="converters:ActiveDocumentConverter_1" />
