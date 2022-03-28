@@ -8,20 +8,19 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Helpers
 {
     public class TranslationSource : INotifyPropertyChanged
     {
-        public static TranslationSource Instance { get; } = new TranslationSource();
-
         private readonly Dictionary<string, ResourceManager> resourceManagerDictionary = new Dictionary<string, ResourceManager>();
 
         public string this[string key]
         {
             get
             {
-                Tuple<string, string> tuple = SplitName(key);
+                var tuple = SplitName(key);
                 string translation = null;
                 if (resourceManagerDictionary.ContainsKey(tuple.Item1))
                     translation = resourceManagerDictionary[tuple.Item1].GetString(tuple.Item2, Thread.CurrentThread.CurrentUICulture);
@@ -32,7 +31,7 @@ namespace ClearDashboard.Wpf.Helpers
         private string language = Thread.CurrentThread.CurrentUICulture.Name;
         public string Language
         {
-            get { return language; }
+            get => language;
             set
             {
                 if (language != null)
@@ -60,8 +59,8 @@ namespace ClearDashboard.Wpf.Helpers
 
         public static Tuple<string, string> SplitName(string local)
         {
-            int idx = local.ToString().LastIndexOf(".");
-            var tuple = new Tuple<string, string>(local.Substring(0, idx), local.Substring(idx + 1));
+            var indexOfLastPeriod = local.LastIndexOf(".", StringComparison.Ordinal);
+            var tuple = new Tuple<string, string>(local.Substring(0, indexOfLastPeriod), local.Substring(indexOfLastPeriod + 1));
             return tuple;
         }
     }
@@ -84,6 +83,7 @@ namespace ClearDashboard.Wpf.Helpers
 
     public class LocExtension : MarkupExtension
     {
+        private TranslationSource TranslationSource { get; set; }
         public string StringName { get; }
 
         public LocExtension(string stringName)
@@ -95,15 +95,14 @@ namespace ClearDashboard.Wpf.Helpers
         {
             if (control is DependencyObject dependencyObject)
             {
-                object localValue = dependencyObject.ReadLocalValue(Translation.ResourceManagerProperty);
+                var localValue = dependencyObject.ReadLocalValue(Translation.ResourceManagerProperty);
 
                 // does this control have a "Translation.ResourceManager" attached property with a set value?
                 if (localValue != DependencyProperty.UnsetValue)
                 {
                     if (localValue is ResourceManager resourceManager)
                     {
-                        TranslationSource.Instance.AddResourceManager(resourceManager);
-
+                        TranslationSource.AddResourceManager(resourceManager);
                         return resourceManager;
                     }
                 }
@@ -114,18 +113,20 @@ namespace ClearDashboard.Wpf.Helpers
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
+
+            TranslationSource = IoC.Get<TranslationSource>();
             // targetObject is the control that is using the LocExtension
-            object targetObject = (serviceProvider as IProvideValueTarget)?.TargetObject;
+            var targetObject = (serviceProvider as IProvideValueTarget)?.TargetObject;
 
             if (targetObject?.GetType().Name == "SharedDp") // is extension used in a control template?
                 return targetObject; // required for template re-binding
 
-            string baseName = GetResourceManager(targetObject)?.BaseName ?? string.Empty;
+            var baseName = GetResourceManager(targetObject)?.BaseName ?? string.Empty;
 
             if (string.IsNullOrEmpty(baseName))
             {
                 // rootObject is the root control of the visual tree (the top parent of targetObject)
-                object rootObject = (serviceProvider as IRootObjectProvider)?.RootObject;
+                var rootObject = (serviceProvider as IRootObjectProvider)?.RootObject;
                 baseName = GetResourceManager(rootObject)?.BaseName ?? string.Empty;
             }
 
@@ -137,11 +138,11 @@ namespace ClearDashboard.Wpf.Helpers
                 }
             }
 
-            Binding binding = new Binding
+            var binding = new Binding
             {
                 Mode = BindingMode.OneWay,
                 Path = new PropertyPath($"[{baseName}.{StringName}]"),
-                Source = TranslationSource.Instance,
+                Source = TranslationSource,
                 FallbackValue = StringName
             };
 
