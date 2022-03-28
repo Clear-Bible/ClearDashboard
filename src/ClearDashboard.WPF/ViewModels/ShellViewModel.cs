@@ -20,10 +20,12 @@ namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
+        private readonly TranslationSource _translationSource;
+
         #region Properties
 
         //Connection to the DAL
-        private StartUp _DAL;
+        private ProjectManager ProjectManager { get; set; }
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -69,21 +71,23 @@ namespace ClearDashboard.Wpf.ViewModels
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
         {
-            get { return _selectedLanguage; }
+            get => _selectedLanguage;
             set
             {
                 _selectedLanguage = value;
+                
+                _translationSource.Language = EnumHelper.GetDescription(_selectedLanguage);
+                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
-                TranslationSource.Instance.Language = EnumHelper.GetDescription(_selectedLanguage);
-                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
             }
         }
 
         private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string Message
         {
-            get { return _message; }
+            get => _message;
             set
             {
                 _message = value;
@@ -130,15 +134,17 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         public ShellViewModel()
         {
-
+           
         }
 
         /// <summary>
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, StartUp dal) : base(navigationService, logger)
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
+            _translationSource = translationSource;
+
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
@@ -150,18 +156,18 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
-            _DAL = dal;
-            StartUp.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            ProjectManager = projectManager;
+            ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             //_DAL = new StartUp();
-            _DAL.NamedPipeChanged += HandleEvent;
+            ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
 
-            _DAL.GetParatextUserName();
+            ProjectManager.GetParatextUserName();
         }
 
         protected override void Dispose(bool disposing)
         {
-            StartUp.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            _DAL.NamedPipeChanged -= HandleEvent;
+            ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
 
             base.Dispose(disposing);
         }
@@ -176,7 +182,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            _DAL.OnClosing();
+            ProjectManager.OnClosing();
 
             return base.CanCloseAsync(cancellationToken);
         }
@@ -184,7 +190,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void HandleEvent(object sender, PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             if (args == null) return;
 
