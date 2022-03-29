@@ -175,7 +175,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewLoaded(object view)
         {
-            SetLanguage();
+            //SetLanguage();
         }
 
         #endregion

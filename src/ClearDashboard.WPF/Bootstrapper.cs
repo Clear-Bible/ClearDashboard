@@ -15,7 +15,8 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Extensions;
 using ClearDashboard.Wpf.Extensions;
-
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Models;
 
 namespace ClearDashboard.Wpf
 {
@@ -42,6 +43,7 @@ namespace ClearDashboard.Wpf
                 .Build();
 
             SetupLogging();
+            SetupLanguage();
             Initialize();
 
             //set the light/dark
@@ -53,28 +55,11 @@ namespace ClearDashboard.Wpf
         #region Configure
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
-            FrameSet = new FrameSet();
-            serviceCollection.AddCaliburnMicro(FrameSet);
+
+            FrameSet = serviceCollection.AddCaliburnMicro();
             serviceCollection.AddClearDashboardDataAccessLayer();
-
             serviceCollection.AddLogging();
-
-
-            // wire up the interfaces required by Caliburn.Micro
-            serviceCollection.AddSingleton<IWindowManager, WindowManager>();
-            serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
-
-            // Register the FrameAdapter which wraps a Frame as INavigationService
-            FrameSet = new FrameSet();
-            serviceCollection.AddSingleton<INavigationService>(sp => FrameSet.NavigationService);
-
-            // wire up all of the view models in the project.
-            GetType().Assembly.GetTypes()
-                .Where(type => type.IsClass)
-                .Where(type => type.Name.EndsWith("ViewModel"))
-                .ToList()
-                .ForEach(viewModelType => serviceCollection.AddScoped(viewModelType));
-
+            serviceCollection.AddLocalization();
 
         }
 
@@ -93,6 +78,19 @@ namespace ClearDashboard.Wpf
 
             // Navigate to the LandingView.
             FrameSet.NavigationService.NavigateToViewModel(typeof(LandingViewModel));
+        }
+
+        private static void SetupLanguage()
+        {
+            var selectedLanguage = Properties.Settings.Default.language_code;
+            if (string.IsNullOrEmpty(selectedLanguage))
+            {
+                selectedLanguage = "en-US";
+            }
+
+            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage);
+            var translationSource = Host.Services.GetService<TranslationSource>();
+            translationSource.Language = EnumHelper.GetDescription(languageType);
         }
 
         /// <summary>
