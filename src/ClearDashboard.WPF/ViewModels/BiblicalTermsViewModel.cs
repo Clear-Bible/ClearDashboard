@@ -191,11 +191,11 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Observable Properties
 
         #region Constructor
-        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager dal)
+        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
         {
             this.NavigationService = navigationService;
             this.Logger = logger;
-            this.ProjectManager = dal;
+            this.ProjectManager =projectManager;
 
             this.Title = "🕮 BIBLICAL TERMS";
             this.ContentId = "BIBLICALTERMS";
