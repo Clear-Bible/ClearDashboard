@@ -232,63 +232,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void SetLanguage()
         {
-            // set the combobox based on the current UI Thread Culture
-            //var culture = Thread.CurrentThread.CurrentUICulture.Name;
-
             var culture = Properties.Settings.Default.language_code;
+            // strip out any "-" characters so the string can be propey parsed into the target enum
             SelectedLanguage =  (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", String.Empty));
-            //switch (culture)
-            //{
-            //    case "am":
-            //        SelectedLanguage = LanguageTypeValue.am;
-            //        break;
-            //    case "de":
-            //        SelectedLanguage = LanguageTypeValue.de;
-            //        break;
-            //    case "en":
-            //        SelectedLanguage = LanguageTypeValue.en;
-            //        break;
-            //    case "es":
-            //        SelectedLanguage = LanguageTypeValue.es;
-            //        break;
-            //    case "fr":
-            //        SelectedLanguage = LanguageTypeValue.fr;
-            //        break;
-            //    case "hi":
-            //        SelectedLanguage = LanguageTypeValue.hi;
-            //        break;
-            //    case "id":
-            //        SelectedLanguage = LanguageTypeValue.id;
-            //        break;
-            //    case "km":
-            //        SelectedLanguage = LanguageTypeValue.km;
-            //        break;
-            //    case "pt":
-            //        SelectedLanguage = LanguageTypeValue.pt;
-            //        break;
-            //    case "ptBR":
-            //    case "pt-BR":
-            //        SelectedLanguage = LanguageTypeValue.ptBR;
-            //        break;
-            //    case "ro":
-            //        SelectedLanguage = LanguageTypeValue.ro;
-            //        break;
-            //    case "ruRU":
-            //    case "ru-RU":
-            //        SelectedLanguage = LanguageTypeValue.ruRU;
-            //        break;
-            //    case "vi":
-            //        SelectedLanguage = LanguageTypeValue.vi;
-            //        break;
-            //    case "zhCN":
-            //    case "zh-CN":
-            //        SelectedLanguage = LanguageTypeValue.zhCN;
-            //        break;
-            //    case "zhTW":
-            //    case "zh-TW":
-            //        SelectedLanguage = LanguageTypeValue.zhTW;
-            //        break;
-            //}
         }
     }
 }
