@@ -53,6 +53,9 @@
             </Button>
 
             <ProgressBar
+                x:Name="ProgressBarVisibility"
+                Width="30"
+                Height="30"
                 IsIndeterminate="True"
                 Style="{StaticResource MaterialDesignCircularProgressBar}"
                 Visibility="{Binding ProgressBarVisibility}"

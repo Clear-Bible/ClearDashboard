@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Views
         public CreateNewProjectsView()
         {
             InitializeComponent();
-
+            _vm = (CreateNewProjectsViewModel)this.DataContext;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
