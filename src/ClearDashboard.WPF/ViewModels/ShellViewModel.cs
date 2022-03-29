@@ -188,6 +188,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        #region Caliburn.Micro overrides
+
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
             ProjectManager.OnClosing();
@@ -195,6 +197,7 @@ namespace ClearDashboard.Wpf.ViewModels
             return base.CanCloseAsync(cancellationToken);
         }
 
+        #endregion
 
         #region Methods
 
@@ -227,13 +230,15 @@ namespace ClearDashboard.Wpf.ViewModels
             frm.Show();
         }
 
-        #endregion
-
         public void SetLanguage()
         {
             var culture = Properties.Settings.Default.language_code;
             // strip out any "-" characters so the string can be propey parsed into the target enum
-            SelectedLanguage =  (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+            SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
         }
+
+        #endregion
+
+
     }
 }
