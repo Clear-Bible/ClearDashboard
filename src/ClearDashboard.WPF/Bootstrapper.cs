@@ -85,10 +85,10 @@ namespace ClearDashboard.Wpf
             var selectedLanguage = Properties.Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "en-US";
+                selectedLanguage = "en";
             }
 
-            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage);
+            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", String.Empty));
             var translationSource = Host.Services.GetService<TranslationSource>();
             translationSource.Language = EnumHelper.GetDescription(languageType);
         }

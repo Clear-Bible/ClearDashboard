@@ -38,13 +38,14 @@ namespace ClearDashboard.Wpf.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var userPrefs = new UserPreferences();
-
-            userPrefs.WindowHeight = this.Height;
-            userPrefs.WindowWidth = this.Width;
-            userPrefs.WindowTop = this.Top;
-            userPrefs.WindowLeft = this.Left;
-            userPrefs.WindowState = this.WindowState;
+            var userPrefs = new UserPreferences
+            {
+                WindowHeight = this.Height,
+                WindowWidth = this.Width,
+                WindowTop = this.Top,
+                WindowLeft = this.Left,
+                WindowState = this.WindowState
+            };
 
             userPrefs.Save();
 

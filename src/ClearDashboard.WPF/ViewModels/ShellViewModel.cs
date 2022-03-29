@@ -75,13 +75,22 @@ namespace ClearDashboard.Wpf.ViewModels
             set
             {
                 _selectedLanguage = value;
-                
-                _translationSource.Language = EnumHelper.GetDescription(_selectedLanguage);
+
+                var language = EnumHelper.GetDescription(_selectedLanguage);
+                SaveUserLanguage(_selectedLanguage.ToString());
+                _translationSource.Language = language;
+
                 Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
 
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
             }
+        }
+
+        private static void SaveUserLanguage(string language)
+        {
+            Properties.Settings.Default.language_code = language;
+            Properties.Settings.Default.Save();
         }
 
         private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
@@ -175,7 +184,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewLoaded(object view)
         {
-            //SetLanguage();
+            SetLanguage();
         }
 
         #endregion
@@ -227,55 +236,59 @@ namespace ClearDashboard.Wpf.ViewModels
             //var culture = Thread.CurrentThread.CurrentUICulture.Name;
 
             var culture = Properties.Settings.Default.language_code;
-
-            switch (culture)
-            {
-                case "am":
-                    SelectedLanguage = LanguageTypeValue.am;
-                    break;
-                case "de":
-                    SelectedLanguage = LanguageTypeValue.de;
-                    break;
-                case "en":
-                    SelectedLanguage = LanguageTypeValue.en;
-                    break;
-                case "es":
-                    SelectedLanguage = LanguageTypeValue.es;
-                    break;
-                case "fr":
-                    SelectedLanguage = LanguageTypeValue.fr;
-                    break;
-                case "hi":
-                    SelectedLanguage = LanguageTypeValue.hi;
-                    break;
-                case "id":
-                    SelectedLanguage = LanguageTypeValue.id;
-                    break;
-                case "km":
-                    SelectedLanguage = LanguageTypeValue.km;
-                    break;
-                case "pt":
-                    SelectedLanguage = LanguageTypeValue.pt;
-                    break;
-                case "pt-BR":
-                    SelectedLanguage = LanguageTypeValue.ptBR;
-                    break;
-                case "ro":
-                    SelectedLanguage = LanguageTypeValue.ro;
-                    break;
-                case "ru-RU":
-                    SelectedLanguage = LanguageTypeValue.ruRU;
-                    break;
-                case "vi":
-                    SelectedLanguage = LanguageTypeValue.vi;
-                    break;
-                case "zh-CN":
-                    SelectedLanguage = LanguageTypeValue.zhCN;
-                    break;
-                case "zh-TW":
-                    SelectedLanguage = LanguageTypeValue.zhTW;
-                    break;
-            }
+            SelectedLanguage =  (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", String.Empty));
+            //switch (culture)
+            //{
+            //    case "am":
+            //        SelectedLanguage = LanguageTypeValue.am;
+            //        break;
+            //    case "de":
+            //        SelectedLanguage = LanguageTypeValue.de;
+            //        break;
+            //    case "en":
+            //        SelectedLanguage = LanguageTypeValue.en;
+            //        break;
+            //    case "es":
+            //        SelectedLanguage = LanguageTypeValue.es;
+            //        break;
+            //    case "fr":
+            //        SelectedLanguage = LanguageTypeValue.fr;
+            //        break;
+            //    case "hi":
+            //        SelectedLanguage = LanguageTypeValue.hi;
+            //        break;
+            //    case "id":
+            //        SelectedLanguage = LanguageTypeValue.id;
+            //        break;
+            //    case "km":
+            //        SelectedLanguage = LanguageTypeValue.km;
+            //        break;
+            //    case "pt":
+            //        SelectedLanguage = LanguageTypeValue.pt;
+            //        break;
+            //    case "ptBR":
+            //    case "pt-BR":
+            //        SelectedLanguage = LanguageTypeValue.ptBR;
+            //        break;
+            //    case "ro":
+            //        SelectedLanguage = LanguageTypeValue.ro;
+            //        break;
+            //    case "ruRU":
+            //    case "ru-RU":
+            //        SelectedLanguage = LanguageTypeValue.ruRU;
+            //        break;
+            //    case "vi":
+            //        SelectedLanguage = LanguageTypeValue.vi;
+            //        break;
+            //    case "zhCN":
+            //    case "zh-CN":
+            //        SelectedLanguage = LanguageTypeValue.zhCN;
+            //        break;
+            //    case "zhTW":
+            //    case "zh-TW":
+            //        SelectedLanguage = LanguageTypeValue.zhTW;
+            //        break;
+            //}
         }
     }
 }
