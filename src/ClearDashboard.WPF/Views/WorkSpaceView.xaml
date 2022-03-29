@@ -125,7 +125,7 @@
                 Grid.Column="4"
                 Foreground="Pink"
                 Text="{Binding VerseRef}" />
-            <Button Grid.Column="4" x:Name="MYBUTTON">CMD</Button>
+            <Button x:Name="MYBUTTON" Grid.Column="4">CMD</Button>
         </Grid>
 
 

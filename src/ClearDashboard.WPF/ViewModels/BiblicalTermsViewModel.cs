@@ -19,6 +19,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using SIL.Extensions;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -338,12 +340,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
-
             // create inlines of the selected word
             foreach (var verse in _selectedItemVerses)
             {
-                TextBlock tb = new TextBlock();
-
                 var verseText = verse.VerseText;
                 List<Point> points = new List<Point>();
                 foreach (var render in selectedBiblicalTermsData.Renderings)
@@ -368,64 +367,70 @@ namespace ClearDashboard.Wpf.ViewModels
                         // Syntax error in the regular expression
                     }
 
-                    tb = new TextBlock();
-
-
                     // interate through in while loop
                     int index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
-                    while (true)
+                    if (index == -1)
                     {
-                        tb.Inlines.AddRange(new Inline[] {
-                            new Run(verseText.Substring(0, index)),
-                            new Run(verseText.Substring(index, render.Length)) {FontWeight = FontWeights.Bold,
-                                Foreground = Brushes.Orange}
-                        });
-
-                        verseText = verseText.Substring(index + render.Length);
-                        index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
-
-                        if (index < 0)
+                        verse.Inlines.Add(new Run(verseText));
+                        verse.Found = false;
+                    }
+                    else
+                    {
+                        verse.Found = true;
+                        while (true)
                         {
-                            tb.Inlines.Add(new Run(verseText));
-                            break;
+                            verse.Inlines.AddRange(new Inline[]
+                            {
+                                new Run(verseText.Substring(0, index)),
+                                new Run(verseText.Substring(index, render.Length))
+                                {
+                                    FontWeight = FontWeights.Bold,
+                                    Foreground = Brushes.Orange
+                                }
+                            });
+
+                            verseText = verseText.Substring(index + render.Length);
+                            index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
+
+                            if (index < 0)
+                            {
+                                verse.Inlines.Add(new Run(verseText));
+                                break;
+                            }
                         }
                     }
 
+                    //// interate through in reverse
+                    //for (int i = points.Count - 1; i >= 0; i--)
+                    //{
+                    //    tb = new TextBlock();
+                    //    try
+                    //    {
+                    //        string endPart = verseText.Substring((int)points[i].Y - 1);
+                    //        string startPart = verseText.Substring(0, (int)points[i].Y - 1 - render.Length);
 
-                    // interate through in reverse
-                    for (int i = points.Count - 1; i >= 0; i--)
-                    {
-                        tb = new TextBlock();
-                        try
-                        {
-                            string endPart = verseText.Substring((int)points[i].Y - 1);
-                            string startPart = verseText.Substring(0, (int)points[i].Y - 1 - render.Length);
+                    //        var a = new Run(startPart) { FontWeight = FontWeights.Normal };
+                    //        tb.Inlines.Add(new Run(render) { FontWeight = FontWeights.Bold, Foreground= Brushes.Orange });
+                    //        tb.Inlines.Add(new Run(endPart) { FontWeight = FontWeights.Normal });
 
-                            var a = new Run(startPart) { FontWeight = FontWeights.Normal };
-                            tb.Inlines.Add(new Run(render) { FontWeight = FontWeights.Bold, Foreground= Brushes.Orange });
-                            tb.Inlines.Add(new Run(endPart) { FontWeight = FontWeights.Normal });
-
-                            // check if this was the last one
-                            if (i == 1)
-                            {
-                                tb.Inlines.Add(new Run(startPart) { FontWeight = FontWeights.Normal });
-                            }
-                            else
-                            {
-                                verseText = verseText.Substring(0, verseText.Length - render.Length);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                            throw;
-                        }
-                    }
-
+                    //        // check if this was the last one
+                    //        if (i == 1)
+                    //        {
+                    //            tb.Inlines.Add(new Run(startPart) { FontWeight = FontWeights.Normal });
+                    //        }
+                    //        else
+                    //        {
+                    //            verseText = verseText.Substring(0, verseText.Length - render.Length);
+                    //        }
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        Console.WriteLine(e);
+                    //        throw;
+                    //    }
+                    //}
                     
                 }
-
-                //verse.VerseText = tb.Inlines;
             }
             
 
