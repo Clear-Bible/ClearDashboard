@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using MvvmHelpers;
 
-namespace ClearDashboard.NamedPipes.Models
+namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Author : ObservableObject
     {

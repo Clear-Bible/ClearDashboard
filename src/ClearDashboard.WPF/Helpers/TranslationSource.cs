@@ -12,6 +12,12 @@ using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Helpers
 {
+    // 
+    // from: https://github.com/Jinjinov/wpf-localization-multiple-resource-resx-one-language
+    // license: MIT
+    //
+    // see also: https://github.com/Clear-Bible/GenerateTranslationsForDashboard
+    //
     public class TranslationSource : INotifyPropertyChanged
     {
         private readonly Dictionary<string, ResourceManager> resourceManagerDictionary = new Dictionary<string, ResourceManager>();

@@ -2,7 +2,12 @@
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.Wpf.ViewModels.Menus;
+using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
+using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,8 +15,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using ClearDashboard.Wpf.ViewModels.Menus;
-using ClearDashboard.Wpf.ViewModels.Panes;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -28,6 +31,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
+
+        private ILogger Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
+        private ProjectManager ProjectManager;
 
         #endregion //Member Variables
 
@@ -71,6 +78,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private string _verseRef;
+
+        public string VerseRef
+        {
+            get { return _verseRef; }
+            set
+            {
+                _verseRef = value;
+                NotifyOfPropertyChange(() => VerseRef);
+            }
+        }
+
+
 
         private string _windowIdToLoad;
         public string WindowIDToLoad
@@ -104,7 +124,7 @@ namespace ClearDashboard.Wpf.ViewModels
         ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
         public ObservableCollection<ToolViewModel> Tools
         {
-            get=> _tools;
+            get => _tools;
             set
             {
                 _tools = value;
@@ -144,13 +164,19 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Required for design-time support
         /// </summary>
-        public WorkSpaceViewModel() 
-        {
+        //public WorkSpaceViewModel() 
+        //{
 
-        }
+        //}
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger) : base(navigationService, logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
+            Logger = logger;
+            NavigationService = navigationService;
+            ProjectManager = projectManager;
+
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
+
             _this = this;
             
             Themes = new List<Tuple<string, Theme>>
@@ -192,7 +218,82 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        #endregion //Constructor
 
+        #region Methods
+
+        public async void Init()
+        {
+            // initiate the menu system
+            MenuItems.Clear();
+            MenuItems = new ObservableCollection<MenuItemViewModel>
+            {
+                new MenuItemViewModel { Header = "Layouts", Id = "LayoutID", ViewModel = this, },
+                new MenuItemViewModel
+                {
+                    Header = "Windows", Id = "WindowID", ViewModel = this,
+                    MenuItems = new ObservableCollection<MenuItemViewModel>
+                    {
+                        new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
+                        new MenuItemViewModel
+                            { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                    }
+                },
+                new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
+            };
+
+
+            // add in the document panes
+            _files.Clear();
+
+
+            Debug.WriteLine(DashboardProject.Name);
+            _dashboardViewModel = IoC.Get<DashboardViewModel>();
+            _files.Add(_dashboardViewModel);
+
+            _files.Add(IoC.Get<ConcordanceViewModel>());
+            _files.Add(IoC.Get<StartPageViewModel>());
+            _files.Add(IoC.Get<AlignmentToolViewModel>());
+            // trigger property changed event
+            Files.Add(IoC.Get<TreeDownViewModel>());
+
+
+            // add in the tool panes
+            _tools.Clear();
+            _tools.Add(IoC.Get<BiblicalTermsViewModel>());
+            _tools.Add(IoC.Get<WordMeaningsViewModel>());
+            _tools.Add(IoC.Get<SourceContextViewModel>());
+            _tools.Add(IoC.Get<TargetContextViewModel>());
+            _tools.Add(IoC.Get<NotesViewModel>());
+            _tools.Add(IoC.Get<PinsViewModel>());
+            // trigger property changed event
+            Tools.Add(new TextCollectionViewModel());
+
+
+            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+            Init();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
+            base.Dispose(disposing);
+        }
 
         #endregion //Constructor
 
@@ -215,67 +316,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        public void Init()
-        {
-            // initiate the menu system
-            MenuItems.Clear();
-            MenuItems = new ObservableCollection<MenuItemViewModel>
-            {
-                new MenuItemViewModel { Header = "Layouts", Id = "LayoutID", ViewModel = this, },
-                new MenuItemViewModel
-                {
-                    Header = "Windows", Id = "WindowID", ViewModel = this,
-                    MenuItems = new ObservableCollection<MenuItemViewModel>
-                    {
-                        new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
-                        new MenuItemViewModel
-                            { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new MenuItemViewModel
-                            { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
-                    }
-                },
-                new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
-            };
-
-
-            // add in the document panes
-            _files.Clear();
-
-
-            Debug.WriteLine(DashboardProject.Name);
-            _dashboardViewModel = new DashboardViewModel();
-            _files.Add(_dashboardViewModel);
-
-            _files.Add(new ConcordanceViewModel());
-            _files.Add(new StartPageViewModel());
-            _files.Add(new AlignmentToolViewModel());
-            // trigger property changed event
-            Files.Add(new TreeDownViewModel());
-
-
-            // add in the tool panes
-            _tools.Clear();
-            _tools.Add(new BiblicalTermsViewModel());
-            _tools.Add(new WordMeaningsViewModel());
-            _tools.Add(new SourceContextViewModel());
-            _tools.Add(new TargetContextViewModel());
-            _tools.Add(new NotesViewModel());
-            _tools.Add(new PinsViewModel());
-            // trigger property changed event
-            Tools.Add(new TextCollectionViewModel());
-
-        }
-
-
-
 
         public void LoadLayout(XmlLayoutSerializer layoutSerializer)
         {
@@ -288,7 +328,7 @@ namespace ClearDashboard.Wpf.ViewModels
             layoutSerializer.LayoutSerializationCallback += (s, e) =>
             {
                 switch (e.Model.ContentId.ToUpper())
-                { 
+                {
                     case WorkspaceLayoutNames.Dashboard:
                         e.Content = _dashboardViewModel ?? new DashboardViewModel();
                         break;
@@ -296,7 +336,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         e.Content = new ConcordanceViewModel();
                         break;
                     case WorkspaceLayoutNames.BiblicalTerms:
-                        e.Content = new BiblicalTermsViewModel();
+                        e.Content = IoC.Get<BiblicalTermsViewModel>();
                         break;
                     case WorkspaceLayoutNames.WordMeanings:
                         e.Content = new WordMeaningsViewModel();
@@ -337,7 +377,7 @@ namespace ClearDashboard.Wpf.ViewModels
             switch (windowTag)
             {
                 case WorkspaceLayoutNames.BiblicalTerms:
-                    var vm = new BiblicalTermsViewModel();
+                    var vm = IoC.Get<BiblicalTermsViewModel>();
                     return (vm, vm.Title, vm.DockSide);
                 case WorkspaceLayoutNames.Dashboard:
                     var vm1 = new DashboardViewModel();
@@ -376,12 +416,35 @@ namespace ClearDashboard.Wpf.ViewModels
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
 
+
+        private void HandleEventAsync(object sender, PipeEventArgs args)
+        {
+            if (args == null) return;
+
+            PipeMessage pipeMessage = args.PM;
+
+            switch (pipeMessage.Action)
+            {
+                case ActionType.CurrentVerse:
+                    this.VerseRef = pipeMessage.Text;
+                    break;
+                case ActionType.OnConnected:
+                    break;
+                case ActionType.OnDisconnected:
+                    break;
+            }
+
+            Debug.WriteLine($"{pipeMessage.Text}");
+        }
+
         public override event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+
 
         #endregion // Methods
     }

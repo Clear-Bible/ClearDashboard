@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using MvvmHelpers;
 
-namespace ClearDashboard.NamedPipes.Models
+namespace ClearDashboard.Pipes_Shared.Models
 {
     public class BiblicalTermsData : ObservableObject
     {
@@ -87,6 +87,27 @@ namespace ClearDashboard.NamedPipes.Models
             }
         }
 
+        private List<string> _referencesListLong = new List<string>();
+        [JsonProperty]
+        public List<string> ReferencesLong
+        {
+            get => _referencesListLong;
+            set
+            {
+                SetProperty(ref _referencesListLong, value);
+            }
+        }
+
+        private List<string> _referencesListText = new List<string>();
+        [JsonProperty]
+        public List<string> ReferencesListText
+        {
+            get => _referencesListText;
+            set
+            {
+                SetProperty(ref _referencesListText, value);
+            }
+        }
 
         private List<string> _renderings = new List<string>();
         [JsonProperty]
@@ -111,4 +132,5 @@ namespace ClearDashboard.NamedPipes.Models
         }
 
     }
+
 }

@@ -1,0 +1,5269 @@
+<?xml version="1.0"?>
+<MARBLELinks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MARBLELink Id="03400100100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַשָּׂא:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100100004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נִינְוֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00225</ImageLink>
+      <ImageLink>tb112004093-2</ImageLink>
+      <ImageLink>tb112004741</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>36.359410,43.152887</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100100008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חָזֹון:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נַחוּם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֶלְקֹשִׁי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵל:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קַנֹּוא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נקם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נקם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בַּעַל:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֵמָה:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נקם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צַר:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נטר:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100200038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:איב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אָרֵךְ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַף:000007</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גָּדֹול:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גָּדֹול:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֹּחַ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נקה:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נקה:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:סוּפָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Whirlwind</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:דֶּרֶךְ:000003</LexicalLink>
+      <LexicalLink>SDBH:שְׂעָרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Whirlwind</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300040">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Altocumulus_cloud</ImageLink>
+      <ImageLink>White_cloud_111</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עָנָן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Pillar_of_cloud</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אָבָק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100300046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֶגֶל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גער:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יָם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Rough_seas</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יבשׁ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נָהָר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חרב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אמל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בָּשָׁן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>tb032905283</ImageLink>
+      <ImageLink>Satellite Bible Atlas00007</ImageLink>
+      <ImageLink>Satellite Bible Atlas00008</ImageLink>
+      <ImageLink>Satellite Bible Atlas00009</ImageLink>
+      <ImageLink>Satellite Bible Atlas00010</ImageLink>
+      <ImageLink>Satellite Bible Atlas00012</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>32.800075,35.937301</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כַּרְמֶל:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Bolen00052</ImageLink>
+      <ImageLink>tb052500101</ImageLink>
+      <ImageLink>tb050900101</ImageLink>
+      <ImageLink>Satellite Bible Atlas00011</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פֶּרַח:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לְבָנֹון:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Lebanon_mountains</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100400038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אמל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הַר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רעשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גִּבְעָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מוג:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500016">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4315</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נשׂא:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4315</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֶרֶץ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100500030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תֵּבֵל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זַעַם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חָרֹון:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַף:000008</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֵמָה:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נתך:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fire02</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צוּר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100600040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נתץ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4316</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טֹוב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700006">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4317</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700008">
+    <ThematicLinks>
+      <ThematicLink>Realia:3.13.3.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָעֹוז:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4317</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Realia:3.13.3.2</ImageLink>
+      <ImageLink>tb031115997</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֹום:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צָרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100700020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חסה:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800002">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4318</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800004">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4318</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֶׁטֶף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4318</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Flooding</ImageLink>
+      <ImageLink>Flooded_land</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800008">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4318</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כָּלָה:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָקֹום:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4319</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:איב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רדף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100800022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֹשֶׁךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חשׁב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כָּלָה:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4320</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900018">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4320</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900020">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4320</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400100900022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צָרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4320</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000002">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4321</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עַד:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4321</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000006">
+    <ThematicLinks>
+      <ThematicLink>Flora:6.2.3</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:סִירָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4321</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>LB00121</ImageLink>
+      <ImageLink>HK00122</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:סבך:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4321</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000010">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4322</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000012">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4322</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000014">
+    <ThematicLinks>
+      <ThematicLink>Realia:9.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:סֹבֶא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4322</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:סבא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4322</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קַשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יָבֵשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101000026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָלֵא:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִן:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יצא:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חשׁב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רָעָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יעץ:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בְּלִיַּעַל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אמר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200008">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שָׁלֵם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200012">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200014">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רַב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200018">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200020">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4323</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גוז:000001</LexicalLink>
+      <LexicalLink>SDBH:גזז:000000</LexicalLink>
+      <LexicalLink>SDBH:גזז:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:ענה:000008</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101200032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁבר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101300008">
+    <ThematicLinks>
+      <ThematicLink>Realia:1.1.1</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מֹוט:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>LB00021</ImageLink>
+      <ImageLink>Realia:1.1.1a</ImageLink>
+      <ImageLink>Yoke-bullock</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מֹוסֵרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101300018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נתק:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זרע:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֵׁם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400022">
+    <ThematicLinks>
+      <ThematicLink>Realia:3.1</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:בַּיִת:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00232</ImageLink>
+      <ImageLink>LB00235</ImageLink>
+      <ImageLink>NBGbs20090430-1_87</ImageLink>
+      <ImageLink>NBGbs20110223-127</ImageLink>
+      <ImageLink>NBGmk20140917</ImageLink>
+      <ImageLink>NBGmk20120826</ImageLink>
+      <ImageLink>NBGmk20120826a</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֱלֹהִים:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כרת:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400028">
+    <ThematicLinks>
+      <ThematicLink>Realia:4.6.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:פֶּסֶל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:4.6b</ImageLink>
+      <ImageLink>adr1305227007</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400032">
+    <ThematicLinks>
+      <ThematicLink>Realia:4.6.3</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַסֵּכָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:4.6b</ImageLink>
+      <ImageLink>adr070513161</ImageLink>
+      <ImageLink>adr1305227007</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׂים:000008</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קֶבֶר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>tb031115105</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400101400040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קלל:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הַר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֶגֶל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בשׂר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שָׁלֹום:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חגג:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יְהוּדָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חַג:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁלם:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נֶדֶר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עבר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עבר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בְּלִיַּעַל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200100050">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כרת:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עלה:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פוץ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נצר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200012">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.19</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מְצוּרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צפה:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:דֶּרֶךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חזק:000009</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָתְנַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אמץ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֹּחַ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200200026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מְאֹד:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁוב:000039</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גָּאֹון:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יַעֲקֹב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גָּאֹון:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יִשְׂרָאֵל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בקק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בקק:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Lachish_Relief-Booty</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זְמֹורָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200300030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁחת:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400002">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.10.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָגֵן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGmk20131008</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גִּבֹּור:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400006">
+    <ThematicLinks>
+      <ThematicLink>Realia:1.5.3.14</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אדם:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אִישׁ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חַיִל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תלע:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400014">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4324</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4324</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Fire02</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פְּלָדָה:000000</LexicalLink>
+      <LexicalLink>SDBH:פְּלָדָה:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4324</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400022">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.15</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֶכֶב:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:2.15a</ImageLink>
+      <ImageLink>NBGmk20140410</ImageLink>
+      <ImageLink>adr1006031442</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֹום:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כון:000019</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400030">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4325</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400032">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4325</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400034">
+    <ThematicLinks>
+      <ThematicLink>Flora:1.6</ThematicLink>
+      <ThematicLink>Flora:1.9</ThematicLink>
+      <ThematicLink>Flora:1.11.1</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:בְּרֹושׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4325</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Flora:1.6a</ImageLink>
+      <ImageLink>Flora:1.6b</ImageLink>
+      <ImageLink>Flora:1.9</ImageLink>
+      <ImageLink>Flora:1.11.1</ImageLink>
+      <ImageLink>Flora:1.11.2</ImageLink>
+      <ImageLink>Spearheads-02-007a</ImageLink>
+      <ImageLink>Juniperus_excelsa</ImageLink>
+      <ImageLink>Juniperus_excelsa_Antalya</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200400036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רעל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חוּץ:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00169</ImageLink>
+      <ImageLink>Realia:3.13.2</ImageLink>
+      <ImageLink>NBGbs20130807-933</ImageLink>
+      <ImageLink>NBGbs20130806-853</ImageLink>
+      <ImageLink>NBGbs20130805-708</ImageLink>
+      <ImageLink>Bethsaida, street</ImageLink>
+      <ImageLink>tb052001215</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הלל:002003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500012">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.15</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֶכֶב:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:2.15a</ImageLink>
+      <ImageLink>NBGmk20140410</ImageLink>
+      <ImageLink>adr1006031442</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁקק:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רְחֹוב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00236</ImageLink>
+      <ImageLink>NBGbs20130807-933</ImageLink>
+      <ImageLink>NBGbs20130806-853</ImageLink>
+      <ImageLink>NBGbs20130805-708</ImageLink>
+      <ImageLink>Bethsaida, street</ImageLink>
+      <ImageLink>tr_ldc_st_to_colossae_f02</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַרְאֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לַפִּיד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Flame</ImageLink>
+      <ImageLink>Torches</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בָּרָק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Lightning_14.07.2009_20-42-33</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200500036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רוץ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זכר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַדִּיר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כשׁל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4326</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הֲלִיכָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הֲלִיכָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מהר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֹומָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כון:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200600026">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.19.8</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:סֹכֵךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:2.19.8</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200700002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שַׁעַר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:3.13.3.5b</ImageLink>
+      <ImageLink>Tel_Arad</ImageLink>
+      <ImageLink>CityGate-03-042c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200700006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נָהָר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200700008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פתח:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200700014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הֵיכָל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200700016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מוג:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800002">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4327</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נצב:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4327</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גלה:000002</LexicalLink>
+      <LexicalLink>SDBH:גלה:000013</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4328</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>tb112004312</ImageLink>
+      <ImageLink>Babylon_exile_Fugel</ImageLink>
+      <ImageLink>Exile_after_Lachish</ImageLink>
+      <ImageLink>Exile_Lachish</ImageLink>
+      <ImageLink>Jehu-Obelisk-cropped</ImageLink>
+      <ImageLink>Lachish_Relief-exile</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עלה:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4329</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אָמָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נהג:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800020">
+    <ThematicLinks>
+      <ThematicLink>Fauna:3.7</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֹונָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00064</ImageLink>
+      <ImageLink>LB00068</ImageLink>
+      <ImageLink>BK00066</ImageLink>
+      <ImageLink>BK00067</ImageLink>
+      <ImageLink>Fauna:3.7a</ImageLink>
+      <ImageLink>Fauna:3.7b</ImageLink>
+      <ImageLink>Rock_pigeons</ImageLink>
+      <ImageLink>Columba_livia</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תפף:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200800026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֵבָב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נִינְוֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00225</ImageLink>
+      <ImageLink>tb112004093-2</ImageLink>
+      <ImageLink>tb112004741</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>36.359410,43.152887</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בְּרֵכָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Water_drop_001</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900012">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4330</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֹום:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4330</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900016">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4330</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900018">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4330</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900020">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4330</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נוס:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400200900032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פנה:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בזז:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4331</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Lachish_Relief-Booty</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000004">
+    <ThematicLinks>
+      <ThematicLink>Realia:1.6.3</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֶּסֶף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGpb20140401</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בזז:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4331</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Lachish_Relief-Booty</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זָהָב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Bolen00041</ImageLink>
+      <ImageLink>Bolen00050</ImageLink>
+      <ImageLink>Bolen00053</ImageLink>
+      <ImageLink>adr1306212575</ImageLink>
+      <ImageLink>adr1305240906</ImageLink>
+      <ImageLink>adr1006039110</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קֵצֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תְּכוּנָה:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כָּבֹוד:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כְּלִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201000030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֶמְדָּה:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בּוּקָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מְבוּקָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מְבֻלָּקָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֵב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מסס:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פִּיק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בֶּרֶךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חַלְחָלָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָתְנַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פָּנֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קבץ:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201100042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פָּארוּר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַיֵּה:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָעֹון:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֲרִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200008">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4332</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200010">
+    <ThematicLinks>
+      <ThematicLink>Flora:5.1.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִרְעֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4332</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200018">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:כְּפִיר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הלך:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200024">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַרְיֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200026">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:לָבִיא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שָׁם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גּוּר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200032">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַרְיֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201200038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חרד:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300002">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַרְיֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טרף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:דַּי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּור:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חנק:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300018">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:לִבְאָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מלא:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טֶרֶף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֹר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָעֹון:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201300032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טְרֵפָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נְאֻם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צָבָא:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בער:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עָשָׁן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Smoke</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400022">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.15</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֶכֶב:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4333</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Realia:2.15a</ImageLink>
+      <ImageLink>NBGmk20140410</ImageLink>
+      <ImageLink>adr1006031442</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400026">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.24</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:כְּפִיר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:2.24a</ImageLink>
+      <ImageLink>Fauna:2.24b</ImageLink>
+      <ImageLink>Fauna:2.24c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֶרֶב:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGmk20130711a</ImageLink>
+      <ImageLink>NBGmk20130711b</ImageLink>
+      <ImageLink>NBGmk20130711c</ImageLink>
+      <ImageLink>adr1305240787</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כרת:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֶרֶץ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טֶרֶף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400201400052">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַלְאָךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4334</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הֹוי:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עִיר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:דָּם:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כַּחַשׁ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פֶּרֶק:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Lachish_Relief-Booty</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מלא:000010</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מושׁ:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טֶרֶף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200000">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00191</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200004">
+    <ThematicLinks>
+      <ThematicLink>Realia:1.1.3</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֹׁוט:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:1.1.3a</ImageLink>
+      <ImageLink>Whip-01-005</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רַעַשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200012">
+    <ThematicLinks>
+      <ThematicLink>Realia:8.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֹופַן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:8.2b</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200016">
+    <ThematicLinks>
+      <ThematicLink>Fauna:2.18</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:סוּס:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>LB00032</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:דהר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200022">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.15</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מֶרְכָּבָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:2.15a</ImageLink>
+      <ImageLink>NBGmk20140410</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300200024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רקד:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פָּרָשׁ:000000</LexicalLink>
+      <LexicalLink>SDBH:פָּרָשׁ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עלה:000030</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לַהַב:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Flame</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300010">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.3</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֶרֶב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGmk20130711a</ImageLink>
+      <ImageLink>NBGmk20130711b</ImageLink>
+      <ImageLink>NBGmk20130711c</ImageLink>
+      <ImageLink>StraightSword-02-003</ImageLink>
+      <ImageLink>adr1305240787</ImageLink>
+      <ImageLink>tb061616732</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בָּרָק:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Lightning_14.07.2009_20-42-33</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300016">
+    <ThematicLinks>
+      <ThematicLink>Realia:2.5</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֲנִית:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00200</ImageLink>
+      <ImageLink>Spearheads-02-007a</ImageLink>
+      <ImageLink>adr1005306124</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֹב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חָלָל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֹּבֶד:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פֶּגֶר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קֵצֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גְּוִיָּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כשׁל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300048">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כשׁל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300300052">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גְּוִיָּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֹב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זְנוּנִים:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זֹנָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טֹוב:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֵן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בַּעֲלָה:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֶּשֶׁף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּוי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>jlm_soltemp_d01</ImageLink>
+      <ImageLink>jlm_soltemp_m06</ImageLink>
+      <ImageLink>jlm_soltemp_pillars_m01</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זְנוּנִים:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִשְׁפָּחָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300400034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֶּשֶׁף:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נְאֻם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יהוה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:צָבָא:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גלה:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500016">
+    <ThematicLinks>
+      <ThematicLink>Realia:6.2.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁוּל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:ראה:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּוי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַעַר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַמְלָכָה:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300500034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קָלֹון:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300600004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁלך:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300600008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שִׁקּוּץ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:4.6.4</ImageLink>
+      <ImageLink>adr080710384</ImageLink>
+      <ImageLink>Refuse</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300600012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נבל:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300600016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׂים:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300600020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֳאִי:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:ראה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נדד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אמר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁדד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נִינְוֵה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00225</ImageLink>
+      <ImageLink>tb112004093-2</ImageLink>
+      <ImageLink>tb112004741</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>36.359410,43.152887</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נוד:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַיִן:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בקשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300700034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נחם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הֲ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יטב:000009</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אָמֹון:002000</LexicalLink>
+      <LexicalLink>SDBH:נֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Thebes</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>25.700025,32.639441</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יְאֹר:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Water_drop_001</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:סָבִיב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֵיל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יָם:000007</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800032">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4335</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יָם:000007</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4335</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300800036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֹומָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כּוּשׁ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִצְרַיִם:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGbs20140204-40</ImageLink>
+      <ImageLink>Gizah_Pyramids</ImageLink>
+    </ImageLinks>
+    <MapLinks>
+      <MapLink>30.108086,31.338220</MapLink>
+    </MapLinks>
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קֵצֶה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פּוּט:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Libya_BMNG</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לוּב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Libya_BMNG</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400300900026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עֶזְרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גַּם:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּולָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>tb112004312</ImageLink>
+      <ImageLink>Babylon_exile_Fugel</ImageLink>
+      <ImageLink>Exile_after_Lachish</ImageLink>
+      <ImageLink>Exile_Lachish</ImageLink>
+      <ImageLink>Jehu-Obelisk-cropped</ImageLink>
+      <ImageLink>Lachish_Relief-exile</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הלך:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שְׁבִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>tb112004312</ImageLink>
+      <ImageLink>Babylon_exile_Fugel</ImageLink>
+      <ImageLink>Exile_after_Lachish</ImageLink>
+      <ImageLink>Exile_Lachish</ImageLink>
+      <ImageLink>Jehu-Obelisk-cropped</ImageLink>
+      <ImageLink>Lachish_Relief-exile</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גַּם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עֹולָל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רטשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רֹאשׁ:000011</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חוּץ:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00169</ImageLink>
+      <ImageLink>Realia:3.13.2</ImageLink>
+      <ImageLink>NBGbs20130807-933</ImageLink>
+      <ImageLink>NBGbs20130806-853</ImageLink>
+      <ImageLink>NBGbs20130805-708</ImageLink>
+      <ImageLink>Bethsaida, street</ImageLink>
+      <ImageLink>tb052001215</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כבד:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:ידד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּורָל:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>tb032014463</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000048">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גָּדֹול:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000050">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רתק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:3.21.4</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301000056">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זֵק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:3.21.4</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גַּם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁכר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עלם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גַּם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בקשׁ:000007</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100018">
+    <ThematicLinks>
+      <ThematicLink>Realia:3.13.3.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָעֹוז:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:3.13.3.2</ImageLink>
+      <ImageLink>tb031115997</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִן:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301100022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:איב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִבְצָר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200006">
+    <ThematicLinks>
+      <ThematicLink>Flora:2.6</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:תְּאֵנָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Flora:2.6b</ImageLink>
+      <ImageLink>Flora:2.6d</ImageLink>
+      <ImageLink>figtree1689, rp</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בִּכּוּרִים:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נוע:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נפל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פֶּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301200024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עַם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אִשָּׁה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:איב:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פתח:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פתח:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שַׁעַר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:3.13.3.5b</ImageLink>
+      <ImageLink>Tel_Arad</ImageLink>
+      <ImageLink>CityGate-03-042c</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֶרֶץ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fire02</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301300028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:בְּרִיחַ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Water_drop_001</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָצֹור:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Assyrian_siege</ImageLink>
+      <ImageLink>Siegeworks-02-029b</ImageLink>
+      <ImageLink>SiegeTower-02-031</ImageLink>
+      <ImageLink>adr08072471511</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁאב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Using donkey to irrigate, rp</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חזק:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִבְצָר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טִיט:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רמס:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֹמֶר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGbs20130727-080</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חזק:000017</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301400034">
+    <ThematicLinks>
+      <ThematicLink>Realia:1.8.1</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַלְבֵּן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Realia:1.8.1b</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שָׁם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fire02</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כרת:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חֶרֶב:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>NBGmk20130711a</ImageLink>
+      <ImageLink>NBGmk20130711b</ImageLink>
+      <ImageLink>NBGmk20130711c</ImageLink>
+      <ImageLink>adr1305240787</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אכל:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4336</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500014">
+    <ThematicLinks />
+    <LexicalLinks />
+    <TextualLinks>
+      <TextualLink>HOTTP4336</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500018">
+    <ThematicLinks>
+      <ThematicLink>Fauna:6.9</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֶלֶק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4336</TextualLink>
+    </TextualLinks>
+    <ImageLinks>
+      <ImageLink>Fauna:6.9a</ImageLink>
+      <ImageLink>Fauna:6.9b</ImageLink>
+      <ImageLink>Fauna:6.9d</ImageLink>
+      <ImageLink>Locusta_migratoria_(gregarious_phase)_(5012171245)</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כבד:000012</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500026">
+    <ThematicLinks>
+      <ThematicLink>Fauna:6.9</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֶלֶק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:6.9a</ImageLink>
+      <ImageLink>Fauna:6.9b</ImageLink>
+      <ImageLink>Fauna:6.9d</ImageLink>
+      <ImageLink>Locusta_migratoria_(gregarious_phase)_(5012171245)</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כבד:000012</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301500034">
+    <ThematicLinks>
+      <ThematicLink>Fauna:6.9</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַרְבֶּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:6.9a</ImageLink>
+      <ImageLink>Fauna:6.9b</ImageLink>
+      <ImageLink>Fauna:6.9d</ImageLink>
+      <ImageLink>Locusta_migratoria_(gregarious_phase)_(5012171245)</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רכל:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00169</ImageLink>
+      <ImageLink>HK00172</ImageLink>
+      <ImageLink>Realia:3.13.2</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֹּוכָב:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Stars</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שָׁמַיִם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600014">
+    <ThematicLinks>
+      <ThematicLink>Fauna:6.9</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֶלֶק:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:6.9a</ImageLink>
+      <ImageLink>Fauna:6.9b</ImageLink>
+      <ImageLink>Fauna:6.9d</ImageLink>
+      <ImageLink>Locusta_migratoria_(gregarious_phase)_(5012171245)</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פשׁט:000000</LexicalLink>
+      <LexicalLink>SDBH:פשׁט:001000</LexicalLink>
+      <LexicalLink>SDBH:פשׁט:002000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301600020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עוף:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִנְזָר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700008">
+    <ThematicLinks>
+      <ThematicLink>Fauna:6.9</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַרְבֶּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Fauna:6.9a</ImageLink>
+      <ImageLink>Fauna:6.9b</ImageLink>
+      <ImageLink>Fauna:6.9d</ImageLink>
+      <ImageLink>Locusta_migratoria_(gregarious_phase)_(5012171245)</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:טִפְסָר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גֹּבַי:000000</LexicalLink>
+      <LexicalLink>SDBH:גֹּוב:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חנה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:גְּדֵרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:יֹום:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קָרָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֶׁמֶשׁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Sunrise</ImageLink>
+      <ImageLink>Sunset</ImageLink>
+      <ImageLink>Sun</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:זרח:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נדד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700050">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מָקֹום:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301700052">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אֵי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4337</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:נום:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רעה:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>LB00001</ImageLink>
+      <ImageLink>BK00005</ImageLink>
+      <ImageLink>BK00010</ImageLink>
+      <ImageLink>HK00009</ImageLink>
+      <ImageLink>LB00013</ImageLink>
+      <ImageLink>Realia:1.2.1</ImageLink>
+      <ImageLink>NBGpb20140401b</ImageLink>
+      <ImageLink>Shepherd</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מֶלֶךְ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַשּׁוּר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>adr1311202840</ImageLink>
+      <ImageLink>adr1311203118</ImageLink>
+      <ImageLink>adr1306212845</ImageLink>
+      <ImageLink>adr1306212575</ImageLink>
+      <ImageLink>Satellite Bible Atlas00066</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שׁכן:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks>
+      <TextualLink>HOTTP4338</TextualLink>
+    </TextualLinks>
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:אַדִּיר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:פושׁ:001000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:עַם:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:הַר:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301800028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:קבץ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כֵּהָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֶׁבֶר:000000</LexicalLink>
+      <LexicalLink>SDBH:שֶׁבֶר:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:חלה:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מַכָּה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:שֵׁמַע:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תקע:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:כַּף:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:מִי:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:לֹא:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:רָעָה:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="03400301900038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBH:תָּמִיד:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+</MARBLELinks>

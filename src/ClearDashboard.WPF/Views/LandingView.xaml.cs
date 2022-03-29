@@ -29,7 +29,6 @@ namespace ClearDashboard.Wpf.Views
 
         private void Grid_Click(object sender, RoutedEventArgs e)
         {
-            var ClickedButton = e.OriginalSource as NavButton;
 
             //(Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject =
             //    new Common.Models.DashboardProject { Name = "TEST ME" };

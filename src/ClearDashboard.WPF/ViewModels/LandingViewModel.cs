@@ -58,6 +58,12 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation("LandingViewModel constructor called.");
         }
 
+        protected override void OnViewAttached(object view, object context)
+        {
+            Console.WriteLine();
+            base.OnViewAttached(view, context);
+        }
+
         #endregion
 
 

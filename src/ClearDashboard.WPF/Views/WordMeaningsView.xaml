@@ -6,20 +6,148 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    x:Uid="UserControl_1"
+    d:DataContext="{d:DesignInstance Type=viewModels:WordMeaningsViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance Type=viewModels:WordMeaningsViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
-    <Grid x:Uid="Grid_1">
-        <TextBlock
-            x:Uid="TextBlock_1"
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="20"
-            VerticalAlignment="Top"
-            Background="GreenYellow"
-            FontSize="64"
-            Text="WORD MEANINGS" />
+    <Grid>
+        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <StackPanel Orientation="Vertical">
+                <ListView
+                    DockPanel.Dock="Bottom"
+                    ItemsSource="{Binding WordData}"
+                    Style="{StaticResource MaterialDesignListBox}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Padding="0"
+                                BorderBrush="White"
+                                BorderThickness="1">
+                                <StackPanel Orientation="Vertical">
+                                    <!--  First Line  -->
+                                    <StackPanel
+                                        Margin="0,0,0,5"
+                                        Background="{DynamicResource MaterialDesignTextAreaInactiveBorder}"
+                                        Orientation="Horizontal">
+                                        <StackPanel Margin="3" Orientation="Vertical">
+                                            <TextBlock
+                                                Width="80"
+                                                Margin="3,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                                FontSize="18"
+                                                FontWeight="Bold"
+                                                Foreground="{StaticResource RedLightBrush}"
+                                                Text="{Binding Word}" />
+                                            <TextBlock
+                                                Width="80"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontSize="12"
+                                                Foreground="{StaticResource YellowLightBrush}"
+                                                Text="{Binding WordTransliterated, StringFormat=({0})}" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            Width="235"
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource BlueLightBrush}"
+                                            Text="{Binding Glosses}"
+                                            TextWrapping="Wrap" />
+                                        <Button Width="32" Height="32">
+                                            <Image Source="pack://application:,,,/resources/logos_icon.png" />
+                                        </Button>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="50"
+                                            Margin="0,0,0,0"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource BlueLightBrush}"
+                                            Text="Domain: "
+                                            TextAlignment="Left"
+                                            TextDecorations="Underline" />
+                                        <TextBlock
+                                            Width="220"
+                                            Margin="3,0,0,5"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource OrangeDarkBrush}"
+                                            Text="{Binding Domains}"
+                                            TextAlignment="Left"
+                                            TextDecorations="Underline"
+                                            TextWrapping="Wrap" />
+                                        <!--<TextBlock
+                                                            Width="150"
+                                                            Margin="0,15,0,0"
+                                                            HorizontalAlignment="Left"
+                                                            FontSize="16"
+                                                            FontWeight="Bold"
+                                                            Text="{Binding DefinitionLong}" />
+                                                        <TextBlock
+                                                            MinWidth="150"
+                                                            Margin="0,15,0,0"
+                                                            Text="{Binding Comment}" />-->
+                                    </StackPanel>
+
+                                    <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="70"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource BlueLightBrush}"
+                                            Text="SubDomain: "
+                                            TextAlignment="Left"
+                                            TextDecorations="Underline" />
+                                        <TextBlock
+                                            Width="180"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource OrangeDarkBrush}"
+                                            Text="{Binding SubDomains}"
+                                            TextAlignment="Left"
+                                            TextDecorations="Underline"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Width="45"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource BlueLightBrush}"
+                                            Text="Sense: "
+                                            TextAlignment="Left"
+                                            TextDecorations="Underline" />
+                                        <TextBlock
+                                            Width="30"
+                                            VerticalAlignment="Center"
+                                            Background="{StaticResource MaterialDesignShadowBrush}"
+                                            FontSize="14"
+                                            Text="{Binding SenseId}"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+
+
+                                    <TextBlock
+                                        Width="325"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        FontSize="14"
+                                        Text="{Binding DefinitionShort}"
+                                        TextWrapping="Wrap" />
+
+
+                                </StackPanel>
+                            </Border>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>

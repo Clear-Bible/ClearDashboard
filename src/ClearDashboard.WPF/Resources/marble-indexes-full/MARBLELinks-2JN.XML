@@ -1,0 +1,1831 @@
+<?xml version="1.0"?>
+<MARBLELinks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MARBLELink Id="06300100100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πρεσβύτερος:001001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐκλεκτός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:κυρία:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:τέκνον:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Children_of_Kabul,_Afghanistan</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀγαπάω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000021</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλήθεια:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μόνος:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλλά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πᾶς:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:γινώσκω:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100100048">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλήθεια:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:διά:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλήθεια:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μένω:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000006</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μετά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100200028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:αἰών:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μετά:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:χάρις:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔλεος:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:εἰρήνη:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:παρά:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:θεός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πατήρ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:Ἰησοῦς:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:Χριστός:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:υἱός:000015</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πατήρ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000007</LexicalLink>
+      <LexicalLink>SDBG:ἐν:000016</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλήθεια:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100300042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀγάπη:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:χαίρω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λίαν:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὅτι:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:εὑρίσκω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:τέκνον:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Children_of_Kabul,_Afghanistan</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:περιπατέω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000021</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλήθεια:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καθώς:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐντολή:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λαμβάνω:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:παρά:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100400034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πατήρ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καί:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:νῦν:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐρωτάω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:κυρία:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὡς:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐντολή:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:γράφω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καινός:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλλά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔχω:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀπό:000007</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀρχή:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἵνα:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀγαπάω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100500038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλλήλων:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καί:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀγάπη:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἵνα:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:περιπατέω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:κατά:000010</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐντολή:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐντολή:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καθώς:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀκούω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀρχή:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἵνα:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000015</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100600046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:περιπατέω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὅτι:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πολύς:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πλάνος:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐξέρχομαι:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:εἰς:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:κόσμος:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁμολογέω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:Ἰησοῦς:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:Χριστός:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔρχομαι:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐν:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:σάρξ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πλάνος:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καί:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100700044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀντίχριστος:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:βλέπω:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἵνα:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀπόλλυμι:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐργάζομαι:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλλά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μισθός:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πλήρης:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100800022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀπολαμβάνω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πᾶς:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:προάγω:000004</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μένω:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:διδαχή:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:Χριστός:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:θεός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900028">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔχω:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900030">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900032">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:μένω:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:διδαχή:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:καί:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πατήρ:000003</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900050">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300100900052">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:υἱός:000015</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:εἰ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔρχομαι:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πρός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:διδαχή:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:φέρω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λαμβάνω:000002</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000032">
+    <ThematicLinks>
+      <ThematicLink>realia:3.1</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBG:οἰκία:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00232</ImageLink>
+      <ImageLink>LB00231</ImageLink>
+      <ImageLink>LB00235</ImageLink>
+      <ImageLink>Realia:3.1</ImageLink>
+      <ImageLink>NBGbs20100214-204</ImageLink>
+      <ImageLink>NBGbs20110223-127</ImageLink>
+      <ImageLink>il_capernaum_house_d01</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000036">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:χαίρω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101000042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λέγω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100004">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λέγω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:γάρ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:χαίρω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:κοινωνέω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἔργον:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100020">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101100022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πονηρός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:γράφω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:βούλομαι:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200014">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:διά:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200016">
+    <ThematicLinks>
+      <ThematicLink>realia:1.7.7</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBG:χάρτης:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Flora:5.1.3a</ImageLink>
+      <ImageLink>Flora:5.1.3b</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200020">
+    <ThematicLinks>
+      <ThematicLink>realia:1.7.2</ThematicLink>
+    </ThematicLinks>
+    <LexicalLinks>
+      <LexicalLink>SDBG:μέλας:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>HK00153</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200022">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀλλά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200024">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐλπίζω:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200026">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:γίνομαι:000008</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200034">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:στόμα:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200038">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:στόμα:000005</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200040">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:λαλέω:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200042">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἵνα:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200044">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200046">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:χαρά:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200048">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐγώ:000001</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101200052">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:πληρόω:000009</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300002">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀσπάζομαι:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>CN01609</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300006">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300008">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:τέκνον:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks>
+      <ImageLink>Children_of_Kabul,_Afghanistan</ImageLink>
+    </ImageLinks>
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300010">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300012">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἀδελφή:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300016">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ὁ:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+  <MARBLELink Id="06300101300018">
+    <ThematicLinks />
+    <LexicalLinks>
+      <LexicalLink>SDBG:ἐκλεκτός:000000</LexicalLink>
+    </LexicalLinks>
+    <TextualLinks />
+    <ImageLinks />
+    <MapLinks />
+    <ArticleLinks />
+  </MARBLELink>
+</MARBLELinks>

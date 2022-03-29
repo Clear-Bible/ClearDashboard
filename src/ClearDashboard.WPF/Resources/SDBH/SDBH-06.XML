@@ -1,0 +1,1554 @@
+<?xml version="1.0"?>
+<Lexicon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Lexicon_Entry Id="001900000000000" Lemma="וְ" Version="0" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes />
+    <Authors />
+    <AlternateLemmas>
+      <AlternateLemma>וּ</AlternateLemma>
+    </AlternateLemmas>
+    <MainLinks />
+    <Notes />
+    <Localizations />
+    <Dates />
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001900001000000">
+        <PartsOfSpeech />
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001900001001000" IsBiblicalTerm="A" EntryCode="" Indent="0">
+            <LEXDomains />
+            <LEXSubDomains />
+            <LEXForms>
+              <LEXForm>conj</LEXForm>
+            </LEXForms>
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>and, but, also</DefinitionShort>
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:06:07" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses>
+                  <Gloss>et, mais, aussi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences />
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001900001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses>
+                  <CONSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                    <DefinitionLong />
+                    <DefinitionShort />
+                    <Glosses>
+                      <Gloss>NO DATA YET</Gloss>
+                    </Glosses>
+                    <Comments />
+                  </CONSense>
+                </CONSenses>
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001901000000000" Lemma="וְדָן" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2051</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>02602701900002</Reference>
+        </References>
+        <Content>{A:HOTTP}-C {A:NJPS} {A:NRSV} {A:CEV} | {A:RSV} {A:REB} {A:GNT} [-] | {A:NIV} {A:NJB} וְ דָּן "and Dan(ites)"</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="pt" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>02602701900002</Reference>
+        </References>
+        <Content>{A:TEB} | {A:ARA} {A:NVI} וְ דָּן "Também Dã” | {A:BJ} {A:BV} {A:BP} {A:CNBB} “Dã” | {A:LXX} {A:NTLH} “traziam vinho” (cf. {A:BJ} n.)</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="sp" LastEdited="2021-05-20 09:15:55" LastEditedBy="tony">
+        <References>
+          <Reference>02602701900002</Reference>
+        </References>
+        <Content>HOTTP BLA | NVI "danitas" BJL RVC TLA "Dan" RV60 "Asimismo Dan" | DHH BP omiten</Content>
+      </Note>
+    </Notes>
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>2008-03-04 21:48:50</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 18:49:35 administrator</Date>
+      <Date>2006-06-20 15:38:02 enio</Date>
+      <Date>2008-03-04 21:48:50 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001901001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001901001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of Locations</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2008-03-04 21:48:50" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= unknown location</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wedan</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:06:31" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= lieu inconnu</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wedân</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2021-05-20 09:15:55" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= lugar desconocido</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vedán</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2019-12-25 12:55:25" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>sentido incerto; provavelmente = nome de localidade</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vedan</Gloss>
+                  <Gloss>Dã</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort />
+                <Glosses />
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝位置不詳</DefinitionShort>
+                <Glosses>
+                  <Gloss>威但，《思》丹</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝位置不详</DefinitionShort>
+                <Glosses>
+                  <Gloss>威但，《思》丹</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>02602701900002{N:001}</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001901001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001902000000000" Lemma="וָהֵב" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2052</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 18:57:42 administrator</Date>
+      <Date>2006-06-20 15:48:17 enio</Date>
+      <Date>2015-11-16 15:27:54 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001902001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001902001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of Locations</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-11-16 15:27:54" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= unidentified location, ◄ probably in {L:Moab&lt;SDBH:מֹואָב&gt;} near river {L:Arnon&lt;SDBH:אַרְנֹון&gt;} ({A:ABD})</DefinitionShort>
+                <Glosses>
+                  <Gloss>Waheb</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:08:07" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= lieu non identifié, ◄ probablement en {L:Moab&lt;SDBH:מֹואָב&gt;}, près du fleuve {L:Arnôn&lt;SDBH:אַרְנֹון&gt;} ({A:ABD})</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wahev</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2021-05-20 09:16:51" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= ubicación no identificada, ◄ probablemente en {L:Moab&lt;SDBH:מֹואָב&gt;} cerca del río {L:Arnón&lt;SDBH:אַרְנֹון&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaheb</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:10:04" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= localidade não identificada; ◄ provavelmente em {L:Moabe&lt;SDBH:מֹואָב&gt;}, perto do rio {L:Arnom&lt;SDBH:אַרְנֹון&gt;} ({A:ABD})</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaebe</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>sehemu isiyotambulika, huenda; ipo Moabu karibu na mto Arnoni</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wahebu</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝未能識別的位置，◄很可能在{摩押}境內，靠近{亞嫩}河（{A:ABD}）</DefinitionShort>
+                <Glosses>
+                  <Gloss>哇哈伯，《思》瓦赫布</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝未能识别的位置，◄很可能在{摩押}境内，靠近{亚嫩}河（{A:ABD}）</DefinitionShort>
+                <Glosses>
+                  <Gloss>哇哈伯，《思》瓦赫布</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>00402101400018</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates>
+              <LEXCoordinates>27.088473,34.771729</LEXCoordinates>
+            </LEXCoordinates>
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001902001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001903000000000" Lemma="וָו" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2053</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Enio R. Mueller</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2016-01-29 09:26:37 enio</Date>
+      <Date>2021-06-07 08:43:27 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001903001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>nsm</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001903001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Parts: Tents</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-09-03 14:55:03" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= a piece of curved metal ► for attaching curtains to pillars</DefinitionShort>
+                <Glosses>
+                  <Gloss>hook</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:11:29" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= peça de metal encurvado ► para prender cortinas a colunas</DefinitionShort>
+                <Glosses>
+                  <Gloss>gancho</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:09:47" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= morceau de métal incurvé ► pour attacher des rideaux à des piliers</DefinitionShort>
+                <Glosses>
+                  <Gloss>crochet</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>kipande cha chuma kilichokunjwa kwa kuunganisha mapazia kwenye nguzo</DefinitionShort>
+                <Glosses>
+                  <Gloss>ndoana</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:46:10" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= una pieza de metal curvado ► para unir cortinas a pilares</DefinitionShort>
+                <Glosses>
+                  <Gloss>gancho</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝一片彎曲的金屬，►用來把幔子繫在柱子上</DefinitionShort>
+                <Glosses>
+                  <Gloss>鈎子</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝一片弯曲的金属，►用来把幔子系在柱子上</DefinitionShort>
+                <Glosses>
+                  <Gloss>钩子</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>00202603200020</LEXReference>
+              <LEXReference>00202603700026</LEXReference>
+              <LEXReference>00202701000016</LEXReference>
+              <LEXReference>00202701100040</LEXReference>
+              <LEXReference>00202701700016</LEXReference>
+              <LEXReference>00203603600020</LEXReference>
+              <LEXReference>00203603800014</LEXReference>
+              <LEXReference>00203801000014</LEXReference>
+              <LEXReference>00203801100030</LEXReference>
+              <LEXReference>00203801200030</LEXReference>
+              <LEXReference>00203801700016</LEXReference>
+              <LEXReference>00203801900016</LEXReference>
+              <LEXReference>00203802800028</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages>
+              <LEXImage>adr1305240787</LEXImage>
+            </LEXImages>
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains>
+              <LEXCoreDomain>Crafts</LEXCoreDomain>
+            </LEXCoreDomains>
+            <CONMeanings>
+              <ContextualMeaning Id="001903001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>Sanctuary</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses>
+                  <CONSense LanguageCode="en" LastEdited="" LastEditedBy="">
+                    <DefinitionLong />
+                    <DefinitionShort />
+                    <Glosses>
+                      <Gloss>hook (of gold, used for hanging the curtains)</Gloss>
+                    </Glosses>
+                    <Comments />
+                  </CONSense>
+                </CONSenses>
+                <CONLinks />
+                <CONImages />
+                <CONReferences>
+                  <CONReference>00202603200020</CONReference>
+                  <CONReference>00202603700026</CONReference>
+                  <CONReference>00202701000016</CONReference>
+                  <CONReference>00202701100040</CONReference>
+                  <CONReference>00202701700016</CONReference>
+                  <CONReference>00203603600020</CONReference>
+                  <CONReference>00203603800014</CONReference>
+                  <CONReference>00203801000014</CONReference>
+                  <CONReference>00203801100030</CONReference>
+                  <CONReference>00203801200030</CONReference>
+                  <CONReference>00203801700016</CONReference>
+                  <CONReference>00203801900016</CONReference>
+                  <CONReference>00203802800028</CONReference>
+                </CONReferences>
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001904000000000" Lemma="וָזָר" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2054</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois; Enio R. Mueller</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>02002100800008</Reference>
+        </References>
+        <Content>NJPS וְזָר = {L:זָר&lt;SDBH:זָר&gt;}</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="pt" LastEdited="" LastEditedBy="">
+        <References />
+        <Content>NOTE</Content>
+      </Note>
+    </Notes>
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 18:52:27 administrator</Date>
+      <Date>2016-01-29 10:02:31 enio</Date>
+      <Date>2017-09-03 14:46:00 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001904001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>aj</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001904001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Evil</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains>
+              <LEXSubDomain>State/Process</LEXSubDomain>
+            </LEXSubDomains>
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms>
+              <LEXAntonym>זַךְ</LEXAntonym>
+            </LEXAntonyms>
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-09-03 14:46:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>exact meaning unknown; possibly: = state in which the behavior of humans is considered morally and ethically unacceptable</DefinitionShort>
+                <Glosses>
+                  <Gloss>evil</Gloss>
+                  <Gloss>guilty</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:13:10" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>significado exato incerto; possivelmente: = estado em que o comportamento de pessoas é considerado moral e eticamente inaceitável</DefinitionShort>
+                <Glosses>
+                  <Gloss>culpado</Gloss>
+                  <Gloss>mau</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:12:13" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>sens exact incertain; possiblement: = situation où le comportement d'humains est considéré comme moralement et éthiquement inacceptable</DefinitionShort>
+                <Glosses>
+                  <Gloss>coupable</Gloss>
+                  <Gloss>mauvais</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>maana sahihi haijulikani; huenda; hali ambayo tabia ya wanadamu inachukuliwa haikubaliki kiuadilifu na kimaadili</DefinitionShort>
+                <Glosses>
+                  <Gloss>ouvu</Gloss>
+                  <Gloss>hatia</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:48:32" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= significado exacto desconocido; posiblemente: = estado por el cual el comportamiento de los seres humanos se considera moral y éticamente inaceptable</DefinitionShort>
+                <Glosses>
+                  <Gloss>malvado</Gloss>
+                  <Gloss>perverso</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>確切含義不明；可能：＝狀態，人的行為在道德上和倫理上被認為是不可接受的</DefinitionShort>
+                <Glosses>
+                  <Gloss>邪惡；有罪，犯罪的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>确切含义不明；可能：＝状态，人的行为在道德上和伦理上被认为是不可接受的</DefinitionShort>
+                <Glosses>
+                  <Gloss>邪恶；有罪，犯罪的</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>02002100800008{N:001}</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains>
+              <LEXCoreDomain>Behavior</LEXCoreDomain>
+            </LEXCoreDomains>
+            <CONMeanings>
+              <ContextualMeaning Id="001904001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001905000000000" Lemma="וַיְזָתָא" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2055</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 18:42:32 administrator</Date>
+      <Date>2006-06-20 16:10:16 enio</Date>
+      <Date>2020-04-02 12:37:15 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001905001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001905001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-11-12 15:05:59" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= man; ◄ son of {L:Haman&lt;SDBH:הָמָן&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaizatha</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:13:22" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= homme; ◄ fils de {L:Hamân&lt;SDBH:הָמָן&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Waïzata</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:49:40" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= hombre; ◄ hijo de {L:Amán&lt;SDBH:הָמָן&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaizata</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:13:29" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= um homem; ◄ filho de {L:Hamã&lt;SDBH:הָמָן&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaizata</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mwanaume; mwana wa Hamani</DefinitionShort>
+                <Glosses>
+                  <Gloss>Waizatha</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{哈曼}的兒子</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦耶撒他，《思》耶匝達</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{哈曼}的儿子</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦耶撒他，《思》耶匝达</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>01700900900024</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001905001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001906000000000" Lemma="וָלָד" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2056</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Enio R. Mueller</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2016-01-29 10:11:13 enio</Date>
+      <Date>2017-09-03 14:57:01 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001906001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>nsm</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas>
+          <RelatedLemma>
+            <Word>ילד</Word>
+          </RelatedLemma>
+        </RelatedLemmas>
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001906001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-09-03 14:57:01" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= posterity of humans</DefinitionShort>
+                <Glosses>
+                  <Gloss>child</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:14:50" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= descendência de humanos</DefinitionShort>
+                <Glosses>
+                  <Gloss>filhos</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:13:52" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= postérité d'humains</DefinitionShort>
+                <Glosses>
+                  <Gloss>enfant</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>kizazi cha baadaye cha wanadamu</DefinitionShort>
+                <Glosses>
+                  <Gloss>mtoto</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:50:27" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= posteridad de los humanos</DefinitionShort>
+                <Glosses>
+                  <Gloss>hijo</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝人的後代</DefinitionShort>
+                <Glosses>
+                  <Gloss>孩子</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝人的后代</DefinitionShort>
+                <Glosses>
+                  <Gloss>孩子</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>00101103000014</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains>
+              <LEXCoreDomain>Parenthood</LEXCoreDomain>
+            </LEXCoreDomains>
+            <CONMeanings>
+              <ContextualMeaning Id="001906001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001907000000000" Lemma="וַנְיָה" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2057</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>2008-03-04 21:49:13</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 09:49:22 administrator</Date>
+      <Date>2006-06-20 16:12:08 enio</Date>
+      <Date>2008-03-04 21:49:13 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001907001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001907001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2008-03-04 21:49:13" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= man; ► married a foreign wife; after exile</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vaniah</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:19:10" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= homme; ► a épousé une femme étrangère; après l'exil</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wanya</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:51:11" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= hombre; ► se casó con una esposa extranjera; despues del exilio</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vanías</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= um homem; ► casou com mulher estrangeira; no pós-exílio</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vanias</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mwanaume; alimuoa mwanamke wa kigeni; baada ya uhamisho</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wania</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；►娶了外族女子為妻；被擄歸回時期</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦尼雅</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；►娶了外族女子为妻；被掳归回时期</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦尼雅</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>01501003600002</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001907001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001908000000000" Lemma="וָפְסִי" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2058</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 09:48:12 administrator</Date>
+      <Date>2006-06-20 16:13:24 enio</Date>
+      <Date>2015-11-12 15:06:27 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001908001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001908001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-11-12 15:06:27" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= man; ◄ tribe of {L:Naphtali&lt;SDBH:נַפְתָּלִי&gt;}; ► father of {L:Nahbi&lt;SDBH:נַחְבִּי&gt;}, spy</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vophsi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:16:02" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= um homem ◄ da tribo de {L:Naftali&lt;SDBH:נַפְתָּלִי&gt;}; ► pai de {L:Nabi&lt;SDBH:נַחְבִּי&gt;}, um dos espias</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vofsi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:20:07" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= homme; ◄ tribu de {L:Neftali&lt;SDBH:נַפְתָּלִי&gt;}; ► père de {L:Nahbi&lt;SDBH:נַחְבִּי&gt;}, espion</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wofsi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mwanaume; kabila la Naftali; baba wa Nabi, mpelelezi</DefinitionShort>
+                <Glosses>
+                  <Gloss>Wofsi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:52:32" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= hombre; ◄ tribu de {L:Neftalí&lt;SDBH:נַפְתָּלִי&gt;}; ► padre de {L:Nahbi&lt;SDBH:נַחְבִּי&gt;}, espía</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vapsi</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{拿弗他利}支派；►探子{拿比}的父親</DefinitionShort>
+                <Glosses>
+                  <Gloss>縛西，《思》沃斐息</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{拿弗他利}支派；►探子{拿比}的父亲</DefinitionShort>
+                <Glosses>
+                  <Gloss>缚西，《思》沃斐息</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>00401301400012</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001908001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001909000000000" Lemma="וַשְׁנִי" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2059</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes>
+      <Note Caller="1" LanguageCode="en" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>01300601300012</Reference>
+        </References>
+        <Content>{A:HOTTP}-C {A:NJPS} | {A:RSV} {A:NIV} {A:NJB} {A:NRSV} {A:REB} {A:GNT} {A:CEV} וְהַשֵּׁנִי "and the second" = {L:שֵׁנִי&lt;SDBH:שֵׁנִי&gt;}</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="pt" LastEdited="" LastEditedBy="">
+        <References>
+          <Reference>01300601300012</Reference>
+        </References>
+        <Content>{A:ARA} {A:NVI} {A:BJ} {A:TEB} {A:BV} {A:BP} {A:CNBB} וְהַשֵּׁנִי "e o segundo”.</Content>
+      </Note>
+      <Note Caller="1" LanguageCode="sp" LastEdited="2021-05-20 09:33:24" LastEditedBy="tony">
+        <References>
+          <Reference>01300601300012</Reference>
+        </References>
+        <Content>BLA BJL BP "el segundo" = {L:שֵׁנִי&lt;SDBH:שֵׁנִי&gt;}</Content>
+      </Note>
+    </Notes>
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 09:46:47 administrator</Date>
+      <Date>2006-06-27 15:17:42 enio</Date>
+      <Date>2021-04-21 07:59:55 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001909001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001909001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2017-03-03 10:49:06" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= man; ◄ son of {L:Samuel&lt;SDBH:שְׁמוּאֵל&gt;}; tribe of {L:Levi&lt;SDBH:לֵוִי&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vashni</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:20:46" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= homme; ◄ fils de {L:Samuel&lt;SDBH:שְׁמוּאֵל&gt;}; tribu de {L:Lévi&lt;SDBH:לֵוִי&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Washni</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2021-05-20 09:33:24" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= hombre; ◄ hijo de {L:Samuel&lt;SDBH:שְׁמוּאֵל&gt;}; tribu de {L:Levi&lt;SDBH:לֵוִי&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vasni</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:16:21" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= um homem, ◄ filho de {L:Samuel&lt;SDBH:שְׁמוּאֵל&gt;}, da tribo de {L:Levi&lt;SDBH:לֵוִי&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vasni</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mwanaume; mwana wa Samweli; kabila la Lawi</DefinitionShort>
+                <Glosses>
+                  <Gloss>Abia</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{撒母耳}的兒子；{利未}支派</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦希尼，約珥，《思》約厄耳</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝男性；◄{撒母耳}的儿子；{利未}支派</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦希尼，约珥，《思》约厄耳</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>01300601301040{N:001}</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001909001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+  <Lexicon_Entry Id="001910000000000" Lemma="וַשְׁתִּי" Version="5" HasAramaic="false" InLXX="false" AlphaPos="">
+    <StrongCodes>
+      <Strong>H2060</Strong>
+    </StrongCodes>
+    <Authors>
+      <Author>Reinier de Blois</Author>
+    </Authors>
+    <AlternateLemmas />
+    <MainLinks />
+    <Notes />
+    <Localizations>
+      <Localization LanguageCode="pt">
+        <DateTime>x</DateTime>
+      </Localization>
+    </Localizations>
+    <Dates>
+      <Date>2005-07-03 18:41:29 administrator</Date>
+      <Date>2006-06-27 15:37:26 enio</Date>
+      <Date>2015-11-12 15:08:36 administrator</Date>
+    </Dates>
+    <ContributorNote />
+    <BaseForms>
+      <BaseForm Id="001910001000000">
+        <PartsOfSpeech>
+          <PartOfSpeech>np</PartOfSpeech>
+        </PartsOfSpeech>
+        <Inflections />
+        <Constructs />
+        <Etymologies />
+        <RelatedLemmas />
+        <RelatedNames />
+        <MeaningsOfName />
+        <CrossReferences />
+        <BaseFormLinks />
+        <LEXMeanings>
+          <LEXMeaning Id="001910001001000" IsBiblicalTerm="Y" EntryCode="" Indent="0">
+            <LEXDomains>
+              <LEXDomain>Names of People</LEXDomain>
+            </LEXDomains>
+            <LEXSubDomains />
+            <LEXForms />
+            <LEXValencies />
+            <LEXCollocations />
+            <LEXSynonyms />
+            <LEXAntonyms />
+            <LEXCrossReferences />
+            <LEXSenses>
+              <LEXSense LanguageCode="en" LastEdited="2015-11-12 15:08:36" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>= woman; ► wife of {L:Ahasuerus&lt;SDBH:אֲחַשְׁוֵרֹושׁ&gt;}, king of {L:Persia&lt;SDBH:פָּרַס&gt;}; was deposed as queen of Persia and replaced by {L:Esther&lt;SDBH:אֶסְתֵּר&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vashti</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="fr" LastEdited="2019-11-15 13:23:17" LastEditedBy="nicolas">
+                <DefinitionLong />
+                <DefinitionShort>= femme; ► femme d'{L:Assuérus&lt;SDBH:אֲחַשְׁוֵרֹושׁ&gt;}, roi de {L:Perse&lt;SDBH:פָּרַס&gt;}; reine de Perse destituée et remplacée par {L:Esther&lt;SDBH:אֶסְתֵּר&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vashti</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sp" LastEdited="2020-07-27 22:55:32" LastEditedBy="tony">
+                <DefinitionLong />
+                <DefinitionShort>= mujer; ► esposa de {L:Asuero&lt;SDBH:אֲחַשְׁוֵרֹושׁ&gt;}, rey de {L:Persia&lt;SDBH:פָּרַס&gt;}; fue depuesta como reina de Persia y reemplazada por {L:Esther&lt;SDBH:אֶסְתֵּר&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vasti</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="pt" LastEdited="2018-01-05 09:16:55" LastEditedBy="karl">
+                <DefinitionLong />
+                <DefinitionShort>= uma mulher; ► esposa de {L:Assuero&lt;SDBH:אֲחַשְׁוֵרֹושׁ&gt;}, rei da {L:Pérsia&lt;SDBH:פָּרַס&gt;}; foi deposta da posição de rainha e substituída por {L:Ester&lt;SDBH:אֶסְתֵּר&gt;}</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vasti</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="sw" LastEdited="" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>mwanamke; mke wa Ahasuero, mfalme wa Ashuru, aliondolewa kama malkia wa Ashuru na aliwekwa Esta</DefinitionShort>
+                <Glosses>
+                  <Gloss>Vashti</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zht" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝女性；►{波斯}王{亞哈隨魯}的妻子；她被廢黜王后的位分，後來{以斯帖}取代她的位置</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦實提，《思》瓦市提</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+              <LEXSense LanguageCode="zhs" LastEdited="2020-12-02 00:00:00" LastEditedBy="">
+                <DefinitionLong />
+                <DefinitionShort>＝女性；►{波斯}王{亚哈随鲁}的妻子；她被废黜王后的位分，后来{以斯帖}取代她的位置</DefinitionShort>
+                <Glosses>
+                  <Gloss>瓦实提，《思》瓦市提</Gloss>
+                </Glosses>
+                <Comments />
+              </LEXSense>
+            </LEXSenses>
+            <LEXIllustrations />
+            <LEXReferences>
+              <LEXReference>01700100900004</LEXReference>
+              <LEXReference>01700101100008</LEXReference>
+              <LEXReference>01700101200010</LEXReference>
+              <LEXReference>01700101500018</LEXReference>
+              <LEXReference>01700101600038</LEXReference>
+              <LEXReference>01700101700048</LEXReference>
+              <LEXReference>01700101900050</LEXReference>
+              <LEXReference>01700200100028</LEXReference>
+              <LEXReference>01700200400024</LEXReference>
+              <LEXReference>01700201700062</LEXReference>
+            </LEXReferences>
+            <LEXLinks />
+            <LEXImages />
+            <LEXVideos />
+            <LEXCoordinates />
+            <LEXCoreDomains />
+            <CONMeanings>
+              <ContextualMeaning Id="001910001001001" IsBiblicalTerm="" Indent="0">
+                <CONDomains>
+                  <CONDomain>NO DATA YET</CONDomain>
+                </CONDomains>
+                <CONForms />
+                <CONValencies />
+                <CONCollocations />
+                <CONSynonyms />
+                <CONAntonyms />
+                <CONCrossReferences />
+                <CONSenses />
+                <CONLinks />
+                <CONImages />
+                <CONReferences />
+              </ContextualMeaning>
+            </CONMeanings>
+          </LEXMeaning>
+        </LEXMeanings>
+      </BaseForm>
+    </BaseForms>
+  </Lexicon_Entry>
+</Lexicon>

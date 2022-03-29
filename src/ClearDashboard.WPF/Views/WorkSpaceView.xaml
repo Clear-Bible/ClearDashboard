@@ -4,19 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.ViewModels.Menus"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
-    x:Uid="Page_1"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     Title="WorkSpaceView"
+    d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Loaded="Page_Loaded"
@@ -25,58 +27,57 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel, IsDesignTimeCreatable=True}"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
-   <Page.Resources>
-        <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" x:Uid="converters:ActiveDocumentConverter_1" />
-        <system:Boolean x:Key="TRUE" x:Uid="system:Boolean_1">True</system:Boolean>
-        <system:Boolean x:Key="FALSE" x:Uid="system:Boolean_2">False</system:Boolean>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" x:Uid="BoolToVisibilityConverter_1" />
+    <Page.Resources>
+        <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
+        <system:Boolean x:Key="TRUE">True</system:Boolean>
+        <system:Boolean x:Key="FALSE">False</system:Boolean>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
 
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="Auto" />
-            <RowDefinition x:Uid="RowDefinition_2" Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel
-            x:Uid="StackPanel_1"
-            Grid.Row="0"
-            Orientation="Horizontal">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" MinWidth="250" />
+                <ColumnDefinition Width="*" MinWidth="250" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
             <Button
-                x:Uid="Button_1"
+                Grid.Column="0"
                 Margin="5,5,0,0"
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 BorderThickness="0"
                 Command="NavigationCommands.BrowseBack">
-                <materialDesign:PackIcon x:Uid="materialDesign:PackIcon_1" Kind="ChevronLeft" />
+                <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
-            <WrapPanel x:Uid="WrapPanel_1" Margin="5,0,0,0">
-                <Menu x:Uid="Menu_1" VerticalAlignment="Center">
-                    <MenuItem x:Uid="MenuItem_1" Header="Layout">
+            <WrapPanel Grid.Column="1">
+                <Menu VerticalAlignment="Center">
+                    <MenuItem Header="Layout">
                         <MenuItem
-                            x:Uid="MenuItem_2"
                             Click="MenuItem_Click"
                             Header="Load"
                             Icon=""
                             Tag="Load" />
                         <MenuItem
-                            x:Uid="MenuItem_3"
                             Click="MenuItem_Click"
                             Header="Save"
                             Icon=""
                             Tag="Save" />
                     </MenuItem>
                 </Menu>
-                <Menu x:Uid="Menu_2" VerticalAlignment="Center">
-                    <MenuItem x:Uid="MenuItem_4" Header="Windows">
+                <Menu VerticalAlignment="Center">
+                    <MenuItem Header="Windows">
                         <MenuItem
-                            x:Uid="MenuItem_5"
                             Click="MenuItem_Click"
                             Header="Biblical Terms"
                             Icon=""
@@ -84,31 +85,24 @@
                     </MenuItem>
                 </Menu>
                 <ComboBox
-                    x:Uid="ComboBox_1"
                     VerticalContentAlignment="Center"
                     DisplayMemberPath="Item1"
                     ItemsSource="{Binding Themes}"
                     SelectedItem="{Binding SelectedTheme}" />
-
-
             </WrapPanel>
 
 
-            <Menu x:Uid="Menu_3" ItemsSource="{Binding MenuItems}">
+            <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
-                    <Style x:Uid="Style_1" TargetType="{x:Type MenuItem}">
-                        <Setter x:Uid="Setter_1" Property="Icon" Value="{Binding IconSource}" />
-                        <Setter x:Uid="Setter_2" Property="Command" Value="{Binding Command}" />
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Icon" Value="{Binding IconSource}" />
+                        <Setter Property="Command" Value="{Binding Command}" />
                     </Style>
                 </Menu.ItemContainerStyle>
 
                 <Menu.ItemTemplate>
-                    <HierarchicalDataTemplate
-                        x:Uid="HierarchicalDataTemplate_1"
-                        DataType="{x:Type models:MenuItemViewModel}"
-                        ItemsSource="{Binding Path=MenuItems}">
+                    <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                         <TextBlock
-                            x:Uid="TextBlock_1"
                             Margin="0,10,0,0"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -117,13 +111,29 @@
                 </Menu.ItemTemplate>
             </Menu>
 
-        </StackPanel>
+            <TextBlock
+                Grid.Column="3"
+                Width="250"
+                Height="24"
+                Margin="0,0,29,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="LawnGreen"
+                Foreground="HotPink"
+                TextAlignment="Center">
+                Placeholder for Verse Ref Control
+            </TextBlock>
+
+            <TextBlock
+                Grid.Column="4"
+                Foreground="Pink"
+                Text="{Binding VerseRef}" />
+        </Grid>
 
 
         <!--  AnchorablesSource="{Binding Tools}" DocumentsSource="{Binding Files}"  -->
         <DockingManager
             x:Name="dockManager"
-            x:Uid="dockManager"
             Grid.Row="1"
             ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
             AllowMixedOrientation="True"
@@ -131,78 +141,78 @@
             DocumentsSource="{Binding Files}"
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
-                <panes:PanesTemplateSelector x:Uid="userControls:PanesTemplateSelector_1">
+                <panes:PanesTemplateSelector>
                     <!--  DOCUMENTS  -->
                     <panes:PanesTemplateSelector.ConcordanceViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_1">
-                            <local:Concordance x:Uid="local:Concordance_1" />
+                        <DataTemplate>
+                            <local:Concordance />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.ConcordanceViewTemplate>
 
                     <panes:PanesTemplateSelector.DashboardViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_2">
-                            <local:DashboardView x:Uid="local:Dashboard_1" />
+                        <DataTemplate>
+                            <local:DashboardView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.DashboardViewTemplate>
 
                     <panes:PanesTemplateSelector.AlignmentToolViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_3">
-                            <local:AlignmentTool x:Uid="local:AlignmentTool_1" />
+                        <DataTemplate>
+                            <local:AlignmentTool />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.AlignmentToolViewTemplate>
 
                     <panes:PanesTemplateSelector.TreeDownViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_4">
-                            <local:TreeDownView x:Uid="local:TreeDown_1" />
+                        <DataTemplate>
+                            <local:TreeDownView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.TreeDownViewTemplate>
 
                     <panes:PanesTemplateSelector.StartPageViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_5">
-                            <local:StartPageView x:Uid="local:StartPage_1" />
+                        <DataTemplate>
+                            <local:StartPageView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.StartPageViewTemplate>
 
                     <!--  TOOLS  -->
                     <panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_6">
-                            <local:BiblicalTerms x:Uid="local:BiblicalTerms_1" />
+                        <DataTemplate>
+                            <local:BiblicalTerms />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
                     <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_7">
-                            <local:WordMeaningsView x:Uid="local:WordMeanings_1" />
+                        <DataTemplate>
+                            <local:WordMeaningsView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
 
                     <panes:PanesTemplateSelector.SourceContextViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_8">
-                            <local:SourceContextView x:Uid="local:SourceContext_1" />
+                        <DataTemplate>
+                            <local:SourceContextView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.SourceContextViewTemplate>
 
                     <panes:PanesTemplateSelector.TargetContextViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_9">
-                            <local:TargetContextView x:Uid="local:TargetContext_1" />
+                        <DataTemplate>
+                            <local:TargetContextView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.TargetContextViewTemplate>
 
                     <panes:PanesTemplateSelector.NotesViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_10">
-                            <local:NotesView x:Uid="local:Notes_1" />
+                        <DataTemplate>
+                            <local:NotesView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.NotesViewTemplate>
 
                     <panes:PanesTemplateSelector.PinsViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_11">
-                            <local:PinsView x:Uid="local:PINS_1" />
+                        <DataTemplate>
+                            <local:PinsView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.PinsViewTemplate>
 
                     <panes:PanesTemplateSelector.TextCollectionViewTemplate>
-                        <DataTemplate x:Uid="DataTemplate_12">
-                            <local:TextCollectionsView x:Uid="local:TextCollections_1" />
+                        <DataTemplate>
+                            <local:TextCollectionsView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.TextCollectionViewTemplate>
 
@@ -210,42 +220,39 @@
             </DockingManager.LayoutItemTemplateSelector>
 
             <DockingManager.LayoutItemContainerStyleSelector>
-                <panes:PanesStyleSelector x:Uid="userControls:PanesStyleSelector_1">
+                <panes:PanesStyleSelector>
                     <!--  DOCUMENTS  -->
                     <panes:PanesStyleSelector.DocumentStyle>
-                        <Style x:Uid="Style_2" TargetType="{x:Type LayoutItem}">
-                            <Setter x:Uid="Setter_3" Property="Title" Value="{Binding Model.Title}" />
-                            <Setter x:Uid="Setter_4" Property="IconSource" Value="{Binding Model.IconSource}" />
-                            <Setter x:Uid="Setter_5" Property="ContentId" Value="{Binding Model.ContentId}" />
+                        <Style TargetType="{x:Type LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
                     </panes:PanesStyleSelector.DocumentStyle>
 
                     <!--  TOOLS  -->
                     <panes:PanesStyleSelector.ToolStyle>
-                        <Style x:Uid="Style_3" TargetType="{x:Type LayoutAnchorableItem}">
-                            <Setter x:Uid="Setter_6" Property="Title" Value="{Binding Model.Title}" />
-                            <Setter x:Uid="Setter_7" Property="CanClose" Value="True" />
-                            <Setter x:Uid="Setter_8" Property="IconSource" Value="{Binding Model.IconSource}" />
-                            <Setter x:Uid="Setter_9" Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource FALSE}}" />
-                            <Setter x:Uid="Setter_10" Property="ContentId" Value="{Binding Model.ContentId}" />
-                            <Setter x:Uid="Setter_11" Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
-                            <Setter x:Uid="Setter_12" Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
+                        <Style TargetType="{x:Type LayoutAnchorableItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="CanClose" Value="True" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
+                            <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource FALSE}}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
                         </Style>
                     </panes:PanesStyleSelector.ToolStyle>
 
                 </panes:PanesStyleSelector>
             </DockingManager.LayoutItemContainerStyleSelector>
             <DockingManager.LayoutUpdateStrategy>
-                <panes:LayoutInitializer x:Uid="userControls:LayoutInitializer_1" />
+                <panes:LayoutInitializer />
             </DockingManager.LayoutUpdateStrategy>
 
-            <LayoutRoot x:Uid="LayoutRoot_1">
-                <LayoutPanel x:Uid="LayoutPanel_1" Orientation="Vertical">
-                    <LayoutDocumentPane x:Uid="LayoutDocumentPane_1" />
-                    <LayoutAnchorablePane
-                        Name="ToolsPane"
-                        x:Uid="ToolsPane"
-                        DockHeight="150" />
+            <LayoutRoot>
+                <LayoutPanel Orientation="Vertical">
+                    <LayoutDocumentPane />
+                    <LayoutAnchorablePane Name="ToolsPane" DockHeight="150" />
                 </LayoutPanel>
             </LayoutRoot>
         </DockingManager>

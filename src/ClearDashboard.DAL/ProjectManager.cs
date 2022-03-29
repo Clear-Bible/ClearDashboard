@@ -16,6 +16,25 @@ namespace ClearDashboard.DataAccessLayer
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
 
+        public bool IsPipeConnected { get; set; }
+
+        public enum PipeAction
+        {
+            OnConnected,
+            OnDisconnected,
+
+            SendText,
+
+            GetBibilicalTermsAll,
+            GetBibilicalTermsProject,
+            GetSourceVerses,
+            GetTargetVerses,
+            GetNotes,
+            GetProject,
+            GetCurrentVerse,
+        }
+
+
         #endregion
 
         #region Events
@@ -50,6 +69,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void OnClosing()
         {
+            IsPipeConnected = false;
             _namedPipesClient.Dispose();
         }
 
@@ -60,7 +80,18 @@ namespace ClearDashboard.DataAccessLayer
 
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
-            RaisePipesChangedEvent(args.PM);
+            PipeMessage pm = args.PM;
+
+            if (pm.Action == ActionType.OnConnected)
+            {
+                this.IsPipeConnected = true;
+            } 
+            else if (pm.Action == ActionType.OnDisconnected)
+            {
+                this.IsPipeConnected= false;
+            }
+
+            RaisePipesChangedEvent(pm);
         }
 
         public void GetParatextUserName()
@@ -77,9 +108,43 @@ namespace ClearDashboard.DataAccessLayer
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
 
-        public async Task SendMessage(string message)
+        public async Task SendPipeMessage(PipeAction action, string text = "")
         {
-            message = message.Trim() + " through the DAL";
+            PipeMessage message = new PipeMessage();
+            switch (action)
+            {
+                case PipeAction.OnConnected:
+                    message.Action = ActionType.OnConnected;
+                    break;
+                case PipeAction.OnDisconnected:
+                    message.Action = ActionType.OnDisconnected;
+                    break;
+                case PipeAction.GetCurrentVerse:
+                    message.Action = ActionType.GetCurrentVerse;
+                    break;
+                case PipeAction.SendText:
+                    message.Action = ActionType.SendText;
+                    message.Text = text;
+                    break;
+                case PipeAction.GetBibilicalTermsAll:
+                    message.Action = ActionType.GetBibilicalTermsAll;
+                    break;
+                case PipeAction.GetBibilicalTermsProject:
+                    message.Action = ActionType.GetBibilicalTermsProject;
+                    break;
+                case PipeAction.GetSourceVerses:
+                    message.Action = ActionType.GetSourceVerses;
+                    break;
+                case PipeAction.GetTargetVerses:
+                    message.Action= ActionType.GetTargetVerses;
+                    break;
+                case PipeAction.GetNotes:
+                    message.Action = ActionType.GetNotes;
+                    break;
+                case PipeAction.GetProject:
+                    message.Action = ActionType.GetProject;
+                    break;
+            }
 
             await _namedPipesClient.WriteAsync(message);
         }

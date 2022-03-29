@@ -51,7 +51,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private bool _connected;
-
         public bool Connected
         {
             get { return _connected; }

@@ -1,22 +1,22 @@
-﻿//using ClearDashboard.NamedPipes.Models;
+﻿using Serilog;
 using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using H.Formatters;
 using H.Pipes;
-using Microsoft.Win32;
-//using NamedPipes;
 using Newtonsoft.Json;
 using Paratext.PluginInterfaces;
+using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using H.Formatters;
-using Pipes_Shared;
+using ClearDashboard.Pipes_Shared.Models;
+using Pipes_Shared.Models;
+using Serilog.Core;
 
 namespace ClearDashboardPlugin
 {
@@ -30,12 +30,15 @@ namespace ClearDashboardPlugin
         private IReadOnlyList<IProjectNote> m_noteList;
 
         private IWindowPluginHost m_host;
-        private IBiblicalTermList m_list;
+        private List<BiblicalTermsData> _allTermsList;
         IPluginChildWindow m_parent;
 
         private ListType ProjectList = new ListType("Project", true, BiblicalTermListType.All);
         private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
         private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
+
+        private IBiblicalTermList m_listProject;
+        private IBiblicalTermList m_listAll;
 
         ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
@@ -60,6 +63,7 @@ namespace ClearDashboardPlugin
             Green,
             Blue,
             Orange,
+            Purple,
         }
 
         #endregion
@@ -71,9 +75,19 @@ namespace ClearDashboardPlugin
         {
             InitializeComponent();
 
-            // set the version information
+            // configure serilog
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .WriteTo.File("Plugin.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            // set instance to global logger
+            Log.Logger = log;
+
+
+            // get the version information
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            lblVersion.Text = string.Format("Plugin Version: {0}", version);
+            lblVersion.Text = string.Format($"Plugin Version: {version}");
 
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
@@ -108,12 +122,14 @@ namespace ClearDashboardPlugin
 
             //if (showErrorMessage)
             //{
-            //    // TODO Do some alert now that ClearSuite is NOT installed
+            //    // TODO Do some alert now that ClearDashboard is NOT installed
             //}
 
 
             Load += OnLoad;
 
+            // use a customized formatter for receiving classes so that the pipes knows
+            // how to decode the payload
             var formatter = new BinaryFormatter();
             formatter.InternalFormatter.Binder = new CustomizedBinder();
             _PipeServer = new PipeServer<PipeMessage>(PipeName, formatter: formatter);
@@ -129,6 +145,7 @@ namespace ClearDashboardPlugin
 
                 try
                 {
+                    // send notice to client that we are connected
                     AppendText(MsgColor.Green, "Sending OnConnected Message to Client");
                     await args.Connection.WriteAsync(new PipeMessage
                     {
@@ -136,6 +153,11 @@ namespace ClearDashboardPlugin
                         Text = "Connected to Paratext",
                         Payload = null
                     }).ConfigureAwait(false);
+
+
+                    // send the current verse
+                    await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.OnConnected }).ConfigureAwait(false);
+                   
                 }
                 catch (Exception exception)
                 {
@@ -149,11 +171,11 @@ namespace ClearDashboardPlugin
 
                 AppendText(MsgColor.Green, $"{args.Connection.PipeName} disconnected!");
             };
-            _PipeServer.MessageReceived += (sender, args) =>
+            _PipeServer.MessageReceived += async (sender, args) =>
             {
                 if (args.Message != null)
                 {
-                    OnMessageReceivedAsync(args.Message);
+                    await OnMessageReceivedAsync(args.Message).ConfigureAwait(false);
                 }
             };
 
@@ -162,6 +184,15 @@ namespace ClearDashboardPlugin
                 OnExceptionOccurred(args.Exception);
             };
         }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region pipes section
 
         /// <summary>
         /// A custom serialization binder to make sure that we are processing the correct
@@ -214,12 +245,127 @@ namespace ClearDashboardPlugin
             await _PipeServer.DisposeAsync().ConfigureAwait(false);
         }
 
-        private void OnMessageReceivedAsync(PipeMessage message)
+        private async Task OnMessageReceivedAsync(PipeMessage message)
         {
+            AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
+            
+            //PipeMessage msg = null;
+            //try
+            //{
+            //    msg = JsonConvert.DeserializeObject<PipeMessage>(e.String);
+            //}
+            //catch (Exception exception)
+            //{
+            //    msg = null;
+            //    Log.Logger.Error(exception.Message);
+            //    return;
+            //}
+
+
+            // Do the command's action
             switch (message.Action)
             {
+                case ActionType.GetCurrentVerse:
+                    // send the current BCV location of Paratext
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.CurrentVerse,
+                        Text = m_verseRef.BBBCCCVVV.ToString(),
+                    }).ConfigureAwait(false);
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    break;
+                case ActionType.CurrentVerse:
+
+                    break;
                 case ActionType.SendText:
-                    AppendText(MsgColor.Orange, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                    AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                    break;
+                case ActionType.GetBibilicalTermsAll:
+
+                    if (_allTermsList == null)
+                    {
+                        BibilicalTerms btAll = new BibilicalTerms(AllList, m_project, m_host);
+                        _allTermsList = btAll.ProcessBiblicalTerms(m_project);
+                    }
+
+                    var payloadBTAll = JsonConvert.SerializeObject(_allTermsList, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.SetBiblicalTerms,
+                        Text = "Project Object",
+                        Payload = payloadBTAll
+                    }).ConfigureAwait(false);
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    break;
+                case ActionType.GetBibilicalTermsProject:
+                    BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
+                    var btList = bt.ProcessBiblicalTerms(m_project);
+
+                    var payloadBT = JsonConvert.SerializeObject(btList, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.SetBiblicalTerms,
+                        Text = "Project Object",
+                        Payload = payloadBT
+                    }).ConfigureAwait(false);
+                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    break;
+                case ActionType.GetTargetVerses:
+                    await GetUSXScripture().ConfigureAwait(false);
+                    break;
+                case ActionType.GetNotes:
+                    //await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
+                    break;
+                case ActionType.GetProject:
+                    AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
+                    await WriteMessageToPipeAsync(message).ConfigureAwait(false);
+                    AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
+                    break;
+                case ActionType.OnConnected:
+                    AppendText(MsgColor.Green, "ClearDashboard Connected");
+
+                    // send the current BCV location of Paratext
+                    var msgOut = new PipeMessage
+                    {
+                        Action = ActionType.CurrentVerse,
+                        Text = m_verseRef.BBBCCCVVV.ToString(),
+                    };
+
+                    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
+                    AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef.ToString()}");
+
+                    // get the paratext project info and send that over
+                    Project proj = BuildProjectObject();
+
+                    var payload = JsonConvert.SerializeObject(proj, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                    await OnMessageReceivedAsync(new PipeMessage
+                    {
+                        Action = ActionType.GetProject,
+                        Text = "Project Object",
+                        Payload = payload
+                    });
+                    break;
+                case ActionType.OnDisconnected:
+                    AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+
+                    await Task.Delay(2000).ConfigureAwait(true);
+
+                    btnRestart_Click(null, null);
                     break;
                 default:
                     AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
@@ -227,6 +373,17 @@ namespace ClearDashboardPlugin
             }
         }
 
+        private async Task WriteMessageToPipeAsync(PipeMessage msgOut)
+        {
+            try
+            {
+                await _PipeServer.WriteAsync(msgOut).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                OnExceptionOccurred(exception);
+            }
+        }
 
         private async void OnLoad(object sender, EventArgs eventArgs)
         {
@@ -235,7 +392,6 @@ namespace ClearDashboardPlugin
                 AppendText(MsgColor.Green, "PipeServer starting...");
                 _ = new PipeMessage();
                 await _PipeServer.StartAsync().ConfigureAwait(false);
-
                 AppendText(MsgColor.Green, "PipeServer is started!");
             }
             catch (Exception exception)
@@ -247,6 +403,8 @@ namespace ClearDashboardPlugin
 
         private void OnExceptionOccurred(Exception exception)
         {
+            // write to Serilog
+            Log.Error($"OnLoad {exception.Message}");
             AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
         }
 
@@ -262,10 +420,9 @@ namespace ClearDashboardPlugin
             }));
         }
 
-
         #endregion
 
-        #region overrides - standard functions
+        #region Paratext overrides - standard functions
 
         protected override void OnParentChanged(EventArgs e)
         {
@@ -294,7 +451,7 @@ namespace ClearDashboardPlugin
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
             parent.ProjectChanged += ProjectChanged;
-            //parent.VerseRefChanged += VerseRefChanged;
+            parent.VerseRefChanged += VerseRefChanged;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -302,8 +459,6 @@ namespace ClearDashboardPlugin
             m_host = host;
             m_project = parent.CurrentState.Project;
             m_parent = parent;
-
-            //parent.VerseRefChanged += VerseRefChanged;
         }
 
 
@@ -345,17 +500,17 @@ namespace ClearDashboardPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        //private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        //{
+        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        {
 
-        //    if (newReference != m_verseRef)
-        //    {
-        //        m_verseRef = newReference;
-        //        await ShowUSXScripture().ConfigureAwait(true);
-        //    }
-        //}
+            if (newReference != m_verseRef)
+            {
+                m_verseRef = newReference;
+                await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.CurrentVerse }).ConfigureAwait(false);
+            }
+        }
 
-        #endregion overrides - standard functions
+        #endregion Paratext overrides - standard functions
 
 
         /// <summary>
@@ -365,10 +520,10 @@ namespace ClearDashboardPlugin
         /// <param name="e"></param>
         //private async void ServerPipeOnDataReceived(object sender, PipeEventArgs e)
         //{
-        //    NamedPipeMessage msg = null;
+        //    PipeMessage msg = null;
         //    try
         //    {
-        //        msg = JsonConvert.DeserializeObject<NamedPipeMessage>(e.String);
+        //        msg = JsonConvert.DeserializeObject<PipeMessage>(e.String);
         //    }
         //    catch (Exception exception)
         //    {
@@ -380,11 +535,11 @@ namespace ClearDashboardPlugin
         //    // Do the command's action
         //    switch (msg.actionType)
         //    {
-        //        case "GetBibilicalTerms":
-        //            await GetBibilicalTerms(msg);
+        //        case "BibilicalTerms":
+        //            await BibilicalTerms(msg);
         //            break;
         //        case "GetTargetVerses":
-        //            await ShowUSXScripture().ConfigureAwait(false);
+        //            await GetUSXScripture().ConfigureAwait(false);
         //            break;
         //        case "GetNotes":
         //            await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
@@ -397,11 +552,11 @@ namespace ClearDashboardPlugin
         //            var msgSend = msgOut.CreateMessage();
 
         //            await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}",m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
+        //            AppendText(MsgColor.Green, String.Format($"Sent Current Verse: {0} {1}:{2}", m_verseRef.BookCode, m_verseRef.ChapterNum, m_verseRef.VerseNum));
 
-        //            await ShowUSXScripture().ConfigureAwait(false);
+        //            await GetUSXScripture().ConfigureAwait(false);
 
-        //            await GetBibilicalTerms(msg);
+        //            await BibilicalTerms(msg);
         //            break;
         //        case "OnDisconnected":
         //            AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
@@ -413,14 +568,14 @@ namespace ClearDashboardPlugin
         //    }
         //}
 
-        //private async Task GetBibilicalTerms(NamedPipeMessage msg)
+        //private async Task BibilicalTerms(NamedPipeMessage msg)
         //{
         //    _logger.Log(LogLevel.Info, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
         //    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: " + msg.actionType.ToString());
         //    string dataPayload = "";
 
         //    await Task.Run(() => { 
-        //        GetBibilicalTerms bt = new GetBibilicalTerms(ProjectList, m_project, m_host);
+        //        BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
         //        List<BiblicalTermsData> biblicalTermList = bt.ProcessBiblicalTerms(m_project);
 
         //        dataPayload = JsonConvert.SerializeObject(biblicalTermList, Formatting.None,
@@ -455,6 +610,54 @@ namespace ClearDashboardPlugin
         //    AppendText(MsgColor.Blue, "ServerPipeOnDataReceived: msgSend sent");
         //}
 
+        #region Methods
+
+        /// <summary>
+        /// Build up a project object to send over.  This is only a small portion
+        /// of what is available in the m_project object
+        /// </summary>
+        /// <returns></returns>
+        private Project BuildProjectObject()
+        {
+            Project project = new Project();
+            project.ID = m_project.ID;
+            project.LanguageName = m_project.LanguageName;
+            project.ShortName = m_project.ShortName;
+            project.LongName = m_project.LongName;
+            foreach (var users in m_project.NonObserverUsers)
+            {
+                project.NonObservers.Add(users.Name);
+            }
+
+            foreach (var book in m_project.AvailableBooks)
+            {
+                project.AvailableBooks.Add(new BookInfo
+                {
+                    Code = book.Code,
+                    InProjectScope = book.InProjectScope,
+                    Number = book.Number,
+                });
+            }
+
+            project.Language = new ScrLanguageWrapper
+            {
+                FontFamily = m_project.Language.Font.FontFamily,
+                IsRtol = m_project.Language.IsRtoL,
+            };
+
+            switch (m_project.Type)
+            {
+                case Paratext.PluginInterfaces.ProjectType.Standard:
+                    project.Type = Project.ProjectType.Standard;
+                    break;
+                default:
+                    project.Type = Project.ProjectType.NotSelected;
+                    break;
+            }
+
+            return project;
+        }
+
         /// <summary>
         /// Does a registry check to ensure that ClearSuite is reachable
         /// </summary>
@@ -477,106 +680,101 @@ namespace ClearDashboardPlugin
         //    return false;
         //}
 
-        //private async Task GetNoteList(string actionCommand, string jsonPayload)
-        //{
-        //    var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
+        private async Task GetNoteList(string actionCommand, string jsonPayload)
+        {
+            var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
 
-        //    if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
-        //    {
-        //        m_booknum = m_project.AvailableBooks[data.BookID].Number;
-        //        int chapter = data.ChapterID;
-        //        // include resolved notes
-        //        bool onlyUnresolved = !data.IncludeResolved;
-        //        m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
-        //        AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
+            if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
+            {
+                m_booknum = m_project.AvailableBooks[data.BookID].Number;
+                int chapter = data.ChapterID;
+                // include resolved notes
+                bool onlyUnresolved = !data.IncludeResolved;
+                m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
+                AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
 
-        //        var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
-        //            new JsonSerializerSettings()
-        //            {
-        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        //                TypeNameHandling = TypeNameHandling.Auto,
-        //                NullValueHandling = NullValueHandling.Ignore,
-        //                Formatting = Formatting.None,
-        //            });
+                var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        Formatting = Formatting.None,
+                    });
 
-        //        try
-        //        {
-        //            var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
-        //            {
-        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        //                TypeNameHandling = TypeNameHandling.Auto,
-        //                NullValueHandling = NullValueHandling.Ignore,
-        //                Formatting = Formatting.None,
-        //            });
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            AppendText(MsgColor.Red, e.Message);
-        //        }
+                try
+                {
+                    var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        Formatting = Formatting.None,
+                    });
 
-        //        NamedPipeMessage msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetNotesObject, "", dataPayload);
-        //        var msgSend = msgOut.CreateMessage();
+                    PipeMessage msgOut = new PipeMessage
+                    {
+                        Action = ActionType.SetNotesObject,
+                        Text = "Notes Object",
+                        Payload = dataPayload
+                    };
 
-        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
+                    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    AppendText(MsgColor.Red, e.Message);
+                }
+            }
+        }
 
-        //        try
-        //        {
-        //            await _PipeServer.WriteAsync(new PipeMessage
-        //            {
-        //                Action = NamedPipeMessage.ActionType.SendText,
-        //                Text = "Notes Sent"
-        //            }).ConfigureAwait(false);
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            OnExceptionOccurred(exception);
-        //        }
+        /// <summary>
+        /// Retrieves the USX & USFM for the project passing in the current book number
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetUSXScripture()
+        {
+            var usx = m_project.GetUSX(m_verseRef.BookNum);
+            if (usx != null)
+            {
+                var dataPayload = JsonConvert.SerializeObject(usx, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
 
-        //    }
-        //}
+                await WriteMessageToPipeAsync(new PipeMessage
+                {
+                    Action= ActionType.SetUSX,
+                    Text = "Set USX",
+                    Payload= dataPayload,
+                }).ConfigureAwait(false);
+            }
 
-        //private async Task ShowUSXScripture()
-        //{
-        //    var temp = m_project.GetUSX(m_verseRef.BookNum);
-        //    if (temp != null)
-        //    {
-        //        var dataPayload = JsonConvert.SerializeObject(temp, Formatting.None,
-        //            new JsonSerializerSettings()
-        //            {
-        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //            });
+            var usfm = m_project.GetUSFM(m_verseRef.BookNum);
+            if (usfm != null)
+            {
+                var dataPayload = JsonConvert.SerializeObject(usfm, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
 
-        //        //var msgOut = new NamedPipeMessage(NamedPipeMessage.ActionType.SetTargetVerseText, m_verseRef.BBBCCCVVV.ToString(), dataPayload);
-        //        //var msgSend = msgOut.CreateMessage();
-
-        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
-
-        //        //_logger.Log(LogLevel.Info, "VerseTextSent: " + NamedPipeMessage.ActionType.SetBiblicalTerms.ToString());
-
-        //        //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
-        //        //try
-        //        //{
-        //        //    await _PipeServer.WriteAsync(new PipeMessage
-        //        //    {
-        //        //        Action = NamedPipeMessage.ActionType.SendText,
-        //        //        Text = "Verse Text Sent"
-        //        //    }).ConfigureAwait(false);
-        //        //}
-        //        //catch (Exception exception)
-        //        //{
-        //        //    OnExceptionOccurred(exception);
-        //        //}
-
-        //        AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
-        //    }
-        //}
+                await WriteMessageToPipeAsync(new PipeMessage
+                {
+                    Action = ActionType.SetUSFM,
+                    Text = "Set USFM",
+                    Payload = dataPayload,
+                }).ConfigureAwait(false);
+            }
+        }
 
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
         /// <param name="sError"></param>
         /// <param name="color"></param>
-        internal void AppendText(string sError, StringBuilder sb)
+        private void AppendText(string sError, StringBuilder sb)
         {
             //check for threading issues
             if (this.InvokeRequired)
@@ -596,7 +794,7 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sMsg"></param>
         /// <param name="color"></param>
-        internal void AppendText(MsgColor color, string sMsg)
+        private void AppendText(MsgColor color, string sMsg)
         {
             //check for threading issues
             if (this.InvokeRequired)
@@ -620,7 +818,13 @@ namespace ClearDashboardPlugin
                     case MsgColor.Orange:
                         cRTB.AppendText(sMsg, Color.Orange, this.rtb);
                         break;
+                    case MsgColor.Purple:
+                        cRTB.AppendText(sMsg, Color.Purple, this.rtb);
+                        break;
                 }
+
+                // write to Serilog
+                Log.Information(sMsg);
             }
         }
 
@@ -668,11 +872,6 @@ namespace ClearDashboardPlugin
             //    });
 
             //_ = GetNoteList("", dataPayload);
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-
         }
 
 
@@ -745,11 +944,13 @@ namespace ClearDashboardPlugin
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
 
-            //PipeMessage msgOut = new PipeMessage(ActionType.SetTargetVerseText, "", dataPayload);
+            //PipeMessage msgOut = new PipeMessage(ActionType.SetUSX, "", dataPayload);
             //var msgSend = msgOut.CreateMessage();
             //AppendText(MsgColor.Blue, "VerseTextSent: msgSend created");
             //await _serverPipe.WriteString(msgSend).ConfigureAwait(false);
             //AppendText(MsgColor.Blue, "VerseTextSent: msgSend sent");
         }
+
+        #endregion
     }
 }
