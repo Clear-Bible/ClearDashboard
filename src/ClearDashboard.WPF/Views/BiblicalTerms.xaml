@@ -191,7 +191,7 @@
                             <TextBlock
                                 Width="20"
                                 Height="15"
-                                Text="{Binding Renderings.Count}" />
+                                Text="{Binding RenderingCount}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -255,12 +255,14 @@
         </Border>
 
         <Border
+            x:Name="LowerBorder"
             Grid.Row="3"
             Margin="5"
             BorderBrush="{DynamicResource PrimaryHueLightBrush}"
             BorderThickness="1">
             <ListView
                 x:Name="SelectedItemVerses"
+                MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                 Margin="5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding SelectedItemVerses}">
@@ -296,7 +298,10 @@
                         <GridViewColumn Width="Auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <helpers:BindableTextBlock Width="Auto" TextWrapping="Wrap" InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}" />
+                                    <helpers:BindableTextBlock
+                                        Width="Auto"
+                                        InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
+                                        TextWrapping="Wrap" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

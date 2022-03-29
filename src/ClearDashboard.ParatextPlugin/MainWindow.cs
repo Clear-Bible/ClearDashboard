@@ -30,7 +30,7 @@ namespace ClearDashboardPlugin
         private IReadOnlyList<IProjectNote> m_noteList;
 
         private IWindowPluginHost m_host;
-        private List<BiblicalTermsData> _allTermsList;
+        private List<BiblicalTermsData> _TermsList;
         IPluginChildWindow m_parent;
 
         private ListType ProjectList = new ListType("Project", true, BiblicalTermListType.All);
@@ -282,13 +282,13 @@ namespace ClearDashboardPlugin
                     break;
                 case ActionType.GetBibilicalTermsAll:
 
-                    if (_allTermsList == null)
+                    if (_TermsList == null)
                     {
                         BibilicalTerms btAll = new BibilicalTerms(AllList, m_project, m_host);
-                        _allTermsList = btAll.ProcessBiblicalTerms(m_project);
+                        _TermsList = btAll.ProcessBiblicalTerms(m_project);
                     }
 
-                    var payloadBTAll = JsonConvert.SerializeObject(_allTermsList, Formatting.None,
+                    var payloadBTAll = JsonConvert.SerializeObject(_TermsList, Formatting.None,
                         new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore

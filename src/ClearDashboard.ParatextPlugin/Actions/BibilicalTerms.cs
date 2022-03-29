@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ClearDashboard.ParatextPlugin.Models;
 
 namespace ClearDashboard.ParatextPlugin.Actions
 {
@@ -140,6 +141,32 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 bterm.References = VerseRef;
                 bterm.ReferencesLong = VerseRefLong;
                 bterm.ReferencesListText = VerseRefText;
+
+
+                // check the renderings to see if they are completed
+                List<BiblicalTermsCount> Counts = new List<BiblicalTermsCount> {};
+                foreach (var verseRef in VerseRef)
+                {
+                    Counts.Add(new BiblicalTermsCount
+                    {
+                        VerseID = verseRef,
+                        Found = false
+                    });
+                }
+                // loop through each text testing to see if any rendering matches
+                for (int i = 0; i < VerseRefText.Count; i++)
+                {
+                    foreach (var render in renderingArray)
+                    {
+                        if (VerseRefText[i].IndexOf(render) > -1)
+                        {
+                            Counts[i].Found = true;
+                        }
+                    }
+                }
+                var count = Counts.Where(c => c.Found == true);
+                bterm.RenderingCount = count.Count();
+
                 btList.Add(bterm);
             }
 

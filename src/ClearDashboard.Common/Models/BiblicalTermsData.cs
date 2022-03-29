@@ -152,7 +152,7 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _renderingString;
-
+        [JsonProperty]
         public string RenderingString
         {
             get { return _renderingString; }
@@ -163,7 +163,17 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-
+        private int _renderingCount;
+        [JsonProperty]
+        public int RenderingCount
+        {
+            get { return _renderingCount; }
+            set
+            {
+                _renderingCount = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

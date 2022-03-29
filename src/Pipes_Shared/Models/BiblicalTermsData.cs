@@ -121,7 +121,7 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _renderingString;
-
+        [JsonProperty]
         public string RenderingString
         {
             get { return _renderingString; }
@@ -130,6 +130,18 @@ namespace ClearDashboard.Pipes_Shared.Models
                 SetProperty(ref _renderingString, value);
             }
         }
+
+        private int _renderingCount;
+        [JsonProperty]
+        public int RenderingCount
+        {
+            get { return _renderingCount; }
+            set
+            {
+                SetProperty(ref _renderingCount, value);
+            }
+        }
+
 
     }
 
