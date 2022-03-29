@@ -1,12 +1,13 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pipes_Shared;
+using SIL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,12 +16,9 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using SIL.Extensions;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -40,7 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ILogger Logger { get; set; }
         public INavigationService NavigationService { get; set; }
-        public ProjectManager _DAL { get; set; }
+        public ProjectManager ProjectManager { get; set; }
         private string _currentVerse = "";
 
         //Dictionary<string, object> filters = new Dictionary<string, object>();
@@ -101,11 +99,11 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
                     {
-                        _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject);
+                        ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject);
                     }
                     else
                     {
-                        _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll);
+                        ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll);
                     }
 
                     _lastSelectedBTtype = _selectedBiblicalTermsType;
@@ -197,13 +195,13 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             this.NavigationService = navigationService;
             this.Logger = logger;
-            this._DAL = dal;
+            this.ProjectManager = dal;
 
             this.Title = "🕮 BIBLICAL TERMS";
             this.ContentId = "BIBLICALTERMS";
             this.DockSide = EDockSide.Left;
 
-            _DAL.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             SetupSemanticDomains();
 
@@ -215,7 +213,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public async void HandleEventAsync(object sender, NamedPipesClient.PipeEventArgs args)
+        public async void HandleEventAsync(object sender, PipeEventArgs args)
         {
             if (args == null) return;
 
@@ -227,7 +225,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await _DAL.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
+                        await ProjectManager.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
                             .ConfigureAwait(false);
                     }
 
@@ -295,7 +293,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            _DAL.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             Debug.WriteLine("Dispose");
             base.Dispose(disposing);
@@ -465,7 +463,7 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         public async void ReloadBiblicalTerms()
         {
-            if (_DAL.IsPipeConnected)
+            if (ProjectManager.IsPipeConnected)
             {
                 await Task.Run(() =>
                 {
@@ -473,7 +471,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }).ConfigureAwait(false);
                 System.Windows.Forms.Application.DoEvents();
 
-                await _DAL.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
+                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
             }
         }
 

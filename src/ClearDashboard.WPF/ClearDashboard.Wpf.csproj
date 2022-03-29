@@ -36,6 +36,7 @@
 		<Folder Include="DB\" />
 		<Folder Include="Fonts\" />
 		<Folder Include="Stores\" />
+		<Folder Include="Themes\" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -28,7 +28,7 @@
         <Style x:Key="BigButton" TargetType="Button">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Height" Value="80" />
-            <Setter Property="Width" Value="65" />
+            <Setter Property="Width" Value="Auto" />
             <Setter Property="Foreground" Value="{DynamicResource OrangeLightBrush}" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Template">
@@ -67,28 +67,30 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Margin="5">
-            <helpers:NavButton
+            <Button
                 x:Name="CreateNewProject"
-                Width="128"
-                Height="128"
-                ImageSource="/Resources/NewProject_Icon_128.png"
-                Text="{helpers:Loc Landing_newproject}" />
-            <helpers:NavButton
+                Margin="10,0,10,0"
+                Content="{helpers:Loc Landing_newproject}"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
+                </Button.Tag>
+            </Button>
+
+            <Button
                 x:Name="Settings"
-                Width="128"
-                Height="128"
-                ImageSource="/Resources/settings_logo_128.png"
-                Text="{helpers:Loc Landing_settings}" />
-            <!--<helpers:NavButton
-                x:Name="Workspace"
-                Width="128"
-                Height="128"
-                ImageSource="/Resources/settings_logo_128.png"
-                Text="{helpers:Loc Landing_project}" />-->
+                Margin="10,0,10,0"
+                Content="{helpers:Loc Landing_settings}"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/settings_logo_128.png</ImageSource>
+                </Button.Tag>
+            </Button>
 
             <Button
                 x:Name="Workspace"
-                Content="PROJECT"
+                Margin="10,0,10,0"
+                Content="{helpers:Loc Landing_project}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>

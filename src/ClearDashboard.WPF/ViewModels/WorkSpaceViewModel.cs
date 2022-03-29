@@ -2,20 +2,19 @@
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.Wpf.ViewModels.Menus;
+using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
+using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DAL.NamedPipes;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.ViewModels.Menus;
-using ClearDashboard.Wpf.ViewModels.Panes;
-using Pipes_Shared;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -35,7 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private ILogger Logger { get; set; }
         private INavigationService NavigationService { get; set; }
-        private ProjectManager _DAL;
+        private ProjectManager ProjectManager;
 
         #endregion //Member Variables
 
@@ -170,13 +169,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         //}
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager dal) : base(navigationService, logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;
-            _DAL = dal;
+            ProjectManager = projectManager;
 
-            _DAL.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
             
@@ -219,31 +218,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        public async Task Init()
-
-
         #endregion //Constructor
 
         #region Methods
 
-        private void WorkSpaceViewModel_ThemeChanged()
-        {
-            // TODO
-
-            var newTheme = ((App)Application.Current).Theme;
-            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                // toggle the Dark theme for AvalonDock
-                this.SelectedTheme = Themes[0];
-            }
-            else
-            {
-                // toggle the light theme for AvalonDock
-                this.SelectedTheme = Themes[1];
-            }
-        }
-
-        public void Init()
+        public async void Init()
         {
             // initiate the menu system
             MenuItems.Clear();
@@ -300,7 +279,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await _DAL.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -312,7 +291,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            _DAL.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
             base.Dispose(disposing);
         }
 
@@ -320,16 +299,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        public void MYBUTTON()
-        {
-            Console.WriteLine();
-        }
-
         private void WorkSpaceViewModel_ThemeChanged()
         {
             // TODO
 
-            var newTheme = (Application.Current as ClearDashboard.Wpf.App).Theme;
+            var newTheme = ((App)Application.Current).Theme;
             if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
                 // toggle the Dark theme for AvalonDock
@@ -443,7 +417,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void HandleEventAsync(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleEventAsync(object sender, PipeEventArgs args)
         {
             if (args == null) return;
 
