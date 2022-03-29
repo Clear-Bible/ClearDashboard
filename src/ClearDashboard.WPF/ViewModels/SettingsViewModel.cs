@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private ILogger Logger { get; set; }
         private INavigationService NavigationService { get; set; }
-        private ProjectManager _DAL;
+        private ProjectManager ProjectManager;
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();
 
         /// <summary>
@@ -25,11 +25,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, ProjectManager dal) : base(navigationService, logger)
+        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
             Logger = logger;
             NavigationService = navigationService;
-            _DAL = dal;
+            ProjectManager = projectManager;
 
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/NewProject_Icon_96.png", ImageName = "NEW" });
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/settings_logo_96.png", ImageName = "SETTINGS" });
