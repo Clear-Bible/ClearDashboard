@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
@@ -234,7 +233,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             var culture = Properties.Settings.Default.language_code;
             // strip out any "-" characters so the string can be propey parsed into the target enum
-            SelectedLanguage =  (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", String.Empty));
+            SelectedLanguage =  (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
         }
     }
 }
