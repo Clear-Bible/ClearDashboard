@@ -13,10 +13,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer.Context;
-using Microsoft.Extensions.Configuration;
 using ClearDashboard.DataAccessLayer.Extensions;
-using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Extensions;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Models;
 
 namespace ClearDashboard.Wpf
 {
@@ -28,8 +28,7 @@ namespace ClearDashboard.Wpf
         public static IHost Host { get; private set; }
         protected ILogger<Bootstrapper> Logger { get; private set; }
 
-        public ProjectManager DAL { get; set; }
-
+        
         #endregion
 
         #region Contructor
@@ -44,20 +43,12 @@ namespace ClearDashboard.Wpf
                 .Build();
 
             SetupLogging();
-            //EnsureDatabase();
-
+            SetupLanguage();
             Initialize();
 
             //set the light/dark
             ((App)Application.Current).SetTheme(Settings.Default.Theme);
         }
-
-        //private void EnsureDatabase()
-        //{
-        //    // Ask for the database context.  This will create the database
-        //    // and apply migrations if required.
-        //    _ = Host.Services.GetService<AlignmentContext>();
-        //}
 
         #endregion
 
@@ -65,32 +56,11 @@ namespace ClearDashboard.Wpf
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
 
-            //serviceCollection.AddAlignmentDatabase("alignment.sqlite");
-
-            serviceCollection.AddProjectNameDatabaseContextFactory();
-
-            // wire up the interfaces required by Caliburn.Micro
-            serviceCollection.AddSingleton<IWindowManager, WindowManager>();
-            serviceCollection.AddSingleton<IEventAggregator, EventAggregator>();
-
-            // add in the DAL
-            serviceCollection.AddSingleton<ProjectManager>();
-
-
-            // Register the FrameAdapter which wraps a Frame as INavigationService
-            FrameSet = new FrameSet();
-            serviceCollection.AddSingleton<INavigationService>(sp=> FrameSet.NavigationService);
-            
-            // wire up all of the view models in the project.
-            GetType().Assembly.GetTypes()
-                .Where(type => type.IsClass)
-                .Where(type => type.Name.EndsWith("ViewModel"))
-                .ToList()
-                .ForEach(viewModelType => serviceCollection.AddScoped(viewModelType));
-
+            FrameSet = serviceCollection.AddCaliburnMicro();
+            serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddLogging();
+            serviceCollection.AddLocalization();
 
-            
         }
 
         #endregion
@@ -108,6 +78,19 @@ namespace ClearDashboard.Wpf
 
             // Navigate to the LandingView.
             FrameSet.NavigationService.NavigateToViewModel(typeof(LandingViewModel));
+        }
+
+        private static void SetupLanguage()
+        {
+            var selectedLanguage = Properties.Settings.Default.language_code;
+            if (string.IsNullOrEmpty(selectedLanguage))
+            {
+                selectedLanguage = "en";
+            }
+
+            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", String.Empty));
+            var translationSource = Host.Services.GetService<TranslationSource>();
+            translationSource.Language = EnumHelper.GetDescription(languageType);
         }
 
         /// <summary>

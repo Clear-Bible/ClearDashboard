@@ -17,4 +17,4 @@ rename "%ParatextInstallDir%\plugins\%ProjectName%\ClearDashboard.ParatextPlugin
 
 
 @echo Copying Named Pipes dll files to %ParatextInstallDir%\plugins\%ProjectName%
-rem xcopy "%NamedPipesPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
+xcopy "%NamedPipesPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i

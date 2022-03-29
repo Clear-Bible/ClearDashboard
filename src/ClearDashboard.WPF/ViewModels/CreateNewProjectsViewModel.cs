@@ -20,8 +20,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region props
-        //Connection to the DAL
-        private ProjectManager _DAL;
+        private ProjectManager ProjectManager { get; set; }
 
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
@@ -39,13 +38,13 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private bool _ButtonEnabled;
+        private bool _buttonEnabled;
         public bool ButtonEnabled
         {
-            get => _ButtonEnabled;
+            get => _buttonEnabled;
             set
             {
-                _ButtonEnabled = value;
+                _buttonEnabled = value;
                 NotifyOfPropertyChange(() => ButtonEnabled);
             }
         }
@@ -67,7 +66,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public string _textXaml;
         public string TextXaml
         {
-            get { return _textXaml; }
+            get => _textXaml;
             set
             {
                 if (_textXaml == value) return;
@@ -99,7 +98,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public string ProjectName
         {
-            get { return _projectName; }
+            get => _projectName;
             set
             {
                 _projectName = value;
@@ -140,9 +139,9 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
-        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager dal) : base(navigationService, logger)
+        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
-            _DAL = dal;
+            ProjectManager = projectManager;
             createNewProjectCommand = new RelayCommand(CreateNewProject);
         }
 
@@ -232,9 +231,9 @@ namespace ClearDashboard.Wpf.ViewModels
             dashboardProject.LWCProjects = _LWCprojects;
             dashboardProject.BTProjects = _BackTransProjects;
             dashboardProject.CreationDate = DateTime.Now;
-            dashboardProject.ParatextUser = _DAL.ParatextUserName;
+            dashboardProject.ParatextUser = ProjectManager.ParatextUserName;
 
-            await _DAL.CreateNewProject(dashboardProject).ConfigureAwait(false);
+            await ProjectManager.CreateNewProject(dashboardProject).ConfigureAwait(false);
         }
 
         internal void SetProjects(List<ParatextProject> lWCproject = null, 

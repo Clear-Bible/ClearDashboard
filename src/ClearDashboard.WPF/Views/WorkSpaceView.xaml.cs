@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using AvalonDock.Layout;
+﻿using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using ClearDashboard.Common.Models;
-using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -37,7 +25,7 @@ namespace ClearDashboard.Wpf.Views
             InitializeComponent();
 
             //---------------------------------------------------------------------------------------------------------
-            // NB;  GERFEN - moved the follwoing code to Page_Loaded so that CM can complete the DataContext wire up.
+            // NB;  GERFEN - moved the following code to Page_Loaded so that CM can complete the DataContext wire up.
 
             //_vm = this.DataContext as WorkSpaceViewModel;
 
@@ -163,10 +151,9 @@ namespace ClearDashboard.Wpf.Views
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is MenuItem)
+            if (sender is MenuItem menuItem)
             {
-                var menuItem = sender as MenuItem;
-                switch (menuItem.Tag.ToString().ToUpper())
+                switch (menuItem.Tag.ToString()?.ToUpper())
                 {
                     case "LOAD":
                         // remove all existing windows
@@ -219,8 +206,10 @@ namespace ClearDashboard.Wpf.Views
             else
             {
                 // window has been closed so reload it
-                windowPane = new LayoutAnchorable();
-                windowPane.ContentId = windowTag;
+                windowPane = new LayoutAnchorable
+                {
+                    ContentId = windowTag
+                };
 
                 // setup the right ViewModel for the pane
                 var obj = _vm.LoadWindow(windowTag);

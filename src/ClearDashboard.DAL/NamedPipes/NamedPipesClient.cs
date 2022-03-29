@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using H.Pipes;
 using Pipes_Shared;
 
-
-namespace ClearDashboard.DAL.NamedPipes
+namespace ClearDashboard.DataAccessLayer.NamedPipes
 {
-    public class NamedPipesClient : IDisposable
-    {
-        #region Events
 
-        public class PipeEventArgs : EventArgs
+    public class PipeEventArgs : EventArgs
     {
         private readonly PipeMessage _pm;
 
@@ -29,117 +22,111 @@ namespace ClearDashboard.DAL.NamedPipes
         }
     }
 
-    public delegate void PipesEventHandler(
-        object sender,
-        PipeEventArgs args);
-
-    public event PipesEventHandler NamedPipeChanged;
-
-    private void RaisePipesChangedEvent(PipeMessage s)
+    public class NamedPipesClient : IDisposable
     {
-        PipeEventArgs args = new PipeEventArgs(s);
-        NamedPipeChanged?.Invoke(this, args);
-    }
+        #region Events
 
-    #endregion
+       
 
+        public delegate void PipesEventHandler(
+            object sender,
+            PipeEventArgs args);
 
-    #region Props
+        public event PipesEventHandler NamedPipeChanged;
 
-    const string pipeName = "ClearDashboard";
-
-    private static NamedPipesClient instance;
-    private PipeClient<PipeMessage> client;
-
-    public static NamedPipesClient Instance
-    {
-        get
+        private void RaisePipesChangedEvent(PipeMessage s)
         {
-            return instance ?? new NamedPipesClient();
+            PipeEventArgs args = new PipeEventArgs(s);
+            NamedPipeChanged?.Invoke(this, args);
         }
-    }
 
-    #endregion
+        #endregion
 
-    #region startup
 
-    private NamedPipesClient()
-    {
-        instance = this;
-    }
+        #region Props
 
-    #endregion
+        private const string pipeName = "ClearDashboard";
+        private PipeClient<PipeMessage> client;
 
-    #region Methods
+        #endregion
 
-    public async Task InitializeAsync()
-    {
-        if (client != null && client.IsConnected)
-            return;
+        #region startup
 
-        client = new PipeClient<PipeMessage>(pipeName);
-        client.MessageReceived += (sender, args) =>
+        #endregion
+
+        #region Methods
+
+        public async Task InitializeAsync()
         {
-            if (args.Message is not null)
+            if (client is { IsConnected: true })
+                return;
+
+            client = new PipeClient<PipeMessage>(pipeName);
+            client.MessageReceived += (sender, args) =>
             {
-                OnMessageReceivedAsync(args.Message);
+                if (args.Message is not null)
+                {
+                    OnMessageReceivedAsync(args.Message);
+                }
+            };
+            client.Disconnected += (o, args) => HandleEvents(new PipeMessage
+            {
+                Action = ActionType.OnDisconnected,
+                Text = "Disconnected from server",
+            });
+            client.Connected += (o, args) => Debug.WriteLine("Connected to server");
+            client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
+
+            await client.ConnectAsync();
+
+            await client.WriteAsync(new PipeMessage
+            {
+                Action = ActionType.SendText,
+                Text = "Hello from client",
+            });
+        }
+
+        public void HandleEvents(PipeMessage pm)
+        {
+            RaisePipesChangedEvent(pm);
+        }
+
+        private void OnMessageReceivedAsync(PipeMessage message)
+        {
+            switch (message.Action)
+            {
+                case ActionType.OnConnected:
+                    HandleEvents(message);
+                    break;
+                case ActionType.SendText:
+                    HandleEvents(message);
+                    break;
+                default:
+                    HandleEvents(message);
+                    break;
             }
-        };
-        client.Disconnected += (o, args) => HandleEvents(new PipeMessage
+        }
+
+        private void OnExceptionOccurred(Exception exception)
         {
-            Action = ActionType.OnDisconnected,
-            Text = "Disconnected from server",
-        });
-        client.Connected += (o, args) => Debug.WriteLine("Connected to server");
-        client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
+            Debug.WriteLine($"An exception occurred: {exception}");
+        }
 
-        await client.ConnectAsync();
-
-        await client.WriteAsync(new PipeMessage
+        public void Dispose()
         {
-            Action = ActionType.SendText,
-            Text = "Hello from client",
-        });
-    }
+            if (client != null)
+                client.DisposeAsync().GetAwaiter().GetResult();
+        }
 
-    public void HandleEvents(PipeMessage pm)
-    {
-        RaisePipesChangedEvent(pm);
-    }
+        #endregion
 
-
-    private void OnMessageReceivedAsync(PipeMessage message)
-    {
-        switch (message.Action)
+        public async Task WriteAsync(string message)
         {
-            case ActionType.OnConnected:
-                HandleEvents(message);
-                break;
-            case ActionType.SendText:
-                HandleEvents(message);
-                break;
-            default:
-                HandleEvents(message);
-                break;
+            await client.WriteAsync(new PipeMessage
+            {
+                Action = ActionType.SendText,
+                Text = message,
+            });
         }
     }
-
-    private void OnExceptionOccurred(Exception exception)
-    {
-        Debug.WriteLine($"An exception occured: {exception}");
-    }
-
-    public void Dispose()
-    {
-        if (client != null)
-            client.DisposeAsync().GetAwaiter().GetResult();
-    }
-
-    #endregion
-
-    public async Task WriteAsync(PipeMessage message)
-    {
-        await client.WriteAsync(message);
-    }
-}
 }

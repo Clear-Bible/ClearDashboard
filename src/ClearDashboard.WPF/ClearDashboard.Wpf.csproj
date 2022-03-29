@@ -65,10 +65,13 @@
 
 	<ItemGroup>
 		<Reference Include="Caliburn.Micro.Core">
-			<HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
+		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Caliburn.Micro.Platform">
-			<HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+		</Reference>
+		<Reference Include="Caliburn.Micro.Platform.Core">
+		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="H.Formatters">
 			<HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>

@@ -1,22 +1,20 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
 using Microsoft.Extensions.Logging;
 using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
-
-
     public class ProjectManager
     {
         #region props
 
         private readonly ILogger _logger;
+        private readonly NamedPipesClient _namedPipesClient;
 
         public bool IsPipeConnected { get; set; }
 
@@ -41,17 +39,14 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Events
 
-
         // event handler to be raised when the Paratext Username changes
-        public static event EventHandler ParatextUserNameEventHandler;
-
-
+        public event EventHandler ParatextUserNameEventHandler;
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
 
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
-            NamedPipesClient.PipeEventArgs args = new NamedPipesClient.PipeEventArgs(pm);
+            var args = new PipeEventArgs(pm);
             NamedPipeChanged?.Invoke(this, args);
         }
 
@@ -59,17 +54,13 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public ProjectManager(ILogger<ProjectManager> logger)
+        public ProjectManager(NamedPipesClient namedPipeClient, ILogger<ProjectManager> logger)
         {
             _logger = logger;
-            _logger.LogInformation("'DAL.Startup' ctor called.");
+            _logger.LogInformation("'ProjectManager' ctor called.");
 
-            // Wire up named pipes
-            NamedPipesClient.Instance.InitializeAsync().ContinueWith(t =>
-                    Debug.WriteLine($"Error while connecting to pipe server: {t.Exception}"),
-                TaskContinuationOptions.OnlyOnFaulted);
-
-            NamedPipesClient.Instance.NamedPipeChanged += HandleEvent;
+            _namedPipesClient = namedPipeClient;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
         }
 
         #endregion
@@ -79,7 +70,7 @@ namespace ClearDashboard.DataAccessLayer
         public void OnClosing()
         {
             IsPipeConnected = false;
-            NamedPipesClient.Instance.Dispose();
+            _namedPipesClient.Dispose();
         }
 
         #endregion
@@ -87,7 +78,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Methods
 
-        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             PipeMessage pm = args.PM;
 
@@ -108,7 +99,7 @@ namespace ClearDashboard.DataAccessLayer
             // TODO this is a hack that reads the first user in the Paratext project'pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            Paratext.ParatextUtils paratextUtils = new Paratext.ParatextUtils();
+            var paratextUtils = new Paratext.ParatextUtils();
             var user = paratextUtils.GetCurrentParatextUser();
 
             ParatextUserName = user;
@@ -155,7 +146,7 @@ namespace ClearDashboard.DataAccessLayer
                     break;
             }
 
-            await NamedPipesClient.Instance.WriteAsync(message);
+            await _namedPipesClient.WriteAsync(message);
         }
 
         #endregion
@@ -164,11 +155,11 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
             // create the new folder
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             appPath = Path.Combine(appPath, "ClearDashboard_Projects");
 
             //check to see if the directory exists already
-            string newDir = Path.Combine(appPath, dashboardProject.ProjectName);
+            var newDir = Path.Combine(appPath, dashboardProject.ProjectName);
             if (!Directory.Exists(newDir))
             {
                 try

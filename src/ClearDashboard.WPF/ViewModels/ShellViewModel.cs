@@ -9,22 +9,22 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DAL.NamedPipes;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
+        private readonly TranslationSource _translationSource;
+
         #region Properties
 
-        private ILogger Logger { get; set; }
-        private INavigationService NavigationService { get; set; }
-        private ProjectManager _DAL;
+        //Connection to the DAL
+        private ProjectManager ProjectManager { get; set; }
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -69,21 +69,32 @@ namespace ClearDashboard.Wpf.ViewModels
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
         {
-            get { return _selectedLanguage; }
+            get => _selectedLanguage;
             set
             {
                 _selectedLanguage = value;
+
+                var language = EnumHelper.GetDescription(_selectedLanguage);
+                SaveUserLanguage(_selectedLanguage.ToString());
+                _translationSource.Language = language;
+
+                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
-                TranslationSource.Instance.Language = EnumHelper.GetDescription(_selectedLanguage);
-                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
             }
+        }
+
+        private static void SaveUserLanguage(string language)
+        {
+            Properties.Settings.Default.language_code = language;
+            Properties.Settings.Default.Save();
         }
 
         private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string Message
         {
-            get { return _message; }
+            get => _message;
             set
             {
                 _message = value;
@@ -130,18 +141,16 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         public ShellViewModel()
         {
-
+           
         }
 
         /// <summary>
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager dal) : base(navigationService, logger)
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
-            Logger = logger;
-            NavigationService = navigationService;
-            _DAL = dal;
+            _translationSource = translationSource;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -154,17 +163,18 @@ namespace ClearDashboard.Wpf.ViewModels
             ColorStylesCommand = new RelayCommand(ShowColorStyles);
 
             // listen for username changes in Paratext
+            ProjectManager = projectManager;
             ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+            //_DAL = new StartUp();
+            ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
 
-            _DAL.NamedPipeChanged += HandleEvent;
-
-            _DAL.GetParatextUserName();
+            ProjectManager.GetParatextUserName();
         }
 
         protected override void Dispose(bool disposing)
         {
             ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            _DAL.NamedPipeChanged -= HandleEvent;
+            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
 
             base.Dispose(disposing);
         }
@@ -177,17 +187,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        #region Caliburn.Micro overrides
+
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            _DAL.OnClosing();
+            ProjectManager.OnClosing();
 
             return base.CanCloseAsync(cancellationToken);
         }
 
+        #endregion
 
         #region Methods
 
-        private void HandleEvent(object sender, NamedPipesClient.PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             if (args == null) return;
 
@@ -216,63 +229,15 @@ namespace ClearDashboard.Wpf.ViewModels
             frm.Show();
         }
 
-        #endregion
-
         public void SetLanguage()
         {
-            // set the combobox based on the current UI Thread Culture
-            //var culture = Thread.CurrentThread.CurrentUICulture.Name;
-
             var culture = Properties.Settings.Default.language_code;
-
-            switch (culture)
-            {
-                case "am":
-                    SelectedLanguage = LanguageTypeValue.am;
-                    break;
-                case "de":
-                    SelectedLanguage = LanguageTypeValue.de;
-                    break;
-                case "en":
-                    SelectedLanguage = LanguageTypeValue.en;
-                    break;
-                case "es":
-                    SelectedLanguage = LanguageTypeValue.es;
-                    break;
-                case "fr":
-                    SelectedLanguage = LanguageTypeValue.fr;
-                    break;
-                case "hi":
-                    SelectedLanguage = LanguageTypeValue.hi;
-                    break;
-                case "id":
-                    SelectedLanguage = LanguageTypeValue.id;
-                    break;
-                case "km":
-                    SelectedLanguage = LanguageTypeValue.km;
-                    break;
-                case "pt":
-                    SelectedLanguage = LanguageTypeValue.pt;
-                    break;
-                case "pt-BR":
-                    SelectedLanguage = LanguageTypeValue.ptBR;
-                    break;
-                case "ro":
-                    SelectedLanguage = LanguageTypeValue.ro;
-                    break;
-                case "ru-RU":
-                    SelectedLanguage = LanguageTypeValue.ruRU;
-                    break;
-                case "vi":
-                    SelectedLanguage = LanguageTypeValue.vi;
-                    break;
-                case "zh-CN":
-                    SelectedLanguage = LanguageTypeValue.zhCN;
-                    break;
-                case "zh-TW":
-                    SelectedLanguage = LanguageTypeValue.zhTW;
-                    break;
-            }
+            // strip out any "-" characters so the string can be propey parsed into the target enum
+            SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
         }
+
+        #endregion
+
+
     }
 }

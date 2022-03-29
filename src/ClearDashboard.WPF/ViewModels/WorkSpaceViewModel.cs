@@ -30,10 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private static WorkSpaceViewModel _this;
         public static WorkSpaceViewModel This => _this;
 
-
-
         public DashboardProject DashboardProject { get; set; }
-
         private DashboardViewModel _dashboardViewModel;
 
         private ILogger Logger { get; set; }
@@ -96,13 +93,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-        private string _WindowIDToLoad;
+        private string _windowIdToLoad;
         public string WindowIDToLoad
         {
-            get => _WindowIDToLoad;
+            get => _windowIdToLoad;
             set
             {
-                _WindowIDToLoad = value;
+                _windowIdToLoad = value;
                 NotifyOfPropertyChange(() => WindowIDToLoad);
                 OnPropertyChanged("WindowIDToLoad");
             }
@@ -152,7 +149,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private Tuple<string, Theme> _selectedTheme;
         public Tuple<string, Theme> SelectedTheme
         {
-            get { return _selectedTheme; }
+            get => _selectedTheme;
             set
             {
                 _selectedTheme = value;
@@ -182,8 +179,8 @@ namespace ClearDashboard.Wpf.ViewModels
             _DAL.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
-
-            this.Themes = new List<Tuple<string, Theme>>
+            
+            Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
                 new Tuple<string, Theme>(nameof(Vs2013LightTheme),new Vs2013LightTheme()),
@@ -213,16 +210,40 @@ namespace ClearDashboard.Wpf.ViewModels
                 // TODO
 
                 // subscribe to change events in the parent's theme
-                (Application.Current as ClearDashboard.Wpf.App).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
+                ((App)Application.Current).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
-                if (Application.Current is ClearDashboard.Wpf.App)
+                if (Application.Current is App)
                 {
-                    DashboardProject = (Application.Current as ClearDashboard.Wpf.App).SelectedDashboardProject;
+                    DashboardProject = (Application.Current as App)?.SelectedDashboardProject;
                 }
             }
         }
 
         public async Task Init()
+
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private void WorkSpaceViewModel_ThemeChanged()
+        {
+            // TODO
+
+            var newTheme = ((App)Application.Current).Theme;
+            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            {
+                // toggle the Dark theme for AvalonDock
+                this.SelectedTheme = Themes[0];
+            }
+            else
+            {
+                // toggle the light theme for AvalonDock
+                this.SelectedTheme = Themes[1];
+            }
+        }
+
+        public void Init()
         {
             // initiate the menu system
             MenuItems.Clear();
@@ -254,6 +275,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // add in the document panes
             _files.Clear();
+
 
             Debug.WriteLine(DashboardProject.Name);
             _dashboardViewModel = IoC.Get<DashboardViewModel>();
@@ -324,14 +346,13 @@ namespace ClearDashboard.Wpf.ViewModels
         public void LoadLayout(XmlLayoutSerializer layoutSerializer)
         {
             // Here I've implemented the LayoutSerializationCallback just to show
-            //  a way to feed layout desarialization with content loaded at runtime
+            //  a way to feed layout deserialization with content loaded at runtime
             // Actually I could in this case let AvalonDock to attach the contents
             // from current layout using the content ids
             // LayoutSerializationCallback should anyway be handled to attach contents
             // not currently loaded
             layoutSerializer.LayoutSerializationCallback += (s, e) =>
             {
-                // Debug.WriteLine(e.Model?.ContentId?.ToString());
                 switch (e.Model.ContentId.ToUpper())
                 {
                     case WorkspaceLayoutNames.Dashboard:

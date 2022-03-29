@@ -9,8 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.ViewModels.Menus"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -24,6 +24,8 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:WorkSpaceViewModel, IsDesignTimeCreatable=True}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
