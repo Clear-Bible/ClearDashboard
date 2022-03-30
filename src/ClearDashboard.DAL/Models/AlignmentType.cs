@@ -15,4 +15,20 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual ICollection<Alignment> Alignments { get; set; }
     }
+
+    public enum EAlignType
+    {
+        Auto = 1,
+        Manual = 2,
+    }
+    public enum EAlignState
+    {
+        NotSet = -1,
+        NotChecked = 0,
+        Verified = 1,
+        Bad = 2,
+        Question = 3,
+    }
+
+
 }
