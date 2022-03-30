@@ -1,18 +1,16 @@
-﻿using ClearDashboard.Common.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace ClearDashboard.Common.Models
 {
     public class DashboardProject : INotifyPropertyChanged
     {
         public string DirectoryPath { get; set; }
-        public string ClearEngineDirectoryPath { get; set; }
+        public string ClearEngineDirectoryPath => Path.Combine(DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
 
 
@@ -38,7 +36,6 @@ namespace ClearDashboard.Common.Models
             {
                 _projectPath = value;
                 DirectoryPath = value;
-                ClearEngineDirectoryPath = Path.Combine(DirectoryPath, "ClearEngine");
             }
         }
 
@@ -63,9 +60,10 @@ namespace ClearDashboard.Common.Models
             set
             {
                 if (_fullFilePath == value) return;
+                
                 _fullFilePath = value;
 
-                FileInfo fi = new FileInfo(_fullFilePath);
+                var fi = new FileInfo(_fullFilePath);
                 ProjectPath = fi.DirectoryName;
 
                 OnPropertyChanged();
@@ -76,16 +74,16 @@ namespace ClearDashboard.Common.Models
         /// <summary>
         /// the target project
         /// </summary>
-        private ParatextProject _TargetProject;
+        private ParatextProject _targetProject;
         [JsonProperty]
         public ParatextProject TargetProject
         {
-            get => _TargetProject;
+            get => _targetProject;
             set
             {
-                _TargetProject = value;
-                this.BaseTargetName = _TargetProject.Name;
-                this.BaseTargetFullName = _TargetProject.FullName;
+                _targetProject = value;
+                this.BaseTargetName = _targetProject.Name;
+                this.BaseTargetFullName = _targetProject.FullName;
             }
         }
 
@@ -103,67 +101,67 @@ namespace ClearDashboard.Common.Models
         /// <summary>
         /// List of Back Translation projects
         /// </summary>
-        private List<ParatextProject> _BTProjects;
+        private List<ParatextProject> _btProjects;
         [JsonProperty]
         public List<ParatextProject> BTProjects
         {
-            get => _BTProjects;
-            set => _BTProjects = value;
+            get => _btProjects;
+            set => _btProjects = value;
         }
 
         /// <summary>
         /// The Paratext UserID of the creator
         /// </summary>
-        private string _ParatextUser;
+        private string _paratextUser;
         [JsonProperty]
         public string ParatextUser
         {
-            get => _ParatextUser;
-            set => _ParatextUser = value;
+            get => _paratextUser;
+            set => _paratextUser = value;
         }
 
         /// <summary>
         /// Date that this project was created
         /// </summary>
-        private DateTime _CreationDate;
+        private DateTime _creationDate;
         [JsonProperty]
         public DateTime CreationDate
         {
-            get => _CreationDate;
-            set => _CreationDate = value;
+            get => _creationDate;
+            set => _creationDate = value;
         }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-        private string _Name;
+        private string _name;
         [JsonProperty]
         public string Name
         {
-            get => _Name;
-            set => _Name = value;
+            get => _name;
+            set => _name = value;
         }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-        private string _BaseTargetName;
+        private string _baseTargetName;
         [JsonProperty]
         public string BaseTargetName
         {
-            get => _BaseTargetName;
-            set => _BaseTargetName = value;
+            get => _baseTargetName;
+            set => _baseTargetName = value;
         }
 
         /// <summary>
         /// The Dashboard Project FullName
         /// </summary>
-        private string _BaseTargetFullName;
+        private string _baseTargetFullName;
         [JsonProperty]
         public string BaseTargetFullName
         {
-            get => _BaseTargetFullName;
-            set => _BaseTargetFullName = value;
+            get => _baseTargetFullName;
+            set => _baseTargetFullName = value;
         }
 
         private string _shortFilePath;
