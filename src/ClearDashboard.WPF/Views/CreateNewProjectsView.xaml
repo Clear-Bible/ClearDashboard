@@ -9,14 +9,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:cm="http://caliburnmicro.com"
     Title="NewProjects"
     d:DataContext="{d:DesignInstance Type=viewModels:CreateNewProjectsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
-    Loaded="Page_Loaded"
-    SizeChanged="Page_SizeChanged"
+     cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
     mc:Ignorable="d">
+
+    <!-- 
+    [Event Loaded] = [Action Page_Loaded($source,$eventArgs)];
+    Loaded="Page_Loaded"
+    SizeChanged="Page_SizeChanged"-->
 
     <Page.Resources>
         <ControlTemplate x:Key="validationTemplate">
@@ -27,11 +32,7 @@
         </ControlTemplate>
     </Page.Resources>
 
-    <Grid>
-
-
-
-
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
@@ -90,12 +91,11 @@
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
-
                 <ListView
                     Margin="5"
                     ItemsSource="{Binding ParatextProjects}"
-                    PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
-                    PreviewMouseMove="listview_PreviewMouseMove"
+                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source,$eventArgs)];
+                                       [Event PreviewMouseMove] = [Action ListView_PreviewMouseMove($source,$eventArgs)]"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -187,12 +187,13 @@
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
+              
                 <ListView
                     x:Name="resourcesLV"
                     Margin="5"
                     ItemsSource="{Binding ParatextResources}"
-                    PreviewMouseLeftButtonDown="listview_PreviewMouseLeftButtonDown"
-                    PreviewMouseMove="listview_PreviewMouseMove"
+                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                       [Event  PreviewMouseMove] = [Action ListView_PreviewMouseMove($source, $eventArgs)]"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -239,22 +240,22 @@
             </GroupBox>
 
 
-
+            <!--PreviewDrop="Canvas_PreviewDropTop" -->
             <Canvas
                 x:Name="DrawCanvasTop"
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="5"
                 AllowDrop="True"
-                PreviewDrop="Canvas_PreviewDropTop" />
-
+                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropTop($source, $eventArgs)]"/>
             <Canvas
                 x:Name="DrawCanvasBottom"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
                 AllowDrop="True"
-                PreviewDrop="Canvas_PreviewDropBottom" />
+                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropBottom($source, $eventArgs)]"/>
+              
 
             <Border
                 Grid.Row="0"
