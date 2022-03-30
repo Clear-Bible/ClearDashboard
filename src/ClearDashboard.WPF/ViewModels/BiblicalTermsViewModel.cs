@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Pipes_Shared;
 using SIL.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Helpers;
 using Point = System.Windows.Point;
+using System.Linq;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -410,20 +412,51 @@ namespace ClearDashboard.Wpf.ViewModels
             foreach (var verse in _selectedItemVerses)
             {
                 var verseText = verse.VerseText;
+
+                // create a punctionless version of the verse
+                var puncs = Punctuation.LoadPunctuation();
+                foreach (var punc in puncs)
+                {
+                    // we need to maintain the same verse length so we need to pad
+                    // out the replacement spaces
+                    string sBlank = "".PadLeft(punc.Length, ' ');
+
+                    verseText = verseText.Replace(punc, sBlank);
+                }
+
+                // create a list of all the matches within the verse
                 List<Point> points = new List<Point>();
+                List<string> words = new List<string>();
                 foreach (var render in selectedBiblicalTermsData.Renderings)
                 {
+                    // do the same for the target word that we are trying to test against
+                    string puncLessWord = render;
+                    foreach (var punc in puncs)
+                    {
+                        // we need to maintain the same verse length so we need to pad
+                        // out the replacement spaces
+                        string sBlank = "".PadLeft(punc.Length, ' ');
+
+                        puncLessWord = puncLessWord.Replace(punc, sBlank);
+                    }
+
+
                     try
                     {
-                        Regex regexObj = new Regex(@"\W*((?i)" + render + @"(?-i))\W*");
-                        Match matchResults = regexObj.Match(verseText);
+                        // look for full word and case sensitive
+                        Regex pattern = new Regex(@"\b" + puncLessWord + @"\b", RegexOptions.None);
+                        Match matchResults = pattern.Match(verseText);
                         while (matchResults.Success)
                         {
                             // matched text: matchResults.Value
                             // match start: matchResults.Index
                             // match length: matchResults.Length
-                            Point point = new Point(matchResults.Index, matchResults.Index + matchResults.Length - 1);
+                            Point point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
                             points.Add(point);
+                            words.Add(render);
+
+                            // flag that we found the word
+                            verse.Found = true;
 
                             matchResults = matchResults.NextMatch();
                         }
@@ -433,69 +466,73 @@ namespace ClearDashboard.Wpf.ViewModels
                         // Syntax error in the regular expression
                     }
 
-                    // interate through in while loop
-                    int index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
-                    if (index == -1)
-                    {
-                        verse.Inlines.Add(new Run(verseText));
-                        verse.Found = false;
-                    }
-                    else
-                    {
-                        verse.Found = true;
-                        while (true)
-                        {
-                            verse.Inlines.AddRange(new Inline[]
-                            {
-                                new Run(verseText.Substring(0, index)),
-                                new Run(verseText.Substring(index, render.Length))
-                                {
-                                    FontWeight = FontWeights.Bold,
-                                    Foreground = Brushes.Orange
-                                }
-                            });
-
-                            verseText = verseText.Substring(index + render.Length);
-                            index = verseText.IndexOf(render, StringComparison.CurrentCultureIgnoreCase);
-
-                            if (index < 0)
-                            {
-                                verse.Inlines.Add(new Run(verseText));
-                                break;
-                            }
-                        }
-                    }
-
-                    //// interate through in reverse
-                    //for (int i = points.Count - 1; i >= 0; i--)
+                    //// interate through in while loop
+                    //int index = verseText.IndexOf(render, StringComparison.InvariantCultureIgnoreCase);
+                    //if (index == -1)
                     //{
-                    //    tb = new TextBlock();
-                    //    try
+                    //    verse.Inlines.Add(new Run(verseText));
+                    //    verse.Found = false;
+                    //}
+                    //else
+                    //{
+                    //    verse.Found = true;
+                    //    while (true)
                     //    {
-                    //        string endPart = verseText.Substring((int)points[i].Y - 1);
-                    //        string startPart = verseText.Substring(0, (int)points[i].Y - 1 - render.Length);
-
-                    //        var a = new Run(startPart) { FontWeight = FontWeights.Normal };
-                    //        tb.Inlines.Add(new Run(render) { FontWeight = FontWeights.Bold, Foreground= Brushes.Orange });
-                    //        tb.Inlines.Add(new Run(endPart) { FontWeight = FontWeights.Normal });
-
-                    //        // check if this was the last one
-                    //        if (i == 1)
+                    //        verse.Inlines.AddRange(new Inline[]
                     //        {
-                    //            tb.Inlines.Add(new Run(startPart) { FontWeight = FontWeights.Normal });
-                    //        }
-                    //        else
+                    //            new Run(verseText.Substring(0, index)),
+                    //            new Run(verseText.Substring(index, render.Length))
+                    //            {
+                    //                FontWeight = FontWeights.Bold,
+                    //                Foreground = Brushes.Orange
+                    //            }
+                    //        });
+
+                    //        verseText = verseText.Substring(index + render.Length);
+                    //        index = verseText.IndexOf(render, StringComparison.InvariantCultureIgnoreCase);
+
+                    //        if (index < 0)
                     //        {
-                    //            verseText = verseText.Substring(0, verseText.Length - render.Length);
+                    //            verse.Inlines.Add(new Run(verseText));
+                    //            break;
                     //        }
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        Console.WriteLine(e);
-                    //        throw;
                     //    }
                     //}
-                    
+
+                }
+
+                verseText = verse.VerseText;
+
+                // organize the points in lowest to highest
+                points  = points.OrderBy(o => o.X).ToList();
+
+                // interate through in reverse
+                for (int i = points.Count - 1; i >= 0; i--)
+                {
+                    try
+                    {
+                        string endPart = verseText.Substring((int)points[i].Y);
+                        string startPart = verseText.Substring(0, (int)points[i].X);
+
+                        //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
+                        verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+
+                        // check if this was the last one
+                        if (i == 0)
+                        {
+                            verse.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
+                        }
+                        else
+                        {
+                            verseText = startPart;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
             }
             
