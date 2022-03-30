@@ -218,6 +218,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion //Observable Properties
 
+        #region Commands
+
+        private ICommand _notesCommand;
+        public ICommand NotesCommand
+        {
+            get => _notesCommand;
+            set
+            {
+                _notesCommand = value;
+            }
+        }
+
+        #endregion
+
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
         {
@@ -240,6 +254,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // setup the method that we go to for filtering
             BiblicalTermsCollectionView.Filter = FilterGridItems;
+
+            // wire up the commands
+            NotesCommand = new RelayCommand(ShowNotes);
         }
 
 
@@ -336,6 +353,12 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Constructor
 
         #region Methods
+
+        private void ShowNotes(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         /// <summary>

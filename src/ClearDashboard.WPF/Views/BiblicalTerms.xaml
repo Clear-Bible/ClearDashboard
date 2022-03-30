@@ -163,6 +163,7 @@
                                 Height="20"
                                 Margin="-15,0,0,0"
                                 HorizontalAlignment="Center"
+                                Command="{Binding Path=DataContext.NotesCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"
                                 Style="{DynamicResource MaterialDesignIconButton}"
                                 ToolTip="Note">
                                 <materialDesign:PackIcon
@@ -332,8 +333,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
-                        <GridViewColumn 
-                            Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='0.85'}">
+                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='0.85'}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <helpers:BindableTextBlock
