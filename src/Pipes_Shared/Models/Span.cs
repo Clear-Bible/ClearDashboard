@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using MvvmHelpers;
+﻿using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Span : ObservableObject
     {
         private string _Text;
-        [JsonProperty]
         public string Text
         {
             get => _Text;
@@ -14,7 +12,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _Style;
-        [JsonProperty]
         public int Style
         {
             get => _Style;
@@ -22,7 +19,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private object _Language;
-        [JsonProperty]
         public object Language
         {
             get => _Language;

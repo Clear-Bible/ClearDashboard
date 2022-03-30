@@ -1,19 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using MvvmHelpers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     internal class NotesObject : ObservableObject
     {
         private Anchor _Anchor;
-        [JsonProperty]
         public Anchor Anchor
         {
             get => _Anchor;
@@ -21,7 +13,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private List<Comment> comments;
-        [JsonProperty]
         public List<Comment> Comments
         {
             get => comments;
@@ -29,7 +20,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _isRead;
-        [JsonProperty]
         public bool IsRead
         {
             get => _isRead;
@@ -37,7 +27,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _IsResolved;
-        [JsonProperty]
         public bool IsResolved
         {
             get => _IsResolved;
@@ -45,7 +34,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private AssignedUser _AssignedUser;
-        [JsonProperty]
         public AssignedUser AssignedUser
         {
             get => _AssignedUser;
@@ -53,7 +41,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private object _ReplyToUser;
-        [JsonProperty]
         public object ReplyToUser
         {
             get => _ReplyToUser;

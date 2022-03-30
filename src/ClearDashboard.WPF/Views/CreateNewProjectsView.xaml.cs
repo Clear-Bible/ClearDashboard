@@ -57,12 +57,12 @@ namespace ClearDashboard.Wpf.Views
         public CreateNewProjectsView()
         {
             InitializeComponent();
-
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             DrawTheCanvas();
+            _vm = (CreateNewProjectsViewModel)this.DataContext;
         }
 
         #endregion

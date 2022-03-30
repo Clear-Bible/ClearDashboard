@@ -95,22 +95,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 _selectedBiblicalTermsType = value;
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
-                if (_lastSelectedBTtype != _selectedBiblicalTermsType)
-                {
-                    if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
-                    {
-                        ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject);
-                    }
-                    else
-                    {
-                        ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll);
-                    }
-
-                    _lastSelectedBTtype = _selectedBiblicalTermsType;
-                }
+                SwitchedBibilicalTermsType();
             }
         }
-
 
         #endregion //Public Properties
 
@@ -175,7 +162,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private Visibility _progressBarVisibility = Visibility.Collapsed;
+        private Visibility _progressBarVisibility = Visibility.Visible;
 
         public Visibility ProgressBarVisibility
         {
@@ -231,6 +218,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                     break;
                 case ActionType.SetBiblicalTerms:
+                    await SetProgBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
                     // invoke to get it to run in STA mode
                     Application.Current.Dispatcher.Invoke(delegate
                     {
@@ -263,12 +251,9 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     });
 
-                    ProgressBarVisibility = Visibility.Collapsed;
-                    System.Windows.Forms.Application.DoEvents();
+                    await SetProgBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
                     break;
             }
-
-            await Task.CompletedTask;
         }
 
 
@@ -302,6 +287,34 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Constructor
 
         #region Methods
+
+        private async Task SwitchedBibilicalTermsType()
+        {
+            if (_lastSelectedBTtype != _selectedBiblicalTermsType)
+            {
+                BiblicalTerms.Clear();
+                await SetProgBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+
+                if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
+                {
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll).ConfigureAwait(false);
+                }
+
+                //await SetProgBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+
+                _lastSelectedBTtype = _selectedBiblicalTermsType;
+            }
+        }
+
+        private async Task SetProgBarVisibilityAsync(Visibility visibility)
+        {
+            await Task.Run(() => { ProgressBarVisibility = visibility; }).ConfigureAwait(false);
+            System.Windows.Forms.Application.DoEvents();
+        }
 
         /// <summary>
         /// On BiblicalTerms Click - these are the bottom verse/verse references
@@ -465,11 +478,11 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (ProjectManager.IsPipeConnected)
             {
-                await Task.Run(() =>
-                {
-                    ProgressBarVisibility = Visibility.Visible;
-                }).ConfigureAwait(false);
-                System.Windows.Forms.Application.DoEvents();
+                //await Task.Run(() =>
+                //{
+                //    ProgressBarVisibility = Visibility.Visible;
+                //}).ConfigureAwait(false);
+                //System.Windows.Forms.Application.DoEvents();
 
                 await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
             }

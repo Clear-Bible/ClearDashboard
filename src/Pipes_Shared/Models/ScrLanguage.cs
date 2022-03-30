@@ -1,13 +1,9 @@
-﻿using Pipes_Shared.Models;
-using Newtonsoft.Json;
-
-namespace Pipes_Shared.Models
+﻿namespace Pipes_Shared.Models
 {
     public class ScrLanguage : BindableBase
     {
 
         private string _DisplayName;
-        [JsonProperty]
         public string DisplayName
         {
             get => _DisplayName;
@@ -16,7 +12,6 @@ namespace Pipes_Shared.Models
 
 
         private string _LanguageTag;
-        [JsonProperty]
         public string LanguageTag
         {
             get => _LanguageTag;
