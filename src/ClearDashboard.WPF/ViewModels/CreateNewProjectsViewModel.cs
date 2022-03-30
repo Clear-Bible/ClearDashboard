@@ -1257,7 +1257,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        private void RemoveItem_Click(object sender, RoutedEventArgs e)
+        public void RemoveItem_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button)
             {
@@ -1304,7 +1304,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             DrawTheCanvas();
         }
