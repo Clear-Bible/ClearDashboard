@@ -113,7 +113,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private SelectedBTtype _selectedBiblicalTermsType = SelectedBTtype.OptionProject;
         public SelectedBTtype SelectedBiblicalTermsType
         {
-            get { return _selectedBiblicalTermsType; }
+            get => _selectedBiblicalTermsType;
             set
             {
                 _selectedBiblicalTermsType = value;
@@ -374,11 +374,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
                 }
                 else
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
                 }
 
                 _lastSelectedBTtype = _selectedBiblicalTermsType;
