@@ -444,7 +444,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     try
                     {
                         // look for full word and case sensitive
-                        Regex pattern = new Regex(@"\b" + puncLessWord + @"\b", RegexOptions.None);
+                        Regex pattern = new Regex(@"\b" + puncLessWord + @"\b");
                         Match matchResults = pattern.Match(verseText);
                         while (matchResults.Success)
                         {
@@ -533,6 +533,11 @@ namespace ClearDashboard.Wpf.ViewModels
                         Console.WriteLine(e);
                         throw;
                     }
+                }
+
+                if (points.Count == 0)
+                {
+                    verse.Inlines.Add(new Run(verseText));
                 }
             }
             
