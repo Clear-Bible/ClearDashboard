@@ -36,8 +36,6 @@ namespace ClearDashboard.ParatextPlugin.Actions
 
         public BibilicalTerms(ListType listType, IProject project, IWindowPluginHost host)
         {
-            IBiblicalTermList biblicalTermList;
-
             if (listType.isProject)
             {
                 BiblicalTermList = project.BiblicalTermList;

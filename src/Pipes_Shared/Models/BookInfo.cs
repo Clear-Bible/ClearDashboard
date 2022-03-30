@@ -1,12 +1,8 @@
-﻿using Pipes_Shared.Models;
-using Newtonsoft.Json;
-
-namespace Pipes_Shared.Models
+﻿namespace Pipes_Shared.Models
 {
     public class BookInfo : BindableBase
     {
         private string _Code;
-        [JsonProperty]
         public string Code
         {
             get => _Code;
@@ -15,7 +11,6 @@ namespace Pipes_Shared.Models
 
 
         private bool _inProjectScope;
-        [JsonProperty]
         public bool InProjectScope
         {
             get => _inProjectScope;
@@ -24,7 +19,6 @@ namespace Pipes_Shared.Models
 
 
         private int _Number;
-        [JsonProperty]
         public int Number
         {
             get => _Number;

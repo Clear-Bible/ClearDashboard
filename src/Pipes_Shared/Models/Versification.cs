@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using MvvmHelpers;
+﻿using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     public  class Versification : ObservableObject
     {
         private int _Type;
-        [JsonProperty]
         public int Type
         {
             get => _Type;
@@ -14,7 +12,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _IsCustomized;
-        [JsonProperty]
         public bool IsCustomized
         {
             get => _IsCustomized;

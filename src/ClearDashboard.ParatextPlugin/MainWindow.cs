@@ -3,7 +3,8 @@ using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
 using H.Formatters;
 using H.Pipes;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Paratext.PluginInterfaces;
 using Pipes_Shared;
 using System;
@@ -14,6 +15,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using ClearDashboard.Pipes_Shared.Models;
 using Pipes_Shared.Models;
 using Serilog.Core;
@@ -39,6 +41,8 @@ namespace ClearDashboardPlugin
 
         private IBiblicalTermList m_listProject;
         private IBiblicalTermList m_listAll;
+
+        private JsonSerializerOptions _jsonOptions;
 
         ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
@@ -93,6 +97,13 @@ namespace ClearDashboardPlugin
             this.Disposed += MainWindow_Disposed;
 
             bool showErrorMessage = true;
+
+            JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+
 
             //// check to see if ClearSuite is installed
             //if (CheckIfClearSuiteInstalledAsync())
@@ -288,11 +299,13 @@ namespace ClearDashboardPlugin
                         _TermsList = btAll.ProcessBiblicalTerms(m_project);
                     }
 
-                    var payloadBTAll = JsonConvert.SerializeObject(_TermsList, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+                    var payloadBTAll = JsonSerializer.Serialize(_TermsList, _jsonOptions);
+
+                    //var payloadBTAll = JsonConvert.SerializeObject(_TermsList, Formatting.None,
+                    //    new JsonSerializerSettings()
+                    //    {
+                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    //    });
 
                     await WriteMessageToPipeAsync(new PipeMessage
                     {
@@ -306,11 +319,12 @@ namespace ClearDashboardPlugin
                     BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
                     var btList = bt.ProcessBiblicalTerms(m_project);
 
-                    var payloadBT = JsonConvert.SerializeObject(btList, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+                    var payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
+                    //var payloadBT = JsonConvert.SerializeObject(btList, Formatting.None,
+                    //    new JsonSerializerSettings()
+                    //    {
+                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    //    });
 
                     await WriteMessageToPipeAsync(new PipeMessage
                     {
@@ -347,11 +361,13 @@ namespace ClearDashboardPlugin
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
 
-                    var payload = JsonConvert.SerializeObject(proj, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+
+                    var payload = JsonSerializer.Serialize(proj, _jsonOptions);
+                    //var payload = JsonConvert.SerializeObject(proj, Formatting.None,
+                    //    new JsonSerializerSettings()
+                    //    {
+                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    //    });
 
                     await OnMessageReceivedAsync(new PipeMessage
                     {
@@ -682,7 +698,8 @@ namespace ClearDashboardPlugin
 
         private async Task GetNoteList(string actionCommand, string jsonPayload)
         {
-            var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
+            var data = JsonSerializer.Deserialize<GetNotesData>(jsonPayload);
+            //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
 
             if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
             {
@@ -693,24 +710,27 @@ namespace ClearDashboardPlugin
                 m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
                 AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
 
-                var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
-                    });
+
+                var dataPayload = JsonSerializer.Serialize(m_noteList, _jsonOptions);
+                //var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
+                //    new JsonSerializerSettings()
+                //    {
+                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                //        TypeNameHandling = TypeNameHandling.Auto,
+                //        NullValueHandling = NullValueHandling.Ignore,
+                //        Formatting = Formatting.None,
+                //    });
 
                 try
                 {
-                    var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
-                    });
+                    var deserializedObj = JsonSerializer.Deserialize<IReadOnlyList<IProjectNote>>(dataPayload);
+                    //var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
+                    //{
+                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    //    TypeNameHandling = TypeNameHandling.Auto,
+                    //    NullValueHandling = NullValueHandling.Ignore,
+                    //    Formatting = Formatting.None,
+                    //});
 
                     PipeMessage msgOut = new PipeMessage
                     {
@@ -737,11 +757,12 @@ namespace ClearDashboardPlugin
             var usx = m_project.GetUSX(m_verseRef.BookNum);
             if (usx != null)
             {
-                var dataPayload = JsonConvert.SerializeObject(usx, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+                var dataPayload = JsonSerializer.Serialize(usx);
+                //var dataPayload = JsonConvert.SerializeObject(usx, Formatting.None,
+                //    new JsonSerializerSettings()
+                //    {
+                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                //    });
 
                 await WriteMessageToPipeAsync(new PipeMessage
                 {
@@ -754,11 +775,12 @@ namespace ClearDashboardPlugin
             var usfm = m_project.GetUSFM(m_verseRef.BookNum);
             if (usfm != null)
             {
-                var dataPayload = JsonConvert.SerializeObject(usfm, Formatting.None,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+                var dataPayload = JsonSerializer.Serialize(usfm);
+                //var dataPayload = JsonConvert.SerializeObject(usfm, Formatting.None,
+                //    new JsonSerializerSettings()
+                //    {
+                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                //    });
 
                 await WriteMessageToPipeAsync(new PipeMessage
                 {
@@ -938,11 +960,12 @@ namespace ClearDashboardPlugin
                 }
             }
 
-            var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
+            var dataPayload = JsonSerializer.Serialize(lines);
+            //var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
+            //    new JsonSerializerSettings()
+            //    {
+            //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //    });
 
             //PipeMessage msgOut = new PipeMessage(ActionType.SetUSX, "", dataPayload);
             //var msgSend = msgOut.CreateMessage();

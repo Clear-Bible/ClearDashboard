@@ -1,13 +1,9 @@
-﻿using Pipes_Shared.Models;
-using Newtonsoft.Json;
-
-namespace Pipes_Shared.Models
+﻿namespace Pipes_Shared.Models
 {
     public class ScrLanguageWrapper : BindableBase
     {
 
         private string _FontFamily;
-        [JsonProperty]
         public string FontFamily
         {
             get => _FontFamily;
@@ -15,7 +11,6 @@ namespace Pipes_Shared.Models
         }
 
         private bool _IsRtol;
-        [JsonProperty]
         public bool IsRtol
         {
             get => _IsRtol;
@@ -23,7 +18,6 @@ namespace Pipes_Shared.Models
         }
 
         private ScrLanguage _language;
-        [JsonProperty]
         public ScrLanguage language
         {
             get => _language;

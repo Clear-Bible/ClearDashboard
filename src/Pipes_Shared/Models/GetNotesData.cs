@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using MvvmHelpers;
+﻿using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     public class GetNotesData : ObservableObject
     {
         private int _bookID;
-        [JsonProperty]
         public int BookID
         {
             get => _bookID;
@@ -18,7 +16,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _chapterID;
-        [JsonProperty]
         public int ChapterID
         {
             get => _chapterID;
@@ -30,7 +27,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _includeResolved;
-        [JsonProperty]
         public bool IncludeResolved
         {
             get => _includeResolved;
