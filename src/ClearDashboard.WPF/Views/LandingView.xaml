@@ -30,13 +30,13 @@
             <Setter Property="Height" Value="80" />
             <Setter Property="Width" Value="Auto" />
             <Setter Property="Foreground" Value="{DynamicResource OrangeLightBrush}" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <!--<Setter Property="FontWeight" Value="Bold" />-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border
                             x:Name="border"
-                            Background="{StaticResource MaterialDesignDarkBackground}"
+                            Background="{DynamicResource PrimaryHueDarkBrush}"
                             CornerRadius="5">
                             <StackPanel>
                                 <Image
