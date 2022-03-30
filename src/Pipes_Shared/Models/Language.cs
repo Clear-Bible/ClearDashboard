@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using MvvmHelpers;
 using System.ComponentModel;
-using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Language : ObservableObject
     {
         private string _FontFamily;
-        [JsonProperty]
         public string FontFamily
         {
             get => _FontFamily;
@@ -15,7 +13,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private double _Size;
-        [JsonProperty]
         public double Size
         {
             get => _Size;
@@ -23,7 +20,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _language;
-        [JsonProperty]
         [DisplayName("Language")]
         public string language
         {
@@ -32,7 +28,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _Features;
-        [JsonProperty]
         public string Features
         {
             get => _Features;
@@ -40,7 +35,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _Id;
-        [JsonProperty]
         public string Id
         {
             get => _Id;
@@ -48,7 +42,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _IsRtoL;
-        [JsonProperty]
         public bool IsRtoL
         {
             get => _IsRtoL;

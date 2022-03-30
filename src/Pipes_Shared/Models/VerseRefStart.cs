@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
@@ -7,7 +6,6 @@ namespace ClearDashboard.Pipes_Shared.Models
     public class VerseRefStart : ObservableObject
     {
         private string _BookCode;
-        [JsonProperty]
         public string BookCode
         {
             get => _BookCode;
@@ -15,7 +13,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _BookNum;
-        [JsonProperty]
         public int BookNum
         {
             get => _BookNum;
@@ -23,7 +20,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _ChapterNum;
-        [JsonProperty]
         public int ChapterNum
         {
             get => _ChapterNum;
@@ -31,7 +27,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _VerseNum;
-        [JsonProperty]
         public int VerseNum
         {
             get => _VerseNum;
@@ -39,7 +34,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _BBBCCCVVV;
-        [JsonProperty]
         public int BBBCCCVVV
         {
             get => _BBBCCCVVV;
@@ -47,7 +41,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private Versification _Versification;
-        [JsonProperty]
         public Versification Versification
         {
             get => _Versification;
@@ -55,7 +48,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private bool _RepresentsMultipleVerses;
-        [JsonProperty]
         public bool RepresentsMultipleVerses
         {
             get => _RepresentsMultipleVerses;
@@ -63,7 +55,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private List<object> _AllVerses;
-        [JsonProperty]
         public List<object> AllVerses
         {
             get => _AllVerses;

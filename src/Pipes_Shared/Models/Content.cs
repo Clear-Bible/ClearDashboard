@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
@@ -7,7 +6,6 @@ namespace ClearDashboard.Pipes_Shared.Models
     public class Content : ObservableObject
     {
         private List<Span> _Spans;
-        [JsonProperty]
         public List<Span> Spans
         {
             get => _Spans;

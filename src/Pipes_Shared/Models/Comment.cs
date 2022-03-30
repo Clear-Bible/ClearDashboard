@@ -1,14 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using MvvmHelpers;
 using System;
 using System.Collections.Generic;
-using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Comment : ObservableObject
     {
         private List<Content> _Contents;
-        [JsonProperty]
         public List<Content> Contents
         {
             get => _Contents;
@@ -16,7 +14,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private Author _Author;
-        [JsonProperty]
         public Author Author
         {
             get => _Author;
@@ -24,7 +21,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private DateTimeOffset _Created;
-        [JsonProperty]
         public DateTimeOffset Created
         {
             get => _Created;
@@ -32,7 +28,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private Language _Language;
-        [JsonProperty]
         public Language Language
         {
             get => _Language;
@@ -40,7 +35,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private AssignedUser _AssignedUser;
-        [JsonProperty]
         public AssignedUser AssignedUser
         {
             get => _AssignedUser;

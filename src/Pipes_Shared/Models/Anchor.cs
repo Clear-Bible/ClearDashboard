@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using MvvmHelpers;
 
 namespace ClearDashboard.Pipes_Shared.Models
@@ -6,7 +6,6 @@ namespace ClearDashboard.Pipes_Shared.Models
     public class Anchor : ObservableObject
     {
         private VerseRefStart _VerseRefStart;
-        [JsonProperty]
         public VerseRefStart VerseRefStart
         {
             get => _VerseRefStart;
@@ -14,7 +13,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private VerseRefEnd _VerseRefEnd;
-        [JsonProperty]
         public VerseRefEnd VerseRefEnd
         {
             get => _VerseRefEnd;
@@ -22,7 +20,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _SelectedText;
-        [JsonProperty]
         public string SelectedText
         {
             get => _SelectedText;
@@ -30,7 +27,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private int _Offset;
-        [JsonProperty]
         public int Offset
         {
             get => _Offset;
@@ -38,7 +34,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _BeforeContext;
-        [JsonProperty]
         public string BeforeContext
         {
             get => _BeforeContext;
@@ -46,7 +41,6 @@ namespace ClearDashboard.Pipes_Shared.Models
         }
 
         private string _AfterContext;
-        [JsonProperty]
         public string AfterContext
         {
             get => _AfterContext;

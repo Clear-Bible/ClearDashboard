@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Pipes_Shared.Models
 {
@@ -29,7 +28,6 @@ namespace Pipes_Shared.Models
 
 
         private string _ID = "";
-        [JsonProperty]
         public string ID
         {
             get => _ID;
@@ -37,7 +35,6 @@ namespace Pipes_Shared.Models
         }
 
         private string _ShortName = "";
-        [JsonProperty]
         public string ShortName
         {
             get => _ShortName;
@@ -46,7 +43,6 @@ namespace Pipes_Shared.Models
 
 
         private string _LongName = "";
-        [JsonProperty]
         public string LongName
         {
             get => _LongName;
@@ -55,7 +51,6 @@ namespace Pipes_Shared.Models
 
 
         private string _LanguageName = "";
-        [JsonProperty]
         public string LanguageName
         {
             get => _LanguageName;
@@ -63,7 +58,6 @@ namespace Pipes_Shared.Models
         }
 
         private List<BookInfo> _AvailableBooks = new List<BookInfo>();
-        [JsonProperty]
         public List<BookInfo> AvailableBooks
         {
             get => _AvailableBooks;
@@ -72,7 +66,6 @@ namespace Pipes_Shared.Models
 
 
         private List<string> _NonObservers = new List<string>();
-        [JsonProperty]
         public List<string> NonObservers
         {
             get => _NonObservers;
@@ -81,7 +74,6 @@ namespace Pipes_Shared.Models
 
 
         private ProjectType _Type;
-        [JsonProperty]
         public ProjectType Type
         {
             get => _Type;
@@ -90,7 +82,6 @@ namespace Pipes_Shared.Models
 
 
         private ScrLanguageWrapper _Language;
-        [JsonProperty]
         public ScrLanguageWrapper Language
         {
             get => _Language;
