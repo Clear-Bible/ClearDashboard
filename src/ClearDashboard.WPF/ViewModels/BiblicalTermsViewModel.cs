@@ -18,7 +18,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Helpers;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -36,6 +38,12 @@ namespace ClearDashboard.Wpf.ViewModels
             OptionProject
         }
 
+        public enum FilterWordType
+        {
+            English,
+            Rendering
+        }
+
         public ILogger Logger { get; set; }
         public INavigationService NavigationService { get; set; }
         public ProjectManager ProjectManager { get; set; }
@@ -46,8 +54,22 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-        private string _gloss;
 
+        private string _filterText;
+
+        public string FilterText
+        {
+            get { return _filterText; }
+            set
+            {
+                _filterText = value;
+                NotifyOfPropertyChange(() => FilterText);
+                TriggerFilterTermsByWord();
+            }
+        }
+
+
+        private string _gloss;
         public string Gloss
         {
             get { return _gloss; }
@@ -79,7 +101,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
 
-                //refresh the biblicalterms collection
+                //refresh the biblicalterms collection so the filter runs
                 BiblicalTermsCollectionView.Refresh();
             }
         }
@@ -95,7 +117,24 @@ namespace ClearDashboard.Wpf.ViewModels
                 _selectedBiblicalTermsType = value;
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
+                // reset the semantic domains & filter
+                FilterText = "";
+                SelectedDomain = null;
+
                 SwitchedBibilicalTermsType();
+            }
+        }
+
+        private FilterWordType _selectedWordFilterType = FilterWordType.English;
+        public FilterWordType SelectedWordFilterType
+        {
+            get { return _selectedWordFilterType; }
+            set
+            {
+                _selectedWordFilterType = value;
+                NotifyOfPropertyChange(() => SelectedWordFilterType);
+
+                TriggerFilterTermsByWord();
             }
         }
 
@@ -188,18 +227,25 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "BIBLICALTERMS";
             this.DockSide = EDockSide.Left;
 
+            // listen to the DAL event messages coming in
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
+            // populate the combo box for semantic domains
             SetupSemanticDomains();
-
 
             // setup the collectionview that binds to the datagrid
             BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(this._biblicalTerms);
 
-            BiblicalTermsCollectionView.Filter = FilterTerms;
+            // setup the method that we go to for filtering
+            BiblicalTermsCollectionView.Filter = FilterGridItems;
         }
 
 
+        /// <summary>
+        /// Listen for changes in the DAL regarding any messages coming in
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public async void HandleEventAsync(object sender, PipeEventArgs args)
         {
             if (args == null) return;
@@ -278,6 +324,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
+            // unsubscribe from events
             ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             Debug.WriteLine("Dispose");
@@ -288,6 +335,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+
+        /// <summary>
+        /// User has switched the toggle for All/Project Bibilical Terms
+        /// </summary>
+        /// <returns></returns>
         private async Task SwitchedBibilicalTermsType()
         {
             if (_lastSelectedBTtype != _selectedBiblicalTermsType)
@@ -304,12 +356,15 @@ namespace ClearDashboard.Wpf.ViewModels
                     await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll).ConfigureAwait(false);
                 }
 
-                //await SetProgBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
-
                 _lastSelectedBTtype = _selectedBiblicalTermsType;
             }
         }
 
+        /// <summary>
+        /// Turn on/off the progress bar asyncronously so the UI can render it
+        /// </summary>
+        /// <param name="visibility"></param>
+        /// <returns></returns>
         private async Task SetProgBarVisibilityAsync(Visibility visibility)
         {
             await Task.Run(() => { ProgressBarVisibility = visibility; }).ConfigureAwait(false);
@@ -444,14 +499,54 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
             
-
             NotifyOfPropertyChange(() => SelectedItemVerses);
             NotifyOfPropertyChange(() => Renderings);
             NotifyOfPropertyChange(() => RenderingsText);
         }
 
-        private bool FilterTerms(object obj)
+        private void TriggerFilterTermsByWord()
         {
+            //refresh the biblicalterms collection so the filter runs
+            BiblicalTermsCollectionView.Refresh();
+        }
+
+        /// <summary>
+        /// This is the filter callback for the grid
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private bool FilterGridItems(object obj)
+        {
+            // filter based on word
+            if (this.FilterText != "" && FilterText is not null)
+            {
+                if (obj is BiblicalTermsData btFilter)
+                {
+                    if (SelectedWordFilterType == FilterWordType.English)
+                    {
+                        // make this case insensitive
+                        if (btFilter.LocalGloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        // make this case insensitive
+                        foreach (var rendering in btFilter.Renderings)
+                        {
+                            if (rendering.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+            }
+
+            // filter based on semantic domain
             if (obj is BiblicalTermsData bt)
             {
                 //if (! filters.ContainsKey(bt.SemanticDomain))
@@ -468,26 +563,17 @@ namespace ClearDashboard.Wpf.ViewModels
                 return bt.SemanticDomain.Contains(SelectedDomain);
             }
 
+
+
             return false;
         }
 
+
         /// <summary>
-        /// Send message to server that we want the Biblical Terms list
+        /// Combo box for the domains
+        /// TODO once Paratext fixes their API, we need to collect this information from the ALL Biblical Terms
+        /// as right now, this information is null on ALL but filled in for Project
         /// </summary>
-        public async void ReloadBiblicalTerms()
-        {
-            if (ProjectManager.IsPipeConnected)
-            {
-                //await Task.Run(() =>
-                //{
-                //    ProgressBarVisibility = Visibility.Visible;
-                //}).ConfigureAwait(false);
-                //System.Windows.Forms.Application.DoEvents();
-
-                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
-            }
-        }
-
         private void SetupSemanticDomains()
         {
             _domains = new BindableCollection<string>();

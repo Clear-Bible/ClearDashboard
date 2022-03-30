@@ -13,7 +13,7 @@
     d:DataContext="{d:DesignInstance Type=viewModels:BiblicalTermsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -37,25 +37,17 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
+            <RowDefinition Height="47" />
             <RowDefinition Height="*" />
             <RowDefinition Height="80" />
             <RowDefinition Height="150" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button
-                x:Name="ReloadBiblicalTerms"
-                Width="100"
-                Margin="20,5,20,5"
-                HorizontalAlignment="Left"
-                Style="{DynamicResource MaterialDesignButton}">
-                Reload
-            </Button>
-
             <ProgressBar
                 x:Name="ProgressBarVisibility"
                 Width="30"
                 Height="30"
+                Margin="15,0,5,0"
                 IsIndeterminate="True"
                 Style="{StaticResource MaterialDesignCircularProgressBar}"
                 Visibility="{Binding ProgressBarVisibility}"
@@ -67,23 +59,68 @@
                 <RadioButton
                     Content="PROJECT"
                     Foreground="{DynamicResource PrimaryHueLightBrush}"
-                    GroupName="BTType"
+                    GroupName="radBTType"
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                 <RadioButton
                     Content="ALL"
                     Foreground="{DynamicResource PrimaryHueLightBrush}"
-                    GroupName="BTType"
+                    GroupName="radBTType"
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
             </StackPanel>
-            <TextBlock Margin="20,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
-            <ComboBox
-                x:Name="Domains"
-                MinWidth="150"
-                ItemsSource="{Binding Domains}"
-                SelectedItem="{Binding SelectedDomain, Mode=OneWayToSource}" />
+            <Border
+                Margin="10,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="20,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
+                    <ComboBox
+                        x:Name="Domains"
+                        MinWidth="150"
+                        Margin="0,0,5,0"
+                        ItemsSource="{Binding Domains}"
+                        SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Border>
+
+            <Border
+                Margin="2,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD FILTER:</TextBlock>
+                    <TextBox
+                        x:Name="FilterText"
+                        MinWidth="150"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        AcceptsReturn="False"
+                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <StackPanel
+                        Margin="5,0,0,5"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <RadioButton
+                            Margin="0,0,5,0"
+                            Content="ENGLISH"
+                            Foreground="{DynamicResource PrimaryHueLightBrush}"
+                            GroupName="radFilterType"
+                            IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=English}"
+                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+
+                        <RadioButton
+                            Margin="0,0,5,0"
+                            Content="RENDERINGS"
+                            Foreground="{DynamicResource PrimaryHueLightBrush}"
+                            GroupName="radFilterType"
+                            IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
+                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </StackPanel>
 
         <DataGrid
@@ -99,7 +136,6 @@
             HorizontalGridLinesBrush="{StaticResource StackOverflowGray}"
             IsReadOnly="True"
             ItemsSource="{Binding BiblicalTermsCollectionView}"
-            RowBackground="{DynamicResource MaterialDesignDarkBackground}"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -219,8 +255,7 @@
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="DimGray" />
-
+                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
                                                 <Setter Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
