@@ -297,11 +297,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsProject).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
                 }
                 else
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBibilicalTermsAll).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
                 }
 
                 //await SetProgBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
