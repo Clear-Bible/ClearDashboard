@@ -23,9 +23,6 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Views;
 using Path = System.Windows.Shapes.Path;
 
-//using Path = System.IO.Path;
-
-//using Path = System.IO.Path;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -37,9 +34,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public bool ParatextVisible = false;
         public bool ShowWaitingIcon = true;
-
-        //public DragAndDropManager DragAndDropManager { get; private set; }
-
 
         private string _helpText;
         public string HelpText
@@ -53,28 +47,26 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private bool _buttonEnabled;
-        public bool ButtonEnabled
+        private bool _canCreateNewProject;
+        public bool CanCreateNewProject
         {
-            get => _buttonEnabled;
+            get => _canCreateNewProject;
             set
             {
-                _buttonEnabled = value;
-                NotifyOfPropertyChange(() => ButtonEnabled);
+                _canCreateNewProject = value;
+                NotifyOfPropertyChange(() => CanCreateNewProject);
             }
         }
 
 
 
-        //private List<ParatextProject> _lwcProjects = new List<ParatextProject>();
-        //private ParatextProject _targetProject = null; 
-        //private List<ParatextProject> _backTransProjects = new List<ParatextProject>();
+        
 
-        public ObservableRangeCollection<ParatextProjectDisplay> ParatextProjects { get; set; } =
-            new ObservableRangeCollection<ParatextProjectDisplay>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } =
+            new ObservableRangeCollection<ParatextProjectViewModel>();
 
-        public ObservableRangeCollection<ParatextProjectDisplay> ParatextResources { get; set; } =
-            new ObservableRangeCollection<ParatextProjectDisplay>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } =
+            new ObservableRangeCollection<ParatextProjectViewModel>();
 
 
         private Task _textXamlChangeEvent;
@@ -161,8 +153,6 @@ namespace ClearDashboard.Wpf.ViewModels
         protected Canvas DrawCanvasBottom { get; set; }
         protected override void OnViewAttached(object view, object context)
         {
-            // DragAndDropManager = new DragAndDropManager(view as CreateNewProjectsView);
-
             var createNewProjectView = (view as CreateNewProjectsView);
 
             DrawCanvasTop = (Canvas)createNewProjectView.FindName("DrawCanvasTop");
@@ -186,7 +176,7 @@ namespace ClearDashboard.Wpf.ViewModels
             if (File.Exists(helpFile))
             {
                 var markdownTxt = File.ReadAllText(helpFile);
-                HelpText = String.Join("\r\n", Regex.Split(markdownTxt, "\r?\n").Select(ln => ln.TrimStart()));
+                HelpText = string.Join("\r\n", Regex.Split(markdownTxt, "\r?\n").Select(ln => ln.TrimStart()));
             }
 
 
@@ -198,29 +188,29 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 // get all the Paratext Projects (Projects/Backtranslations)
                 ParatextProjects.Clear();
-                List<ParatextProject> projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.eFolderType.Projects);
+                var projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.eFolderType.Projects);
                 try
                 {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectDisplay>();
+                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
                     foreach (var project in projects)
                     {
-                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectDisplay>(project));
+                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectViewModel>(project));
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e);
+                    Logger.LogError(ex, "Unexpected error while initializing");
                 }
 
                 // get all the Paratext Resources (LWC)
                 ParatextResources.Clear();
-                List<ParatextProject> resources = paratextUtils.GetParatextResources();
+                var resources = paratextUtils.GetParatextResources();
                 try
                 {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectDisplay>();
+                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
                     foreach (var resource in resources)
                     {
-                        ParatextResources.Add(TinyMapper.Map<ParatextProjectDisplay>(resource));
+                        ParatextResources.Add(TinyMapper.Map<ParatextProjectViewModel>(resource));
                     }
                 }
                 catch (Exception ex)
@@ -1311,7 +1301,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion 
 
-        public async void CreateNewProject(object obj)
+        public async void CreateNewProject()
         {
             if (_targetProject == null)
             {
@@ -1332,7 +1322,7 @@ namespace ClearDashboard.Wpf.ViewModels
             await ProjectManager.CreateNewProject(dashboardProject).ConfigureAwait(false);
         }
 
-        internal void SetProjects(List<ParatextProject> lwcProjects = null, 
+        private void SetProjects(List<ParatextProject> lwcProjects = null, 
             ParatextProject targetProject = null, 
             List<ParatextProject> backTranslationProjects = null, 
             ParatextProject _interlinearizerProject = null)
@@ -1352,62 +1342,22 @@ namespace ClearDashboard.Wpf.ViewModels
                 _backTranslationProjects = new List<ParatextProject>(backTranslationProjects);
             }
 
-            if (ProjectName == "" || ProjectName is null)
+            if (ProjectName is "" or null)
             {
-                ButtonEnabled = false;
+                CanCreateNewProject = false;
                 return;
             }
 
             // check to see if we have at least a target project
             if (_targetProject is null)
             {
-                ButtonEnabled = false;
+                CanCreateNewProject = false;
             }
             else
             {
-                ButtonEnabled = true;
+                CanCreateNewProject = true;
             }
         }
 
-    }
-
-    public class ParatextProjectDisplay : ParatextProject
-    {
-        private bool _inUse;
-        public bool InUse
-        {
-            get => _inUse;
-            set
-            {
-                _inUse = value;
-                OnPropertyChanged(nameof(InUse));
-            }
-        }
-
-    }
-
-    public class DragAndDropManager
-    {
-        private CreateNewProjectsView _view;
-
-        public DragAndDropManager(CreateNewProjectsView view)
-        {
-            
-        }
-        public void PreviewDrop(object sender, DragEventArgs e)
-        {
-            var s = e.Data;
-        }
-
-        public void ListView_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            e.Handled = true;
-            var s = e.Device.Target;
-        }
-
-        public void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var _dragStartPoint = e.GetPosition(null);
-        }
     }
 }
