@@ -19,11 +19,11 @@ namespace ClearDashboard.DAL.Tests
         public async Task TestProjectDatabaseCreation()
         {
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
-            const string projectName = "Project5";
+            const string projectName = "Project6";
 
             Assert.NotNull(factory);
 
-            var context1 = await factory.Create(projectName);
+            var context1 = await factory?.Create(projectName)!;
 
             Assert.NotNull(context1);
             var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";

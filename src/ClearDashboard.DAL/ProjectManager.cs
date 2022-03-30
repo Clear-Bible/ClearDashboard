@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using Microsoft.Extensions.Logging;
@@ -11,22 +12,35 @@ namespace ClearDashboard.DataAccessLayer
 {
     public class ProjectManager
     {
-        #region props
+        #region Properties
 
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
+        private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
 
         public bool IsPipeConnected { get; set; }
+
+        #region Startup
+
+        public ProjectManager(NamedPipesClient namedPipeClient, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        {
+            _logger = logger;
+            _projectNameDbContextFactory = projectNameDbContextFactory;
+            _logger.LogInformation("'ProjectManager' ctor called.");
+
+            _namedPipesClient = namedPipeClient;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
+        }
+
+        #endregion
 
         public enum PipeAction
         {
             OnConnected,
             OnDisconnected,
-
             SendText,
-
-            GetBibilicalTermsAll,
-            GetBibilicalTermsProject,
+            GetBiblicalTermsAll,
+            GetBiblicalTermsProject,
             GetSourceVerses,
             GetTargetVerses,
             GetNotes,
@@ -52,19 +66,6 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion
 
-        #region Startup
-
-        public ProjectManager(NamedPipesClient namedPipeClient, ILogger<ProjectManager> logger)
-        {
-            _logger = logger;
-            _logger.LogInformation("'ProjectManager' ctor called.");
-
-            _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
-        }
-
-        #endregion
-
         #region Shutdown
 
         public void OnClosing()
@@ -75,12 +76,11 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion
 
-
         #region Methods
 
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
-            PipeMessage pm = args.PM;
+            var pm = args.PM;
 
             if (pm.Action == ActionType.OnConnected)
             {
@@ -96,7 +96,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void GetParatextUserName()
         {
-            // TODO this is a hack that reads the first user in the Paratext project'pm directory
+            // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
             var paratextUtils = new Paratext.ParatextUtils();
@@ -110,7 +110,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task SendPipeMessage(PipeAction action, string text = "")
         {
-            PipeMessage message = new PipeMessage();
+            var message = new PipeMessage();
             switch (action)
             {
                 case PipeAction.OnConnected:
@@ -126,10 +126,10 @@ namespace ClearDashboard.DataAccessLayer
                     message.Action = ActionType.SendText;
                     message.Text = text;
                     break;
-                case PipeAction.GetBibilicalTermsAll:
+                case PipeAction.GetBiblicalTermsAll:
                     message.Action = ActionType.GetBibilicalTermsAll;
                     break;
-                case PipeAction.GetBibilicalTermsProject:
+                case PipeAction.GetBiblicalTermsProject:
                     message.Action = ActionType.GetBibilicalTermsProject;
                     break;
                 case PipeAction.GetSourceVerses:
@@ -144,6 +144,8 @@ namespace ClearDashboard.DataAccessLayer
                 case PipeAction.GetProject:
                     message.Action = ActionType.GetProject;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
 
             await _namedPipesClient.WriteAsync(message);
@@ -154,33 +156,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
-            // create the new folder
-            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            appPath = Path.Combine(appPath, "ClearDashboard_Projects");
-
-            //check to see if the directory exists already
-            var newDir = Path.Combine(appPath, dashboardProject.ProjectName);
-            if (!Directory.Exists(newDir))
-            {
-                try
-                {
-                    Directory.CreateDirectory(newDir);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"'DAL.CreateNewProject: {ex.Message}");
-                    return;
-                }
-            }
-
-            dashboardProject.ProjectPath = newDir;
-
-            // PASS THIS DOWN TO MICHAEL FOR DATABASE CREATION
-
-
-            // remove compiler warning
-            await Task.CompletedTask;
-
+            var projectAssets = await _projectNameDbContextFactory.Create(dashboardProject.ProjectName);
         }
     }
 }
