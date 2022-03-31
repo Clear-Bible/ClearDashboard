@@ -51,6 +51,9 @@ namespace ClearDashboard.Wpf.ViewModels
         public ProjectManager ProjectManager { get; set; }
         private string _currentVerse = "";
 
+
+
+
         //Dictionary<string, object> filters = new Dictionary<string, object>();
         #endregion //Member Variables
 
@@ -143,6 +146,41 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Public Properties
 
         #region Observable Properties
+
+        private string _fontFamily = "Segoe UI";
+        public string FontFamily
+        {
+            get => _fontFamily;
+            set
+            {
+                _fontFamily = value;
+                NotifyOfPropertyChange(() => FontFamily);
+            }
+        }
+
+        private float _fontSize;
+
+        public float FontSize
+        {
+            get { return _fontSize; }
+            set
+            {
+                _fontSize = value;
+                NotifyOfPropertyChange(() => FontSize);
+            }
+        }
+
+
+        private bool _isRTL = false;
+        public bool IsRTL
+        {
+            get => _isRTL;
+            set
+            {
+                _isRTL = value;
+                NotifyOfPropertyChange(() => IsRTL);
+            }
+        }
 
         public ICollectionView BiblicalTermsCollectionView { get; }
 
@@ -257,6 +295,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // wire up the commands
             NotesCommand = new RelayCommand(ShowNotes);
+
+            if (projectManager.Project is not null)
+            {
+                // pull out the project font family
+                _fontFamily = projectManager.Project.Language.FontFamily;
+                _fontSize = projectManager.Project.Language.Size;
+                _isRTL = projectManager.Project.Language.IsRtol;
+            }
         }
 
 

@@ -1,12 +1,17 @@
 using System;
 using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.Pipes_Shared.Models;
 using Microsoft.Extensions.Logging;
 using Pipes_Shared;
+using Pipes_Shared.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -17,6 +22,8 @@ namespace ClearDashboard.DataAccessLayer
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
+
+        public Project Project;
 
         public bool IsPipeConnected { get; set; }
 
@@ -90,7 +97,13 @@ namespace ClearDashboard.DataAccessLayer
             {
                 this.IsPipeConnected= false;
             }
-
+            else if (pm.Action == ActionType.SetProject)
+            {
+                // intercept and keep a copy of the current project
+                var payload = pm.Payload;
+                Project = JsonSerializer.Deserialize<Project>((string)payload);
+            }
+            
             RaisePipesChangedEvent(pm);
         }
 

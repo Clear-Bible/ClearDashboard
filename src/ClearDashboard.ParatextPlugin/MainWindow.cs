@@ -260,19 +260,6 @@ namespace ClearDashboardPlugin
         {
             AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
             
-            //PipeMessage msg = null;
-            //try
-            //{
-            //    msg = JsonConvert.DeserializeObject<PipeMessage>(e.String);
-            //}
-            //catch (Exception exception)
-            //{
-            //    msg = null;
-            //    Log.Logger.Error(exception.Message);
-            //    return;
-            //}
-
-
             // Do the command's action
             switch (message.Action)
             {
@@ -301,12 +288,6 @@ namespace ClearDashboardPlugin
 
                     var payloadBTAll = JsonSerializer.Serialize(_TermsList, _jsonOptions);
 
-                    //var payloadBTAll = JsonConvert.SerializeObject(_TermsList, Formatting.None,
-                    //    new JsonSerializerSettings()
-                    //    {
-                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    //    });
-
                     await WriteMessageToPipeAsync(new PipeMessage
                     {
                         Action = ActionType.SetBiblicalTerms,
@@ -320,11 +301,6 @@ namespace ClearDashboardPlugin
                     var btList = bt.ProcessBiblicalTerms(m_project);
 
                     var payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
-                    //var payloadBT = JsonConvert.SerializeObject(btList, Formatting.None,
-                    //    new JsonSerializerSettings()
-                    //    {
-                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    //    });
 
                     await WriteMessageToPipeAsync(new PipeMessage
                     {
@@ -340,7 +316,7 @@ namespace ClearDashboardPlugin
                 case ActionType.GetNotes:
                     //await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
                     break;
-                case ActionType.GetProject:
+                case ActionType.SetProject:
                     AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
                     await WriteMessageToPipeAsync(message).ConfigureAwait(false);
                     AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
@@ -361,17 +337,11 @@ namespace ClearDashboardPlugin
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
 
-
                     var payload = JsonSerializer.Serialize(proj, _jsonOptions);
-                    //var payload = JsonConvert.SerializeObject(proj, Formatting.None,
-                    //    new JsonSerializerSettings()
-                    //    {
-                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    //    });
 
                     await OnMessageReceivedAsync(new PipeMessage
                     {
-                        Action = ActionType.GetProject,
+                        Action = ActionType.SetProject,
                         Text = "Project Object",
                         Payload = payload
                     });
@@ -658,6 +628,7 @@ namespace ClearDashboardPlugin
             project.Language = new ScrLanguageWrapper
             {
                 FontFamily = m_project.Language.Font.FontFamily,
+                Size = m_project.Language.Font.Size,
                 IsRtol = m_project.Language.IsRtoL,
             };
 
@@ -712,25 +683,11 @@ namespace ClearDashboardPlugin
 
 
                 var dataPayload = JsonSerializer.Serialize(m_noteList, _jsonOptions);
-                //var dataPayload = JsonConvert.SerializeObject(m_noteList, Formatting.None,
-                //    new JsonSerializerSettings()
-                //    {
-                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                //        TypeNameHandling = TypeNameHandling.Auto,
-                //        NullValueHandling = NullValueHandling.Ignore,
-                //        Formatting = Formatting.None,
-                //    });
+
 
                 try
                 {
                     var deserializedObj = JsonSerializer.Deserialize<IReadOnlyList<IProjectNote>>(dataPayload);
-                    //var deserializedObj = JsonConvert.DeserializeObject<IReadOnlyList<IProjectNote>>(dataPayload, new JsonSerializerSettings()
-                    //{
-                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    //    TypeNameHandling = TypeNameHandling.Auto,
-                    //    NullValueHandling = NullValueHandling.Ignore,
-                    //    Formatting = Formatting.None,
-                    //});
 
                     PipeMessage msgOut = new PipeMessage
                     {
@@ -758,11 +715,6 @@ namespace ClearDashboardPlugin
             if (usx != null)
             {
                 var dataPayload = JsonSerializer.Serialize(usx);
-                //var dataPayload = JsonConvert.SerializeObject(usx, Formatting.None,
-                //    new JsonSerializerSettings()
-                //    {
-                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                //    });
 
                 await WriteMessageToPipeAsync(new PipeMessage
                 {
@@ -776,11 +728,6 @@ namespace ClearDashboardPlugin
             if (usfm != null)
             {
                 var dataPayload = JsonSerializer.Serialize(usfm);
-                //var dataPayload = JsonConvert.SerializeObject(usfm, Formatting.None,
-                //    new JsonSerializerSettings()
-                //    {
-                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                //    });
 
                 await WriteMessageToPipeAsync(new PipeMessage
                 {
@@ -961,11 +908,6 @@ namespace ClearDashboardPlugin
             }
 
             var dataPayload = JsonSerializer.Serialize(lines);
-            //var dataPayload = JsonConvert.SerializeObject(lines, Formatting.None,
-            //    new JsonSerializerSettings()
-            //    {
-            //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //    });
 
             //PipeMessage msgOut = new PipeMessage(ActionType.SetUSX, "", dataPayload);
             //var msgSend = msgOut.CreateMessage();

@@ -7,8 +7,6 @@ namespace ClearDashboard.Wpf.Helpers
 {
     public class BindableTextBlock : TextBlock
     {
-        
-
         public ObservableCollection<Inline> InlineList
         {
             get
@@ -20,6 +18,17 @@ namespace ClearDashboard.Wpf.Helpers
                 SetValue(InlineListProperty, value);
             }
         }
+
+        public string FontFamily = "Segoe UI";
+        public float FontSize = 13;
+
+        public static readonly DependencyProperty FontSizeProperty =
+            DependencyProperty.Register("FontSize", typeof(float), typeof(BindableTextBlock), new UIPropertyMetadata(13f, OnPropertyChanged));
+
+
+        public static readonly DependencyProperty FontFamilyProperty =
+            DependencyProperty.Register("FontFamily", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata("Segoe UI", OnPropertyChanged));
+
 
         public static readonly DependencyProperty InlineListProperty =
             DependencyProperty.Register("InlineList", typeof(ObservableCollection<Inline>), typeof(BindableTextBlock), new UIPropertyMetadata(null, OnPropertyChanged));

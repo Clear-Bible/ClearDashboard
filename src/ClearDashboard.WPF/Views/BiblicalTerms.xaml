@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    x:Name="UserControl"
     d:DataContext="{d:DesignInstance Type=viewModels:BiblicalTermsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -40,9 +41,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="47" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="230" />
         </Grid.RowDefinitions>
+        <!--  ROW 0  -->
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <ProgressBar
                 x:Name="ProgressBarVisibility"
@@ -59,21 +61,21 @@
                 Orientation="Vertical">
                 <RadioButton
                     Content="PROJECT"
-                    Foreground="{DynamicResource PrimaryHueLightBrush}"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
                     GroupName="radBTType"
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                 <RadioButton
                     Content="ALL"
-                    Foreground="{DynamicResource PrimaryHueLightBrush}"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
                     GroupName="radBTType"
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
             </StackPanel>
             <Border
                 Margin="10,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="20,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
@@ -88,7 +90,7 @@
 
             <Border
                 Margin="2,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD FILTER:</TextBlock>
@@ -107,7 +109,7 @@
                         <RadioButton
                             Margin="0,0,5,0"
                             Content="ENGLISH"
-                            Foreground="{DynamicResource PrimaryHueLightBrush}"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=English}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
@@ -115,7 +117,7 @@
                         <RadioButton
                             Margin="0,0,5,0"
                             Content="RENDERINGS"
-                            Foreground="{DynamicResource PrimaryHueLightBrush}"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
@@ -124,6 +126,7 @@
             </Border>
         </StackPanel>
 
+        <!--  ROW 1  -->
         <DataGrid
             x:Name="gridVerses"
             Grid.Row="1"
@@ -147,7 +150,7 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
                 </Style>
@@ -163,7 +166,8 @@
                                 Height="20"
                                 Margin="-15,0,0,0"
                                 HorizontalAlignment="Center"
-                                Command="{Binding Path=DataContext.NotesCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"
+                                Command="{Binding Path=DataContext.NotesCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding}"
                                 Style="{DynamicResource MaterialDesignIconButton}"
                                 ToolTip="Note">
                                 <materialDesign:PackIcon
@@ -255,6 +259,8 @@
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
+                                        <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
+                                        <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
                                         <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
@@ -270,82 +276,107 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Border
+        <!--  ROW 2  -->
+        <GridSplitter
             Grid.Row="2"
-            Margin="5"
-            BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-            BorderThickness="1">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        Margin="5,0,5,0"
-                        Foreground="{DynamicResource PrimaryHueLightBrush}"
-                        Text="Gloss:" />
-                    <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
-                </StackPanel>
-                <ListBox
-                    x:Name="SelectedItemVerseRenderings"
+            Height="5"
+            HorizontalAlignment="Stretch" />
+
+        <!--  ROW 3  -->
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border
+                Grid.Row="0"
+                Margin="5"
+                BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="5,0,5,0"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            Text="Gloss:" />
+                        <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
+                    </StackPanel>
+                    <ListBox
+                        x:Name="SelectedItemVerseRenderings"
+                        Margin="5"
+                        VerticalAlignment="Top"
+                        materialDesign:ListBoxItemAssist.ShowSelection="False"
+                        ItemsSource="{Binding Renderings}">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
+                                <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
+                                <Setter Property="Height" Value="20" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!--  ROW 1  -->
+            <Border
+                x:Name="LowerBorder"
+                Grid.Row="1"
+                Margin="5"
+                BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <ListView
+                    x:Name="SelectedItemVerses"
+                    MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                     Margin="5"
                     VerticalAlignment="Top"
-                    materialDesign:ListBoxItemAssist.ShowSelection="False"
-                    ItemsSource="{Binding Renderings}" />
-            </StackPanel>
-        </Border>
+                    ItemsSource="{Binding SelectedItemVerses}">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
 
-        <Border
-            x:Name="LowerBorder"
-            Grid.Row="3"
-            Margin="5"
-            BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-            BorderThickness="1">
-            <ListView
-                x:Name="SelectedItemVerses"
-                MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
-                Margin="5"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding SelectedItemVerses}">
-                <ListView.View>
-                    <GridView>
-                        <GridView.ColumnHeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Style>
-                        </GridView.ColumnHeaderContainerStyle>
-
-                        <GridViewColumn Width="30">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <materialDesign:PackIcon Width="20" Height="20">
-                                        <materialDesign:PackIcon.Style>
-                                            <Style TargetType="materialDesign:PackIcon">
-                                                <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
-                                                <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Found}" Value="False">
-                                                        <Setter Property="Kind" Value="CloseBox" />
-                                                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </materialDesign:PackIcon.Style>
-                                    </materialDesign:PackIcon>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
-                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='0.85'}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <helpers:BindableTextBlock
-                                        Width="Auto"
-                                        InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                        TextWrapping="Wrap" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Border>
+                            <GridViewColumn Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:PackIcon Width="20" Height="20">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Found}" Value="False">
+                                                            <Setter Property="Kind" Value="CloseBox" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
+                            <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='0.85'}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <helpers:BindableTextBlock
+                                            Width="Auto"
+                                            FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
+                                            FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                            InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
