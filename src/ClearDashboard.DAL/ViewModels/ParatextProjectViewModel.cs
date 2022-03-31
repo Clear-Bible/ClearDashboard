@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.Common.Models;
 
-namespace ClearDashboard.Wpf.ViewModels;
+namespace ClearDashboard.DataAccessLayer.ViewModels;
 
 public class ParatextProjectViewModel : ParatextProject
 {

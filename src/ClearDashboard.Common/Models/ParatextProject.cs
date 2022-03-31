@@ -1,31 +1,31 @@
-﻿using System;
+﻿using SIL.Scripture;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
-using SIL.Scripture;
 
 namespace ClearDashboard.Common.Models
 {
+
+    public enum ProjectType
+    {
+        Unknown,
+        Standard,
+        Resource,
+        BackTranslation,
+        Auxiliary,
+        Daughter,
+        MarbleResource,
+    }
+
+    public enum DirType
+    {
+        Project,
+        Resources
+    }
+
     public class ParatextProject : INotifyPropertyChanged
     {
-        public enum eProjectType
-        {
-            Unknown,
-            Standard,
-            Resource,
-            BackTranslation,
-            Auxiliary,
-            Daughter,
-            MarbleResource,
-        }
-
-        public enum eDirType
-        {
-            Project,
-            Resources
-        }
+       
 
         public Dictionary<int, ParatextBookFileName> BookNames = new Dictionary<int, ParatextBookFileName>
         {
@@ -99,11 +99,11 @@ namespace ClearDashboard.Common.Models
         };
 
 
-        private eDirType _dirType = eDirType.Project;
-        public eDirType DirType
+        private DirType _dirType = DirType.Project;
+        public DirType DirType
         {
             get => _dirType;
-            set { _dirType = value; }
+            set => _dirType = value;
         }
 
 
@@ -118,9 +118,9 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        private eProjectType _projectType;
+        private ProjectType _projectType;
 
-        public eProjectType ProjectType
+        public ProjectType ProjectType
         {
             get => _projectType;
             set
@@ -310,7 +310,7 @@ namespace ClearDashboard.Common.Models
 
     public class Translation_Info
     {
-        public ParatextProject.eProjectType projectType { get; set; } = ParatextProject.eProjectType.Unknown;
+        public ProjectType projectType { get; set; } = ProjectType.Unknown;
         public string projectName { get; set; } = "";
         public string projectGuid { get; set; } = "";
     }

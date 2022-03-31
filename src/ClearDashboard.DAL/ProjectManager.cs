@@ -5,7 +5,11 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.ViewModels;
 using Microsoft.Extensions.Logging;
+using MvvmHelpers;
+using Nelibur.ObjectMapper;
 using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
@@ -17,6 +21,14 @@ namespace ClearDashboard.DataAccessLayer
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
+
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } =
+            new ObservableRangeCollection<ParatextProjectViewModel>();
+
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } =
+            new ObservableRangeCollection<ParatextProjectViewModel>();
+
+        public bool ParatextVisible = false;
 
         public bool IsPipeConnected { get; set; }
 
@@ -94,18 +106,69 @@ namespace ClearDashboard.DataAccessLayer
             RaisePipesChangedEvent(pm);
         }
 
+        public async Task SetupParatext()
+        {
+            // detect if Paratext is installed
+            var paratextUtils = new ParatextUtils();
+            ParatextVisible = paratextUtils.IsParatextInstalled();
+
+            if (ParatextVisible)
+            {
+                // get all the Paratext Projects (Projects/Backtranslations)
+                ParatextProjects.Clear();
+                var projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.FolderType.Projects);
+                try
+                {
+                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
+                    foreach (var project in projects)
+                    {
+                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectViewModel>(project));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Unexpected error while initializing");
+                }
+
+                // get all the Paratext Resources (LWC)
+                ParatextResources.Clear();
+                var resources = paratextUtils.GetParatextResources();
+                try
+                {
+                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
+                    foreach (var resource in resources)
+                    {
+                        ParatextResources.Add(TinyMapper.Map<ParatextProjectViewModel>(resource));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Unexpected error while initializing");
+                }
+            }
+        }
+
         public void GetParatextUserName()
         {
             // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            var paratextUtils = new Paratext.ParatextUtils();
+            var paratextUtils = new ParatextUtils();
             var user = paratextUtils.GetCurrentParatextUser();
 
             ParatextUserName = user;
 
             // raise the paratext username event
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
+        }
+
+        public DashboardProject CreateDashboardProject()
+        {
+            return  new DashboardProject
+            {
+                ParatextUser = ParatextUserName,
+                CreationDate = DateTime.Now
+            };
         }
 
         public async Task SendPipeMessage(PipeAction action, string text = "")
