@@ -23,10 +23,10 @@ namespace ClearDashboard.DataAccessLayer.Context
 
         public virtual DbSet<Adornment> Adornments { get; set; }
         public virtual DbSet<Alignment> Alignments { get; set; }
-        public virtual DbSet<AlignmentType> AlignmentTypes { get; set; }
+        //public virtual DbSet<AlignmentType> AlignmentTypes { get; set; }
         public virtual DbSet<AlignmentVersion> AlignmentVersions { get; set; }
         public virtual DbSet<Corpus> Corpa { get; set; }
-        public virtual DbSet<CorpusType> CorpusTypes { get; set; }
+        //public virtual DbSet<CorpusType> CorpusTypes { get; set; }
         public virtual DbSet<InterlinearNote> InterlinearNotes { get; set; }
         public virtual DbSet<ParallelCorpus> ParallelCorpus { get; set; }
         public virtual DbSet<ParallelVerse> ParallelVerses { get; set; }
@@ -110,25 +110,25 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.Property(e => e.SourceTokenId);
                 entity.Property(e => e.TargetTokenId);
 
-                entity.HasOne(d => d.AlignmentType)
-                    .WithMany(p => p.Alignments)
-                    .HasForeignKey(d => d.AlignmentTypeId);
+                //entity.HasOne(d => d.AlignmentType)
+                //    .WithMany(p => p.Alignments)
+                //    .HasForeignKey(d => d.AlignmentTypeId);
 
                 entity.HasOne(d => d.AlignmentVersion)
                     .WithMany(p => p.Alignments)
                     .HasForeignKey(d => d.AlignmentVersionId);
             });
 
-            modelBuilder.Entity<AlignmentType>(entity =>
-            {
-                entity.ToTable("AlignmentType");
+            //modelBuilder.Entity<AlignmentType>(entity =>
+            //{
+            //    entity.ToTable("AlignmentType");
 
-                entity.HasKey(e => e.Id);
+            //    entity.HasKey(e => e.Id);
                
-                entity.Property(e => e.Description)
-                    .HasMaxLength(100)
-                    .HasColumnType("varchar(100)");
-            });
+            //    entity.Property(e => e.Description)
+            //        .HasMaxLength(100)
+            //        .HasColumnType("varchar(100)");
+            //});
 
             modelBuilder.Entity<AlignmentVersion>(entity =>
             {
@@ -169,32 +169,32 @@ namespace ClearDashboard.DataAccessLayer.Context
                     .HasColumnType("varchar(250)")
                     .HasColumnName("ParatextGUID");
 
-                entity.HasOne(d => d.ParallelCorpus)
-                    .WithOne(p => p.CorpusCorpus)
-                    .HasPrincipalKey<ParallelCorpus>(p => p.SourceCorpusId)
-                    .HasForeignKey<Corpus>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.ParallelCorpus)
+                //    .WithOne(p => p.CorpusCorpus)
+                //    .HasPrincipalKey<ParallelCorpus>(p => p.SourceCorpusId)
+                //    .HasForeignKey<Corpus>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.CorpusNavigation)
-                    .WithOne(p => p.CorpusCorpusNavigation)
-                    .HasPrincipalKey<ParallelCorpus>(p => p.TargetCorpusId)
-                    .HasForeignKey<Corpus>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.CorpusNavigation)
+                //    .WithOne(p => p.CorpusCorpusNavigation)
+                //    .HasPrincipalKey<ParallelCorpus>(p => p.TargetCorpusId)
+                //    .HasForeignKey<Corpus>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.CorpusType)
-                    .WithMany(p => p.Corpa)
-                    .HasForeignKey(d => d.CorpusTypeId);
+                //entity.HasOne(d => d.CorpusType)
+                //    .WithMany(p => p.Corpa)
+                //    .HasForeignKey(d => d.CorpusTypeId);
             });
 
-            modelBuilder.Entity<CorpusType>(entity =>
-            {
-                entity.ToTable("CorpusType");
+            //modelBuilder.Entity<CorpusType>(entity =>
+            //{
+            //    entity.ToTable("CorpusType");
 
-                entity.HasKey(e => e.Id);
+            //    entity.HasKey(e => e.Id);
 
-                // CODE-REVIEW: Should this be a string?
-                entity.Property(e => e.Description);
-            });
+            //    // CODE-REVIEW: Should this be a string?
+            //    entity.Property(e => e.Description);
+            //});
 
             modelBuilder.Entity<InterlinearNote>(entity =>
             {
@@ -284,8 +284,8 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.VerseId).IsUnique();
 
-                entity.Property(e => e.WordId);
-                entity.Property(e => e.PartId);
+                entity.Property(e => e.WordNumber);
+                entity.Property(e => e.SubwordNumber);
                 entity.Property(e => e.VerseId);
 
 
@@ -295,17 +295,17 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.Property(e => e.Text)
                     .HasColumnType("varchar(250)");
 
-                entity.HasOne(d => d.TokenNavigation)
-                    .WithOne(p => p.TokenTokenNavigation)
-                    .HasPrincipalKey<Alignment>(p => p.SourceTokenId)
-                    .HasForeignKey<Token>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.Alignment)
+                //    .WithOne(p => p.SourceToken)
+                //    .HasPrincipalKey<Alignment>(p => p.SourceTokenId)
+                //    .HasForeignKey<Token>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.Token1)
-                    .WithOne(p => p.TokenToken1)
-                    .HasPrincipalKey<Alignment>(p => p.TargetTokenId)
-                    .HasForeignKey<Token>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.Alignment)
+                //    .WithOne(p => p.TargetToken)
+                //    .HasPrincipalKey<Alignment>(p => p.TargetTokenId)
+                //    .HasForeignKey<Token>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -332,8 +332,10 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.HasKey(e => e.Id);
 
                 //CODE-REVIEW: is this correct length?
-                entity.Property(e => e.BookId)
+                entity.Property(e => e.SilBookNumber)
                     .HasColumnType("varchar(2)");
+
+             
 
                 entity.Property(e => e.CorpusId);
 
@@ -348,23 +350,23 @@ namespace ClearDashboard.DataAccessLayer.Context
                     .WithMany(p => p.Verses)
                     .HasForeignKey(d => d.CorpusId);
 
-                entity.HasOne(d => d.VerseNavigation)
-                    .WithOne(p => p.VerseVerseNavigation)
-                    .HasPrincipalKey<ParallelVerse>(p => p.SourceVerseId)
-                    .HasForeignKey<Verse>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.Corpus)
+                //    .WithOne(p => p.)
+                //    .HasPrincipalKey<ParallelVerse>(p => p.SourceVerseId)
+                //    .HasForeignKey<Verse>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.Verse1)
-                    .WithOne(p => p.VerseVerse1)
-                    .HasPrincipalKey<ParallelVerse>(p => p.TargetVerseId)
-                    .HasForeignKey<Verse>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.Verse1)
+                //    .WithOne(p => p.VerseVerse1)
+                //    .HasPrincipalKey<ParallelVerse>(p => p.TargetVerseId)
+                //    .HasForeignKey<Verse>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.Verse2)
-                    .WithOne(p => p.Verse)
-                    .HasPrincipalKey<Token>(p => p.VerseId)
-                    .HasForeignKey<Verse>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                //entity.HasOne(d => d.Verse2)
+                //    .WithOne(p => p.Verse)
+                //    .HasPrincipalKey<Token>(p => p.VerseId)
+                //    .HasForeignKey<Verse>(d => d.Id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             OnModelCreatingPartial(modelBuilder);

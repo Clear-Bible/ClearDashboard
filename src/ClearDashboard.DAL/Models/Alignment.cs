@@ -14,7 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual AlignmentType AlignmentType { get; set; }
         public virtual AlignmentVersion AlignmentVersion { get; set; }
-        public virtual Token TokenToken1 { get; set; }
-        public virtual Token TokenTokenNavigation { get; set; }
+        public virtual Token SourceToken { get; set; }
+        public virtual Token TargetToken { get; set; }
     }
 }
