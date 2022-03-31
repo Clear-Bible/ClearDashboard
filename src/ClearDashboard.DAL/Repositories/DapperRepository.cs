@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Repositories
 
         internal string DatabaseFilePathName { get; set; }
 
-        internal DapperDataProvider Db { get; set; }
+     //   internal DapperDataProvider Db { get; set; }
 
         /// <summary>
         /// Allows for easy change of the table abbr. We want developers to be able to save objects in different tables.

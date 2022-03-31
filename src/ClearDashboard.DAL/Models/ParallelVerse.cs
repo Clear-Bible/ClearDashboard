@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? ParallelCorpusId { get; set; }
 
         public virtual ParallelCorpus ParallelCorpus { get; set; }
-        public virtual Verse VerseVerse1 { get; set; }
-        public virtual Verse VerseVerseNavigation { get; set; }
+        public virtual Verse SourceVerse { get; set; }
+        public virtual Verse TargetVersen { get; set; }
     }
 }
