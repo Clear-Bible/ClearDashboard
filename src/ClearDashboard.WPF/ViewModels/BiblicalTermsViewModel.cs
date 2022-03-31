@@ -268,6 +268,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private ICommand _verseClickCommand;
+        public ICommand VerseClickCommand
+        {
+            get => _verseClickCommand;
+            set
+            {
+                _verseClickCommand = value;
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -295,6 +305,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // wire up the commands
             NotesCommand = new RelayCommand(ShowNotes);
+            VerseClickCommand = new RelayCommand(VerseClick);
 
             if (projectManager.Project is not null)
             {
@@ -303,6 +314,11 @@ namespace ClearDashboard.Wpf.ViewModels
                 _fontSize = projectManager.Project.Language.Size;
                 _isRTL = projectManager.Project.Language.IsRtol;
             }
+        }
+
+        private void VerseClick(object obj)
+        {
+            Console.WriteLine();
         }
 
 

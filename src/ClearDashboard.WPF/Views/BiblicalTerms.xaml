@@ -41,7 +41,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="47" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="10" />
+            <RowDefinition Height="12" />
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>
         <!--  ROW 0  -->
@@ -273,18 +273,21 @@
         <!--  Text="⁞" for vertical splitter  -->
         <GridSplitter
             Grid.Row="2"
-            Height="10"
+            Height="12"
             HorizontalAlignment="Stretch">
             <GridSplitter.Template>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
                     <Grid>
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="9"
-                            Foreground="{StaticResource OrangeLightBrush}"
-                            Text="[- - - - - - - - - - - - - -]" />
-                        <Rectangle Fill="#00FFFFFF" />
+                        <StackPanel Background="{StaticResource PrimaryHueDarkBrush}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="10"
+                                FontWeight="ExtraBold"
+                                Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                                Text="[- - - - - - - - - -]" />
+                            <Rectangle Fill="#00FFFFFF" />
+                        </StackPanel>
                     </Grid>
                 </ControlTemplate>
             </GridSplitter.Template>
@@ -368,7 +371,23 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
+                            <GridViewColumn Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Cursor="Hand"
+                                            FontStyle="Italic"
+                                            Foreground="{StaticResource BlueMidBrush}">
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" MouseAction="LeftClick" />
+                                            </TextBlock.InputBindings>
+                                            <Underline>
+                                                <Run Text="{Binding VerseID}" />
+                                            </Underline>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
