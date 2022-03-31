@@ -41,7 +41,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="47" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>
         <!--  ROW 0  -->
@@ -78,7 +78,7 @@
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="20,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN FILTER:</TextBlock>
+                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN:</TextBlock>
                     <ComboBox
                         x:Name="Domains"
                         MinWidth="150"
@@ -93,7 +93,7 @@
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD FILTER:</TextBlock>
+                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD:</TextBlock>
                     <TextBox
                         x:Name="FilterText"
                         MinWidth="150"
@@ -152,7 +152,7 @@
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -179,52 +179,43 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--  star button  -->
-                <!--<DataGridTemplateColumn Width="20" Header="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button
-                                Width="20"
-                                Height="15"
-                                Margin="-15,0,0,0"
-                                HorizontalAlignment="Center"
-                                Style="{DynamicResource MaterialDesignIconButton}"
-                                ToolTip="Add Biblical Term">
-                                <materialDesign:PackIcon
-                                    Width="12"
-                                    Height="12"
-                                    Foreground="Wheat"
-                                    Kind="Star" />
-                            </Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
 
-                <DataGridTemplateColumn Width="80" Header="Term">
+                <DataGridTemplateColumn Width="Auto" Header="Term">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Width="150"
-                                Height="15"
-                                Text="{Binding Lemma}" />
+                                Width="Auto"
+                                Height="Auto"
+                                Margin="-8"
+                                VerticalAlignment="Center"
+                                Text="{Binding Lemma}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="Category">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Height="15" Text="{Binding SemanticDomain}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="250" Header="English">
+                <DataGridTemplateColumn Width="110" Header="Category">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Height="15"
-                                Margin="5,0,0,0"
+                                Width="Auto"
+                                Height="Auto"
+                                Margin="-8"
+                                VerticalAlignment="Center"
+                                Text="{Binding SemanticDomain}"
+                                TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="150                                         " Header="English">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Height="Auto"
+                                Margin="-8"
                                 HorizontalAlignment="Left"
-                                Text="{Binding Gloss}" />
+                                VerticalAlignment="Center"
+                                Text="{Binding Gloss}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -234,6 +225,7 @@
                             <TextBlock
                                 Width="20"
                                 Height="15"
+                                Margin="-8"
                                 Text="{Binding RenderingCount}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -244,6 +236,7 @@
                             <TextBlock
                                 Width="20"
                                 Height="15"
+                                Margin="-8"
                                 Text="{Binding References.Count}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -254,7 +247,7 @@
                             <TextBlock
                                 Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
                                 Height="15"
-                                Margin="5,0,0,0"
+                                Margin="-8"
                                 HorizontalAlignment="Left"
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
@@ -277,10 +270,25 @@
         </DataGrid>
 
         <!--  ROW 2  -->
+        <!--  Text="⁞" for vertical splitter  -->
         <GridSplitter
             Grid.Row="2"
-            Height="5"
-            HorizontalAlignment="Stretch" />
+            Height="10"
+            HorizontalAlignment="Stretch">
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                    <Grid>
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="9"
+                            Foreground="{StaticResource OrangeLightBrush}"
+                            Text="[- - - - - - - - - - - - - -]" />
+                        <Rectangle Fill="#00FFFFFF" />
+                    </Grid>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
 
         <!--  ROW 3  -->
         <Grid Grid.Row="3">
@@ -361,7 +369,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="80" DisplayMemberBinding="{Binding VerseID}" />
-                            <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='0.85'}">
+                            <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <helpers:BindableTextBlock
