@@ -14,7 +14,7 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer
 {
-    public class ProjectManager
+    public class ProjectManager : IDisposable
     {
         #region Properties
 
@@ -220,6 +220,12 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
             var projectAssets = await _projectNameDbContextFactory.Create(dashboardProject.ProjectName);
+        }
+
+        public void Dispose()
+        {
+            IsPipeConnected = false;
+            _namedPipesClient.Dispose();
         }
     }
 }

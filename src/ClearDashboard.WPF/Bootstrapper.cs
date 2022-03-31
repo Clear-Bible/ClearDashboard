@@ -13,6 +13,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Extensions;
 using ClearDashboard.Wpf.Extensions;
 using ClearDashboard.Wpf.Helpers;
@@ -93,6 +94,8 @@ namespace ClearDashboard.Wpf
             translationSource.Language = EnumHelper.GetDescription(languageType);
         }
 
+      
+
         /// <summary>
         /// Adds the Frame to the Grid control on the ShellView
         /// </summary>
@@ -162,6 +165,12 @@ namespace ClearDashboard.Wpf
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger.LogInformation("ClearDashboard application is exiting.");
+
+
+            // Clean up the projectManager Singleton.
+            var projectManager = Host.Services.GetService<ProjectManager>();
+            projectManager.Dispose();
+
             base.OnExit(sender, e);
         }
         #endregion
