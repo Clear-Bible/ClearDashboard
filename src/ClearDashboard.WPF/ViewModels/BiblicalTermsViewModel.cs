@@ -2,18 +2,20 @@
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pipes_Shared;
-using SIL.Extensions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,9 +23,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Helpers;
+using AvalonDock.Controls;
 using Point = System.Windows.Point;
-using System.Linq;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -318,6 +319,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void VerseClick(object obj)
         {
+            if (obj is null)
+            {
+                return;
+            }
+
+            string verseBBCCCVVV = (string)obj;
             Console.WriteLine();
         }
 
@@ -419,6 +426,13 @@ namespace ClearDashboard.Wpf.ViewModels
         private void ShowNotes(object obj)
         {
             throw new NotImplementedException();
+
+            //LayoutAnchorableFloatingWindowControl lfwc = (LayoutAnchorableFloatingWindowControl)Activator.CreateInstance(typeof(LayoutAnchorableFloatingWindowControl), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { lfw }, CultureInfo.InvariantCulture);
+            //dm.UpdateLayout();
+            //lfwc.Width = 300;
+            //lfwc.Height = 300;
+            //lfwc.Topmost = true;
+            //lfwc.Show();
         }
 
 
@@ -483,6 +497,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     _selectedItemVerses.Add(new Verse
                     {
                         VerseID = verseRef,
+                        VerseBBCCCVVV = selectedBiblicalTermsData.References[i],
                         VerseText = verseText
                     });
                 }

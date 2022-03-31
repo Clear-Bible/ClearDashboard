@@ -379,7 +379,10 @@
                                             FontStyle="Italic"
                                             Foreground="{StaticResource BlueMidBrush}">
                                             <TextBlock.InputBindings>
-                                                <MouseBinding Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" MouseAction="LeftClick" />
+                                                <MouseBinding
+                                                    Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                    CommandParameter="{Binding VerseBBCCCVVV}"
+                                                    MouseAction="LeftClick" />
                                             </TextBlock.InputBindings>
                                             <Underline>
                                                 <Run Text="{Binding VerseID}" />
