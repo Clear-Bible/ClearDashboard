@@ -115,7 +115,10 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
         public void Dispose()
         {
             if (client != null)
+            {
                 client.DisposeAsync().GetAwaiter().GetResult();
+                client = null;
+            }
         }
 
         #endregion
