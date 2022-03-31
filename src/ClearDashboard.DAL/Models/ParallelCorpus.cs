@@ -18,8 +18,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public DateTime LastGenerated { get; set; }
         public int Id { get; set; }
 
-        public virtual Corpus CorpusCorpus { get; set; }
-        public virtual Corpus CorpusCorpusNavigation { get; set; }
+        public virtual Corpus SourceCorpus { get; set; }
+        public virtual Corpus TargetCorpus { get; set; }
         public virtual ICollection<ParallelVerse> ParallelVerses { get; set; }
     }
 }
