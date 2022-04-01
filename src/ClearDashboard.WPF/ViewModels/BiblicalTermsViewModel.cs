@@ -24,6 +24,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Controls;
+using Microsoft.EntityFrameworkCore.Sqlite.Diagnostics.Internal;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -297,13 +298,13 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
         {
-            this.NavigationService = navigationService;
-            this.Logger = logger;
-            this.ProjectManager =projectManager;
+            NavigationService = navigationService;
+            Logger = logger;
+            ProjectManager =projectManager;
 
-            this.Title = "🕮 BIBLICAL TERMS";
-            this.ContentId = "BIBLICALTERMS";
-            this.DockSide = EDockSide.Left;
+            Title = "🕮 BIBLICAL TERMS";
+            ContentId = "BIBLICALTERMS";
+            DockSide = EDockSide.Left;
 
             // listen to the DAL event messages coming in
             ProjectManager.NamedPipeChanged += HandleEventAsync;
@@ -321,12 +322,12 @@ namespace ClearDashboard.Wpf.ViewModels
             NotesCommand = new RelayCommand(ShowNotes);
             VerseClickCommand = new RelayCommand(VerseClick);
 
-            if (projectManager.Project is not null)
+            if (projectManager.ParatextProject is not null)
             {
                 // pull out the project font family
-                _fontFamily = projectManager.Project.Language.FontFamily;
-                _fontSize = projectManager.Project.Language.Size;
-                _isRTL = projectManager.Project.Language.IsRtol;
+                _fontFamily = projectManager.ParatextProject.Language.FontFamily;
+                _fontSize = projectManager.ParatextProject.Language.Size;
+                _isRTL = projectManager.ParatextProject.Language.IsRtol;
             }
         }
 
@@ -395,19 +396,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewAttached(object view, object context)
         {
-            Debug.WriteLine("OnViewAttached");
+            Logger.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
         }
 
         protected override void OnViewLoaded(object view)
         {
-            Debug.WriteLine("OnViewLoaded");
+            Logger.LogInformation("OnViewLoaded");
             base.OnViewLoaded(view);
         }
 
         protected override void OnViewReady(object view)
         {
-            Debug.WriteLine("OnViewReady");
+            Logger.LogInformation("OnViewReady");
             base.OnViewReady(view);
         }
 
@@ -416,7 +417,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // unsubscribe from events
             ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
-            Debug.WriteLine("Dispose");
+            Logger.LogInformation("Dispose");
             base.Dispose(disposing);
         }
 
@@ -443,7 +444,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             string verseBBCCCVVV = (string)obj;
-            Console.WriteLine();
+           
 
 
             //LayoutAnchorableFloatingWindowControl lfwc = (LayoutAnchorableFloatingWindowControl)Activator.CreateInstance(typeof(LayoutAnchorableFloatingWindowControl), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { lfw }, CultureInfo.InvariantCulture);
@@ -649,7 +650,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
                         throw;
                     }
                 }
@@ -733,7 +734,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 //if (! filters.ContainsKey(bt.SemanticDomain))
                 //{
                 //    filters.Add(bt.SemanticDomain, bt.SemanticDomain);
-                //    Debug.WriteLine($"SEMANTIC DOMAIN: {bt.SemanticDomain}");
+                //    Logger.LogInformation($"SEMANTIC DOMAIN: {bt.SemanticDomain}");
                 //}
 
                 if (SelectedDomain == "" || SelectedDomain == "*" || SelectedDomain is null)

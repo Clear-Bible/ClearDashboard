@@ -2,13 +2,16 @@
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Context
 {
     public partial class AlignmentContext : DbContext
     {
-        public AlignmentContext()
+        private readonly ILogger<AlignmentContext> _logger;
+        public AlignmentContext(ILogger<AlignmentContext> logger)
         {
+            _logger = logger;
         }
 
         public AlignmentContext(DbContextOptions<AlignmentContext> options)
@@ -54,11 +57,15 @@ namespace ClearDashboard.DataAccessLayer.Context
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
+                _logger.LogInformation("Ensure that the database is created, migrating if necessary.");
                 await Database.MigrateAsync();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Could not apply database migrations: {e.Message}");
+                _logger.LogError(ex, $"Could not apply database migrations");
+
+                // This is useful when applying migrations via the EF core plumbing, please leave in place.
+                Console.WriteLine($"Could not apply database migrations: {ex.Message}");
             }
         }
       
