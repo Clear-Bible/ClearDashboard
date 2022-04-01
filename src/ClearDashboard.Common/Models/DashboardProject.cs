@@ -99,7 +99,6 @@ namespace ClearDashboard.Common.Models
         /// list of LWC projects
         /// </summary>
         private List<ParatextProject> _languageOfWiderCommunicationProjects;
-        [JsonProperty]
         public List<ParatextProject> LanguageOfWiderCommunicationProjects
         {
             get => _languageOfWiderCommunicationProjects;
@@ -110,7 +109,6 @@ namespace ClearDashboard.Common.Models
         /// List of Back Translation projects
         /// </summary>
         private List<ParatextProject> _backTranslationProjects;
-        [JsonProperty]
         public List<ParatextProject> BackTranslationProjects
         {
             get => _backTranslationProjects;
