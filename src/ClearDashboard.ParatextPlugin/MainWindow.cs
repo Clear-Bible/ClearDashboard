@@ -674,7 +674,7 @@ namespace ClearDashboardPlugin
             var bookNum = 0;
             var chapNum = 0;
 
-            var data = JsonSerializer.Deserialize<GetNotesData>(jsonPayload);
+            var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Payload);
             //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
 
             if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
