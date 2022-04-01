@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using Newtonsoft.Json;
 
-namespace ClearDashboard.Wpf.Helpers
+namespace ClearDashboard.Common.Models
 {
     public class UserPrefs
     {

@@ -18,7 +18,6 @@ namespace ClearDashboard.Common.Models
             LanguageOfWiderCommunicationProjects = new List<ParatextProject>();
             BackTranslationProjects = new List<ParatextProject>();
             InterlinearizerProject = null;
-            //TargetProject = null;
         }
 
         private string _projectName;

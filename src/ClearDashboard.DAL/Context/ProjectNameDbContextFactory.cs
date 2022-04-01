@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Utility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -60,7 +61,7 @@ namespace ClearDashboard.DataAccessLayer.Context
 
         private string EnsureProjectDirectory(string projectName)
         {
-            var directoryPath =  $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
+            var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); //$"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}");
             if (!Directory.Exists(directoryPath))
             {
                 _logger.LogInformation($"Creating project directory {directoryPath}.");
