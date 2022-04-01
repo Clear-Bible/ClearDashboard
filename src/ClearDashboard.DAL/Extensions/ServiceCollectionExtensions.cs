@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer.NamedPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Paratext;
 
 namespace ClearDashboard.DataAccessLayer.Extensions
 {
@@ -19,6 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Extensions
             serviceCollection.AddLogging();
 
             serviceCollection.AddSingleton<ProjectManager>();
+            serviceCollection.AddScoped<ParatextUtils>();
             serviceCollection.AddSingleton<NamedPipesClient>(sp =>
             {
                 var logger = sp.GetService<ILogger<NamedPipesClient>>();

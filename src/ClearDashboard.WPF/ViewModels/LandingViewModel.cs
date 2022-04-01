@@ -57,9 +57,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         protected override void OnViewAttached(object view, object context)
-        {
-            Console.WriteLine();
-            base.OnViewAttached(view, context);
+        { base.OnViewAttached(view, context);
         }
 
         #endregion

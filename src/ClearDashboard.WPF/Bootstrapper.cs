@@ -165,12 +165,6 @@ namespace ClearDashboard.Wpf
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger.LogInformation("ClearDashboard application is exiting.");
-
-
-            // Clean up the projectManager Singleton.
-            var projectManager = Host.Services.GetService<ProjectManager>();
-            projectManager.Dispose();
-
             base.OnExit(sender, e);
         }
         #endregion
