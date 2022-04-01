@@ -5,20 +5,26 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.Common.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
     public class ParatextUtils
     {
-        private string paratextProjectPath = "";
-        private string paratextInstallPath = "";
-        private string paratextResourcesPath = "";
-
+        private string _paratextProjectPath = string.Empty;
+        private string _paratextInstallPath = string.Empty;
+        private string _paratextResourcesPath = string.Empty;
+        private readonly ILogger<ParatextUtils> _logger;
         public enum FolderType
         {
             Projects,
             Resources,
+        }
+
+        public ParatextUtils(ILogger<ParatextUtils> logger)
+        {
+            _logger = logger;
         }
 
         /// <summary>
@@ -31,7 +37,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             GetParatextProjectsPath();
             GetParatextInstallPath();
 
-            if (string.IsNullOrEmpty(paratextProjectPath))
+            if (string.IsNullOrEmpty(_paratextProjectPath))
             {
                 return false;
             }
@@ -42,29 +48,29 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]
         private void GetParatextInstallPath()
         {
-            paratextInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Paratext9_Full_Release_AppPath", null);
+            _paratextInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Paratext9_Full_Release_AppPath", null);
 
             // check if path exists
-            if (!Directory.Exists(paratextInstallPath))
+            if (!Directory.Exists(_paratextInstallPath))
             {
                 // file doesn't exist so null this out
-                paratextInstallPath = "";
+                _paratextInstallPath = "";
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]
         private void GetParatextProjectsPath()
         {
-            paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
+            _paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
             // check if directory exists
-            if (!Directory.Exists(paratextProjectPath))
+            if (!Directory.Exists(_paratextProjectPath))
             {
                 // directory doesn't exist so null this out
-                paratextProjectPath = "";
+                _paratextProjectPath = "";
             }
             else
             {
-                paratextResourcesPath = Path.Combine(paratextProjectPath, "_Resources");
+                _paratextResourcesPath = Path.Combine(_paratextProjectPath, "_Resources");
             }
         }
 
@@ -75,47 +81,39 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <returns></returns>
         public async Task<List<ParatextProject>> GetParatextProjectsOrResources(FolderType folderType = FolderType.Projects)
         {
-            if (paratextProjectPath == "")
+            if (_paratextProjectPath == "")
             {
                 GetParatextProjectsPath();
             }
 
-            string searchPath = "";
+            var searchPath = "";
             if (folderType == FolderType.Projects)
             {
-                searchPath = paratextProjectPath;
+                searchPath = _paratextProjectPath;
             } 
             else if (folderType == FolderType.Resources)
             {
-                searchPath = paratextResourcesPath;
+                searchPath = _paratextResourcesPath;
             }
 
             // look through these folders for files which are called "unique.id"
-            string[] directories = Directory.GetDirectories(searchPath);
+            var directories = Directory.GetDirectories(searchPath);
 
-            List<ParatextProject> projects = new List<ParatextProject>();
+            var projects = new List<ParatextProject>();
 
             await Task.Run(() =>
             {
                 foreach (var directory in directories)
                 {
                     // look for settings.xml file
-                    string sSettingFilePath = Path.Combine(directory, "settings.xml");
+                    var sSettingFilePath = Path.Combine(directory, "settings.xml");
 
                     // read in settings.xml file
                     if (File.Exists(sSettingFilePath))
                     {
-                        //ParatextProject.eDirType dirType;
-                        //if (folderType == eFolderType.Projects)
-                        //{
-                        //    dirType = ParatextProject.eDirType.Project;
-                        //}
-                        //else
-                        //{
-                        //    dirType = ParatextProject.eDirType.Resources;
-                        //}
-
-                        var project = GetSettingFileInfo(sSettingFilePath, DirType.Project);
+                      
+                        var project = GetParatextProject(sSettingFilePath, DirType.Project);
+                        var sBookNamesPath = Path.Combine(directory, "booknames.xml");
                         if (project.FullName != "")
                         {
                             // get the books
@@ -123,34 +121,33 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
 
                             // check for custom VRS file
-                            string sCusteomVRSfilePath = Path.Combine(directory, "custom.vrs");
-                            if (File.Exists(sCusteomVRSfilePath))
+                            var customVRSfilePath = Path.Combine(directory, "custom.vrs");
+                            if (File.Exists(customVRSfilePath))
                             {
                                 project.HasCustomVRSfile = true;
-                                project.CustomVRSfilePath = sCusteomVRSfilePath;
+                                project.CustomVRSfilePath = customVRSfilePath;
                             }
 
                             // read in booknames.xml file
-                            string sBookNamesPath = Path.Combine(directory, "booknames.xml");
                             if (File.Exists(sBookNamesPath))
                             {
                                 var xmlString = File.ReadAllText(sBookNamesPath);
 
-                                int iRow = 1;
+                                var iRow = 1;
                                 // Create an XmlReader
-                                using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+                                using (var reader = XmlReader.Create(new StringReader(xmlString)))
                                 {
                                     while (reader.Read())
                                     {
                                         reader.ReadToFollowing("book");
                                         reader.MoveToFirstAttribute();
-                                        string code = reader.Value;
+                                        var code = reader.Value;
                                         reader.MoveToNextAttribute();
-                                        string abbr = reader.Value;
+                                        var abbr = reader.Value;
                                         reader.MoveToNextAttribute();
-                                        string shortname = reader.Value;
+                                        var shortname = reader.Value;
                                         reader.MoveToNextAttribute();
-                                        string longname = reader.Value;
+                                        var longname = reader.Value;
 
                                         iRow++;
                                         if (iRow == 40)
@@ -199,13 +196,13 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         public string GetCurrentParatextUser()
         {
-            if (paratextResourcesPath == "")
+            if (_paratextResourcesPath == "")
             {
                 GetParatextProjectsPath();
             }
 
-            string user = "USER NOT DETERMINED";
-            string userfile = Path.Combine(this.paratextProjectPath, "localUsers.txt");
+            var user = "USER NOT DETERMINED";
+            var userfile = Path.Combine(this._paratextProjectPath, "localUsers.txt");
             if (File.Exists(userfile))
             {
                 var tmp = File.ReadAllText(userfile);
@@ -225,21 +222,21 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         public List<ParatextProject> GetParatextResources()
         {
-            if (paratextResourcesPath == "")
+            if (_paratextResourcesPath == "")
             {
                 GetParatextProjectsPath();
             }
 
-            string searchPath = paratextResourcesPath;
+            var searchPath = _paratextResourcesPath;
             
 
             // look through these folders for files which are called "unique.id"
-            string[] files = Directory.GetFiles(searchPath, "*.p8z");
+            var files = Directory.GetFiles(searchPath, "*.p8z");
 
-            List<ParatextProject> projects = new List<ParatextProject>();
+            var projects = new List<ParatextProject>();
             foreach (var file in files)
             {
-                FileInfo fileInfo = new FileInfo(file);
+                var fileInfo = new FileInfo(file);
                 projects.Add(new ParatextProject
                 {
                     Name = fileInfo.Name.Replace(fileInfo.Extension, ""),
@@ -256,16 +253,16 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         public static List<SelectedBook> UpdateBooks(ParatextProject paratextProject, List<SelectedBook> books)
         {
-            for (int i = 0; i < paratextProject.BooksList.Count; i++)
+            for (var i = 0; i < paratextProject.BooksList.Count; i++)
             {
                 if (paratextProject.BooksList[i].Available)
                 {
-                    //Debug.WriteLine(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " AVAILABLE");
+                    //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " AVAILABLE");
                     books[i].IsEnabled = true;
                 }
                 else
                 {
-                    //Debug.WriteLine(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " MISSING");
+                    //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " MISSING");
                     books[i].IsEnabled = false;
                     books[i].IsSelected = false;
                 }
@@ -277,103 +274,103 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <summary>
         /// Parse through the Settings file and return back a ParatextProject obj
         /// </summary>
-        /// <param name="sSettingFilePath"></param>
+        /// <param name="settingFilePath"></param>
         /// <param name="dirType"></param>
         /// <returns></returns>
-        public ParatextProject GetSettingFileInfo(string sSettingFilePath, DirType dirType)
+        public ParatextProject GetParatextProject(string settingFilePath, DirType dirType)
         {
-            ParatextProject p = new ParatextProject();
+            var paratextProject = new ParatextProject();
 
             try
             {
-                string xml = File.ReadAllText(sSettingFilePath);
-                XmlSerializer serializer = new XmlSerializer(typeof(ScriptureText));
-                using (StringReader reader = new StringReader(xml))
+                var xml = File.ReadAllText(settingFilePath);
+                var serializer = new XmlSerializer(typeof(ScriptureText));
+                using (var reader = new StringReader(xml))
                 {
-                    var obj = (ScriptureText)serializer.Deserialize(reader);
-                    if (obj != null)
+                    var scriptureText = (ScriptureText)serializer.Deserialize(reader);
+                    if (scriptureText != null)
                     {
-                        p.Name = obj.Name;
-                        p.Guid = obj.Guid;
-                        p.FullName = obj.FullName;
-                        p.Copyright = obj.Copyright;
-                        p.BooksPresent = obj.BooksPresent;
-                        p.FileNameBookNameForm = obj.FileNameBookNameForm;
-                        if (obj.FileNamePostPart != null)
+                        paratextProject.Name = scriptureText.Name;
+                        paratextProject.Guid = scriptureText.Guid;
+                        paratextProject.FullName = scriptureText.FullName;
+                        paratextProject.Copyright = scriptureText.Copyright;
+                        paratextProject.BooksPresent = scriptureText.BooksPresent;
+                        paratextProject.FileNameBookNameForm = scriptureText.FileNameBookNameForm;
+                        if (scriptureText.FileNamePostPart != null)
                         {
-                            p.FileNamePostPart = obj.FileNamePostPart;
+                            paratextProject.FileNamePostPart = scriptureText.FileNamePostPart;
                         }
-                        if (obj.FileNamePrePart != null)
+                        if (scriptureText.FileNamePrePart != null)
                         {
-                            if (obj.FileNamePrePart is object)
+                            if (scriptureText.FileNamePrePart is object)
                             {
-                                p.FileNamePrePart = "";
+                                paratextProject.FileNamePrePart = "";
                             }
                             else
                             {
-                                p.FileNamePrePart = obj.FileNamePrePart.ToString();
+                                paratextProject.FileNamePrePart = scriptureText.FileNamePrePart.ToString();
                             }
                         }
 
-                        if (obj.NormalizationForm != null)
+                        if (scriptureText.NormalizationForm != null)
                         {
-                            p.NormalizationForm = obj.NormalizationForm;
+                            paratextProject.NormalizationForm = scriptureText.NormalizationForm;
                         }
 
-                        if (obj.Language != null)
+                        if (scriptureText.Language != null)
                         {
-                            p.Language = obj.Language;
+                            paratextProject.Language = scriptureText.Language;
                         }
 
-                        if (obj.DefaultFont != null)
+                        if (scriptureText.DefaultFont != null)
                         {
-                            p.DefaultFont = obj.DefaultFont;
+                            paratextProject.DefaultFont = scriptureText.DefaultFont;
                         }
 
-                        if (obj.Encoding != null)
+                        if (scriptureText.Encoding != null)
                         {
-                            p.Encoding = obj.Encoding;
+                            paratextProject.Encoding = scriptureText.Encoding;
                         }
 
-                        if (obj.LanguageIsoCode != null)
+                        if (scriptureText.LanguageIsoCode != null)
                         {
-                            p.LanguageIsoCode = obj.LanguageIsoCode;
+                            paratextProject.LanguageIsoCode = scriptureText.LanguageIsoCode;
                         }
 
-                        if (obj.LeftToRight != null)
+                        if (scriptureText.LeftToRight != null)
                         {
-                            if (obj.LeftToRight.ToUpper() == "T")
+                            if (scriptureText.LeftToRight.ToUpper() == "T")
                             {
-                                p.IsRTL = true;
+                                paratextProject.IsRTL = true;
                             }
                         }
 
-                        if (obj.TranslationInfo != null)
+                        if (scriptureText.TranslationInfo != null)
                         {
-                            var split = obj.TranslationInfo.Split(':');
+                            var split = scriptureText.TranslationInfo.Split(':');
                             if (split.Length >= 3)
                             {
-                                ProjectType projType = GetProjectType(split[0], dirType);
+                                var projType = GetProjectType(split[0], dirType);
 
-                                p.TranslationInfo = new Translation_Info
+                                paratextProject.TranslationInfo = new Translation_Info
                                 {
                                     projectType = projType,
                                     projectName = split[1],
                                     projectGuid = split[2],
                                 };
 
-                                p.ProjectType = projType;
+                                paratextProject.ProjectType = projType;
                             }
                         }
 
-                        if (obj.BaseTranslation != null)
+                        if (scriptureText.BaseTranslation != null)
                         {
-                            var split = obj.BaseTranslation.Split(':');
+                            var split = scriptureText.BaseTranslation.Split(':');
                             if (split.Length >= 3)
                             {
-                               ProjectType projType = GetProjectType(split[0], dirType);
+                               var projType = GetProjectType(split[0], dirType);
 
-                                p.BaseTranslation = new Translation_Info
+                                paratextProject.BaseTranslation = new Translation_Info
                                 {
                                     projectType = projType,
                                     projectName = split[1],
@@ -382,18 +379,18 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             }
                         }
 
-                        p.Versification = obj.Versification;
-                        p.ProjectPath = sSettingFilePath;
+                        paratextProject.Versification = scriptureText.Versification;
+                        paratextProject.ProjectPath = settingFilePath;
 
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, $"An unexpected error occurred while deserializing the setting file {settingFilePath}");
             }
 
-            return p;
+            return paratextProject;
         }
 
         /// <summary>
@@ -430,10 +427,10 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return ProjectType.Unknown;
         }
 
-        public static List<ParatextBook> GetBookList(ParatextProject project, string directory)
+        public List<ParatextBook> GetBookList(ParatextProject project, string directory)
         {
             // initialize the list
-            List<ParatextBook> books = new List<ParatextBook>
+            var books = new List<ParatextBook>
             {
                 new ParatextBook{BookId = "01", BookNameShort = "GEN", Available = false, FilePath = "", USFM_Num = 1},
                 new ParatextBook{BookId = "02", BookNameShort = "EXO", Available = false, FilePath = "", USFM_Num = 2},
@@ -503,7 +500,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 new ParatextBook{BookId = "66", BookNameShort = "REV", Available = false, FilePath = "", USFM_Num = 67}
             };
 
-            for (int i = 0; i < project.BooksPresent.Length; i++)
+            for (var i = 0; i < project.BooksPresent.Length; i++)
             {
                 // stop after OT / NT
                 if (i >= 66)
@@ -519,43 +516,43 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                         books[i].Available = true;
                         // build the path
 
-                        string sFileName = "";
+                        var fileName = string.Empty;
 
                         if (project.FileNamePrePart != "System.Object")
                         {
-                            sFileName += project.FileNamePrePart;
+                            fileName += project.FileNamePrePart;
                         }
 
                         if (project.FileNameBookNameForm == "41MAT")
                         {
-                            sFileName += books[i].USFM_Num.ToString().PadLeft(2, '0') + books[i].BookNameShort;
+                            fileName += books[i].USFM_Num.ToString().PadLeft(2, '0') + books[i].BookNameShort;
                         }
                         else if (project.FileNameBookNameForm == "41")
                         {
-                            sFileName += books[i].USFM_Num.ToString().PadLeft(2, '0');
+                            fileName += books[i].USFM_Num.ToString().PadLeft(2, '0');
                         }
                         else if (project.FileNameBookNameForm == "MAT")
                         {
-                            sFileName += books[i].BookNameShort;
+                            fileName += books[i].BookNameShort;
                         }
 
                         if (project.FileNamePostPart != "System.Object")
                         {
-                            sFileName += project.FileNamePostPart;
+                            fileName += project.FileNamePostPart;
                         }
 
-                        books[i].FilePath = Path.Combine(directory, sFileName);
+                        books[i].FilePath = Path.Combine(directory, fileName);
 
                         // check if the file exists
                         if (!File.Exists(books[i].FilePath))
                         {
                             // check to see if the file exists with a .usx ending instead
-                            sFileName = sFileName.Substring(0, sFileName.LastIndexOf("."));
-                            sFileName += ".usx";
-                            sFileName = Path.Combine(directory, sFileName);
-                            if (File.Exists(sFileName))
+                            fileName = fileName.Substring(0, fileName.LastIndexOf("."));
+                            fileName += ".usx";
+                            fileName = Path.Combine(directory, fileName);
+                            if (File.Exists(fileName))
                             {
-                                books[i].FilePath = sFileName;
+                                books[i].FilePath = fileName;
                             }
                             else
                             {
@@ -566,9 +563,10 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError(ex, "An unexpected error occurred while getting the Paratext book list.");
+                   
                     throw;
                 }
 
