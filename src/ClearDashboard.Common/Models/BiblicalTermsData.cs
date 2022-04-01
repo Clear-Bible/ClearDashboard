@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace ClearDashboard.Common.Models
 {
@@ -11,7 +10,6 @@ namespace ClearDashboard.Common.Models
     {
 
         private string _id = String.Empty;
-        [JsonProperty]
         public string Id
         {
             get => _id;
@@ -24,7 +22,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _lemma = String.Empty;
-        [JsonProperty]
         public string Lemma
         {
             get => _lemma;
@@ -37,7 +34,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _transliteration = String.Empty;
-        [JsonProperty]
         public string Transliteration
         {
             get => _transliteration;
@@ -50,7 +46,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _semanticDomain = String.Empty;
-        [JsonProperty]
         public string SemanticDomain
         {
             get => _semanticDomain;
@@ -63,7 +58,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _localGloss = String.Empty;
-        [JsonProperty]
         public string LocalGloss
         {
             get => _localGloss;
@@ -76,7 +70,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _gloss = String.Empty;
-        [JsonProperty]
         public string Gloss
         {
             get => _gloss;
@@ -90,7 +83,6 @@ namespace ClearDashboard.Common.Models
 
 
         private string _linkString = String.Empty;
-        [JsonProperty]
         public string LinkString
         {
             get { return _linkString; }
@@ -103,7 +95,6 @@ namespace ClearDashboard.Common.Models
 
 
         private List<string> _referencesList = new List<string>();
-        [JsonProperty]
         public List<string> References
         {
             get => _referencesList;
@@ -115,7 +106,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private List<string> _referencesLong = new List<string>();
-        [JsonProperty]
         public List<string> ReferencesLong
         {
             get => _referencesLong;
@@ -126,8 +116,9 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+
+
         private List<string> _referencesListText = new List<string>();
-        [JsonProperty]
         public List<string> ReferencesListText
         {
             get => _referencesListText;
@@ -140,7 +131,6 @@ namespace ClearDashboard.Common.Models
 
 
         private List<string> _renderings = new List<string>();
-        [JsonProperty]
         public List<string> Renderings
         {
             get => _renderings;
@@ -152,7 +142,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _renderingString;
-        [JsonProperty]
         public string RenderingString
         {
             get { return _renderingString; }
@@ -164,7 +153,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private int _renderingCount;
-        [JsonProperty]
         public int RenderingCount
         {
             get { return _renderingCount; }

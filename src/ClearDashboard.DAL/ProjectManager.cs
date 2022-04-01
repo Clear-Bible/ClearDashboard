@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Context;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using Pipes_Shared;
+using Pipes_Shared.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -71,6 +75,7 @@ namespace ClearDashboard.DataAccessLayer
         public event EventHandler ParatextUserNameEventHandler;
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
+        public string CurrentVerse { get; set; } = "";
 
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
@@ -104,7 +109,16 @@ namespace ClearDashboard.DataAccessLayer
             {
                 this.IsPipeConnected= false;
             }
-
+            else if (pm.Action == ActionType.SetProject)
+            {
+                // intercept and keep a copy of the current project
+                var payload = pm.Payload;
+                Project = JsonSerializer.Deserialize<Project>((string)payload);
+            } else if (pm.Action == ActionType.CurrentVerse)
+            {
+                CurrentVerse = pm.Text;
+            }
+            
             RaisePipesChangedEvent(pm);
         }
 

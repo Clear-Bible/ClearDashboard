@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -21,7 +20,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _projectName;
-        [JsonProperty]
         public string ProjectName
         {
             get => _projectName;
@@ -34,7 +32,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _projectPath;
-        [JsonProperty]
         public string ProjectPath
         {
             get => _projectPath;
@@ -46,7 +43,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private DateTime _lastChanged;
-        [JsonProperty]
         public DateTime LastChanged
         {
             get => _lastChanged;
@@ -59,7 +55,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _fullFilePath;
-        [JsonProperty]
         public string FullFilePath
         {
             get => _fullFilePath;
@@ -81,7 +76,6 @@ namespace ClearDashboard.Common.Models
         /// the target project
         /// </summary>
         private ParatextProject _targetProject;
-        [JsonProperty]
         public ParatextProject TargetProject
         {
             get => _targetProject;
@@ -127,7 +121,6 @@ namespace ClearDashboard.Common.Models
         /// The Paratext UserID of the creator
         /// </summary>
         private string _paratextUser;
-        [JsonProperty]
         public string ParatextUser
         {
             get => _paratextUser;
@@ -138,7 +131,6 @@ namespace ClearDashboard.Common.Models
         /// Date that this project was created
         /// </summary>
         private DateTime _creationDate;
-        [JsonProperty]
         public DateTime CreationDate
         {
             get => _creationDate;
@@ -149,7 +141,6 @@ namespace ClearDashboard.Common.Models
         /// The Dashboard Project Name
         /// </summary>
         private string _name;
-        [JsonProperty]
         public string Name
         {
             get => _name;
@@ -160,7 +151,6 @@ namespace ClearDashboard.Common.Models
         /// The Dashboard Project Name
         /// </summary>
         private string _baseTargetName;
-        [JsonProperty]
         public string BaseTargetName
         {
             get => _baseTargetName;
@@ -171,7 +161,6 @@ namespace ClearDashboard.Common.Models
         /// The Dashboard Project FullName
         /// </summary>
         private string _baseTargetFullName;
-        [JsonProperty]
         public string BaseTargetFullName
         {
             get => _baseTargetFullName;
@@ -179,7 +168,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _shortFilePath;
-        [JsonProperty]
         public string ShortFilePath
         {
             get => _shortFilePath;
@@ -192,7 +180,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private string _jsonProjectName;
-        [JsonProperty]
         public string JsonProjectName
         {
             get => _jsonProjectName;
@@ -205,7 +192,6 @@ namespace ClearDashboard.Common.Models
         }
 
         private int _userValidationLevel;
-        [JsonProperty]
         public int UserValidationLevel
         {
             get => _userValidationLevel;
@@ -219,7 +205,6 @@ namespace ClearDashboard.Common.Models
 
         private int _lastContentWordLevel;
 
-        [JsonProperty]
         public int LastContentWordLevel
         {
             get => _lastContentWordLevel;

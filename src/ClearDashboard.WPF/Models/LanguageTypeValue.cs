@@ -8,6 +8,8 @@ namespace ClearDashboard.Wpf.Models
     {
         [Description("am"), DefaultValue("አማርኛ")]
         am,
+        [Description("ar"), DefaultValue("عربي")]
+        ar,
         [Description("de"), DefaultValue("Deutsche Sprache")]
         de,
         [Description("en-US"), DefaultValue("English Language")]
