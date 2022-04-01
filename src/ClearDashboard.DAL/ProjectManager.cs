@@ -33,7 +33,8 @@ namespace ClearDashboard.DataAccessLayer
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
 
-        
+        public Project Project;
+
         public bool ParatextVisible = false;
 
         public bool IsPipeConnected { get; set; }
