@@ -26,5 +26,24 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
         }
+        
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // listen for changes to the lower listview to make it scroll back 
+            // to the top
+            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            viewModel.PropertyChanged += (sender, args) => {
+                if (args.PropertyName.Equals("SelectedItemVerses"))
+                {
+                    if (SelectedItemVerses.Items.Count > 0)
+                    {
+                        SelectedItemVerses.ScrollIntoView(SelectedItemVerses.Items[0]);
+                    }
+
+                    return;
+                    // execute code here.
+                }
+            };
+        }
     }
 }

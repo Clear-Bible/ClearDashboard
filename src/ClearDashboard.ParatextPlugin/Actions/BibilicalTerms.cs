@@ -51,14 +51,14 @@ namespace ClearDashboard.ParatextPlugin.Actions
             var biblicalTermList = this.BiblicalTermList.ToList();
 
             List<BiblicalTermsData> btList = new List<BiblicalTermsData>();
-
+            int recordNum = 0;
 
             foreach (var biblicalTerm in biblicalTermList)
             {
                 BiblicalTermsData bterm = new BiblicalTermsData();
                 PropertyInfo[] properties = biblicalTerm.GetType().GetProperties();
-                StringBuilder sb = new StringBuilder();
 
+                recordNum++;
                 foreach (PropertyInfo pi in properties)
                 {
                     var term = pi.GetValue(biblicalTerm, null);
@@ -71,6 +71,12 @@ namespace ClearDashboard.ParatextPlugin.Actions
                         {
                             case "Id":
                                 bterm.Id = termProperty.GetValue(term, null).ToString();
+                                //Debug.WriteLine(recordNum + " " +bterm.Id);
+                                //if (recordNum == 14)
+                                //{
+                                //    Console.WriteLine();
+                                //}
+
                                 break;
                             case "Lemma":
                                 bterm.Lemma = termProperty.GetValue(term, null).ToString();
@@ -190,13 +196,41 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 {
                     if (marker.Type == MarkerType.Verse)
                     {
+                        Debug.WriteLine($"Verse: {marker.Data}");
                         // skip if the verses are beyond what we are looking for
-                        if (Convert.ToInt16(marker.Data) > VerseNum)
+                        int i = 0;
+                        bool result = int.TryParse(marker.Data, out i);
+
+                        if (result)
                         {
-                            break;
+                            if (Convert.ToInt16(marker.Data) > VerseNum)
+                            {
+                                break;
+                            }
+                            lines.Add($"Verse [{marker.Data}]");
+                        }
+                        else
+                        {
+                            // verse span so bust up the verse span
+                            string[] nums = marker.Data.Split('-');
+                            if (nums.Length > 1)
+                            {
+                                if (int.TryParse(nums[0], out i))
+                                {
+                                    if (int.TryParse(nums[1], out i))
+                                    {
+                                        int start = Convert.ToInt16(nums[0]);
+                                        int end = Convert.ToInt16(nums[1]);
+                                        for (int j = start; j < end + 1; j++)
+                                        {
+                                            lines.Add($"Verse [{j}]");
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        lines.Add($"Verse [{marker.Data}]");
+
                     }
                 }
                 else if (token is IUSFMTextToken textToken)

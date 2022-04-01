@@ -37,6 +37,7 @@ namespace Pipes_Shared
         SetUSX,
         SetUSFM,
         SetNotesObject,
+        SetProject,
 
         CurrentVerse,
     }
