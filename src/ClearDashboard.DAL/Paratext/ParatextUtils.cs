@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         private string paratextInstallPath = "";
         private string paratextResourcesPath = "";
 
-        public enum eFolderType
+        public enum FolderType
         {
             Projects,
             Resources,
@@ -73,7 +73,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// </summary>
         /// <param name="folderType"></param>
         /// <returns></returns>
-        public async Task<List<ParatextProject>> GetParatextProjectsOrResources(eFolderType folderType = eFolderType.Projects)
+        public async Task<List<ParatextProject>> GetParatextProjectsOrResources(FolderType folderType = FolderType.Projects)
         {
             if (paratextProjectPath == "")
             {
@@ -81,11 +81,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             }
 
             string searchPath = "";
-            if (folderType == eFolderType.Projects)
+            if (folderType == FolderType.Projects)
             {
                 searchPath = paratextProjectPath;
             } 
-            else if (folderType == eFolderType.Resources)
+            else if (folderType == FolderType.Resources)
             {
                 searchPath = paratextResourcesPath;
             }
@@ -115,7 +115,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                         //    dirType = ParatextProject.eDirType.Resources;
                         //}
 
-                        var project = GetSettingFileInfo(sSettingFilePath, ParatextProject.eDirType.Project);
+                        var project = GetSettingFileInfo(sSettingFilePath, DirType.Project);
                         if (project.FullName != "")
                         {
                             // get the books
@@ -243,8 +243,8 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 projects.Add(new ParatextProject
                 {
                     Name = fileInfo.Name.Replace(fileInfo.Extension, ""),
-                    ProjectType = ParatextProject.eProjectType.Resource,
-                    DirType = ParatextProject.eDirType.Resources
+                    ProjectType = ProjectType.Resource,
+                    DirType = DirType.Resources
                 });
             }
 
@@ -280,7 +280,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <param name="sSettingFilePath"></param>
         /// <param name="dirType"></param>
         /// <returns></returns>
-        public ParatextProject GetSettingFileInfo(string sSettingFilePath, ParatextProject.eDirType dirType)
+        public ParatextProject GetSettingFileInfo(string sSettingFilePath, DirType dirType)
         {
             ParatextProject p = new ParatextProject();
 
@@ -353,7 +353,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             var split = obj.TranslationInfo.Split(':');
                             if (split.Length >= 3)
                             {
-                                ParatextProject.eProjectType projType = GetProjectType(split[0], dirType);
+                                ProjectType projType = GetProjectType(split[0], dirType);
 
                                 p.TranslationInfo = new Translation_Info
                                 {
@@ -371,7 +371,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             var split = obj.BaseTranslation.Split(':');
                             if (split.Length >= 3)
                             {
-                                ParatextProject.eProjectType projType = GetProjectType(split[0], dirType);
+                               ProjectType projType = GetProjectType(split[0], dirType);
 
                                 p.BaseTranslation = new Translation_Info
                                 {
@@ -402,32 +402,32 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <param name="s"></param>
         /// <param name="dirType"></param>
         /// <returns></returns>
-        private ParatextProject.eProjectType GetProjectType(string s, ParatextProject.eDirType dirType)
+        private ProjectType GetProjectType(string s, DirType dirType)
         {
             s = s.ToUpper().Trim();
 
             switch (s)
             {
                 case "STANDARD":
-                    if (dirType == ParatextProject.eDirType.Project)
+                    if (dirType == DirType.Project)
                     {
-                        return ParatextProject.eProjectType.Standard;
+                        return ProjectType.Standard;
                     }
                     else
                     {
-                        return ParatextProject.eProjectType.Resource;
+                        return ProjectType.Resource;
                     }
                 case "BACKTRANSLATION":
-                    return ParatextProject.eProjectType.BackTranslation;
+                    return ProjectType.BackTranslation;
                 case "AUXILIARY":
-                    return ParatextProject.eProjectType.Auxiliary;
+                    return ProjectType.Auxiliary;
                 case "DAUGHTER":
-                    return ParatextProject.eProjectType.Daughter;
+                    return ProjectType.Daughter;
                 case "MARBLERESOURCE":
-                    return ParatextProject.eProjectType.MarbleResource;
+                    return ProjectType.MarbleResource;
             }
 
-            return ParatextProject.eProjectType.Unknown;
+            return ProjectType.Unknown;
         }
 
         public static List<ParatextBook> GetBookList(ParatextProject project, string directory)

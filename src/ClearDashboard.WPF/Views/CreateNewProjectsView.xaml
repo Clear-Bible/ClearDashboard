@@ -93,7 +93,7 @@
                 </GroupBox.HeaderTemplate>
                 <ListView
                     Margin="5"
-                    ItemsSource="{Binding ParatextProjects}"
+                    ItemsSource="{Binding ProjectManager.ParatextProjects}"
                     cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source,$eventArgs)];
                                        [Event PreviewMouseMove] = [Action ListView_PreviewMouseMove($source,$eventArgs)]"
                     Style="{StaticResource MaterialDesignListBox}">
@@ -191,7 +191,7 @@
                 <ListView
                     x:Name="resourcesLV"
                     Margin="5"
-                    ItemsSource="{Binding ParatextResources}"
+                    ItemsSource="{Binding ProjectManager.ParatextResources}"
                     cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                        [Event  PreviewMouseMove] = [Action ListView_PreviewMouseMove($source, $eventArgs)]"
                     Style="{StaticResource MaterialDesignListBox}">

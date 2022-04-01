@@ -1,18 +1,14 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
-using MvvmHelpers;
-using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,13 +25,13 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region Properties
-        private ProjectManager ProjectManager { get; set; }
+        public ProjectManager ProjectManager { get; set; }
 
         protected Canvas DrawCanvasTop { get; set; }
         protected Canvas DrawCanvasBottom { get; set; }
 
         public bool ParatextVisible = false;
-        public bool ShowWaitingIcon = true;
+        //public bool ShowWaitingIcon = true;
 
         private bool _isDragging = false;
         private Point _dragStartPoint;
@@ -43,10 +39,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private double _boxWidth;
         private double _boxHeight;
 
-        private ParatextProject _targetProject;
-        private readonly List<ParatextProject> _lwcProjects = new List<ParatextProject>();
-        private readonly List<ParatextProject> _backTranslationProjects = new List<ParatextProject>();
-        private ParatextProject _interlinearizerProject;
+        public DashboardProject DashboardProject { get; set; }
 
         // variables that hold the arrow connection points
         private Point _sourceConnectionPoint = new Point(0, 0);
@@ -59,7 +52,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private enum DropZones
         {
             Source,
-            LWC,
+            LanguageOfWiderCommunication,
             Target,
             BackTranslation,
             Interlinearizer,
@@ -89,59 +82,46 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        //private Task _textXamlChangeEvent;
+        //private string _textXaml;
+        //public string TextXaml
+        //{
+        //    get => _textXaml;
+        //    set
+        //    {
+        //        if (_textXaml == value) return;
+        //        _textXaml = value;
+        //        if (_textXamlChangeEvent == null || _textXamlChangeEvent.Status >= TaskStatus.RanToCompletion)
+        //        {
+        //            _textXamlChangeEvent = Task.Run(() =>
+        //            {
+        //                Task.Delay(100);
+        //                retry:
+        //                var oldVal = _textXaml;
 
+        //                Thread.MemoryBarrier();
+        //                _textXaml = value;
+        //                NotifyOfPropertyChange(() => TextXaml);
 
-        
-
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } =
-            new ObservableRangeCollection<ParatextProjectViewModel>();
-
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } =
-            new ObservableRangeCollection<ParatextProjectViewModel>();
-
-
-        private Task _textXamlChangeEvent;
-        private string _textXaml;
-        public string TextXaml
-        {
-            get => _textXaml;
-            set
-            {
-                if (_textXaml == value) return;
-                _textXaml = value;
-                if (_textXamlChangeEvent == null || _textXamlChangeEvent.Status >= TaskStatus.RanToCompletion)
-                {
-                    _textXamlChangeEvent = Task.Run(() =>
-                    {
-                        Task.Delay(100);
-                        retry:
-                        var oldVal = _textXaml;
-
-                        Thread.MemoryBarrier();
-                        _textXaml = value;
-                        NotifyOfPropertyChange(() => TextXaml);
-
-                        Thread.MemoryBarrier();
-                        if (oldVal != _textXaml) goto retry;
-                    });
-                }
-            }
-        }
+        //                Thread.MemoryBarrier();
+        //                if (oldVal != _textXaml) goto retry;
+        //            });
+        //        }
+        //    }
+        //}
 
         #endregion
 
         #region Observable Properties
 
-        private string _projectName;
-
         public string ProjectName
         {
-            get => _projectName;
+            get => DashboardProject?.ProjectName;
             set
             {
-                _projectName = value;
+                DashboardProject.ProjectName = value;
                 NotifyOfPropertyChange(() => ProjectName);
-                ValidateProjectData();
+                CanCreateNewProject = DashboardProject.ValidateProjectData();
             }
         }
         #endregion
@@ -184,62 +164,28 @@ namespace ClearDashboard.Wpf.ViewModels
         public async Task Init()
         {
             SetupUserHelp();
-            await SetupParatext();
+
+            await ProjectManager.SetupParatext();
+            DashboardProject = ProjectManager.CreateDashboardProject();
+
         }
 
-        private async Task SetupParatext()
-        {
-            // detect if Paratext is installed
-            var paratextUtils = new ParatextUtils();
-            ParatextVisible = paratextUtils.IsParatextInstalled();
-
-            if (ParatextVisible)
-            {
-                // get all the Paratext Projects (Projects/Backtranslations)
-                ParatextProjects.Clear();
-                var projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.eFolderType.Projects);
-                try
-                {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
-                    foreach (var project in projects)
-                    {
-                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectViewModel>(project));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "Unexpected error while initializing");
-                }
-
-                // get all the Paratext Resources (LWC)
-                ParatextResources.Clear();
-                var resources = paratextUtils.GetParatextResources();
-                try
-                {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
-                    foreach (var resource in resources)
-                    {
-                        ParatextResources.Add(TinyMapper.Map<ParatextProjectViewModel>(resource));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "Unexpected error while initializing");
-                }
-            }
-        }
+   
 
         private void SetupUserHelp()
         {
             // get the right help text
             // TODO Work on the help regionalization
             var fileInfo = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            var helpFile = System.IO.Path.Combine(fileInfo.Directory.ToString(), @"HelpFiles\NewProjectHelp_us.md");
-
-            if (File.Exists(helpFile))
+            if (fileInfo.Directory != null)
             {
-                var markdownTxt = File.ReadAllText(helpFile);
-                HelpText = string.Join("\r\n", Regex.Split(markdownTxt, "\r?\n").Select(ln => ln.TrimStart()));
+                var helpFile = System.IO.Path.Combine(fileInfo.Directory.ToString(), @"HelpFiles\NewProjectHelp_us.md");
+
+                if (File.Exists(helpFile))
+                {
+                    var markdownTxt = File.ReadAllText(helpFile);
+                    HelpText = string.Join("\r\n", Regex.Split(markdownTxt, "\r?\n").Select(ln => ln.TrimStart()));
+                }
             }
         }
 
@@ -270,7 +216,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     _isDragging = true;
                     var data = new DataObject(typeof(ParatextProject), listView.SelectedItem);
-                    var dragDropEffects = DragDrop.DoDragDrop(listView, data, DragDropEffects.Copy);
+                    DragDrop.DoDragDrop(listView, data, DragDropEffects.Copy);
                     _isDragging = false;
                 }
             }
@@ -292,27 +238,27 @@ namespace ClearDashboard.Wpf.ViewModels
                     case DropZones.Source:
                         text.Text = "MANUSCRIPT";
                         break;
-                    case DropZones.LWC:
+                    case DropZones.LanguageOfWiderCommunication:
                         text.Text = "LWC";
-                        if (!_lwcProjects.Any(p=>project != null && p.Name == project.Name))
+                        if (!DashboardProject.LanguageOfWiderCommunicationProjects.Any(p=>project != null && p.Name == project.Name))
                         {
                             // only allow it to be added once
-                            _lwcProjects.Add(project);
+                            DashboardProject.LanguageOfWiderCommunicationProjects.Add(project);
                         }
                         break;
                     case DropZones.Target:
                         text.Text = "TARGET";
-                        if (project.ProjectType == ParatextProject.eProjectType.Standard)
+                        if (project is { ProjectType: ProjectType.Standard })
                         {
-                            _targetProject = project;
+                            DashboardProject.TargetProject = project;
 
                             // look for linked back translations
-                            var backTranslationProjects = ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
+                            var backTranslationProjects = ProjectManager.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
                             foreach (var backTranslationProject in backTranslationProjects)
                             {
-                                if (!_backTranslationProjects.Any(p => p.Name == backTranslationProject.Name))
+                                if (DashboardProject.BackTranslationProjects.All(p => p.Name != backTranslationProject.Name))
                                 {
-                                    _backTranslationProjects.Add(backTranslationProject);
+                                    DashboardProject.BackTranslationProjects.Add(backTranslationProject);
                                 }
                             }
                         }
@@ -345,18 +291,18 @@ namespace ClearDashboard.Wpf.ViewModels
                     case DropZones.BackTranslation:
                         text.Text = "BACK TRANSLATION";
                         // look for linked back translations
-                        if (!_backTranslationProjects.Any(p => project != null && p.Name == project.Name))
+                        if (!DashboardProject.BackTranslationProjects.Any(p => project != null && p.Name == project.Name))
                         {
-                            _backTranslationProjects.Add(project);
+                            DashboardProject.BackTranslationProjects.Add(project);
                         }
                         break;
                     case DropZones.Blank:
                         break;
                     case DropZones.Interlinearizer:
                         text.Text = "INTERLINEARIZER";
-                        if (project != null && project.ProjectType == ParatextProject.eProjectType.Resource)
+                        if (project != null && project.ProjectType == ProjectType.Resource)
                         {
-                            _interlinearizerProject = project;
+                            DashboardProject.InterlinearizerProject = project;
                         }
                         break;
                 }
@@ -378,7 +324,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 return DropZones.Target;
             }
-            return DropZones.LWC;
+            return DropZones.LanguageOfWiderCommunication;
         }
 
         private DropZones GetDropZoneBottom(Point point)
@@ -419,7 +365,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // ===============================
             // Draw the Target Box Contents
             // ===============================
-            if (_targetProject != null)
+            if (DashboardProject.TargetProject != null)
             {
                 DrawTargetBox(projectBoxWidth, projectBoxHeight);
             }
@@ -427,15 +373,15 @@ namespace ClearDashboard.Wpf.ViewModels
             // ===============================
             // Draw the LWC Box(es) Contents
             // ===============================
-            if (_lwcProjects.Count > 0)
+            if (DashboardProject.LanguageOfWiderCommunicationProjects.Count > 0)
             {
-                DrawLWCBoxes(projectBoxWidth, projectBoxHeight);
+                DrawLanguageOfWiderCommunicationBoxes(projectBoxWidth, projectBoxHeight);
             }
 
             // =============================================
             // Draw the Back Translation Box(es) Contents
             // =============================================
-            if (_backTranslationProjects.Count > 0)
+            if (DashboardProject.BackTranslationProjects.Count > 0)
             {
                 DrawBackTransBoxes(projectBoxWidth, projectBoxHeight);
             }
@@ -443,7 +389,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // =============================================
             // Draw the Interlinearizer Contents
             // =============================================
-            if (_interlinearizerProject != null)
+            if (DashboardProject.InterlinearizerProject != null)
             {
                 DrawInterlinearizerBox(projectBoxWidth, projectBoxHeight);
             }
@@ -452,7 +398,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // Draw the ConnectionLines
             // ===============================
             // connect target to source
-            if (_targetProject != null)
+            if (DashboardProject.TargetProject != null)
             {
                 var leftPoint = new Point(_sourceConnectionPoint.X + 6, _sourceConnectionPoint.Y + 2);
                 var rightPoint = new Point(_targetConnectionPointLeft.X - 6, _targetConnectionPointLeft.Y + 2);
@@ -463,9 +409,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // some LWC's so connect to Target
-            for (var i = 0; i < _lwcProjects.Count; i++)
+            for (var i = 0; i < DashboardProject.LanguageOfWiderCommunicationProjects.Count; i++)
             {
-                if (_targetProject != null)
+                if (DashboardProject.TargetProject != null)
                 {
                     var leftPoint = new Point(_lwcConnectionPointsLeft[i].X + 6, _lwcConnectionPointsLeft[i].Y + 2);
                     var rightPoint = new Point(_targetConnectionPointRight.X + 6, _targetConnectionPointRight.Y + 2);
@@ -479,7 +425,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // connection lines between target and Intelinear
-            if (_targetProject != null && _interlinearizerProject != null)
+            if (DashboardProject.TargetProject != null && DashboardProject.InterlinearizerProject != null)
             {
                 var bottomPoint = new Point(_targetConnectionPtBottom.X, _targetConnectionPtBottom.Y + 6);
                 var leftPoint = new Point(_inConnectionPointLeft.X - 6, _inConnectionPointLeft.Y + 10 + DrawCanvasTop.ActualHeight);
@@ -673,8 +619,10 @@ namespace ClearDashboard.Wpf.ViewModels
             // ==================================
             var point = new Point
             {
+                // ReSharper disable PossibleLossOfFraction
                 X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 6),
                 Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset
+                // ReSharper restore PossibleLossOfFraction
             };
 
             var rectangle = new Rectangle
@@ -702,7 +650,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Width = _boxWidth,
-                Text = _interlinearizerProject.Name
+                Text = DashboardProject.InterlinearizerProject.Name
             };
             var textSize = DrawingUtils.MeasureString(textBlock.Text, textBlock);
             var additionalX = (projectBoxWidth - textSize.Width) / 2;
@@ -714,7 +662,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // Draw circle at connect point (left side)
             var leftPoint = new Point(point.X, point.Y);
+            // ReSharper disable PossibleLossOfFraction
             leftPoint.Y += projectBoxHeight / 2;
+            // ReSharper restore PossibleLossOfFraction
 
             var ellipse = new Ellipse();
             var brushCircle = new SolidColorBrush
@@ -745,7 +695,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 Height = 25
             };
             button.Click += RemoveItem_Click;
-            button.Uid = "IN:" + _interlinearizerProject.Name;
+            button.Uid = "IN:" + DashboardProject.InterlinearizerProject.Name;
             button.Foreground = Brushes.Red;
             button.Effect =
                 new DropShadowEffect
@@ -770,28 +720,34 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             double separation = 0;
             double offset = 30;
-            if (_backTranslationProjects.Count > 1)
+            if (DashboardProject.BackTranslationProjects.Count > 1)
             {
                 separation = 30;
-                offset = _backTranslationProjects.Count * separation / 2;
+                offset = DashboardProject.BackTranslationProjects.Count * separation / 2;
             }
 
-            for (int i = 0; i < _backTranslationProjects.Count; i++)
+            for (var i = 0; i < DashboardProject.BackTranslationProjects.Count; i++)
             {
                 // ========================
                 // Draw the Back Translation Boxes
                 // ========================
                 var point = new Point
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     X = (_boxWidth / 2) - (projectBoxWidth / 2)
+                    // ReSharper restore PossibleLossOfFraction
                 };
-                if (_backTranslationProjects.Count > 1)
+                if (DashboardProject.BackTranslationProjects.Count > 1)
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset + 30;
+                    // ReSharper restore PossibleLossOfFraction
                 }
                 else
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
+                    // ReSharper restore PossibleLossOfFraction
                 }
 
                 var rectangle = new Rectangle
@@ -819,7 +775,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Width = _boxWidth,
-                    Text = _backTranslationProjects[i].Name
+                    Text = DashboardProject.BackTranslationProjects[i].Name
                 };
                 var textSize = DrawingUtils.MeasureString(textBlock.Text, textBlock);
                 var additionalX = (projectBoxWidth - textSize.Width) / 2;
@@ -837,7 +793,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     Height = 25
                 };
                 button.Click += RemoveItem_Click;
-                button.Uid = "BT:" + _backTranslationProjects[i].Name;
+                button.Uid = "BT:" + DashboardProject.BackTranslationProjects[i].Name;
                 button.Foreground = Brushes.Red;
                 button.Effect =
                     new DropShadowEffect
@@ -861,34 +817,40 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <param name="projectBoxWidth"></param>
         /// <param name="projectBoxHeight"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void DrawLWCBoxes(int projectBoxWidth, int projectBoxHeight)
+        private void DrawLanguageOfWiderCommunicationBoxes(int projectBoxWidth, int projectBoxHeight)
         {
             _lwcConnectionPointsLeft.Clear();
 
             double separation = 0;
             double offset = 0;
-            if (_lwcProjects.Count > 1)
+            if (DashboardProject.LanguageOfWiderCommunicationProjects.Count > 1)
             {
                 separation = 30;
-                offset = _lwcProjects.Count * separation / 2;
+                offset = DashboardProject.LanguageOfWiderCommunicationProjects.Count * separation / 2;
             }
 
-            for (int i = 0; i < _lwcProjects.Count; i++)
+            for (var i = 0; i < DashboardProject.LanguageOfWiderCommunicationProjects.Count; i++)
             {
                 // ========================
                 // Draw the LWC Boxes
                 // ========================
                 var point = new Point
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 6)
+                    // ReSharper restore PossibleLossOfFraction
                 };
-                if (_lwcProjects.Count > 1)
+                if (DashboardProject.LanguageOfWiderCommunicationProjects.Count > 1)
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     point.Y = (_boxHeight / 2) - (projectBoxHeight / 2) + offset + 30;
+                    // ReSharper restore PossibleLossOfFraction
                 }
                 else
                 {
+                    // ReSharper disable PossibleLossOfFraction
                     point.Y = (_boxHeight / 2) - (projectBoxHeight / 2);
+                    // ReSharper restore PossibleLossOfFraction
                 }
 
 
@@ -917,7 +879,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Width = _boxWidth,
-                    Text = _lwcProjects[i].Name
+                    Text = DashboardProject.LanguageOfWiderCommunicationProjects[i].Name
                 };
                 var textSize = DrawingUtils.MeasureString(textBlock.Text, textBlock);
                 var additionalX = (projectBoxWidth - textSize.Width) / 2;
@@ -928,7 +890,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 // Draw circle at connect point (left side)
                 var leftPoint = new Point(point.X, point.Y);
+                // ReSharper disable PossibleLossOfFraction
                 leftPoint.Y += projectBoxHeight / 2;
+                // ReSharper restore PossibleLossOfFraction
 
                 var ellipse = new Ellipse();
                 var brushCircle = new SolidColorBrush
@@ -959,7 +923,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     Height = 25
                 };
                 button.Click += RemoveItem_Click;
-                button.Uid = "LWC:" + _lwcProjects[i].Name;
+                button.Uid = "LWC:" + DashboardProject.LanguageOfWiderCommunicationProjects[i].Name;
                 button.Foreground = Brushes.Red;
                 button.Effect =
                     new DropShadowEffect
@@ -989,8 +953,10 @@ namespace ClearDashboard.Wpf.ViewModels
             // ========================
             var point = new Point
             {
+                // ReSharper disable PossibleLossOfFraction
                 X = (_boxWidth / 2) - (projectBoxWidth / 2) + (projectBoxWidth * 3),
                 Y = (_boxHeight / 2) - (projectBoxHeight / 2)
+                // ReSharper restore PossibleLossOfFraction
             };
 
             var rectangle = new Rectangle
@@ -1018,7 +984,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Width = _boxWidth,
-                Text = _targetProject.Name
+                Text = DashboardProject.TargetProject.Name
             };
             var textSize = DrawingUtils.MeasureString(textBlock.Text, textBlock);
             var additionalX = (projectBoxWidth - textSize.Width) / 2;
@@ -1031,7 +997,9 @@ namespace ClearDashboard.Wpf.ViewModels
             // Draw circle at connect point (right side)
             var rightPoint = new Point(point.X, point.Y);
             rightPoint.X += projectBoxWidth;
+            // ReSharper disable PossibleLossOfFraction
             rightPoint.Y += projectBoxHeight / 2;
+            // ReSharper restore PossibleLossOfFraction
 
             var ellipse = new Ellipse();
             var brushCircle = new SolidColorBrush
@@ -1056,7 +1024,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // Draw circle at connect point (left side)
             var leftPoint = new Point(point.X, point.Y);
+            // ReSharper disable PossibleLossOfFraction
             leftPoint.Y += projectBoxHeight / 2;
+            // ReSharper restore PossibleLossOfFraction
 
             ellipse = new Ellipse();
             brushCircle = new SolidColorBrush
@@ -1082,7 +1052,9 @@ namespace ClearDashboard.Wpf.ViewModels
             // Draw circle at connect point (bottom side)
             var bottomPoint = new Point(point.X, point.Y);
             bottomPoint.Y += projectBoxHeight;
+            // ReSharper disable PossibleLossOfFraction
             bottomPoint.X = point.X + (projectBoxWidth / 2);
+            // ReSharper restore PossibleLossOfFraction
 
             ellipse = new Ellipse();
             brushCircle = new SolidColorBrush
@@ -1140,8 +1112,10 @@ namespace ClearDashboard.Wpf.ViewModels
             // ========================
             var point = new Point
             {
+                // ReSharper disable PossibleLossOfFraction
                 X = (_boxWidth / 2) - (projectBoxWidth / 2),
                 Y = (_boxHeight / 2) - (projectBoxHeight / 2)
+                // ReSharper restore PossibleLossOfFraction
             };
 
             // draw the 'Source' word
@@ -1182,7 +1156,9 @@ namespace ClearDashboard.Wpf.ViewModels
             // Draw circle at connect point
             var leftPoint = new Point(point.X, point.Y);
             leftPoint.X += projectBoxWidth;
+            // ReSharper disable PossibleLossOfFraction
             leftPoint.Y += projectBoxHeight / 2;
+            // ReSharper restore PossibleLossOfFraction
 
             var ellipse = new Ellipse();
             var brushCircle = new SolidColorBrush
@@ -1212,15 +1188,15 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 if (button.Uid.StartsWith("TARGET:"))
                 {
-                    _targetProject = null;
+                    DashboardProject.TargetProject = null;
                 }
                 else if (button.Uid.StartsWith("LWC:"))
                 {
                     var name = button.Uid.Substring(4);
-                    var index = _lwcProjects.FindIndex(a => a.Name == name);
+                    var index = DashboardProject.LanguageOfWiderCommunicationProjects.FindIndex(a => a.Name == name);
                     try
                     {
-                        _lwcProjects.RemoveAt(index);
+                        DashboardProject.LanguageOfWiderCommunicationProjects.RemoveAt(index);
                     }
                     catch (Exception ex)
                     {
@@ -1231,10 +1207,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 else if (button.Uid.StartsWith("BT:"))
                 {
                     var name = button.Uid.Substring(3);
-                    var index = _backTranslationProjects.FindIndex(a => a.Name == name);
+                    var index = DashboardProject.BackTranslationProjects.FindIndex(a => a.Name == name);
                     try
                     {
-                        _backTranslationProjects.RemoveAt(index);
+                        DashboardProject.BackTranslationProjects.RemoveAt(index);
                     }
                     catch (Exception ex)
                     {
@@ -1243,7 +1219,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 else if (button.Uid.StartsWith("IN:"))
                 {
-                    _interlinearizerProject = null;
+                    DashboardProject.InterlinearizerProject = null;
                 }
             }
 
@@ -1260,42 +1236,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async void CreateNewProject()
         {
-            if (_targetProject == null)
+            if (DashboardProject.TargetProject == null)
             {
                 // unlikely ever to be true but just in case
                 return;
             }
-
-            var dashboardProject = new DashboardProject
-            {
-                ProjectName = ProjectName,
-                TargetProject = _targetProject,
-                LWCProjects = _lwcProjects,
-                BTProjects = _backTranslationProjects,
-                CreationDate = DateTime.Now,
-                ParatextUser = ProjectManager.ParatextUserName
-            };
-
-            await ProjectManager.CreateNewProject(dashboardProject).ConfigureAwait(false);
+            await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
-        private void ValidateProjectData()
-        {
-            if (ProjectName is "" or null)
-            {
-                CanCreateNewProject = false;
-                return;
-            }
-
-            // check to see if we have at least a target project
-            if (_targetProject is null)
-            {
-                CanCreateNewProject = false;
-            }
-            else
-            {
-                CanCreateNewProject = true;
-            }
-        }
+    
     }
 }

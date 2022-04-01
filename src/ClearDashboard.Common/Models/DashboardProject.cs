@@ -12,6 +12,12 @@ namespace ClearDashboard.Common.Models
         public string ClearEngineDirectoryPath => Path.Combine(DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
 
+        public DashboardProject()
+        {
+            LanguageOfWiderCommunicationProjects = new List<ParatextProject>();
+            BackTranslationProjects = new List<ParatextProject>();
+            InterlinearizerProject = null;
+        }
 
         private string _projectName;
         public string ProjectName
@@ -81,24 +87,32 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+        private ParatextProject _interlinearizerProject;
+        public ParatextProject InterlinearizerProject
+        {
+            get => _interlinearizerProject;
+            set => _interlinearizerProject = value;
+        }
+
+
         /// <summary>
         /// list of LWC projects
         /// </summary>
-        private List<ParatextProject> _lwcProjects;
-        public List<ParatextProject> LWCProjects
+        private List<ParatextProject> _languageOfWiderCommunicationProjects;
+        public List<ParatextProject> LanguageOfWiderCommunicationProjects
         {
-            get => _lwcProjects;
-            set => _lwcProjects = value;
+            get => _languageOfWiderCommunicationProjects;
+            set => _languageOfWiderCommunicationProjects = value;
         }
 
         /// <summary>
         /// List of Back Translation projects
         /// </summary>
-        private List<ParatextProject> _btProjects;
-        public List<ParatextProject> BTProjects
+        private List<ParatextProject> _backTranslationProjects;
+        public List<ParatextProject> BackTranslationProjects
         {
-            get => _btProjects;
-            set => _btProjects = value;
+            get => _backTranslationProjects;
+            set => _backTranslationProjects = value;
         }
 
         /// <summary>
@@ -199,11 +213,23 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+      
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public bool ValidateProjectData()
+        {
+            if (ProjectName is "" or null)
+            {
+                return false;
+            }
+
+            // check to see if we have at least a target project
+            return TargetProject is not null;
         }
     }
 }

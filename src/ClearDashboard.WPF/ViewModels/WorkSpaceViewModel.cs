@@ -32,8 +32,6 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-        private ILogger Logger { get; set; }
-        private INavigationService NavigationService { get; set; }
         private ProjectManager ProjectManager;
 
         #endregion //Member Variables
@@ -164,17 +162,14 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Required for design-time support
         /// </summary>
-        //public WorkSpaceViewModel() 
-        //{
+        public WorkSpaceViewModel()
+        {
 
-        //}
+        }
 
         public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
-            Logger = logger;
-            NavigationService = navigationService;
             ProjectManager = projectManager;
-
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
