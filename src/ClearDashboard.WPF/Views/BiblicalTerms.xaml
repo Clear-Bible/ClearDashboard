@@ -27,7 +27,7 @@
             <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
 
             <SolidColorBrush
-                x:Key="StackOverflowGray"
+                x:Key="GridBrush"
                 Opacity="0.25"
                 Color="LightBlue" />
 
@@ -73,6 +73,26 @@
                     IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                     Style="{StaticResource MaterialDesignLightRadioButton}" />
             </StackPanel>
+
+            <!--  SCOPE  -->
+            <Border
+                Margin="10,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SCOPE:</TextBlock>
+                    <ComboBox
+                        x:Name="Scope"
+                        MinWidth="50"
+                        Margin="0,0,5,0"
+                        DisplayMemberPath="Display"
+                        ItemsSource="{Binding Scopes}"
+                        SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Value" />
+                </StackPanel>
+            </Border>
+
+            <!--  SEMANTIC DOMAINS  -->
             <Border
                 Margin="10,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -81,13 +101,14 @@
                     <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN:</TextBlock>
                     <ComboBox
                         x:Name="Domains"
-                        MinWidth="150"
+                        MinWidth="50"
                         Margin="0,0,5,0"
                         ItemsSource="{Binding Domains}"
                         SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Border>
 
+            <!--  WORD FILTER  -->
             <Border
                 Margin="2,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -124,20 +145,6 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <StackPanel
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <TextBlock
-                    Width="75"
-                    Text="Current Verse Only"
-                    TextAlignment="Center"
-                    TextWrapping="Wrap" />
-                <ToggleButton
-                    IsChecked="{Binding CurrentVerseToggle}"
-                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                    ToolTip="MaterialDesignSwitchToggleButton" />
-            </StackPanel>
         </StackPanel>
 
         <!--  ROW 1  -->
@@ -151,7 +158,7 @@
             CanUserAddRows="False"
             CanUserResizeColumns="True"
             GridLinesVisibility="All"
-            HorizontalGridLinesBrush="{StaticResource StackOverflowGray}"
+            HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding BiblicalTermsCollectionView}"
             ScrollViewer.CanContentScroll="True"
@@ -160,7 +167,7 @@
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
-            VerticalGridLinesBrush="{StaticResource StackOverflowGray}">
+            VerticalGridLinesBrush="{StaticResource GridBrush}">
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -260,9 +267,9 @@
                         <DataTemplate>
                             <TextBlock
                                 Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
-                                Height="15"
                                 Margin="-8"
                                 HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">

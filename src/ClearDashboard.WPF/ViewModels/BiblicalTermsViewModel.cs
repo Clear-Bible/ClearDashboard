@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -24,6 +25,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Controls;
+using ClearDashboard.Wpf.Models;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -47,6 +49,14 @@ namespace ClearDashboard.Wpf.ViewModels
             Rendering
         }
 
+        public enum FilterScope
+        {
+            All,
+            Book,
+            Chapter,
+            Verse
+        }
+
         public ILogger Logger { get; set; }
         public INavigationService NavigationService { get; set; }
         public ProjectManager ProjectManager { get; set; }
@@ -65,7 +75,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public string FilterText
         {
-            get { return _filterText; }
+            get => _filterText;
             set
             {
                 _filterText = value;
@@ -85,6 +95,35 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => Gloss);
             }
         }
+
+        private DataTable _scope;
+        public DataTable Scopes
+        {
+            get { return _scope; }
+            set
+            {
+                _scope = value;
+                NotifyOfPropertyChange(() => Scopes);
+            }
+        }
+
+        private DataRowView _selectedScope;
+        public DataRowView SelectedScope
+        {
+            get { return _selectedScope; }
+            set
+            {
+                _selectedScope = value;
+                NotifyOfPropertyChange(() => SelectedScope);
+
+                //refresh the biblicalterms collection so the filter runs
+                if (BiblicalTermsCollectionView is not null)
+                {
+                    BiblicalTermsCollectionView.Refresh();
+                }
+            }
+        }
+
 
 
         private BindableCollection<string> _domains;
@@ -108,7 +147,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => SelectedDomain);
 
                 //refresh the biblicalterms collection so the filter runs
-                BiblicalTermsCollectionView.Refresh();
+                if (BiblicalTermsCollectionView is not null)
+                {
+                    BiblicalTermsCollectionView.Refresh();
+                }
             }
         }
 
@@ -141,19 +183,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => SelectedWordFilterType);
 
                 TriggerFilterTermsByWord();
-            }
-        }
-
-        private bool _currentVerseToggle;
-        public bool CurrentVerseToggle
-        {
-            get { return _currentVerseToggle; }
-            set
-            {
-                _currentVerseToggle = value;
-                NotifyOfPropertyChange(() => CurrentVerseToggle);
-
-                ToggleCurrentVerse();
             }
         }
 
@@ -299,7 +328,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             this.NavigationService = navigationService;
             this.Logger = logger;
-            this.ProjectManager =projectManager;
+            this.ProjectManager = projectManager;
 
             this.Title = "🕮 BIBLICAL TERMS";
             this.ContentId = "BIBLICALTERMS";
@@ -310,6 +339,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // populate the combo box for semantic domains
             SetupSemanticDomains();
+            SelectedDomain = Domains[0];
+
+            // populate the combo box for scope
+            SetupScopes();
+            // select the first one
+            //SelectedScope = new DataRowView() Scopes.Rows[0][0].ToString();
+
 
             // setup the collectionview that binds to the datagrid
             BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(this._biblicalTerms);
@@ -623,7 +659,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 verseText = verse.VerseText;
 
                 // organize the points in lowest to highest
-                points  = points.OrderBy(o => o.X).ToList();
+                points = points.OrderBy(o => o.X).ToList();
 
                 // interate through in reverse
                 for (int i = points.Count - 1; i >= 0; i--)
@@ -659,7 +695,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     verse.Inlines.Add(new Run(verseText));
                 }
             }
-            
+
             NotifyOfPropertyChange(() => SelectedItemVerses);
             NotifyOfPropertyChange(() => Renderings);
             NotifyOfPropertyChange(() => RenderingsText);
@@ -678,23 +714,61 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private bool FilterGridItems(object obj)
         {
-            // filter down only to the current verse
-            if (CurrentVerseToggle)
+            if (SelectedScope is DataRowView rowView)
             {
-                if (obj is BiblicalTermsData)
+                var selectedScope = rowView[1].ToString();
+
+                // filter down to scope if present
+                if (selectedScope != "All")
                 {
-                    var terms = (BiblicalTermsData)obj;
-                    bool bFound = false;
-                    foreach (var term in terms.References)
+                    if (ProjectManager.CurrentVerse.Length != 8)
                     {
-                        if (term == ProjectManager.CurrentVerse)
+                        return false;
+                    }
+
+                    if (obj is BiblicalTermsData)
+                    {
+                        var terms = (BiblicalTermsData)obj;
+                        bool bFound = false;
+                        switch (selectedScope)
                         {
-                            return true;
+                            case "Book":
+                                foreach (var term in terms.References)
+                                {
+                                    string book = term.Substring(0, 2);
+                                    if (book == ProjectManager.CurrentVerse.Substring(0, 2))
+                                    {
+                                        return true;
+                                    }
+                                }
+
+                                break;
+                            case "Chapter":
+                                foreach (var term in terms.References)
+                                {
+                                    string chapter = term.Substring(0, 5);
+                                    if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
+                                    {
+                                        return true;
+                                    }
+                                }
+
+                                break;
+                            case "Verse":
+                                foreach (var term in terms.References)
+                                {
+                                    if (term == ProjectManager.CurrentVerse)
+                                    {
+                                        return true;
+                                    }
+                                }
+
+                                break;
                         }
                     }
-                }
 
-                return false;
+                    return false;
+                }
             }
 
 
@@ -749,6 +823,19 @@ namespace ClearDashboard.Wpf.ViewModels
             return false;
         }
 
+
+        private void SetupScopes()
+        {
+            _scope = new DataTable();
+            _scope.Columns.Add("Display");
+            _scope.Columns.Add("Value");
+
+            var scopes = Enum.GetNames(typeof(FilterScope));
+            for (int i = 0; i < scopes.Length; i++)
+            {
+                _scope.Rows.Add(scopes[i], scopes[i]);
+            }
+        }
 
         /// <summary>
         /// Combo box for the domains
