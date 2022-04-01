@@ -1,10 +1,7 @@
-﻿using System;
+﻿using SIL.Scripture;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
-using SIL.Scripture;
 
 namespace ClearDashboard.Common.Models
 {

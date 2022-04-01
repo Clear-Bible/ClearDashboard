@@ -314,7 +314,7 @@ namespace ClearDashboardPlugin
                     await GetUSXScripture().ConfigureAwait(false);
                     break;
                 case ActionType.GetNotes:
-                    //await GetNoteList(msg.actionCommand, msg.jsonPayload).ConfigureAwait(false);
+                    await GetNoteList(message).ConfigureAwait(false);
                     break;
                 case ActionType.SetProject:
                     AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
@@ -667,8 +667,13 @@ namespace ClearDashboardPlugin
         //    return false;
         //}
 
-        private async Task GetNoteList(string actionCommand, string jsonPayload)
+        private async Task GetNoteList(PipeMessage message)
         {
+
+
+            var bookNum = 0;
+            var chapNum = 0;
+
             var data = JsonSerializer.Deserialize<GetNotesData>(jsonPayload);
             //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
 

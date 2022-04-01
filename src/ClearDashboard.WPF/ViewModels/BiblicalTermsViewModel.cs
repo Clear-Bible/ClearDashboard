@@ -144,6 +144,19 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private bool _currentVerseToggle;
+        public bool CurrentVerseToggle
+        {
+            get { return _currentVerseToggle; }
+            set
+            {
+                _currentVerseToggle = value;
+                NotifyOfPropertyChange(() => CurrentVerseToggle);
+
+                ToggleCurrentVerse();
+            }
+        }
+
         #endregion //Public Properties
 
         #region Observable Properties
@@ -317,18 +330,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private void VerseClick(object obj)
-        {
-            if (obj is null)
-            {
-                return;
-            }
-
-            string verseBBCCCVVV = (string)obj;
-            Console.WriteLine();
-        }
-
-
         /// <summary>
         /// Listen for changes in the DAL regarding any messages coming in
         /// </summary>
@@ -423,9 +424,27 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+        private void ToggleCurrentVerse()
+        {
+            //refresh the biblicalterms collection so the filter runs
+            BiblicalTermsCollectionView.Refresh();
+        }
+
         private void ShowNotes(object obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void VerseClick(object obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            string verseBBCCCVVV = (string)obj;
+            Console.WriteLine();
+
 
             //LayoutAnchorableFloatingWindowControl lfwc = (LayoutAnchorableFloatingWindowControl)Activator.CreateInstance(typeof(LayoutAnchorableFloatingWindowControl), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { lfw }, CultureInfo.InvariantCulture);
             //dm.UpdateLayout();
@@ -659,6 +678,26 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private bool FilterGridItems(object obj)
         {
+            // filter down only to the current verse
+            if (CurrentVerseToggle)
+            {
+                if (obj is BiblicalTermsData)
+                {
+                    var terms = (BiblicalTermsData)obj;
+                    bool bFound = false;
+                    foreach (var term in terms.References)
+                    {
+                        if (term == ProjectManager.CurrentVerse)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+
             // filter based on word
             if (this.FilterText != "" && FilterText is not null)
             {

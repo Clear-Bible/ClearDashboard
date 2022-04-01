@@ -58,50 +58,230 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Joshua" xml:space="preserve">
-    <value>約書亞記 </value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>以賽亞書</value>
-  </data>
   <data name="Leviticus" xml:space="preserve">
     <value>利未記</value>
   </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>以弗所書</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1彼得</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>以西結書</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>西番雅書</value>
+  <data name="delete" xml:space="preserve">
+    <value>刪除</value>
   </data>
   <data name="Judges" xml:space="preserve">
     <value>法官</value>
   </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>以弗所書</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>啟示錄</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>約書亞記 </value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>歷代志下</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>以西結書</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>腓利門書</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>腓立比島</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>撒母耳記上</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1哥林多前書</value>
+  </data>
   <data name="Galatians" xml:space="preserve">
     <value>加拉太人</value>
   </data>
-  <data name="Revelation" xml:space="preserve">
+  <data name="Mark" xml:space="preserve">
+    <value>馬可福音</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>帖撒羅尼迦後書</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Chinese [zh-tw]</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>路得記 </value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>彌迦書</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2哥林多前書</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>約拿書</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
     <value>啟示錄</value>
   </data>
-  <data name="add" xml:space="preserve">
-    <value>加加</value>
+  <data name="2 John" xml:space="preserve">
+    <value>約翰</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1個帖撒羅尼亞人</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>詩篇</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 John.</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>阿摩司書</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>取消</value>
   </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>何西阿書</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>提多書</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 John.</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>創世紀</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>啟示錄</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>希伯來書</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>羅馬書</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>約伯記</value>
+  </data>
   <data name="Acts" xml:space="preserve">
     <value>使徒行傳</value>
   </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>申命記</value>
+  <data name="save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>那鴻書</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>哀歌</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1蒂莫西</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>約珥書</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1彼得</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>瑪拉基</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>啟示錄</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>出漏</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>哈該書</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>尼希米</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>以斯帖記</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>但以理書</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>莫薩斯人</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>歷代志上</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>哈巴谷書</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>撒迦利亞書</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>編輯</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>以斯拉記</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>耶利米書</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>民數記 </value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>猶大書</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>馬太福音</value>
   </data>
   <data name="Song of Songs" xml:space="preserve">
     <value>歌曲歌曲</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2彼得</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>俄巴底亞書</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>創建</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>啟示錄</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>蒂莫西2</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>列王紀上</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>雅各書</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>啟示錄</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>以賽亞書</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>列王紀下</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>繁體中文</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>教會</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>路加福音</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>西番雅書</value>
   </data>
   <data name="John" xml:space="preserve">
     <value>約翰福音</value>
@@ -109,193 +289,13 @@
   <data name="2 Samuel" xml:space="preserve">
     <value>塞繆爾</value>
   </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>撒母耳記上</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 John.</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>瑪拉基</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Chinese [zh-tw]</value>
-  </data>
   <data name="Proverbs" xml:space="preserve">
     <value>箴言</value>
   </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2彼得</value>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>申命記</value>
   </data>
-  <data name="Joel" xml:space="preserve">
-    <value>約珥書</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>啟示錄</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1個帖撒羅尼亞人</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>猶大書</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>路得記 </value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>刪除</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>路加福音</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>保存</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>民數記 </value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>撒迦利亞書</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>約伯記</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>馬太福音</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 John.</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>詩篇</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>以斯拉記</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>以斯帖記</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>蒂莫西2</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>彌迦書</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>出漏</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>提多書</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>啟示錄</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>歷代志上</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>羅馬書</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>腓立比島</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>更新</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>哀歌</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>編輯</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>創世紀</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>約翰</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>阿摩司書</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>耶利米書</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>啟示錄</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>俄巴底亞書</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>但以理書</value>
-  </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1蒂莫西</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>約拿書</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>列王紀上</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>馬可福音</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>那鴻書</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>尼希米</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>雅各書</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>腓利門書</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>莫薩斯人</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>啟示錄</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>哈巴谷書</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>教會</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>希伯來書</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>創建</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2哥林多前書</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>帖撒羅尼迦後書</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>何西阿書</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>哈該書</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1哥林多前書</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>歷代志下</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>啟示錄</value>
-  </data>
-  <data name="language" xml:space="preserve">
-    <value>繁體中文</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>列王紀下</value>
+  <data name="add" xml:space="preserve">
+    <value>加加</value>
   </data>
 </root>

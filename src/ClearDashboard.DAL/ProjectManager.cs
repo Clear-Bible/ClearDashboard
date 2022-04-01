@@ -64,6 +64,7 @@ namespace ClearDashboard.DataAccessLayer
         public event EventHandler ParatextUserNameEventHandler;
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
+        public string CurrentVerse { get; set; } = "";
 
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
@@ -102,6 +103,9 @@ namespace ClearDashboard.DataAccessLayer
                 // intercept and keep a copy of the current project
                 var payload = pm.Payload;
                 Project = JsonSerializer.Deserialize<Project>((string)payload);
+            } else if (pm.Action == ActionType.CurrentVerse)
+            {
+                CurrentVerse = pm.Text;
             }
             
             RaisePipesChangedEvent(pm);

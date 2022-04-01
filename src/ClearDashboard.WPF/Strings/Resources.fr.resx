@@ -58,50 +58,230 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Joshua" xml:space="preserve">
-    <value>Joshua</value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Isaïe</value>
-  </data>
   <data name="Leviticus" xml:space="preserve">
     <value>Lévitique</value>
   </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Éphésiens</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 peter</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Ezekiel</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
+  <data name="delete" xml:space="preserve">
+    <value>Supprimer</value>
   </data>
   <data name="Judges" xml:space="preserve">
     <value>Juge</value>
   </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Éphésiens</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Utilisateur</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>Joshua</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 chroniques</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Ezekiel</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>Philemon</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>Philippes</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 Corinthiens</value>
+  </data>
   <data name="Galatians" xml:space="preserve">
     <value>Galates</value>
   </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Révélation</value>
+  <data name="Mark" xml:space="preserve">
+    <value>marque</value>
   </data>
-  <data name="add" xml:space="preserve">
-    <value>Ajouter</value>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 Thessaloniciens</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>French [fr]</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>Ruth</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>Micah</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 Corinthiens</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Jonas</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Nouveau projet</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 John</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1 Thessaloniciens</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>Psaumes</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 John</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Amos</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>Hosesée</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Titus</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 John</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Genèse</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Projets</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Hébreux</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Romains</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Emploi</value>
+  </data>
   <data name="Acts" xml:space="preserve">
     <value>Actes</value>
   </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>Deutéronome</value>
+  <data name="save" xml:space="preserve">
+    <value>sauvegarder</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Lamentations</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1 Timothée</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 peter</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>Malachi</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Révélation</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Exode</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>Néhémie</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>Esther</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Colossiens</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 chroniques</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Habakkukuk</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Zacharie</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Éditer</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Jeremiah</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>Nombres</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Judicieux</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Matthieu</value>
   </data>
   <data name="Song of Songs" xml:space="preserve">
     <value>Chanson de chansons</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2 Peter</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Projet</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>2 Timothée</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 rois</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Réglages</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Isaïe</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 rois</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Langue française</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Ecclesiastes</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Luke</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Zephaniah</value>
   </data>
   <data name="John" xml:space="preserve">
     <value>John</value>
@@ -109,193 +289,13 @@
   <data name="2 Samuel" xml:space="preserve">
     <value>2 Samuel</value>
   </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 John</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>French [fr]</value>
-  </data>
   <data name="Proverbs" xml:space="preserve">
     <value>les proverbes</value>
   </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2 Peter</value>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>Deutéronome</value>
   </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Réglages</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 Thessaloniciens</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Judicieux</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Ruth</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Luke</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>sauvegarder</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>Nombres</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Zacharie</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>Emploi</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Matthieu</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 John</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Psaumes</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>Esther</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 Timothée</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Exode</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Titus</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Nouveau projet</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 chroniques</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Romains</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>Philippes</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>Mettre à jour</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>Éditer</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Genèse</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 John</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Projets</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 Timothée</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Jonas</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 rois</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>marque</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>Néhémie</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Philemon</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Colossiens</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Utilisateur</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Habakkukuk</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Ecclesiastes</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Hébreux</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Créer</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 Corinthiens</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 Thessaloniciens</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>Hosesée</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 Corinthiens</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 chroniques</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Projet</value>
-  </data>
-  <data name="language" xml:space="preserve">
-    <value>Langue française</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 rois</value>
+  <data name="add" xml:space="preserve">
+    <value>Ajouter</value>
   </data>
 </root>

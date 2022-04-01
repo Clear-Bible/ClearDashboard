@@ -124,6 +124,20 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
+            <StackPanel
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock
+                    Width="75"
+                    Text="Current Verse Only"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+                <ToggleButton
+                    IsChecked="{Binding CurrentVerseToggle}"
+                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                    ToolTip="MaterialDesignSwitchToggleButton" />
+            </StackPanel>
         </StackPanel>
 
         <!--  ROW 1  -->
