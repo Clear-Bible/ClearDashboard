@@ -58,185 +58,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Leviticus" xml:space="preserve">
-    <value>ዘሌዋውያን</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>ሰርዝ</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>ዳኞች</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>ኤፌሶን</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>ተጠቃሚ</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>ኢያሱ</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 ዜና መዋዕል</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>ሕዝቅኤል</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>ፊልሞና</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>ፊልጵስዩስ</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 ሳሙኤል</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 ኛ ቆሮንቶስ</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>ገላትያ ሰዎች</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>ማርክ</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 ተሰሎንቄ</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Amharic [am]</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>ሩት</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>ሚክያስ</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 ኛ ቆሮንቶስ</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>ዮናስ</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>አዲስ ፕሮጀክት</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 ዮሐንስ</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 ተሰሎንቄ</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>መዝሙሮች</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 ዮሐንስ</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>አሞጽ</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>ይቅር</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>ሆሴዕ</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>ቲቶ</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 ጆን</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>ዘፍጥረት</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>ፕሮጄክቶች</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>ዕብራውያን</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>ሮማውያን</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>ሥራ</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>ድርጊቶች</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>አስቀምጥ</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>ናሆም</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>ሰቆሚዎች</value>
-  </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 ጢሞቴዎስ</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>ጆኤል</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>ዝመና</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 ጴጥሮስ</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>ሚልክያስ</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>ራዕይ</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>ዘፀአት</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>ሐጌ</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>ነህምያ</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>አስቴር</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>ዳንኤል</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>ቆላስይስ</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 ዜና መዋዕል</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>ዕንባቆም</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>ዘካርያስ</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>አርትዕ</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>ዕዝራ</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>ኤርምያስ</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>ቁጥሮች</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>ይሁዳ</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>ማቲው</value>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>ከተፈጥሮ በላይነት እና ኃይሎች; ርዕሶች</value>
   </data>
   <data name="Song of Songs" xml:space="preserve">
     <value>የዘፈኖች መዝሙር</value>
@@ -244,58 +67,376 @@
   <data name="2 Peter" xml:space="preserve">
     <value>2 ጴጥሮስ</value>
   </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>አብድዩ</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>ፍጠር</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>ፕሮጀክት</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 ጢሞቴዎስ</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 ነገሥታት</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>ጄምስ</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>ቅንብሮች</value>
-  </data>
   <data name="Isaiah" xml:space="preserve">
     <value>ኢሳይያስ</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 ነገሥታት</value>
-  </data>
-  <data name="language" xml:space="preserve">
-    <value>አማርኛ</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>መክብብ</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>ሉቃስ</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>ሶፎንያስ</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>ጆን</value>
-  </data>
-  <data name="2 Samuel" xml:space="preserve">
-    <value>2 ሳሙኤል</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>ምሳሌዎች</value>
   </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>ዘዳግም</value>
+  <data name="Colossians" xml:space="preserve">
+    <value>ቆላስይስ</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>መስዋትነቶች እና መባዎች</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>ማቲው</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>ዛፎች; ፍራፍሬዎች</value>
   </data>
   <data name="add" xml:space="preserve">
     <value>ጨምር</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>አሞጽ</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>ማህበር</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>ዘፀአት</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>ሳርዎች</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>ፍራፍሬዎች</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>እርሻ</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>ናሆም</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>ኢያሱ</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>gesmstone</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Amharic [am]</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>ገላትያ ሰዎች</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>ጄምስ</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>ዘፍጥረት</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>ፊልጵስዩስ</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>ሮማውያን</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>መሣሪያዎች</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>መዝሙሮች</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>ዕንባቆም</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 ነገሥታት</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>አጥቢ እንስሳት; የዱር እንስሳት</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 ኛ ቆሮንቶስ</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>አስቀምጥ</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>ሉቃስ</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>አካባቢ</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>አዲስ ፕሮጀክት</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>አጥቢ እንስሳት; የቤት እንስሳት</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>መክብብ</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 ነገሥታት</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>ሶፎንያስ</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>ሕዝቅኤል</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>ሰቆሚዎች</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1 ተሰሎንቄ</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 ሳሙኤል</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>አርትዕ</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>ዝመና</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>ተጠቃሚ</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>ዕብራውያን</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>ሰው</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>ዘሌዋውያን</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>ግንባታ, የእንስሳት እርባታ</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>ጥበብ, ማስተዋል</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>የአመለካከት ትርጓሜ</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>ሰዎች; ክብር, አክብሮት, ሁኔታ</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>ሥነ ምግባር እና ሥነምግባር</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>ቁጥሮች</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>ነህምያ</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>መጽሐፍ</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>ክብር, አክብሮት, ሁኔታ</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 ኛ ቆሮንቶስ</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>ይቅር</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>ሰዎች; ባለስልጣን</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>የሃይማኖት እንቅስቃሴዎች</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>ዳንኤል</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 ዮሐንስ</value>
+  </data>
+  <data name="2 Samuel" xml:space="preserve">
+    <value>2 ሳሙኤል</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>ዳኞች</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>ኤርምያስ</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>ተፈጥሮ</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>ሩት</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>አካባቢ; ተፈጥሮ</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>ግንባታ; የሃይማኖት እንቅስቃሴዎች</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>ቁጥር</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>ሚልክያስ</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>ዓላማ</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>አስቴር</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>ጆኤል</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>ምዕራፍ</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>ጆን</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>አካባቢ</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>ዘካርያስ</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>ሰዎች</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>ማርክ</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>እንስሳት</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>አረማዊነት</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>ቡድን; አካባቢ</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>ሰርዝ</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 ጴጥሮስ</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>ሥራ</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>የእጅ ሥራዎች; ጨርቅ</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 ዜና መዋዕል</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>ቅንብሮች</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 ዜና መዋዕል</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>መያዣዎች; የእንስሳት እርባታ</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>የመታሰቢያ ሐውልት</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>ዕዝራ</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 ተሰሎንቄ</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>አብድዩ</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>ምልክቶች እና ድንቆች</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>ሐጌ</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>ሰፈራ</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>ሆሴዕ</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>ዮናስ</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>መሣሪያዎች; ክብደት; ንግድ</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>ከሰው በላይ የሆኑ ፍጥረታት እና ኃይሎች</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>ሀዘን</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>ድርጊቶች</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>ራዕይ</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>መሣሪያዎች; ልጅ መውለድ</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>ዘዳግም</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>ፍጠር</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>ዛፎች; ሽቶዎች እና ቅመሞች</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>ፊልሞና</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>ይሁዳ</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>ፍቅር</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>ቲቶ</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>ሚክያስ</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>ፕሮጀክት</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>ፕሮጄክቶች</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 ጆን</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>ኤፌሶን</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1 ጢሞቴዎስ</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 ዮሐንስ</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>2 ጢሞቴዎስ</value>
   </data>
 </root>

@@ -58,185 +58,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Leviticus" xml:space="preserve">
-    <value>छिछोरापन</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>हटाएं</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>न्यायाधीशों</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>इफिसियों</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>उपयोगकर्ता</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>यहोशू</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 इतिहास</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>ईजेकील</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>फिलेमोन</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>फिलिप्पियों</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 सैमुअल</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 कुरिंथियों</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>गलाटियन्स</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>निशान</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 थिस्सलोनियन</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Hindi [hi]</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>दया</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>मीका</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 कुरिंथियों</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>जोनाह</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>नया काम</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 जॉन</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 थिस्सलुनिकियों</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>स्तोत्र</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 जॉन</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>अमोस</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>रद्द करें</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>होशे</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>टाइटस</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 जॉन</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>उत्पत्ति</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>परियोजनाओं</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>इब्रियों</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>रोमनों</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>काम</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>अधिनियमों</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>सहेजें</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>नहुम</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>विलाप</value>
-  </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 तीमुथियुस</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>योएल</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>अद्यतन</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 पीटर</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>मालाची</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>रहस्योद्घाटन</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>एक्सोदेस</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>हाग्गै</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>नहेमायाह</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>एस्थर</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>डैनियल</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>कुलुस्सियों</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 इतिहास</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>हबक्कूक</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>जकर्याह</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>संपादित करें</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>एजरा</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>यिर्मयाह</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>नंबर</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>जूदास</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>मैथ्यू</value>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>अलौकिक प्राणियों और शक्तियों; खिताब</value>
   </data>
   <data name="Song of Songs" xml:space="preserve">
     <value>गीतों का गीत</value>
@@ -244,58 +67,376 @@
   <data name="2 Peter" xml:space="preserve">
     <value>2 पीटर</value>
   </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>सृजन करना</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>परियोजना</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 तीमुथियुस</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 राजा</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>जेम्स</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>समायोजन</value>
-  </data>
   <data name="Isaiah" xml:space="preserve">
     <value>यशायाह</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 किंग्स</value>
-  </data>
-  <data name="language" xml:space="preserve">
-    <value>हिन्दी</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>ऐकलेसिस्टास</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>ल्यूक</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>सपन्याह</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>जॉन</value>
-  </data>
-  <data name="2 Samuel" xml:space="preserve">
-    <value>2 सैमुअल</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>कहावत का खेल</value>
   </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>व्यवस्था विवरण</value>
+  <data name="Colossians" xml:space="preserve">
+    <value>कुलुस्सियों</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>बलिदान और प्रसाद</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>मैथ्यू</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>पेड़; फल</value>
   </data>
   <data name="add" xml:space="preserve">
     <value>जोड़ें</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>अमोस</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>संगठन</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>एक्सोदेस</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>घास</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>फल</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>कृषि</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>नहुम</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>यहोशू</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>रत्न शामिल हैं</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Hindi [hi]</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>गलाटियन्स</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>जेम्स</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>उत्पत्ति</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>फिलिप्पियों</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>रोमनों</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>उपकरण</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>स्तोत्र</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>हबक्कूक</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 किंग्स</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>स्तनधारियों; जंगली जानवर</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 कुरिंथियों</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>सहेजें</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>ल्यूक</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>क्षेत्र</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>नया काम</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>स्तनधारियों; घरेलु पशु</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>ऐकलेसिस्टास</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 राजा</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>सपन्याह</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>ईजेकील</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>विलाप</value>
+  </data>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1 थिस्सलुनिकियों</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 सैमुअल</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>संपादित करें</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>अद्यतन</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>उपयोगकर्ता</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>इब्रियों</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>व्यक्ति</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>छिछोरापन</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>निर्माण; पशुपालन</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>बुद्धि, समझ</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>लापता रेंडरिंग</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>लोग; सम्मान, सम्मान, स्थिति</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>नैतिकता और नैतिकता</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>नंबर</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>नहेमायाह</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>पुस्तक</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>सम्मान, सम्मान, स्थिति</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 कुरिंथियों</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>लोग; अधिकार</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>धार्मिक गतिविधियां</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>डैनियल</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 जॉन</value>
+  </data>
+  <data name="2 Samuel" xml:space="preserve">
+    <value>2 सैमुअल</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>न्यायाधीशों</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>यिर्मयाह</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>प्रकृति</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>दया</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>क्षेत्र; प्रकृति</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>निर्माण; धार्मिक गतिविधियां</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>कविता</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>मालाची</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>प्रयोजन</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>एस्थर</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>योएल</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>अध्याय</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>जॉन</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>स्थान</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>जकर्याह</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>लोग</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>निशान</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>जानवरों</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>मूर्तिवाद</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>समूह; क्षेत्र</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>हटाएं</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 पीटर</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>काम</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>शिल्प; कपड़ा</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 इतिहास</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>समायोजन</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 इतिहास</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>कंटेनर; पशुपालन</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>स्मारक</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>एजरा</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 थिस्सलोनियन</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>संकेत और चमत्कार</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>हाग्गै</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>समझौता</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>होशे</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>जोनाह</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>उपकरण; वजन; व्यापार</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>अलौकिक प्राणी और शक्तियां</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>शोक</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>अधिनियमों</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>रहस्योद्घाटन</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>उपकरण; प्रसव</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>व्यवस्था विवरण</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>सृजन करना</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>पेड़; परफ्यूम और मसाले</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>फिलेमोन</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>जूदास</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>स्नेह</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>टाइटस</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>मीका</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>परियोजना</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>परियोजनाओं</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 जॉन</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>इफिसियों</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>समूह</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1 तीमुथियुस</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 जॉन</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>2 तीमुथियुस</value>
   </data>
 </root>

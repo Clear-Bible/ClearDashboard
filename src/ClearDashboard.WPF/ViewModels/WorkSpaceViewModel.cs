@@ -213,10 +213,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        #endregion //Constructor
-
-        #region Methods
-
         public async void Init()
         {
             // initiate the menu system

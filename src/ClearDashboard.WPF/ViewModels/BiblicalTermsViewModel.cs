@@ -14,9 +14,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,9 +22,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using AvalonDock.Controls;
-using ClearDashboard.Wpf.Models;
 using Point = System.Windows.Point;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMember.Local
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -37,29 +35,87 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        public enum SelectedBTtype
+        public enum SelectedBtEnum
         {
             OptionAll,
             OptionProject
         }
 
-        public enum FilterWordType
+        public enum FilterWordEnum
         {
-            English,
+            Gloss,
             Rendering
         }
 
-        public enum FilterScope
+        private enum FilterScopeEnum
         {
-            All,
-            Book,
-            Chapter,
-            Verse
+            // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
+            // LOCALIZATION SPREADSHEET LOOKUPS
+            BtBcvAll,
+            BtBcvBook,
+            BtBcvChapter,
+            BtBcvVerse
         }
 
-        public ILogger Logger { get; set; }
-        public INavigationService NavigationService { get; set; }
-        public ProjectManager ProjectManager { get; set; }
+        private enum RenderingFilterEnum
+        {
+            // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
+            // LOCALIZATION SPREADSHEET LOOKUPS
+            BtRenderingAllTerms,
+            BtRenderingMissingRenderings
+        }
+
+        private enum SemanticDomainEnum
+        {
+            // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
+            // LOCALIZATION SPREADSHEET LOOKUPS
+            BtDomainsAll = 0,
+            BtDomainsAffection = 1,
+            BtDomainsAgriculture = 2,
+            BtDomainsAnimals = 3,
+            BtDomainsArea = 4,
+            BtDomainsAreaNature = 5,
+            BtDomainsAssociation = 6,
+            BtDomainsConstructionReligiousActivities = 7,
+            BtDomainsConstructionsAnimalHusbandry = 8,
+            BtDomainsContainersAnimalHusbandry = 9,
+            BtDomainsCraftsCloth = 10,
+            BtDomainsFruits = 11,
+            BtDomainsGemstones = 12,
+            BtDomainsGrasses = 13,
+            BtDomainsGroup = 14,
+            BtDomainsGroupArea = 15,
+            BtDomainsHonorRespectStatus = 16,
+            BtDomainsLocale = 17,
+            BtDomainsMammalsDomesticAnimals = 18,
+            BtDomainsMammalsWildAnimals = 19,
+            BtDomainsMonument = 20,
+            BtDomainsMoralsAndEthics = 21,
+            BtDomainsMourning = 22,
+            BtDomainsNature = 23,
+            BtDomainsPaganism = 24,
+            BtDomainsPeople = 25,
+            BtDomainsPeopleAuthority = 26,
+            BtDomainsPeopleHonorRespectStatus = 27,
+            BtDomainsPerson = 28,
+            BtDomainsPurpose = 29,
+            BtDomainsReligiousActivities = 30,
+            BtDomainsSacrificesAndOfferings = 31,
+            BtDomainsSettlement = 32,
+            BtDomainsSignsAndWonders = 33,
+            BtDomainsSupernaturalBeingsAndPowers = 34,
+            BtDomainsSupernaturalBeingsAndPowersTitles = 35,
+            BtDomainsTools = 36,
+            BtDomainsToolsChildbirth = 37,
+            BtDomainsToolsWeightCommerce = 38,
+            BtDomainsTreesFruits = 39,
+            BtDomainsTreesPerfumesAndSpices = 40,
+            BtDomainsWisdomUnderstanding = 41,
+        }
+
+        public ILogger _logger { get; set; }
+        public INavigationService _navigationService { get; set; }
+        public ProjectManager _projectManager { get; set; }
         private string _currentVerse = "";
 
 
@@ -88,7 +144,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private string _gloss;
         public string Gloss
         {
-            get { return _gloss; }
+            get => _gloss;
             set
             {
                 _gloss = value;
@@ -96,10 +152,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+        // ALL, BOOK, CHAPTER, VERSE
         private DataTable _scope;
         public DataTable Scopes
         {
-            get { return _scope; }
+            get => _scope; 
             set
             {
                 _scope = value;
@@ -107,10 +165,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        // ALL, BOOK, CHAPTER, VERSE
         private DataRowView _selectedScope;
         public DataRowView SelectedScope
         {
-            get { return _selectedScope; }
+            get => _selectedScope; 
             set
             {
                 _selectedScope = value;
@@ -124,12 +183,41 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-
-
-        private BindableCollection<string> _domains;
-        public BindableCollection<string> Domains
+        // ALL TERMS, MISSING RENDERINGS
+        private DataTable _renderingsFilters;
+        public DataTable RenderingsFilters
         {
-            get { return _domains; }
+            get => _renderingsFilters;
+            set
+            {
+                _renderingsFilters = value;
+                NotifyOfPropertyChange(() => RenderingsFilters);
+            }
+        }
+
+        // ALL TERMS, MISSING RENDERINGS
+        private DataRowView _renderingFilter;
+        public DataRowView RenderingFilter
+        {
+            get => _renderingFilter;
+            set
+            {
+                _renderingFilter = value;
+                NotifyOfPropertyChange(() => RenderingFilter);
+
+                //refresh the biblicalterms collection so the filter runs
+                if (BiblicalTermsCollectionView is not null)
+                {
+                    BiblicalTermsCollectionView.Refresh();
+                }
+            }
+        }
+
+
+        private DataTable _domains;
+        public DataTable Domains
+        {
+            get => _domains; 
             set
             {
                 _domains = value;
@@ -137,10 +225,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private string _selectedDomain = string.Empty;
-        public string SelectedDomain
+        private DataRowView _selectedDomain;
+        public DataRowView SelectedDomain
         {
-            get { return _selectedDomain; }
+            get => _selectedDomain; 
             set
             {
                 _selectedDomain = value;
@@ -154,10 +242,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private SelectedBTtype _lastSelectedBTtype = SelectedBTtype.OptionProject;
+        private SelectedBtEnum _lastSelectedBtEnum = SelectedBtEnum.OptionProject;
 
-        private SelectedBTtype _selectedBiblicalTermsType = SelectedBTtype.OptionProject;
-        public SelectedBTtype SelectedBiblicalTermsType
+        private SelectedBtEnum _selectedBiblicalTermsType = SelectedBtEnum.OptionProject;
+        public SelectedBtEnum SelectedBiblicalTermsType
         {
             get => _selectedBiblicalTermsType;
             set
@@ -169,18 +257,18 @@ namespace ClearDashboard.Wpf.ViewModels
                 FilterText = "";
                 SelectedDomain = null;
 
-                SwitchedBibilicalTermsType();
+                SwitchedBiblicalTermsType();
             }
         }
 
-        private FilterWordType _selectedWordFilterType = FilterWordType.English;
-        public FilterWordType SelectedWordFilterType
+        private FilterWordEnum _selectedWordFilterEnum = FilterWordEnum.Gloss;
+        public FilterWordEnum SelectedWordFilterEnum
         {
-            get { return _selectedWordFilterType; }
+            get => _selectedWordFilterEnum;
             set
             {
-                _selectedWordFilterType = value;
-                NotifyOfPropertyChange(() => SelectedWordFilterType);
+                _selectedWordFilterEnum = value;
+                NotifyOfPropertyChange(() => SelectedWordFilterEnum);
 
                 TriggerFilterTermsByWord();
             }
@@ -205,7 +293,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public float FontSize
         {
-            get { return _fontSize; }
+            get => _fontSize;
             set
             {
                 _fontSize = value;
@@ -214,20 +302,20 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private bool _isRTL = false;
-        public bool IsRTL
+        private bool _isRtl;
+        public bool IsRtl
         {
-            get => _isRTL;
+            get => _isRtl;
             set
             {
-                _isRTL = value;
-                NotifyOfPropertyChange(() => IsRTL);
+                _isRtl = value;
+                NotifyOfPropertyChange(() => IsRtl);
             }
         }
 
         public ICollectionView BiblicalTermsCollectionView { get; }
 
-        private ObservableCollection<BiblicalTermsData> _biblicalTerms = new ObservableCollection<BiblicalTermsData>();
+        private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
         public ObservableCollection<BiblicalTermsData> BiblicalTerms
         {
             get => _biblicalTerms;
@@ -241,7 +329,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private BiblicalTermsData _selectedBiblicalTermsData;
         public BiblicalTermsData SelectedBiblicalTermsData
         {
-            get { return _selectedBiblicalTermsData; }
+            get => _selectedBiblicalTermsData; 
             set
             {
                 _selectedBiblicalTermsData = value;
@@ -250,10 +338,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<Verse> _selectedItemVerses = new ObservableCollection<Verse>();
+        private ObservableCollection<Verse> _selectedItemVerses = new();
         public ObservableCollection<Verse> SelectedItemVerses
         {
-            get { return _selectedItemVerses; }
+            get => _selectedItemVerses; 
             set
             {
                 _selectedItemVerses = value;
@@ -261,10 +349,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<string> _renderings = new ObservableCollection<string>();
+        private ObservableCollection<string> _renderings = new();
         public ObservableCollection<string> Renderings
         {
-            get { return _renderings; }
+            get => _renderings;
             set
             {
                 _renderings = value;
@@ -272,10 +360,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<string> _renderingsText = new ObservableCollection<string>();
+        private ObservableCollection<string> _renderingsText = new();
         public ObservableCollection<string> RenderingsText
         {
-            get { return _renderingsText; }
+            get => _renderingsText;
             set
             {
                 _renderingsText = value;
@@ -301,53 +389,42 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Commands
 
-        private ICommand _notesCommand;
-        public ICommand NotesCommand
-        {
-            get => _notesCommand;
-            set
-            {
-                _notesCommand = value;
-            }
-        }
-
-        private ICommand _verseClickCommand;
-        public ICommand VerseClickCommand
-        {
-            get => _verseClickCommand;
-            set
-            {
-                _verseClickCommand = value;
-            }
-        }
+        public ICommand NotesCommand { get; set; }
+        public ICommand VerseClickCommand { get; set; }
 
         #endregion
 
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
         {
-            this.NavigationService = navigationService;
-            this.Logger = logger;
-            this.ProjectManager = projectManager;
-
-            this.Title = "🕮 BIBLICAL TERMS";
-            this.ContentId = "BIBLICALTERMS";
-            this.DockSide = EDockSide.Left;
+            _navigationService = navigationService;
+            _logger = logger;
+            _projectManager = projectManager;
+            
+            Title = "🕮 BIBLICAL TERMS";
+            ContentId = "BIBLICALTERMS";
+            DockSide = EDockSide.Left;
 
             // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
+            _projectManager.NamedPipeChanged += HandleEventAsync;
 
             // populate the combo box for semantic domains
             SetupSemanticDomains();
-            SelectedDomain = Domains[0];
+            DataRowView drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
+            SelectedDomain = drv;
 
             // populate the combo box for scope
             SetupScopes();
             // select the first one
-            //SelectedScope = new DataRowView() Scopes.Rows[0][0].ToString();
+            drv = Scopes.DefaultView[Scopes.Rows.IndexOf(Scopes.Rows[0])];
+            SelectedScope = drv;
 
+            // populate the combo box for rendering filters
+            SetupRenderingFilters();
+            drv = RenderingsFilters.DefaultView[RenderingsFilters.Rows.IndexOf(RenderingsFilters.Rows[0])];
+            RenderingFilter = drv;
 
-            // setup the collectionview that binds to the datagrid
+            // setup the collectionview that binds to the data grid
             BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(this._biblicalTerms);
 
             // setup the method that we go to for filtering
@@ -362,9 +439,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 // pull out the project font family
                 _fontFamily = projectManager.Project.Language.FontFamily;
                 _fontSize = projectManager.Project.Language.Size;
-                _isRTL = projectManager.Project.Language.IsRtol;
+                _isRtl = projectManager.Project.Language.IsRtol;
             }
         }
+
 
         /// <summary>
         /// Listen for changes in the DAL regarding any messages coming in
@@ -383,27 +461,27 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await ProjectManager.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
+                        await _projectManager.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
                             .ConfigureAwait(false);
                     }
 
                     break;
                 case ActionType.SetBiblicalTerms:
-                    await SetProgBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+                    await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
                     // invoke to get it to run in STA mode
                     Application.Current.Dispatcher.Invoke(delegate
                     {
                         _biblicalTerms.Clear();
 
                         // deserialize the list
-                        List<BiblicalTermsData> biblicalTermsList = new List<BiblicalTermsData>();
+                        var biblicalTermsList = new List<BiblicalTermsData>();
                         try
                         {
                             biblicalTermsList = JsonConvert.DeserializeObject<List<BiblicalTermsData>>((string)pipeMessage.Payload);
                         }
                         catch (Exception e)
                         {
-                            Logger.LogError($"BiblicalTermsViewModel Deserialize BibilicalTerms: {e.Message}");
+                            _logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
                         }
 
                         if (biblicalTermsList.Count > 0)
@@ -422,7 +500,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     });
 
-                    await SetProgBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+                    await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
                     break;
             }
         }
@@ -450,7 +528,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe from events
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
+            _projectManager.NamedPipeChanged -= HandleEventAsync;
 
             Debug.WriteLine("Dispose");
             base.Dispose(disposing);
@@ -462,7 +540,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void ToggleCurrentVerse()
         {
-            //refresh the biblicalterms collection so the filter runs
+            //refresh the biblical terms collection so the filter runs
             BiblicalTermsCollectionView.Refresh();
         }
 
@@ -478,7 +556,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            string verseBBCCCVVV = (string)obj;
+            string verseBbcccvvv = (string)obj;
             Console.WriteLine();
 
 
@@ -493,35 +571,35 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         /// <summary>
-        /// User has switched the toggle for All/Project Bibilical Terms
+        /// User has switched the toggle for All/Project Biblical Terms
         /// </summary>
         /// <returns></returns>
-        private async Task SwitchedBibilicalTermsType()
+        private async Task SwitchedBiblicalTermsType()
         {
-            if (_lastSelectedBTtype != _selectedBiblicalTermsType)
+            if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
                 BiblicalTerms.Clear();
-                await SetProgBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+                await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
-                if (_selectedBiblicalTermsType == SelectedBTtype.OptionProject)
+                if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
+                    await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
                 }
                 else
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
+                    await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
                 }
 
-                _lastSelectedBTtype = _selectedBiblicalTermsType;
+                _lastSelectedBtEnum = _selectedBiblicalTermsType;
             }
         }
 
         /// <summary>
-        /// Turn on/off the progress bar asyncronously so the UI can render it
+        /// Turn on/off the progress bar asynchronously so the UI can render it
         /// </summary>
         /// <param name="visibility"></param>
         /// <returns></returns>
-        private async Task SetProgBarVisibilityAsync(Visibility visibility)
+        private async Task SetProgressBarVisibilityAsync(Visibility visibility)
         {
             await Task.Run(() => { ProgressBarVisibility = visibility; }).ConfigureAwait(false);
             System.Windows.Forms.Application.DoEvents();
@@ -568,7 +646,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 var verseText = verse.VerseText;
 
-                // create a punctionless version of the verse
+                // create a punctuation-less version of the verse
                 var puncs = Punctuation.LoadPunctuation();
                 foreach (var punc in puncs)
                 {
@@ -616,12 +694,12 @@ namespace ClearDashboard.Wpf.ViewModels
                             matchResults = matchResults.NextMatch();
                         }
                     }
-                    catch (ArgumentException ex)
+                    catch (ArgumentException)
                     {
                         // Syntax error in the regular expression
                     }
 
-                    //// interate through in while loop
+                    //// iterate through in while loop
                     //int index = verseText.IndexOf(render, StringComparison.InvariantCultureIgnoreCase);
                     //if (index == -1)
                     //{
@@ -661,7 +739,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 // organize the points in lowest to highest
                 points = points.OrderBy(o => o.X).ToList();
 
-                // interate through in reverse
+                // iterate through in reverse
                 for (int i = points.Count - 1; i >= 0; i--)
                 {
                     try
@@ -703,7 +781,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void TriggerFilterTermsByWord()
         {
-            //refresh the biblicalterms collection so the filter runs
+            //refresh the biblical terms collection so the filter runs
             BiblicalTermsCollectionView.Refresh();
         }
 
@@ -714,70 +792,112 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private bool FilterGridItems(object obj)
         {
-            if (SelectedScope is DataRowView rowView)
+            // first check if the row is filtered by the book or not
+            bool isBcbFound = false;
+            if (SelectedScope is { } rowView)
             {
                 var selectedScope = rowView[1].ToString();
 
                 // filter down to scope if present
-                if (selectedScope != "All")
+                if (selectedScope != FilterScopeEnum.BtBcvAll.ToString())
                 {
-                    if (ProjectManager.CurrentVerse.Length != 8)
+                    if (_projectManager.CurrentVerse.Length != 8)
                     {
                         return false;
                     }
 
-                    if (obj is BiblicalTermsData)
+                    if (obj is BiblicalTermsData terms)
                     {
-                        var terms = (BiblicalTermsData)obj;
-                        bool bFound = false;
                         switch (selectedScope)
                         {
-                            case "Book":
+                            case "BtBcvBook":
                                 foreach (var term in terms.References)
                                 {
                                     string book = term.Substring(0, 2);
-                                    if (book == ProjectManager.CurrentVerse.Substring(0, 2))
+                                    if (book == _projectManager.CurrentVerse.Substring(0, 2))
                                     {
-                                        return true;
+                                        // found the book
+                                        isBcbFound = true;
+                                        break;
                                     }
                                 }
 
                                 break;
-                            case "Chapter":
+                            case "BtBcvChapter":
                                 foreach (var term in terms.References)
                                 {
                                     string chapter = term.Substring(0, 5);
-                                    if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
+                                    if (chapter == _projectManager.CurrentVerse.Substring(0, 5))
                                     {
-                                        return true;
+                                        // found the chapter
+                                        isBcbFound = true;
+                                        break;
                                     }
                                 }
 
                                 break;
-                            case "Verse":
+                            case "BtBcvVerse":
                                 foreach (var term in terms.References)
                                 {
-                                    if (term == ProjectManager.CurrentVerse)
+                                    if (term == _projectManager.CurrentVerse)
                                     {
-                                        return true;
+                                        // found the verse
+                                        isBcbFound = true;
+                                        break;
                                     }
                                 }
-
                                 break;
                         }
                     }
 
+                    if (!isBcbFound)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            // filter based on semantic domain
+            bool bFoundSemanticDomain = false;
+            if (obj is BiblicalTermsData bt)
+            {
+                //if (! filters.ContainsKey(bt.SemanticDomain))
+                //{
+                //    filters.Add(bt.SemanticDomain, bt.SemanticDomain);
+                //    Debug.WriteLine($"SEMANTIC DOMAIN: {bt.SemanticDomain}");
+                //}
+                if (SelectedDomain is not null)
+                {
+                    bFoundSemanticDomain = SelectedDomain[1].ToString() == "BtDomainsAll" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
+                }
+
+                if (! bFoundSemanticDomain)
+                {
                     return false;
                 }
             }
 
+            // filter based on rendering filter
+            if (obj is BiblicalTermsData renderingFilter)
+            {
+                if (RenderingFilter is not null)
+                {
+                    if (RenderingFilter[1].ToString() == "BtRenderingMissingRenderings")
+                    {
+                        if (renderingFilter.RenderingCount > 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
 
             // filter based on word
             if (this.FilterText != "" && FilterText is not null)
             {
                 if (obj is BiblicalTermsData btFilter)
                 {
-                    if (SelectedWordFilterType == FilterWordType.English)
+                    if (SelectedWordFilterEnum == FilterWordEnum.Gloss)
                     {
                         // make this case insensitive
                         if (btFilter.LocalGloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
@@ -801,26 +921,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
-            // filter based on semantic domain
-            if (obj is BiblicalTermsData bt)
-            {
-                //if (! filters.ContainsKey(bt.SemanticDomain))
-                //{
-                //    filters.Add(bt.SemanticDomain, bt.SemanticDomain);
-                //    Debug.WriteLine($"SEMANTIC DOMAIN: {bt.SemanticDomain}");
-                //}
-
-                if (SelectedDomain == "" || SelectedDomain == "*" || SelectedDomain is null)
-                {
-                    return true;
-                }
-
-                return bt.SemanticDomain.Contains(SelectedDomain);
-            }
-
-
-
-            return false;
+            return true;
         }
 
 
@@ -830,10 +931,27 @@ namespace ClearDashboard.Wpf.ViewModels
             _scope.Columns.Add("Display");
             _scope.Columns.Add("Value");
 
-            var scopes = Enum.GetNames(typeof(FilterScope));
-            for (int i = 0; i < scopes.Length; i++)
+            var filter = Enum.GetNames(typeof(FilterScopeEnum));
+            foreach (var loc in filter)
             {
-                _scope.Rows.Add(scopes[i], scopes[i]);
+                // get the localized rendering for this
+                var localizedString = GetLocalizationString.Get(loc, _logger);
+                _scope.Rows.Add(localizedString, loc);
+            }
+        }
+
+        private void SetupRenderingFilters()
+        {
+            _renderingsFilters = new DataTable();
+            _renderingsFilters.Columns.Add("Display");
+            _renderingsFilters.Columns.Add("Value");
+
+            var filter = Enum.GetNames(typeof(RenderingFilterEnum));
+            foreach (var loc in filter)
+            {
+                // get the localized rendering for this
+                var localizedString = GetLocalizationString.Get(loc, _logger);
+                _renderingsFilters.Rows.Add(localizedString, loc);
             }
         }
 
@@ -844,49 +962,18 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         private void SetupSemanticDomains()
         {
-            _domains = new BindableCollection<string>();
-            _domains.Add("*");
-            _domains.Add("affection");
-            _domains.Add("agriculture");
-            _domains.Add("animals");
-            _domains.Add("area");
-            _domains.Add("area; nature");
-            _domains.Add("association");
-            _domains.Add("construction; religious activities");
-            _domains.Add("constructions; animal husbandry");
-            _domains.Add("containers; animal husbandry");
-            _domains.Add("crafts; cloth");
-            _domains.Add("fruits");
-            _domains.Add("gemstones");
-            _domains.Add("grasses");
-            _domains.Add("group");
-            _domains.Add("group; area");
-            _domains.Add("honor, respect, status");
-            _domains.Add("locale");
-            _domains.Add("mammals; domestic animals");
-            _domains.Add("mammals; wild animals");
-            _domains.Add("monument");
-            _domains.Add("morals and ethics");
-            _domains.Add("mourning");
-            _domains.Add("nature");
-            _domains.Add("paganism");
-            _domains.Add("people");
-            _domains.Add("people; authority");
-            _domains.Add("people; honor, respect, status");
-            _domains.Add("person");
-            _domains.Add("purpose");
-            _domains.Add("religious activities");
-            _domains.Add("sacrifices and offerings");
-            _domains.Add("settlement");
-            _domains.Add("signs and wonders");
-            _domains.Add("supernatural beings and powers");
-            _domains.Add("supernatural beings and powers; titles");
-            _domains.Add("tools");
-            _domains.Add("tools; childbirth");
-            _domains.Add("tools; weight; commerce");
-            _domains.Add("trees; fruits");
-            _domains.Add("trees; perfumes and spices");
-            _domains.Add("wisdom, understanding");
+            _domains = new DataTable();
+            _domains.Columns.Add("Display");
+            _domains.Columns.Add("Value");
+
+            var filter = Enum.GetNames(typeof(SemanticDomainEnum));
+            foreach (var loc in filter)
+            {
+                // get the localized rendering for this
+                var localizedString = GetLocalizationString.Get(loc, _logger);
+                _domains.Rows.Add(localizedString, loc);
+            }
+
             NotifyOfPropertyChange(() => Domains);
         }
 

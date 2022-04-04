@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels
             set
             {
                 _projectSelectedId = value;
-                if (_projectSelectedId > 0)
+                if (_projectSelectedId >= 0)
                 {
                     // combobox changed
                     string proj = Projects[_projectSelectedId];
