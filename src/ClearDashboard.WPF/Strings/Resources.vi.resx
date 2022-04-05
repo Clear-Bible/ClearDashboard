@@ -58,244 +58,424 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Leviticus.</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Xóa bỏ</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>Ban giám khảo</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Ê-phê-sô</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Người sử dụng</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>Joshua.</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 Biên niên sử</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Ezekiel.</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Philemon.</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>Phi Phi.</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 samuel.</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 Cô-rinh-tô</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>Galatians.</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>dấu</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 Thessalonia</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Vietnamese [vi]</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Ruth.</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Micah.</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 Cô-rinh-tô</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Jonah.</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Dự án mới</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 John.</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 Thessalonia</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Thi thiên</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 john.</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Amos.</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Hủy bỏ</value>
-  </data>
   <data name="Hosea" xml:space="preserve">
     <value>Hosea.</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Titus.</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 john.</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Genesis.</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Dự án.</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Hebrews.</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Người La Mã.</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>Công việc</value>
   </data>
   <data name="Acts" xml:space="preserve">
     <value>Hành vi</value>
   </data>
-  <data name="save" xml:space="preserve">
-    <value>Tiết kiệm</value>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>Tôn giáo</value>
   </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Nahum.</value>
+  <data name="Philippians" xml:space="preserve">
+    <value>Phi Phi.</value>
   </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Lời than vãn</value>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1 Thessalonia</value>
   </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 Timothy.</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Joel.</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>Cập nhật</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 Peter.</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>Malachi.</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Khải huyền</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Cuộc di cư</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>Haggai.</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>Nehemiah.</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>Esther.</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Daniel.</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Colossians.</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 Biên niên sử</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Habakkuk.</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Zechariah.</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>Biên tập</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra.</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Jeremiah.</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>Số</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Jude.</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Matthew.</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>Bài hát của bài hát</value>
-  </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2 Peter.</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Obadiah.</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Tạo ra</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Dự án</value>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>tập đoàn; khu vực</value>
   </data>
   <data name="2 Timothy" xml:space="preserve">
     <value>2 Timothy.</value>
   </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 vua</value>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>nông nghiệp</value>
   </data>
-  <data name="James" xml:space="preserve">
-    <value>James.</value>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>loài vật</value>
   </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Cài đặt</value>
+  <data name="edit" xml:space="preserve">
+    <value>Biên tập</value>
   </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Ê-sai</value>
+  <data name="Philemon" xml:space="preserve">
+    <value>Philemon.</value>
   </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 Kings.</value>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>công cụ; cân nặng; thương mại</value>
   </data>
-  <data name="language" xml:space="preserve">
-    <value>Ngôn ngữ tiếng Việt</value>
+  <data name="Numbers" xml:space="preserve">
+    <value>Số</value>
   </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Giáo hội</value>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>Nehemiah.</value>
   </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Luke.</value>
+  <data name="Ruth" xml:space="preserve">
+    <value>Ruth.</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>đồ thủ công; vải</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>Galatians.</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>Bài hát của bài hát</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>trái cây</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Người La Mã.</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>danh dự, tôn trọng, tình trạng</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>dấu</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>công cụ; sinh con.</value>
   </data>
   <data name="Zephaniah" xml:space="preserve">
     <value>Zephaniah.</value>
   </data>
-  <data name="John" xml:space="preserve">
-    <value>John</value>
-  </data>
   <data name="2 Samuel" xml:space="preserve">
     <value>2 samuel.</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Dự án mới</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 Thessalonia</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Danh mục</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>Joel.</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Gloss.</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>tập đoàn</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>động vật có vú; vật nuôi</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>động vật có vú; động vật hoang dã</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Xóa bỏ</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>cỏ.</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Thiếu kết xuất</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Ê-phê-sô</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Khải huyền</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Lời than vãn</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Giáo hội</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Dự án.</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>Mọi người</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>Giải quyết</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>hy sinh và cung cấp</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah.</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Nahum.</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>Châm ngôn.</value>
   </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>Siêu nhiên sinh vật và quyền hạn</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 John.</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>Thành lập</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>khu vực; Thiên nhiên</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>Micah.</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Kết xuất.</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra.</value>
+  </data>
   <data name="Deuteronomy" xml:space="preserve">
     <value>Phục truyền luật lệ ký</value>
   </data>
+  <data name="update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Ê-sai</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Chuyện</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>cây; trái cây</value>
+  </data>
   <data name="add" xml:space="preserve">
     <value>Thêm vào</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Vietnamese [vi]</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>Haggai.</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 Biên niên sử</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Hủy bỏ</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Hebrews.</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Colossians.</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Phạm vi:</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>sự kết hợp</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>khu vực</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Người sử dụng</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Titus.</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>Thơ</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>Mọi người; thẩm quyền</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Công việc</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 john.</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>Đài kỷ niệm</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>cây; nước hoa và gia vị</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Đếm</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Miền ngữ nghĩa:</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 Cô-rinh-tô</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>đá quý</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Jonah.</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>James.</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Matthew.</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>Thiên nhiên</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Thuật ngữ</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 samuel.</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 Kings.</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Tiết kiệm</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Luke.</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>Trí tuệ, hiểu biết.</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 Cô-rinh-tô</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Amos.</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Sách</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>công cụ</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Tạo ra</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2 Peter.</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 Peter.</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Zechariah.</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Habakkuk.</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Jude.</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Ezekiel.</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>Ban giám khảo</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>xây dựng; Hoạt động tôn giáo</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>Hoạt động tôn giáo</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>Malachi.</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>đạo đức và đạo đức.</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Daniel.</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Jeremiah.</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Cuộc di cư</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 Biên niên sử</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Từ:</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>miền địa phương</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>sinh vật siêu nhiên và quyền hạn; Tiêu đề</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>Joshua.</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>Thi thiên</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>Esther.</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>Dấu hiệu và kỳ diệu</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>mục đích</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Leviticus.</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>GLOSS:</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>tang chế</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 john.</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1 Timothy.</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>Mọi người; danh dự, tôn trọng, tình trạng</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 vua</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Genesis.</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>công trình; chăn nuôi</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>hộp đựng; chăn nuôi</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>sự yêu mến</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>người</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>Kết xuất.</value>
   </data>
 </root>

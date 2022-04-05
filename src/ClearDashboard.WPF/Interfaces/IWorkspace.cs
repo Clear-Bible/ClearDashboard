@@ -7,9 +7,9 @@ namespace ClearDashboard.Wpf.Interfaces
 {
     interface IWorkspace
     {
-        ILogger Logger { get; set; }
-        INavigationService NavigationService { get; set; }
-        ProjectManager ProjectManager { get; set; }
+        ILogger _logger { get; set; }
+        INavigationService _navigationService { get; set; }
+        ProjectManager _projectManager { get; set; }
 
         void HandleEventAsync(object sender, PipeEventArgs args);
         //void OnViewAttached(object view, object context);

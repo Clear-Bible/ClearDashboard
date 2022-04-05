@@ -58,244 +58,424 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Leviticus" xml:space="preserve">
-    <value>利未记</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>删除</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>法官</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>以弗所书</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>启示录</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>                      约书亚记</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>历代志下</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>以西结书</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>腓利门书 </value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>腓立比岛</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>                      撒母耳记上</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1哥林多前书</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>加拉太人</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>马可福音</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>帖撒罗尼迦后书</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Chinese [zh-cn]</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>路得记</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>弥迦书</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2哥林多前书</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>约拿书</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>启示录</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>约翰</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1个帖撒罗尼亚人</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>诗篇</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 John.</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>阿摩司书</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>取消</value>
-  </data>
   <data name="Hosea" xml:space="preserve">
     <value>何西阿书</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>提多书</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 John.</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>创世纪</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>启示录</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>希伯来书</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>罗马书</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>约伯记</value>
   </data>
   <data name="Acts" xml:space="preserve">
     <value>使徒行传</value>
   </data>
-  <data name="save" xml:space="preserve">
-    <value>保存</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>那鸿书</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>哀歌</value>
-  </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1蒂莫西</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>约珥书</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>更新</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1彼得</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>玛拉基</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
+  <data name="BtDomainsPaganism" xml:space="preserve">
     <value>启示录</value>
   </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>出漏</value>
+  <data name="Philippians" xml:space="preserve">
+    <value>腓立比岛</value>
   </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>哈该书</value>
+  <data name="1 Thessalonians" xml:space="preserve">
+    <value>1个帖撒罗尼亚人</value>
   </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>尼希米</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>以斯帖记</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>但以理书</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>莫萨斯人</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>历代志上</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>哈巴谷书</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>撒迦利亚书</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>编辑</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>以斯拉记</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>耶利米书</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>民数记</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>犹大书</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>马太福音</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>歌曲歌曲</value>
-  </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2彼得</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>俄巴底亚书</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>创建</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
+  <data name="BtDomainsGroupArea" xml:space="preserve">
     <value>启示录</value>
   </data>
   <data name="2 Timothy" xml:space="preserve">
     <value>蒂莫西2</value>
   </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>列王纪上</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>雅各书</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
+  <data name="BtDomainsAgriculture" xml:space="preserve">
     <value>启示录</value>
   </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>以赛亚书</value>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>启示录</value>
   </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>列王纪下</value>
+  <data name="edit" xml:space="preserve">
+    <value>编辑</value>
   </data>
-  <data name="language" xml:space="preserve">
-    <value>简体中文</value>
+  <data name="Philemon" xml:space="preserve">
+    <value>腓利门书 </value>
   </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>教会</value>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>启示录</value>
   </data>
-  <data name="Luke" xml:space="preserve">
-    <value>路加福音</value>
+  <data name="Numbers" xml:space="preserve">
+    <value>民数记</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>尼希米</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>路得记</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>加拉太人</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>歌曲歌曲</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>罗马书</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>马可福音</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>启示录</value>
   </data>
   <data name="Zephaniah" xml:space="preserve">
     <value>西番雅书</value>
   </data>
-  <data name="John" xml:space="preserve">
-    <value>约翰福音</value>
-  </data>
   <data name="2 Samuel" xml:space="preserve">
     <value>塞缪尔</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>帖撒罗尼迦后书</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>约珥书</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>以弗所书</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>哀歌</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>教会</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>俄巴底亚书</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>那鸿书</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>箴言</value>
   </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>约翰</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>约翰福音</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>弥迦书</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>以斯拉记</value>
+  </data>
   <data name="Deuteronomy" xml:space="preserve">
     <value>申命记</value>
   </data>
+  <data name="update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>以赛亚书</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>启示录</value>
+  </data>
   <data name="add" xml:space="preserve">
     <value>添加</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Chinese [zh-cn]</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>哈该书</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>历代志上</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>希伯来书</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>莫萨斯人</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>提多书</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>约伯记</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 John.</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2哥林多前书</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>约拿书</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>雅各书</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>马太福音</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>                      撒母耳记上</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>列王纪下</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>路加福音</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1哥林多前书</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>阿摩司书</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2彼得</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1彼得</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>撒迦利亚书</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>哈巴谷书</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>犹大书</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>以西结书</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>法官</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>玛拉基</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>但以理书</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>耶利米书</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>出漏</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>历代志下</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>                      约书亚记</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>诗篇</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>以斯帖记</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>利未记</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 John" xml:space="preserve">
+    <value>1 John.</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Timothy" xml:space="preserve">
+    <value>1蒂莫西</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="1 Kings" xml:space="preserve">
+    <value>列王纪上</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>创世纪</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>启示录</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>启示录</value>
   </data>
 </root>
