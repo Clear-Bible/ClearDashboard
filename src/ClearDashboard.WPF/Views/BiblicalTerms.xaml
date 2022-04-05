@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     x:Name="UserControl"
@@ -15,6 +16,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
@@ -59,14 +61,14 @@
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <RadioButton
-                        Content="PROJECT"
+                        Content="{helpers:Loc BtFormProject}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                         Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                     <RadioButton
-                        Content="ALL"
+                        Content="{helpers:Loc BtFormAll}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
@@ -80,7 +82,10 @@
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD:</TextBlock>
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormWord}" />
                     <TextBox
                         x:Name="FilterText"
                         MinWidth="125"
@@ -95,7 +100,7 @@
                         Orientation="Vertical">
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="ENGLISH"
+                            Content="{helpers:Loc BtFormGloss}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
@@ -103,7 +108,7 @@
 
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="RENDERINGS"
+                            Content="{helpers:Loc BtFormRenderings}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
@@ -140,7 +145,10 @@
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SCOPE:</TextBlock>
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormScope}" />
                     <ComboBox
                         x:Name="Scope"
                         MinWidth="50"
@@ -158,7 +166,10 @@
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN:</TextBlock>
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormSemanticDomain}" />
                     <ComboBox
                         x:Name="Domains"
                         MinWidth="50"
@@ -226,7 +237,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="Term">
+                <DataGridTemplateColumn Width="Auto" Header="{helpers:Loc BtFormTerm}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -240,7 +251,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="Category">
+                <DataGridTemplateColumn Width="110" Header="{helpers:Loc BtFormCategory}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -253,7 +264,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150                                         " Header="English">
+                <DataGridTemplateColumn Width="150" Header="{helpers:Loc BtFormGlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -266,7 +277,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Counts">
+                <DataGridTemplateColumn Header="{helpers:Loc BtFormCounts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -277,7 +288,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Found">
+                <DataGridTemplateColumn Header="{helpers:Loc BtFormFound}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -288,7 +299,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="Renderings">
+                <DataGridTemplateColumn Width="200" Header="{helpers:Loc BtFormRenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -368,7 +379,7 @@
                         <TextBlock
                             Margin="5,0,5,0"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            Text="Gloss:" />
+                            Text="{helpers:Loc BtFormGlossLower}" />
                         <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
                     </StackPanel>
                     <ListBox

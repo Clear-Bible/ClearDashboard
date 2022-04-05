@@ -58,170 +58,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>êtres et pouvoirs surnaturels; titres</value>
+  <data name="Hosea" xml:space="preserve">
+    <value>Hosesée</value>
   </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>Chanson de chansons</value>
+  <data name="Acts" xml:space="preserve">
+    <value>Actes</value>
   </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2 Peter</value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Isaïe</value>
-  </data>
-  <data name="Proverbs" xml:space="preserve">
-    <value>les proverbes</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Colossiens</value>
-  </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>sacrifices et offrandes</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Matthieu</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>des arbres; des fruits</value>
-  </data>
-  <data name="add" xml:space="preserve">
-    <value>Ajouter</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>association</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Exode</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>des herbes</value>
-  </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>des fruits</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>agriculture</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>Joshua</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>pierres précieuses</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>French [fr]</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>Galates</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Genèse</value>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>paganisme</value>
   </data>
   <data name="Philippians" xml:space="preserve">
     <value>Philippes</value>
   </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Romains</value>
-  </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>outils</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Psaumes</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Habakkukuk</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 rois</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>mammifères; animaux sauvages</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 Corinthiens</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>sauvegarder</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Luke</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>région</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Nouveau projet</value>
-  </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>mammifères; animaux domestiques</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Ecclesiastes</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 rois</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Ezekiel</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
-  </data>
   <data name="1 Thessalonians" xml:space="preserve">
     <value>1 Thessaloniciens</value>
   </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>grouper; région</value>
+  </data>
+  <data name="2 Timothy" xml:space="preserve">
+    <value>2 Timothée</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>agriculture</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>animaux</value>
   </data>
   <data name="edit" xml:space="preserve">
     <value>Éditer</value>
   </data>
-  <data name="update" xml:space="preserve">
-    <value>Mettre à jour</value>
+  <data name="Philemon" xml:space="preserve">
+    <value>Philemon</value>
   </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Utilisateur</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Hébreux</value>
-  </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>la personne</value>
-  </data>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Lévitique</value>
-  </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>constructions; élevage</value>
-  </data>
-  <data name="BtDomainsAll" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>Sagesse, compréhension</value>
-  </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>Renustes manquants</value>
-  </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>gens; Honneur, respect, statut</value>
-  </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>morale et éthique</value>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>outils; poids; Commerce</value>
   </data>
   <data name="Numbers" xml:space="preserve">
     <value>Nombres</value>
@@ -229,62 +100,323 @@
   <data name="Nehemiah" xml:space="preserve">
     <value>Néhémie</value>
   </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>Livre</value>
+  <data name="Ruth" xml:space="preserve">
+    <value>Ruth</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>artisanat; chiffon</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>Galates</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>Chanson de chansons</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>des fruits</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Romains</value>
   </data>
   <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
     <value>Honneur, respect, statut</value>
   </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 Corinthiens</value>
+  <data name="Mark" xml:space="preserve">
+    <value>marque</value>
   </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Annuler</value>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>outils; accouchement</value>
   </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>gens; autorité</value>
-  </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>activités religieuses</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>Tous</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 John</value>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Zephaniah</value>
   </data>
   <data name="2 Samuel" xml:space="preserve">
     <value>2 Samuel</value>
   </data>
-  <data name="Judges" xml:space="preserve">
-    <value>Juge</value>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Nouveau projet</value>
   </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
+  <data name="2 Thessalonians" xml:space="preserve">
+    <value>2 Thessaloniciens</value>
   </data>
-  <data name="BtDomainsNature" xml:space="preserve">
-    <value>nature</value>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Catégorie</value>
   </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Ruth</value>
+  <data name="Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>grouper</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>mammifères; animaux domestiques</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>mammifères; animaux sauvages</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>des herbes</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Renustes manquants</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Éphésiens</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Révélation</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Lamentations</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Ecclesiastes</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Projets</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>gens</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>règlement</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>sacrifices et offrandes</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="Proverbs" xml:space="preserve">
+    <value>les proverbes</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>êtres et pouvoirs surnaturels</value>
+  </data>
+  <data name="2 John" xml:space="preserve">
+    <value>2 John</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>A trouvé</value>
   </data>
   <data name="BtDomainsAreaNature" xml:space="preserve">
     <value>région; nature</value>
   </data>
-  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
-    <value>construction; activités religieuses</value>
+  <data name="Micah" xml:space="preserve">
+    <value>Micah</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Rendu</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>Deutéronome</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Isaïe</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Chapitre</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>des arbres; des fruits</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Projet</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>French [fr]</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="1 Chronicles" xml:space="preserve">
+    <value>1 chroniques</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Hébreux</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Colossiens</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Portée:</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>association</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>région</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Utilisateur</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Titus</value>
   </data>
   <data name="BtBcvVerse" xml:space="preserve">
     <value>Verset</value>
   </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>gens; autorité</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Emploi</value>
+  </data>
+  <data name="3 John" xml:space="preserve">
+    <value>3 John</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>monument</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>des arbres; parfums et épices</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Comptes</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Domaine sémantique:</value>
+  </data>
+  <data name="2 Corinthians" xml:space="preserve">
+    <value>2 Corinthiens</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>pierres précieuses</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Jonas</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Matthieu</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>nature</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Terme</value>
+  </data>
+  <data name="1 Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="2 Kings" xml:space="preserve">
+    <value>2 rois</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>sauvegarder</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Luke</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>Sagesse, compréhension</value>
+  </data>
+  <data name="1 Corinthians" xml:space="preserve">
+    <value>1 Corinthiens</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Amos</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>outils</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="2 Peter" xml:space="preserve">
+    <value>2 Peter</value>
+  </data>
+  <data name="1 Peter" xml:space="preserve">
+    <value>1 peter</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Zacharie</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Habakkukuk</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Judicieux</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Ezekiel</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>Juge</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>construction; activités religieuses</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>activités religieuses</value>
+  </data>
   <data name="Malachi" xml:space="preserve">
     <value>Malachi</value>
   </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>but</value>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>morale et éthique</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Jeremiah</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Exode</value>
+  </data>
+  <data name="2 Chronicles" xml:space="preserve">
+    <value>2 chroniques</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Mot:</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>lieu</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>êtres et pouvoirs surnaturels; titres</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>Joshua</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>Psaumes</value>
   </data>
   <data name="BtBcvAll" xml:space="preserve">
     <value>Tous</value>
@@ -292,151 +424,58 @@
   <data name="Esther" xml:space="preserve">
     <value>Esther</value>
   </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Joel</value>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>Signes et merveilles</value>
   </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>Chapitre</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>John</value>
-  </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>lieu</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Zacharie</value>
-  </data>
-  <data name="BtDomainsPeople" xml:space="preserve">
-    <value>gens</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>marque</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>animaux</value>
-  </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>paganisme</value>
-  </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>grouper; région</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 peter</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>Emploi</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>artisanat; chiffon</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 chroniques</value>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>but</value>
   </data>
   <data name="Landing_settings" xml:space="preserve">
     <value>Réglages</value>
   </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 chroniques</value>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Lévitique</value>
   </data>
-  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
-    <value>conteneurs; élevage</value>
-  </data>
-  <data name="BtDomainsMonument" xml:space="preserve">
-    <value>monument</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 Thessaloniciens</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>Signes et merveilles</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>règlement</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>Hosesée</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Jonas</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>outils; poids; Commerce</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>êtres et pouvoirs surnaturels</value>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>Brillant:</value>
   </data>
   <data name="BtDomainsMourning" xml:space="preserve">
     <value>deuil</value>
   </data>
-  <data name="Acts" xml:space="preserve">
-    <value>Actes</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Révélation</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>outils; accouchement</value>
-  </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>Deutéronome</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Créer</value>
-  </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>des arbres; parfums et épices</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Philemon</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Judicieux</value>
-  </data>
-  <data name="BtDomainsAffection" xml:space="preserve">
-    <value>affection</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Titus</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Projet</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Projets</value>
-  </data>
   <data name="1 John" xml:space="preserve">
     <value>1 John</value>
   </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Éphésiens</value>
-  </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>grouper</value>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
   </data>
   <data name="1 Timothy" xml:space="preserve">
     <value>1 Timothée</value>
   </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 John</value>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>gens; Honneur, respect, statut</value>
   </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 Timothée</value>
+  <data name="1 Kings" xml:space="preserve">
+    <value>1 rois</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Genèse</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>constructions; élevage</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>conteneurs; élevage</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>affection</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>la personne</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Projet</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>Rendu</value>
   </data>
 </root>
