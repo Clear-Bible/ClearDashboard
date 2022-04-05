@@ -158,28 +158,18 @@ namespace ClearDashboard.Wpf.ViewModels
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
-
-            // wire up the commands
-            ColorStylesCommand = new RelayCommand(ShowColorStyles);
-
-            // listen for username changes in Paratext
             ProjectManager = projectManager;
             ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            //_DAL = new StartUp();
             ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
-
-            ProjectManager.GetParatextUserName();
         }
 
-        protected override void Dispose(bool disposing)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
-
-            base.Dispose(disposing);
+            ProjectManager.Initialize();
+            await base.OnActivateAsync(cancellationToken);
         }
 
-
+      
         protected override void OnViewLoaded(object view)
         {
             SetLanguage();
@@ -191,9 +181,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            ProjectManager.OnClosing();
-
+            //ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            //ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
+            
             return base.CanCloseAsync(cancellationToken);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
+            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
+
+            ProjectManager.Dispose();
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion
@@ -203,9 +203,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             if (args == null) return;
-
-            PipeMessage pipeMessage = args.PM;
-
+            var pipeMessage = args.PM;
             switch (pipeMessage.Action)
             {
                 case ActionType.OnConnected:
@@ -215,24 +213,23 @@ namespace ClearDashboard.Wpf.ViewModels
                     this.Connected = false;
                     break;
             }
-
-            Debug.WriteLine($"{pipeMessage.Text}");
+            Logger.LogDebug(pipeMessage.Text);
+            
         }
         
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>
-        /// <param abbr="obj"></param>
-        private void ShowColorStyles(object obj)
+        public void ShowColorStyles()
         {
-            ColorStyles frm = new ColorStyles();
+            var frm = new ColorStyles();
             frm.Show();
         }
 
         public void SetLanguage()
         {
             var culture = Properties.Settings.Default.language_code;
-            // strip out any "-" characters so the string can be propey parsed into the target enum
+            // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
         }
 

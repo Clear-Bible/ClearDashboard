@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Events;
@@ -18,6 +10,11 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using Pipes_Shared;
 using Pipes_Shared.Models;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -27,13 +24,14 @@ namespace ClearDashboard.DataAccessLayer
 
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
+        private readonly ParatextUtils _paratextUtils;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
 
-        public Project Project;
+        public Project ParatextProject { get; private set; }
 
         public bool ParatextVisible = false;
 
@@ -41,10 +39,11 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public ProjectManager(NamedPipesClient namedPipeClient, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        public ProjectManager(NamedPipesClient namedPipeClient, ParatextUtils paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
         {
             _logger = logger;
             _projectNameDbContextFactory = projectNameDbContextFactory;
+            _paratextUtils = paratextUtils;
             _logger.LogInformation("'ProjectManager' ctor called.");
 
             _namedPipesClient = namedPipeClient;
@@ -133,13 +132,19 @@ namespace ClearDashboard.DataAccessLayer
             {
                 // intercept and keep a copy of the current project
                 var payload = pm.Payload;
-                Project = JsonSerializer.Deserialize<Project>((string)payload);
+                ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
             } else if (pm.Action == ActionType.CurrentVerse)
             {
                 CurrentVerse = pm.Text;
             }
             
             RaisePipesChangedEvent(pm);
+        }
+
+        public void Initialize()
+        {
+            GetParatextUserName();
+            EnsureDashboardProjectDirectory();
         }
 
         /// <summary>
@@ -150,23 +155,7 @@ namespace ClearDashboard.DataAccessLayer
         {
 
             var projectList = new ObservableCollection<DashboardProject>();
-
-            //var appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
-            if (!Directory.Exists(FilePathTemplates.ProjectBaseDirectory))
-            {
-                // need to create that directory
-                try
-                {
-                    Directory.CreateDirectory(FilePathTemplates.ProjectBaseDirectory);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-            }
-
+            
             // check for Projects subfolder
             var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
 
@@ -221,6 +210,23 @@ namespace ClearDashboard.DataAccessLayer
             return projectList;
         }
 
+        private void EnsureDashboardProjectDirectory()
+        {
+            if (!Directory.Exists(FilePathTemplates.ProjectBaseDirectory))
+            {
+                // need to create that directory
+                try
+                {
+                    Directory.CreateDirectory(FilePathTemplates.ProjectBaseDirectory);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        $"An unexpected error occurred while creating '{FilePathTemplates.ProjectBaseDirectory}");
+                }
+            }
+        }
+
 
         /// <summary>
         /// Taken from LandingViewModel - most likely will be deprecated
@@ -254,14 +260,14 @@ namespace ClearDashboard.DataAccessLayer
         public async Task SetupParatext()
         {
             // detect if Paratext is installed
-            var paratextUtils = new ParatextUtils();
-            ParatextVisible = paratextUtils.IsParatextInstalled();
+           
+            ParatextVisible = _paratextUtils.IsParatextInstalled();
 
             if (ParatextVisible)
             {
                 // get all the Paratext Projects (Projects/Backtranslations)
                 ParatextProjects.Clear();
-                var projects = await paratextUtils.GetParatextProjectsOrResources(ParatextUtils.FolderType.Projects);
+                var projects = await _paratextUtils.GetParatextProjectsOrResources(ParatextUtils.FolderType.Projects);
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -277,7 +283,7 @@ namespace ClearDashboard.DataAccessLayer
 
                 // get all the Paratext Resources (LWC)
                 ParatextResources.Clear();
-                var resources = paratextUtils.GetParatextResources();
+                var resources = _paratextUtils.GetParatextResources();
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -298,8 +304,7 @@ namespace ClearDashboard.DataAccessLayer
             // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            var paratextUtils = new ParatextUtils();
-            var user = paratextUtils.GetCurrentParatextUser();
+            var user = _paratextUtils.GetCurrentParatextUser();
 
             ParatextUserName = user;
 

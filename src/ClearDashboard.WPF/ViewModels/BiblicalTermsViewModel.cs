@@ -1,4 +1,4 @@
-﻿using Caliburn.Micro;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
@@ -434,12 +434,15 @@ namespace ClearDashboard.Wpf.ViewModels
             NotesCommand = new RelayCommand(ShowNotes);
             VerseClickCommand = new RelayCommand(VerseClick);
 
-            if (projectManager.Project is not null)
+            if (projectManager.ParatextProject is not null)
             {
                 // pull out the project font family
                 _fontFamily = projectManager.Project.Language.FontFamily;
                 _fontSize = projectManager.Project.Language.Size;
                 _isRtl = projectManager.Project.Language.IsRtol;
+                _fontFamily = projectManager.ParatextProject.Language.FontFamily;
+                _fontSize = projectManager.ParatextProject.Language.Size;
+                _isRTL = projectManager.ParatextProject.Language.IsRtol;
             }
         }
 
@@ -509,19 +512,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewAttached(object view, object context)
         {
-            Debug.WriteLine("OnViewAttached");
+            Logger.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
         }
 
         protected override void OnViewLoaded(object view)
         {
-            Debug.WriteLine("OnViewLoaded");
+            Logger.LogInformation("OnViewLoaded");
             base.OnViewLoaded(view);
         }
 
         protected override void OnViewReady(object view)
         {
-            Debug.WriteLine("OnViewReady");
+            Logger.LogInformation("OnViewReady");
             base.OnViewReady(view);
         }
 
@@ -530,7 +533,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // unsubscribe from events
             _projectManager.NamedPipeChanged -= HandleEventAsync;
 
-            Debug.WriteLine("Dispose");
+            Logger.LogInformation("Dispose");
             base.Dispose(disposing);
         }
 
@@ -556,8 +559,8 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            string verseBbcccvvv = (string)obj;
-            Console.WriteLine();
+            string verseBBCCCVVV = (string)obj;
+           
 
 
             //LayoutAnchorableFloatingWindowControl lfwc = (LayoutAnchorableFloatingWindowControl)Activator.CreateInstance(typeof(LayoutAnchorableFloatingWindowControl), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { lfw }, CultureInfo.InvariantCulture);
@@ -763,7 +766,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
                         throw;
                     }
                 }

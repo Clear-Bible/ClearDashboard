@@ -71,12 +71,6 @@ namespace ClearDashboard.ParatextPlugin.Actions
                         {
                             case "Id":
                                 bterm.Id = termProperty.GetValue(term, null).ToString();
-                                //Debug.WriteLine(recordNum + " " +bterm.Id);
-                                //if (recordNum == 14)
-                                //{
-                                //    Console.WriteLine();
-                                //}
-
                                 break;
                             case "Lemma":
                                 bterm.Lemma = termProperty.GetValue(term, null).ToString();

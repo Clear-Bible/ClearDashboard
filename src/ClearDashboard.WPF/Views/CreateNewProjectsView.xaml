@@ -15,6 +15,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
+    cm:Action.TargetWithoutContext=""
      cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
     mc:Ignorable="d">
 
