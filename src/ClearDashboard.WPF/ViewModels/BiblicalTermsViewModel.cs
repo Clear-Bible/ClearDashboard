@@ -558,15 +558,15 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             string verseBBCCCVVV = (string)obj;
-           
+            var verses = SelectedItemVerses.Where(v => v.VerseBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
 
-
-            //LayoutAnchorableFloatingWindowControl lfwc = (LayoutAnchorableFloatingWindowControl)Activator.CreateInstance(typeof(LayoutAnchorableFloatingWindowControl), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { lfw }, CultureInfo.InvariantCulture);
-            //dm.UpdateLayout();
-            //lfwc.Width = 300;
-            //lfwc.Height = 300;
-            //lfwc.Topmost = true;
-            //lfwc.Show();
+            if (verses.Count > 0)
+            {
+                IWindowManager manager = new WindowManager();
+                manager.ShowWindowAsync(
+                    new VersePopUpViewModel(_navigationService, (ILogger<WorkSpaceViewModel>)_logger, _projectManager,
+                        verses[0]), null, null);
+            }
         }
 
 
@@ -628,9 +628,12 @@ namespace ClearDashboard.Wpf.ViewModels
                         verseText = selectedBiblicalTermsData.ReferencesListText[i];
                     }
 
+                    string loc = verseRef.Substring(0, 3);
+                    var localizedString = GetLocalizationString.Get(loc, _logger) + verseRef.Substring(3);
+
                     _selectedItemVerses.Add(new Verse
                     {
-                        VerseID = verseRef,
+                        VerseID = localizedString,
                         VerseBBCCCVVV = selectedBiblicalTermsData.References[i],
                         VerseText = verseText
                     });
