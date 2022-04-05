@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer.NamedPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Paratext;
 
 namespace ClearDashboard.DataAccessLayer.Extensions
@@ -18,6 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Extensions
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddLogging();
+           
 
             serviceCollection.AddSingleton<ProjectManager>();
             serviceCollection.AddScoped<ParatextUtils>();
@@ -26,12 +28,21 @@ namespace ClearDashboard.DataAccessLayer.Extensions
                 var logger = sp.GetService<ILogger<NamedPipesClient>>();
                 var namedPipesClient = new NamedPipesClient();
                 namedPipesClient.InitializeAsync().ContinueWith(t =>
-                       logger.LogError($"Error while connecting to pipe server: {t.Exception}"),
+                    {
+                        logger?.LogError($"Error while connecting to pipe server: {t.Exception}");
+                    },
                     TaskContinuationOptions.OnlyOnFaulted);
                 return namedPipesClient;
             });
 
             serviceCollection.AddProjectNameDatabaseContextFactory();
+
+            // QUESTION:  Can we run the HostedService as a scoped service?
+            // ANSWER:    Testing seems to indicate, YES!
+
+            //serviceCollection.AddHostedService<ClearEngineBackgroundService>();
+            serviceCollection.AddScoped<ClearEngineBackgroundService>();
+            serviceCollection.AddScoped<IClearEngineProcessingService, ClearEngineProcessingService>();
         }
     }
 } 

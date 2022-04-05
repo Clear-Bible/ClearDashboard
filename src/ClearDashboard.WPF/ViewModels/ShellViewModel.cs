@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
@@ -25,6 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         //Connection to the DAL
         private ProjectManager ProjectManager { get; set; }
+        private ClearEngineBackgroundService BackgroundService { get; set; }
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -148,9 +150,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager, ClearEngineBackgroundService backgroundService) : base(navigationService, logger)
         {
             _translationSource = translationSource;
+
+            BackgroundService = backgroundService;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -224,6 +228,38 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             var frm = new ColorStyles();
             frm.Show();
+        }
+
+
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        public async void StartBackgroundService()
+        {
+            _cancellationTokenSource ??= new CancellationTokenSource();
+            
+            await BackgroundService.StartAsync(_cancellationTokenSource.Token);
+        }
+
+        public async void StopBackgroundService()
+        {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+            }
+
+            await BackgroundService.StopAsync(new CancellationToken());
+
+            var result = 
+            _cancellationTokenSource = null;
+        }
+
+        public void StopScopedService()
+        {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource = null;
+            }
+
         }
 
         public void SetLanguage()

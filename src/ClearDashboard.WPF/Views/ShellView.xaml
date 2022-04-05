@@ -142,6 +142,36 @@
                         Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
                         ColorStyles
                     </Button>
+
+                    <Button
+                        x:Name="StartBackgroundService"
+                        Width="110"
+                        Height="25"
+                        Margin="8,0,20,0"
+                        Style="{StaticResource GreenLightButton}"
+                        Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                        Start
+                    </Button>
+
+                    <Button
+                        x:Name="StopBackgroundService"
+                        Width="110"
+                        Height="25"
+                        Margin="8,0,20,0"
+                        Style="{StaticResource GreenLightButton}"
+                        Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                        Stop
+                    </Button>
+
+                    <Button
+                        x:Name="StopScopedService"
+                        Width="110"
+                        Height="25"
+                        Margin="8,0,20,0"
+                        Style="{StaticResource GreenLightButton}"
+                        Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                        Stop Scoped
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
