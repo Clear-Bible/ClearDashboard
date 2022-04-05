@@ -126,6 +126,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
+        public bool _isRTL { get; set; }
 
         private string _filterText;
 
@@ -437,9 +438,6 @@ namespace ClearDashboard.Wpf.ViewModels
             if (projectManager.ParatextProject is not null)
             {
                 // pull out the project font family
-                _fontFamily = projectManager.Project.Language.FontFamily;
-                _fontSize = projectManager.Project.Language.Size;
-                _isRtl = projectManager.Project.Language.IsRtol;
                 _fontFamily = projectManager.ParatextProject.Language.FontFamily;
                 _fontSize = projectManager.ParatextProject.Language.Size;
                 _isRTL = projectManager.ParatextProject.Language.IsRtol;

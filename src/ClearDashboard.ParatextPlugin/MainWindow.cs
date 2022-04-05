@@ -294,7 +294,7 @@ namespace ClearDashboardPlugin
                         Text = "Project Object",
                         Payload = payloadBTAll
                     }).ConfigureAwait(false);
-                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsAll");
                     break;
                 case ActionType.GetBibilicalTermsProject:
                     BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
@@ -308,7 +308,7 @@ namespace ClearDashboardPlugin
                         Text = "Project Object",
                         Payload = payloadBT
                     }).ConfigureAwait(false);
-                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsAll");
                     break;
                 case ActionType.GetTargetVerses:
                     await GetUSXScripture().ConfigureAwait(false);
