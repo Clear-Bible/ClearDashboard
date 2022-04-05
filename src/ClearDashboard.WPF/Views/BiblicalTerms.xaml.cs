@@ -22,6 +22,8 @@ namespace ClearDashboard.Wpf.Views
     /// </summary>
     public partial class BiblicalTerms : UserControl
     {
+        private BiblicalTermsViewModel _vm;
+
         public BiblicalTerms()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace ClearDashboard.Wpf.Views
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            _vm = (BiblicalTermsViewModel)DataContext;
+
             // listen for changes to the lower listview to make it scroll back 
             // to the top
             INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
@@ -43,6 +47,11 @@ namespace ClearDashboard.Wpf.Views
                     return;
                     // execute code here.
                 }
+                if (args.PropertyName.Equals("flowDirection"))
+                {
+                    this.FlowDirection = _vm.flowDirection;
+                }
+
             };
         }
     }

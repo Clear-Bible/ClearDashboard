@@ -11,6 +11,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    FlowDirection="{Binding flowDirection}"
     mc:Ignorable="d">
     <Grid>
         <wpf:WebView2

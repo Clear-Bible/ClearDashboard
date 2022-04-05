@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -313,6 +314,7 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         public DashboardProject CurrentDashboardProject { get; private set; }
+        public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
         public DashboardProject CreateDashboardProject()
         {

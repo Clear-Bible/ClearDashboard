@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using ClearDashboard.Wpf.Helpers;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +16,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class DashboardViewModel : PaneViewModel
     {
         #region Member Variables
-        private readonly ILogger<DashboardViewModel> _logger;
+        private readonly ILogger _logger;
+        private readonly ProjectManager _projectManager;
         private bool _firstLoad;
 
         #endregion //Member Variables
@@ -29,6 +31,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -42,8 +54,11 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public DashboardViewModel(ILogger<DashboardViewModel> logger)
+        public DashboardViewModel(ILogger<DashboardViewModel> logger, ProjectManager projectManager)
         {
+            _projectManager = projectManager;
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
             _logger = logger;
             Initialize();
 

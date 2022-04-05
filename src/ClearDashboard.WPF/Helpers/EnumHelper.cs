@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace ClearDashboard.Wpf.Helpers
@@ -25,6 +26,14 @@ namespace ClearDashboard.Wpf.Helpers
         {
             var str = GetEnumAttribute<DescriptionAttribute>(source);
             return str == null ? null : str.Description;
+        }
+
+        public static TAttribute GetAttribute<TAttribute>(this Enum value)
+            where TAttribute : Attribute
+        {
+            var enumType = value.GetType();
+            var name = Enum.GetName(enumType, value);
+            return enumType.GetField(name).GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
         }
     }
 }

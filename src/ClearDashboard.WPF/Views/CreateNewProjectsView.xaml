@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Views.CreateNewProjectsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -9,20 +10,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    xmlns:cm="http://caliburnmicro.com"
     Title="NewProjects"
+    cm:Action.TargetWithoutContext=""
+    cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
     d:DataContext="{d:DesignInstance Type=viewModels:CreateNewProjectsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
-    cm:Action.TargetWithoutContext=""
-     cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
+    FlowDirection="{Binding flowDirection}"
     mc:Ignorable="d">
 
-    <!-- 
-    [Event Loaded] = [Action Page_Loaded($source,$eventArgs)];
-    Loaded="Page_Loaded"
-    SizeChanged="Page_SizeChanged"-->
+    <!--
+        [Event Loaded] = [Action Page_Loaded($source,$eventArgs)];
+        Loaded="Page_Loaded"
+        SizeChanged="Page_SizeChanged"
+    -->
 
     <Page.Resources>
         <ControlTemplate x:Key="validationTemplate">
@@ -94,9 +96,8 @@
                 </GroupBox.HeaderTemplate>
                 <ListView
                     Margin="5"
-                    ItemsSource="{Binding ProjectManager.ParatextProjects}"
-                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source,$eventArgs)];
-                                       [Event PreviewMouseMove] = [Action ListView_PreviewMouseMove($source,$eventArgs)]"
+                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source,$eventArgs)];                                        [Event PreviewMouseMove] = [Action ListView_PreviewMouseMove($source,$eventArgs)]"
+                    ItemsSource="{Binding _projectManager.ParatextProjects}"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -188,13 +189,12 @@
                         </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
-              
+
                 <ListView
                     x:Name="resourcesLV"
                     Margin="5"
-                    ItemsSource="{Binding ProjectManager.ParatextResources}"
-                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source, $eventArgs)];
-                                       [Event  PreviewMouseMove] = [Action ListView_PreviewMouseMove($source, $eventArgs)]"
+                    cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source, $eventArgs)];                                        [Event  PreviewMouseMove] = [Action ListView_PreviewMouseMove($source, $eventArgs)]"
+                    ItemsSource="{Binding _projectManager.ParatextResources}"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -241,22 +241,22 @@
             </GroupBox>
 
 
-            <!--PreviewDrop="Canvas_PreviewDropTop" -->
+            <!--  PreviewDrop="Canvas_PreviewDropTop"  -->
             <Canvas
                 x:Name="DrawCanvasTop"
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="5"
-                AllowDrop="True"
-                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropTop($source, $eventArgs)]"/>
+                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropTop($source, $eventArgs)]"
+                AllowDrop="True" />
             <Canvas
                 x:Name="DrawCanvasBottom"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
-                AllowDrop="True"
-                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropBottom($source, $eventArgs)]"/>
-              
+                cm:Message.Attach="[Event PreviewDrop] = [Action Canvas_PreviewDropBottom($source, $eventArgs)]"
+                AllowDrop="True" />
+
 
             <Border
                 Grid.Row="0"

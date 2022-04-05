@@ -1,10 +1,17 @@
-﻿using ClearDashboard.Wpf.ViewModels.Panes;
+﻿using System.Windows;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ConcordanceViewModel : PaneViewModel
     {
         #region Member Variables
+
+        private readonly ILogger _logger;
+        private readonly ProjectManager _projectManager;
 
         #endregion //Member Variables
 
@@ -16,21 +23,39 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
 
         #endregion //Observable Properties
 
         #region Constructor
-
-        #endregion //Constructor
-
-        #region Methods
-
-        #endregion // Methods
 
         public ConcordanceViewModel()
         {
             this.Title = "🆎 CONCORDANCE TOOL";
             this.ContentId = "CONCORDANCETOOL";
         }
+
+        public ConcordanceViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager)
+        {
+            _projectManager = projectManager;
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+
+        }
+
+        #endregion //Constructor
+
+        #region Methods
+
+        #endregion // Methods
     }
 }

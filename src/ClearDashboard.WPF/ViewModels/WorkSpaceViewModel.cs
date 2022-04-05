@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-        private ProjectManager ProjectManager;
+        private ProjectManager _projectManager;
 
         #endregion //Member Variables
 
@@ -76,8 +76,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private string _verseRef;
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
 
+
+        private string _verseRef;
         public string VerseRef
         {
             get { return _verseRef; }
@@ -169,8 +180,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
-            ProjectManager = projectManager;
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
+            this._projectManager = projectManager;
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            this._projectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
             
@@ -270,7 +282,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -282,7 +294,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
+            _projectManager.NamedPipeChanged -= HandleEventAsync;
             base.Dispose(disposing);
         }
 

@@ -128,6 +128,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public bool _isRTL { get; set; }
 
+
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public  FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value; 
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
+
+
+
         private string _filterText;
 
         public string FilterText
@@ -409,6 +423,8 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
 
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             DataRowView drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
@@ -441,6 +457,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 _fontFamily = projectManager.ParatextProject.Language.FontFamily;
                 _fontSize = projectManager.ParatextProject.Language.Size;
                 _isRTL = projectManager.ParatextProject.Language.IsRtol;
+
             }
         }
 
@@ -564,7 +581,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(_navigationService, (ILogger<WorkSpaceViewModel>)_logger, _projectManager,
+                    new VersePopUpViewModel(_navigationService, (ILogger<VersePopUpViewModel>)_logger, _projectManager,
                         verses[0]), null, null);
             }
         }
@@ -628,8 +645,13 @@ namespace ClearDashboard.Wpf.ViewModels
                         verseText = selectedBiblicalTermsData.ReferencesListText[i];
                     }
 
-                    string loc = verseRef.Substring(0, 3);
-                    var localizedString = GetLocalizationString.Get(loc, _logger) + verseRef.Substring(3);
+                    var loc = verseRef.Split(' ');
+                    string localizedString = verseRef;
+
+                    if (loc.Length > 1)
+                    {
+                        localizedString = GetLocalizationString.Get(loc[0], _logger) + $" {loc[1]}";
+                    }
 
                     _selectedItemVerses.Add(new Verse
                     {
