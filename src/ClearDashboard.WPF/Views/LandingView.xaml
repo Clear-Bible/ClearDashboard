@@ -16,6 +16,7 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding flowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"

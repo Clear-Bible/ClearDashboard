@@ -443,6 +443,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
+                                            VerticalAlignment="Center"
                                             Cursor="Hand"
                                             FontStyle="Italic"
                                             Foreground="{StaticResource BlueMidBrush}">

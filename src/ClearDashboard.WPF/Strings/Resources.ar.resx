@@ -58,194 +58,239 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Hosea" xml:space="preserve">
-    <value>هوسيا</value>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>كلمة:</value>
   </data>
-  <data name="Acts" xml:space="preserve">
-    <value>أعمال</value>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
   </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>الباجية</value>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>طبيعة</value>
   </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>فيلبي</value>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>تاثير</value>
   </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 ثيسالونيا</value>
-  </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>مجموعة؛ مساحة</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 تيموثي</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>زراعة</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>الحيوانات</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>يحرر</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>فليمون</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>أدوات؛ وزن؛ تجارة</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>أعداد</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>nehemiah.</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>روث</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>الحرف؛ قماش</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>غلاطيون</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>أغنية الأغاني</value>
-  </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>الفاكهة</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>الرومان</value>
-  </data>
-  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
-    <value>الشرف والاحترام والحالة</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>علامة</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>أدوات؛ الولادة</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Zephaniah.</value>
-  </data>
-  <data name="2 Samuel" xml:space="preserve">
-    <value>2 صموئيل</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>مشروع جديد</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 ثيسالونيا</value>
-  </data>
-  <data name="BtFormCategory" xml:space="preserve">
-    <value>فئة</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>جويل</value>
-  </data>
-  <data name="BtFormGloss" xml:space="preserve">
-    <value>لمعان</value>
-  </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>مجموعة</value>
-  </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>الثدييات. الحيوانات الأليفة</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>الثدييات. الحيوانات البرية</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>حذف</value>
-  </data>
-  <data name="BtFormAll" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>الأعشاب</value>
-  </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>الاداءات المفقودة</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>أفسس</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>وحي</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>lamentations.</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>سفر الجامعة</value>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
   </data>
   <data name="Landing_projects" xml:space="preserve">
     <value>مشاريع</value>
   </data>
-  <data name="BtDomainsPeople" xml:space="preserve">
-    <value>اشخاص</value>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
   </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>مستوطنة</value>
+  <data name="save" xml:space="preserve">
+    <value>يحفظ</value>
   </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>التضحيات والعروض</value>
+  <data name="edit" xml:space="preserve">
+    <value>يحرر</value>
   </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>أوبضية</value>
+  <data name="Ephesians" xml:space="preserve">
+    <value>أفسس</value>
   </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>ناهوم</value>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>العد</value>
   </data>
-  <data name="Proverbs" xml:space="preserve">
-    <value>الأمثال</value>
+  <data name="1_John" xml:space="preserve">
+    <value>1 جون</value>
   </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>الكائنات الخاربية والصلاحيات</value>
+  <data name="2_Kings" xml:space="preserve">
+    <value>2 ملوك</value>
   </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 جون</value>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>اشخاص؛ الشرف والاحترام والحالة</value>
   </data>
-  <data name="John" xml:space="preserve">
-    <value>يوحنا</value>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>بيت شعر</value>
   </data>
-  <data name="BtFormFound" xml:space="preserve">
-    <value>وجد</value>
+  <data name="2_Corinthians" xml:space="preserve">
+    <value>2 كورنثوس</value>
   </data>
-  <data name="BtDomainsAreaNature" xml:space="preserve">
-    <value>مساحة؛ طبيعة</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>ميكا</value>
-  </data>
-  <data name="BtFormRenderingsLower" xml:space="preserve">
-    <value>الاداءات</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra.</value>
-  </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>تثني</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>تحديث</value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
-  </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>الفصل</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>الأشجار؛ الفاكهة</value>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>nehemiah.</value>
   </data>
   <data name="add" xml:space="preserve">
     <value>يضيف</value>
   </data>
-  <data name="Landing_project" xml:space="preserve">
+  <data name="Proverbs" xml:space="preserve">
+    <value>الأمثال</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra.</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>الكائنات الخاربية والصلاحيات</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>الأخلاق والأخلاق</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>فليمون</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>exodus</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="1_Kings" xml:space="preserve">
+    <value>1 ملوك</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>الأشجار؛ الفاكهة</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>اشخاص؛ السلطة</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>أعداد</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>ناهوم</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>أموس</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>علامة</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>الفصل</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>الفاكهة</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>فيلبي</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
     <value>المشروع</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>أدوات؛ الولادة</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>ماثيو.</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>الباجية</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>مشروع جديد</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>زكريا</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>اشخاص</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>شخص</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>جوشوا</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>يوحنا</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>لغة</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>الثدييات. الحيوانات البرية</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>غلاطيون</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>سفر الجامعة</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>إشعياء</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>الأشجار؛ العطور والتوابل</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>الاداءات</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>الحرف؛ قماش</value>
+  </data>
+  <data name="2_Timothy" xml:space="preserve">
+    <value>2 تيموثي</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>المجال الدلالي:</value>
   </data>
   <data name="UID Key []" xml:space="preserve">
     <value>Arabic [ar]</value>
@@ -253,229 +298,382 @@
   <data name="Haggai" xml:space="preserve">
     <value>haggai.</value>
   </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 Chronicles.</value>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
   </data>
-  <data name="cancel" xml:space="preserve">
-    <value>يلغي</value>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
   </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>العبرانيين</value>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
   </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>كولوسي</value>
-  </data>
-  <data name="BtFormScope" xml:space="preserve">
-    <value>مجال:</value>
-  </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>منظمة</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>مساحة</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>المستعمل</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>تيتوس</value>
-  </data>
-  <data name="BtBcvVerse" xml:space="preserve">
-    <value>بيت شعر</value>
-  </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>اشخاص؛ السلطة</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>وظيفة</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 جون</value>
-  </data>
-  <data name="BtDomainsMonument" xml:space="preserve">
-    <value>نصب</value>
-  </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>الأشجار؛ العطور والتوابل</value>
-  </data>
-  <data name="BtFormCounts" xml:space="preserve">
-    <value>العد</value>
-  </data>
-  <data name="BtFormSemanticDomain" xml:space="preserve">
-    <value>المجال الدلالي:</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 كورنثوس</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>الأحجار الكريمة</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>يونس</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>جوامع</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>ماثيو.</value>
-  </data>
-  <data name="BtDomainsNature" xml:space="preserve">
-    <value>طبيعة</value>
-  </data>
-  <data name="BtFormTerm" xml:space="preserve">
-    <value>مصطلح</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 صموئيل</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 ملوك</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>يحفظ</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>لوقا</value>
-  </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>الحكمة، فهم</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 كورنثوس</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>أموس</value>
-  </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>كتاب</value>
-  </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>أدوات</value>
+  <data name="2_Samuel" xml:space="preserve">
+    <value>2 صموئيل</value>
   </data>
   <data name="create" xml:space="preserve">
     <value>خلق</value>
   </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2 بيتر</value>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>مجموعة</value>
   </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 بطرس</value>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
   </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>زكريا</value>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
   </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>habakkuk.</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>جود</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Ezekiel</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>القضاة</value>
+  <data name="Hosea" xml:space="preserve">
+    <value>هوسيا</value>
   </data>
   <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
     <value>اعمال بناء؛ الأنشطة الدينية</value>
   </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>الأنشطة الدينية</value>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
   </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>مالاشي</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>الأخلاق والأخلاق</value>
+  <data name="cancel" xml:space="preserve">
+    <value>يلغي</value>
   </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>دانيال</value>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>أغنية الأغاني</value>
   </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>إرميا</value>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>مساحة؛ طبيعة</value>
   </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>exodus</value>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>مساحة</value>
   </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 Chronicles.</value>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>أدوات</value>
   </data>
-  <data name="BtFormWord" xml:space="preserve">
-    <value>كلمة:</value>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>أدوات؛ وزن؛ تجارة</value>
   </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>لغة</value>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
   </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>الكائنات الخاربية والصلاحيات؛ عناوين</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>جوشوا</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Psalms.</value>
-  </data>
-  <data name="BtBcvAll" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>استشر</value>
-  </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>علامات وعجائب</value>
-  </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>هدف</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>إعدادات</value>
-  </data>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Leviticus.</value>
-  </data>
-  <data name="BtFormGlossLower" xml:space="preserve">
-    <value>لمعان:</value>
-  </data>
-  <data name="BtDomainsMourning" xml:space="preserve">
-    <value>الحداد</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 جون</value>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
   </data>
   <data name="BtDomainsAll" xml:space="preserve">
     <value>*</value>
   </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 تيموثي</value>
+  <data name="Landing_project" xml:space="preserve">
+    <value>المشروع</value>
   </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>اشخاص؛ الشرف والاحترام والحالة</value>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Leviticus.</value>
   </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 ملوك</value>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>إرميا</value>
   </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>منشأ</value>
+  <data name="James" xml:space="preserve">
+    <value>جوامع</value>
   </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>اعمال البناء؛ تربية الحيوان</value>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>الاداءات</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>المستعمل</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>habakkuk.</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>كولوسي</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>ميكا</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>روث</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>كتاب</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>أوبضية</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>الأنشطة الدينية</value>
+  </data>
+  <data name="2_Peter" xml:space="preserve">
+    <value>2 بيتر</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>وظيفة</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>منظمة</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>تيتوس</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>الأعشاب</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>تثني</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>جويل</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>أعمال</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>علامات وعجائب</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>الثدييات. الحيوانات الأليفة</value>
+  </data>
+  <data name="3_John" xml:space="preserve">
+    <value>3 جون</value>
+  </data>
+  <data name="2_Chronicles" xml:space="preserve">
+    <value>2 Chronicles.</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>الكائنات الخاربية والصلاحيات؛ عناوين</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>العبرانيين</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>إعدادات</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>الشرف والاحترام والحالة</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
   </data>
   <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
     <value>حاويات تربية الحيوان</value>
   </data>
-  <data name="BtDomainsAffection" xml:space="preserve">
-    <value>تاثير</value>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
   </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>شخص</value>
+  <data name="Psalms" xml:space="preserve">
+    <value>Psalms.</value>
   </data>
-  <data name="BtFormProject" xml:space="preserve">
-    <value>المشروع</value>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
   </data>
-  <data name="BtFormRenderings" xml:space="preserve">
-    <value>الاداءات</value>
+  <data name="Romans" xml:space="preserve">
+    <value>الرومان</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>مصطلح</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>الأحجار الكريمة</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>التضحيات والعروض</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>استشر</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>مجموعة؛ مساحة</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Ezekiel</value>
+  </data>
+  <data name="1_Thessalonians" xml:space="preserve">
+    <value>1 ثيسالونيا</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>مجال:</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>فئة</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="2_John" xml:space="preserve">
+    <value>2 جون</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>دانيال</value>
+  </data>
+  <data name="2_Thessalonians" xml:space="preserve">
+    <value>2 ثيسالونيا</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>مستوطنة</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>جود</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>لوقا</value>
+  </data>
+  <data name="1_Chronicles" xml:space="preserve">
+    <value>1 Chronicles.</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>اعمال البناء؛ تربية الحيوان</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>لمعان:</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>القضاة</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>الحكمة، فهم</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>الحيوانات</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>يونس</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>منشأ</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>نصب</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="1_Peter" xml:space="preserve">
+    <value>1 بطرس</value>
+  </data>
+  <data name="1_Timothy" xml:space="preserve">
+    <value>1 تيموثي</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>الحداد</value>
+  </data>
+  <data name="1_Corinthians" xml:space="preserve">
+    <value>1 كورنثوس</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>هدف</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>الاداءات المفقودة</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>وحي</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>مالاشي</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>زراعة</value>
+  </data>
+  <data name="1_Samuel" xml:space="preserve">
+    <value>1 صموئيل</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>وجد</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>lamentations.</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Zephaniah.</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
   </data>
 </root>

@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class TreeDownViewModel : PaneViewModel
     {
         #region Member Variables
+
+        private readonly ILogger _logger;
+        private readonly ProjectManager _projectManager;
 
         #endregion //Member Variables
 
@@ -18,6 +25,17 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion //Public Properties
 
         #region Observable Properties
+
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -28,6 +46,15 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "⯭ TREEDOWN";
             this.ContentId = "TREEDOWN";
         }
+
+        public TreeDownViewModel(INavigationService navigationService, ILogger<TreeDownViewModel> logger, ProjectManager projectManager)
+        {
+            _projectManager = projectManager;
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+
+        }
+
         #endregion //Constructor
 
         #region Methods

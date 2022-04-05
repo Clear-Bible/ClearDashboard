@@ -6,6 +6,7 @@ using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,15 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
         private readonly TranslationSource _translationSource;
+        private readonly ProjectManager _projectManager;
+        private readonly ILogger _logger;
 
         #region Properties
 
@@ -65,6 +69,18 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region ObservableProps
+
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
+
 
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
@@ -148,9 +164,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
+            ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
             _translationSource = translationSource;
+            _projectManager = projectManager;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -231,10 +249,21 @@ namespace ClearDashboard.Wpf.ViewModels
             var culture = Properties.Settings.Default.language_code;
             // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+
+            var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
+            if (languageFlowDirection.isRTL)
+            {
+                _projectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+            }
+            else
+            {
+                _projectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
+            }
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion
-
 
     }
 }
