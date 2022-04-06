@@ -105,7 +105,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
                 }
 
-                string targetChapterNum = verse.VerseBBCCCVVV.Substring(2, 3);
+                string targetChapterNum = verse.ChapterNum;
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
                 if (chapters.Count > 0)
@@ -163,7 +163,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             // get the file name for that book
             var bookFile = project.BooksList.Where(b => b.BookId == verse.BookNum).FirstOrDefault();
 
-            if (bookFile != null)
+            if (bookFile is null)
             {
                 return string.Empty;
             }
