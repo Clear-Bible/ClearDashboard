@@ -1258,8 +1258,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // TODO HACK TO SAVE CURRENT PROJECT AS OBJECT
-            string jsonString = JsonSerializer.Serialize(DashboardProject);
-            File.WriteAllText(@"c:\temp\project.json", jsonString);
+            //string jsonString = JsonSerializer.Serialize(DashboardProject);
+            //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
 
 

@@ -34,7 +34,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         }
 
 
-        private readonly ILogger<ParatextUtils> _logger;
+        private readonly ILogger _logger;
         public enum FolderType
         {
             Projects,

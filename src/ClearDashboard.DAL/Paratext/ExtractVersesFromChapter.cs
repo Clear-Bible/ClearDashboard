@@ -4,6 +4,7 @@ using SIL.Machine.Corpora;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
@@ -23,17 +24,20 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             var stylesheetPath = GetStyleSheetPath(logger, project);
             string usfmBookPath = GetUsfmBookPath(project, verse);
 
+            if (usfmBookPath == String.Empty || stylesheetPath == String.Empty)
+            {
+                return new List<string>();
+            }
+
+            List<string> lines = new List<string>();
             UsfmStylesheet usfmStylesheet = new UsfmStylesheet(stylesheetPath, null);
             UsfmParser parser = new UsfmParser(usfmStylesheet);
 
-            // TODO HACK WITH FIXED REFERENCES
             using (TextReader reader = File.OpenText(usfmBookPath))
             {
                 string usfm = reader.ReadToEnd();
-
                 var tokens = parser.Parse(usfm, false);
 
-                List<string> lines = new List<string>();
                 foreach (var token in tokens)
                 {
                     if (token.Type is UsfmTokenType marker)
@@ -104,43 +108,67 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 string targetChapterNum = verse.VerseBBCCCVVV.Substring(2, 3);
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
-                // remove lines after chapter
-                if (chapters.ContainsKey(targetChapNum + 1))
+                if (chapters.Count > 0)
                 {
-                    lines.RemoveRange(chapters[targetChapNum + 1], lines.Count - chapters[targetChapNum + 1]);
-                }
+                    // remove lines after chapter
+                    if (chapters.ContainsKey(targetChapNum + 1))
+                    {
+                        lines.RemoveRange(chapters[targetChapNum + 1], lines.Count - chapters[targetChapNum + 1]);
+                    }
 
-                //remove lines from the start
-                lines.RemoveRange(0, chapters[targetChapNum]);
+                    //remove lines from the start
+                    lines.RemoveRange(0, chapters[targetChapNum]);
+                }
             }
-            return new List<string>();
+            return lines;
         }
 
         private static string GetStyleSheetPath(ILogger logger, ParatextProject project)
         {
-            // look for custom usfm stylesheet
-            var stylesheetPath = Path.Combine(project.DirectoryPath, "custom.sty");
-            if (!File.Exists(stylesheetPath))
+            //// look for custom usfm stylesheet
+            //var stylesheetPath = Path.Combine(project.DirectoryPath, "custom.sty");
+            //if (!File.Exists(stylesheetPath))
+            //{
+            //    // get the standard Paratext one
+            //    ParatextUtils paratextUtils = new ParatextUtils((ILogger<ParatextUtils>)logger);
+            //    if (paratextUtils.IsParatextInstalled())
+            //    {
+            //        var projectPath = paratextUtils.ParatextProjectPath;
+            //        var standardStyleSheet = Path.Combine(projectPath, "usfm.sty");
+            //        if (File.Exists(standardStyleSheet))
+            //        {
+            //            stylesheetPath = standardStyleSheet;
+            //        }
+            //    }
+            //}
+
+            // get the standard Paratext one
+            string stylesheetPath = "";
+            ParatextUtils paratextUtils = new ParatextUtils(logger as ILogger<ParatextUtils>);
+            if (paratextUtils.IsParatextInstalled())
             {
-                // get the standard Paratext one
-                ParatextUtils paratextUtils = new ParatextUtils((ILogger<ParatextUtils>)logger);
-                if (paratextUtils.IsParatextInstalled())
+                var projectPath = paratextUtils.ParatextProjectPath;
+                var standardStyleSheet = Path.Combine(projectPath, "usfm.sty");
+                if (File.Exists(standardStyleSheet))
                 {
-                    var projectPath = paratextUtils.ParatextProjectPath;
-                    var standardStyleSheet = Path.Combine(projectPath, "usfm.sty");
-                    if (File.Exists(standardStyleSheet))
-                    {
-                        stylesheetPath = standardStyleSheet;
-                    }
+                    stylesheetPath = standardStyleSheet;
                 }
             }
-
             return stylesheetPath;
         }
 
         private static string GetUsfmBookPath(ParatextProject project, Verse verse)
         {
-            throw new NotImplementedException();
+            var book = verse.BookNum;
+            // get the file name for that book
+            var bookFile = project.BooksList.Where(b => b.BookId == verse.BookNum).FirstOrDefault();
+
+            if (bookFile != null)
+            {
+                return string.Empty;
+            }
+
+            return bookFile.FilePath;
         }
 
         public static bool IsNumeric(string input)
