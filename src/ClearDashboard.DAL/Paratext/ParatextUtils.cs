@@ -13,8 +13,27 @@ namespace ClearDashboard.DataAccessLayer.Paratext
     public class ParatextUtils
     {
         private string _paratextProjectPath = string.Empty;
+        public string ParatextProjectPath
+        {
+            get => _paratextProjectPath;
+            set => _paratextProjectPath = value;
+        }
+
         private string _paratextInstallPath = string.Empty;
+        public string ParatextInstallPath
+        {
+            get => _paratextInstallPath;
+            set => _paratextInstallPath = value;
+        }
+
         private string _paratextResourcesPath = string.Empty;
+        public string ParatextResourcePath
+        {
+            get => _paratextResourcesPath;
+            set => _paratextResourcesPath = value;
+        }
+
+
         private readonly ILogger<ParatextUtils> _logger;
         public enum FolderType
         {
