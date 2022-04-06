@@ -10,12 +10,11 @@ namespace ClearDashboard.Wpf.ViewModels
     public class LandingViewModel: ApplicationScreen
     {
         #region   Member Variables
-
         
-
         private readonly INavigationService _navigationService;
         private readonly ProjectManager _projectManager;
         private readonly ILogger _logger;
+        
         #endregion
 
         #region Observable Objects

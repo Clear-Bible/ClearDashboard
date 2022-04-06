@@ -581,7 +581,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(_navigationService, (ILogger<VersePopUpViewModel>)_logger, _projectManager,
+                    new VersePopUpViewModel(_navigationService, _logger, _projectManager,
                         verses[0]), null, null);
             }
         }
