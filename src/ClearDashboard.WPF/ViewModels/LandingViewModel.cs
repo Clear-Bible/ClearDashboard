@@ -2,6 +2,8 @@
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 using Microsoft.Extensions.Logging;
 
@@ -75,9 +77,20 @@ namespace ClearDashboard.Wpf.ViewModels
            _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
         }
 
-        public void Workspace()
+        public void Workspace(DashboardProject project)
         {
-            _logger.LogInformation("Workspace called.");
+            if (project is null)
+            {
+                return;
+            }
+
+            // TODO HACK TO READ IN PROJECT AS OBJECT
+            var jsonString =File.ReadAllText(@"c:\temp\project.json");
+            project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
+
+
+            _logger.LogInformation("Workspace called."); 
+            _projectManager.CurrentDashboardProject = project;
            _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 

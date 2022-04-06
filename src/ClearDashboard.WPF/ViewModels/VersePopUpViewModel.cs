@@ -58,7 +58,6 @@ namespace ClearDashboard.Wpf.ViewModels
             var project = _projectManager.CurrentDashboardProject;
             foreach (var btProject in project.BackTranslationProjects)
             {
-                // TODO HACK WITH FIXED REFERENCES
                 var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(logger, btProject, verse);
             }
 

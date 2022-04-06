@@ -313,7 +313,7 @@ namespace ClearDashboard.DataAccessLayer
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
 
-        public DashboardProject CurrentDashboardProject { get; private set; }
+        public DashboardProject CurrentDashboardProject { get; set; }
         public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
         public DashboardProject CreateDashboardProject()

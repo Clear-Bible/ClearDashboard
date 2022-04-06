@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -1255,6 +1256,13 @@ namespace ClearDashboard.Wpf.ViewModels
                 // unlikely ever to be true but just in case
                 return;
             }
+
+            // TODO HACK TO SAVE CURRENT PROJECT AS OBJECT
+            string jsonString = JsonSerializer.Serialize(DashboardProject);
+            File.WriteAllText(@"c:\temp\project.json", jsonString);
+
+
+
             await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
