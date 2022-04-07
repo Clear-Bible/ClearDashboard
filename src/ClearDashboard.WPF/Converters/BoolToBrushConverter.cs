@@ -18,7 +18,7 @@ namespace ClearDashboard.Wpf.Converters
             switch (input)
             {
                 case true:
-                    return Brushes.CadetBlue;
+                    return Application.Current.TryFindResource("SecondaryHueMidBrush");
                 default:
                     return DependencyProperty.UnsetValue;
             }
