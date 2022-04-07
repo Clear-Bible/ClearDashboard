@@ -6,6 +6,33 @@ namespace ClearDashboard.Common.Models
 {
     public class Verse
     {
+        public string BookNum
+        {
+            get
+            {
+                var book = _VerseBBCCCVVV.Substring(0, 2);
+                return book;
+            }
+        }
+
+        public string ChapterNum
+        {
+            get
+            {
+                var chap = _VerseBBCCCVVV.Substring(2, 3);
+                return chap;
+            }
+        }
+
+        public string VerseNum
+        {
+            get
+            {
+                var verse = _VerseBBCCCVVV.Substring(5, 3);
+                return verse;
+            }
+        }
+
         public string VerseID { get; set; } = string.Empty;
 
         private string _VerseBBCCCVVV = string.Empty;

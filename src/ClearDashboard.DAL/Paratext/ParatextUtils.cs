@@ -34,7 +34,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         }
 
 
-        private readonly ILogger<ParatextUtils> _logger;
+        private readonly ILogger _logger;
         public enum FolderType
         {
             Projects,
@@ -408,6 +408,9 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             {
                 _logger.LogError(e, $"An unexpected error occurred while deserializing the setting file {settingFilePath}");
             }
+
+            FileInfo fileInfo = new FileInfo(settingFilePath);
+            paratextProject.DirectoryPath = fileInfo.DirectoryName;
 
             return paratextProject;
         }
