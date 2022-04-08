@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

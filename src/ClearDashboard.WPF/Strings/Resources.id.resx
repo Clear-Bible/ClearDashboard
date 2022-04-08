@@ -58,244 +58,622 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Imamat.</value>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Kata:</value>
   </data>
-  <data name="delete" xml:space="preserve">
-    <value>Menghapus</value>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
   </data>
-  <data name="Judges" xml:space="preserve">
-    <value>Hakim</value>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>alam</value>
   </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Efesus</value>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>kasih sayang</value>
   </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Pengguna</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>Joshua.</value>
-  </data>
-  <data name="2 Chronicles" xml:space="preserve">
-    <value>2 Tawarikh</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Yehezkiel.</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Filemon</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>Filipi Filipi</value>
-  </data>
-  <data name="1 Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="1 Corinthians" xml:space="preserve">
-    <value>1 Korintus</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>Galatia</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>tanda</value>
-  </data>
-  <data name="2 Thessalonians" xml:space="preserve">
-    <value>2 Tesalonika</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Indoneasian [id]</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Ruth.</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Mikha.</value>
-  </data>
-  <data name="2 Corinthians" xml:space="preserve">
-    <value>2 Korintus</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Jonah.</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Proyek baru</value>
-  </data>
-  <data name="2 John" xml:space="preserve">
-    <value>2 John.</value>
-  </data>
-  <data name="1 Thessalonians" xml:space="preserve">
-    <value>1 Tesalonika</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Mazmur</value>
-  </data>
-  <data name="3 John" xml:space="preserve">
-    <value>3 John.</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Amos.</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Membatalkan</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>Hosea.</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Titus</value>
-  </data>
-  <data name="1 John" xml:space="preserve">
-    <value>1 John.</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Asal</value>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
   </data>
   <data name="Landing_projects" xml:space="preserve">
     <value>Proyek</value>
   </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Ibrani.</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Roma</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>Pekerjaan</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>Tindakan</value>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
   </data>
   <data name="save" xml:space="preserve">
     <value>Menyimpan</value>
   </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Nahum</value>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Ratapan.</value>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Efesus</value>
   </data>
-  <data name="1 Timothy" xml:space="preserve">
-    <value>1 Timothy.</value>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Hitungan</value>
   </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Joel.</value>
+  <data name="1_John" xml:space="preserve">
+    <value>1 John.</value>
   </data>
-  <data name="update" xml:space="preserve">
-    <value>Memperbarui</value>
+  <data name="2_Kings" xml:space="preserve">
+    <value>2 raja</value>
   </data>
-  <data name="1 Peter" xml:space="preserve">
-    <value>1 Peter.</value>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>orang-orang; Kehormatan, hormat, status</value>
   </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>Maleakhi.</value>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>Ayat</value>
   </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Wahyu</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Keluaran</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>HAGGAI.</value>
+  <data name="2_Corinthians" xml:space="preserve">
+    <value>2 Korintus</value>
   </data>
   <data name="Nehemiah" xml:space="preserve">
     <value>Nehemia</value>
   </data>
-  <data name="Esther" xml:space="preserve">
-    <value>Esther.</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Daniel.</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Kolose.</value>
-  </data>
-  <data name="1 Chronicles" xml:space="preserve">
-    <value>1 Tawarikh</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Habakkuk.</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Zakharia.</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra.</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Yeremia.</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>Angka</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Jude.</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Matius</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>Song of Lagu.</value>
-  </data>
-  <data name="2 Peter" xml:space="preserve">
-    <value>2 Peter.</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Membuat</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Proyek</value>
-  </data>
-  <data name="2 Timothy" xml:space="preserve">
-    <value>2 Timotius.</value>
-  </data>
-  <data name="1 Kings" xml:space="preserve">
-    <value>1 raja</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>James.</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Pengaturan</value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Yesaya.</value>
-  </data>
-  <data name="2 Kings" xml:space="preserve">
-    <value>2 raja</value>
-  </data>
-  <data name="language" xml:space="preserve">
-    <value>Bahasa Indo</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Pengkhotbah</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Luke.</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Zefanya</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>John.</value>
-  </data>
-  <data name="2 Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
+  <data name="add" xml:space="preserve">
+    <value>Menambahkan</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>Peribahasa</value>
   </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>Ezra.</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Gloss.</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>Makhluk dan Kekuatan Supernatural</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>moral dan etika.</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>Filemon</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Keluaran</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Menghapus</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="1_Kings" xml:space="preserve">
+    <value>1 raja</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>pohon; buah-buahan</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>orang-orang; otoritas</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>Angka</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Amos.</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>tanda</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Bab</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>buah-buahan</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>Filipi Filipi</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Proyek</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>peralatan; persalinan</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Matius</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>kekafiran</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Proyek baru</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Zakharia.</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>orang-orang</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>orang</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Memperbarui</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>Joshua.</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>John.</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>Lokal</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>mamalia; Hewan liar</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>Galatia</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Pengkhotbah</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Yesaya.</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>pohon; parfum dan rempah-rempah</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Renderings.</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>kerajinan; kain</value>
+  </data>
+  <data name="2_Timothy" xml:space="preserve">
+    <value>2 Timotius.</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Domain semantik:</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Indoneasian [id]</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>HAGGAI.</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="2_Samuel" xml:space="preserve">
+    <value>2 Samuel</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Membuat</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>kelompok</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>Hosea.</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>konstruksi; kegiatan keagamaan</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Membatalkan</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>Song of Lagu.</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>daerah; alam</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>daerah</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>peralatan</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>peralatan; bobot; perdagangan</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>Keahlian</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Proyek</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Imamat.</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Yeremia.</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>James.</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>Renderings.</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Pengguna</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Habakkuk.</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Kolose.</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>Mikha.</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>Ruth.</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Buku</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>kegiatan keagamaan</value>
+  </data>
+  <data name="2_Peter" xml:space="preserve">
+    <value>2 Peter.</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Pekerjaan</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>asosiasi</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Titus</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>rumput</value>
+  </data>
   <data name="Deuteronomy" xml:space="preserve">
     <value>Deuteronomy.</value>
   </data>
-  <data name="add" xml:space="preserve">
-    <value>Menambahkan</value>
+  <data name="Joel" xml:space="preserve">
+    <value>Joel.</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>Tindakan</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>tanda dan keajaiban</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>mamalia; binatang lokal</value>
+  </data>
+  <data name="3_John" xml:space="preserve">
+    <value>3 John.</value>
+  </data>
+  <data name="2_Chronicles" xml:space="preserve">
+    <value>2 Tawarikh</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>makhluk dan kekuatan supernatural; Judul</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Ibrani.</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Pengaturan</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>Kehormatan, hormat, status</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>wadah; Peternakan</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>Mazmur</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Roma</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Ketentuan</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>Gemstones.</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>Pengorbanan dan Penawaran</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>Esther.</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>kelompok; daerah</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Yehezkiel.</value>
+  </data>
+  <data name="1_Thessalonians" xml:space="preserve">
+    <value>1 Tesalonika</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Cakupan:</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="2_John" xml:space="preserve">
+    <value>2 John.</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Daniel.</value>
+  </data>
+  <data name="2_Thessalonians" xml:space="preserve">
+    <value>2 Tesalonika</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>hunian</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Jude.</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Luke.</value>
+  </data>
+  <data name="1_Chronicles" xml:space="preserve">
+    <value>1 Tawarikh</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>konstruksi; Peternakan</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>Gloss:</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>Hakim</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>kebijaksanaan, pengertian</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>Hewan</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Jonah.</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Asal</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>Monumen</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="1_Peter" xml:space="preserve">
+    <value>1 Peter.</value>
+  </data>
+  <data name="1_Timothy" xml:space="preserve">
+    <value>1 Timothy.</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>duka</value>
+  </data>
+  <data name="1_Corinthians" xml:space="preserve">
+    <value>1 Korintus</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>tujuan</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Renderings yang hilang</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Wahyu</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>Maleakhi.</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>pertanian</value>
+  </data>
+  <data name="1_Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>Ditemukan</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Ratapan.</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Zefanya</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
   </data>
 </root>

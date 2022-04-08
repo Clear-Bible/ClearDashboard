@@ -1,32 +1,36 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.Wpf.Helpers;
-using Serilog;
-using System;
+using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Extensions.Logging;
-using ClearDashboard.DataAccessLayer.Utility;
-using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class LandingViewModel: ApplicationScreen
     {
         #region   Member Variables
-
         
-
         private readonly INavigationService _navigationService;
         private readonly ProjectManager _projectManager;
-
+        private readonly ILogger _logger;
+        
         #endregion
 
         #region Observable Objects
+
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
 
         public ObservableCollection<DashboardProject> DashboardProjects { get; set; } =
             new ObservableCollection<DashboardProject>();
@@ -45,15 +49,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger): base(navigationService, logger)
         {
-           
+            _logger = logger;
             _navigationService = navigationService;
             _projectManager = projectManager;
 
-          
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+
             // get the clearsuite projects
             DashboardProjects = projectManager.LoadExistingProjects();
 
-            Logger.LogInformation("LandingViewModel constructor called.");
+            _logger.LogError("LandingViewModel constructor called.");
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -68,19 +73,30 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void CreateNewProject()
         {
-           Logger.LogInformation("CreateNewProject called.");
+            _logger.LogInformation("CreateNewProject called.");
            _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
         }
 
-        public void Workspace()
+        public void Workspace(DashboardProject project)
         {
-           Logger.LogInformation("Workspace called.");
+            if (project is null)
+            {
+                return;
+            }
+
+            // TODO HACK TO READ IN PROJECT AS OBJECT
+            var jsonString =File.ReadAllText(@"c:\temp\project.json");
+            project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
+
+
+            _logger.LogInformation("Workspace called."); 
+            _projectManager.CurrentDashboardProject = project;
            _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 
         public void Settings()
         {
-            Logger.LogInformation("Settings called.");
+            _logger.LogInformation("Settings called.");
             _navigationService.NavigateToViewModel<SettingsViewModel>();
 
         }

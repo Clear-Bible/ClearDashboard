@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     x:Name="UserControl"
@@ -15,6 +16,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
@@ -27,7 +29,7 @@
             <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
 
             <SolidColorBrush
-                x:Key="StackOverflowGray"
+                x:Key="GridBrush"
                 Opacity="0.25"
                 Color="LightBlue" />
 
@@ -40,63 +42,53 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="47" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="*" />
             <RowDefinition Height="12" />
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>
         <!--  ROW 0  -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <ProgressBar
-                x:Name="ProgressBarVisibility"
-                Width="30"
-                Height="30"
-                Margin="15,0,5,0"
-                IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                Visibility="{Binding ProgressBarVisibility}"
-                Value="0" />
-            <StackPanel
-                Margin="5,0,0,5"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <RadioButton
-                    Content="PROJECT"
-                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                    GroupName="radBTType"
-                    IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
 
-                <RadioButton
-                    Content="ALL"
-                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                    GroupName="radBTType"
-                    IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
-            </StackPanel>
+        <StackPanel Orientation="Horizontal">
+
             <Border
+                Grid.Row="0"
                 Margin="10,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">SEMANTIC DOMAIN:</TextBlock>
-                    <ComboBox
-                        x:Name="Domains"
-                        MinWidth="150"
-                        Margin="0,0,5,0"
-                        ItemsSource="{Binding Domains}"
-                        SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel
+                    Margin="5,0,0,5"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <RadioButton
+                        Content="{helpers:Loc BtFormProject}"
+                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                        GroupName="radBTType"
+                        IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
+                        Style="{StaticResource MaterialDesignLightRadioButton}" />
+
+                    <RadioButton
+                        Content="{helpers:Loc BtFormAll}"
+                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                        GroupName="radBTType"
+                        IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
+                        Style="{StaticResource MaterialDesignLightRadioButton}" />
                 </StackPanel>
             </Border>
 
+            <!--  WORD FILTER  -->
             <Border
                 Margin="2,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5,0,5,0" VerticalAlignment="Center">WORD:</TextBlock>
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormWord}" />
                     <TextBox
                         x:Name="FilterText"
-                        MinWidth="150"
+                        MinWidth="125"
                         Margin="0,0,5,0"
                         VerticalAlignment="Center"
                         AcceptsReturn="False"
@@ -108,42 +100,93 @@
                         Orientation="Vertical">
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="ENGLISH"
+                            Content="{helpers:Loc BtFormGloss}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
-                            IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=English}"
+                            IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="RENDERINGS"
+                            Content="{helpers:Loc BtFormRenderings}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
-                            IsChecked="{Binding Path=SelectedWordFilterType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
+                            IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <StackPanel
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <TextBlock
-                    Width="75"
-                    Text="Current Verse Only"
-                    TextAlignment="Center"
-                    TextWrapping="Wrap" />
-                <ToggleButton
-                    IsChecked="{Binding CurrentVerseToggle}"
-                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                    ToolTip="MaterialDesignSwitchToggleButton" />
-            </StackPanel>
+
+
         </StackPanel>
 
         <!--  ROW 1  -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <!--  RENDERINGS FILTER  -->
+            <Border
+                Margin="10,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                        x:Name="RenderingsFilter"
+                        MinWidth="50"
+                        Margin="0,0,5,0"
+                        DisplayMemberPath="Display"
+                        ItemsSource="{Binding RenderingsFilters}"
+                        SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Value" />
+                </StackPanel>
+            </Border>
+
+            <!--  SCOPE  -->
+            <Border
+                Margin="10,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormScope}" />
+                    <ComboBox
+                        x:Name="Scope"
+                        MinWidth="50"
+                        Margin="0,0,5,0"
+                        DisplayMemberPath="Display"
+                        ItemsSource="{Binding Scopes}"
+                        SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Value" />
+                </StackPanel>
+            </Border>
+
+            <!--  SEMANTIC DOMAINS  -->
+            <Border
+                Margin="10,5,0,2"
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <Label
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Loc BtFormSemanticDomain}" />
+                    <ComboBox
+                        x:Name="Domains"
+                        MinWidth="50"
+                        Margin="0,0,5,0"
+                        DisplayMemberPath="Display"
+                        ItemsSource="{Binding Domains}"
+                        SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Border>
+
+
+        </StackPanel>
+
+        <!--  ROW 2  -->
         <DataGrid
             x:Name="gridVerses"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="5"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -151,7 +194,7 @@
             CanUserAddRows="False"
             CanUserResizeColumns="True"
             GridLinesVisibility="All"
-            HorizontalGridLinesBrush="{StaticResource StackOverflowGray}"
+            HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding BiblicalTermsCollectionView}"
             ScrollViewer.CanContentScroll="True"
@@ -160,7 +203,7 @@
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
-            VerticalGridLinesBrush="{StaticResource StackOverflowGray}">
+            VerticalGridLinesBrush="{StaticResource GridBrush}">
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -194,7 +237,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="Term">
+                <DataGridTemplateColumn Width="Auto" Header="{helpers:Loc BtFormTerm}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -202,12 +245,13 @@
                                 Height="Auto"
                                 Margin="-8"
                                 VerticalAlignment="Center"
+                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                 Text="{Binding Lemma}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="Category">
+                <DataGridTemplateColumn Width="110" Header="{helpers:Loc BtFormCategory}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -220,7 +264,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150                                         " Header="English">
+                <DataGridTemplateColumn Width="150" Header="{helpers:Loc BtFormGlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -233,7 +277,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Counts">
+                <DataGridTemplateColumn Header="{helpers:Loc BtFormCounts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -244,7 +288,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Found">
+                <DataGridTemplateColumn Header="{helpers:Loc BtFormFound}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -255,14 +299,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="Renderings">
+                <DataGridTemplateColumn Width="200" Header="{helpers:Loc BtFormRenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
-                                Height="15"
                                 Margin="-8"
                                 HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
@@ -283,10 +327,21 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!--  ROW 2  -->
+        <ProgressBar
+            x:Name="ProgressBarVisibility"
+            Grid.Row="2"
+            Width="100"
+            Height="100"
+            Margin="15,0,5,0"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+
+        <!--  ROW 3  -->
         <!--  Text="⁞" for vertical splitter  -->
         <GridSplitter
-            Grid.Row="2"
+            Grid.Row="3"
             Height="12"
             HorizontalAlignment="Stretch">
             <GridSplitter.Template>
@@ -307,8 +362,8 @@
             </GridSplitter.Template>
         </GridSplitter>
 
-        <!--  ROW 3  -->
-        <Grid Grid.Row="3">
+        <!--  ROW 4  -->
+        <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" />
                 <RowDefinition Height="*" />
@@ -324,7 +379,7 @@
                         <TextBlock
                             Margin="5,0,5,0"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            Text="Gloss:" />
+                            Text="{helpers:Loc BtFormGlossLower}" />
                         <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
                     </StackPanel>
                     <ListBox
@@ -337,7 +392,6 @@
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
                                 <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
-                                <Setter Property="Height" Value="20" />
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -389,6 +443,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
+                                            VerticalAlignment="Center"
                                             Cursor="Hand"
                                             FontStyle="Italic"
                                             Foreground="{StaticResource BlueMidBrush}">

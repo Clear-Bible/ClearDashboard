@@ -190,7 +190,6 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 {
                     if (marker.Type == MarkerType.Verse)
                     {
-                        Debug.WriteLine($"Verse: {marker.Data}");
                         // skip if the verses are beyond what we are looking for
                         int i = 0;
                         bool result = int.TryParse(marker.Data, out i);
@@ -229,7 +228,10 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 }
                 else if (token is IUSFMTextToken textToken)
                 {
-                    lines.Add("Text Token: " + textToken.Text);
+                    if (token.IsScripture)
+                    {
+                        lines.Add("Text Token: " + textToken.Text);
+                    }
                 }
             }
 

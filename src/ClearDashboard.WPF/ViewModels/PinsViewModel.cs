@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Caliburn.Micro;
 using System.Threading;
+using System.Windows;
+using ClearDashboard.DataAccessLayer;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -17,6 +20,10 @@ namespace ClearDashboard.Wpf.ViewModels
     {
 
         #region Member Variables
+
+        private readonly ILogger _logger;
+        private readonly ProjectManager _projectManager;
+
 
         private string _paratextInstallPath = "";
 
@@ -38,7 +45,7 @@ namespace ClearDashboard.Wpf.ViewModels
             set
             {
                 _projectSelectedId = value;
-                if (_projectSelectedId > 0)
+                if (_projectSelectedId >= 0)
                 {
                     // combobox changed
                     string proj = Projects[_projectSelectedId];
@@ -128,6 +135,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -138,6 +156,15 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "PINS";
 
             PT_version_selected();
+        }
+
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager)
+        {
+            _logger = logger;
+            _projectManager = projectManager;
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

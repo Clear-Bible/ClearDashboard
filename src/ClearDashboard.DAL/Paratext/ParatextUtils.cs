@@ -13,9 +13,28 @@ namespace ClearDashboard.DataAccessLayer.Paratext
     public class ParatextUtils
     {
         private string _paratextProjectPath = string.Empty;
+        public string ParatextProjectPath
+        {
+            get => _paratextProjectPath;
+            set => _paratextProjectPath = value;
+        }
+
         private string _paratextInstallPath = string.Empty;
+        public string ParatextInstallPath
+        {
+            get => _paratextInstallPath;
+            set => _paratextInstallPath = value;
+        }
+
         private string _paratextResourcesPath = string.Empty;
-        private readonly ILogger<ParatextUtils> _logger;
+        public string ParatextResourcePath
+        {
+            get => _paratextResourcesPath;
+            set => _paratextResourcesPath = value;
+        }
+
+
+        private readonly ILogger _logger;
         public enum FolderType
         {
             Projects,
@@ -390,6 +409,9 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 _logger.LogError(e, $"An unexpected error occurred while deserializing the setting file {settingFilePath}");
             }
 
+            FileInfo fileInfo = new FileInfo(settingFilePath);
+            paratextProject.DirectoryPath = fileInfo.DirectoryName;
+
             return paratextProject;
         }
 
@@ -541,10 +563,10 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             fileName += project.FileNamePostPart;
                         }
 
-                        books[i].FilePath = Path.Combine(directory, fileName);
+                        books[i].FilePath = fileName;
 
                         // check if the file exists
-                        if (!File.Exists(books[i].FilePath))
+                        if (!File.Exists(Path.Combine(directory, fileName)))
                         {
                             // check to see if the file exists with a .usx ending instead
                             fileName = fileName.Substring(0, fileName.LastIndexOf("."));
@@ -560,6 +582,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                                 books[i].Available = false;
                             }
                         }
+
 
                     }
                 }

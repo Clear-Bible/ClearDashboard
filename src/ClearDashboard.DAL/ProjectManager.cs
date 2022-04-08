@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -75,7 +76,26 @@ namespace ClearDashboard.DataAccessLayer
         public event EventHandler ParatextUserNameEventHandler;
         public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
-        public string CurrentVerse { get; set; } = "";
+
+
+        private string _currentVerse;
+        public string CurrentVerse
+        {
+            get { return _currentVerse; }
+            set
+            {
+                // ensure that we are getting a fully delimited BB as things like
+                // 01 through 09 often get truncated to "1" through "9" without the 
+                // leading zero
+                var s = value;
+                if (s.Length < "BBCCCVVV".Length)
+                {
+                    s = value.PadLeft("BBCCCVVV".Length, '0');
+                }
+                _currentVerse = s;
+            }
+        }
+
 
         private void RaisePipesChangedEvent(PipeMessage pm)
         {
@@ -293,7 +313,8 @@ namespace ClearDashboard.DataAccessLayer
             ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
         }
 
-        public DashboardProject CurrentDashboardProject { get; private set; }
+        public DashboardProject CurrentDashboardProject { get; set; }
+        public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
         public DashboardProject CreateDashboardProject()
         {

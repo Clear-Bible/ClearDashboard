@@ -2,13 +2,16 @@
     x:Class="ClearDashboard.Wpf.Views.LandingView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    x:Name="page"
     Title="LandingViewModel"
     d:DataContext="{d:DesignInstance Type=viewModels:LandingViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -16,6 +19,7 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding flowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
@@ -88,7 +92,7 @@
                 </Button.Tag>
             </Button>
 
-            <Button
+            <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"
                 Content="{helpers:Loc Landing_project}"
@@ -96,7 +100,7 @@
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
                 </Button.Tag>
-            </Button>
+            </Button>-->
 
         </WrapPanel>
 
@@ -137,14 +141,16 @@
                                                     HorizontalAlignment="Left"
                                                     FontSize="16"
                                                     FontWeight="Bold"
-                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                    Text="{Binding ProjectName}" />
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                                    <Run Text="PROJECT: " />
+                                                    <Run Text="{Binding ProjectName}" />
+                                                </TextBlock>
 
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Width="217"
-                                                        Margin="10,0,0,0"
-                                                        Text="{Binding ShortFilePath}" />
+                                                    <TextBlock Width="217" Margin="10,0,0,0">
+                                                        <Run Text="Database: " />
+                                                        <Run Text="{Binding ShortFilePath}" />
+                                                    </TextBlock>
                                                     <TextBlock
                                                         Margin="25,0,0,0"
                                                         FontStyle="Italic"
@@ -152,15 +158,35 @@
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
-
-
-
                                     </StackPanel>
 
                                     <!--  ==========================  -->
                                     <!--  TOOL BUTTONS  -->
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
+
+                                        <Button
+                                            x:Name="Workspace"
+                                            Width="165"
+                                            Margin="15,8,12,12"
+                                            cal:Message.Attach="Workspace($dataContext)"
+                                            IsEnabled="True">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
+                                                    <Setter Property="Padding" Value="0,3,0,3" />
+                                                </Style>
+                                            </Button.Style>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    Width="36"
+                                                    Height="36"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="MonitorDashboard" />
+                                                <TextBlock VerticalAlignment="Center">ClearDashboard</TextBlock>
+                                            </StackPanel>
+                                        </Button>
 
                                         <Button
                                             Width="165"
@@ -183,7 +209,6 @@
                                             </StackPanel>
                                         </Button>
 
-
                                         <Button
                                             Width="165"
                                             Margin="8"
@@ -205,7 +230,7 @@
                                             </StackPanel>
                                         </Button>
 
-                                        <Button
+                                        <!--<Button
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
@@ -221,9 +246,9 @@
                                                     View Alignment
                                                 </TextBlock>
                                             </StackPanel>
-                                        </Button>
+                                        </Button>-->
 
-                                        <Button
+                                        <!--<Button
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
@@ -244,7 +269,7 @@
                                                     ClearSuggester
                                                 </TextBlock>
                                             </StackPanel>
-                                        </Button>
+                                        </Button>-->
 
                                     </StackPanel>
 

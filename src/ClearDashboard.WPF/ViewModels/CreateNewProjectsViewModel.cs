@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,7 +26,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region Properties
-        public ProjectManager ProjectManager { get; set; }
+        public ProjectManager _projectManager { get; set; }
+        private readonly ILogger _logger;
 
         protected Canvas DrawCanvasTop { get; set; }
         protected Canvas DrawCanvasBottom { get; set; }
@@ -114,6 +116,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection flowDirection
+        {
+            get => _flowDirection;
+            set
+            {
+                _flowDirection = value;
+                NotifyOfPropertyChange(() => flowDirection);
+            }
+        }
         public string ProjectName
         {
             get => DashboardProject?.ProjectName;
@@ -138,7 +150,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
-            ProjectManager = projectManager;
+            _projectManager = projectManager;
+            _logger = logger;
+
+            flowDirection = _projectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion
@@ -165,8 +180,8 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             SetupUserHelp();
 
-            await ProjectManager.SetupParatext();
-            DashboardProject = ProjectManager.CreateDashboardProject();
+            await _projectManager.SetupParatext();
+            DashboardProject = _projectManager.CreateDashboardProject();
 
         }
 
@@ -253,7 +268,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             DashboardProject.TargetProject = project;
 
                             // look for linked back translations
-                            var backTranslationProjects = ProjectManager.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
+                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
                             foreach (var backTranslationProject in backTranslationProjects)
                             {
                                 if (DashboardProject.BackTranslationProjects.All(p => p.Name != backTranslationProject.Name))
@@ -1241,7 +1256,14 @@ namespace ClearDashboard.Wpf.ViewModels
                 // unlikely ever to be true but just in case
                 return;
             }
-            await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+
+            // TODO HACK TO SAVE CURRENT PROJECT AS OBJECT
+            //string jsonString = JsonSerializer.Serialize(DashboardProject);
+            //File.WriteAllText(@"c:\temp\project.json", jsonString);
+
+
+
+            await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
     

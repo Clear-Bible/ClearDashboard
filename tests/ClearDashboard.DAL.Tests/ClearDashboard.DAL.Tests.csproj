@@ -1,13 +1,98 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net6.0-windows</TargetFramework>
+	  <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
 
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MockData\USFM\0121GENdedBible.SFM" />
+    <None Remove="MockData\USFM\0137GENdedBible.SFM" />
+    <None Remove="MockData\USFM\0139GENCLEAR.SFM" />
+    <None Remove="MockData\USFM\01GEN21dedBible.SFM" />
+    <None Remove="MockData\USFM\01GENCLEAR.SFM" />
+    <None Remove="MockData\USFM\01GENdedBible.SFM" />
+    <None Remove="MockData\USFM\1702ESTNET.SFM" />
+    <None Remove="MockData\USFM\20-Proverbs.usfm" />
+    <None Remove="MockData\USFM\2017Proverbs.usfm" />
+    <None Remove="MockData\USFM\2102ECCruCARS13.SFM" />
+    <None Remove="MockData\USFM\2502LAMzz_SUR.SFM" />
+    <None Remove="MockData\USFM\2710DANCUV.SFM" />
+    <None Remove="MockData\USFM\27DANCUV.SFM" />
+    <None Remove="MockData\USFM\2802HOSpor.SFM" />
+    <None Remove="MockData\USFM\3804ZEC4dedBible.SFM" />
+    <None Remove="MockData\USFM\3808ZEC8dedBible.SFM" />
+    <None Remove="MockData\USFM\38ZEC4dedBible.SFM" />
+    <None Remove="MockData\USFM\38ZEC8dedBible.SFM" />
+    <None Remove="MockData\USFM\3902MALdedBible.SFM" />
+    <None Remove="MockData\USFM\4202MRKNTG.SFM" />
+    <None Remove="MockData\USFM\5002EPHCSPI1.SFM" />
+    <None Remove="MockData\USFM\5202COLurUCVv1.SFM" />
+    <None Remove="MockData\VerseText\1702ESTNET.txt" />
+    <None Remove="MockData\VerseText\2102ECCruCARS13.txt" />
+    <None Remove="MockData\VerseText\2502LAMzz_SUR.txt" />
+    <None Remove="MockData\VerseText\2802HOSpor.txt" />
+    <None Remove="MockData\VerseText\3902MALdedBible.txt" />
+    <None Remove="MockData\VerseText\4202MRKNTG.txt" />
+    <None Remove="MockData\VerseText\5002EPHCSPI1.txt" />
+    <None Remove="MockData\VerseText\5202COLurUCVv1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MockData\USFM\1702ESTNET.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2102ECCruCARS13.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2502LAMzz_SUR.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2802HOSpor.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\3902MALdedBible.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\4202MRKNTG.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\5002EPHCSPI1.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\5202COLurUCVv1.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\1702ESTNET.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\2102ECCruCARS13.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\2502LAMzz_SUR.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\2802HOSpor.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\3902MALdedBible.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\4202MRKNTG.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\5002EPHCSPI1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\5202COLurUCVv1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
