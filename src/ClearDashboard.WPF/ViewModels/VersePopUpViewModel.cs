@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Helpers;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;

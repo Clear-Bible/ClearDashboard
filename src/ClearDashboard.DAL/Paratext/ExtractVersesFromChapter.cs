@@ -21,8 +21,15 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <returns></returns>
         public static List<string> ParseUSFM(ILogger logger, ParatextProject project, Verse verse)
         {
+            ParatextUtils paratextUtils = new ParatextUtils(logger as ILogger<ParatextUtils>);
+            string projectPath = "";
+            if (paratextUtils.IsParatextInstalled())
+            {
+                projectPath = paratextUtils.ParatextProjectPath;
+            }
+
             var stylesheetPath = GetStyleSheetPath(logger, project);
-            string usfmBookPath = GetUsfmBookPath(project, verse);
+            string usfmBookPath = GetUsfmBookPath(project, verse, projectPath);
 
             if (usfmBookPath == String.Empty || stylesheetPath == String.Empty)
             {
@@ -38,8 +45,10 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 string usfm = reader.ReadToEnd();
                 var tokens = parser.Parse(usfm, false);
 
+                UsfmTokenType lastTokeType = UsfmTokenType.Unknown;
                 foreach (var token in tokens)
                 {
+                    
                     if (token.Type is UsfmTokenType marker)
                     {
                         switch (marker)
@@ -51,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                                 //lines.Add($"{token.Marker} {token.Text}");
                                 break;
                             case UsfmTokenType.Chapter:
-                                lines.Add($@"\c {token.Text}");
+                                //lines.Add($@"\c {token.Text}");
                                 break;
                             case UsfmTokenType.Character:
                                 //lines.Add($"Marker Character: {token.Marker} {token.Text}");
@@ -125,23 +134,6 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         private static string GetStyleSheetPath(ILogger logger, ParatextProject project)
         {
-            //// look for custom usfm stylesheet
-            //var stylesheetPath = Path.Combine(project.DirectoryPath, "custom.sty");
-            //if (!File.Exists(stylesheetPath))
-            //{
-            //    // get the standard Paratext one
-            //    ParatextUtils paratextUtils = new ParatextUtils((ILogger<ParatextUtils>)logger);
-            //    if (paratextUtils.IsParatextInstalled())
-            //    {
-            //        var projectPath = paratextUtils.ParatextProjectPath;
-            //        var standardStyleSheet = Path.Combine(projectPath, "usfm.sty");
-            //        if (File.Exists(standardStyleSheet))
-            //        {
-            //            stylesheetPath = standardStyleSheet;
-            //        }
-            //    }
-            //}
-
             // get the standard Paratext one
             string stylesheetPath = "";
             ParatextUtils paratextUtils = new ParatextUtils(logger as ILogger<ParatextUtils>);
@@ -157,7 +149,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return stylesheetPath;
         }
 
-        private static string GetUsfmBookPath(ParatextProject project, Verse verse)
+        private static string GetUsfmBookPath(ParatextProject project, Verse verse, string projectPath)
         {
             var book = verse.BookNum;
             // get the file name for that book
@@ -168,7 +160,8 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 return string.Empty;
             }
 
-            return bookFile.FilePath;
+            var path = Path.Combine(projectPath, project.Name, bookFile.FilePath);
+            return path;
         }
 
         public static bool IsNumeric(string input)

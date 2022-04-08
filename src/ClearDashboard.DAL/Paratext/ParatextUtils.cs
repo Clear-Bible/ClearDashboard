@@ -563,10 +563,10 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             fileName += project.FileNamePostPart;
                         }
 
-                        books[i].FilePath = Path.Combine(directory, fileName);
+                        books[i].FilePath = fileName;
 
                         // check if the file exists
-                        if (!File.Exists(books[i].FilePath))
+                        if (!File.Exists(Path.Combine(directory, fileName)))
                         {
                             // check to see if the file exists with a .usx ending instead
                             fileName = fileName.Substring(0, fileName.LastIndexOf("."));
@@ -582,6 +582,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                                 books[i].Available = false;
                             }
                         }
+
 
                     }
                 }
