@@ -46,13 +46,17 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public WordMeaningsViewModel()
         {
-            this.Title = "⌺ WORD MEANINGS";
-            this.ContentId = "WORDMEANINGS";
-            this.DockSide = EDockSide.Left;
+
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager)
         {
+            this.Title = "⌺ WORD MEANINGS";
+            this.ContentId = "WORDMEANINGS";
+            this.DockSide = EDockSide.Left;
+
+            _logger = logger;
+
             _projectManager = projectManager;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;

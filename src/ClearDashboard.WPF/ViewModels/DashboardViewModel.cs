@@ -64,7 +64,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        internal void Initialize()
+        private void Initialize()
         {
 
             this.Title = "📐 DASHBOARD";
