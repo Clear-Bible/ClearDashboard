@@ -23,12 +23,13 @@
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding flowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    SizeChanged="window_SizeChanged"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d" SizeChanged="window_SizeChanged">
+    mc:Ignorable="d">
 
     <Window.DataContext>
         <viewModels:VersePopUpViewModel />

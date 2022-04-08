@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Common", "Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin", "ClearDashboard.ParatextPlugin\ClearDashboard.ParatextPlugin.csproj", "{C15A13E5-60AE-4249-8B15-1AA1B026512C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Tests", "ClearDashboard.Tests\ClearDashboard.Tests.csproj", "{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}"
-EndProject
 Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Program Files\Paratext 9\Paratext.exe", "{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}"
 	ProjectSection(DebuggerProjectSystem) = preProject
 		PortSupplier = 00000000-0000-0000-0000-000000000000
@@ -73,14 +71,6 @@ Global
 		{C15A13E5-60AE-4249-8B15-1AA1B026512C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C15A13E5-60AE-4249-8B15-1AA1B026512C}.Release|x64.ActiveCfg = Release|Any CPU
 		{C15A13E5-60AE-4249-8B15-1AA1B026512C}.Release|x64.Build.0 = Release|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Debug|x64.Build.0 = Debug|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Release|x64.ActiveCfg = Release|Any CPU
-		{A407E3A7-8098-44E3-8792-AE6CAF4B0F38}.Release|x64.Build.0 = Release|Any CPU
 		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Debug|Any CPU.ActiveCfg = Release|x64
 		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Debug|x64.ActiveCfg = Release|x64
 		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Release|Any CPU.ActiveCfg = Release|x64
