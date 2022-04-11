@@ -101,7 +101,9 @@
 		<Resource Include="Resources\ClearDashboard_logo_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
-		<Resource Include="Resources\logos_icon.png" />
+		<Resource Include="Resources\logos_icon.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="Resources\NewProject_Icon_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>

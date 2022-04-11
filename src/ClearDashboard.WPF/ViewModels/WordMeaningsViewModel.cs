@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.SQLite;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Pipes_Shared;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -164,11 +155,13 @@ namespace ClearDashboard.Wpf.ViewModels
             _logger = logger;
 
             _projectManager = projectManager;
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
 
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
+
         }
 
         #endregion //Constructor
@@ -191,6 +184,8 @@ namespace ClearDashboard.Wpf.ViewModels
                 case ActionType.CurrentVerse:
                     if (_currentVerse != pipeMessage.Text)
                     {
+                        _currentVerse = pipeMessage.Text;
+                        CurrentBcv.SetVerseFromId(_currentVerse);
                         if (_currentVerse.EndsWith("000"))
                         {
                             // a zero based verse
@@ -214,55 +209,13 @@ namespace ClearDashboard.Wpf.ViewModels
                             {
                                 _isOT = false;
                             }
-                            // run these tasks without an await
-                            _ = ProcessSourceVerseData(CurrentBcv);
-                            ProcessTargetVerseData(pipeMessage);
+
                             _ = ReloadWordMeanings();
                         }
                     }
 
                     break;
             }
-        }
-
-        private void ProcessTargetVerseData(PipeMessage message)
-        {
-            // invoke to get it to run in STA mode
-            Application.Current.Dispatcher.Invoke((Action)delegate
-            {
-                _sourceVerses = "";
-
-                // deserialize the list
-                var sourceVerseXML = JsonConvert.DeserializeObject<string>((string)message.Payload);
-
-                //File.WriteAllText(@"D:\temp\file.usx", sourceVerseXML, Encoding.UTF8);
-
-                // Make the Unformatted version
-                _targetInlinesText.Clear();
-                var usxList = Helpers.UsxParser.ParseXMLToList(sourceVerseXML);
-                foreach (var line in usxList)
-                {
-                    _targetInlinesText.Add(line);
-                }
-
-                NotifyOfPropertyChange(() => TargetInlinesText);
-
-
-                // Make the Formatted version
-                string startupPath = AppDomain.CurrentDomain.BaseDirectory;
-                string xsltPath = Path.Combine(startupPath, @"resources\usx.xslt");
-                if (File.Exists(xsltPath))
-                {
-                    var usxHtml = Helpers.UsxParser.TransformXMLToHTML(sourceVerseXML, xsltPath);
-                    TargetHTML = usxHtml;
-                }
-
-
-
-
-                // File.WriteAllText(@"D:\temp\output.html", TargetHTML);
-
-            });
         }
 
         /// <summary>
@@ -297,53 +250,6 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => WordData);
         }
 
-        private async Task ProcessSourceVerseData(BookChapterVerse bcv)
-        {
-            List<CoupleOfStrings> verseData = new List<CoupleOfStrings>();
-
-            await Task.Run(() =>
-            {
-                // connect to the manuscript database
-                var appPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-                string verseFile = Path.Combine(appPath, "Clear_Projects", "manuscriptverses.sqlite");
-                // read in the info
-                Connection connVerse = new Connection(verseFile);
-                ReadData rdVerse = new ReadData(connVerse.Conn);
-
-                // get the manuscript verse from the database
-                verseData = rdVerse.GetSourceChapterText(bcv.VerseLocationId);
-            }).ConfigureAwait(false);
-
-            // invoke to get it to run in STA mode
-            Application.Current.Dispatcher.Invoke((Action)delegate
-            {
-                _sourceInlinesText.Clear();
-                foreach (var verse in verseData)
-                {
-                    if (verse.stringA.EndsWith(bcv.VerseIdText))
-                    {
-                        _sourceInlinesText.Add(
-                            new Run("(" + Convert.ToInt16(verse.stringA.Substring(5, 3)) + ") " + verse.stringB)
-                            {
-                                Foreground = Brushes.Cyan
-                            });
-                        _sourceInlinesText.Add(new Run("\n"));
-                    }
-                    else
-                    {
-                        _sourceInlinesText.Add(
-                            new Run("(" + Convert.ToInt16(verse.stringA.Substring(5, 3)) + ") " + verse.stringB)
-                            {
-                                Foreground = Brushes.AntiqueWhite
-                            });
-                        _sourceInlinesText.Add(new Run("\n"));
-                    }
-                }
-
-                NotifyOfPropertyChange(() => SourceInlinesText);
-            });
-        }
 
         #endregion // Methods
 

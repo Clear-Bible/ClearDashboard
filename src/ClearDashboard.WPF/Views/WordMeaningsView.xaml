@@ -4,13 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewModels:WordMeaningsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding flowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
     <Grid>
         <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -61,8 +69,13 @@
                                             Foreground="{StaticResource BlueLightBrush}"
                                             Text="{Binding Glosses}"
                                             TextWrapping="Wrap" />
-                                        <Button Width="32" Height="32">
-                                            <Image Source="pack://application:,,,/resources/logos_icon.png" />
+                                        <Button
+                                            Width="32"
+                                            Height="32"
+                                            Padding="0">
+                                            <Button.Content>
+                                                <Image Source="/Resources/logos_icon.png" />
+                                            </Button.Content>
                                         </Button>
                                     </StackPanel>
 
@@ -151,4 +164,5 @@
         </ScrollViewer>
 
     </Grid>
+
 </UserControl>
