@@ -66,7 +66,7 @@ namespace ClearDashboard.Common.Models
         }
 
         /// <summary>
-        /// The Book ID number as a padded string. Automatically calculated from BookNum.
+        /// The Book ID number as a padded string. Automatically calculated from BookStr.
         /// </summary>
         public string Book => BookNum.ToString().PadLeft(2, '0');
 
