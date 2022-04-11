@@ -1,7 +1,9 @@
 ﻿using ClearDashboard.Common.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using Unidecode.NET;
@@ -33,7 +35,7 @@ namespace ClearDashboard.Wpf.Helpers
             }
 
             List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(linksFilePath, bcv);
-
+            
             return mr;
         }
 
@@ -77,6 +79,7 @@ namespace ClearDashboard.Wpf.Helpers
             List<MARBLEresource> resourceList = new List<MARBLEresource>();
 
             // load up the resources
+            int ID = 0;
             foreach (var lexicalLink in lexicalLinks)
             {
                 LexicalLookUp item = null;
@@ -110,8 +113,6 @@ namespace ClearDashboard.Wpf.Helpers
 
                 if (item != null)
                 {
-
-
                     // read in the XML file and go to the line number
                     // read in the lookup file and put into a dictionary lookup
                     string startupPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -159,50 +160,56 @@ namespace ClearDashboard.Wpf.Helpers
                                 int iSenseID = Convert.ToInt32(senseID);
                                 int ilinkSenseID = Convert.ToInt32(lexicalLink.SenseID);
 
-                                if (iSenseID - 1 == ilinkSenseID)
-                                {
+                                //if (iSenseID - 1 == ilinkSenseID)
+                                //{
                                     XmlNodeList nodeEntry = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]");
                                     MARBLEresource mr = new MARBLEresource();
 
                                     if (nodeEntry.Count > 0)
                                     {
                                         // get the domain
-                                        var nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXDomains/LEXDomain");
+                                        var nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXDomains/LEXDomain");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.Domains += nodeInner.InnerText + ", ";
                                         }
 
                                         // get the subdomain
-                                        nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSubDomains");
+                                        nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSubDomains");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.SubDomains += nodeInner.InnerText + ", ";
                                         }
 
                                         // get the definition long
-                                        nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionLong");
+                                        nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionLong");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.DefinitionLong += nodeInner.InnerText + ", ";
                                         }
 
                                         // get the definition short
-                                        nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionShort");
+                                        nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionShort");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.DefinitionShort += nodeInner.InnerText + ", ";
                                         }
 
                                         // get the glosses
-                                        nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Glosses/Gloss");
+                                        nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Glosses/Gloss");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.Glosses += nodeInner.InnerText + ", ";
                                         }
 
                                         // get the comments
-                                        nodes = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Comments");
+                                        nodes = doc.SelectNodes(
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Comments");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.Comment += nodeInner.InnerText + ", ";
@@ -228,36 +235,45 @@ namespace ClearDashboard.Wpf.Helpers
                                             mr.Comment = mr.Comment.Trim();
                                             mr.Comment = mr.Comment.Substring(0, mr.Comment.Length - 1);
                                         }
+
                                         if (mr.DefinitionLong != "")
                                         {
                                             mr.DefinitionLong = mr.DefinitionLong.Trim();
-                                            mr.DefinitionLong = mr.DefinitionLong.Substring(0, mr.DefinitionLong.Length - 1);
+                                            mr.DefinitionLong =
+                                                mr.DefinitionLong.Substring(0, mr.DefinitionLong.Length - 1);
                                         }
+
                                         if (mr.DefinitionShort != "")
                                         {
                                             mr.DefinitionShort = mr.DefinitionShort.Trim();
-                                            mr.DefinitionShort = mr.DefinitionShort.Substring(0, mr.DefinitionShort.Length - 1);
+                                            mr.DefinitionShort =
+                                                mr.DefinitionShort.Substring(0, mr.DefinitionShort.Length - 1);
                                         }
+
                                         if (mr.Domains != "")
                                         {
                                             mr.Domains = mr.Domains.Trim();
                                             mr.Domains = mr.Domains.Substring(0, mr.Domains.Length - 1);
                                         }
+
                                         if (mr.SubDomains != "")
                                         {
                                             mr.SubDomains = mr.SubDomains.Trim();
                                             mr.SubDomains = mr.SubDomains.Substring(0, mr.SubDomains.Length - 1);
                                         }
+
                                         if (mr.Glosses != "")
                                         {
                                             mr.Glosses = mr.Glosses.Trim();
                                             mr.Glosses = mr.Glosses.Substring(0, mr.Glosses.Length - 1);
                                         }
+
                                         if (mr.Strong != "")
                                         {
                                             mr.Strong = mr.Strong.Trim();
                                             mr.Strong = mr.Strong.Substring(0, mr.Strong.Length - 1);
                                         }
+
                                         mr.SenseId = senseID;
                                         mr.PoS = mr.PoS.Trim();
                                         mr.Word = lexicalLink.Lemma;
@@ -276,18 +292,39 @@ namespace ClearDashboard.Wpf.Helpers
                                             mr.WordTransliterated = lexicalLink.Lemma.Unidecode();
                                         }
 
+                                        mr.ID = ID;
+
+                                        if (iSenseID - 1 == ilinkSenseID)
+                                        {
+                                            mr.IsSense = true;
+                                        }
+
                                         resourceList.Add(mr);
                                     }
+                                
+                                //}
 
-                                }
                             }
                         }
                     }
                 }
 
+                ID++;
 
             }
 
+            // group by to get the totals
+
+            var groups = resourceList.GroupBy(p => p.ID);
+            foreach (var group in groups)
+            {
+                int count = group.Count();
+
+                foreach (var item in group)
+                {
+                    item.TotalSenses = count;   
+                }
+            }
 
             return resourceList;
         }

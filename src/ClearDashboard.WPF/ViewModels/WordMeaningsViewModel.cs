@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
@@ -8,9 +9,11 @@ using Microsoft.Extensions.Logging;
 using Pipes_Shared;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -25,9 +28,22 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private string _currentVerse = "";
 
+        List<MARBLEresource> _whatIsThisWord = new List<MARBLEresource>();
+
         #endregion //Member Variables
 
         #region Public Properties
+
+        private Visibility _buttonVisibility = Visibility.Hidden;
+        public Visibility ButtonVisibility
+        {
+            get => _buttonVisibility;
+            set
+            {
+                _buttonVisibility = value;
+                NotifyOfPropertyChange(() => ButtonVisibility);
+            }
+        }
 
 
         #endregion //Public Properties
@@ -140,6 +156,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion //Observable Properties
 
+        #region Commands
+
+        public ICommand LaunchLogosCommand { get; set; }
+        public ICommand LaunchSensesCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
+
+        #endregion
+
         #region Constructor
         public WordMeaningsViewModel()
         {
@@ -162,11 +186,75 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
 
+            // wire up the commands
+            LaunchLogosCommand = new RelayCommand(ShowLogos);
+            LaunchSensesCommand = new RelayCommand(ShowSenses);
+            GoBackCommand = new RelayCommand(RefreshWords);
         }
 
         #endregion //Constructor
 
         #region Methods
+
+        private void ShowSenses(object obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            MARBLEresource mr = (MARBLEresource)obj;
+            if (mr.TotalSenses == 1)
+            {
+                return;
+            }
+
+            if (this.ButtonVisibility == Visibility.Visible)
+            {
+                // we are in the details already...jump back up a level
+                this.RefreshWords(null);
+                return;
+            }
+
+
+            int ID = mr.ID;
+
+            var items = _whatIsThisWord.Where(p => p.ID == ID);
+
+            WordData.Clear();
+            foreach (var item in items)
+            {
+                WordData.Add(item);
+            }
+
+            ButtonVisibility = Visibility.Visible;
+        }
+
+        private void ShowLogos(object obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            MARBLEresource mr = (MARBLEresource)obj;
+
+            // OT or NT?
+            if (CurrentBcv.BookNum < 40)
+            {
+                // Hebrew link
+                string hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + mr.LogosRef);
+            }
+            else
+            {
+                // Greek link
+                string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
+                LaunchWebPage.TryOpenUrl(greekPrefix + mr.LogosRef);
+            }
+
+        }
+
 
         /// <summary>
         /// Listen for changes in the DAL regarding any messages coming in
@@ -225,21 +313,38 @@ namespace ClearDashboard.Wpf.ViewModels
         private async Task ReloadWordMeanings()
         {
             GetWhatIsThisWord sd = new GetWhatIsThisWord();
-            List<MARBLEresource> whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv);
+            _whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv);
 
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
                 _wordData.Clear();
-                foreach (var marbleResource in whatIsThisWord)
+                foreach (var marbleResource in _whatIsThisWord)
                 {
-                    _wordData.Add(marbleResource);
+                    if (marbleResource.IsSense)
+                    {
+                        _wordData.Add(marbleResource);
+                    }
                 }
             });
 
             NotifyOfPropertyChange(() => WordData);
         }
 
+        private void RefreshWords(object obj)
+        {
+            _wordData.Clear();
+            foreach (var marbleResource in _whatIsThisWord)
+            {
+                if (marbleResource.IsSense)
+                {
+                    _wordData.Add(marbleResource);
+                }
+            }
+            NotifyOfPropertyChange(() => WordData);
+
+            ButtonVisibility = Visibility.Hidden;
+        }
 
         #endregion // Methods
     }

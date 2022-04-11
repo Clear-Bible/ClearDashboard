@@ -6,6 +6,8 @@ namespace ClearDashboard.Common.Models
 {
     public class MARBLEresource
     {
+        public int ID { get; set; }
+        public int TotalSenses { get; set; }
         public string Word { get; set; } = "";
         public string WordTransliterated { get; set; }
         public string SenseId { get; set; } = "";
@@ -18,6 +20,7 @@ namespace ClearDashboard.Common.Models
         public string DefinitionShort { get; set; } = "";
         public string PoS { get; set; } = "";
         public string LogosRef { get; set; } = "";
+        public bool IsSense { get; set; } = false;
     }
 
 }
