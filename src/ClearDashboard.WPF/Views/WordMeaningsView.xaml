@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
@@ -37,7 +36,7 @@
             </Button>
 
             <helpers:ScrollingToTopListBox
-                x:Name="lvSenses"
+                x:Name="LVSenses"
                 DockPanel.Dock="Bottom"
                 ItemsSource="{Binding WordData}"
                 Style="{StaticResource MaterialDesignListBox}">
@@ -55,7 +54,7 @@
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=lvSenses}" Value="Hidden">
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
                                                     <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInactiveBorder}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -96,7 +95,7 @@
                                         Width="32"
                                         Height="32"
                                         Padding="0"
-                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=lvSenses}"
+                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
                                         CommandParameter="{Binding}">
                                         <Button.Content>
                                             <Image Source="/Resources/logos_icon.png" />
@@ -124,7 +123,7 @@
                                         TextWrapping="Wrap" />
                                 </StackPanel>
 
-                                <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                <!--<StackPanel Margin="15,0,0,0" Orientation="Horizontal">
                                     <TextBlock
                                         Width="50"
                                         FontStyle="Italic"
@@ -138,7 +137,7 @@
                                         FontSize="16"
                                         FontWeight="Bold"
                                         Text="{Binding PoS}" />
-                                </StackPanel>
+                                </StackPanel>-->
 
                                 <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
                                     <TextBlock
@@ -169,14 +168,14 @@
                                         Margin="0,0,2,0"
                                         Padding="0"
                                         VerticalAlignment="Center"
-                                        Command="{Binding DataContext.LaunchSensesCommand, ElementName=lvSenses}"
+                                        Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
                                         CommandParameter="{Binding}"
                                         FontSize="14">
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInactiveBorder}" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=lvSenses}" Value="Hidden">
+                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
                                                         <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
