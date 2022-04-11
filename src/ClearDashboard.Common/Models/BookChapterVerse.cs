@@ -174,7 +174,7 @@ namespace ClearDashboard.Common.Models
         /// </summary>
         /// <param name="verseId">Paratext verse ID</param>
         /// <returns>Success of parsing IncommingVerseLocation.</returns>
-        public bool SetVerseFromId(string verseId, bool isParatext = true)
+        public bool SetVerseFromId(string verseId)
         {
             // Convert the number into a string we can parse.
             string _VerseLocationId = verseId.ToString().PadLeft(8, '0');

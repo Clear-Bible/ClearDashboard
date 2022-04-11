@@ -270,7 +270,7 @@ namespace ClearDashboardPlugin
                         Action = ActionType.CurrentVerse,
                         Text = m_verseRef.BBBCCCVVV.ToString(),
                     }).ConfigureAwait(false);
-                    AppendText(MsgColor.Orange, "OUTBOUND -> " + message.Action.ToString());
+                    AppendText(MsgColor.Orange, "OUTBOUND -> SetCurrentVerse");
                     break;
                 case ActionType.CurrentVerse:
 
@@ -492,7 +492,7 @@ namespace ClearDashboardPlugin
             if (newReference != m_verseRef)
             {
                 m_verseRef = newReference;
-                await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.CurrentVerse }).ConfigureAwait(false);
+                await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.GetCurrentVerse }).ConfigureAwait(false);
             }
         }
 

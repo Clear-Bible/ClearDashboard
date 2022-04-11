@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using ClearDashboard.Common.Models;
+using ClearDashboard.Wpf.ViewModels;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.Wpf.UserControls
 {
@@ -12,8 +13,6 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class BcvUserControl : UserControl
     {
-        //private SantaFeMessageHandler santaFeMessageHandler;
-
         public static readonly DependencyProperty _isRtl =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
@@ -70,9 +69,6 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(_verseNums, value);
         }
 
-        //public ScrollGroup ScrollGroupSelectedValue => (ScrollGroup)cboScrollGroup.SelectedItem;
-
-        //private readonly List<ScrollGroup> ScrollGroups = ScrollGroupList.GetScrollGroupList();
 
         public BcvUserControl()
         {
@@ -106,30 +102,8 @@ namespace ClearDashboard.Wpf.UserControls
             btnVerseLeft.IsEnabled = true;
             btnVerseRight.IsEnabled = true;
 
-            //cboScrollGroup.ItemsSource = ScrollGroups;
-            //cboScrollGroup.SelectedIndex = 0;
 
-            // After the page is loaded, setup the event to watch for Paratext verse location changes.
-            //santaFeMessageHandler = new SantaFeMessageHandler();
-            //santaFeMessageHandler.VerseLocationChangedMsgEventHandler += new MsgEventHandler(VerseLocationMessageEventHandler);
         }
-
-        /// <summary>
-        ///  This is run when a new SantaFeMessage event happens.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        //private void VerseLocationMessageEventHandler(object source, VerseLocationChangedEventArgs e)
-        //{
-        //    IDictionary<string, string> verseInfo = e.EventInfo;
-        //    string scriptureReference = verseInfo.First(f => f.Key.Equals("Scripture Reference", StringComparison.Ordinal)).Value;
-        //    string scrollGroup = verseInfo.First(f => f.Key.Equals("Scroll Group", StringComparison.Ordinal)).Value;
-
-        //    if (ScrollGroupSelectedValue != null && ScrollGroupSelectedValue.Value == scrollGroup)
-        //    {
-        //        _ = CurrentBCV.SetVerseFromId(scriptureReference);
-        //    }
-        //}
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -143,22 +117,8 @@ namespace ClearDashboard.Wpf.UserControls
                 {
                     cboVerse.SelectedIndex = 0;
                 }
-
-                //SantaFeScriptureLocationUpdate();
             }
         }
-
-        //private void SantaFeScriptureLocationUpdate()
-        //{
-        //    if (santaFeMessageHandler != null
-        //        && ScrollGroupSelectedValue != null
-        //        && !ScrollGroupSelectedValue.ItemName.Equals("NONE", StringComparison.OrdinalIgnoreCase)
-        //        && CurrentBCV.Chapter != null
-        //        && CurrentBCV.Verse != null)
-        //    {
-        //        santaFeMessageHandler.SetSantaFeScriptureReference(CurrentBCV.BookNum, (int)CurrentBCV.Chapter, (int)CurrentBCV.Verse, ScrollGroupSelectedValue.Value);
-        //    }
-        //}
 
         private void BookUpArrow_Click(object sender, RoutedEventArgs e)
         {
@@ -225,5 +185,23 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            viewModel.PropertyChanged += (sender, args) => {
+                if (args.PropertyName.Equals("CurrentBcv"))
+
+
+
+                    return;
+                // execute code here.
+            };
+
+            if (DataContext is WorkSpaceViewModel vm)
+            {
+                CurrentBCV = vm.CurrentBcv;
+            }
+            
+        }
     }
 }

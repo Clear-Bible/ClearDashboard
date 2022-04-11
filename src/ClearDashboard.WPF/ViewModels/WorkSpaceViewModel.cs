@@ -53,6 +53,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
         }
+
+        public bool IsRtl { get; set; } = false;
+
         #endregion //Public Properties
 
         #region Commands
@@ -87,7 +90,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-
         private string _verseRef;
         public string VerseRef
         {
@@ -98,8 +100,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => VerseRef);
             }
         }
-
-
 
         private string _windowIdToLoad;
         public string WindowIDToLoad
@@ -165,6 +165,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private BookChapterVerse _currentBcv = new();
+        public BookChapterVerse CurrentBcv
+        {
+            get => _currentBcv;
+            set
+            {
+                _currentBcv = value;
+                NotifyOfPropertyChange(() => CurrentBcv);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -430,6 +440,11 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 case ActionType.CurrentVerse:
                     this.VerseRef = pipeMessage.Text;
+                    if (pipeMessage.Text != CurrentBcv.GetVerseId())
+                    {
+                        _currentBcv.SetVerseFromId(pipeMessage.Text);
+                        NotifyOfPropertyChange(() => CurrentBcv);
+                    }
                     break;
                 case ActionType.OnConnected:
                     break;
@@ -450,6 +465,115 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #endregion // Methods
+
+        #region BCV Navigation
+
+        /// <summary>
+        /// Given a book ID, this fills the ChapNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
+        /// </summary>
+        /// <param name="bookId">What book do you want a chapter list and verse ID from?</param>
+        /// <param name="sVerseId">If set, this value is returned.</param>
+        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
+        private string GetNumberOfChapters(string bookId, string sVerseId)
+        {
+            return "";
+
+            //if (Alignment == null)
+            //{
+            //    return string.Empty;
+            //}
+
+            //CurrentBcv.ChapterNumbers = new List<int>(Alignment.verses
+            //    .Where(w => w.VerseId.Substring(0, 2).Equals(bookId, StringComparison.Ordinal))
+            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(2, 3)))
+            //    .Distinct().OrderBy(o => o));
+
+            //if (sVerseId == "")
+            //{
+            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 2)
+            //        .Equals(bookId, StringComparison.Ordinal))
+            //        .Distinct().OrderBy(o => o.VerseId)
+            //        .First().VerseId;
+            //}
+            //else
+            //{
+            //    return sVerseId;
+            //}
+        }
+
+        /// <summary>
+        /// Given a book and chapter ID, this fills the VerseNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
+        /// </summary>
+        /// <param name="bookChapNum">What book and chapter do you want a verse list and verse ID from?</param>
+        /// <param name="sVerseId">If set, this value is returned.</param>
+        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
+        private string GetVerseNumberList(string bookChapNum, string sVerseId)
+        {
+            return "";
+
+            //if (Alignment == null)
+            //{
+            //    return string.Empty;
+            //}
+
+            //CurrentBcv.VerseNumbers = new List<int>(Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
+            //.Equals(bookChapNum, StringComparison.Ordinal))
+            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(5, 3)))
+            //    .Distinct().OrderBy(o => o));
+
+            //if (sVerseId == "" && CurrentBcv.VerseNumbers.Count != 0)
+            //{
+            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
+            //        .Equals(bookChapNum, StringComparison.Ordinal))
+            //        .Distinct().OrderBy(o => o.VerseId)
+            //        .FirstOrDefault().VerseId;
+            //}
+            //else
+            //{
+            //    return sVerseId;
+            //}
+        }
+
+        public void VerseChanged(string verseNum)
+        {
+            CurrentBcv.Verse = Convert.ToInt32(verseNum);
+            // SwitchVerse();
+        }
+
+
+        /// <summary>
+        /// Triggered when any change is reported for the data fields or properties of the Book Chapter Verse object.
+        /// </summary>
+        /// <param name="sender">This should always be the CurrentBcv object.</param>
+        /// <param name="e">Has information about what property changed.</param>
+        private void BcvChanged(object sender, PropertyChangedEventArgs e)
+        {
+            BookChapterVerse bcv = (BookChapterVerse)sender;
+            string bookChapNum = string.Concat(bcv.Book, bcv.ChapterIdText);
+
+            if (e.PropertyName == "BookName")
+            {
+                _ = GetNumberOfChapters(bcv.Book, bcv.VerseIdText);
+            }
+            else if (e.PropertyName == "Chapter")
+            {
+                _ = GetVerseNumberList(bookChapNum, "");
+            }
+
+            if (e.PropertyName == "VerseLocationId") // This is triggered by any change to the Book, Chapter, or Verse.
+            {
+                //SwitchVerse();
+                //VerseIdFull = $"{bcv.BookName} {bcv.Chapter}:{bcv.Verse}";
+
+                if (bcv.VerseNumbers.Count < 2)
+                {
+                    _ = GetVerseNumberList(bookChapNum, "");
+                }
+            }
+
+
+        }
+        #endregion
     }
 
     public class WorkspaceLayoutNames
