@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,14 +8,14 @@ using ClearDashboard.Common.Models;
 namespace ClearDashboard.Wpf.UserControls
 {
     /// <summary>
-    /// Interaction logic for BCVcontrol.xaml
+    /// Interaction logic for BookChapterVerse.xaml
     /// </summary>
-    public partial class BCVcontrol : UserControl
+    public partial class BcvUserControl : UserControl
     {
         //private SantaFeMessageHandler santaFeMessageHandler;
 
         public static readonly DependencyProperty _isRtl =
-            DependencyProperty.Register("IsRtl", typeof(bool), typeof(BCVcontrol),
+            DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
 
         public bool IsRtl
@@ -27,8 +25,8 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
         public static readonly DependencyProperty _currentBCV =
-            DependencyProperty.Register("CurrentBCV", typeof(BookChapterVerse), typeof(BCVcontrol),
-            new PropertyMetadata(new BookChapterVerse()));
+            DependencyProperty.Register("CurrentBCV", typeof(BookChapterVerse), typeof(BcvUserControl),
+                new PropertyMetadata(new BookChapterVerse()));
 
         public BookChapterVerse CurrentBCV
         {
@@ -43,7 +41,7 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
         public static readonly DependencyProperty _bookNames =
-            DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BCVcontrol),
+            DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
             new PropertyMetadata(new ObservableCollection<string>()));
 
         public ObservableCollection<string> BookNames
@@ -53,7 +51,7 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
         public static readonly DependencyProperty _chapNums =
-            DependencyProperty.Register("ChapNums", typeof(ObservableCollection<int>), typeof(BCVcontrol),
+            DependencyProperty.Register("ChapNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
             new PropertyMetadata(new ObservableCollection<int>()));
 
         public ObservableCollection<int> ChapNums
@@ -63,7 +61,7 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
         public static readonly DependencyProperty _verseNums =
-            DependencyProperty.Register("VerseNums", typeof(ObservableCollection<int>), typeof(BCVcontrol),
+            DependencyProperty.Register("VerseNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
             new PropertyMetadata(new ObservableCollection<int>()));
 
         public ObservableCollection<int> VerseNums
@@ -76,7 +74,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         //private readonly List<ScrollGroup> ScrollGroups = ScrollGroupList.GetScrollGroupList();
 
-        public BCVcontrol()
+        public BcvUserControl()
         {
             InitializeComponent();
             LayoutRoot.DataContext = this;
