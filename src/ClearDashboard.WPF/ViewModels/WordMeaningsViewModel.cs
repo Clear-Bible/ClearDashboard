@@ -224,16 +224,6 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private async Task ReloadWordMeanings()
         {
-            //// detect if Paratext is installed
-            //ParatextUtils paratextUtils = new ParatextUtils();
-            //bool isParatextInstalled = await paratextUtils.IsParatextInstalledAsync().ConfigureAwait(true);
-
-            //if (isParatextInstalled)
-            //{
-            //    // get the current verse
-            //    Debug.WriteLine(CurrentBcv.VerseLocationId);
-            //}
-
             GetWhatIsThisWord sd = new GetWhatIsThisWord();
             List<MARBLEresource> whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv);
 
@@ -252,7 +242,5 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #endregion // Methods
-
-
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
+﻿using ClearDashboard.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboard.Common.Models;
 using Unidecode.NET;
 
 namespace ClearDashboard.Wpf.Helpers
@@ -33,7 +31,6 @@ namespace ClearDashboard.Wpf.Helpers
             {
                 return new List<MARBLEresource>();
             }
-
 
             List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(linksFilePath, bcv);
 
