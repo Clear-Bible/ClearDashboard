@@ -57,7 +57,7 @@
                         Margin="5,5,5,5"
                         Padding="20"
                         HorizontalAlignment="Center"
-                        Background="{DynamicResource MaterialDesignCardBackground}"
+                        Background="{StaticResource MaterialDesignCardBackground}"
                         FontSize="14"
                         Foreground="WhiteSmoke"
                         TextWrapping="Wrap"

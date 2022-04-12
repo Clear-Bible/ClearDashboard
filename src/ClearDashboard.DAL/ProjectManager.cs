@@ -65,6 +65,7 @@ namespace ClearDashboard.DataAccessLayer
             GetNotes,
             GetProject,
             GetCurrentVerse,
+            GetUSX,
         }
 
 

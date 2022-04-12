@@ -6,7 +6,6 @@ using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Pipes_Shared;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -495,7 +495,8 @@ namespace ClearDashboard.Wpf.ViewModels
                         var biblicalTermsList = new List<BiblicalTermsData>();
                         try
                         {
-                            biblicalTermsList = JsonConvert.DeserializeObject<List<BiblicalTermsData>>((string)pipeMessage.Payload);
+                            string json = pipeMessage.Payload.ToString();
+                            biblicalTermsList = JsonSerializer.Deserialize<List<BiblicalTermsData>>(json);
                         }
                         catch (Exception e)
                         {

@@ -31,6 +31,8 @@ namespace Pipes_Shared
         GetNotes,
         GetProject,
         GetCurrentVerse,
+        GetUSX,
+        GetUSFM,
 
         SetBiblicalTerms,
         SetSourceVerseText,

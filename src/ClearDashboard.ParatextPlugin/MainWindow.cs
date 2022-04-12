@@ -321,6 +321,13 @@ namespace ClearDashboardPlugin
                     await WriteMessageToPipeAsync(message).ConfigureAwait(false);
                     AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
                     break;
+                case ActionType.GetUSFM:
+                    await ShowUSFMScripture().ConfigureAwait(false);
+                    break;
+                case ActionType.GetUSX:
+                    AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
+                    await ShowUSXScripture().ConfigureAwait(false);
+                    break;
                 case ActionType.OnConnected:
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
@@ -846,6 +853,23 @@ namespace ClearDashboardPlugin
             //    });
 
             //_ = GetNoteList("", dataPayload);
+        }
+
+        private async Task ShowUSXScripture()
+        {
+            var temp = m_project.GetUSX(m_verseRef.BookNum);
+            if (temp != null)
+            {
+                var dataPayload = JsonSerializer.Serialize(temp);
+
+                await WriteMessageToPipeAsync(new PipeMessage
+                {
+                    Action = ActionType.SetUSX,
+                    Text = $"BOOK: {m_verseRef.BookNum}",
+                    Payload = dataPayload
+                }).ConfigureAwait(false);
+                AppendText(MsgColor.Orange, "OUTBOUND -> SetUSX");
+            }
         }
 
 
