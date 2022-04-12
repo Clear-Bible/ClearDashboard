@@ -25,6 +25,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private readonly ILogger _logger;
         private readonly ProjectManager _projectManager;
+        private readonly TranslationSource _translationSource;
 
         private string _currentVerse = "";
 
@@ -170,15 +171,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager)
+        public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager, TranslationSource translationSource)
         {
             this.Title = "⌺ WORD MEANINGS";
             this.ContentId = "WORDMEANINGS";
             this.DockSide = EDockSide.Left;
 
             _logger = logger;
-
+            _translationSource = translationSource;
             _projectManager = projectManager;
+
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
@@ -312,8 +314,34 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private async Task ReloadWordMeanings()
         {
+            // SDBH & SDBG support the following language codes:
+            // en, fr, sp, pt, sw, zht, zhs
+
+            string languageCode = "";
+
+            switch (_translationSource.Language)
+            {
+                case "es":
+                    languageCode = "sp";
+                    break;
+                case "fr":
+                    languageCode = "fr";
+                    break;
+                case "zh-CN":
+                    languageCode = "zhs";
+                    break;
+                case "zh-TW":
+                    languageCode = "zht";
+                    break;
+                default:
+                    // default to English for everyone else
+                    languageCode = "en";
+                    break;
+            }
+
+
             GetWhatIsThisWord sd = new GetWhatIsThisWord();
-            _whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv);
+            _whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv, languageCode);
 
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((Action)delegate

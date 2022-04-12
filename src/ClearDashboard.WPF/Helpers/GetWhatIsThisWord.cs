@@ -13,7 +13,7 @@ namespace ClearDashboard.Wpf.Helpers
     public class GetWhatIsThisWord
     {
 
-        public List<MARBLEresource> GetSemanticDomainData(BookChapterVerse bcv)
+        public List<MARBLEresource> GetSemanticDomainData(BookChapterVerse bcv, string languageCode)
         {
             // Load up NIV84+ for this verse
             string filename = GetFilenameFromMarbleBook(bcv.BookNum);
@@ -34,7 +34,7 @@ namespace ClearDashboard.Wpf.Helpers
                 return new List<MARBLEresource>();
             }
 
-            List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(linksFilePath, bcv);
+            List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(linksFilePath, bcv, languageCode);
             
             return mr;
         }
@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Helpers
         /// <param name="filename"></param>
         /// <param name="bcv"></param>
         /// <returns></returns>
-        private List<MARBLEresource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerse bcv)
+        private List<MARBLEresource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerse bcv, string languageCode)
         {
             Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
             Dictionary<string, LexicalLookUp> SDBH = new Dictionary<string, LexicalLookUp>();
@@ -185,7 +185,7 @@ namespace ClearDashboard.Wpf.Helpers
 
                                         // get the definition long
                                         nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionLong");
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionLong");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.DefinitionLong += nodeInner.InnerText + ", ";
@@ -193,7 +193,7 @@ namespace ClearDashboard.Wpf.Helpers
 
                                         // get the definition short
                                         nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/DefinitionShort");
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionShort");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.DefinitionShort += nodeInner.InnerText + ", ";
@@ -201,7 +201,7 @@ namespace ClearDashboard.Wpf.Helpers
 
                                         // get the glosses
                                         nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Glosses/Gloss");
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Glosses/Gloss");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.Glosses += nodeInner.InnerText + ", ";
@@ -209,7 +209,7 @@ namespace ClearDashboard.Wpf.Helpers
 
                                         // get the comments
                                         nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='en']/Comments");
+                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Comments");
                                         foreach (XmlNode nodeInner in nodes)
                                         {
                                             mr.Comment += nodeInner.InnerText + ", ";
