@@ -44,8 +44,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public SourceContextViewModel()
         {
-            this.Title = "⬒ SOURCE CONTEXT";
-            this.ContentId = "SOURCECONTEXT";
+
         }
 
         public SourceContextViewModel(INavigationService navigationService, ILogger<SourceContextViewModel> logger, ProjectManager projectManager)
@@ -54,6 +53,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
 
+            this.Title = "⬒ SOURCE CONTEXT";
+            this.ContentId = "SOURCECONTEXT";
         }
 
         #endregion //Constructor

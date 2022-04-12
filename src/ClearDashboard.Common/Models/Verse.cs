@@ -6,7 +6,7 @@ namespace ClearDashboard.Common.Models
 {
     public class Verse
     {
-        public string BookNum
+        public string BookStr
         {
             get
             {
@@ -15,7 +15,16 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        public string ChapterNum
+        public int BookNum
+        {
+            get
+            {
+                var book = _VerseBBCCCVVV.Substring(0, 2);
+                return Convert.ToInt32(book);
+            }
+        }
+
+        public string ChapterStr
         {
             get
             {
@@ -24,12 +33,30 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        public string VerseNum
+        public int ChapterNum
+        {
+            get
+            {
+                var chap = _VerseBBCCCVVV.Substring(2, 3);
+                return Convert.ToInt32(chap);
+            }
+        }
+
+        public string VerseStr
         {
             get
             {
                 var verse = _VerseBBCCCVVV.Substring(5, 3);
                 return verse;
+            }
+        }
+
+        public int VerseNum
+        {
+            get
+            {
+                var verse = _VerseBBCCCVVV.Substring(5, 3);
+                return Convert.ToInt32(verse);
             }
         }
 

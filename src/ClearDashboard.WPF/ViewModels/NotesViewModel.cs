@@ -39,8 +39,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public NotesViewModel()
         {
-            this.Title = "🖉 NOTES";
-            this.ContentId = "NOTES";
+
         }
 
         public NotesViewModel(INavigationService navigationService, ILogger<NotesViewModel> logger, ProjectManager projectManager)
@@ -49,6 +48,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
 
+            this.Title = "🖉 NOTES";
+            this.ContentId = "NOTES";
 
         }
 

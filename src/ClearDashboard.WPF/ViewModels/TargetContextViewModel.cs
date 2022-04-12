@@ -44,12 +44,15 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public TargetContextViewModel()
         {
-            this.Title = "⬓ TARGET CONTEXT";
-            this.ContentId = "TARGETCONTEXT";
+
         }
 
         public TargetContextViewModel(INavigationService navigationService, ILogger<TargetContextViewModel> logger, ProjectManager projectManager)
         {
+            this.Title = "⬓ TARGET CONTEXT";
+            this.ContentId = "TARGETCONTEXT";
+
+            _logger = logger;
             _projectManager = projectManager;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;

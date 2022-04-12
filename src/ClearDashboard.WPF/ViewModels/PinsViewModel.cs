@@ -152,10 +152,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public PinsViewModel()
         {
-            this.Title = "⍒ PINS";
-            this.ContentId = "PINS";
 
-            PT_version_selected();
+
+
         }
 
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager)
@@ -165,6 +164,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
 
+            this.Title = "⍒ PINS";
+            this.ContentId = "PINS";
+
+            PT_version_selected();
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

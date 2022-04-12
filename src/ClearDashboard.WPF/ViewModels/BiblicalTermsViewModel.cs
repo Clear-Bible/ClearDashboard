@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -420,6 +419,8 @@ namespace ClearDashboard.Wpf.ViewModels
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
 
+
+
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
 
@@ -457,7 +458,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 _fontFamily = projectManager.ParatextProject.Language.FontFamily;
                 _fontSize = projectManager.ParatextProject.Language.Size;
                 _isRTL = projectManager.ParatextProject.Language.IsRtol;
-
             }
         }
 

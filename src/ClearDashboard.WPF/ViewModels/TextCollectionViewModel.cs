@@ -44,12 +44,15 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public TextCollectionViewModel()
         {
-            this.Title = "🗐 TEXT COLLECTION";
-            this.ContentId = "TEXTCOLLECTION";
+
         }
 
         public TextCollectionViewModel(INavigationService navigationService, ILogger<TextCollectionViewModel> logger, ProjectManager projectManager)
         {
+            this.Title = "🗐 TEXT COLLECTION";
+            this.ContentId = "TEXTCOLLECTION";
+
+            _logger = logger;
             _projectManager = projectManager;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;

@@ -24,5 +24,10 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
         }
+
+        private void lvSenses_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            Console.WriteLine();
+        }
     }
 }
