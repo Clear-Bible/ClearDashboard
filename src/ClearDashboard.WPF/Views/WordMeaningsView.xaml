@@ -35,64 +35,87 @@
                 <DataTemplate>
                     <Border
                         Padding="0"
-                        BorderBrush="White"
+                        BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                         BorderThickness="1"
                         CornerRadius="4">
                         <StackPanel Orientation="Vertical">
-                            <!--  First Line  -->
-                            <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <StackPanel.Style>
-                                    <Style TargetType="StackPanel">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInactiveBorder}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Style>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="35" />
+                                </Grid.ColumnDefinitions>
 
-                                <StackPanel Margin="3" Orientation="Vertical">
+                                <!--  First Line  -->
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <StackPanel Margin="3" Orientation="Vertical">
+                                        <TextBlock
+                                            Margin="3,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource RedLightBrush}"
+                                            Text="{Binding Word}" />
+                                        <TextBlock
+                                            Width="80"
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="{StaticResource OrangeLightBrush}"
+                                            Text="{Binding WordTransliterated, StringFormat=({0})}" />
+                                    </StackPanel>
                                     <TextBlock
-                                        Width="80"
-                                        Margin="3,0,0,0"
+                                        Width="235"
+                                        Margin="5,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
-                                        FontSize="18"
+                                        FontSize="14"
                                         FontWeight="Bold"
-                                        Foreground="{StaticResource RedLightBrush}"
-                                        Text="{Binding Word}" />
-                                    <TextBlock
-                                        Width="80"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        FontSize="12"
-                                        Foreground="{StaticResource YellowLightBrush}"
-                                        Text="{Binding WordTransliterated, StringFormat=({0})}" />
+                                        Foreground="{StaticResource OrangeLightBrush}"
+                                        Text="{Binding Glosses}"
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
-                                <TextBlock
-                                    Width="235"
-                                    Margin="5,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    Foreground="{StaticResource BlueLightBrush}"
-                                    Text="{Binding Glosses}"
-                                    TextWrapping="Wrap" />
-                                <Button
-                                    x:Name="ShowLogos"
-                                    Width="32"
-                                    Height="32"
-                                    Padding="0"
-                                    Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
-                                    CommandParameter="{Binding}">
-                                    <Button.Content>
-                                        <Image Source="/Resources/logos_icon.png" />
-                                    </Button.Content>
-                                </Button>
-                            </StackPanel>
+
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="0,0,0,5"
+                                    Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Button
+                                        x:Name="ShowLogos"
+                                        Grid.Column="1"
+                                        Width="32"
+                                        Height="32"
+                                        Padding="0"
+                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
+                                        CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <Image Source="/Resources/logos_icon.png" />
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
 
                             <!--  Second Line  -->
                             <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
@@ -100,17 +123,17 @@
                                 <Label
                                     MinWidth="50"
                                     Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
                                     Content="{helpers:Loc WmDomain}"
                                     FontStyle="Italic"
-                                    VerticalAlignment="Center"
                                     Foreground="{StaticResource BlueLightBrush}" />
                                 <TextBlock
                                     Width="220"
                                     Margin="3,0,0,5"
+                                    VerticalAlignment="Center"
                                     FontStyle="Italic"
                                     Foreground="{StaticResource OrangeDarkBrush}"
                                     Text="{Binding Domains}"
-                                    VerticalAlignment="Center"
                                     TextAlignment="Left"
                                     TextDecorations="Underline"
                                     TextWrapping="Wrap" />
@@ -145,9 +168,11 @@
                                     x:Name="ShowSenses"
                                     MinWidth="50"
                                     Padding="0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Background="{DynamicResource MaterialDesignShadowBrush}"
+                                    Background="{StaticResource MaterialDesignShadowBrush}"
                                     FontSize="14"
+                                    Foreground="{StaticResource MaterialDesignDarkForeground}"
                                     TextAlignment="Left">
                                     <Run Text="{Binding SenseId}" />
                                     <Run Text="/" />

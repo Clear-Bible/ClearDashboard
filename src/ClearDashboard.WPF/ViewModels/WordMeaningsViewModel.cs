@@ -198,6 +198,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+        protected override void Dispose(bool disposing)
+        {
+            // unsubscribe to the pipes listener
+            _projectManager.NamedPipeChanged -= HandleEventAsync;
+
+            base.Dispose(disposing);    
+        }
+
         private void ShowSenses(object obj)
         {
             if (obj is null)
