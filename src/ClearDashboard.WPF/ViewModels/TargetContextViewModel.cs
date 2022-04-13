@@ -231,7 +231,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 // deserialize the payload
                 string payload = message.Payload.ToString();
                 string xmlData = JsonSerializer.Deserialize<string>(payload);
-                //File.WriteAllText(@"D:\temp\file.usx", sourceVerseXML, Encoding.UTF8);
+
+
+                //File.WriteAllText(@"D:\temp\file.usx", xmlData, Encoding.UTF8);
 
                 // Make the Unformatted version
                 _targetInlinesText.Clear();
@@ -253,7 +255,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
 
 
-                // File.WriteAllText(@"D:\temp\output.html", TargetHTML);
+                File.WriteAllText(@"D:\temp\output.html", TargetHTML);
 
             });
         }

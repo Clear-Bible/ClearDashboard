@@ -9,8 +9,8 @@
                 <!-- <link rel="stylesheet" href="bible.css" /> -->
                 <style>
                     body {
-                        background-color: #323130;
-                        color: white;
+                    background-color: #303030;
+                    color: white;
                     }
                     /* HTML5 display-role reset for older browsers */
                     font-size: 20px;
@@ -100,11 +100,11 @@
                     mark,
                     audio,
                     video {
-                        margin: 0;
-                        padding: 0;
-                        border: 0;
-                        font-family: inherit;
-                        vertical-align: baseline; }
+                    margin: 0;
+                    padding: 0;
+                    border: 0;
+                    font-family: inherit;
+                    vertical-align: baseline; }
                     article,
                     aside,
                     details,
@@ -116,22 +116,22 @@
                     menu,
                     nav,
                     section {
-                        display: block; }
+                    display: block; }
                     ol,
                     ul {
-                        list-style: none; }
+                    list-style: none; }
                     blockquote,
                     q {
-                        quotes: none; }
+                    quotes: none; }
                     blockquote:before,
                     blockquote:after,
                     q:before,
                     q:after {
-                        content: "";
-                        content: none; }
+                    content: "";
+                    content: none; }
                     table {
-                        border-collapse: collapse;
-                        border-spacing: 0; }
+                    border-collapse: collapse;
+                    border-spacing: 0; }
 
                     .c {
                     text-align: center;
@@ -143,9 +143,9 @@
                     font-weight: normal;
                     color: #777777; }
                     .ca:before {
-                        content: "("; }
+                    content: "("; }
                     .ca:after {
-                        content: ")" !important; }
+                    content: ")" !important; }
 
                     .cl {
                     text-align: center;
@@ -157,14 +157,14 @@
                     font-style: italic; }
 
                     .p {
-                        font-size: 18px;
+                    font-size: 18px;
                     }
 
                     .v,
                     .verse,
                     .vp,
                     sup[class^="v"] {
-                    color: red;
+                    color: #3399ff;
                     background: #dedede
                     font-size: 0.7em;
                     letter-spacing: -0.03em;
@@ -175,7 +175,10 @@
                     .v:after,
                     .vp:after,
                     sup[class^="v"]:after {
-                        content: "\a0"; }
+                    content: "\a0"; }
+
+                    sup + sup:before {
+                    content: "\a0"; }
 
                     sup + sup:before {
                     content: "\a0"; }
@@ -183,9 +186,9 @@
                     .va {
                     font-style: italic; }
                     .va:before {
-                        content: "("; }
+                    content: "("; }
                     .va:after {
-                        content: ")" !important; }
+                    content: ")" !important; }
 
                     .x {
                     font-size: 16px;
@@ -212,16 +215,16 @@
                     text-decoration: underline;
                     padding: 0.1em; }
                     .notelink, .notelink:hover, .notelink:active, .notelink:visited {
-                        color: #6a6a6a; }
+                    color: #6a6a6a; }
                     .notelink sup {
-                        font-size: 0.7em;
-                        letter-spacing: -0.03em;
-                        vertical-align: 0.25em;
-                        line-height: 0;
-                        font-family: sans-serif;
-                        font-weight: bold; }
+                    font-size: 0.7em;
+                    letter-spacing: -0.03em;
+                    vertical-align: 0.25em;
+                    line-height: 0;
+                    font-family: sans-serif;
+                    font-weight: bold; }
                     .notelink + sup:before {
-                        content: "\a0"; }
+                    content: "\a0"; }
 
                     .f {
                     font-size: 16px;
@@ -257,7 +260,7 @@
                     font-family: sans-serif;
                     font-weight: bold; }
                     .fv:after {
-                        content: "\a0"; }
+                    content: "\a0"; }
 
                     .h {
                     text-align: center;
@@ -610,7 +613,7 @@
                     .s3,
                     .s4 {
                     text-align: center;
-                    color: #f22247;
+                    color: #fff2e6;
                     font-size: 18px;
                     font-weight: bold;
                     font-style: italic;
@@ -654,7 +657,9 @@
                 </style>
             </head>
             <body>
-                <main><xsl:apply-templates /></main>
+                <main>
+                    <xsl:apply-templates />
+                </main>
             </body>
         </html>
     </xsl:template>
@@ -669,23 +674,42 @@
     <xsl:template match="para[@style='rem']|para[@style='ide']|verse[@eid]"></xsl:template>
 
     <xsl:template match="para">
-        <p><xsl:apply-templates select="@*|node()" /></p>
+        <p>
+            <xsl:apply-templates select="@*|node()" />
+        </p>
     </xsl:template>
 
     <xsl:template match="char">
-        <em><xsl:apply-templates select="@*|node()" /></em>
+        <em>
+            <xsl:apply-templates select="@*|node()" />
+        </em>
     </xsl:template>
 
     <xsl:template match="note">
-        <span class="note"><xsl:apply-templates select="@*|node()" /></span>
+        <span class="note">
+            <xsl:apply-templates select="@*|node()" />
+        </span>
     </xsl:template>
 
     <xsl:template match="chapter">
-        <b class="c"><xsl:value-of select="@number" /></b>
+        <b class="c">
+            <xsl:value-of select="@number" />
+        </b>
     </xsl:template>
 
     <xsl:template match="verse[@sid]">
-        <sup class="verse"><xsl:value-of select="@number" /></sup>
+        <sup class="verse">
+            <xsl:attribute name="id">
+                <!--put your logic in variable-->
+                <xsl:variable name="str">
+                    <xsl:value-of select="@sid" />
+                </xsl:variable>
+                <!--normalize space will prevent spaces from left and right of string, then all spaces inside will be replaced by '-' -->
+                <xsl:value-of select="translate(normalize-space($str), ' ', '-')"/>
+            </xsl:attribute>
+
+            <xsl:value-of select="@number" />
+        </sup>
     </xsl:template>
 
     <xsl:template match="book">
@@ -697,6 +721,8 @@
     </xsl:template>
 
     <xsl:template match="@*|node()">
-        <xsl:copy><xsl:apply-templates select="@*|node()" /></xsl:copy>
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()" />
+        </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

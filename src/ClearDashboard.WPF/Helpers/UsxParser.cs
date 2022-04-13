@@ -230,11 +230,17 @@ namespace ClearDashboard.Wpf.Helpers
             return inlinesText;
         }
 
-        public static string TransformXMLToHTML(string inputXml, string xsltString)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputXml">The XML text to process</param>
+        /// <param name="xsltPath">The path to the xslt file</param>
+        /// <returns></returns>
+        public static string TransformXMLToHTML(string inputXml, string xsltPath)
         {
             StringWriter results = new StringWriter();
             XslCompiledTransform xslt = new XslCompiledTransform();
-            xslt.Load(xsltString);
+            xslt.Load(xsltPath);
 
             XmlDocument source = new XmlDocument();
 
