@@ -109,7 +109,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
   </ItemGroup>
 
 </Project>
