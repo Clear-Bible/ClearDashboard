@@ -22,8 +22,6 @@
 
     <!--
         [Event Loaded] = [Action Page_Loaded($source,$eventArgs)];
-        Loaded="Page_Loaded"
-        SizeChanged="Page_SizeChanged"
     -->
 
     <Page.Resources>

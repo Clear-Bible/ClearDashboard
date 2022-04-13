@@ -9,7 +9,8 @@ namespace ClearDashboard.Common.Models
     public class DashboardProject : INotifyPropertyChanged
     {
         public string DirectoryPath { get; set; }
-        public string ClearEngineDirectoryPath => Path.Combine(DirectoryPath, "ClearEngine");
+       //TODO:  fix this to use the correct CLear.Engine directory path
+       // public string ClearEngineDirectoryPath => Path.Combine(TargetProject.DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
 
         public DashboardProject()

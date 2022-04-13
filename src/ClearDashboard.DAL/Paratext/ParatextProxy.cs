@@ -10,7 +10,7 @@ using Microsoft.Win32;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
-    public class ParatextUtils
+    public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;
         public string ParatextProjectPath
@@ -41,7 +41,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             Resources,
         }
 
-        public ParatextUtils(ILogger<ParatextUtils> logger)
+        public ParatextProxy(ILogger<ParatextProxy> logger)
         {
             _logger = logger;
         }

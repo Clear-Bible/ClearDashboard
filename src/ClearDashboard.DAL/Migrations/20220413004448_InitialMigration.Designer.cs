@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    [Migration("20220331154126_InitialMigration")]
+    [Migration("20220413004448_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,7 +197,7 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.ToTable("ParallelCorpus", (string)null);
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVerse", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,28 +206,16 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.Property<int?>("ParallelCorpusId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SourceVerseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TargetVerseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TargetVersenId")
+                    b.Property<int?>("VerseId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ParallelCorpusId");
 
-                    b.HasIndex("SourceVerseId")
-                        .IsUnique();
+                    b.HasIndex("VerseId");
 
-                    b.HasIndex("TargetVerseId")
-                        .IsUnique();
-
-                    b.HasIndex("TargetVersenId");
-
-                    b.ToTable("ParallelVerse", (string)null);
+                    b.ToTable("ParallelVerseLink", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
@@ -350,6 +338,30 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.ToTable("Verse", (string)null);
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseLink", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsSource")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ParallelVersesLinkId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VerseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParallelVersesLinkId");
+
+                    b.HasIndex("VerseId");
+
+                    b.ToTable("VerseLink", (string)null);
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
@@ -421,27 +433,17 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.Navigation("TargetCorpus");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVerse", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("ParallelVerses")
                         .HasForeignKey("ParallelCorpusId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "SourceVerse")
-                        .WithMany()
-                        .HasForeignKey("SourceVerseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "TargetVersen")
-                        .WithMany()
-                        .HasForeignKey("TargetVersenId");
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", null)
+                        .WithMany("ParallelVersesLinks")
+                        .HasForeignKey("VerseId");
 
                     b.Navigation("ParallelCorpus");
-
-                    b.Navigation("SourceVerse");
-
-                    b.Navigation("TargetVersen");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
@@ -475,6 +477,25 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.Navigation("Corpus");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseLink", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", "ParallelVersesLink")
+                        .WithMany("VerseLinks")
+                        .HasForeignKey("ParallelVersesLinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "Verse")
+                        .WithMany()
+                        .HasForeignKey("VerseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParallelVersesLink");
+
+                    b.Navigation("Verse");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
                 {
                     b.Navigation("Alignments");
@@ -495,6 +516,11 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     b.Navigation("ParallelVerses");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", b =>
+                {
+                    b.Navigation("VerseLinks");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
                     b.Navigation("Adornment");
@@ -509,6 +535,8 @@ namespace ClearDashboard.DataAccessLayer.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
                 {
+                    b.Navigation("ParallelVersesLinks");
+
                     b.Navigation("Token");
                 });
 #pragma warning restore 612, 618

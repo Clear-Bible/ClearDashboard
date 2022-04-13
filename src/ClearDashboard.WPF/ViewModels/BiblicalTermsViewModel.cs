@@ -15,6 +15,7 @@ using System.Data;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -461,6 +462,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            return base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            return base.OnActivateAsync(cancellationToken);
+        }
 
         /// <summary>
         /// Listen for changes in the DAL regarding any messages coming in

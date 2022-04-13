@@ -14,8 +14,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using MediatR;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -25,8 +27,9 @@ namespace ClearDashboard.DataAccessLayer
 
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
-        private readonly ParatextUtils _paratextUtils;
+        private readonly ParatextProxy _paratextUtils;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
+        private readonly IMediator mediator_;
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
 
@@ -37,6 +40,21 @@ namespace ClearDashboard.DataAccessLayer
         public bool ParatextVisible = false;
 
         public bool IsPipeConnected { get; set; }
+
+        #region Startup
+
+        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        {
+            _logger = logger;
+            _projectNameDbContextFactory = projectNameDbContextFactory;
+            _paratextUtils = paratextUtils;
+            _logger.LogInformation("'ProjectManager' ctor called.");
+
+            _namedPipesClient = namedPipeClient;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
+
+            mediator_ = mediator;
+        }
 
         #endregion
 
@@ -272,7 +290,7 @@ namespace ClearDashboard.DataAccessLayer
             {
                 // get all the Paratext Projects (Projects/Backtranslations)
                 ParatextProjects.Clear();
-                var projects = await _paratextUtils.GetParatextProjectsOrResources(ParatextUtils.FolderType.Projects);
+                var projects = await _paratextUtils.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -377,6 +395,17 @@ namespace ClearDashboard.DataAccessLayer
 
             await _namedPipesClient.WriteAsync(message);
         }
+
+        #endregion
+
+        #region Commands
+
+        public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
+        {
+            return mediator_.Send(request, cancellationToken);
+        }
+        #endregion
+
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
