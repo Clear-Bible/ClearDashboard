@@ -49,12 +49,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public StartPageViewModel()
         {
-            this.Title = "⌂ START PAGE";
-            this.ContentId = "{StartPage_ContentId}";
+
         }
 
         public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, ProjectManager projectManager)
         {
+            this.Title = "⌂ START PAGE";
+            this.ContentId = "{StartPage_ContentId}";
+
+            _logger = logger;
             _projectManager = projectManager;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;

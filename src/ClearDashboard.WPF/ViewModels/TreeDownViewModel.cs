@@ -43,12 +43,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public TreeDownViewModel()
         {
-            this.Title = "⯭ TREEDOWN";
-            this.ContentId = "TREEDOWN";
+
         }
 
         public TreeDownViewModel(INavigationService navigationService, ILogger<TreeDownViewModel> logger, ProjectManager projectManager)
         {
+            this.Title = "⯭ TREEDOWN";
+            this.ContentId = "TREEDOWN";
+
+            _logger = logger;
             _projectManager = projectManager;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;

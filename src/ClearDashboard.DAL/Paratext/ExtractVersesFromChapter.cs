@@ -114,7 +114,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
                 }
 
-                string targetChapterNum = verse.ChapterNum;
+                string targetChapterNum = verse.ChapterStr;
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
                 if (chapters.Count > 0)
@@ -151,9 +151,9 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         private static string GetUsfmBookPath(ParatextProject project, Verse verse, string projectPath)
         {
-            var book = verse.BookNum;
+            var book = verse.BookStr;
             // get the file name for that book
-            var bookFile = project.BooksList.Where(b => b.BookId == verse.BookNum).FirstOrDefault();
+            var bookFile = project.BooksList.Where(b => b.BookId == verse.BookStr).FirstOrDefault();
 
             if (bookFile is null)
             {
