@@ -1,4 +1,8 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Extensions;
+using ClearDashboard.Wpf.Extensions;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,15 +13,10 @@ using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Extensions;
-using ClearDashboard.Wpf.Extensions;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Models;
+using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 
 namespace ClearDashboard.Wpf
 {
@@ -83,15 +82,22 @@ namespace ClearDashboard.Wpf
 
         private static void SetupLanguage()
         {
-            var selectedLanguage = Properties.Settings.Default.language_code;
+            var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
                 selectedLanguage = "en";
             }
 
-            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", String.Empty));
+            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
             var translationSource = Host.Services.GetService<TranslationSource>();
-            translationSource.Language = EnumHelper.GetDescription(languageType);
+            if (translationSource != null)
+            {
+                translationSource.Language = EnumHelper.GetDescription(languageType);
+            }
+            else
+            {
+                throw new NullReferenceException("'TranslationSource' needs to registered with the DI container.");
+            }
         }
 
       
@@ -146,7 +152,7 @@ namespace ClearDashboard.Wpf
 #if DEBUG
             level = LogEventLevel.Verbose;
 #endif
-            var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
+            const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
             var log = new LoggerConfiguration()
                 .MinimumLevel.Is(level)
@@ -179,7 +185,6 @@ namespace ClearDashboard.Wpf
         {
             e.Handled = true;
 
-            // write to the log file
             Logger.LogError(e.Exception, "An unhandled error as occurred");
             MessageBox.Show(e.Exception.Message, "An error as occurred", MessageBoxButton.OK);
         }

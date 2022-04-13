@@ -110,33 +110,25 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ParallelVerse",
+                name: "ParallelVerseLink",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SourceVerseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TargetVerseId = table.Column<int>(type: "INTEGER", nullable: false),
                     ParallelCorpusId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TargetVersenId = table.Column<int>(type: "INTEGER", nullable: true)
+                    VerseId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParallelVerse", x => x.Id);
+                    table.PrimaryKey("PK_ParallelVerseLink", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ParallelVerse_ParallelCorpus_ParallelCorpusId",
+                        name: "FK_ParallelVerseLink_ParallelCorpus_ParallelCorpusId",
                         column: x => x.ParallelCorpusId,
                         principalTable: "ParallelCorpus",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ParallelVerse_Verse_SourceVerseId",
-                        column: x => x.SourceVerseId,
-                        principalTable: "Verse",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ParallelVerse_Verse_TargetVersenId",
-                        column: x => x.TargetVersenId,
+                        name: "FK_ParallelVerseLink_Verse_VerseId",
+                        column: x => x.VerseId,
                         principalTable: "Verse",
                         principalColumn: "Id");
                 });
@@ -158,6 +150,33 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                     table.PrimaryKey("PK_Token", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Token_Verse_VerseId",
+                        column: x => x.VerseId,
+                        principalTable: "Verse",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VerseLink",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    VerseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ParallelVersesLinkId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsSource = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VerseLink", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VerseLink_ParallelVerseLink_ParallelVersesLinkId",
+                        column: x => x.ParallelVersesLinkId,
+                        principalTable: "ParallelVerseLink",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VerseLink_Verse_VerseId",
                         column: x => x.VerseId,
                         principalTable: "Verse",
                         principalColumn: "Id",
@@ -332,26 +351,14 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerse_ParallelCorpusId",
-                table: "ParallelVerse",
+                name: "IX_ParallelVerseLink_ParallelCorpusId",
+                table: "ParallelVerseLink",
                 column: "ParallelCorpusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerse_SourceVerseId",
-                table: "ParallelVerse",
-                column: "SourceVerseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerse_TargetVerseId",
-                table: "ParallelVerse",
-                column: "TargetVerseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerse_TargetVersenId",
-                table: "ParallelVerse",
-                column: "TargetVersenId");
+                name: "IX_ParallelVerseLink_VerseId",
+                table: "ParallelVerseLink",
+                column: "VerseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Token_VerseId",
@@ -363,6 +370,16 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "IX_Verse_CorpusId",
                 table: "Verse",
                 column: "CorpusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerseLink_ParallelVersesLinkId",
+                table: "VerseLink",
+                column: "ParallelVersesLinkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerseLink_VerseId",
+                table: "VerseLink",
+                column: "VerseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -374,22 +391,25 @@ namespace ClearDashboard.DataAccessLayer.Migrations
                 name: "Alignment");
 
             migrationBuilder.DropTable(
-                name: "ParallelVerse");
-
-            migrationBuilder.DropTable(
                 name: "ProjectInfo");
 
             migrationBuilder.DropTable(
                 name: "QuestionGroup");
 
             migrationBuilder.DropTable(
+                name: "VerseLink");
+
+            migrationBuilder.DropTable(
                 name: "AlignmentVersion");
 
             migrationBuilder.DropTable(
-                name: "ParallelCorpus");
+                name: "ParallelVerseLink");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "ParallelCorpus");
 
             migrationBuilder.DropTable(
                 name: "InterlinearNotes");

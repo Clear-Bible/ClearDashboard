@@ -12,10 +12,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -29,6 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         //Connection to the DAL
         private ProjectManager ProjectManager { get; set; }
+        private ClearEngineBackgroundService BackgroundService { get; set; }
 
         private string _paratextUserName;
         public string ParatextUserName
@@ -164,11 +167,12 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Overload for DI of the logger
         /// </summary>
         /// <param name="logger"></param>
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager, ClearEngineBackgroundService backgroundService) : base(navigationService, logger)
         {
             _translationSource = translationSource;
             _projectManager = projectManager;
+
+            BackgroundService = backgroundService;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -243,6 +247,9 @@ namespace ClearDashboard.Wpf.ViewModels
             var frm = new ColorStyles();
             frm.Show();
         }
+
+
+       
 
         public void SetLanguage()
         {

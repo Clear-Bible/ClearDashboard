@@ -97,7 +97,7 @@ namespace ClearDashboard.DataAccessLayer.Extensions
             {
                 _logger.LogDebug(
                     @"Executing DbCommand [CommandType='{commandType}', CommandTimeout='{commandTimeout}']
-{commandText}", Definition.CommandType, Definition.CommandTimeout, Definition.CommandText);
+                            {commandText}", Definition.CommandType, Definition.CommandTimeout, Definition.CommandText);
             }
         }
 
@@ -109,7 +109,7 @@ namespace ClearDashboard.DataAccessLayer.Extensions
             {
                 _logger.LogInformation(
                     @"Executed DbCommand [CommandType='{commandType}', CommandTimeout='{commandTimeout}']
-{commandText}", Definition.CommandType, Definition.CommandTimeout, Definition.CommandText);
+                        {commandText}", Definition.CommandType, Definition.CommandTimeout, Definition.CommandText);
             }
         }
     }

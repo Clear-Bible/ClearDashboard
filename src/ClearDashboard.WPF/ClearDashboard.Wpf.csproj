@@ -88,7 +88,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -129,6 +128,7 @@
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.SQLite\ClearDashboard.SQLite.csproj" />
+		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
 		<ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
 	</ItemGroup>
 

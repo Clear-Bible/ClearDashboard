@@ -10,7 +10,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--  Caliburn Micro BootStrapper  -->
+                <!--  Caliburn Micro Bootstrapper  -->
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper" />
                     <SolidColorBrush x:Key="BackgroundBrush" Color="#FF225378" />

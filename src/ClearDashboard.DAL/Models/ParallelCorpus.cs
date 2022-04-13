@@ -7,7 +7,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
         public ParallelCorpus()
         {
-            ParallelVerses = new HashSet<ParallelVerse>();
+            ParallelVersesLinks = new HashSet<ParallelVersesLink>();
         }
 
         public int SourceCorpusId { get; set; }
@@ -20,6 +20,6 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual Corpus SourceCorpus { get; set; }
         public virtual Corpus TargetCorpus { get; set; }
-        public virtual ICollection<ParallelVerse> ParallelVerses { get; set; }
+        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
     }
 }

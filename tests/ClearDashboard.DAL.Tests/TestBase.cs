@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Extensions;
+using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
