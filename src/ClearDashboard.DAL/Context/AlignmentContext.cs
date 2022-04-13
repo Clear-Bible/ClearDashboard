@@ -9,6 +9,10 @@ namespace ClearDashboard.DataAccessLayer.Context
     public partial class AlignmentContext : DbContext
     {
         private readonly ILogger<AlignmentContext> _logger;
+        public AlignmentContext()
+        {
+        }
+
         public AlignmentContext(ILogger<AlignmentContext> logger)
         {
             _logger = logger;
@@ -32,12 +36,13 @@ namespace ClearDashboard.DataAccessLayer.Context
         //public virtual DbSet<CorpusType> CorpusTypes { get; set; }
         public virtual DbSet<InterlinearNote> InterlinearNotes { get; set; }
         public virtual DbSet<ParallelCorpus> ParallelCorpus { get; set; }
-        public virtual DbSet<ParallelVerse> ParallelVerses { get; set; }
+        public virtual DbSet<ParallelVersesLink> ParallelVersesLinks { get; set; }
         public virtual DbSet<ProjectInfo> ProjectInfos { get; set; }
         public virtual DbSet<QuestionGroup> QuestionGroups { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Verse> Verses { get; set; }
+        public virtual DbSet<VerseLink> VerseLinks { get; set; }
 
 
         public string DatabasePath { get; set; }
@@ -241,21 +246,14 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.Property(e => e.TargetCorpusId);
             });
 
-            modelBuilder.Entity<ParallelVerse>(entity =>
+            modelBuilder.Entity<ParallelVersesLink>(entity =>
             {
-                entity.ToTable("ParallelVerse");
+                entity.ToTable("ParallelVerseLink");
 
                 entity.HasKey(e => e.Id);
 
-                entity.HasIndex(e => e.SourceVerseId).IsUnique();
-                entity.HasIndex(e => e.TargetVerseId).IsUnique();
-
-                entity.Property(e => e.ParallelCorpusId);
-                entity.Property(e => e.SourceVerseId);
-                entity.Property(e => e.TargetVerseId);
-
                 entity.HasOne(d => d.ParallelCorpus)
-                    .WithMany(p => p.ParallelVerses)
+                    .WithMany(p => p.ParallelVersesLinks)
                     .HasForeignKey(d => d.ParallelCorpusId);
             });
 
@@ -374,6 +372,13 @@ namespace ClearDashboard.DataAccessLayer.Context
                 //    .HasPrincipalKey<Token>(p => p.VerseId)
                 //    .HasForeignKey<Verse>(d => d.Id)
                 //    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<VerseLink>(entity =>
+            {
+                entity.ToTable("VerseLink");
+
+                entity.HasKey(e => e.Id);
             });
 
             OnModelCreatingPartial(modelBuilder);

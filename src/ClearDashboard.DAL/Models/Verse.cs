@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Microsoft.VisualBasic;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class Verse
     {
+
+        public Verse()
+        {
+            ParallelVersesLinks = new HashSet<ParallelVersesLink>();
+        }
         public int Id { get; set; }
 
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
@@ -17,8 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? CorpusId { get; set; }
 
         public virtual Corpus Corpus { get; set; }
-        //public virtual ParallelVerse ParallelVerse { get; set; }
         public virtual Token Token { get; set; }
-       // public virtual ParallelVerse VerseNavigation { get; set; }
+        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
     }
 }
