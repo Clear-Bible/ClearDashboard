@@ -249,57 +249,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private string _manuscriptVerse;
-
-        public async void StartBackgroundService()
-        {
-            _cancellationTokenSource ??= new CancellationTokenSource();
-            
-            await BackgroundService.StartAsync(_cancellationTokenSource.Token);
-        }
-
-        public async void StopBackgroundService()
-        {
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Cancel();
-            }
-
-            await BackgroundService.StopAsync(new CancellationToken());
-
-            var result = 
-            _cancellationTokenSource = null;
-        }
-
-        public void StopScopedService()
-        {
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource = null;
-            }
-
-        }
-
-
-        public string ManuscriptVerse
-        {
-            get => _manuscriptVerse;
-            set
-            {
-                _manuscriptVerse = value;
-                NotifyOfPropertyChange(() => ManuscriptVerse);
-            }
-        }
-
-        public async void GetVerse()
-        {
-
-            var result = await ProjectManager.ExecuteCommand(new GetManuscriptVerseByIdQuery("1001"), CancellationToken.None);
-
-            ManuscriptVerse = result[0].stringA;
-        }
+       
 
         public void SetLanguage()
         {
