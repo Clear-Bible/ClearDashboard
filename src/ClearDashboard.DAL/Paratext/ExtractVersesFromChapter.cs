@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <returns></returns>
         public static List<string> ParseUSFM(ILogger logger, ParatextProject project, Verse verse)
         {
-            ParatextUtils paratextUtils = new ParatextUtils(logger as ILogger<ParatextUtils>);
+            ParatextProxy paratextUtils = new ParatextProxy(logger as ILogger<ParatextProxy>);
             string projectPath = "";
             if (paratextUtils.IsParatextInstalled())
             {
@@ -136,7 +136,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         {
             // get the standard Paratext one
             string stylesheetPath = "";
-            ParatextUtils paratextUtils = new ParatextUtils(logger as ILogger<ParatextUtils>);
+            ParatextProxy paratextUtils = new ParatextProxy(logger as ILogger<ParatextProxy>);
             if (paratextUtils.IsParatextInstalled())
             {
                 var projectPath = paratextUtils.ParatextProjectPath;

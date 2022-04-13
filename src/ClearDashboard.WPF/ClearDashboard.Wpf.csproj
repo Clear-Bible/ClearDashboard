@@ -81,7 +81,6 @@
 		<ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform.Core\Caliburn.Micro.Platform.Core.csproj" />
 		<ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform\Caliburn.Micro.Platform.csproj" />
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -118,7 +117,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
 		<ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
 	</ItemGroup>
 

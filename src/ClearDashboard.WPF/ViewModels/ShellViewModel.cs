@@ -17,6 +17,7 @@ using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -249,6 +250,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private string _manuscriptVerse;
+
         public async void StartBackgroundService()
         {
             _cancellationTokenSource ??= new CancellationTokenSource();
@@ -277,6 +280,25 @@ namespace ClearDashboard.Wpf.ViewModels
                 _cancellationTokenSource = null;
             }
 
+        }
+
+
+        public string ManuscriptVerse
+        {
+            get => _manuscriptVerse;
+            set
+            {
+                _manuscriptVerse = value;
+                NotifyOfPropertyChange(() => ManuscriptVerse);
+            }
+        }
+
+        public async void GetVerse()
+        {
+
+            var result = await ProjectManager.ExecuteCommand(new GetManuscriptVerseByIdQuery("1001"), CancellationToken.None);
+
+            ManuscriptVerse = result[0].stringA;
         }
 
         public void SetLanguage()

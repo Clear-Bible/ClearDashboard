@@ -1,12 +1,14 @@
-﻿using ClearDashboard.DataAccessLayer.Context;
+﻿using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.BackgroundServices;
+using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.BackgroundServices;
-using ClearDashboard.DataAccessLayer.Paratext;
 
-namespace ClearDashboard.DataAccessLayer.Extensions
+namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -19,10 +21,11 @@ namespace ClearDashboard.DataAccessLayer.Extensions
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddLogging();
-           
+
+            serviceCollection.AddMediatR(typeof(GetManuscriptVerseByIdQuery));
 
             serviceCollection.AddSingleton<ProjectManager>();
-            serviceCollection.AddScoped<ParatextUtils>();
+            serviceCollection.AddScoped<ParatextProxy>();
             serviceCollection.AddSingleton<NamedPipesClient>(sp =>
             {
                 var logger = sp.GetService<ILogger<NamedPipesClient>>();

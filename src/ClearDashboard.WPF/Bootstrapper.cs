@@ -16,6 +16,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 
 namespace ClearDashboard.Wpf
 {
