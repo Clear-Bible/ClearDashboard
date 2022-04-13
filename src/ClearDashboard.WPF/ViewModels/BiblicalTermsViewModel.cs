@@ -479,7 +479,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await _projectManager.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
+                        await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
                             .ConfigureAwait(false);
                     }
 

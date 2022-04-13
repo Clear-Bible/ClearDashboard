@@ -14,6 +14,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     FlowDirection="{Binding flowDirection}"
+    GotFocus="UserControl_GotFocus"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -27,24 +29,16 @@
         <ScrollViewer>
             <StackPanel x:Name="TargetStackPanel" Orientation="Vertical">
                 <Border BorderBrush="DarkGray" BorderThickness="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Button
-                            Width="350"
-                            Margin="20,5,20,5"
-                            HorizontalAlignment="Left"
-                            Style="{DynamicResource MaterialDesignButton}">
-                            Reload
-                        </Button>
+                    <StackPanel Margin="5,2,0,2" Orientation="Horizontal">
                         <RadioButton
                             x:Name="radUnformatted"
                             Content="Unformatted"
-                            IsChecked="False"
+                            IsChecked="True"
                             Style="{StaticResource MaterialDesignRadioButton}" />
                         <RadioButton
                             x:Name="radFormatted"
                             Margin="10,0,0,0"
                             Content="Formatted"
-                            IsChecked="True"
                             Style="{StaticResource MaterialDesignRadioButton}" />
                     </StackPanel>
                 </Border>
@@ -60,16 +54,14 @@
                         Background="{StaticResource MaterialDesignCardBackground}"
                         FontSize="14"
                         Foreground="WhiteSmoke"
+                        InlineList="{Binding TargetInlinesText}"
                         TextWrapping="Wrap"
                         Visibility="{Binding ElementName=radUnformatted, Path=IsChecked, Converter={StaticResource VisibilityConverter}}" />
 
                     <!--  InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}"  -->
                 </Border>
 
-                <wpf:WebView2
-                    Name="Browser"
-                    MinHeight="250"
-                    Source="https://clear.bible" />
+                <wpf:WebView2 Name="Browser" MinHeight="250" />
             </StackPanel>
         </ScrollViewer>
 

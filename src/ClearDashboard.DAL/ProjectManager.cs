@@ -28,15 +28,34 @@ namespace ClearDashboard.DataAccessLayer
         private readonly ParatextUtils _paratextUtils;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ();
 
         public Project ParatextProject { get; private set; }
 
         public bool ParatextVisible = false;
 
         public bool IsPipeConnected { get; set; }
+
+        #endregion
+
+        #region Enums
+        public enum PipeAction
+        {
+            OnConnected,
+            OnDisconnected,
+            SendText,
+            GetBiblicalTermsAll,
+            GetBiblicalTermsProject,
+            GetSourceVerses,
+            GetTargetVerses,
+            GetNotes,
+            GetProject,
+            GetCurrentVerse,
+            GetUSX,
+        }
+        #endregion
 
         #region Startup
 
@@ -53,23 +72,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion
 
-        public enum PipeAction
-        {
-            OnConnected,
-            OnDisconnected,
-            SendText,
-            GetBiblicalTermsAll,
-            GetBiblicalTermsProject,
-            GetSourceVerses,
-            GetTargetVerses,
-            GetNotes,
-            GetProject,
-            GetCurrentVerse,
-            GetUSX,
-        }
 
-
-        #endregion
 
         #region Events
 
@@ -364,15 +367,16 @@ namespace ClearDashboard.DataAccessLayer
                 case PipeAction.GetProject:
                     message.Action = ActionType.GetProject;
                     break;
+                case PipeAction.GetUSX:
+                    message.Action = ActionType.GetUSX;
+                    message.Text = text;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
 
             await _namedPipesClient.WriteAsync(message);
         }
-
-        #endregion
-
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
@@ -384,5 +388,11 @@ namespace ClearDashboard.DataAccessLayer
             IsPipeConnected = false;
             _namedPipesClient.Dispose();
         }
+
+
+        #endregion
+
+
+
     }
 }

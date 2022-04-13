@@ -8,9 +8,9 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.9" />
+		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.16" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="System.Text.Json" Version="6.0.2" />
+		<PackageReference Include="System.Text.Json" Version="6.0.3" />
 	</ItemGroup>
 
 </Project>

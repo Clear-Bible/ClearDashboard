@@ -184,6 +184,8 @@ namespace ClearDashboard.Wpf.ViewModels
                         string newBook = pipeMessage.Text.Substring(0, 2);
                         if (_currentBook != newBook)
                         {
+                            _currentBook = newBook;
+
                             // send a message to get this book
                             _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetUSX, newBook);
 
@@ -226,13 +228,10 @@ namespace ClearDashboard.Wpf.ViewModels
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((System.Action)delegate
             {
-
-                // deserialize the list
-                //var sourceVerseXML = JsonConvert.DeserializeObject<string>(message.jsonPayload);
-
+                // deserialize the payload
+                string payload = message.Payload.ToString();
+                string xmlData = JsonSerializer.Deserialize<string>(payload);
                 //File.WriteAllText(@"D:\temp\file.usx", sourceVerseXML, Encoding.UTF8);
-
-                string xmlData = message.Payload.ToString();
 
                 // Make the Unformatted version
                 _targetInlinesText.Clear();
