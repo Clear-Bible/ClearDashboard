@@ -31,9 +31,9 @@ namespace ClearDashboard.DataAccessLayer
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
         private readonly IMediator mediator_;
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ObservableRangeCollection<ParatextProjectViewModel>();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ();
 
         public Project ParatextProject { get; private set; }
 
@@ -41,23 +41,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public bool IsPipeConnected { get; set; }
 
-        #region Startup
-
-        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
-        {
-            _logger = logger;
-            _projectNameDbContextFactory = projectNameDbContextFactory;
-            _paratextUtils = paratextUtils;
-            _logger.LogInformation("'ProjectManager' ctor called.");
-
-            _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
-
-            mediator_ = mediator;
-        }
-
-        #endregion
-
+        #region Enums
         public enum PipeAction
         {
             OnConnected,
@@ -70,10 +54,10 @@ namespace ClearDashboard.DataAccessLayer
             GetNotes,
             GetProject,
             GetCurrentVerse,
+            GetUSX,
         }
-
-
         #endregion
+
 
         #region Events
 
@@ -106,6 +90,23 @@ namespace ClearDashboard.DataAccessLayer
         {
             var args = new PipeEventArgs(pm);
             NamedPipeChanged?.Invoke(this, args);
+        }
+
+        #endregion
+
+        #region Startup
+
+        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        {
+            _logger = logger;
+            _projectNameDbContextFactory = projectNameDbContextFactory;
+            _paratextUtils = paratextUtils;
+            _logger.LogInformation("'ProjectManager' ctor called.");
+
+            _namedPipesClient = namedPipeClient;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
+
+            mediator_ = mediator;
         }
 
         #endregion
@@ -368,6 +369,10 @@ namespace ClearDashboard.DataAccessLayer
                 case PipeAction.GetProject:
                     message.Action = ActionType.GetProject;
                     break;
+                case PipeAction.GetUSX:
+                    message.Action = ActionType.GetUSX;
+                    message.Text = text;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
@@ -396,5 +401,11 @@ namespace ClearDashboard.DataAccessLayer
             IsPipeConnected = false;
             _namedPipesClient.Dispose();
         }
+
+
+        #endregion
+
+
+
     }
 }

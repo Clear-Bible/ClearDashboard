@@ -113,6 +113,9 @@ namespace ClearDashboard.Common.Models
             }
         }
 
+        public int? ChapterNum => Chapter;
+
+
         /// <summary>
         /// Chapter number as padded text. Automatically calculated from Chapter.
         /// </summary>
@@ -140,6 +143,8 @@ namespace ClearDashboard.Common.Models
                 }
             }
         }
+
+        public int? VerseNum => Verse;
 
         /// <summary>
         /// Verse ID as a string. Automatically calculated from Verse.
@@ -176,6 +181,10 @@ namespace ClearDashboard.Common.Models
         /// <returns>Success of parsing IncommingVerseLocation.</returns>
         public bool SetVerseFromId(string verseId)
         {
+            if (verseId is null)
+            {
+                return false;
+            }
             // Convert the number into a string we can parse.
             string _VerseLocationId = verseId.ToString().PadLeft(8, '0');
             string _BookNumStr = _VerseLocationId.Substring(0, 2);
@@ -351,6 +360,17 @@ namespace ClearDashboard.Common.Models
             }
 
             return GetFullBookNameFromBookNum(bookNum.ToString().PadLeft(2, '0'));
+        }
+
+        public string GetVerseRefAbbreviated()
+        {
+            var BookShort = BibleBookAcronymListEn();
+            if (BookShort.Count > BookNum)
+            {
+                return $"{BookShort[BookNum]}-{Chapter}:{Verse}";
+            }
+            
+            return "";
         }
 
         /// <summary>

@@ -6,7 +6,6 @@ using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Pipes_Shared;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -490,7 +490,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (_currentVerse != pipeMessage.Text)
                     {
                         // ask for Biblical Terms
-                        await _projectManager.SendPipeMessage((ProjectManager.PipeAction)ActionType.GetBibilicalTermsProject)
+                        await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
                             .ConfigureAwait(false);
                     }
 
@@ -506,7 +506,8 @@ namespace ClearDashboard.Wpf.ViewModels
                         var biblicalTermsList = new List<BiblicalTermsData>();
                         try
                         {
-                            biblicalTermsList = JsonConvert.DeserializeObject<List<BiblicalTermsData>>((string)pipeMessage.Payload);
+                            string json = pipeMessage.Payload.ToString();
+                            biblicalTermsList = JsonSerializer.Deserialize<List<BiblicalTermsData>>(json);
                         }
                         catch (Exception e)
                         {
