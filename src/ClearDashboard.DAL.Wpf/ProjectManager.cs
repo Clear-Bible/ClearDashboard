@@ -41,23 +41,6 @@ namespace ClearDashboard.DataAccessLayer
 
         public bool IsPipeConnected { get; set; }
 
-        #region Startup
-
-        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
-        {
-            _logger = logger;
-            _projectNameDbContextFactory = projectNameDbContextFactory;
-            _paratextUtils = paratextUtils;
-            _logger.LogInformation("'ProjectManager' ctor called.");
-
-            _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
-
-            mediator_ = mediator;
-        }
-
-        #endregion
-
         #region Enums
         public enum PipeAction
         {
@@ -74,22 +57,6 @@ namespace ClearDashboard.DataAccessLayer
             GetUSX,
         }
         #endregion
-
-        #region Startup
-
-        public ProjectManager(NamedPipesClient namedPipeClient, ParatextUtils paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
-        {
-            _logger = logger;
-            _projectNameDbContextFactory = projectNameDbContextFactory;
-            _paratextUtils = paratextUtils;
-            _logger.LogInformation("'ProjectManager' ctor called.");
-
-            _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
-        }
-
-        #endregion
-
 
 
         #region Events
@@ -123,6 +90,23 @@ namespace ClearDashboard.DataAccessLayer
         {
             var args = new PipeEventArgs(pm);
             NamedPipeChanged?.Invoke(this, args);
+        }
+
+        #endregion
+
+        #region Startup
+
+        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        {
+            _logger = logger;
+            _projectNameDbContextFactory = projectNameDbContextFactory;
+            _paratextUtils = paratextUtils;
+            _logger.LogInformation("'ProjectManager' ctor called.");
+
+            _namedPipesClient = namedPipeClient;
+            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
+
+            mediator_ = mediator;
         }
 
         #endregion

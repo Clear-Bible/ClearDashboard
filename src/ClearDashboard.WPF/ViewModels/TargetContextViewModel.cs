@@ -89,6 +89,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        public string AnchorRef = "";
+
         #endregion //Public Properties
 
         #region Observable Properties
@@ -253,6 +255,8 @@ namespace ClearDashboard.Wpf.ViewModels
                     var usxHtml = Helpers.UsxParser.TransformXMLToHTML(xmlData, xsltPath);
                     TargetHTML = usxHtml;
                 }
+
+                AnchorRef = CurrentBcv.GetVerseRefAbbreviated();
 
 
                 File.WriteAllText(@"D:\temp\output.html", TargetHTML);

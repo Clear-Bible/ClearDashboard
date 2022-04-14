@@ -38,24 +38,38 @@ namespace ClearDashboard.Wpf.Views
                     string html = _vm.TargetHTML;
                     if (_lastHTML != html)
                     {
-                        Browser.NavigateToString(html);
+                        //Browser.NavigateToString(html);
                         _lastHTML = html;
+
+                        UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                        {
+                            Fragment = _vm.AnchorRef
+                        };
+                        Browser.Source = uriBuilder.Uri;
                     }
                     return;
                 }
             };
         }
 
-        private void UserControl_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+
+        private void radFormatted_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
             // oddly this gets triggered before the UserControl_Loaded
             if (_vm is not null)
             {
                 string html = _vm.TargetHTML;
-                if (_lastHTML != html)
+                if (_lastHTML.Length != html.Length)
                 {
-                    Browser.NavigateToString(html);
+                    //Browser.NavigateToString(html);
                     _lastHTML = html;
+
+
+                    UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                    {
+                        Fragment = _vm.AnchorRef
+                    };
+                    Browser.Source = uriBuilder.Uri;
                 }
             }
         }
