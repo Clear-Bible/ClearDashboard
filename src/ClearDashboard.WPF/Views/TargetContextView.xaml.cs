@@ -38,7 +38,6 @@ namespace ClearDashboard.Wpf.Views
                     string html = _vm.TargetHTML;
                     if (_lastHTML != html)
                     {
-                        //Browser.NavigateToString(html);
                         _lastHTML = html;
 
                         UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
@@ -48,6 +47,15 @@ namespace ClearDashboard.Wpf.Views
                         Browser.Source = uriBuilder.Uri;
                     }
                     return;
+                } 
+                else if (args.PropertyName.Equals("AnchorRef"))
+                {
+                    // update the verse location
+                    UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                    {
+                        Fragment = _vm.AnchorRef
+                    };
+                    Browser.Source = uriBuilder.Uri;
                 }
             };
         }

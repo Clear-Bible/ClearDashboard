@@ -89,7 +89,17 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        public string AnchorRef = "";
+        private string _anchorRef = string.Empty;
+        public string AnchorRef
+        {
+            get { return _anchorRef; }
+            set
+            {
+                _anchorRef = value;
+                NotifyOfPropertyChange(() => AnchorRef);
+            }
+        }
+
 
         #endregion //Public Properties
 
@@ -183,6 +193,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 case ActionType.CurrentVerse:
                     if (_currentVerse != pipeMessage.Text)
                     {
+                        // check for book change
                         string newBook = pipeMessage.Text.Substring(0, 2);
                         if (_currentBook != newBook)
                         {
@@ -215,6 +226,10 @@ namespace ClearDashboard.Wpf.ViewModels
                                     _isOT = false;
                                 }
                             }
+                        } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
+                        {
+                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+                            AnchorRef = CurrentBcv.GetVerseRefAbbreviated();
                         }
                     }
                     break;

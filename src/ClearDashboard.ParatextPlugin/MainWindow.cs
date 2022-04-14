@@ -80,7 +80,7 @@ namespace ClearDashboardPlugin
         {
             InitializeComponent();
 
-            // configure serilog
+            // configure Serilog
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
@@ -92,12 +92,10 @@ namespace ClearDashboardPlugin
 
             // get the version information
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            lblVersion.Text = string.Format($"Plugin Version: {version}");
+            lblVersion.Text = string.Format($@"Plugin Version: {version}");
 
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
-
-            bool showErrorMessage = true;
 
             JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
             {
@@ -105,8 +103,8 @@ namespace ClearDashboardPlugin
             };
 
 
-
             //// check to see if ClearSuite is installed
+            //             bool showErrorMessage = true;
             //if (CheckIfClearSuiteInstalledAsync())
             //{
             //    if (_clearSuitePath != string.Empty)
@@ -276,12 +274,8 @@ namespace ClearDashboardPlugin
                     break;
                 case ActionType.GetCurrentVerse:
                     // send the current BCV location of Paratext
-                    await WriteMessageToPipeAsync(new PipeMessage
-                    {
-                        Action = ActionType.CurrentVerse,
-                        Text = m_verseRef.BBBCCCVVV.ToString(),
-                    }).ConfigureAwait(false);
-                    AppendText(MsgColor.Orange, "OUTBOUND -> SetCurrentVerse");
+                    GetCurrentVerse().Forget();
+
                     break;
                 case ActionType.GetBibilicalTermsAll:
                     // fire off into background
@@ -309,14 +303,7 @@ namespace ClearDashboardPlugin
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
-                    var msgOut = new PipeMessage
-                    {
-                        Action = ActionType.CurrentVerse,
-                        Text = m_verseRef.BBBCCCVVV.ToString(),
-                    };
-
-                    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-                    AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef.ToString()}");
+                    GetCurrentVerse().Forget();
 
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
@@ -471,13 +458,12 @@ namespace ClearDashboardPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        private void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
-
             if (newReference != m_verseRef)
             {
                 m_verseRef = newReference;
-                await OnMessageReceivedAsync(new PipeMessage { Action = ActionType.GetCurrentVerse }).ConfigureAwait(false);
+                GetCurrentVerse().Forget();
             }
         }
 
@@ -486,11 +472,31 @@ namespace ClearDashboardPlugin
 
         #region Methods
 
+
+        /// <summary>
+        /// Send out the current verse through the pipe
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetCurrentVerse()
+        {
+            await WriteMessageToPipeAsync(new PipeMessage
+            {
+                Action = ActionType.CurrentVerse,
+                Text = m_verseRef.BBBCCCVVV.ToString(),
+            }).ConfigureAwait(false);
+            AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef}");
+        }
+
+        /// <summary>
+        /// Send out the Biblical Terms for ALL BTs
+        /// </summary>
+        /// <returns></returns>
         private async Task GetBiblicalTermsAllBackground()
         {
+            // ReSharper disable once InconsistentNaming
             string payloadBTAll = "";
 
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 if (_TermsList == null)
                 {
@@ -512,16 +518,17 @@ namespace ClearDashboardPlugin
         }
 
         /// <summary>
-        /// Run this off in a background task
+        /// Send out the Biblical Terms for only the Project BTs
         /// </summary>
         /// <returns></returns>
         private async Task GetBiblicalTermsProjectBackground()
         {
+            // ReSharper disable once InconsistentNaming
             string payloadBT = "";
 
             BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
 
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 var btList = bt.ProcessBiblicalTerms(m_project);
                 payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
@@ -687,21 +694,21 @@ namespace ClearDashboardPlugin
         /// Append colored text to the rich text box
         /// </summary>
         /// <param name="sError"></param>
-        /// <param name="color"></param>
-        private void AppendText(string sError, StringBuilder sb)
-        {
-            //check for threading issues
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new AppendTextDelegate(AppendText), new object[] { sError, sb });
-            }
-            else
-            {
-                cRTB.AppendText(sError + "\n\n", Color.Red, this.rtb);
-                cRTB.AppendText(sb.ToString(), Color.Blue, this.rtb);
-                cRTB.AppendText("\n\n", Color.Red, this.rtb);
-            }
-        }
+        /// <param name="sb"></param>
+        //private void AppendText(string sError, StringBuilder sb)
+        //{
+        //    //check for threading issues
+        //    if (this.InvokeRequired)
+        //    {
+        //        this.Invoke(new AppendTextDelegate(AppendText), new object[] { sError, sb });
+        //    }
+        //    else
+        //    {
+        //        cRTB.AppendText(sError + "\n\n", Color.Red, this.rtb);
+        //        cRTB.AppendText(sb.ToString(), Color.Blue, this.rtb);
+        //        cRTB.AppendText("\n\n", Color.Red, this.rtb);
+        //    }
+        //}
 
         /// <summary>
         /// Append colored text to the rich text box
@@ -747,7 +754,7 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void btnRestart_Click(object sender, EventArgs e)
+        private void btnRestart_Click(object sender, EventArgs e)
         {
             //// disconnect the pipe
             //UnhookPipe();
