@@ -479,10 +479,16 @@ namespace ClearDashboardPlugin
         /// <returns></returns>
         private async Task GetCurrentVerse()
         {
+            string verseID = m_verseRef.BBBCCCVVV.ToString();
+            if (verseID.Length < 8)
+            {
+                verseID = verseID.PadLeft(8, '0');
+            }
+
             await WriteMessageToPipeAsync(new PipeMessage
             {
                 Action = ActionType.CurrentVerse,
-                Text = m_verseRef.BBBCCCVVV.ToString(),
+                Text = verseID,
             }).ConfigureAwait(false);
             AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef}");
         }

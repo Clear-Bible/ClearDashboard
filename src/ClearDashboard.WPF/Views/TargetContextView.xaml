@@ -25,45 +25,55 @@
 
 
     <Grid>
-        <ScrollViewer>
-            <StackPanel x:Name="TargetStackPanel" Orientation="Vertical">
-                <Border BorderBrush="DarkGray" BorderThickness="1">
-                    <StackPanel Margin="5,2,0,2" Orientation="Horizontal">
-                        <RadioButton
-                            x:Name="radUnformatted"
-                            Content="Unformatted"
-                            IsChecked="True"
-                            Style="{StaticResource MaterialDesignRadioButton}" />
-                        <RadioButton
-                            x:Name="radFormatted"
-                            Margin="10,0,0,0"
-                            Checked="radFormatted_Checked"
-                            Content="Formatted"
-                            Style="{StaticResource MaterialDesignRadioButton}" />
-                    </StackPanel>
-                </Border>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                <Border BorderBrush="DarkGray" BorderThickness="1">
-                    <helpers:BindableTextBlock
-                        x:Name="targetUnformatted"
-                        Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContentControl}}"
-                        Height="2000"
-                        Margin="5,5,5,5"
-                        Padding="20"
-                        HorizontalAlignment="Center"
-                        Background="{StaticResource MaterialDesignCardBackground}"
-                        FontSize="14"
-                        Foreground="WhiteSmoke"
-                        InlineList="{Binding TargetInlinesText}"
-                        TextWrapping="Wrap"
-                        Visibility="{Binding ElementName=radUnformatted, Path=IsChecked, Converter={StaticResource VisibilityConverter}}" />
+        <StackPanel
+            x:Name="TargetStackPanel"
+            Grid.Row="0"
+            Orientation="Vertical">
+            <Border BorderBrush="DarkGray" BorderThickness="1">
+                <StackPanel Margin="5,2,0,2" Orientation="Horizontal">
+                    <RadioButton
+                        x:Name="radUnformatted"
+                        Content="Unformatted"
+                        IsChecked="True"
+                        Style="{StaticResource MaterialDesignRadioButton}" Checked="radUnformatted_Checked" />
+                    <RadioButton
+                        x:Name="radFormatted"
+                        Margin="10,0,0,0"
+                        Checked="radFormatted_Checked"
+                        Content="Formatted"
+                        Style="{StaticResource MaterialDesignRadioButton}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
 
-                    <!--  InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}"  -->
-                </Border>
+        <!--<DockPanel Grid.Row="1">
+            <ScrollViewer x:Name="usfmScroll">
+                <helpers:BindableTextBlock
+                    x:Name="targetUnformatted"
+                    Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContentControl}}"
+                    Margin="5,5,5,5"
+                    Padding="20"
+                    HorizontalAlignment="Center"
+                    Background="{StaticResource MaterialDesignCardBackground}"
+                    FontSize="14"
+                    Foreground="WhiteSmoke"
+                    InlineList="{Binding TargetInlinesText}"
+                    TextWrapping="Wrap"
+                    Visibility="{Binding ElementName=radUnformatted, Path=IsChecked, Converter={StaticResource VisibilityConverter}}" />
+            </ScrollViewer>
+        </DockPanel>
+        -->
+        <!--  InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}"  -->
 
-                <wpf:WebView2 Name="Browser" MinHeight="250" />
-            </StackPanel>
-        </ScrollViewer>
-
+        <wpf:WebView2
+            Name="Browser"
+            Grid.Row="1"
+            MinHeight="250" />
+        <!--  Visibility="{Binding ElementName=radFormatted, Path=IsChecked, Converter={StaticResource VisibilityConverter}}"  -->
     </Grid>
 </UserControl>

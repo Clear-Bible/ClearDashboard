@@ -181,6 +181,10 @@ namespace ClearDashboard.Common.Models
         /// <returns>Success of parsing IncommingVerseLocation.</returns>
         public bool SetVerseFromId(string verseId)
         {
+            if (verseId is null)
+            {
+                return false;
+            }
             // Convert the number into a string we can parse.
             string _VerseLocationId = verseId.ToString().PadLeft(8, '0');
             string _BookNumStr = _VerseLocationId.Substring(0, 2);

@@ -1,9 +1,7 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using ClearDashboard.Wpf.ViewModels;
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -13,7 +11,7 @@ namespace ClearDashboard.Wpf.Views
     public partial class TargetContextView : UserControl
     {
         private TargetContextViewModel _vm;
-        private string _lastHTML = "";
+        private string _lastHtml = "";
 
 
         public TargetContextView()
@@ -28,34 +26,77 @@ namespace ClearDashboard.Wpf.Views
         {
             _vm = (TargetContextViewModel)this.DataContext;
 
+            // trigger the loading of the unformatted
+            radUnformatted_Checked(null, null);
+
+
             // rarely get's hit because the webview2 control doesn't activate until it 
             // is visible to the user
             INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) =>
+            viewModel.PropertyChanged += (_, args) =>
             {
-                if (args.PropertyName.Equals("TargetHTML"))
+                if (args.PropertyName is null)
                 {
-                    string html = _vm.TargetHTML;
-                    if (_lastHTML != html)
-                    {
-                        _lastHTML = html;
+                    return;
+                }
 
-                        UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                if (radFormatted.IsChecked == true)
+                {
+                    if (args.PropertyName.Equals("FormattedHTML"))
+                    {
+                        string html = _vm.FormattedHTML;
+                        if (_lastHtml != html)
                         {
-                            Fragment = _vm.AnchorRef
+                            _lastHtml = html;
+
+                            UriBuilder uriBuilder = new UriBuilder(_vm.HtmlPath)
+                            {
+                                Fragment = _vm.FormattedAnchorRef
+                            };
+                            Browser.Source = uriBuilder.Uri;
+                        }
+
+                        return;
+                    }
+
+                    if (args.PropertyName.Equals("FormattedAnchorRef"))
+                    {
+                        // update the verse location
+                        UriBuilder uriBuilder = new UriBuilder(_vm.HtmlPath)
+                        {
+                            Fragment = _vm.FormattedAnchorRef
                         };
                         Browser.Source = uriBuilder.Uri;
                     }
-                    return;
-                } 
-                else if (args.PropertyName.Equals("AnchorRef"))
+                }
+                else
                 {
-                    // update the verse location
-                    UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                    if (args.PropertyName.Equals("UnformattedHTML"))
                     {
-                        Fragment = _vm.AnchorRef
-                    };
-                    Browser.Source = uriBuilder.Uri;
+                        string html = _vm.UnformattedHTML;
+                        if (_lastHtml != html)
+                        {
+                            _lastHtml = html;
+
+                            UriBuilder uriBuilder = new UriBuilder(_vm.UnformattedPath)
+                            {
+                                Fragment = _vm.UnformattedAnchorRef
+                            };
+                            Browser.Source = uriBuilder.Uri;
+                        }
+
+                        return;
+                    }
+
+                    if (args.PropertyName.Equals("UnformattedAnchorRef"))
+                    {
+                        // update the verse location
+                        UriBuilder uriBuilder = new UriBuilder(_vm.UnformattedPath)
+                        {
+                            Fragment = _vm.UnformattedAnchorRef
+                        };
+                        Browser.Source = uriBuilder.Uri;
+                    }
                 }
             };
         }
@@ -63,19 +104,38 @@ namespace ClearDashboard.Wpf.Views
 
         private void radFormatted_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
-            // oddly this gets triggered before the UserControl_Loaded
             if (_vm is not null)
             {
-                string html = _vm.TargetHTML;
-                if (_lastHTML.Length != html.Length)
+                string html = _vm.FormattedHTML;
+                if (_lastHtml.Length != html.Length)
                 {
                     //Browser.NavigateToString(html);
-                    _lastHTML = html;
+                    _lastHtml = html;
 
 
-                    UriBuilder uriBuilder = new UriBuilder(@"D:\temp\output.html")
+                    UriBuilder uriBuilder = new UriBuilder(_vm.HtmlPath)
                     {
-                        Fragment = _vm.AnchorRef
+                        Fragment = _vm.FormattedAnchorRef
+                    };
+                    Browser.Source = uriBuilder.Uri;
+                }
+            }
+        }
+
+        private void radUnformatted_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_vm is not null)
+            {
+                string html = _vm.UnformattedHTML;
+                if (_lastHtml.Length != html.Length)
+                {
+                    //Browser.NavigateToString(html);
+                    _lastHtml = html;
+
+
+                    UriBuilder uriBuilder = new UriBuilder(_vm.UnformattedPath)
+                    {
+                        Fragment = _vm.UnformattedAnchorRef
                     };
                     Browser.Source = uriBuilder.Uri;
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +14,12 @@ using ClearDashboard.Common.Models;
 
 namespace ClearDashboard.Wpf.Helpers
 {
+    public class ParsedXML
+    {
+        public string VerseID { get; set; }
+        public Inline Inline { get; set; }
+    }
+
     public static class UsxParser
     {
         private static XmlReader usfx;
@@ -21,17 +28,18 @@ namespace ClearDashboard.Wpf.Helpers
         private static string toc2;
         private static string toc3;
 
-        public static List<Inline> ParseXMLToList(string xml)
+        public static List<ParsedXML> ParseXMLToList(string xml)
         {
             string style;
             string caller;
             string code;
             string number;
             string noteCaller = "";
+            string currentChapter = "";
 
             string ret = "";
 
-            List<Inline> inlinesText = new List<Inline>();
+            List<ParsedXML> inlinesText = new List<ParsedXML>();
 
             usfx = XmlReader.Create(new StringReader(xml));
             while (usfx.Read())
@@ -52,16 +60,20 @@ namespace ClearDashboard.Wpf.Helpers
                             if (style != null)
                             {
                                 ret += $@"\{style} {number}" + "\n";
+                                currentChapter = number.PadLeft(3, '0');
                             }
                             break;
                         case "verse":
                             if (style != null)
                             {
+                                ret += "VERSEID=" + currentChapter + number.PadLeft(3, '0');
+                                ret += "\n";
                                 ret += $@"\{style} {number} ";
                             }
                             else
                             {
                                 ret += "\n";
+
                             }
                             break;
                         case "para":
@@ -151,9 +163,15 @@ namespace ClearDashboard.Wpf.Helpers
                         // Syntax error in the regular expression
                     }
 
+                    string verseID = "";
+                    if (line.StartsWith("VERSEID="))
+                    {
+                        verseID = line;
+                    }
+
                     if (resultList.Count == 0)
                     {
-                        inlinesText.Add(new Run(line + "\n"));
+                        inlinesText.Add( new ParsedXML{Inline = new Run(line + "\n"), VerseID= verseID});
                     }
                     else
                     {
@@ -214,9 +232,9 @@ namespace ClearDashboard.Wpf.Helpers
                         {
                             //var p = (System.Windows.Documents.Run)inline;
                             //Debug.WriteLine(p.Text);
-                            inlinesText.Add(inline);
+                            inlinesText.Add(new ParsedXML { Inline = inline, VerseID = verseID });
                         }
-                        inlinesText.Add(new Run("\n"));
+                        inlinesText.Add( new ParsedXML { Inline = new Run("\n"), VerseID = verseID });
                     }
 
                 }
@@ -366,6 +384,149 @@ namespace ClearDashboard.Wpf.Helpers
             usfx.Close();
             usfx.Dispose();
             return ret;
+        }
+
+        public static string ConvertXMLToHTML(string xml, string currentBook, string fontFamily)
+        {
+            string style;
+            string caller;
+            string code;
+            string number;
+            string noteCaller = "";
+            string currentChapter = "";
+
+            StringBuilder sb = new StringBuilder();
+
+            List<string> inlinesText = new List<string>();
+
+            usfx = XmlReader.Create(new StringReader(xml));
+            while (usfx.Read())
+            {
+                if (usfx.NodeType == XmlNodeType.Element)
+                {
+                    style = usfx.GetAttribute("style");
+                    caller = usfx.GetAttribute("caller");
+                    code = usfx.GetAttribute("code");
+                    number = usfx.GetAttribute("number");
+
+                    switch (usfx.Name)
+                    {
+                        case "book":
+                            sb.AppendLine($@"<span class='book'>\{style} {code} </span>");
+                            break;
+                        case "chapter":
+                            if (style != null)
+                            {
+                                sb.AppendLine($@"<span class='chapter'>\{style} {number}</span><p/>");
+                                currentChapter = number.PadLeft(3, '0');
+                            }
+                            break;
+                        case "verse":
+                            if (style != null)
+                            {
+                                string verseID = currentChapter + number.PadLeft(3, '0');
+                                sb.AppendLine($@"<span class='verse' id='{currentBook}{verseID}'>\{style} {number}</span>");
+                            }
+                            else
+                            {
+                                sb.AppendLine("<p/>");
+                            }
+                            break;
+                        case "para":
+                            if (style == "p")
+                            {
+                                sb.AppendLine($@"<span class='tag'>\{style}</span><p/>");
+                            }
+                            else
+                            {
+                                sb.AppendLine($@"<span class='tag'>\{style}</span>");
+                            }
+
+                            break;
+                        case "note":
+                            noteCaller = style;
+                            sb.AppendLine($@"<span class='tag'>\{style} {caller}</span>");
+                            break;
+                        case "char":
+                            sb.AppendLine($@"<span class='tag'>\{style}</span>");
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                else if (usfx.NodeType == XmlNodeType.EndElement)
+                {
+                    //handle closing XML element
+                    switch (usfx.Name)
+                    {
+                        case "book":
+                            sb.AppendLine("<p/>");
+                            break;
+                        case "c":
+                            sb.AppendLine("<p/>");
+                            break;
+                        case "para":
+                            sb.AppendLine("<p/>");
+                            break;
+                        case "verse":
+                            break;
+                        case "char":
+                            sb.AppendLine($@"<span class='tag'>\{noteCaller}* </span>");
+                            break;
+                    }
+
+                }
+                else if (((usfx.NodeType == XmlNodeType.Text) || (usfx.NodeType == XmlNodeType.SignificantWhitespace) || (usfx.NodeType == XmlNodeType.Whitespace)))
+                {
+                    // handle text
+                    if (usfx.Value.Trim() != "")
+                    {
+                        string text = usfx.Value;
+                        text = text.Replace("<", "&lt;");
+                        text = text.Replace(">", "&gt;");
+
+                        sb.AppendLine(text);
+                    }
+                }
+            }
+
+            usfx.Close();
+            usfx.Dispose();
+
+            string html = "";
+            html += "<html>\n";
+            html += "  <head>\n";
+            html += "    <META http-equiv='Content - Type' content='text/html; charset=utf-16'>\n";
+            html += "    <meta content='utf-8'>\n";
+            html += "<style>\n";
+            html += "	body {\n";
+            html += "	font-family: " + fontFamily +  ";\n";
+            html += "	background-color: #292929;\n";
+            html += "	color: white;\n";
+            html += "	}\n\n";
+            html += "	.book {\n";
+            html += "	color: red;\n";
+            html += "	font-family: sans-serif;}\n\n";
+            html += "	.chapter {\n";
+            html += "	color: lime;\n";
+            html += "	font-family: sans-serif;}\n";
+            html += "	.verse {\n\n";
+            html += "	color: orange;\n";
+            html += "	font-family: sans-serif;}\n\n";
+            html += "	.tag {\n";
+            html += "	color: yellow;\n";
+            html += "	font-family: sans-serif;}\n";
+            html += "</style>\n";
+            html += "  </head>\n";
+            html += "  <body>\n";
+
+            html += sb.ToString();
+
+            html += "  </body>\n";
+            html += "</html>\n";
+
+            return html;
         }
     }
 }

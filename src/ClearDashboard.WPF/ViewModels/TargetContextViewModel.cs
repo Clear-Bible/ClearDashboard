@@ -78,28 +78,72 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private string _targetHTML;
-        public string TargetHTML
+        private string _formattedHtml;
+        public string FormattedHTML
         {
-            get => _targetHTML;
+            get => _formattedHtml;
             set
             {
-                _targetHTML = value;
-                NotifyOfPropertyChange(() => TargetHTML);
+                _formattedHtml = value;
+                NotifyOfPropertyChange(() => FormattedHTML);
             }
         }
 
         private string _anchorRef = string.Empty;
-        public string AnchorRef
+        public string FormattedAnchorRef
         {
-            get { return _anchorRef; }
+            get => _anchorRef;
             set
             {
                 _anchorRef = value;
-                NotifyOfPropertyChange(() => AnchorRef);
+                NotifyOfPropertyChange(() => FormattedAnchorRef);
             }
         }
 
+        private string _unformattedHtml;
+        public string UnformattedHTML
+        {
+            get => _unformattedHtml;
+            set
+            {
+                _unformattedHtml = value;
+                NotifyOfPropertyChange(() => UnformattedHTML);
+            }
+        }
+
+        private string _unformattedAnchorRef = string.Empty;
+        public string UnformattedAnchorRef
+        {
+            get => _unformattedAnchorRef;
+            set
+            {
+                _unformattedAnchorRef = value;
+                NotifyOfPropertyChange(() => UnformattedAnchorRef);
+            }
+        }
+
+        private string _unformattedPath;
+        public string UnformattedPath
+        {
+            get => _unformattedPath;
+            set
+            {
+                _unformattedPath = value;
+                NotifyOfPropertyChange(() => UnformattedPath);
+            }
+        }
+
+
+        private string _HtmlPath;
+        public string HtmlPath
+        {
+            get => _HtmlPath; 
+            set
+            {
+                _HtmlPath = value;
+                NotifyOfPropertyChange(() => HtmlPath);
+            }
+        }
 
         #endregion //Public Properties
 
@@ -209,7 +253,8 @@ namespace ClearDashboard.Wpf.ViewModels
                                 // a zero based verse
                                 TargetInlinesText.Clear();
                                 NotifyOfPropertyChange(() => TargetInlinesText);
-                                TargetHTML = "";
+                                FormattedHTML = "";
+                                UnformattedHTML = "";
                             }
                             else
                             {
@@ -229,7 +274,8 @@ namespace ClearDashboard.Wpf.ViewModels
                         } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
                         {
                             CurrentBcv.SetVerseFromId(pipeMessage.Text);
-                            AnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+                            FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+                            UnformattedAnchorRef = CurrentBcv.GetVerseId();
                         }
                     }
                     break;
@@ -249,18 +295,24 @@ namespace ClearDashboard.Wpf.ViewModels
                 string payload = message.Payload.ToString();
                 string xmlData = JsonSerializer.Deserialize<string>(payload);
 
-
-                //File.WriteAllText(@"D:\temp\file.usx", xmlData, Encoding.UTF8);
-
                 // Make the Unformatted version
                 _targetInlinesText.Clear();
-                var usxList = Helpers.UsxParser.ParseXMLToList(xmlData);
-                foreach (var line in usxList)
+                var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, _projectManager.CurrentDashboardProject.TargetProject.DefaultFont);
+                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "usfm.html");
+
+                UnformattedHTML = usfmHtml;
+                UnformattedAnchorRef = CurrentBcv.GetVerseId();
+
+                try
                 {
-                    _targetInlinesText.Add(line);
+                    File.WriteAllText(UnformattedPath, usfmHtml);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
                 }
 
-                NotifyOfPropertyChange(() => TargetInlinesText);
 
 
                 // Make the Formatted version
@@ -268,16 +320,49 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (File.Exists(xsltPath))
                 {
                     var usxHtml = Helpers.UsxParser.TransformXMLToHTML(xmlData, xsltPath);
-                    TargetHTML = usxHtml;
+                    FormattedHTML = usxHtml;
                 }
 
-                AnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
 
+                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "output.html");
 
-                File.WriteAllText(@"D:\temp\output.html", TargetHTML);
+                try
+                {
+                    File.WriteAllText(HtmlPath, FormattedHTML);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
 
             });
         }
+
+        //private void ConvertListToHTML(List<ParsedXML> usxList)
+        //{
+
+        //    int versePosition = 0; // used to calculate the percent that the scrollgroup needs to scroll
+        //    int count = 0;
+        //    for (int i = 0; i < usxList.Count; i++)
+        //    {
+        //        if (usxList[i].VerseID != "")
+        //        {
+        //            string verseID = usxList[i].VerseID.Substring("VERSEID=".Length);
+        //            if (CurrentBcv.ChapterIdText + CurrentBcv.VerseIdText == verseID)
+        //            {
+        //                versePosition = count;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _targetInlinesText.Add(usxList[i].Inline);
+        //            count++;
+        //        }
+        //    }
+
+        //}
 
         #endregion // Methods
 
