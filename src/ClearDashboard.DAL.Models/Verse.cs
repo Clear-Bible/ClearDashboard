@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.VisualBasic;
-
+﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class Verse

@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DataAccessLayer.Context;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {

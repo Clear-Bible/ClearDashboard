@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ClearDashboard.DataAccessLayer.Models
+﻿namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class ProjectInfo
     {

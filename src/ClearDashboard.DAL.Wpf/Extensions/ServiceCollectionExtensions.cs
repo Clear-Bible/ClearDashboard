@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Context;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;

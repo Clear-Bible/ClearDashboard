@@ -1,15 +1,11 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace ClearDashboard.DataAccessLayer.Extensions
+namespace ClearDashboard.DataAccessLayer.Data.Extensions
 {
 
     /// <summary>

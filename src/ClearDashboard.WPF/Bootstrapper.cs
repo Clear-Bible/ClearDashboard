@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Extensions;
 using ClearDashboard.Wpf.Extensions;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
