@@ -14,9 +14,6 @@
     FlowDirection="{Binding flowDirection}"
     mc:Ignorable="d">
     <Grid>
-        <wpf:WebView2
-            Name="treeViewBrowser"
-            DockPanel.Dock="Top"
-            Source="https://globaltech.team" />
+        <wpf:WebView2 Name="Browser" DockPanel.Dock="Top" />
     </Grid>
 </UserControl>

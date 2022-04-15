@@ -1,6 +1,5 @@
 set ProjectName="ClearDashboardPlugin"
 set TargetPath=.\bin\Debug\net472
-rem set NamedPipesPath=.\..\NamedPipes\bin\Debug\net48
 
 if exist "%ParatextInstallDir%\plugins\%ProjectName%"\ (
   del /F /Q "%ParatextInstallDir%\plugins\%ProjectName%"\*.*
