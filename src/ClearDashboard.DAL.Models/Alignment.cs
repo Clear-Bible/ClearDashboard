@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class Alignment
@@ -10,8 +8,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int TargetTokenId { get; set; }
         public decimal Score { get; set; }
         public int? AlignmentVersionId { get; set; }
-        public int? AlignmentTypeId { get; set; }
-
         public virtual AlignmentType AlignmentType { get; set; }
         public virtual AlignmentVersion AlignmentVersion { get; set; }
         public virtual Token SourceToken { get; set; }

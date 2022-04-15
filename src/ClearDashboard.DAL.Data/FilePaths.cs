@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.IO;
-
-namespace ClearDashboard.DataAccessLayer.Utility
+﻿namespace ClearDashboard.DataAccessLayer.Data
 {
     public class FilePathTemplates
     {

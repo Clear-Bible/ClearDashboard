@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Context
+namespace ClearDashboard.DataAccessLayer.Data
 {
     public partial class AlignmentContext : DbContext
     {
@@ -115,7 +113,7 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.HasIndex(e => e.SourceTokenId).IsUnique();
                 entity.HasIndex(e => e.TargetTokenId).IsUnique();
 
-                entity.Property(e => e.AlignmentTypeId);
+                entity.Property(e => e.AlignmentType);
                 entity.Property(e => e.AlignmentVersionId);
                 entity.Property(e => e.Score)
                     .HasColumnType("decimal(3)");
@@ -165,7 +163,7 @@ namespace ClearDashboard.DataAccessLayer.Context
 
                 entity.HasKey(e => e.Id);
                 
-                entity.Property(e => e.CorpusTypeId);
+                entity.Property(e => e.CorpusType);
                    entity.Property(e => e.IsRtl)
                     .HasColumnType("bit")
                     .HasColumnName("IsRTL");
@@ -237,7 +235,7 @@ namespace ClearDashboard.DataAccessLayer.Context
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.SourceCorpusId).IsUnique();
                 entity.HasIndex(e => e.TargetCorpusId).IsUnique();
-                entity.Property(e => e.AlignmentTypeId);
+                entity.Property(e => e.AlignmentType);
                 entity.Property(e => e.Created)
                     .HasColumnType("datetime");
                 entity.Property(e => e.LastGenerated)

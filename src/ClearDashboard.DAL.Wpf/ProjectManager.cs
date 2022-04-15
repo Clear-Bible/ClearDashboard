@@ -3,7 +3,6 @@ using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Utility;
 using ClearDashboard.DataAccessLayer.ViewModels;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
@@ -17,6 +16,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 
 namespace ClearDashboard.DataAccessLayer
@@ -27,7 +27,7 @@ namespace ClearDashboard.DataAccessLayer
 
         private readonly ILogger _logger;
         private readonly NamedPipesClient _namedPipesClient;
-        private readonly ParatextProxy _paratextUtils;
+        private readonly ParatextProxy _paratextProxy;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
         private readonly IMediator mediator_;
 
@@ -41,7 +41,8 @@ namespace ClearDashboard.DataAccessLayer
 
         public bool IsPipeConnected { get; set; }
 
-        #region Enums
+      
+
         public enum PipeAction
         {
             OnConnected,
@@ -96,11 +97,11 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextUtils, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
         {
             _logger = logger;
             _projectNameDbContextFactory = projectNameDbContextFactory;
-            _paratextUtils = paratextUtils;
+            _paratextProxy = paratextProxy;
             _logger.LogInformation("'ProjectManager' ctor called.");
 
             _namedPipesClient = namedPipeClient;
@@ -110,6 +111,8 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         #endregion
+
+  
 
         #region Shutdown
 
@@ -268,13 +271,13 @@ namespace ClearDashboard.DataAccessLayer
         {
             // detect if Paratext is installed
            
-            ParatextVisible = _paratextUtils.IsParatextInstalled();
+            ParatextVisible = _paratextProxy.IsParatextInstalled();
 
             if (ParatextVisible)
             {
                 // get all the Paratext Projects (Projects/Backtranslations)
                 ParatextProjects.Clear();
-                var projects = await _paratextUtils.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
+                var projects = await _paratextProxy.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -290,7 +293,7 @@ namespace ClearDashboard.DataAccessLayer
 
                 // get all the Paratext Resources (LWC)
                 ParatextResources.Clear();
-                var resources = _paratextUtils.GetParatextResources();
+                var resources = _paratextProxy.GetParatextResources();
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -311,7 +314,7 @@ namespace ClearDashboard.DataAccessLayer
             // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            var user = _paratextUtils.GetCurrentParatextUser();
+            var user = _paratextProxy.GetCurrentParatextUser();
 
             ParatextUserName = user;
 
@@ -380,20 +383,20 @@ namespace ClearDashboard.DataAccessLayer
             await _namedPipesClient.WriteAsync(message);
         }
 
-        #endregion
-
-        #region Commands
-
-        public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
-        {
-            return mediator_.Send(request, cancellationToken);
-        }
-        #endregion
-
-
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
             var projectAssets = await _projectNameDbContextFactory.Create(dashboardProject.ProjectName);
+            // Populate ProjectInfo table
+            // Identify relationships
+            //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
+            //   2.Manuscript to target (use ToDb.ManuscriptParatextParallelCorporaToDb)
+            //      a. Get manuscript from Clear.Engine (SourceCorpus)
+            //      b. Get Target from Paratext (TargetCorpus)
+            //      c. Parallelize 
+            //
+            //      d.  Insert results into 
+
+            //dashboardProject.TargetProject.
         }
 
         public void Dispose()
@@ -405,7 +408,13 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion
 
+        #region Commands
 
+        public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
+        {
+            return mediator_.Send(request, cancellationToken);
+        }
+        #endregion
 
     }
 }
