@@ -386,7 +386,7 @@ namespace ClearDashboard.Wpf.Helpers
             return ret;
         }
 
-        public static string ConvertXMLToHTML(string xml, string currentBook, string fontFamily)
+        public static string ConvertXMLToHTML(string xml, string currentBook, string fontFamily, double fontSize)
         {
             string style;
             string caller;
@@ -501,7 +501,8 @@ namespace ClearDashboard.Wpf.Helpers
             html += "    <meta content='utf-8'>\n";
             html += "<style>\n";
             html += "	body {\n";
-            html += "	font-family: " + fontFamily +  ";\n";
+            html += "	font-family: '" + fontFamily +  "';\n";
+            html += "	font-size: " + fontSize + "rem;\n";
             html += "	background-color: #292929;\n";
             html += "	color: white;\n";
             html += "	}\n\n";
