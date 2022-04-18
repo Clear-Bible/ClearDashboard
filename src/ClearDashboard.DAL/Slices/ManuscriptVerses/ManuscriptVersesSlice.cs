@@ -10,28 +10,27 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
 {
     public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<QueryResult<List<CoupleOfStrings>>>;
 
-    public class GetManuscriptVerseByIdHandler : ResourceDatabaseRequestHandler<GetManuscriptVerseByIdQuery, QueryResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
+    public class GetManuscriptVerseByIdHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, QueryResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
         public GetManuscriptVerseByIdHandler(ILogger<GetManuscriptVerseByIdHandler> logger) : base(logger)
         {
             //no-op
         }
 
-        protected override string DatabaseName => "manuscriptverses.sqlite";
+        protected override string ResourceName => "manuscriptverses.sqlite";
         
         public override Task<QueryResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = ValidateDatabasePath(new List<CoupleOfStrings>());
+            var queryResult = ValidateResourcePath(new List<CoupleOfStrings>());
             if (queryResult.Success)
             {
                 try
                 {
-                    queryResult.Data = ExecuteCommand($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..5]}%' ORDER BY verseID");
+                    queryResult.Data = ExecuteSqliteCommandAndProcessData($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..5]}%' ORDER BY verseID");
                 }
                 catch (Exception ex)
                 {
-
-                    LogAndSetUnsuccessfulResult(ref queryResult, $"An unexpected error occurred while querying the '{DatabaseName}' database for verses with verseId : '{request.VerseId}'", ex);
+                    LogAndSetUnsuccessfulResult(ref queryResult, $"An unexpected error occurred while querying the '{ResourceName}' database for verses with verseId : '{request.VerseId}'", ex);
                 }
             }
             return Task.FromResult(queryResult);
