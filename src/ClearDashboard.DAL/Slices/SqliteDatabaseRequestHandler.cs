@@ -7,23 +7,23 @@ using Microsoft.Extensions.Logging;
 namespace ClearDashboard.DataAccessLayer.Slices;
 
 /// <summary>
-    /// A base class used to query data from Sqlite databases - typically found in the "Resources" folder found in the directory of the executable.
-    /// </summary>
-    /// <typeparam name="TRequest"></typeparam>
-    /// <typeparam name="TResponse"></typeparam>
-    /// <typeparam name="TData"></typeparam>
-    public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData> 
-where TRequest : IRequest<TResponse>
-where TData : new ()
+/// A base class used to query data from Sqlite databases - typically found in the "Resources" folder found in the directory of the executable.
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
+/// <typeparam name="TData"></typeparam>
+public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
+    where TRequest : IRequest<TResponse>
+    where TData : new()
 {
     protected SQLiteDataReader? DataReader { get; private set; }
 
-    protected SqliteDatabaseRequestHandler(ILogger logger) :base(logger)
+    protected SqliteDatabaseRequestHandler(ILogger logger) : base(logger)
     {
         //no-op
     }
-    
-    protected TData? ExecuteSqliteCommandAndProcessData(string commandText) 
+
+    protected TData ExecuteSqliteCommandAndProcessData(string commandText)
     {
         var connectionManager = new SqliteConnectionManager(ResourcePath, Logger);
         try

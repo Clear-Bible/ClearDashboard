@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.LanguageResources
 {
-    public record GetLanguageResourcesCommand() : IRequest<QueryResult<List<string>>>;
+    public record GetLanguageResourcesCommand : IRequest<QueryResult<List<string>>>;
 
     public class GetLanguageResourcesCommandHandler : XmlReaderRequestHandler<GetLanguageResourcesCommand, QueryResult<List<string>>, List<string>>
     {
