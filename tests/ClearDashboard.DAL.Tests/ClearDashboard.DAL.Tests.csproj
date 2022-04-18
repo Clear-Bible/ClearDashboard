@@ -112,4 +112,10 @@
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\Xml\languages.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
