@@ -263,7 +263,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         break;
                     case DropZones.Target:
                         text.Text = "TARGET";
-                        if (project is { ProjectType: ProjectType.Standard })
+                        if (project is { CorpusType: CorpusType.Standard })
                         {
                             DashboardProject.TargetProject = project;
 
@@ -315,7 +315,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         break;
                     case DropZones.Interlinearizer:
                         text.Text = "INTERLINEARIZER";
-                        if (project != null && project.ProjectType == ProjectType.Resource)
+                        if (project != null && project.CorpusType == CorpusType.Resource)
                         {
                             DashboardProject.InterlinearizerProject = project;
                         }
