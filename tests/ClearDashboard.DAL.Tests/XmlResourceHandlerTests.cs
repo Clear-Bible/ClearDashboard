@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,24 +19,29 @@ namespace ClearDashboard.DAL.Tests
         {
             Services.AddMediatR(typeof(GetLanguageResourcesCommand));
             Services.AddLogging();
-            //base.SetupDependencyInjection();
         }
 
         [Fact]
         public async Task GetLanguagesTest()
         {
             var mediator = ServiceProvider.GetService<IMediator>();
+
+            if (mediator == null)
+            {
+                throw new NullReferenceException("IMediator has not been set up in DI wire up!");
+            }
             var result = await mediator.Send(new GetLanguageResourcesCommand());
 
             Assert.NotNull(result);
+            Assert.NotNull(result.Data);
             Assert.True(result.Success);
-            Assert.NotEmpty(result.Data);
+            Assert.NotEmpty(result.Data!);
 
-            Assert.Contains("English", result.Data);
-            Assert.Contains("Russian", result.Data);
+            Assert.Contains("English", result.Data!);
+            Assert.Contains("Russian", result.Data!);
 
             Output.WriteLine("Languages in file:");
-            foreach (var language in result.Data)
+            foreach (var language in result.Data!)
             {
                 Output.WriteLine(language);
             }

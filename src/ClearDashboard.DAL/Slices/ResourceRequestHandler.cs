@@ -11,7 +11,7 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
     where TRequest : IRequest<TResponse>
     where TData : new()
 {
-    protected ILogger Logger { get; private set; }
+    protected ILogger Logger { get; }
     protected string ResourceDirectory => Path.Combine(Environment.CurrentDirectory, "Resources");
     protected abstract string ResourceName { get; }
     protected string ResourcePath => Path.Combine(ResourceDirectory, ResourceName);
@@ -22,11 +22,11 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
     }
 
     public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
-    protected abstract TData? ProcessData();
+    protected abstract TData ProcessData();
 
-    protected QueryResult<TResultData?> ValidateResourcePath<TResultData>(TResultData data)
+    protected QueryResult<TResultData> ValidateResourcePath<TResultData>(TResultData data)
     {
-        var queryResult = new QueryResult<TResultData?>(data);
+        var queryResult = new QueryResult<TResultData>(data);
 
         if (string.IsNullOrEmpty(ResourceName))
         {
