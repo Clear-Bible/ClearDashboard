@@ -21,6 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
         
         public override Task<QueryResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
         {
+            
             var queryResult = ValidateDatabasePath(new List<CoupleOfStrings>());
             if (queryResult.Success)
             {
@@ -30,9 +31,8 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, $"An unexpected error occurred while querying the '{DatabaseName}' database for verses with verseId : '{request.VerseId}'");
-                    queryResult.Success = false;
-                    queryResult.Message = ex.Message;
+
+                    LogAndSetUnsuccessfulResult(ref queryResult, $"An unexpected error occurred while querying the '{DatabaseName}' database for verses with verseId : '{request.VerseId}'", ex);
                 }
             }
             return Task.FromResult(queryResult);

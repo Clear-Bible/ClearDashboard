@@ -56,22 +56,34 @@ public abstract class ResourceDatabaseRequestHandler<TRequest, TResponse, TData>
     protected QueryResult<TResultData> ValidateDatabasePath<TResultData>(TResultData data)
     {
         var queryResult = new QueryResult<TResultData>(data);
-        if (string.IsNullOrEmpty(DatabasePath))
+
+        if (string.IsNullOrEmpty(DatabaseName))
         {
-            const string message = $"Please set 'DatabasePath'";
-            Logger.LogError(message);
-            queryResult.Message = message;
-            queryResult.Success = false;
+            LogAndSetUnsuccessfulResult(ref queryResult, "Please set 'DatabaseName'.");
             return queryResult;
         }
-
+     
         if (!File.Exists(DatabasePath))
         {
-            var message = $"{DatabaseName} does not exist in the directory {ResourceDirectory}";
-            Logger.LogError(message);
-            queryResult.Message = message;
-            queryResult.Success = false;
+           LogAndSetUnsuccessfulResult(ref queryResult, $"{DatabaseName} does not exist in the directory {ResourceDirectory}");
         }
         return queryResult;
     }
+
+    protected void LogAndSetUnsuccessfulResult<TResultData>(ref QueryResult<TResultData> queryResult, string message, Exception? ex = null)
+    {
+        if (ex != null)
+        {
+            Logger.LogError(ex, message);
+            queryResult.Message = ex.Message;
+        }
+        else
+        {
+            Logger.LogError(message);
+            queryResult.Message = message;
+        }
+     
+        queryResult.Success = false;
+    }
+   
 }
