@@ -21,7 +21,6 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
         
         public override Task<QueryResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
         {
-            
             var queryResult = ValidateDatabasePath(new List<CoupleOfStrings>());
             if (queryResult.Success)
             {
@@ -51,6 +50,5 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
             }
             return list;
         }
-
     }
 }
