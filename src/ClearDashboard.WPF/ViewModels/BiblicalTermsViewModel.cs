@@ -487,11 +487,16 @@ namespace ClearDashboard.Wpf.ViewModels
             switch (pipeMessage.Action)
             {
                 case ActionType.CurrentVerse:
-                    if (_currentVerse != pipeMessage.Text)
+                    if (_currentVerse == "")
                     {
+                        _currentVerse = pipeMessage.Text;
                         // ask for Biblical Terms
                         await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
                             .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _currentVerse = pipeMessage.Text;
                     }
 
                     break;

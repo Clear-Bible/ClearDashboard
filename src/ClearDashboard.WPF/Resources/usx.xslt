@@ -157,7 +157,7 @@
 					font-style: italic; }
 
 					.p {
-					font-size: 18px;
+					font-size: 17px;
 					}
 
 					.v,
@@ -191,7 +191,7 @@
 					content: ")" !important; }
 
 					.x {
-					font-size: 16px;
+					<!-- font-size: 16px; -->
 					box-sizing: border-box;
 					display: inline-block;
 					position: relative;

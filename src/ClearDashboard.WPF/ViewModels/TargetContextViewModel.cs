@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
@@ -77,6 +78,18 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
         }
+
+        private double _zoomFactor = 1;
+        public double ZoomFactor
+        {
+            get => _zoomFactor;
+            set
+            {
+                _zoomFactor = value;
+                NotifyOfPropertyChange(() => ZoomFactor);
+            }
+        }
+
 
         private string _formattedHtml;
         public string FormattedHTML
@@ -187,6 +200,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion //Observable Properties
 
+        #region Commands
+
+        public ICommand ZoomInCommand { get; set; }
+        public ICommand ZoomOutCommand { get; set; }
+
+        #endregion
+
+
         #region Constructor
         public TargetContextViewModel()
         {
@@ -205,12 +226,26 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
-        }
 
+            // wire up the commands
+            ZoomInCommand = new RelayCommand(ZoomIn);
+            ZoomOutCommand = new RelayCommand(ZoomOut);
+        }
 
         #endregion //Constructor
 
         #region Methods
+
+        private void ZoomOut(object obj)
+        {
+            ZoomFactor = ZoomFactor * 1.1;
+        }
+
+        private void ZoomIn(object obj)
+        {
+            ZoomFactor = ZoomFactor * 0.9;
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -295,10 +330,20 @@ namespace ClearDashboard.Wpf.ViewModels
                 string payload = message.Payload.ToString();
                 string xmlData = JsonSerializer.Deserialize<string>(payload);
 
+                string fontFamily = "Doulos SIL";
+                double fontSize = 16;
+                if (_projectManager.ParatextProject is not null)
+                {
+                    // pull out the project font family
+                    fontFamily = _projectManager.ParatextProject.Language.FontFamily;
+                    fontSize = _projectManager.ParatextProject.Language.Size / (double)12;
+                }
+
+
                 // Make the Unformatted version
                 _targetInlinesText.Clear();
-                var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, _projectManager.CurrentDashboardProject.TargetProject.DefaultFont);
-                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "usfm.html");
+                var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, fontFamily, fontSize);
+                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "unformatted.html");
 
                 UnformattedHTML = usfmHtml;
                 UnformattedAnchorRef = CurrentBcv.GetVerseId();
@@ -323,9 +368,18 @@ namespace ClearDashboard.Wpf.ViewModels
                     FormattedHTML = usxHtml;
                 }
 
+                // inject into the FormattedHTML the proper font family
+                var spot = FormattedHTML.IndexOf("body {") + "body {".Length;
+                if (spot > -1)
+                {
+                    FormattedHTML = FormattedHTML.Insert(spot, "font-family: '" + fontFamily + "';font-size=" + fontSize + "em;");
+                }
+
+                FormattedHTML = FormattedHTML.Replace("font-size: 17px;", $"font-size: {fontSize}em;");
+
                 FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
 
-                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "output.html");
+                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "formatted.html");
 
                 try
                 {
