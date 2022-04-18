@@ -10,14 +10,17 @@ using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using ClearDashboard.ParatextPlugin.Models;
 using ClearDashboard.Pipes_Shared.Models;
 using Microsoft.VisualStudio.Threading;
+using Microsoft.Win32;
 using Pipes_Shared.Models;
 using Serilog.Core;
 
@@ -47,6 +50,7 @@ namespace ClearDashboardPlugin
 
         ////private ServerPipe _serverPipe;
         private string _clearSuitePath = "";
+
 
         private delegate void AppendTextDelegate(string text, StringBuilder sb);
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
@@ -696,25 +700,6 @@ namespace ClearDashboardPlugin
             }
         }
 
-        /// <summary>
-        /// Append colored text to the rich text box
-        /// </summary>
-        /// <param name="sError"></param>
-        /// <param name="sb"></param>
-        //private void AppendText(string sError, StringBuilder sb)
-        //{
-        //    //check for threading issues
-        //    if (this.InvokeRequired)
-        //    {
-        //        this.Invoke(new AppendTextDelegate(AppendText), new object[] { sError, sb });
-        //    }
-        //    else
-        //    {
-        //        cRTB.AppendText(sError + "\n\n", Color.Red, this.rtb);
-        //        cRTB.AppendText(sb.ToString(), Color.Blue, this.rtb);
-        //        cRTB.AppendText("\n\n", Color.Red, this.rtb);
-        //    }
-        //}
 
         /// <summary>
         /// Append colored text to the rich text box
@@ -801,82 +786,230 @@ namespace ClearDashboardPlugin
             //_ = GetNoteList("", dataPayload);
         }
 
+        private async void btnExportUSFM_Click(object sender, EventArgs e)
+        {
+            await ExportUSFMScripture().ConfigureAwait(false);
+        }
 
-        //private async Task ShowUSFMScripture()
-        //{
-        //    IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
-        //    List<string> lines = new List<string>();
-        //    foreach (var token in tokens)
-        //    {
-        //        if (token is IUSFMMarkerToken marker)
-        //        {
-        //            switch (marker.Type)
-        //            {
-        //                case MarkerType.Verse:
-        //                    lines.Add($"v {marker.Data}");
-        //                    break;
-        //                case MarkerType.Book:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Chapter:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Character:
-        //                    lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Milestone:
-        //                    lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.MilestoneEnd:
-        //                    lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.End:
-        //                    lines.Add($"Marker End: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Note:
-        //                    lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Unknown:
-        //                    lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Paragraph:
-        //                    lines.Add($" {marker.Marker} {marker.Data}");
-        //                    break;
-        //            }
-        //        }
-        //        else if (token is IUSFMTextToken textToken)
-        //        {
-        //            if (lines.Count > 0)
-        //            {
-        //                lines[lines.Count - 1] += (textToken.Text);
-        //            }
-        //            else
-        //            {
-        //                lines.Add(textToken.Text);
-        //            }
-        //        }
-        //        else if (token is IUSFMAttributeToken)
-        //        {
-        //            lines.Add("Attribute Token: " + token.ToString());
-        //        }
-        //        else
-        //        {
-        //            lines.Add("Unexpected token type: " + token.ToString());
-        //        }
-        //    }
+        private async Task ExportUSFMScripture()
+        {
+            string projectPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            projectPath = System.IO.Path.Combine(projectPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
 
-        //    var dataPayload = JsonSerializer.Serialize(lines);
+            if (!System.IO.Directory.Exists(projectPath))
+            {
+                try
+                {
+                    System.IO.Directory.CreateDirectory(projectPath);
+                }
+                catch (Exception e)
+                {
+                    AppendText(MsgColor.Red, e.Message);
+                    return;
+                }
+            }
 
-        //    PipeMessage msgOut = new PipeMessage
-        //    {
-        //         Action = ActionType.SetUSX, 
-        //         Text = $"{m_verseRef.BookNum}", 
-        //         Payload = dataPayload
-        //    };
+            // copy over the project's settings file
+            string settingsFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml");
+            if (File.Exists(settingsFile))
+            {
+                try
+                {
+                    File.Copy(settingsFile, Path.Combine(projectPath, "settings.xml"), true);
+                }
+                catch (Exception e)
+                {
+                    AppendText(MsgColor.Red, e.Message);
+                }
+            }
 
-        //    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-        //    AppendText(MsgColor.Orange, $"OUTBOUND -> SetUSX: {m_verseRef.BookNum}");
-        //}
+            // copy over the project's custom versification file
+            string versificationFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "custom.vrs");
+            if (File.Exists(versificationFile))
+            {
+                try
+                {
+                    File.Copy(versificationFile, Path.Combine(projectPath, "custom.vrs"), true);
+                }
+                catch (Exception e)
+                {
+                    AppendText(MsgColor.Red, e.Message);
+                }
+            }
+
+
+            for (int BookNum = 0; BookNum < this.m_project.AvailableBooks.Count; BookNum++)
+            {
+
+                if (m_project.AvailableBooks[BookNum].InProjectScope)
+                {
+                    AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[BookNum].Code}");
+
+                    StringBuilder sb = new StringBuilder();
+                    // do the header
+                    sb.AppendLine($@"\id {m_project.AvailableBooks[BookNum].Code}");
+
+                    var fileName = m_project.AvailableBooks[BookNum].Number.ToString().PadLeft(2, '0') 
+                                   + "-" + m_project.AvailableBooks[BookNum].Code + ".usfm";
+
+                    IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+                    try
+                    {
+                        // get tokens by book number (from object) and chapter
+                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[BookNum].Number);
+                    }
+                    catch (Exception e)
+                    {
+                        AppendText(MsgColor.Orange, $"No Scripture for {BookNum}");
+                    }
+
+                    foreach (var token in tokens)
+                    {
+                        if (token is IUSFMMarkerToken marker)
+                        {
+                            // a verse token
+                            if (marker.Type == MarkerType.Verse)
+                            {
+                                int p = 0;
+                                bool result = int.TryParse(marker.Data, out p);
+
+                                if (result)
+                                {
+                                    sb.Append($@"\v {marker.Data} ");
+                                }
+                                else
+                                {
+                                    // verse span so bust up the verse span
+                                    string[] nums = marker.Data.Split('-');
+                                    if (nums.Length > 1)
+                                    {
+                                        if (int.TryParse(nums[0], out p))
+                                        {
+                                            if (int.TryParse(nums[1], out p))
+                                            {
+                                                int start = Convert.ToInt16(nums[0]);
+                                                int end = Convert.ToInt16(nums[1]);
+                                                for (int j = start; j < end + 1; j++)
+                                                {
+                                                    sb.Append($@"\v {j} ");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } 
+                            else if (marker.Type == MarkerType.Chapter)
+                            {
+                                // new chapter
+                                sb.AppendLine();
+                                sb.AppendLine(@"\c " + marker.Data);
+                            }
+                        }
+                        else if (token is IUSFMTextToken textToken)
+                        {
+                            if (token.IsScripture)
+                            {
+                                // verse text
+                                sb.AppendLine(textToken.Text);
+                            }
+                        }
+                    }
+
+                    // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(projectPath, fileName), sb.ToString());
+                }
+            }
+        }
+
+        private string GetParatextProjectsPath()
+        {
+            string paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
+            // check if directory exists
+            if (!Directory.Exists(paratextProjectPath))
+            {
+                // directory doesn't exist so null this out
+                paratextProjectPath = "";
+            }
+
+            return paratextProjectPath;
+        }
+
+
+        private async Task SetUSFMScripture()
+        {
+            IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
+            List<string> lines = new List<string>();
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    switch (marker.Type)
+                    {
+                        case MarkerType.Verse:
+                            lines.Add($"v {marker.Data}");
+                            break;
+                        case MarkerType.Book:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Chapter:
+                            lines.Add($"{marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Character:
+                            lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Milestone:
+                            lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.MilestoneEnd:
+                            lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.End:
+                            lines.Add($"Marker End: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Note:
+                            lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Unknown:
+                            lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
+                            break;
+                        case MarkerType.Paragraph:
+                            lines.Add($" {marker.Marker} {marker.Data}");
+                            break;
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (lines.Count > 0)
+                    {
+                        lines[lines.Count - 1] += (textToken.Text);
+                    }
+                    else
+                    {
+                        lines.Add(textToken.Text);
+                    }
+                }
+                else if (token is IUSFMAttributeToken)
+                {
+                    lines.Add("Attribute Token: " + token.ToString());
+                }
+                else
+                {
+                    lines.Add("Unexpected token type: " + token.ToString());
+                }
+            }
+
+            var dataPayload = JsonSerializer.Serialize(lines);
+
+            PipeMessage msgOut = new PipeMessage
+            {
+                Action = ActionType.SetUSX,
+                Text = $"{m_verseRef.BookNum}",
+                Payload = dataPayload
+            };
+
+            await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
+            AppendText(MsgColor.Orange, $"OUTBOUND -> SetUSX: {m_verseRef.BookNum}");
+        }
 
         #endregion
     }
