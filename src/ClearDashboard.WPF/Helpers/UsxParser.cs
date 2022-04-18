@@ -502,7 +502,7 @@ namespace ClearDashboard.Wpf.Helpers
             html += "<style>\n";
             html += "	body {\n";
             html += "	font-family: '" + fontFamily +  "';\n";
-            html += "	font-size: " + fontSize + "em;\n";
+            html += "	font-size: " + fontSize + "rem;\n";
             html += "	background-color: #292929;\n";
             html += "	color: white;\n";
             html += "	}\n\n";

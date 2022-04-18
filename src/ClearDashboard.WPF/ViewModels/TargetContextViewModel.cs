@@ -372,10 +372,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 var spot = FormattedHTML.IndexOf("body {") + "body {".Length;
                 if (spot > -1)
                 {
-                    FormattedHTML = FormattedHTML.Insert(spot, "font-family: '" + fontFamily + "';font-size=" + fontSize + "em;");
+                    FormattedHTML = FormattedHTML.Insert(spot, "font-family: '" + fontFamily + "';font-size=" + fontSize + "rem;");
                 }
 
-                FormattedHTML = FormattedHTML.Replace("font-size: 17px;", $"font-size: {fontSize}em;");
+                FormattedHTML = FormattedHTML.Replace("font-size: 17px;", $"font-size: {fontSize}rem;");
 
                 FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
 
