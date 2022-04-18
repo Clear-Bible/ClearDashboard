@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -30,33 +31,32 @@ namespace ClearDashboardPlugin
     {
         #region props
 
+        // ReSharper disable once InconsistentNaming
         private IProject m_project;
+        // ReSharper disable once IdentifierTypo
         private int m_booknum;
+        // ReSharper disable once InconsistentNaming
         private IVerseRef m_verseRef;
+        // ReSharper disable once InconsistentNaming
         private IReadOnlyList<IProjectNote> m_noteList;
 
+        // ReSharper disable once InconsistentNaming
         private IWindowPluginHost m_host;
-        private List<BiblicalTermsData> _TermsList;
+        private List<BiblicalTermsData> _termsList;
+        // ReSharper disable once NotAccessedField.Local
         IPluginChildWindow m_parent;
 
-        private ListType ProjectList = new ListType("Project", true, BiblicalTermListType.All);
-        private ListType AllList = new ListType("All", false, BiblicalTermListType.All);
-        private ListType MajorList = new ListType("Major", false, BiblicalTermListType.Major);
+        private readonly ListType _projectList = new ListType("Project", true, BiblicalTermListType.All);
+        private readonly ListType _allList = new ListType("All", false, BiblicalTermListType.All);
+        private readonly ListType _majorList = new ListType("Major", false, BiblicalTermListType.Major);
 
-        private IBiblicalTermList m_listProject;
-        private IBiblicalTermList m_listAll;
+        // ReSharper disable once InconsistentNaming
+        private readonly IBiblicalTermList m_listProject;
+        // ReSharper disable once InconsistentNaming
+        private readonly IBiblicalTermList m_listAll;
 
         private JsonSerializerOptions _jsonOptions;
-
-        ////private ServerPipe _serverPipe;
-        private string _clearSuitePath = "";
-
-
-        private delegate void AppendTextDelegate(string text, StringBuilder sb);
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
-
-        //private StringBuilder _sb = new StringBuilder();
-
         private Form _parentForm;
 
 
@@ -101,7 +101,7 @@ namespace ClearDashboardPlugin
             // hook up an event when the window is closed so we can kill off the pipe
             this.Disposed += MainWindow_Disposed;
 
-            JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+            _jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
@@ -483,16 +483,16 @@ namespace ClearDashboardPlugin
         /// <returns></returns>
         private async Task GetCurrentVerse()
         {
-            string verseID = m_verseRef.BBBCCCVVV.ToString();
-            if (verseID.Length < 8)
+            string verseId = m_verseRef.BBBCCCVVV.ToString();
+            if (verseId.Length < 8)
             {
-                verseID = verseID.PadLeft(8, '0');
+                verseId = verseId.PadLeft(8, '0');
             }
 
             await WriteMessageToPipeAsync(new PipeMessage
             {
                 Action = ActionType.CurrentVerse,
-                Text = verseID,
+                Text = verseId,
             }).ConfigureAwait(false);
             AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef}");
         }
@@ -508,13 +508,13 @@ namespace ClearDashboardPlugin
 
             await Task.Run(() =>
             {
-                if (_TermsList == null)
+                if (_termsList == null)
                 {
-                    BibilicalTerms btAll = new BibilicalTerms(AllList, m_project, m_host);
-                    _TermsList = btAll.ProcessBiblicalTerms(m_project);
+                    BibilicalTerms btAll = new BibilicalTerms(_allList, m_project, m_host);
+                    _termsList = btAll.ProcessBiblicalTerms(m_project);
                 }
 
-                payloadBTAll = JsonSerializer.Serialize(_TermsList, _jsonOptions);
+                payloadBTAll = JsonSerializer.Serialize(_termsList, _jsonOptions);
 
             });
 
@@ -536,7 +536,7 @@ namespace ClearDashboardPlugin
             // ReSharper disable once InconsistentNaming
             string payloadBT = "";
 
-            BibilicalTerms bt = new BibilicalTerms(ProjectList, m_project, m_host);
+            BibilicalTerms bt = new BibilicalTerms(_projectList, m_project, m_host);
 
             await Task.Run(() =>
             {
@@ -786,21 +786,21 @@ namespace ClearDashboardPlugin
             //_ = GetNoteList("", dataPayload);
         }
 
-        private async void btnExportUSFM_Click(object sender, EventArgs e)
+        private void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            await ExportUSFMScripture().ConfigureAwait(false);
+            ExportUSFMScripture();
         }
 
-        private async Task ExportUSFMScripture()
+        private void ExportUSFMScripture()
         {
             string projectPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            projectPath = System.IO.Path.Combine(projectPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
+            projectPath = Path.Combine(projectPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
 
-            if (!System.IO.Directory.Exists(projectPath))
+            if (!Directory.Exists(projectPath))
             {
                 try
                 {
-                    System.IO.Directory.CreateDirectory(projectPath);
+                    Directory.CreateDirectory(projectPath);
                 }
                 catch (Exception e)
                 {
@@ -821,6 +821,9 @@ namespace ClearDashboardPlugin
                 {
                     AppendText(MsgColor.Red, e.Message);
                 }
+
+                FixParatextSettingsFile(Path.Combine(projectPath, "settings.xml"));
+
             }
 
             // copy over the project's custom versification file
@@ -838,29 +841,40 @@ namespace ClearDashboardPlugin
             }
 
 
-            for (int BookNum = 0; BookNum < this.m_project.AvailableBooks.Count; BookNum++)
+            for (int bookNum = 0; bookNum < this.m_project.AvailableBooks.Count; bookNum++)
             {
 
-                if (m_project.AvailableBooks[BookNum].InProjectScope)
+                if (m_project.AvailableBooks[bookNum].InProjectScope)
                 {
-                    AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[BookNum].Code}");
+                    AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[bookNum].Code}");
 
                     StringBuilder sb = new StringBuilder();
                     // do the header
-                    sb.AppendLine($@"\id {m_project.AvailableBooks[BookNum].Code}");
+                    sb.AppendLine($@"\id {m_project.AvailableBooks[bookNum].Code}");
 
-                    var fileName = m_project.AvailableBooks[BookNum].Number.ToString().PadLeft(2, '0') 
-                                   + "-" + m_project.AvailableBooks[BookNum].Code + ".usfm";
+                    int bookFileNum = 0;
+                    if (m_project.AvailableBooks[bookNum].Number >= 40)
+                    {
+                        // do that crazy USFM file naming where Matthew starts at 41
+                        bookFileNum = m_project.AvailableBooks[bookNum].Number + 1;
+                    }
+                    else
+                    {
+                        // normal OT book
+                        bookFileNum = m_project.AvailableBooks[bookNum].Number;
+                    }
+                    var fileName = bookFileNum.ToString().PadLeft(2, '0') 
+                                   + m_project.AvailableBooks[bookNum].Code + ".usfm";
 
                     IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
                     try
                     {
                         // get tokens by book number (from object) and chapter
-                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[BookNum].Number);
+                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[bookNum].Number);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        AppendText(MsgColor.Orange, $"No Scripture for {BookNum}");
+                        AppendText(MsgColor.Orange, $"No Scripture for {bookNum}");
                     }
 
                     foreach (var token in tokens)
@@ -870,6 +884,7 @@ namespace ClearDashboardPlugin
                             // a verse token
                             if (marker.Type == MarkerType.Verse)
                             {
+                                // ReSharper disable once NotAccessedVariable
                                 int p = 0;
                                 bool result = int.TryParse(marker.Data, out p);
 
@@ -916,11 +931,61 @@ namespace ClearDashboardPlugin
                     }
 
                     // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
-                    System.IO.File.WriteAllText(System.IO.Path.Combine(projectPath, fileName), sb.ToString());
+                    File.WriteAllText(Path.Combine(projectPath, fileName), sb.ToString());
                 }
             }
         }
 
+        // update the settings file to use "normal" file extensions
+        private void FixParatextSettingsFile(string path)
+        {
+            var doc = new XmlDocument();
+            doc.Load(path);
+
+            XmlElement root = doc.DocumentElement;
+            var node = root.SelectSingleNode("//Naming");
+
+            if (node != null)
+            {
+                node.Attributes["PrePart"].Value = "";
+                node.Attributes["PostPart"].Value = ".usfm";
+                node.Attributes["BookNameForm"].Value = "41MAT";
+            }
+
+
+            node = root.SelectSingleNode("//FileNameForm");
+            if (node != null)
+            {
+                node.InnerText = "41MAT";
+            }
+
+            node = root.SelectSingleNode("//FileNameBookNameForm");
+            if (node != null)
+            {
+                node.InnerText = "41MAT";
+            }
+
+            node = root.SelectSingleNode("//FileNamePostPart");
+            if (node != null)
+            {
+                node.InnerText = ".usfm";
+            }
+
+            node = root.SelectSingleNode("//FileNamePrePart");
+            if (node != null)
+            {
+                node.InnerText = "";
+            }
+
+            doc.Save(path);
+        }
+
+
+        /// <summary>
+        /// Returns the Paratext Project's path.  Usually:
+        /// {drive}:\My Paratext 9 Projects\
+        /// </summary>
+        /// <returns></returns>
         private string GetParatextProjectsPath()
         {
             string paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
@@ -935,81 +1000,81 @@ namespace ClearDashboardPlugin
         }
 
 
-        private async Task SetUSFMScripture()
-        {
-            IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
-            List<string> lines = new List<string>();
-            foreach (var token in tokens)
-            {
-                if (token is IUSFMMarkerToken marker)
-                {
-                    switch (marker.Type)
-                    {
-                        case MarkerType.Verse:
-                            lines.Add($"v {marker.Data}");
-                            break;
-                        case MarkerType.Book:
-                            lines.Add($"{marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Chapter:
-                            lines.Add($"{marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Character:
-                            lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Milestone:
-                            lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.MilestoneEnd:
-                            lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.End:
-                            lines.Add($"Marker End: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Note:
-                            lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Unknown:
-                            lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
-                            break;
-                        case MarkerType.Paragraph:
-                            lines.Add($" {marker.Marker} {marker.Data}");
-                            break;
-                    }
-                }
-                else if (token is IUSFMTextToken textToken)
-                {
-                    if (lines.Count > 0)
-                    {
-                        lines[lines.Count - 1] += (textToken.Text);
-                    }
-                    else
-                    {
-                        lines.Add(textToken.Text);
-                    }
-                }
-                else if (token is IUSFMAttributeToken)
-                {
-                    lines.Add("Attribute Token: " + token.ToString());
-                }
-                else
-                {
-                    lines.Add("Unexpected token type: " + token.ToString());
-                }
-            }
+        //private async Task SetUSFMScripture()
+        //{
+        //    IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
+        //    List<string> lines = new List<string>();
+        //    foreach (var token in tokens)
+        //    {
+        //        if (token is IUSFMMarkerToken marker)
+        //        {
+        //            switch (marker.Type)
+        //            {
+        //                case MarkerType.Verse:
+        //                    lines.Add($"v {marker.Data}");
+        //                    break;
+        //                case MarkerType.Book:
+        //                    lines.Add($"{marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Chapter:
+        //                    lines.Add($"{marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Character:
+        //                    lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Milestone:
+        //                    lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.MilestoneEnd:
+        //                    lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.End:
+        //                    lines.Add($"Marker End: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Note:
+        //                    lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Unknown:
+        //                    lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
+        //                    break;
+        //                case MarkerType.Paragraph:
+        //                    lines.Add($" {marker.Marker} {marker.Data}");
+        //                    break;
+        //            }
+        //        }
+        //        else if (token is IUSFMTextToken textToken)
+        //        {
+        //            if (lines.Count > 0)
+        //            {
+        //                lines[lines.Count - 1] += (textToken.Text);
+        //            }
+        //            else
+        //            {
+        //                lines.Add(textToken.Text);
+        //            }
+        //        }
+        //        else if (token is IUSFMAttributeToken)
+        //        {
+        //            lines.Add("Attribute Token: " + token.ToString());
+        //        }
+        //        else
+        //        {
+        //            lines.Add("Unexpected token type: " + token.ToString());
+        //        }
+        //    }
 
-            var dataPayload = JsonSerializer.Serialize(lines);
+        //    var dataPayload = JsonSerializer.Serialize(lines);
 
-            PipeMessage msgOut = new PipeMessage
-            {
-                Action = ActionType.SetUSX,
-                Text = $"{m_verseRef.BookNum}",
-                Payload = dataPayload
-            };
+        //    PipeMessage msgOut = new PipeMessage
+        //    {
+        //        Action = ActionType.SetUSX,
+        //        Text = $"{m_verseRef.BookNum}",
+        //        Payload = dataPayload
+        //    };
 
-            await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-            AppendText(MsgColor.Orange, $"OUTBOUND -> SetUSX: {m_verseRef.BookNum}");
-        }
+        //    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
+        //    AppendText(MsgColor.Orange, $"OUTBOUND -> SetUSX: {m_verseRef.BookNum}");
+        //}
 
         #endregion
     }
