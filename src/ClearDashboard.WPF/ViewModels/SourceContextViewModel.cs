@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
+using Pipes_Shared;
+using System;
 using System.Collections.ObjectModel;
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
-using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.SQLite;
-using Pipes_Shared;
-using Action = Caliburn.Micro.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -101,6 +97,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public SourceContextViewModel(INavigationService navigationService, ILogger<SourceContextViewModel> logger, ProjectManager projectManager)
         {
             _projectManager = projectManager;
+            _logger = logger;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
 
@@ -118,52 +115,47 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private async Task ProcessSourceVerseData(BookChapterVerse bcv)
         {
-            List<CoupleOfStrings> verseData = new List<CoupleOfStrings>();
-
-            await Task.Run(() =>
+            var verseDataResult = await  _projectManager.ExecuteCommand(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
+            if (verseDataResult.Success == false)
             {
-                // connect to the manuscript database
-                var verseFile = Path.Combine(Environment.CurrentDirectory, @"Resources\manuscriptverses.sqlite");
-                if (! File.Exists(verseFile))
-                {
-                    _logger.LogError(@"{verseFile} does not exist");
-                    return;
-                }
-
-                // read in the info
-                Connection connVerse = new Connection(verseFile);
-                ReadData rdVerse = new ReadData(connVerse.Conn);
-
-                // get the manuscript verse from the database
-                verseData = rdVerse.GetSourceChapterText(bcv.VerseLocationId);
-            }).ConfigureAwait(false);
+                _logger.LogError(verseDataResult.Message);
+                return;
+            }
 
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((System.Action)delegate
             {
                 _sourceInlinesText.Clear();
-                foreach (var verse in verseData)
+                if (verseDataResult.Data != null)
                 {
-                    if (verse.stringA.EndsWith(bcv.VerseIdText))
+                    foreach (var verse in verseDataResult.Data)
                     {
-                        _sourceInlinesText.Add(
-                            new SourceVerses
-                            {
-                                IsSelected = true,
-                                VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
-                                VerseText = verse.stringB,
-                            });
+                        if (verse.stringA.EndsWith(bcv.VerseIdText))
+                        {
+                            _sourceInlinesText.Add(
+                                new SourceVerses
+                                {
+                                    IsSelected = true,
+                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
+                                    VerseText = verse.stringB,
+                                });
+                        }
+                        else
+                        {
+                            _sourceInlinesText.Add(
+                                new SourceVerses
+                                {
+                                    IsSelected = false,
+                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
+                                    VerseText = verse.stringB,
+                                });
+                        }
                     }
-                    else
-                    {
-                        _sourceInlinesText.Add(
-                            new SourceVerses
-                            {
-                                IsSelected = false,
-                                VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
-                                VerseText = verse.stringB,
-                            });
-                    }
+                }
+                else
+                {
+                   _logger.LogError("Data returned form query is null.");
+                  
                 }
 
                 NotifyOfPropertyChange(() => SourceInlinesText);
