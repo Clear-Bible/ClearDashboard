@@ -5,24 +5,6 @@ using System.Runtime.CompilerServices;
 
 namespace ClearDashboard.Common.Models
 {
-
-    public enum ProjectType
-    {
-        Unknown,
-        Standard,
-        Resource,
-        BackTranslation,
-        Auxiliary,
-        Daughter,
-        MarbleResource,
-    }
-
-    public enum DirType
-    {
-        Project,
-        Resources
-    }
-
     public class ParatextProject : INotifyPropertyChanged
     {
        
@@ -99,11 +81,11 @@ namespace ClearDashboard.Common.Models
         };
 
 
-        private DirType _dirType = DirType.Project;
-        public DirType DirType
+        private DirectoryType _directoryType = DirectoryType.Project;
+        public DirectoryType DirectoryType
         {
-            get => _dirType;
-            set => _dirType = value;
+            get => _directoryType;
+            set => _directoryType = value;
         }
 
 
@@ -118,15 +100,15 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        private ProjectType _projectType;
+        private CorpusType _corpusType;
 
-        public ProjectType ProjectType
+        public CorpusType CorpusType
         {
-            get => _projectType;
+            get => _corpusType;
             set
             {
-                _projectType = value;
-                OnPropertyChanged(nameof(ProjectType));
+                _corpusType = value;
+                OnPropertyChanged(nameof(CorpusType));
             }
         }
 
@@ -310,7 +292,7 @@ namespace ClearDashboard.Common.Models
 
     public class Translation_Info
     {
-        public ProjectType projectType { get; set; } = ProjectType.Unknown;
+        public CorpusType CorpusType { get; set; } = CorpusType.Unknown;
         public string projectName { get; set; } = "";
         public string projectGuid { get; set; } = "";
     }

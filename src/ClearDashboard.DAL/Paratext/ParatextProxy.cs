@@ -131,7 +131,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     if (File.Exists(sSettingFilePath))
                     {
                       
-                        var project = GetParatextProject(sSettingFilePath, DirType.Project);
+                        var project = GetParatextProject(sSettingFilePath, DirectoryType.Project);
                         var sBookNamesPath = Path.Combine(directory, "booknames.xml");
                         if (project.FullName != "")
                         {
@@ -259,8 +259,8 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 projects.Add(new ParatextProject
                 {
                     Name = fileInfo.Name.Replace(fileInfo.Extension, ""),
-                    ProjectType = ProjectType.Resource,
-                    DirType = DirType.Resources
+                    CorpusType = CorpusType.Resource,
+                    DirectoryType = DirectoryType.Resources
                 });
             }
 
@@ -294,9 +294,9 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// Parse through the Settings file and return back a ParatextProject obj
         /// </summary>
         /// <param name="settingFilePath"></param>
-        /// <param name="dirType"></param>
+        /// <param name="directoryType"></param>
         /// <returns></returns>
-        public ParatextProject GetParatextProject(string settingFilePath, DirType dirType)
+        public ParatextProject GetParatextProject(string settingFilePath, DirectoryType directoryType)
         {
             var paratextProject = new ParatextProject();
 
@@ -369,16 +369,16 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             var split = scriptureText.TranslationInfo.Split(':');
                             if (split.Length >= 3)
                             {
-                                var projType = GetProjectType(split[0], dirType);
+                                var projType = GetProjectType(split[0], directoryType);
 
                                 paratextProject.TranslationInfo = new Translation_Info
                                 {
-                                    projectType = projType,
+                                    CorpusType = projType,
                                     projectName = split[1],
                                     projectGuid = split[2],
                                 };
 
-                                paratextProject.ProjectType = projType;
+                                paratextProject.CorpusType = projType;
                             }
                         }
 
@@ -387,11 +387,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             var split = scriptureText.BaseTranslation.Split(':');
                             if (split.Length >= 3)
                             {
-                               var projType = GetProjectType(split[0], dirType);
+                               var projType = GetProjectType(split[0], directoryType);
 
                                 paratextProject.BaseTranslation = new Translation_Info
                                 {
-                                    projectType = projType,
+                                    CorpusType = projType,
                                     projectName = split[1],
                                     projectGuid = split[2],
                                 };
@@ -419,34 +419,34 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// convert from string to a project type enum
         /// </summary>
         /// <param name="s"></param>
-        /// <param name="dirType"></param>
+        /// <param name="directoryType"></param>
         /// <returns></returns>
-        private ProjectType GetProjectType(string s, DirType dirType)
+        private CorpusType GetProjectType(string s, DirectoryType directoryType)
         {
             s = s.ToUpper().Trim();
 
             switch (s)
             {
                 case "STANDARD":
-                    if (dirType == DirType.Project)
+                    if (directoryType == DirectoryType.Project)
                     {
-                        return ProjectType.Standard;
+                        return CorpusType.Standard;
                     }
                     else
                     {
-                        return ProjectType.Resource;
+                        return CorpusType.Resource;
                     }
                 case "BACKTRANSLATION":
-                    return ProjectType.BackTranslation;
+                    return CorpusType.BackTranslation;
                 case "AUXILIARY":
-                    return ProjectType.Auxiliary;
+                    return CorpusType.Auxiliary;
                 case "DAUGHTER":
-                    return ProjectType.Daughter;
+                    return CorpusType.Daughter;
                 case "MARBLERESOURCE":
-                    return ProjectType.MarbleResource;
+                    return CorpusType.MarbleResource;
             }
 
-            return ProjectType.Unknown;
+            return CorpusType.Unknown;
         }
 
         public List<ParatextBook> GetBookList(ParatextProject project, string directory)

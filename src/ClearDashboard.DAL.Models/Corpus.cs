@@ -1,4 +1,6 @@
 ﻿
+using ClearDashboard.Common.Models;
+
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class Corpus
