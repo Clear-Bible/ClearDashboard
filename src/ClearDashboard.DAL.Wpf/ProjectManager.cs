@@ -59,7 +59,6 @@ namespace ClearDashboard.DataAccessLayer
         }
         #endregion
 
-
         #region Events
 
         // event handler to be raised when the Paratext Username changes
@@ -111,9 +110,7 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         #endregion
-
-  
-
+          
         #region Shutdown
 
         public void OnClosing()
@@ -128,7 +125,7 @@ namespace ClearDashboard.DataAccessLayer
 
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
-            var pm = args.PM;
+            var pm = args.PipeMessage;
 
             if (pm.Action == ActionType.OnConnected)
             {
