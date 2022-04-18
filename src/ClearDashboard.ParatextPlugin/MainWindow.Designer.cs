@@ -34,6 +34,7 @@ namespace ClearDashboardPlugin
             this.btnRestart = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.listBoxClients = new System.Windows.Forms.ListBox();
+            this.btnExportUSFM = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // rtb
@@ -88,10 +89,22 @@ namespace ClearDashboardPlugin
             this.listBoxClients.Size = new System.Drawing.Size(161, 290);
             this.listBoxClients.TabIndex = 24;
             // 
+            // btnExportUSFM
+            // 
+            this.btnExportUSFM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExportUSFM.Location = new System.Drawing.Point(236, 18);
+            this.btnExportUSFM.Name = "btnExportUSFM";
+            this.btnExportUSFM.Size = new System.Drawing.Size(132, 23);
+            this.btnExportUSFM.TabIndex = 25;
+            this.btnExportUSFM.Text = "Export USFM";
+            this.btnExportUSFM.UseVisualStyleBackColor = true;
+            this.btnExportUSFM.Click += new System.EventHandler(this.btnExportUSFM_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnExportUSFM);
             this.Controls.Add(this.listBoxClients);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnRestart);
@@ -111,5 +124,6 @@ namespace ClearDashboardPlugin
         private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.ListBox listBoxClients;
+        private System.Windows.Forms.Button btnExportUSFM;
     }
 }
