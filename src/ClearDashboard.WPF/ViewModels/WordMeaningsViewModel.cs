@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Wpf;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels

@@ -1,14 +1,3 @@
-using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.Context;
-using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.ViewModels;
-using Microsoft.Extensions.Logging;
-using MvvmHelpers;
-using Nelibur.ObjectMapper;
-using Pipes_Shared;
-using Pipes_Shared.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,10 +5,21 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.ViewModels;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using MvvmHelpers;
+using Nelibur.ObjectMapper;
+using Pipes_Shared;
+using Pipes_Shared.Models;
 
-namespace ClearDashboard.DataAccessLayer
+namespace ClearDashboard.DataAccessLayer.Wpf
 {
     public class ProjectManager : IDisposable
     {
@@ -29,7 +29,7 @@ namespace ClearDashboard.DataAccessLayer
         private readonly NamedPipesClient _namedPipesClient;
         private readonly ParatextProxy _paratextProxy;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
-        private readonly IMediator mediator_;
+        private readonly IMediator _mediator;
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
 
@@ -106,7 +106,7 @@ namespace ClearDashboard.DataAccessLayer
             _namedPipesClient = namedPipeClient;
             _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
 
-            mediator_ = mediator;
+            _mediator = mediator;
         }
 
         #endregion
@@ -409,7 +409,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            return mediator_.Send(request, cancellationToken);
+            return _mediator.Send(request, cancellationToken);
         }
         #endregion
 

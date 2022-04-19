@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.Helpers
 {
     public static class ProjectPath
     {
-        public static string GetProjectPath(DataAccessLayer.ProjectManager _projectManager)
+        public static string GetProjectPath(ProjectManager _projectManager)
         { 
             // check to see if the project directory already exists:
             // get the projects directory

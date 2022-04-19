@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.ViewModels
