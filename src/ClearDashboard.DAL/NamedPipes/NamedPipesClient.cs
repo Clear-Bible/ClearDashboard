@@ -6,47 +6,26 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes
 {
-
-    public class PipeEventArgs : EventArgs
-    {
-        private readonly PipeMessage _pm;
-
-        public PipeEventArgs(PipeMessage pm)
-        {
-            this._pm = pm;
-        }
-
-        public PipeMessage PM
-        {
-            get { return this._pm; }
-        }
-    }
-
     public class NamedPipesClient : IDisposable
     {
         #region Events
 
+        public delegate void PipesEventHandler(object sender, PipeEventArgs args);
 
-
-        public delegate void PipesEventHandler(
-            object sender,
-            PipeEventArgs args);
-
-        public event PipesEventHandler NamedPipeChanged;
+        public event PipesEventHandler NamedPipeChanged = null!;
 
         private void RaisePipesChangedEvent(PipeMessage s)
         {
-            PipeEventArgs args = new PipeEventArgs(s);
+            var args = new PipeEventArgs(s);
             NamedPipeChanged?.Invoke(this, args);
         }
 
         #endregion
 
+        #region Properties
 
-        #region Props
-
-        private const string pipeName = "ClearDashboard";
-        private PipeClient<PipeMessage> client;
+        private const string PipeName = "ClearDashboard";
+        private PipeClient<PipeMessage>? _client;
 
         #endregion
 
@@ -58,28 +37,30 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         public async Task InitializeAsync()
         {
-            if (client is { IsConnected: true })
+            if (_client is { IsConnected: true })
+            {
                 return;
+            }
 
-            client = new PipeClient<PipeMessage>(pipeName);
-            client.MessageReceived += (sender, args) =>
+            _client = new PipeClient<PipeMessage>(PipeName);
+            _client.MessageReceived += (sender, args) =>
             {
                 if (args.Message is not null)
                 {
                     OnMessageReceivedAsync(args.Message);
                 }
             };
-            client.Disconnected += (o, args) => HandleEvents(new PipeMessage
+            _client.Disconnected += (o, args) => HandleEvents(new PipeMessage
             {
                 Action = ActionType.OnDisconnected,
                 Text = "Disconnected from server",
             });
-            client.Connected += (o, args) => Debug.WriteLine("Connected to server");
-            client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
+            _client.Connected += (o, args) => Debug.WriteLine("Connected to server");
+            _client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
 
-            await client.ConnectAsync();
+            await _client.ConnectAsync();
 
-            await client.WriteAsync(new PipeMessage
+            await _client.WriteAsync(new PipeMessage
             {
                 Action = ActionType.SendText,
                 Text = "Hello from client",
@@ -114,18 +95,15 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         public void Dispose()
         {
-            if (client != null)
-            {
-                client.DisposeAsync().GetAwaiter().GetResult();
-                client = null;
-            }
+            _client?.DisposeAsync().GetAwaiter().GetResult();
+            _client = null;
         }
 
         #endregion
 
         public async Task WriteAsync(PipeMessage message)
         {
-            await client.WriteAsync(message);
+            await _client.WriteAsync(message);
         }
     }
 }

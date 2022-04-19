@@ -225,7 +225,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
             if (args == null) return;
-            var pipeMessage = args.PM;
+            var pipeMessage = args.PipeMessage;
             switch (pipeMessage.Action)
             {
                 case ActionType.OnConnected:

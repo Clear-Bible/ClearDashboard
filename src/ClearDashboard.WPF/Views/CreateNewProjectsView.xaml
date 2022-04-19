@@ -143,7 +143,7 @@
                                                     HorizontalAlignment="Left"
                                                     FontSize="11"
                                                     Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
-                                                    Text="{Binding TranslationInfo.projectType}"
+                                                    Text="{Binding TranslationInfo.CorpusType}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
                                                     Margin="2"

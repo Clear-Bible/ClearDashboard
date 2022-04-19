@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             this DbContext context,
             CancellationToken ct,
             string text,
-            object parameters = null,
+            object? parameters = null,
             int? timeout = null,
             CommandType? type = null
         )
@@ -42,7 +42,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             this DbContext context,
             CancellationToken ct,
             string text,
-            object parameters = null,
+            object? parameters = null,
             int? timeout = null,
             CommandType? type = null
         )
@@ -68,7 +68,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
         public DapperEFCoreCommand(
             DbContext context,
             string text,
-            object parameters,
+            object? parameters,
             int? timeout,
             CommandType? type,
             CancellationToken ct
