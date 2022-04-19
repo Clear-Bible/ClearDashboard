@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Properties
         public ProjectManager _projectManager { get; set; }
+        private readonly INavigationService _navigationService;
         private readonly ILogger _logger;
 
         protected Canvas DrawCanvasTop { get; set; }
@@ -148,8 +149,10 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
-        public CreateNewProjectsViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public CreateNewProjectsViewModel(INavigationService navigationService, 
+            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
+            _navigationService = navigationService;
             _projectManager = projectManager;
             _logger = logger;
 
@@ -1247,8 +1250,9 @@ namespace ClearDashboard.Wpf.ViewModels
             DrawTheCanvas();
         }
 
-        #endregion 
+        #endregion
 
+        #region Methods
         public async void CreateNewProject()
         {
             if (DashboardProject.TargetProject == null)
@@ -1262,10 +1266,12 @@ namespace ClearDashboard.Wpf.ViewModels
             //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
 
+            _navigationService.For<ProcessUSFMViewModel>()
+                .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
 
-            await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+            //await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
-    
+        #endregion
     }
 }
