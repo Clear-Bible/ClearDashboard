@@ -18,6 +18,7 @@ using ClearDashboard.DataAccessLayer.NamedPipes;
 using Pipes_Shared;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

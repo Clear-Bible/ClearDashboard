@@ -22,6 +22,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Wpf;
 using Point = System.Windows.Point;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedMember.Local

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels

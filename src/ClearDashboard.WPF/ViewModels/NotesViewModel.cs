@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

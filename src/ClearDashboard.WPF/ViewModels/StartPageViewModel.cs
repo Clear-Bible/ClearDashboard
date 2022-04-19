@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 
