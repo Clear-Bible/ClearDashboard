@@ -1,4 +1,4 @@
-﻿using System;
+﻿                                                                             using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -371,11 +371,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             {
                                 var projType = GetProjectType(split[0], directoryType);
 
-                                paratextProject.TranslationInfo = new Translation_Info
+                                paratextProject.TranslationInfo = new TranslationInfo
                                 {
                                     CorpusType = projType,
-                                    projectName = split[1],
-                                    projectGuid = split[2],
+                                    ProjectName = split[1],
+                                    ProjectGuid = split[2],
                                 };
 
                                 paratextProject.CorpusType = projType;
@@ -389,11 +389,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             {
                                var projType = GetProjectType(split[0], directoryType);
 
-                                paratextProject.BaseTranslation = new Translation_Info
+                                paratextProject.BaseTranslation = new TranslationInfo
                                 {
                                     CorpusType = projType,
-                                    projectName = split[1],
-                                    projectGuid = split[2],
+                                    ProjectName = split[1],
+                                    ProjectGuid = split[2],
                                 };
                             }
                         }

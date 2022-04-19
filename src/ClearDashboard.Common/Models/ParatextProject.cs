@@ -7,8 +7,6 @@ namespace ClearDashboard.Common.Models
 {
     public class ParatextProject : INotifyPropertyChanged
     {
-       
-
         public Dictionary<int, ParatextBookFileName> BookNames = new Dictionary<int, ParatextBookFileName>
         {
             {01, new ParatextBookFileName{code="GEN", abbr = "Gen", shortname ="Genesis", longname ="Genesis", fileID="01", BB="01"}},
@@ -50,7 +48,7 @@ namespace ClearDashboard.Common.Models
             {37, new ParatextBookFileName{code="HAG", abbr = "Hag", shortname ="Haggai", longname ="Haggai", fileID="37", BB="37"}},
             {38, new ParatextBookFileName{code="ZEC", abbr = "Zech", shortname ="Zechariah", longname ="Zechariah", fileID="38", BB="38"}},
             {39, new ParatextBookFileName{code="MAL", abbr = "Mal", shortname ="Malachi", longname ="Malachi", fileID="39", BB="39"}},
-
+            // 40 - intentionally omitted
             {41, new ParatextBookFileName{code="MAT", abbr = "Matt", shortname ="Matthew", longname ="Matthew", fileID="41", BB="40"}},
             {42, new ParatextBookFileName{code="MRK", abbr = "Mark", shortname ="Mark", longname ="Mark", fileID="42", BB="41"}},
             {43, new ParatextBookFileName{code="LUK", abbr = "Luke", shortname ="Luke", longname ="Luke", fileID="43", BB="42"}},
@@ -123,79 +121,79 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        private string _Language;
+        private string _language;
         public string Language
         {
-            get => _Language;
+            get => _language;
             set
             {
-                _Language = value;
+                _language = value;
                 OnPropertyChanged(nameof(Language));
             }
         }
 
-        private string _Encoding;
+        private string _encoding;
         public string Encoding
         {
-            get => _Encoding;
+            get => _encoding;
             set
             {
-                _Encoding = value;
+                _encoding = value;
                 OnPropertyChanged(nameof(Encoding));
             }
         }
 
-        private string _LanguageIsoCode;
+        private string _languageIsoCode;
         public string LanguageIsoCode
         {
-            get => _LanguageIsoCode;
+            get => _languageIsoCode;
             set
             {
-                _LanguageIsoCode = value;
+                _languageIsoCode = value;
                 OnPropertyChanged(nameof(LanguageIsoCode));
             }
         }
 
-        private Translation_Info _TranslationInfo;
-        public Translation_Info TranslationInfo
+        private TranslationInfo _translationInfo;
+        public TranslationInfo TranslationInfo
         {
-            get => _TranslationInfo;
+            get => _translationInfo;
             set
             {
-                _TranslationInfo = value;
+                _translationInfo = value;
                 OnPropertyChanged(nameof(TranslationInfo));
             }
         }
 
-        private Translation_Info _BaseTranslation;
-        public Translation_Info BaseTranslation
+        private TranslationInfo _baseTranslation;
+        public TranslationInfo BaseTranslation
         {
-            get => _BaseTranslation;
+            get => _baseTranslation;
             set
             {
-                _BaseTranslation = value;
+                _baseTranslation = value;
                 OnPropertyChanged(nameof(BaseTranslation));
             }
         }
 
-        private string _DefaultFont;
+        private string _defaultFont;
         public string DefaultFont
         {
-            get => _DefaultFont; 
+            get => _defaultFont; 
             set
             {
-                _DefaultFont = value;
+                _defaultFont = value;
                 OnPropertyChanged(nameof(DefaultFont));
             }
         }
 
-        private string _NormalizationForm;
+        private string _normalizationForm;
         public string NormalizationForm
         {
-            get => _NormalizationForm;
+            get => _normalizationForm;
             set
             {
-                _NormalizationForm = value;
+                _normalizationForm = value;
                 OnPropertyChanged(nameof(NormalizationForm));
             }
         }
@@ -211,13 +209,13 @@ namespace ClearDashboard.Common.Models
             }
         }
 
-        private string _Copyright;
+        private string _copyright;
         public string Copyright
         {
-            get => _Copyright;
+            get => _copyright;
             set
             {
-                _Copyright = value;
+                _copyright = value;
                 OnPropertyChanged(nameof(Copyright));
             }
         }
@@ -288,12 +286,5 @@ namespace ClearDashboard.Common.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-    }
-
-    public class Translation_Info
-    {
-        public CorpusType CorpusType { get; set; } = CorpusType.Unknown;
-        public string projectName { get; set; } = "";
-        public string projectGuid { get; set; } = "";
     }
 }

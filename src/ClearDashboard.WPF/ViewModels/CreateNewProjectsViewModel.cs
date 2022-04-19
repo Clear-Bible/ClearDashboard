@@ -268,7 +268,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             DashboardProject.TargetProject = project;
 
                             // look for linked back translations
-                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
+                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.ProjectGuid == project.Guid).ToList();
                             foreach (var backTranslationProject in backTranslationProjects)
                             {
                                 if (DashboardProject.BackTranslationProjects.All(p => p.Name != backTranslationProject.Name))
