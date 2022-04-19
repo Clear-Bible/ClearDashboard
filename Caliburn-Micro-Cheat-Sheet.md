@@ -41,7 +41,7 @@ Different parameters can be passed to the method like this:
 
 <dl>
 	<dt>$eventArgs</dt>
-	<dd>Passes the EventArgs or input parameter to your Action. Note: This will be null for guard methods since the trigger hasn’t actually occurred.</dd>
+	<dd>Passes the EventArgs or input parameter to your Action. Note: This will be null for guard methods since the trigger hasnâ€™t actually occurred.</dd>
 	<dt>$dataContext</dt>
 	<dd>Passes the DataContext of the element that the ActionMessage is attached to. This is very useful in Master/Detail scenarios where the ActionMessage may bubble to a parent VM but needs to carry with it the child instance to be acted upon.</dd>
 	<dt>$source</dt>
@@ -251,7 +251,7 @@ protected override IEnumerable<object> GetAllInstances(Type service)
         Grid.SetColumn(frame, 0);
         grid.Children.Add(frame);
     }
-   ``` csharp
+   ``` 
 
    5. Then override OnStartup and call the method to add the Frame to the visual tree:
 
