@@ -794,14 +794,14 @@ namespace ClearDashboardPlugin
 
         private void ExportUSFMScripture()
         {
-            string projectPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            projectPath = Path.Combine(projectPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
+            string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
 
-            if (!Directory.Exists(projectPath))
+            if (!Directory.Exists(exportPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(projectPath);
+                    Directory.CreateDirectory(exportPath);
                 }
                 catch (Exception e)
                 {
@@ -816,14 +816,14 @@ namespace ClearDashboardPlugin
             {
                 try
                 {
-                    File.Copy(settingsFile, Path.Combine(projectPath, "settings.xml"), true);
+                    File.Copy(settingsFile, Path.Combine(exportPath, "settings.xml"), true);
                 }
                 catch (Exception e)
                 {
                     AppendText(MsgColor.Red, e.Message);
                 }
 
-                FixParatextSettingsFile(Path.Combine(projectPath, "settings.xml"));
+                FixParatextSettingsFile(Path.Combine(exportPath, "settings.xml"));
 
             }
 
@@ -833,11 +833,50 @@ namespace ClearDashboardPlugin
             {
                 try
                 {
-                    File.Copy(versificationFile, Path.Combine(projectPath, "custom.vrs"), true);
+                    File.Copy(versificationFile, Path.Combine(exportPath, "custom.vrs"), true);
                 }
                 catch (Exception e)
                 {
                     AppendText(MsgColor.Red, e.Message);
+                }
+            }
+
+            // copy over project's usfm.sty
+            string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml"), "StyleSheet");
+            bool bFound = false;
+            if (stylePath != "")
+            {
+                if (stylePath != "usfm.sty") // standard stylesheet
+                {
+                    if (File.Exists(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath)))
+                    {
+                        try
+                        {
+                            File.Copy(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath),
+                                Path.Combine(exportPath, "usfm.sty"), true);
+                        }
+                        catch (Exception e)
+                        {
+                            AppendText(MsgColor.Red, e.Message);
+                        }
+                    }
+                }
+            }
+
+            if (!bFound)
+            {
+                // standard stylesheet
+                if (File.Exists(Path.Combine(GetParatextProjectsPath(), "usfm.sty")))
+                {
+                    try
+                    {
+                        File.Copy(Path.Combine(GetParatextProjectsPath(), "usfm.sty"),
+                            Path.Combine(exportPath, "usfm.sty"), true);
+                    }
+                    catch (Exception e)
+                    {
+                        AppendText(MsgColor.Red, e.Message);
+                    }
                 }
             }
 
@@ -931,7 +970,7 @@ namespace ClearDashboardPlugin
                     }
 
                     // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
-                    File.WriteAllText(Path.Combine(projectPath, fileName), sb.ToString());
+                    File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
                 }
             }
         }
