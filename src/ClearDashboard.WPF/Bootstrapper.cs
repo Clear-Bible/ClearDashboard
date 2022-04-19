@@ -54,12 +54,10 @@ namespace ClearDashboard.Wpf
         #region Configure
         protected  void ConfigureServices(IServiceCollection serviceCollection)
         {
-
             FrameSet = serviceCollection.AddCaliburnMicro();
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddLogging();
             serviceCollection.AddLocalization();
-
         }
 
         #endregion
