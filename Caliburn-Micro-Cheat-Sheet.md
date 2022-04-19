@@ -251,7 +251,7 @@ protected override IEnumerable<object> GetAllInstances(Type service)
         Grid.SetColumn(frame, 0);
         grid.Children.Add(frame);
     }
-   ``` csharp
+   ``` 
 
    5. Then override OnStartup and call the method to add the Frame to the visual tree:
 
