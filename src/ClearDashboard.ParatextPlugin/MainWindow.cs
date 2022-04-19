@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using ClearDashboard.ParatextPlugin.Helpers;
 using ClearDashboard.ParatextPlugin.Models;
 using ClearDashboard.Pipes_Shared.Models;
 using Microsoft.VisualStudio.Threading;
@@ -843,8 +844,7 @@ namespace ClearDashboardPlugin
 
             for (int bookNum = 0; bookNum < this.m_project.AvailableBooks.Count; bookNum++)
             {
-
-                if (m_project.AvailableBooks[bookNum].InProjectScope)
+                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
                 {
                     AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[bookNum].Code}");
 
@@ -864,7 +864,7 @@ namespace ClearDashboardPlugin
                         bookFileNum = m_project.AvailableBooks[bookNum].Number;
                     }
                     var fileName = bookFileNum.ToString().PadLeft(2, '0') 
-                                   + m_project.AvailableBooks[bookNum].Code + ".usfm";
+                                   + m_project.AvailableBooks[bookNum].Code + ".sfm";
 
                     IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
                     try
@@ -948,7 +948,7 @@ namespace ClearDashboardPlugin
             if (node != null)
             {
                 node.Attributes["PrePart"].Value = "";
-                node.Attributes["PostPart"].Value = ".usfm";
+                node.Attributes["PostPart"].Value = ".sfm";
                 node.Attributes["BookNameForm"].Value = "41MAT";
             }
 
@@ -968,7 +968,7 @@ namespace ClearDashboardPlugin
             node = root.SelectSingleNode("//FileNamePostPart");
             if (node != null)
             {
-                node.InnerText = ".usfm";
+                node.InnerText = ".sfm";
             }
 
             node = root.SelectSingleNode("//FileNamePrePart");
