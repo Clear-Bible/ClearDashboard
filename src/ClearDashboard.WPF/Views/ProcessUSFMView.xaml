@@ -25,6 +25,95 @@
     mc:Ignorable="d">
 
     <Grid>
-        <ListView />
+        <ListView
+            x:Name="SelectedItemVerses"
+            MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
+            Margin="5"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding AlignmentPlan}">
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+
+
+                    <GridViewColumn Width="80" Header="Target">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueMidBrush}"
+                                    Text="{Binding Target}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80" Header="Source">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueMidBrush}"
+                                    Text="{Binding Source}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="30" Header="USFM Processing Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Width="20" Height="20">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCleanUsfmComplete}" Value="False">
+                                                    <Setter Property="Kind" Value="CheckboxBlankCircleOutline" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="60" Header="Day 1">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding SMT, Mode=TwoWay}" SelectedItem="{Binding AlignmentSMT, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="30" Header="Alignment Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Width="20" Height="20">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsAlignmentComplete}" Value="False">
+                                                    <Setter Property="Kind" Value="CheckboxBlankCircleOutline" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>
