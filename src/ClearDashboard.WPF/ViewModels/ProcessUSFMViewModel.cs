@@ -20,7 +20,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ProjectManager _projectManager;
         private readonly ILogger _logger;
-        private readonly IEventAggregator _eventAggregator;
+
+        public DashboardProject DashboardProject { get; set; }
 
         #endregion
 
@@ -48,32 +49,21 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public ProcessUSFMViewModel(ProjectManager projectManager, INavigationService navigationService, 
-            ILogger<LandingViewModel> logger, IEventAggregator eventAggregator) : base(navigationService, logger)
+            ILogger<LandingViewModel> logger) : base(navigationService, logger)
         {
             _logger = logger;
             _navigationService = navigationService;
             _projectManager = projectManager;
-            _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            Console.WriteLine();
             return base.OnActivateAsync(cancellationToken);
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-
-        public void Handle(object message)
-        {
-            Console.WriteLine();
-        }
         #endregion
 
 
@@ -82,5 +72,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #endregion
+
     }
 }

@@ -29,7 +29,6 @@ namespace ClearDashboard.Wpf.ViewModels
         public ProjectManager _projectManager { get; set; }
         private readonly INavigationService _navigationService;
         private readonly ILogger _logger;
-        private readonly IEventAggregator _eventAggregator;
 
         protected Canvas DrawCanvasTop { get; set; }
         protected Canvas DrawCanvasBottom { get; set; }
@@ -151,13 +150,11 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public CreateNewProjectsViewModel(INavigationService navigationService, 
-            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager, 
-            IEventAggregator eventAggregator) : base(navigationService, logger)
+            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
         {
             _navigationService = navigationService;
             _projectManager = projectManager;
             _logger = logger;
-            _eventAggregator = eventAggregator;
 
             flowDirection = _projectManager.CurrentLanguageFlowDirection;
         }
@@ -1269,10 +1266,10 @@ namespace ClearDashboard.Wpf.ViewModels
             //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
 
-            _navigationService.NavigateToViewModel<ProcessUSFMViewModel>();
-            _ = _eventAggregator.PublishOnUIThreadAsync(DashboardProject);
+            _navigationService.For<ProcessUSFMViewModel>()
+                .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
 
-            await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+            //await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
         #endregion
