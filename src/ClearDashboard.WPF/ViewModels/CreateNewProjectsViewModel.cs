@@ -269,12 +269,12 @@ namespace ClearDashboard.Wpf.ViewModels
                         break;
                     case DropZones.Target:
                         text.Text = "TARGET";
-                        if (project is { ProjectType: ProjectType.Standard })
+                        if (project is { CorpusType: CorpusType.Standard })
                         {
                             DashboardProject.TargetProject = project;
 
                             // look for linked back translations
-                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.projectGuid == project.Guid).ToList();
+                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.ProjectGuid == project.Guid).ToList();
                             foreach (var backTranslationProject in backTranslationProjects)
                             {
                                 if (DashboardProject.BackTranslationProjects.All(p => p.Name != backTranslationProject.Name))
@@ -321,7 +321,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         break;
                     case DropZones.Interlinearizer:
                         text.Text = "INTERLINEARIZER";
-                        if (project != null && project.ProjectType == ProjectType.Resource)
+                        if (project != null && project.CorpusType == CorpusType.Resource)
                         {
                             DashboardProject.InterlinearizerProject = project;
                         }

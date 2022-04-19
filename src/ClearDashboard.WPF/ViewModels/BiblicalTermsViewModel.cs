@@ -126,17 +126,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-        public bool _isRTL { get; set; }
+       // public bool IsRtl { get; set; }
 
 
         private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public  FlowDirection flowDirection
+        public  FlowDirection FlowDirection
         {
             get => _flowDirection;
             set
             {
                 _flowDirection = value; 
-                NotifyOfPropertyChange(() => flowDirection);
+                NotifyOfPropertyChange(() => FlowDirection);
             }
         }
 
@@ -425,7 +425,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // listen to the DAL event messages coming in
             _projectManager.NamedPipeChanged += HandleEventAsync;
 
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            FlowDirection = _projectManager.CurrentLanguageFlowDirection;
 
             // populate the combo box for semantic domains
             SetupSemanticDomains();
@@ -458,7 +458,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 // pull out the project font family
                 _fontFamily = projectManager.ParatextProject.Language.FontFamily;
                 _fontSize = projectManager.ParatextProject.Language.Size;
-                _isRTL = projectManager.ParatextProject.Language.IsRtol;
+                IsRtl = projectManager.ParatextProject.Language.IsRtol;
             }
         }
 
@@ -482,7 +482,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PM;
+            PipeMessage pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {

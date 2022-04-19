@@ -265,7 +265,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PM;
+            PipeMessage pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {
