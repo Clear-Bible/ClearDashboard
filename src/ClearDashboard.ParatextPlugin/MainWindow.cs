@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using ClearDashboard.ParatextPlugin.Helpers;
 using ClearDashboard.ParatextPlugin.Models;
 using ClearDashboard.Pipes_Shared.Models;
 using Microsoft.VisualStudio.Threading;
@@ -793,14 +794,14 @@ namespace ClearDashboardPlugin
 
         private void ExportUSFMScripture()
         {
-            string projectPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            projectPath = Path.Combine(projectPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
+            string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
 
-            if (!Directory.Exists(projectPath))
+            if (!Directory.Exists(exportPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(projectPath);
+                    Directory.CreateDirectory(exportPath);
                 }
                 catch (Exception e)
                 {
@@ -815,14 +816,14 @@ namespace ClearDashboardPlugin
             {
                 try
                 {
-                    File.Copy(settingsFile, Path.Combine(projectPath, "settings.xml"), true);
+                    File.Copy(settingsFile, Path.Combine(exportPath, "settings.xml"), true);
                 }
                 catch (Exception e)
                 {
                     AppendText(MsgColor.Red, e.Message);
                 }
 
-                FixParatextSettingsFile(Path.Combine(projectPath, "settings.xml"));
+                FixParatextSettingsFile(Path.Combine(exportPath, "settings.xml"));
 
             }
 
@@ -832,7 +833,7 @@ namespace ClearDashboardPlugin
             {
                 try
                 {
-                    File.Copy(versificationFile, Path.Combine(projectPath, "custom.vrs"), true);
+                    File.Copy(versificationFile, Path.Combine(exportPath, "custom.vrs"), true);
                 }
                 catch (Exception e)
                 {
@@ -840,11 +841,49 @@ namespace ClearDashboardPlugin
                 }
             }
 
+            // copy over project's usfm.sty
+            string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml"), "StyleSheet");
+            bool bFound = false;
+            if (stylePath != "")
+            {
+                if (stylePath != "usfm.sty") // standard stylesheet
+                {
+                    if (File.Exists(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath)))
+                    {
+                        try
+                        {
+                            File.Copy(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath),
+                                Path.Combine(exportPath, "usfm.sty"), true);
+                        }
+                        catch (Exception e)
+                        {
+                            AppendText(MsgColor.Red, e.Message);
+                        }
+                    }
+                }
+            }
+
+            if (!bFound)
+            {
+                // standard stylesheet
+                if (File.Exists(Path.Combine(GetParatextProjectsPath(), "usfm.sty")))
+                {
+                    try
+                    {
+                        File.Copy(Path.Combine(GetParatextProjectsPath(), "usfm.sty"),
+                            Path.Combine(exportPath, "usfm.sty"), true);
+                    }
+                    catch (Exception e)
+                    {
+                        AppendText(MsgColor.Red, e.Message);
+                    }
+                }
+            }
+
 
             for (int bookNum = 0; bookNum < this.m_project.AvailableBooks.Count; bookNum++)
             {
-
-                if (m_project.AvailableBooks[bookNum].InProjectScope)
+                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
                 {
                     AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[bookNum].Code}");
 
@@ -864,7 +903,7 @@ namespace ClearDashboardPlugin
                         bookFileNum = m_project.AvailableBooks[bookNum].Number;
                     }
                     var fileName = bookFileNum.ToString().PadLeft(2, '0') 
-                                   + m_project.AvailableBooks[bookNum].Code + ".usfm";
+                                   + m_project.AvailableBooks[bookNum].Code + ".sfm";
 
                     IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
                     try
@@ -931,7 +970,7 @@ namespace ClearDashboardPlugin
                     }
 
                     // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
-                    File.WriteAllText(Path.Combine(projectPath, fileName), sb.ToString());
+                    File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
                 }
             }
         }
@@ -948,7 +987,7 @@ namespace ClearDashboardPlugin
             if (node != null)
             {
                 node.Attributes["PrePart"].Value = "";
-                node.Attributes["PostPart"].Value = ".usfm";
+                node.Attributes["PostPart"].Value = ".sfm";
                 node.Attributes["BookNameForm"].Value = "41MAT";
             }
 
@@ -968,7 +1007,7 @@ namespace ClearDashboardPlugin
             node = root.SelectSingleNode("//FileNamePostPart");
             if (node != null)
             {
-                node.InnerText = ".usfm";
+                node.InnerText = ".sfm";
             }
 
             node = root.SelectSingleNode("//FileNamePrePart");
