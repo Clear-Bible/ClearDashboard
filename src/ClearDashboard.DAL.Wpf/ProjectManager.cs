@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Slices.DashboardProjects;
 using ClearDashboard.DataAccessLayer.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -125,27 +126,32 @@ namespace ClearDashboard.DataAccessLayer.Wpf
 
         private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
         {
-            var pm = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
-            if (pm.Action == ActionType.OnConnected)
+            switch (pipeMessage.Action)
             {
-                this.IsPipeConnected = true;
-            } 
-            else if (pm.Action == ActionType.OnDisconnected)
-            {
-                this.IsPipeConnected= false;
-            }
-            else if (pm.Action == ActionType.SetProject)
-            {
-                // intercept and keep a copy of the current project
-                var payload = pm.Payload;
-                ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
-            } else if (pm.Action == ActionType.CurrentVerse)
-            {
-                CurrentVerse = pm.Text;
+                case ActionType.OnConnected:
+                    IsPipeConnected = true;
+                    break;
+                case ActionType.OnDisconnected:
+                    IsPipeConnected= false;
+                    break;
+                case ActionType.SetProject:
+                {
+                    // intercept and keep a copy of the current project
+                    var payload = pipeMessage.Payload;
+                    ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
+                    break;
+                }
+                case ActionType.CurrentVerse:
+                    CurrentVerse = pipeMessage.Text;
+                    break;
+                default:
+                    // Nothing to do.
+                    break;
             }
             
-            RaisePipesChangedEvent(pm);
+            RaisePipesChangedEvent(pipeMessage);
         }
 
         public void Initialize()
@@ -154,68 +160,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
             EnsureDashboardProjectDirectory();
         }
 
-        /// <summary>
-        /// Get a listing of all the existing projects in the /Projects
-        /// folder below the application
-        /// </summary>
-        public ObservableCollection<DashboardProject> LoadExistingProjects()
-        {
-
-            var projectList = new ObservableCollection<DashboardProject>();
-            
-            // check for Projects subfolder
-            var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
-
-            if (directories.Length == 0)
-            {
-                //no projects here yet
-                return projectList;
-            }
-            else
-            {
-                foreach (var dirName in directories)
-                {
-                    // find the Alignment JSONs
-                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, dirName), "*.sqlite");
-                    foreach (var file in files)
-                    {
-                        var fi = new FileInfo(file);
-                        var di = new DirectoryInfo(dirName);
-
-                        // add as ListItem
-                        var dashboardProject = new DashboardProject
-                        {
-                            LastChanged = fi.LastWriteTime,
-                            ProjectName = di.Name,
-                            ShortFilePath = fi.Name,
-                            FullFilePath = fi.FullName
-                        };
-
-                        // check for user prefs file
-                        if (File.Exists(Path.Combine(dirName, "prefs.jsn")))
-                        {
-                            // load in the user prefs
-                            var up = new UserPrefs();
-                            up = up.LoadUserPrefFile(dashboardProject);
-
-                            // add this to the ProjectViewModel
-                            dashboardProject.LastContentWordLevel = up.LastContentWordLevel;
-                            dashboardProject.UserValidationLevel = up.ValidationLevel;
-                        }
-
-                        //dashboardProject.JsonProjectName = GetJsonProjectName(file);
-                        //if (dashboardProject.JsonProjectName != "")
-                        //{
-                        //    dashboardProject.HasJsonProjectName = true;
-                        //}
-
-                        projectList.Add(dashboardProject);
-                    }
-                }
-            }
-
-            return projectList;
-        }
+     
 
         private void EnsureDashboardProjectDirectory()
         {

@@ -12,8 +12,8 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
     where TData : new()
 {
     protected ILogger Logger { get; }
-    protected string ResourceDirectory => Path.Combine(Environment.CurrentDirectory, "Resources");
-    protected abstract string ResourceName { get; }
+    protected string ResourceDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "Resources");
+    protected abstract string ResourceName { get; set; }
     protected string ResourcePath => Path.Combine(ResourceDirectory, ResourceName);
 
     protected ResourceRequestHandler(ILogger logger)
@@ -33,9 +33,10 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
             LogAndSetUnsuccessfulResult(ref queryResult, "Please set 'ResourceName'.");
             return queryResult;
         }
-
-        if (!File.Exists(ResourcePath))
+       
+        if (!File.Exists(ResourcePath) )
         {
+
             LogAndSetUnsuccessfulResult(ref queryResult, $"{ResourceName} does not exist in the directory {ResourceDirectory}");
         }
         return queryResult;
@@ -46,7 +47,7 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
         if (ex != null)
         {
             Logger.LogError(ex, message);
-            queryResult.Message = ex.Message;
+            queryResult.Message = string.IsNullOrEmpty(message)? ex.Message: $"{message}. {ex.Message}";
         }
         else
         {

@@ -19,7 +19,7 @@ namespace ClearDashboard.DAL.Tests.Slices.LanguageResources
             //no-op
         }
 
-        protected override string ResourceName => @"xml\\languages.xml";
+        protected override string ResourceName { get; set; } = @"xml\\languages.xml";
 
         public override Task<QueryResult<List<string>>> Handle(GetLanguageResourcesCommand request, CancellationToken cancellationToken)
         {
