@@ -190,7 +190,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-           
             flowDirection = ProjectManager.CurrentLanguageFlowDirection;
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 

@@ -62,7 +62,6 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SIL.Machine" Version="2.5.11" />
 		<PackageReference Include="TinyMapper" Version="3.0.3" />
-		<PackageReference Include="Unidecode.NET" Version="2.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
