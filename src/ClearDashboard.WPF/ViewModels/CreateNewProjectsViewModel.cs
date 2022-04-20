@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
@@ -17,7 +17,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-using ClearDashboard.DataAccessLayer.Wpf;
 using Path = System.Windows.Shapes.Path;
 
 
@@ -27,10 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class CreateNewProjectsViewModel : ApplicationScreen
     {
         #region Properties
-        public ProjectManager _projectManager { get; set; }
-        private readonly INavigationService _navigationService;
-        private readonly ILogger _logger;
-
+      
         protected Canvas DrawCanvasTop { get; set; }
         protected Canvas DrawCanvasBottom { get; set; }
 
@@ -119,13 +115,13 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Observable Properties
 
         private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
+        public FlowDirection FlowDirection
         {
             get => _flowDirection;
             set
             {
                 _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
+                NotifyOfPropertyChange(() => FlowDirection);
             }
         }
         public string ProjectName
@@ -151,13 +147,9 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public CreateNewProjectsViewModel(INavigationService navigationService, 
-            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-            _navigationService = navigationService;
-            _projectManager = projectManager;
-            _logger = logger;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion
@@ -184,8 +176,8 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             SetupUserHelp();
 
-            await _projectManager.SetupParatext();
-            DashboardProject = _projectManager.CreateDashboardProject();
+            await ProjectManager.SetupParatext();
+            DashboardProject = ProjectManager.CreateDashboardProject();
 
         }
 
@@ -211,10 +203,6 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Page management
-
-
-       
-
         public void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _dragStartPoint = e.GetPosition(null);
@@ -272,7 +260,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             DashboardProject.TargetProject = project;
 
                             // look for linked back translations
-                            var backTranslationProjects = _projectManager.ParatextProjects.Where(p => p.TranslationInfo?.ProjectGuid == project.Guid).ToList();
+                            var backTranslationProjects = ProjectManager.ParatextProjects.Where(p => p.TranslationInfo?.ProjectGuid == project.Guid).ToList();
                             foreach (var backTranslationProject in backTranslationProjects)
                             {
                                 if (DashboardProject.BackTranslationProjects.All(p => p.Name != backTranslationProject.Name))
@@ -1267,7 +1255,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
 
-            _navigationService.For<ProcessUSFMViewModel>()
+            NavigationService.For<ProcessUSFMViewModel>()
                 .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
 
             //await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);

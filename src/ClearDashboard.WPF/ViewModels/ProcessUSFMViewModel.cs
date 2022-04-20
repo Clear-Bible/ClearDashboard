@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -19,10 +15,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region   Member Variables
 
-        private readonly INavigationService _navigationService;
-        private readonly ProjectManager _projectManager;
-        private readonly ILogger _logger;
-
+      
         public DashboardProject DashboardProject { get; set; }
 
         #endregion
@@ -63,13 +56,9 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public ProcessUSFMViewModel(ProjectManager projectManager, INavigationService navigationService, 
-            ILogger<LandingViewModel> logger) : base(navigationService, logger)
+            ILogger<LandingViewModel> logger) : base(navigationService, logger, projectManager)
         {
-            _logger = logger;
-            _navigationService = navigationService;
-            _projectManager = projectManager;
-
-            FlowDirection = _projectManager.CurrentLanguageFlowDirection;
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

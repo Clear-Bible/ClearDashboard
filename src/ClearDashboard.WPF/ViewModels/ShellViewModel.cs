@@ -1,37 +1,30 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.BackgroundServices;
+using ClearDashboard.DataAccessLayer.Events;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
+using Pipes_Shared;
 using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.BackgroundServices;
-using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using Pipes_Shared;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
-using ClearDashboard.DataAccessLayer.Wpf;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen
     {
         private readonly TranslationSource _translationSource;
-        private readonly ProjectManager _projectManager;
-        private readonly ILogger _logger;
-
+       
         #region Properties
 
         //Connection to the DAL
-        private ProjectManager ProjectManager { get; set; }
         private ClearEngineBackgroundService BackgroundService { get; set; }
 
         private string _paratextUserName;
@@ -164,15 +157,11 @@ namespace ClearDashboard.Wpf.ViewModels
            
         }
 
-        /// <summary>
-        /// Overload for DI of the logger
-        /// </summary>
-        /// <param name="logger"></param>
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager, ClearEngineBackgroundService backgroundService) : base(navigationService, logger)
+      
+        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, ILogger<ShellViewModel> logger, ProjectManager projectManager, ClearEngineBackgroundService backgroundService) : base(navigationService, logger, projectManager)
         {
             _translationSource = translationSource;
-            _projectManager = projectManager;
-
+           
             BackgroundService = backgroundService;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
@@ -180,8 +169,6 @@ namespace ClearDashboard.Wpf.ViewModels
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-
-            ProjectManager = projectManager;
             ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
             ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
         }
@@ -261,14 +248,14 @@ namespace ClearDashboard.Wpf.ViewModels
             var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
             if (languageFlowDirection.isRTL)
             {
-                _projectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
             }
             else
             {
-                _projectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
+                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion

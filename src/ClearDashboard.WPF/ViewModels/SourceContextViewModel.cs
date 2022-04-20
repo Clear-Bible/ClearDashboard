@@ -20,9 +20,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
+        
         private string _currentVerse = "";
 
         #endregion //Member Variables
@@ -95,18 +93,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public SourceContextViewModel(INavigationService navigationService, ILogger<SourceContextViewModel> logger, ProjectManager projectManager)
+        public SourceContextViewModel(INavigationService navigationService, ILogger<SourceContextViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-            _projectManager = projectManager;
-            _logger = logger;
+           
 
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             this.Title = "⬒ SOURCE CONTEXT";
             this.ContentId = "SOURCECONTEXT";
 
             // listen to the DAL event messages coming in
-            _projectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
         }
 
 
@@ -116,10 +113,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private async Task ProcessSourceVerseData(BookChapterVerse bcv)
         {
-            var verseDataResult = await  _projectManager.ExecuteCommand(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
+            var verseDataResult = await  ExecuteCommand(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
             if (verseDataResult.Success == false)
             {
-                _logger.LogError(verseDataResult.Message);
+                Logger.LogError(verseDataResult.Message);
                 return;
             }
 
@@ -155,7 +152,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 else
                 {
-                   _logger.LogError("Data returned form query is null.");
+                   Logger.LogError("Data returned form query is null.");
                   
                 }
 
@@ -192,7 +189,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe to the pipes listener
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             base.Dispose(disposing);
         }
