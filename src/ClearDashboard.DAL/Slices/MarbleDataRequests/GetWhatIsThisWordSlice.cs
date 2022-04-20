@@ -13,7 +13,7 @@ using Unidecode.NET;
 
 namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
 {
-    public class GetWhatIsThisWord
+    public class GetWhatIsThisWordSlice
     {
         public record GetWhatIsThisWordByBcvQuery(BookChapterVerse bcv, string languageCode) : IRequest<QueryResult<List<MARBLEresource>>>;
 
@@ -28,7 +28,8 @@ namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
                 //no-op
             }
 
-            protected override string ResourceName { get; set; } =  "manuscriptverses.sqlite";
+
+            protected override string ResourceName { get; set; } = "";
 
             public override Task<QueryResult<List<MARBLEresource>>> Handle(GetWhatIsThisWordByBcvQuery request,
                 CancellationToken cancellationToken)
@@ -36,19 +37,26 @@ namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
                 _bcv = request.bcv;
                 _languageCode = request.languageCode;
 
+                ResourceName = GetFilenameFromMarbleBook(_bcv.BookNum);
+                ResourceName = @"marble-indexes-full\MARBLELinks-" + ResourceName + ".XML";
+
                 var queryResult = ValidateResourcePath(new List<MARBLEresource>());
-                if (queryResult.Success)
+                if (queryResult.Success == false)
                 {
-                    try
-                    {
-                        queryResult.Data = LoadXmlAndProcessData(null);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogAndSetUnsuccessfulResult(ref queryResult,
-                            $"An unexpected error occurred while querying the '{ResourceName}' database for verses with verseId : '{_bcv.GetVerseId()}'",
-                            ex);
-                    }
+                    LogAndSetUnsuccessfulResult(ref queryResult,
+                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.GetVerseId()}'");
+                    return Task.FromResult(queryResult);
+                }
+
+                try
+                {
+                    queryResult.Data = LoadXmlAndProcessData(null);
+                }
+                catch (Exception ex)
+                {
+                    LogAndSetUnsuccessfulResult(ref queryResult,
+                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.GetVerseId()}'",
+                        ex);
                 }
 
                 return Task.FromResult(queryResult);
@@ -56,31 +64,10 @@ namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
 
             protected override List<MARBLEresource> ProcessData()
             {
-                string filename = GetFilenameFromMarbleBook(_bcv.BookNum);
-
-                if (filename == "")
-                {
-                    Logger.LogCritical($"Cannot find the filename for BCV '{_bcv.GetVerseId()}' Filename: {filename}");
-                    return new List<MARBLEresource>();
-                }
-
-                filename = "MARBLELinks-" + filename + ".XML";
-
-                // get the XML file to load
-                string startupPath = AppDomain.CurrentDomain.BaseDirectory;
-                string linksFilePath = Path.Combine(startupPath, @"resources\marble-indexes-full\", filename);
-
-                if (!File.Exists(linksFilePath))
-                {
-                    Logger.LogCritical($"Cannot find the links filename for BCV '{_bcv.GetVerseId()}' Filename: {linksFilePath}");
-                    return new List<MARBLEresource>();
-                }
-
-                List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(linksFilePath, _bcv, _languageCode);
+                List<MARBLEresource> mr = GetLemmaListFromMarbleIndexes(ResourcePath, _bcv, _languageCode);
 
                 return mr;
             }
-
 
 
             /// <summary>
