@@ -9,6 +9,7 @@ using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
 

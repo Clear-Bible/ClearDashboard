@@ -12,6 +12,7 @@ using Caliburn.Micro;
 using System.Threading;
 using System.Windows;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels

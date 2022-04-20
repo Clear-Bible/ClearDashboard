@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Interfaces
