@@ -28,7 +28,7 @@ namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
                 //no-op
             }
 
-            protected override string ResourceName => "manuscriptverses.sqlite";
+            protected override string ResourceName { get; set; } =  "manuscriptverses.sqlite";
 
             public override Task<QueryResult<List<MARBLEresource>>> Handle(GetWhatIsThisWordByBcvQuery request,
                 CancellationToken cancellationToken)
