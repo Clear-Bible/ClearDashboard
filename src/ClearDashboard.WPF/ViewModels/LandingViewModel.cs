@@ -4,7 +4,10 @@ using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Slices.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 
@@ -51,14 +54,20 @@ namespace ClearDashboard.Wpf.ViewModels
            
             flowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
-            // get the clearsuite projects
-            DashboardProjects = projectManager.LoadExistingProjects();
-
             Logger.LogError("LandingViewModel constructor called.");
         }
 
         protected override void OnViewAttached(object view, object context)
         { base.OnViewAttached(view, context);
+        }
+
+        protected  override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+           var results = await ExecuteCommand(new GetDashboardProjectsCommand(), CancellationToken.None);
+           if (results.Success)
+           {
+               DashboardProjects = results.Data;
+           }
         }
 
         #endregion
