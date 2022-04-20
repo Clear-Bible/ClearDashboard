@@ -33,14 +33,24 @@
             ItemsSource="{Binding AlignmentPlan}">
             <ListView.View>
                 <GridView>
-                    <GridView.ColumnHeaderContainerStyle>
+                    <!--<GridView.ColumnHeaderContainerStyle>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </Style>
-                    </GridView.ColumnHeaderContainerStyle>
+                    </GridView.ColumnHeaderContainerStyle>-->
 
 
-                    <GridViewColumn Width="80" Header="Target">
+                    <GridViewColumn Header="Target">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueMidBrush}"
+                                    Text="{Binding Target}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="40">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock
@@ -48,11 +58,11 @@
                                     Cursor="Hand"
                                     FontStyle="Italic"
                                     Foreground="{StaticResource BlueMidBrush}"
-                                    Text="{Binding Target}" />
+                                    Text="&lt;---&gt;" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="80" Header="Source">
+                    <GridViewColumn Header="Source">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock
@@ -64,12 +74,13 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="30" Header="USFM Processing Status">
+                    <GridViewColumn Header="USFM Processing Status">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Width="20" Height="20">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                             <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
                                             <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
                                             <Style.Triggers>
@@ -84,19 +95,20 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="60" Header="Day 1">
+                    <GridViewColumn Width="150" Header="SMT">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding SMT, Mode=TwoWay}" SelectedItem="{Binding AlignmentSMT, Mode=TwoWay}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="30" Header="Alignment Status">
+                    <GridViewColumn Header="Alignment Status">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Width="20" Height="20">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                             <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
                                             <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
                                             <Style.Triggers>

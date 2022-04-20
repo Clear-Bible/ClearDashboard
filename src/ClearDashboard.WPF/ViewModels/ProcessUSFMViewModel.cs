@@ -67,6 +67,13 @@ namespace ClearDashboard.Wpf.ViewModels
             var targetId = DashboardProject.TargetProject.Guid;
 
             AlignmentPlan.Clear();
+            _alignmentPlan.Add(new AlignmentPlan
+            {
+                Source = "Manuscript",
+                SourceID = "",
+                Target = target,
+                TargetID = targetId
+            });
 
             foreach (var proj in DashboardProject.BackTranslationProjects)
             {
@@ -102,8 +109,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             NotifyOfPropertyChange(() => AlignmentPlan);
-
-            Console.WriteLine();
+            
             return base.OnActivateAsync(cancellationToken);
         }
 

@@ -10,10 +10,13 @@ using Pipes_Shared;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
+using ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Action = System.Action;
 
@@ -172,7 +175,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager, TranslationSource translationSource)
+        public WordMeaningsViewModel(INavigationService navigationService, 
+            ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager, TranslationSource translationSource)
+            : base(navigationService, logger, projectManager)
         {
             this.Title = "⌺ WORD MEANINGS";
             this.ContentId = "WORDMEANINGS";
@@ -348,9 +353,24 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
             }
 
+            var queryResult = await ExecuteCommand(new GetWhatIsThisWord.GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger.LogError(queryResult.Message);
+                return;
+            }
 
-            GetWhatIsThisWord sd = new GetWhatIsThisWord();
-            _whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv, languageCode);
+
+            if (queryResult.Data == null)
+            {
+                WordData.Clear();
+                return;
+            }
+
+            _whatIsThisWord = queryResult.Data;
+
+            //GetWhatIsThisWord sd = new GetWhatIsThisWord();
+            //_whatIsThisWord = sd.GetSemanticDomainData(CurrentBcv, languageCode);
 
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((Action)delegate
