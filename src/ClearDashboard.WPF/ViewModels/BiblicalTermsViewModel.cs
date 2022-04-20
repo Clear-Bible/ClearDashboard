@@ -144,7 +144,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         private string _filterText;
-
         public string FilterText
         {
             get => _filterText;

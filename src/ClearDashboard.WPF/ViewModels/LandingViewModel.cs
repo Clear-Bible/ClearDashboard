@@ -14,9 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region   Member Variables
         
-        private readonly INavigationService _navigationService;
-        private readonly ProjectManager _projectManager;
-        private readonly ILogger _logger;
+     
         
         #endregion
 
@@ -48,18 +46,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger): base(navigationService, logger)
+        public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger): base(navigationService, logger, projectManager)
         {
-            _logger = logger;
-            _navigationService = navigationService;
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+           
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             // get the clearsuite projects
             DashboardProjects = projectManager.LoadExistingProjects();
 
-            _logger.LogError("LandingViewModel constructor called.");
+            Logger.LogError("LandingViewModel constructor called.");
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -74,8 +69,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void CreateNewProject()
         {
-            _logger.LogInformation("CreateNewProject called.");
-           _navigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
+            Logger.LogInformation("CreateNewProject called.");
+            NavigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
         }
 
         public void Workspace(DashboardProject project)
@@ -90,15 +85,15 @@ namespace ClearDashboard.Wpf.ViewModels
             project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
 
 
-            _logger.LogInformation("Workspace called."); 
-            _projectManager.CurrentDashboardProject = project;
-           _navigationService.NavigateToViewModel<WorkSpaceViewModel>();
+            Logger.LogInformation("Workspace called."); 
+            ProjectManager.CurrentDashboardProject = project;
+            NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 
         public void Settings()
         {
-            _logger.LogInformation("Settings called.");
-            _navigationService.NavigateToViewModel<SettingsViewModel>();
+            Logger.LogInformation("Settings called.");
+            NavigationService.NavigateToViewModel<SettingsViewModel>();
 
         }
 

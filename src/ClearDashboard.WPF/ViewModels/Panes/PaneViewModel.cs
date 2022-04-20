@@ -1,5 +1,7 @@
 ﻿using System.Windows.Media;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Panes
 {
@@ -88,6 +90,12 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 		#region Constructor
 		public PaneViewModel()
         {
+        }
+
+        public PaneViewModel(INavigationService navigationService, ILogger logger, ProjectManager projectManager) :
+            base(navigationService, logger, projectManager)
+        {
+
         }
 
         #endregion //Constructor
