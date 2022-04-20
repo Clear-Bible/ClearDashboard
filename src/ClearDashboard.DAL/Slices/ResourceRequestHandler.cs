@@ -15,7 +15,7 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
     protected string ResourceDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "Resources");
     protected abstract string ResourceName { get; set; }
     protected string ResourcePath => Path.Combine(ResourceDirectory, ResourceName);
-
+    
     protected ResourceRequestHandler(ILogger logger)
     {
         Logger = logger;
