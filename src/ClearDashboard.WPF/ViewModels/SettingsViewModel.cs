@@ -13,10 +13,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class SettingsViewModel : ApplicationScreen
     {
         #region Member Variables
-        private ILogger _logger { get; set; }
-        private INavigationService _navigationService { get; set; }
-        private ProjectManager _projectManager;
-
+      
 
         #endregion //Member Variables
 
@@ -51,12 +48,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public SettingsViewModel(INavigationService navigationService, ILogger<SettingsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-            _logger = logger;
-            _navigationService = navigationService;
-            _projectManager = projectManager;
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+           
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/NewProject_Icon_96.png", ImageName = "NEW" });
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/settings_logo_96.png", ImageName = "SETTINGS" });

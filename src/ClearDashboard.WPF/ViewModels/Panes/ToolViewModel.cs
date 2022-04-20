@@ -1,4 +1,8 @@
-﻿namespace ClearDashboard.Wpf.ViewModels.Panes
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.Logging;
+
+namespace ClearDashboard.Wpf.ViewModels.Panes
 {
     /// <summary>
     /// 
@@ -33,6 +37,11 @@
 
         #region Constructor
         public ToolViewModel()
+        {
+
+        }
+
+        public ToolViewModel(INavigationService navigationService, ILogger logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
 
         }

@@ -17,7 +17,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
-    FlowDirection="{Binding flowDirection}"
+    FlowDirection="{Binding FlowDirection}"
     mc:Ignorable="d">
 
     <!--
@@ -95,7 +95,7 @@
                 <ListView
                     Margin="5"
                     cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source,$eventArgs)];                                        [Event PreviewMouseMove] = [Action ListView_PreviewMouseMove($source,$eventArgs)]"
-                    ItemsSource="{Binding _projectManager.ParatextProjects}"
+                    ItemsSource="{Binding ProjectManager.ParatextProjects}"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -192,7 +192,7 @@
                     x:Name="resourcesLV"
                     Margin="5"
                     cm:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action ListView_PreviewMouseLeftButtonDown($source, $eventArgs)];                                        [Event  PreviewMouseMove] = [Action ListView_PreviewMouseMove($source, $eventArgs)]"
-                    ItemsSource="{Binding _projectManager.ParatextResources}"
+                    ItemsSource="{Binding ProjectManager.ParatextResources}"
                     Style="{StaticResource MaterialDesignListBox}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">

@@ -33,8 +33,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-        private ProjectManager _projectManager;
-
+       
         #endregion //Member Variables
 
         #region Public Properties
@@ -189,11 +188,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger)
+        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-            this._projectManager = projectManager;
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-            this._projectManager.NamedPipeChanged += HandleEventAsync;
+           
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
             
@@ -293,7 +292,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -305,7 +304,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
             base.Dispose(disposing);
         }
 
