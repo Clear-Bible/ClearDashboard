@@ -15,7 +15,6 @@ namespace ClearDashboard.Wpf.Helpers
 
         public List<MARBLEresource> GetSemanticDomainData(BookChapterVerse bcv, string languageCode)
         {
-            // Load up NIV84+ for this verse
             string filename = GetFilenameFromMarbleBook(bcv.BookNum);
 
             if (filename == "")
