@@ -17,7 +17,8 @@ namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
             //no-op
         }
 
-        protected override string ResourceName => "manuscriptverses.sqlite";
+        
+        protected override string ResourceName { get; set; } = "manuscriptverses.sqlite";
         
         public override Task<QueryResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
         {
