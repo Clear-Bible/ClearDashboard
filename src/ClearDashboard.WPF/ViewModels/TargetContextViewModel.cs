@@ -208,7 +208,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-
         #region Constructor
         public TargetContextViewModel()
         {
