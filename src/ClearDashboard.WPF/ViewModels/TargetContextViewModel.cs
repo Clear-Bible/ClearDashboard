@@ -214,7 +214,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public TargetContextViewModel(INavigationService navigationService, ILogger<TargetContextViewModel> logger, ProjectManager projectManager)
+        public TargetContextViewModel(INavigationService navigationService, 
+            ILogger<TargetContextViewModel> logger, ProjectManager projectManager)
+            : base(navigationService, logger, projectManager)
         {
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";

@@ -147,7 +147,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public CreateNewProjectsViewModel(INavigationService navigationService, 
-            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
+            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }

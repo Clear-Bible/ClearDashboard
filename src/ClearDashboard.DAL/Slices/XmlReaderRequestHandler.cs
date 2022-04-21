@@ -16,6 +16,7 @@ public abstract class XmlReaderRequestHandler<TRequest, TResponse, TData> : Reso
         //no-op
     }
 
+    
     protected TData LoadXmlAndProcessData(XmlReaderSettings? xmlReaderSettings = null)
     {
         try

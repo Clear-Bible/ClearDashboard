@@ -15,7 +15,6 @@ namespace ClearDashboard.Wpf.ViewModels
         public ProjectManager ProjectManager { get; private set; }
 
         private bool isBusy_;
-
         public bool IsBusy
         {
             get => isBusy_;
