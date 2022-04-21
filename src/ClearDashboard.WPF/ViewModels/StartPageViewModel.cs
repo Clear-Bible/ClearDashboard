@@ -1,14 +1,4 @@
-﻿using ClearDashboard.Common;
-using ClearDashboard.Common.Models;
-using MvvmHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
@@ -32,8 +22,6 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Observable Properties
 
         #endregion //Observable Properties
-
-       
 
         #region Constructor
 

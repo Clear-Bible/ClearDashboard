@@ -11,9 +11,6 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
         #endregion //Member Variables
 
         #region Public Properties
@@ -35,7 +32,8 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "ALIGNMENTTOOL";
         }
 
-        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, ProjectManager projectManager):base(navigationService, logger, projectManager)
+        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, ProjectManager projectManager) :
+            base(navigationService, logger, projectManager)
         {
  
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,13 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
         protected INavigationService NavigationService { get; set; }
         protected ProjectManager ProjectManager { get; set; }
 
+
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection FlowDirection
+        {
+            get => _flowDirection;
+            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+        }
 
         private bool isLastWorkflowStep_;
         public bool IsLastWorkflowStep
@@ -38,7 +46,9 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             NavigationService = navigationService;
             EventAggregator = eventAggregator;
             Steps = new List<WorkflowStepViewModel>();
-           
+
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

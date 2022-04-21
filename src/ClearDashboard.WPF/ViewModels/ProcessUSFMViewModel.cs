@@ -3,11 +3,9 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -19,8 +17,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
 
         #endregion
-
-
+        
         #region Observable Objects
 
 
@@ -37,8 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #endregion
-
-
+        
         #region Constructor
         public ProcessUSFMViewModel()
         {
@@ -104,9 +100,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion
-
-
-
+        
         #region Methods
 
 

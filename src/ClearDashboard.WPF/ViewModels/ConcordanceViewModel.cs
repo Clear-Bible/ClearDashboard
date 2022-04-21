@@ -2,7 +2,6 @@
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -30,12 +29,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public ConcordanceViewModel(INavigationService navigationService, ILogger<ConcordanceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
+        public ConcordanceViewModel(INavigationService navigationService, ILogger<ConcordanceViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
-            this.Title = "🆎 CONCORDANCE TOOL";
-            this.ContentId = "CONCORDANCETOOL";
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
+            Title = "🆎 CONCORDANCE TOOL";
+            ContentId = "CONCORDANCETOOL";
         }
 
         #endregion //Constructor

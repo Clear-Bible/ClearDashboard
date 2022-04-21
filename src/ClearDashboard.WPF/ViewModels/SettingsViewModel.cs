@@ -1,12 +1,8 @@
-﻿using System;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Views;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

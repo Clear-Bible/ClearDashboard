@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
@@ -36,7 +29,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public TextCollectionViewModel(INavigationService navigationService, ILogger<TextCollectionViewModel> logger, ProjectManager projectManager) :base(navigationService, logger, projectManager)
+        public TextCollectionViewModel(INavigationService navigationService, ILogger<TextCollectionViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             this.Title = "🗐 TEXT COLLECTION";
             this.ContentId = "TEXTCOLLECTION";

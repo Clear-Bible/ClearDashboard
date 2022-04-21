@@ -10,7 +10,7 @@ using Serilog.Core;
 
 namespace ClearDashboard.Wpf.Helpers
 {
-    public static class GetLocalizationString
+    public static class LocalizationStrings
     {
         public static string Get(string key, ILogger logger)
         {
@@ -21,13 +21,13 @@ namespace ClearDashboard.Wpf.Helpers
             }
             catch (Exception e)
             {
-                logger.LogCritical($"Localization missing for {key} {e.Message} {Thread.CurrentThread.CurrentUICulture.Name}");
+                logger.LogCritical($"Localization string missing for key '{key}' {e.Message} {Thread.CurrentThread.CurrentUICulture.Name}");
                 localizedString = key;
             }
 
             if (localizedString == null)
             {
-                logger.LogCritical($"Localization missing for {key} {Thread.CurrentThread.CurrentUICulture.Name}");
+                logger.LogCritical($"Localization string missing for key '{key}' {Thread.CurrentThread.CurrentUICulture.Name}");
                 localizedString = key;
             }
             return localizedString;

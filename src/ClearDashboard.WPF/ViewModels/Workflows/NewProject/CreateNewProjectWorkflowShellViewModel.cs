@@ -29,15 +29,9 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
     {
         public CreateNewProjectWorkflowShellViewModel(ProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
         {
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+           
         }
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
-        {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
-        }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {

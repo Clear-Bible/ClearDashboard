@@ -1,15 +1,9 @@
-﻿using ClearDashboard.Common.Models;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using ClearDashboard.Wpf.Helpers;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -44,7 +38,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, ProjectManager projectManager): base(navigationService, logger, projectManager)
+        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, ProjectManager projectManager)
+            : base(navigationService, logger, projectManager)
         {
             Initialize();
         }
@@ -57,7 +52,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (!_firstLoad)
             {
-                Debug.WriteLine("Not the first load");
+                Logger.LogInformation("Not the first load");
             }
         }
 

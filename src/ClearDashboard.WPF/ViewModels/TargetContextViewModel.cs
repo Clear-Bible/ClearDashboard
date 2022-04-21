@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using Pipes_Shared;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -165,10 +158,7 @@ namespace ClearDashboard.Wpf.ViewModels
         ObservableCollection<Inline> _targetInlinesText = new ObservableCollection<Inline>();
         public ObservableCollection<Inline> TargetInlinesText
         {
-            get
-            {
-                return _targetInlinesText;
-            }
+            get => _targetInlinesText;
             set
             {
                 _targetInlinesText = value;
@@ -248,7 +238,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {
@@ -277,8 +267,10 @@ namespace ClearDashboard.Wpf.ViewModels
                             else
                             {
                                 // a normal verse
-                                Verse verse = new Verse();
-                                verse.VerseBBCCCVVV = _currentVerse;
+                                var verse = new Verse
+                                {
+                                    VerseBBCCCVVV = _currentVerse
+                                };
 
                                 if (verse.BookNum < 40)
                                 {

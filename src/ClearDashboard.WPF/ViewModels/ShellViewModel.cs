@@ -1,6 +1,5 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -23,10 +22,6 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly TranslationSource _translationSource;
        
         #region Properties
-
-        //Connection to the DAL
-        private ClearEngineBackgroundService BackgroundService { get; set; }
-
         private string _paratextUserName;
         public string ParatextUserName
         {
@@ -54,7 +49,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private bool _connected;
         public bool Connected
         {
-            get { return _connected; }
+            get => _connected;
             set
             {
                 _connected = value;
@@ -149,12 +144,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
       
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, ProjectManager projectManager, ClearEngineBackgroundService backgroundService) 
+            ILogger<ShellViewModel> logger, ProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             _translationSource = translationSource;
-           
-            BackgroundService = backgroundService;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
