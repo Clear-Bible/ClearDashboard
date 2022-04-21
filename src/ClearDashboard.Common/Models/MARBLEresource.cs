@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ClearDashboard.Common.Models
 {
-    public class MARBLEresource
+    public class MarbleResource
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int TotalSenses { get; set; }
         public string Word { get; set; } = "";
         public string WordTransliterated { get; set; }

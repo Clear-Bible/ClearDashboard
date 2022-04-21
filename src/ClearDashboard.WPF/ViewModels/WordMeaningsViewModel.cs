@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private string _currentVerse = "";
 
-        List<MARBLEresource> _whatIsThisWord = new List<MARBLEresource>();
+        List<MarbleResource> _whatIsThisWord = new List<MarbleResource>();
 
         #endregion //Member Variables
 
@@ -84,8 +84,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<MARBLEresource> _wordData = new ObservableCollection<MARBLEresource>();
-        public ObservableCollection<MARBLEresource> WordData
+        private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
+        public ObservableCollection<MarbleResource> WordData
         {
             get => _wordData;
             set
@@ -196,7 +196,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var marbleResource = (MARBLEresource)obj;
+            var marbleResource = (MarbleResource)obj;
             if (marbleResource.TotalSenses == 1)
             {
                 return;
@@ -209,7 +209,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var items = _whatIsThisWord.Where(p => p.ID == marbleResource.ID);
+            var items = _whatIsThisWord.Where(p => p.Id == marbleResource.Id);
 
             WordData.Clear();
             foreach (var item in items)
@@ -227,7 +227,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var marbleResource = (MARBLEresource)obj;
+            var marbleResource = (MarbleResource)obj;
 
             // OT or NT?
             if (CurrentBcv.BookNum < 40)
@@ -329,7 +329,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
             }
 
-            var queryResult = await ExecuteCommand(new GetWhatIsThisWordSlice.GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteCommand(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);

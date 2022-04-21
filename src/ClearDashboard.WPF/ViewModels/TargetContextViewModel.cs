@@ -166,8 +166,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<MARBLEresource> _wordData = new ObservableCollection<MARBLEresource>();
-        public ObservableCollection<MARBLEresource> WordData
+        private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
+        public ObservableCollection<MarbleResource> WordData
         {
             get => _wordData;
             set
