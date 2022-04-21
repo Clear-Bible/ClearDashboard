@@ -67,16 +67,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region ObservableProps
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
 
 
         private LanguageTypeValue _selectedLanguage;
@@ -255,7 +245,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion

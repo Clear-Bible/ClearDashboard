@@ -79,16 +79,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
+       
 
         private string _verseRef;
         public string VerseRef
@@ -190,7 +181,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
         {
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;

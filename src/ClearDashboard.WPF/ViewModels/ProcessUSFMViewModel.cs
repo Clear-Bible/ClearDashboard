@@ -23,16 +23,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Objects
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => FlowDirection);
-            }
-        }
 
         private ObservableCollection<AlignmentPlan> _alignmentPlan = new ();
         public ObservableCollection<AlignmentPlan> AlignmentPlan
@@ -58,7 +48,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public ProcessUSFMViewModel(ProjectManager projectManager, INavigationService navigationService, 
             ILogger<LandingViewModel> logger) : base(navigationService, logger, projectManager)
         {
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

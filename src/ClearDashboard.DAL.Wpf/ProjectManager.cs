@@ -1,17 +1,9 @@
-using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Slices.DashboardProjects;
 using ClearDashboard.DataAccessLayer.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -19,6 +11,12 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using Pipes_Shared;
 using Pipes_Shared.Models;
+using System;
+using System.IO;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.DataAccessLayer.Wpf
 {
@@ -117,6 +115,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
         public void OnClosing()
         {
             IsPipeConnected = false;
+            _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
             _namedPipesClient.Dispose();
         }
 
@@ -159,8 +158,6 @@ namespace ClearDashboard.DataAccessLayer.Wpf
             GetParatextUserName();
             EnsureDashboardProjectDirectory();
         }
-
-     
 
         private void EnsureDashboardProjectDirectory()
         {
@@ -344,6 +341,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
         public void Dispose()
         {
             IsPipeConnected = false;
+            _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
             _namedPipesClient.Dispose();
         }
 

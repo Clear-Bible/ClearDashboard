@@ -27,8 +27,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
+        //private readonly ILogger _logger;
+        //private readonly ProjectManager _projectManager;
         private readonly TranslationSource _translationSource;
 
         private string _currentVerse = "";
@@ -55,17 +55,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
+       
         private bool _isOT;
         public bool IsOT
         {
@@ -183,16 +173,12 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "WORDMEANINGS";
             this.DockSide = EDockSide.Left;
 
-            _logger = logger;
             _translationSource = translationSource;
-            _projectManager = projectManager;
 
-            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
             // listen to the DAL event messages coming in
-            _projectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
@@ -207,7 +193,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe to the pipes listener
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             base.Dispose(disposing);    
         }

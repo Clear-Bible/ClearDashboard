@@ -25,6 +25,7 @@ namespace ClearDashboard.Wpf.Extensions
             // wire up all of the view models in the project.
             typeof(Bootstrapper).Assembly.GetTypes()
                 .Where(type => type.IsClass)
+                .Where(type =>type.IsAbstract == false) // ignore any view models which are abstract!
                 .Where(type => type.Name.EndsWith("ViewModel"))
                 .ToList()
                 .ForEach(viewModelType => serviceCollection.AddTransient(viewModelType));

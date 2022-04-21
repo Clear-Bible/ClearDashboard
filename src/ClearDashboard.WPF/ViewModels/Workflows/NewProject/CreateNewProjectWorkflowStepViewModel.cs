@@ -1,15 +1,9 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Views;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,13 +11,19 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using Caliburn.Micro;
+using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Views.Workflows.NewProject;
+using Microsoft.Extensions.Logging;
 using Path = System.Windows.Shapes.Path;
 
 
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 {
-    public class CreateNewProjectsViewModel : ApplicationScreen
+    public class CreateNewProjectWorkflowStepViewModel : WorkflowStepViewModel
     {
         #region Properties
       
@@ -114,16 +114,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => FlowDirection);
-            }
-        }
         public string ProjectName
         {
             get => DashboardProject?.ProjectName;
@@ -141,15 +131,15 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Required for design-time support
         /// </summary>
-        public CreateNewProjectsViewModel()
+        public CreateNewProjectWorkflowStepViewModel()
         {
             
         }
 
-        public CreateNewProjectsViewModel(INavigationService navigationService, 
-            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
+        public CreateNewProjectWorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, 
+            ILogger<CreateNewProjectWorkflowStepViewModel> logger, ProjectManager projectManager) : base(eventAggregator, navigationService, logger, projectManager)
         {
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+           
         }
 
         #endregion
@@ -159,17 +149,31 @@ namespace ClearDashboard.Wpf.ViewModels
        
         protected override void OnViewAttached(object view, object context)
         {
-            var createNewProjectView = ((CreateNewProjectsView)view);
-            DrawCanvasTop = (Canvas)createNewProjectView.FindName("DrawCanvasTop");
-            DrawCanvasBottom = (Canvas)createNewProjectView.FindName("DrawCanvasBottom");
+            if (view is CreateNewProjectWorkflowStepView stepView)
+            {
+                var createNewProjectView = stepView;
+                DrawCanvasTop = (Canvas)createNewProjectView.FindName("DrawCanvasTop");
+                DrawCanvasBottom = (Canvas)createNewProjectView.FindName("DrawCanvasBottom");
+            }
+          
             base.OnViewAttached(view, context);
+
         }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            //DrawTheCanvas();
+            return base.OnActivateAsync(cancellationToken);
+        }
+
         protected override async void OnViewLoaded(object view)
         {
+            base.OnViewLoaded(view);
+
             await Init();
             DrawTheCanvas();
 
-            base.OnViewLoaded(view);
+           
         }
 
         public async Task Init()
@@ -1255,10 +1259,10 @@ namespace ClearDashboard.Wpf.ViewModels
             //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
 
-            NavigationService.For<ProcessUSFMViewModel>()
-                .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
+            //NavigationService.For<ProcessUSFMViewModel>()
+            //    .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
 
-            //await _projectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+            await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
         #endregion

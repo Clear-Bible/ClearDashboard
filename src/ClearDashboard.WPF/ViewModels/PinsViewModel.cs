@@ -22,10 +22,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
-
+      
         private string _paratextInstallPath = "";
 
         private string _paratextProjectPath = "";
@@ -136,35 +133,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
-
         #endregion //Observable Properties
 
         #region Constructor
         public PinsViewModel()
         {
-
-
-
         }
 
-        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager)
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager): base(navigationService,logger, projectManager)
         {
-            _logger = logger;
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-
+           
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
 
