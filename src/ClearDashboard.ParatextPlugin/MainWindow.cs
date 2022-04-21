@@ -1,30 +1,22 @@
-﻿using Serilog;
-using ClearDashboard.ParatextPlugin;
+﻿using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using ClearDashboard.ParatextPlugin.Helpers;
+using ClearDashboard.Pipes_Shared.Models;
 using H.Formatters;
 using H.Pipes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Pipes_Shared;
+using Pipes_Shared.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
-using ClearDashboard.ParatextPlugin.Helpers;
-using ClearDashboard.ParatextPlugin.Models;
-using ClearDashboard.Pipes_Shared.Models;
-using Microsoft.VisualStudio.Threading;
-using Microsoft.Win32;
-using Pipes_Shared.Models;
-using Serilog.Core;
 
 namespace ClearDashboardPlugin
 {
@@ -35,6 +27,7 @@ namespace ClearDashboardPlugin
         // ReSharper disable once InconsistentNaming
         private IProject m_project;
         // ReSharper disable once IdentifierTypo
+        // ReSharper disable once InconsistentNaming
         private int m_booknum;
         // ReSharper disable once InconsistentNaming
         private IVerseRef m_verseRef;
@@ -45,6 +38,7 @@ namespace ClearDashboardPlugin
         private IWindowPluginHost m_host;
         private List<BiblicalTermsData> _termsList;
         // ReSharper disable once NotAccessedField.Local
+        // ReSharper disable once InconsistentNaming
         IPluginChildWindow m_parent;
 
         private readonly ListType _projectList = new ListType("Project", true, BiblicalTermListType.All);
@@ -56,7 +50,7 @@ namespace ClearDashboardPlugin
         // ReSharper disable once InconsistentNaming
         private readonly IBiblicalTermList m_listAll;
 
-        private JsonSerializerOptions _jsonOptions;
+        private readonly JsonSerializerOptions _jsonOptions;
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
         private Form _parentForm;
 
@@ -242,7 +236,9 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+#pragma warning disable VSTHRD100 // Avoid async void methods
         private async void MainWindow_Disposed(object sender, EventArgs e)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             // this user control is closing - clean up pipe
 
@@ -279,36 +275,36 @@ namespace ClearDashboardPlugin
                     break;
                 case ActionType.GetCurrentVerse:
                     // send the current BCV location of Paratext
-                    GetCurrentVerse().Forget();
+                    GetCurrentVerseAsync().Forget();
 
                     break;
                 case ActionType.GetBibilicalTermsAll:
                     // fire off into background
-                    GetBiblicalTermsAllBackground().Forget();
+                    GetBiblicalTermsAllBackgroundAsync().Forget();
                     break;
                 case ActionType.GetBibilicalTermsProject:
                     // fire off into background
-                    GetBiblicalTermsProjectBackground().Forget();
+                    GetBiblicalTermsProjectBackgroundAsync().Forget();
                     break;
                 case ActionType.GetTargetVerses:
                     // fire off into background
-                    GetUSXScripture().Forget();
+                    GetUSXScriptureAsync().Forget();
                     break;
                 case ActionType.GetNotes:
-                    await GetNoteList(message).ConfigureAwait(false);
+                    await GetNoteListAsync(message).ConfigureAwait(false);
                     break;
                 case ActionType.GetUSFM:
                     //await ShowUSFMScripture().ConfigureAwait(false);
                     break;
                 case ActionType.GetUSX:
                     AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
-                    await GetUSXScripture().ConfigureAwait(false);
+                    await GetUSXScriptureAsync().ConfigureAwait(false);
                     break;
                 case ActionType.OnConnected:
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
-                    GetCurrentVerse().Forget();
+                    GetCurrentVerseAsync().Forget();
 
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
@@ -348,7 +344,9 @@ namespace ClearDashboardPlugin
             }
         }
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         private async void OnLoad(object sender, EventArgs eventArgs)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             try
             {
@@ -468,7 +466,7 @@ namespace ClearDashboardPlugin
             if (newReference != m_verseRef)
             {
                 m_verseRef = newReference;
-                GetCurrentVerse().Forget();
+                GetCurrentVerseAsync().Forget();
             }
         }
 
@@ -482,7 +480,7 @@ namespace ClearDashboardPlugin
         /// Send out the current verse through the pipe
         /// </summary>
         /// <returns></returns>
-        private async Task GetCurrentVerse()
+        private async Task GetCurrentVerseAsync()
         {
             string verseId = m_verseRef.BBBCCCVVV.ToString();
             if (verseId.Length < 8)
@@ -502,7 +500,7 @@ namespace ClearDashboardPlugin
         /// Send out the Biblical Terms for ALL BTs
         /// </summary>
         /// <returns></returns>
-        private async Task GetBiblicalTermsAllBackground()
+        private async Task GetBiblicalTermsAllBackgroundAsync()
         {
             // ReSharper disable once InconsistentNaming
             string payloadBTAll = "";
@@ -532,7 +530,7 @@ namespace ClearDashboardPlugin
         /// Send out the Biblical Terms for only the Project BTs
         /// </summary>
         /// <returns></returns>
-        private async Task GetBiblicalTermsProjectBackground()
+        private async Task GetBiblicalTermsProjectBackgroundAsync()
         {
             // ReSharper disable once InconsistentNaming
             string payloadBT = "";
@@ -558,7 +556,7 @@ namespace ClearDashboardPlugin
         /// Retrieves the USX & USFM for the project passing in the current book number
         /// </summary>
         /// <returns></returns>
-        private async Task GetUSXScripture()
+        private async Task GetUSXScriptureAsync()
         {
             await Task.Run(async () =>
             {
@@ -660,7 +658,7 @@ namespace ClearDashboardPlugin
         //    return false;
         //}
 
-        private async Task GetNoteList(PipeMessage message)
+        private async Task GetNoteListAsync(PipeMessage message)
         {
             var bookNum = 0;
             var chapNum = 0;
@@ -741,6 +739,12 @@ namespace ClearDashboardPlugin
             }
         }
 
+        private void btnExportUSFM_Click(object sender, EventArgs e)
+        {
+            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+            paratextExtractUSFM.ExportUSFMScripture(m_project, this);
+        }
+
         /// <summary>
         /// Force a restart of the named pipes
         /// </summary>
@@ -786,13 +790,6 @@ namespace ClearDashboardPlugin
 
             //_ = GetNoteList("", dataPayload);
         }
-
-        private void btnExportUSFM_Click(object sender, EventArgs e)
-        {
-            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
-            paratextExtractUSFM.ExportUSFMScripture(m_project, this);
-        }
-
 
 
         //private async Task SetUSFMScripture()
