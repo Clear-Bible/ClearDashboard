@@ -202,7 +202,6 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                 sb.AppendLine();
                                 sb.AppendLine();
                                 sb.AppendLine(@"\c " + marker.Data);
-                                //sb.AppendLine();
 
                                 lastTokenChapter = true;
                             }
@@ -247,7 +246,15 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     }
 
                     // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
-                    File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
+                    try
+                    {
+                        File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                    }
+                    
                 }
             }
         }

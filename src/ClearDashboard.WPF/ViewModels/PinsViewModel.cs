@@ -158,7 +158,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager)
+        public PinsViewModel(INavigationService navigationService, 
+            ILogger<PinsViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             _logger = logger;
             _projectManager = projectManager;
