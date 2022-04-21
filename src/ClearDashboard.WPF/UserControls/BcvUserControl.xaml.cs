@@ -197,10 +197,10 @@ namespace ClearDashboard.Wpf.UserControls
                 // execute code here.
             };
 
-            if (DataContext is WorkSpaceViewModel vm)
-            {
-                CurrentBCV = vm.CurrentBcv;
-            }
+            //if (DataContext is WorkSpaceViewModel vm)
+            //{
+            //    CurrentBCV = vm.CurrentBcv;
+            //}
             
         }
     }

@@ -74,14 +74,16 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
             // restart if disconnected
             if (pm.Action == ActionType.OnDisconnected)
             {
-                try
+                if (_client is not null)
                 {
-                    await _client.ConnectAsync();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
+                    try
+                    {
+                        await _client.ConnectAsync();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
                 }
             }
         }
