@@ -322,7 +322,10 @@ namespace ClearDashboard.Wpf.ViewModels
             }
             NotifyOfPropertyChange(() => BookNames);
 
-            BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
+            if (ProjectManager.ParatextProject is not null)
+            {
+                BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
+            }
 
             await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
         }

@@ -16,6 +16,12 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class BcvUserControl : UserControl
     {
+        #region Observable Properties
+
+        
+
+
+
         public static readonly DependencyProperty _isRtl =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
@@ -34,6 +40,7 @@ namespace ClearDashboard.Wpf.UserControls
         {
             get
             {
+                var bcv = (BookChapterVerse)GetValue(_currentBCV);
                 return (BookChapterVerse)GetValue(_currentBCV);
             }
             set
@@ -88,7 +95,9 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(_verseNums, value);
         }
 
+        #endregion
 
+        #region Constructor
         public BcvUserControl()
         {
             InitializeComponent();
@@ -122,8 +131,28 @@ namespace ClearDashboard.Wpf.UserControls
             btnVerseRight.IsEnabled = true;
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            viewModel.PropertyChanged += (sender, args) => {
+                if (args.PropertyName.Equals("CurrentBcv"))
+
+
+
+                    return;
+                // execute code here.
+            };
+
+            ProcessBCV();
+        }
+
         private void ProcessBCV()
         {
+            if (BCVDictionary is null)
+            {
+                return;
+            }
+
             if (BCVDictionary.Count == 0 || CurrentBCV is null)
             {
                 return;
@@ -158,6 +187,10 @@ namespace ClearDashboard.Wpf.UserControls
 
             Console.WriteLine(BookNames.Count);
         }
+
+        #endregion
+
+        #region Methods
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -239,19 +272,6 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) => {
-                if (args.PropertyName.Equals("CurrentBcv"))
-
-
-
-                    return;
-                // execute code here.
-            };
-
-            ProcessBCV();
-        }
+        #endregion
     }
 }
