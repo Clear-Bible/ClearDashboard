@@ -27,7 +27,10 @@ namespace ClearDashboard.Wpf.Views
             InitializeComponent();
             Browser.NavigationStarting += EnsureHttps;
 
-            InitializeAsync();
+            // the following async call will crash the IDE designer
+#if (! DEBUG)
+  InitializeAsync();
+#endif
         }
 
         /// <summary>
@@ -44,6 +47,7 @@ namespace ClearDashboard.Wpf.Views
                 args.Cancel = true;
             }
         }
+
         private async void InitializeAsync()
         {
             // set the directory for which the webview control can write data to
