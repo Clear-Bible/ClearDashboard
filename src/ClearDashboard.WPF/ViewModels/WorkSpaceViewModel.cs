@@ -90,6 +90,29 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private Dictionary<string,string> _BCVDictionary;
+        public Dictionary<string,string> BCVDictionary
+        {
+            get => _BCVDictionary;
+            set
+            {
+                _BCVDictionary = value;
+                NotifyOfPropertyChange(() => BCVDictionary);
+            }
+        }
+
+        private ObservableCollection<string> _bookNames = new();
+        public ObservableCollection<string> BookNames
+        {
+            get => _bookNames;
+            set
+            {
+                _bookNames = value; 
+                NotifyOfPropertyChange(() => BookNames);
+            }
+        }
+
+
         private string _verseRef;
         public string VerseRef
         {
@@ -292,9 +315,16 @@ namespace ClearDashboard.Wpf.ViewModels
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
 
+            var books = Helpers.Helpers.GetBookIdDictionary();
+            foreach (KeyValuePair<string, string> entry in books)
+            {
+                _bookNames.Add(entry.Value);
+            }
+            NotifyOfPropertyChange(() => BookNames);
+
+            BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
 
             await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
-
         }
 
         protected override void OnViewAttached(object view, object context)

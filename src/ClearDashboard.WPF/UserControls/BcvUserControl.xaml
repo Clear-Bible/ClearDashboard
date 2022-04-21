@@ -11,12 +11,13 @@
     d:DesignWidth="460"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    Loaded="UserControl_Loaded"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d" Loaded="UserControl_Loaded">
+    mc:Ignorable="d">
     <Grid
         Name="LayoutRoot"
         Grid.Row="1"
@@ -97,7 +98,7 @@
             Grid.Column="1"
             MinWidth="100"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding BookNames, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectedValue="{Binding CurrentBCV.BookName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectionChanged="SelectionChanged" />
         <ComboBox
@@ -106,7 +107,7 @@
             Grid.Column="4"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding ChapNums, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectedValue="{Binding CurrentBCV.Chapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectionChanged="SelectionChanged" />
         <ComboBox
@@ -115,7 +116,7 @@
             Grid.Column="7"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding VerseNums, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectedValue="{Binding CurrentBCV.Verse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectionChanged="SelectionChanged" />
 

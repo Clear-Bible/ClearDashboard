@@ -1,7 +1,10 @@
-﻿using ClearDashboard.Common.Models;
+﻿using System;
+using System.Collections.Generic;
+using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -38,6 +41,22 @@ namespace ClearDashboard.Wpf.UserControls
                 SetValue(_currentBCV, value);
             }
         }
+
+        public static readonly DependencyProperty _BCVDictionary =
+            DependencyProperty.Register("BCVDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
+                new PropertyMetadata(new Dictionary<string, string>()));
+        public Dictionary<string, string> BCVDictionary
+        {
+            get
+            {
+                return (Dictionary<string, string>)GetValue(_BCVDictionary);
+            }
+            set
+            {
+                SetValue(_BCVDictionary, value);
+            }
+        }
+
 
         public static readonly DependencyProperty _bookNames =
             DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
@@ -101,8 +120,43 @@ namespace ClearDashboard.Wpf.UserControls
 
             btnVerseLeft.IsEnabled = true;
             btnVerseRight.IsEnabled = true;
+        }
 
+        private void ProcessBCV()
+        {
+            if (BCVDictionary.Count == 0 || CurrentBCV is null)
+            {
+                return;
+            }
 
+            string bookNum = CurrentBCV.BookNum.ToString();
+            string chapNum = CurrentBCV.ChapterNum.ToString().PadLeft(3,'0');
+
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookNum + chapNum)).ToList();
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(5);
+            }
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            VerseNums.Clear();
+            foreach (var verse in verses)
+            {
+                VerseNums.Add(Convert.ToInt32(verse));
+            }
+
+            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookNum)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(2,3);
+            }
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            ChapNums.Clear();
+            foreach (var chapter in chapters)
+            {
+                ChapNums.Add(Convert.ToInt32(chapter));
+            }
+
+            Console.WriteLine(BookNames.Count);
         }
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -197,11 +251,7 @@ namespace ClearDashboard.Wpf.UserControls
                 // execute code here.
             };
 
-            //if (DataContext is WorkSpaceViewModel vm)
-            //{
-            //    CurrentBCV = vm.CurrentBcv;
-            //}
-            
+            ProcessBCV();
         }
     }
 }

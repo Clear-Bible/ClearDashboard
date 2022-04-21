@@ -116,6 +116,8 @@
             <userControls:BcvUserControl
                 x:Name="BCVcontrol"
                 Grid.Column="3"
+                BCVDictionary="{Binding BCVDictionary}"
+                BookNames="{Binding BookNames}"
                 CurrentBCV="{Binding CurrentBcv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsRtl="{Binding IsRtl}" />
 

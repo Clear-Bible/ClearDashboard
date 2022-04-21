@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using ClearDashboard.Common.Helpers;
 
 namespace ClearDashboard.Common.Models
 {
@@ -328,11 +330,11 @@ namespace ClearDashboard.Common.Models
             _bibleBooks.Add("Jude");
             _bibleBooks.Add("Revelation");
 
-            if (isParatext)
-            {
-                // Add a blank book between the OT and NT to match the Paratext format.
-                _bibleBooks.Insert(40, String.Empty);
-            }
+            //if (isParatext)
+            //{
+            //    // Add a blank book between the OT and NT to match the Paratext format.
+            //    _bibleBooks.Insert(40, String.Empty);
+            //}
 
             return _bibleBooks;
         }
@@ -345,21 +347,14 @@ namespace ClearDashboard.Common.Models
         /// <returns>An English Bible book name.</returns>
         public static string BookId2BookName(int bookNum, bool isParatext = false)
         {
-            if (isParatext)
+            var books = BibleRefUtils.GetBookIdDictionary();
+            string bookBB = bookNum.ToString().PadLeft(2, '0');
+            if (books.ContainsKey(bookBB))
             {
-                List<string> _bibleBooks = BibleBookListEn(isParatext);
-
-                // If the number passed is greater than the number of books.
-                if (_bibleBooks.Count > bookNum)
-                {
-                    // Grab a book by it's index in the list.
-                    return _bibleBooks[bookNum];
-                }
-
-                return string.Empty;
+                return books[bookBB];
             }
 
-            return GetFullBookNameFromBookNum(bookNum.ToString().PadLeft(2, '0'));
+            return "";
         }
 
         public string GetVerseRefAbbreviated()
@@ -379,42 +374,21 @@ namespace ClearDashboard.Common.Models
         /// <param name="bookName">The English name of the book you are looking for. A partial name or acronym works too.</param>
         /// <param name="isParatext">If true, it adds a blank book name between the OT and NT to match the format Paratext uses.</param>
         /// <returns>Returns a Bible book number as an int.</returns>
-        public int GetIntBookNumFromBookName(string bookName, bool isParatext = false)
+        public int GetIntBookNumFromBookName(string bookName)
         {
-            if (isParatext)
+            var number = GetBookNumFromBookName(bookName);
+            if (IsNumeric(number))
             {
-                List<string> _bibleBooks = BibleBookListEn(isParatext);
-                if (_bibleBooks.Contains(bookName))
-                {
-                    return _bibleBooks.IndexOf(bookName);
-                }
-
-                // A direct match was not found. Try a partial match.
-                string foundIt = _bibleBooks.Find(f => f.Contains(bookName));
-                if (!string.IsNullOrEmpty(foundIt))
-                {
-                    BookName = foundIt; // This triggers another lookup, but this time it should be found.
-                }
-
-                _bibleBooks.ForEach(book =>
-                {
-                    if (bookName.StartsWith(book))
-                    {
-                        BookName = book; // This triggers another lookup, but this time it should be found.
-                    }
-                });
-
-                return 0;
+                return Convert.ToInt32(number);
             }
 
-            if (bookName.Contains("("))
-            {
-                bookName = bookName.Remove(bookName.IndexOf('(')).Trim();
-            }
-
-            return int.Parse(GetBookNumFromBookName(bookName));
+            return 0;
         }
 
+        public bool IsNumeric(string value)
+        {
+            return value.All(char.IsNumber);
+        }
 
         /// <summary>
         /// A list of acronyms of the books of the Bible in English.
