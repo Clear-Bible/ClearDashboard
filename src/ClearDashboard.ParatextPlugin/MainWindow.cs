@@ -916,6 +916,9 @@ namespace ClearDashboardPlugin
                         AppendText(MsgColor.Orange, $"No Scripture for {bookNum}");
                     }
 
+
+                    bool lastTokenChapter = false;
+                    bool lastTokenText = false;
                     foreach (var token in tokens)
                     {
                         if (token is IUSFMMarkerToken marker)
@@ -923,12 +926,17 @@ namespace ClearDashboardPlugin
                             // a verse token
                             if (marker.Type == MarkerType.Verse)
                             {
+                                lastTokenText = false;
                                 // ReSharper disable once NotAccessedVariable
                                 int p = 0;
                                 bool result = int.TryParse(marker.Data, out p);
 
                                 if (result)
                                 {
+                                    if (!lastTokenChapter)
+                                    {
+                                        sb.AppendLine();
+                                    }
                                     sb.Append($@"\v {marker.Data} ");
                                 }
                                 else
@@ -945,18 +953,27 @@ namespace ClearDashboardPlugin
                                                 int end = Convert.ToInt16(nums[1]);
                                                 for (int j = start; j < end + 1; j++)
                                                 {
+                                                    if (!lastTokenChapter)
+                                                    {
+                                                        sb.AppendLine();
+                                                    }
                                                     sb.Append($@"\v {j} ");
                                                 }
                                             }
                                         }
                                     }
                                 }
+                                lastTokenChapter = false;
                             } 
                             else if (marker.Type == MarkerType.Chapter)
                             {
+                                lastTokenText = false;
                                 // new chapter
                                 sb.AppendLine();
                                 sb.AppendLine(@"\c " + marker.Data);
+                                //sb.AppendLine();
+
+                                lastTokenChapter = true;
                             }
                         }
                         else if (token is IUSFMTextToken textToken)
@@ -964,7 +981,16 @@ namespace ClearDashboardPlugin
                             if (token.IsScripture)
                             {
                                 // verse text
-                                sb.AppendLine(textToken.Text);
+                                // check to see if the last character is a space
+                                if (sb[sb.Length - 1] == ' ' && lastTokenText)
+                                {
+                                    sb.Append(textToken.Text.TrimStart());
+                                }
+                                else
+                                {
+                                    sb.Append(textToken.Text);
+                                }
+                                lastTokenText = true;
                             }
                         }
                     }
