@@ -410,7 +410,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Constructor
-        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
+        public BiblicalTermsViewModel(INavigationService navigationService, 
+            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             _navigationService = navigationService;
             _logger = logger;

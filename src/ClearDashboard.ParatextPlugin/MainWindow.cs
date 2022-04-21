@@ -1,30 +1,22 @@
-﻿using Serilog;
-using ClearDashboard.ParatextPlugin;
+﻿using ClearDashboard.ParatextPlugin;
 using ClearDashboard.ParatextPlugin.Actions;
+using ClearDashboard.ParatextPlugin.Helpers;
+using ClearDashboard.Pipes_Shared.Models;
 using H.Formatters;
 using H.Pipes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Pipes_Shared;
+using Pipes_Shared.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
-using ClearDashboard.ParatextPlugin.Helpers;
-using ClearDashboard.ParatextPlugin.Models;
-using ClearDashboard.Pipes_Shared.Models;
-using Microsoft.VisualStudio.Threading;
-using Microsoft.Win32;
-using Pipes_Shared.Models;
-using Serilog.Core;
 
 namespace ClearDashboardPlugin
 {
@@ -35,6 +27,7 @@ namespace ClearDashboardPlugin
         // ReSharper disable once InconsistentNaming
         private IProject m_project;
         // ReSharper disable once IdentifierTypo
+        // ReSharper disable once InconsistentNaming
         private int m_booknum;
         // ReSharper disable once InconsistentNaming
         private IVerseRef m_verseRef;
@@ -45,6 +38,7 @@ namespace ClearDashboardPlugin
         private IWindowPluginHost m_host;
         private List<BiblicalTermsData> _termsList;
         // ReSharper disable once NotAccessedField.Local
+        // ReSharper disable once InconsistentNaming
         IPluginChildWindow m_parent;
 
         private readonly ListType _projectList = new ListType("Project", true, BiblicalTermListType.All);
@@ -56,7 +50,7 @@ namespace ClearDashboardPlugin
         // ReSharper disable once InconsistentNaming
         private readonly IBiblicalTermList m_listAll;
 
-        private JsonSerializerOptions _jsonOptions;
+        private readonly JsonSerializerOptions _jsonOptions;
         private delegate void AppendMsgTextDelegate(MsgColor color, string text);
         private Form _parentForm;
 
@@ -139,6 +133,10 @@ namespace ClearDashboardPlugin
             //{
             //    // TODO Do some alert now that ClearDashboard is NOT installed
             //}
+
+
+
+
 
 
             Load += OnLoad;
@@ -242,7 +240,9 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+#pragma warning disable VSTHRD100 // Avoid async void methods
         private async void MainWindow_Disposed(object sender, EventArgs e)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             // this user control is closing - clean up pipe
 
@@ -279,36 +279,36 @@ namespace ClearDashboardPlugin
                     break;
                 case ActionType.GetCurrentVerse:
                     // send the current BCV location of Paratext
-                    GetCurrentVerse().Forget();
+                    GetCurrentVerseAsync().Forget();
 
                     break;
                 case ActionType.GetBibilicalTermsAll:
                     // fire off into background
-                    GetBiblicalTermsAllBackground().Forget();
+                    GetBiblicalTermsAllBackgroundAsync().Forget();
                     break;
                 case ActionType.GetBibilicalTermsProject:
                     // fire off into background
-                    GetBiblicalTermsProjectBackground().Forget();
+                    GetBiblicalTermsProjectBackgroundAsync().Forget();
                     break;
                 case ActionType.GetTargetVerses:
                     // fire off into background
-                    GetUSXScripture().Forget();
+                    GetUSXScriptureAsync().Forget();
                     break;
                 case ActionType.GetNotes:
-                    await GetNoteList(message).ConfigureAwait(false);
+                    await GetNoteListAsync(message).ConfigureAwait(false);
                     break;
                 case ActionType.GetUSFM:
                     //await ShowUSFMScripture().ConfigureAwait(false);
                     break;
                 case ActionType.GetUSX:
                     AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
-                    await GetUSXScripture().ConfigureAwait(false);
+                    await GetUSXScriptureAsync().ConfigureAwait(false);
                     break;
                 case ActionType.OnConnected:
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
-                    GetCurrentVerse().Forget();
+                    GetCurrentVerseAsync().Forget();
 
                     // get the paratext project info and send that over
                     Project proj = BuildProjectObject();
@@ -348,7 +348,9 @@ namespace ClearDashboardPlugin
             }
         }
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         private async void OnLoad(object sender, EventArgs eventArgs)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             try
             {
@@ -468,7 +470,7 @@ namespace ClearDashboardPlugin
             if (newReference != m_verseRef)
             {
                 m_verseRef = newReference;
-                GetCurrentVerse().Forget();
+                GetCurrentVerseAsync().Forget();
             }
         }
 
@@ -482,7 +484,7 @@ namespace ClearDashboardPlugin
         /// Send out the current verse through the pipe
         /// </summary>
         /// <returns></returns>
-        private async Task GetCurrentVerse()
+        private async Task GetCurrentVerseAsync()
         {
             string verseId = m_verseRef.BBBCCCVVV.ToString();
             if (verseId.Length < 8)
@@ -502,7 +504,7 @@ namespace ClearDashboardPlugin
         /// Send out the Biblical Terms for ALL BTs
         /// </summary>
         /// <returns></returns>
-        private async Task GetBiblicalTermsAllBackground()
+        private async Task GetBiblicalTermsAllBackgroundAsync()
         {
             // ReSharper disable once InconsistentNaming
             string payloadBTAll = "";
@@ -532,7 +534,7 @@ namespace ClearDashboardPlugin
         /// Send out the Biblical Terms for only the Project BTs
         /// </summary>
         /// <returns></returns>
-        private async Task GetBiblicalTermsProjectBackground()
+        private async Task GetBiblicalTermsProjectBackgroundAsync()
         {
             // ReSharper disable once InconsistentNaming
             string payloadBT = "";
@@ -558,7 +560,7 @@ namespace ClearDashboardPlugin
         /// Retrieves the USX & USFM for the project passing in the current book number
         /// </summary>
         /// <returns></returns>
-        private async Task GetUSXScripture()
+        private async Task GetUSXScriptureAsync()
         {
             await Task.Run(async () =>
             {
@@ -635,7 +637,49 @@ namespace ClearDashboardPlugin
                     break;
             }
 
+            project.BCVDictionary = GetBCV_Dictionary();
+
             return project;
+        }
+
+        private Dictionary<string, string> GetBCV_Dictionary()
+        {
+            Dictionary<string, string> bcvDict = new Dictionary<string, string>();
+
+            // loop through all the bible books capturing the BBCCCVVV for every verse
+            for (int bookNum = 0; bookNum < m_project.AvailableBooks.Count; bookNum++)
+            {
+                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
+                {
+                    IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+                    try
+                    {
+                        // get tokens by book number (from object) and chapter
+                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[bookNum].Number);
+                    }
+                    catch (Exception)
+                    {
+                       AppendText(MainWindow.MsgColor.Orange, $"No Scripture for {bookNum}");
+                    }
+
+                    foreach (var token in tokens)
+                    {
+                        if (token is IUSFMMarkerToken marker)
+                        {
+                            // a verse token
+                            if (marker.Type == MarkerType.Verse)
+                            {
+                                string verseID = marker.VerseRef.BBBCCCVVV.ToString().PadLeft(8,'0');
+                                if (! bcvDict.ContainsKey(verseID))
+                                {
+                                    bcvDict.Add(verseID, verseID);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return bcvDict;
         }
 
         /// <summary>
@@ -660,7 +704,7 @@ namespace ClearDashboardPlugin
         //    return false;
         //}
 
-        private async Task GetNoteList(PipeMessage message)
+        private async Task GetNoteListAsync(PipeMessage message)
         {
             var bookNum = 0;
             var chapNum = 0;
@@ -707,7 +751,7 @@ namespace ClearDashboardPlugin
         /// </summary>
         /// <param name="sMsg"></param>
         /// <param name="color"></param>
-        private void AppendText(MsgColor color, string sMsg)
+        public void AppendText(MsgColor color, string sMsg)
         {
             //check for threading issues
             if (this.InvokeRequired)
@@ -739,6 +783,12 @@ namespace ClearDashboardPlugin
                 // write to Serilog
                 Log.Information(sMsg);
             }
+        }
+
+        private void btnExportUSFM_Click(object sender, EventArgs e)
+        {
+            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+            paratextExtractUSFM.ExportUSFMScripture(m_project, this);
         }
 
         /// <summary>
@@ -785,257 +835,6 @@ namespace ClearDashboardPlugin
             //    });
 
             //_ = GetNoteList("", dataPayload);
-        }
-
-        private void btnExportUSFM_Click(object sender, EventArgs e)
-        {
-            ExportUSFMScripture();
-        }
-
-        private void ExportUSFMScripture()
-        {
-            string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
-
-            if (!Directory.Exists(exportPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(exportPath);
-                }
-                catch (Exception e)
-                {
-                    AppendText(MsgColor.Red, e.Message);
-                    return;
-                }
-            }
-
-            // copy over the project's settings file
-            string settingsFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml");
-            if (File.Exists(settingsFile))
-            {
-                try
-                {
-                    File.Copy(settingsFile, Path.Combine(exportPath, "settings.xml"), true);
-                }
-                catch (Exception e)
-                {
-                    AppendText(MsgColor.Red, e.Message);
-                }
-
-                FixParatextSettingsFile(Path.Combine(exportPath, "settings.xml"));
-
-            }
-
-            // copy over the project's custom versification file
-            string versificationFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "custom.vrs");
-            if (File.Exists(versificationFile))
-            {
-                try
-                {
-                    File.Copy(versificationFile, Path.Combine(exportPath, "custom.vrs"), true);
-                }
-                catch (Exception e)
-                {
-                    AppendText(MsgColor.Red, e.Message);
-                }
-            }
-
-            // copy over project's usfm.sty
-            string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml"), "StyleSheet");
-            bool bFound = false;
-            if (stylePath != "")
-            {
-                if (stylePath != "usfm.sty") // standard stylesheet
-                {
-                    if (File.Exists(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath)))
-                    {
-                        try
-                        {
-                            File.Copy(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath),
-                                Path.Combine(exportPath, "usfm.sty"), true);
-                        }
-                        catch (Exception e)
-                        {
-                            AppendText(MsgColor.Red, e.Message);
-                        }
-                    }
-                }
-            }
-
-            if (!bFound)
-            {
-                // standard stylesheet
-                if (File.Exists(Path.Combine(GetParatextProjectsPath(), "usfm.sty")))
-                {
-                    try
-                    {
-                        File.Copy(Path.Combine(GetParatextProjectsPath(), "usfm.sty"),
-                            Path.Combine(exportPath, "usfm.sty"), true);
-                    }
-                    catch (Exception e)
-                    {
-                        AppendText(MsgColor.Red, e.Message);
-                    }
-                }
-            }
-
-
-            for (int bookNum = 0; bookNum < this.m_project.AvailableBooks.Count; bookNum++)
-            {
-                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
-                {
-                    AppendText(MsgColor.Blue,$"Processing {m_project.AvailableBooks[bookNum].Code}");
-
-                    StringBuilder sb = new StringBuilder();
-                    // do the header
-                    sb.AppendLine($@"\id {m_project.AvailableBooks[bookNum].Code}");
-
-                    int bookFileNum = 0;
-                    if (m_project.AvailableBooks[bookNum].Number >= 40)
-                    {
-                        // do that crazy USFM file naming where Matthew starts at 41
-                        bookFileNum = m_project.AvailableBooks[bookNum].Number + 1;
-                    }
-                    else
-                    {
-                        // normal OT book
-                        bookFileNum = m_project.AvailableBooks[bookNum].Number;
-                    }
-                    var fileName = bookFileNum.ToString().PadLeft(2, '0') 
-                                   + m_project.AvailableBooks[bookNum].Code + ".sfm";
-
-                    IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
-                    try
-                    {
-                        // get tokens by book number (from object) and chapter
-                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[bookNum].Number);
-                    }
-                    catch (Exception)
-                    {
-                        AppendText(MsgColor.Orange, $"No Scripture for {bookNum}");
-                    }
-
-                    foreach (var token in tokens)
-                    {
-                        if (token is IUSFMMarkerToken marker)
-                        {
-                            // a verse token
-                            if (marker.Type == MarkerType.Verse)
-                            {
-                                // ReSharper disable once NotAccessedVariable
-                                int p = 0;
-                                bool result = int.TryParse(marker.Data, out p);
-
-                                if (result)
-                                {
-                                    sb.Append($@"\v {marker.Data} ");
-                                }
-                                else
-                                {
-                                    // verse span so bust up the verse span
-                                    string[] nums = marker.Data.Split('-');
-                                    if (nums.Length > 1)
-                                    {
-                                        if (int.TryParse(nums[0], out p))
-                                        {
-                                            if (int.TryParse(nums[1], out p))
-                                            {
-                                                int start = Convert.ToInt16(nums[0]);
-                                                int end = Convert.ToInt16(nums[1]);
-                                                for (int j = start; j < end + 1; j++)
-                                                {
-                                                    sb.Append($@"\v {j} ");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } 
-                            else if (marker.Type == MarkerType.Chapter)
-                            {
-                                // new chapter
-                                sb.AppendLine();
-                                sb.AppendLine(@"\c " + marker.Data);
-                            }
-                        }
-                        else if (token is IUSFMTextToken textToken)
-                        {
-                            if (token.IsScripture)
-                            {
-                                // verse text
-                                sb.AppendLine(textToken.Text);
-                            }
-                        }
-                    }
-
-                    // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
-                    File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
-                }
-            }
-        }
-
-        // update the settings file to use "normal" file extensions
-        private void FixParatextSettingsFile(string path)
-        {
-            var doc = new XmlDocument();
-            doc.Load(path);
-
-            XmlElement root = doc.DocumentElement;
-            var node = root.SelectSingleNode("//Naming");
-
-            if (node != null)
-            {
-                node.Attributes["PrePart"].Value = "";
-                node.Attributes["PostPart"].Value = ".sfm";
-                node.Attributes["BookNameForm"].Value = "41MAT";
-            }
-
-
-            node = root.SelectSingleNode("//FileNameForm");
-            if (node != null)
-            {
-                node.InnerText = "41MAT";
-            }
-
-            node = root.SelectSingleNode("//FileNameBookNameForm");
-            if (node != null)
-            {
-                node.InnerText = "41MAT";
-            }
-
-            node = root.SelectSingleNode("//FileNamePostPart");
-            if (node != null)
-            {
-                node.InnerText = ".sfm";
-            }
-
-            node = root.SelectSingleNode("//FileNamePrePart");
-            if (node != null)
-            {
-                node.InnerText = "";
-            }
-
-            doc.Save(path);
-        }
-
-
-        /// <summary>
-        /// Returns the Paratext Project's path.  Usually:
-        /// {drive}:\My Paratext 9 Projects\
-        /// </summary>
-        /// <returns></returns>
-        private string GetParatextProjectsPath()
-        {
-            string paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
-            // check if directory exists
-            if (!Directory.Exists(paratextProjectPath))
-            {
-                // directory doesn't exist so null this out
-                paratextProjectPath = "";
-            }
-
-            return paratextProjectPath;
         }
 
 

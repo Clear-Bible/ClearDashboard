@@ -67,9 +67,25 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
             });
         }
 
-        public void HandleEvents(PipeMessage pm)
+        public async void HandleEvents(PipeMessage pm)
         {
             RaisePipesChangedEvent(pm);
+
+            // restart if disconnected
+            if (pm.Action == ActionType.OnDisconnected)
+            {
+                if (_client is not null)
+                {
+                    try
+                    {
+                        await _client.ConnectAsync();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                }
+            }
         }
 
         private void OnMessageReceivedAsync(PipeMessage message)

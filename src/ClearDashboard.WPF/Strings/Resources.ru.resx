@@ -58,631 +58,643 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Proverbs" xml:space="preserve">
-    <value>Притчи</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>Мал.</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>Ион.</value>
-  </data>
-  <data name="WmSubDomain" xml:space="preserve">
-    <value>Поддомен:</value>
-  </data>
-  <data name="BtBcvAll" xml:space="preserve">
-    <value>Все</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>драгоценные камни</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Исход</value>
-  </data>
-  <data name="1_Peter" xml:space="preserve">
-    <value>1 Петра</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>сверхъестественные существа и полномочия; заголовки</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>4Цар.</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>Мих.</value>
-  </data>
-  <data name="BtFormWord" xml:space="preserve">
-    <value>Слово:</value>
-  </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>млекопитающие; домашние животные</value>
-  </data>
-  <data name="BtFormGlossLower" xml:space="preserve">
-    <value>Глянец:</value>
-  </data>
-  <data name="BtFormGloss" xml:space="preserve">
-    <value>Глянец</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1Цар</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>Агг.</value>
-  </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>урегулирование</value>
-  </data>
-  <data name="BtFormCategory" xml:space="preserve">
-    <value>Категория</value>
-  </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>язычество</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>Иов</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Михей</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>Ев. от Марка</value>
-  </data>
-  <data name="2_Chronicles" xml:space="preserve">
-    <value>2 Паралипоменон</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>Тит.</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2Тим.</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1Петр.</value>
-  </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>группа</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Иона</value>
-  </data>
-  <data name="BtFormProject" xml:space="preserve">
-    <value>Проект</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1Фес.</value>
-  </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>Знаки и чудеса</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Пользователь</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>Мк.</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>Неемия</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>Аггей</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>Обновлять</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>Ам.</value>
-  </data>
-  <data name="BtBcvVerse" xml:space="preserve">
-    <value>Стиха</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>млекопитающие; дикие животные</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Russian [ru]</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>Судей</value>
-  </data>
-  <data name="1_Thessalonians" xml:space="preserve">
-    <value>1 Фессалоникийцам</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>Авв.</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>Числ.</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Римлянам</value>
-  </data>
-  <data name="2_Corinthians" xml:space="preserve">
-    <value>2 Коринфянам</value>
-  </data>
-  <data name="BtDomainsMonument" xml:space="preserve">
-    <value>памятник</value>
-  </data>
-  <data name="BtDomainsNature" xml:space="preserve">
-    <value>природа</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>Еф.</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>Откр.</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Проекты</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>Еккл.</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>Фил.</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>Флм.</value>
-  </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>Мораль и этика</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>Иуд.</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Псалтирь</value>
-  </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>конструкции; животноводство</value>
-  </data>
   <data name="WmSense" xml:space="preserve">
     <value>Смысл:</value>
-  </data>
-  <data name="BtDomainsPeople" xml:space="preserve">
-    <value>люди</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>Галатам</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>трава</value>
-  </data>
-  <data name="1_Corinthians" xml:space="preserve">
-    <value>1 Коринфянам</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Иезекииль</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Ефесянам</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>Редактировать</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>Песнь песней</value>
-  </data>
-  <data name="2_Timothy" xml:space="preserve">
-    <value>2 Тимофею</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2Фес.</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>Иисус Навин</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>область</value>
-  </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>Отсутствующие визуализации</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Софония</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>Осия</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>фрукты</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>Авдий</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3Ин.</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2Пар.</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Даниил (евр.)</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>инструменты; масса; коммерция</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>Деян.</value>
-  </data>
-  <data name="BtFormAll" xml:space="preserve">
-    <value>Все</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>Гал.</value>
-  </data>
-  <data name="1_Kings" xml:space="preserve">
-    <value>3 Царств</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>Сверхъестественные существа и полномочия</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>Все</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>Плач.</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2Петр.</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Иоиль</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>Дан.</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>Неем.</value>
-  </data>
-  <data name="2_Thessalonians" xml:space="preserve">
-    <value>2 Фессалоникийцам</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>Рим.</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Екклезиаст</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>Деяния</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>Иов.</value>
-  </data>
-  <data name="WmDomain" xml:space="preserve">
-    <value>Домен:</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>животные</value>
-  </data>
-  <data name="2_John" xml:space="preserve">
-    <value>2 Иоанна</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2Ин.</value>
-  </data>
-  <data name="add" xml:space="preserve">
-    <value>Добавлять</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Колоссянам</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>Сохранять</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Титу</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>инструменты; роды</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>3Цар.</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Филимону</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>Филиппийцам</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>ремесла; ткань</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Амос</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>Лк.</value>
-  </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>локаль</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Проект</value>
-  </data>
-  <data name="1_John" xml:space="preserve">
-    <value>1 Иоанна</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Откровение</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>Иез.</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>Песн.</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Плач Иеремии</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>Мф.</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>Кол.</value>
-  </data>
-  <data name="BtDomainsMourning" xml:space="preserve">
-    <value>траур</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>Иак.</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Иеремия</value>
-  </data>
-  <data name="1_Chronicles" xml:space="preserve">
-    <value>1 Паралипоменон</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Аввакум</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>Пс.</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2Кор.</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>Втор.</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>Суд.</value>
-  </data>
-  <data name="BtDomainsAll" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
-    <value>строительство; религиозная деятельность</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Наум</value>
-  </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>Второзаконие</value>
-  </data>
-  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
-    <value>контейнеры; животноводство</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1Ин.</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1Пар.</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Ев. от Луки</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>Руф.</value>
-  </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>жертвы и предложения</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1Тим.</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>Исх.</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>Есф.</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>Иакова</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>деревья; фрукты</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>Есфирь (евр.)</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>Иоил.</value>
-  </data>
-  <data name="2_Samuel" xml:space="preserve">
-    <value>2 Царств</value>
-  </data>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Левит</value>
-  </data>
-  <data name="BtFormRenderingsLower" xml:space="preserve">
-    <value>Рендеринг</value>
-  </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>люди; Честь, уважение, статус</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>Евр.</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>Ос.</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>сельское хозяйство</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>Числа</value>
-  </data>
-  <data name="3_John" xml:space="preserve">
-    <value>3 Иоанна</value>
-  </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>цель</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>Ин.</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1Кор.</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>Езд.</value>
-  </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>религиозная деятельность</value>
-  </data>
-  <data name="BtFormScope" xml:space="preserve">
-    <value>Объем:</value>
-  </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Бытие</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Новый проект</value>
-  </data>
-  <data name="BtDomainsAreaNature" xml:space="preserve">
-    <value>область; природа</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>Соф.</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Руфь</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>Наум.</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>Иер.</value>
-  </data>
-  <data name="2_Peter" xml:space="preserve">
-    <value>2 Петра</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Иуды</value>
-  </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>Глава</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>Прит.</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Создавать</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>Ис.</value>
-  </data>
-  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
-    <value>Честь, уважение, статус</value>
-  </data>
-  <data name="BtFormSemanticDomain" xml:space="preserve">
-    <value>Семантическая область:</value>
-  </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Ев. от Матфея</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>Ев. от Иоанна</value>
-  </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>деревья; парфюмерия и специи</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>Быт.</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>ИсНав.</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>Лев.</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>1 Ездры</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2Цар.</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Отмена</value>
-  </data>
-  <data name="BtFormFound" xml:space="preserve">
-    <value>Найденный</value>
-  </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>группа; область</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Настройки</value>
   </data>
   <data name="1_Samuel" xml:space="preserve">
     <value>1 Царств</value>
   </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>Малахия</value>
+  <data name="NUM" xml:space="preserve">
+    <value>Числ.</value>
   </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>Книга</value>
+  <data name="2KI" xml:space="preserve">
+    <value>4Цар.</value>
   </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Захария</value>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>Глянец:</value>
   </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>люди; орган власти</value>
+  <data name="3_John" xml:space="preserve">
+    <value>3 Иоанна</value>
   </data>
-  <data name="1_Timothy" xml:space="preserve">
-    <value>1 Тимофею</value>
+  <data name="add" xml:space="preserve">
+    <value>Добавлять</value>
   </data>
-  <data name="BtFormCounts" xml:space="preserve">
-    <value>Подсчет</value>
+  <data name="Lamentations" xml:space="preserve">
+    <value>Плач Иеремии</value>
   </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>человек</value>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>1 Фессалоникийцам</value>
   </data>
   <data name="BtFormRenderings" xml:space="preserve">
     <value>Рендеринг</value>
   </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>ассоциация</value>
+  <data name="Psalms" xml:space="preserve">
+    <value>Псалтирь</value>
   </data>
-  <data name="OBA" xml:space="preserve">
-    <value>Авд.</value>
+  <data name="SNG" xml:space="preserve">
+    <value>Песн.</value>
   </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Исаия</value>
+  <data name="EPH" xml:space="preserve">
+    <value>Еф.</value>
   </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>Мудрость, понимание</value>
+  <data name="create" xml:space="preserve">
+    <value>Создавать</value>
   </data>
-  <data name="2_Kings" xml:space="preserve">
-    <value>4 Царств</value>
+  <data name="ACT" xml:space="preserve">
+    <value>Деян.</value>
   </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>инструменты</value>
+  <data name="delete" xml:space="preserve">
+    <value>Удалить</value>
   </data>
-  <data name="BtFormTerm" xml:space="preserve">
-    <value>Срок</value>
+  <data name="2_Thessalonians" xml:space="preserve">
+    <value>2 Фессалоникийцам</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>Мк.</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>3Цар.</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>Мих.</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>Еккл.</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>Иезекииль</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>Рим.</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>Плач.</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Семантическая область:</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>Иак.</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>Аввакум</value>
   </data>
   <data name="BtDomainsAffection" xml:space="preserve">
     <value>привязанность</value>
   </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Евреям</value>
+  <data name="EZK" xml:space="preserve">
+    <value>Иез.</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>животные</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>область</value>
+  </data>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>Неемия</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>Иуды</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>Ис.</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Новый проект</value>
+  </data>
+  <data name="TargetContextZoomIn" xml:space="preserve">
+    <value>Приблизить</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>Филиппийцам</value>
+  </data>
+  <data name="2_Kings" xml:space="preserve">
+    <value>4 Царств</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>Бытие</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Сохранять</value>
+  </data>
+  <data name="Colossians" xml:space="preserve">
+    <value>Колоссянам</value>
+  </data>
+  <data name="WmSubDomain" xml:space="preserve">
+    <value>Поддомен:</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Срок</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>Прит.</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>Ион.</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="1_Kings" xml:space="preserve">
+    <value>3 Царств</value>
+  </data>
+  <data name="1_Peter" xml:space="preserve">
+    <value>1 Петра</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>Ефесянам</value>
+  </data>
+  <data name="Deuteronomy" xml:space="preserve">
+    <value>Второзаконие</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>Амос</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>конструкции; животноводство</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>строительство; религиозная деятельность</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Russian [ru]</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>Суд.</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>Гал.</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>Откр.</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Проект</value>
+  </data>
+  <data name="2_Chronicles" xml:space="preserve">
+    <value>2 Паралипоменон</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>Иоиль</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>Мф.</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>Езд.</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>Фил.</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>Кол.</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Иов</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2_Samuel" xml:space="preserve">
+    <value>2 Царств</value>
+  </data>
+  <data name="2_Peter" xml:space="preserve">
+    <value>2 Петра</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>Софония</value>
+  </data>
+  <data name="Proverbs" xml:space="preserve">
+    <value>Притчи</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1Кор.</value>
+  </data>
+  <data name="Haggai" xml:space="preserve">
+    <value>Аггей</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>ИсНав.</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>Мал.</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>Ев. от Матфея</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>Неем.</value>
+  </data>
+  <data name="Jeremiah" xml:space="preserve">
+    <value>Иеремия</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>Евр.</value>
+  </data>
+  <data name="Luke" xml:space="preserve">
+    <value>Ев. от Луки</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>Тит.</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>Галатам</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>Руфь</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Подсчет</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>Ос.</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Обновлять</value>
+  </data>
+  <data name="Obadiah" xml:space="preserve">
+    <value>Авдий</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>Авд.</value>
+  </data>
+  <data name="1_John" xml:space="preserve">
+    <value>1 Иоанна</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>Авв.</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>область; природа</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>Иона</value>
+  </data>
+  <data name="1_Timothy" xml:space="preserve">
+    <value>1 Тимофею</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>Малахия</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Пользователь</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>Иов.</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>Наум.</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Проекты</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>Михей</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2Фес.</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>Руф.</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2Кор.</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Рендеринг</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1Пар.</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>Иуд.</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>Иер.</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2Тим.</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Глянец</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>Иисус Навин</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3Ин.</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>Откровение</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1Цар</value>
+  </data>
+  <data name="2_Timothy" xml:space="preserve">
+    <value>2 Тимофею</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>Иакова</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>Втор.</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>Титу</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>Деяния</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>Екклезиаст</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>Соф.</value>
+  </data>
+  <data name="TargetContextFormatted" xml:space="preserve">
+    <value>Отформатирован</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>Даниил (евр.)</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1Фес.</value>
   </data>
   <data name="ZEC" xml:space="preserve">
     <value>Зах.</value>
+  </data>
+  <data name="2_John" xml:space="preserve">
+    <value>2 Иоанна</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>Ин.</value>
+  </data>
+  <data name="1_Thessalonians" xml:space="preserve">
+    <value>1 Фессалоникийцам</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1Петр.</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>ассоциация</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>Флм.</value>
+  </data>
+  <data name="1_Chronicles" xml:space="preserve">
+    <value>1 Паралипоменон</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1Ин.</value>
+  </data>
+  <data name="2_Corinthians" xml:space="preserve">
+    <value>2 Коринфянам</value>
+  </data>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>Песнь песней</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>Римлянам</value>
+  </data>
+  <data name="TargetContextUnformatted" xml:space="preserve">
+    <value>Неформатно</value>
+  </data>
+  <data name="WmDomain" xml:space="preserve">
+    <value>Домен:</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Слово:</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>Судей</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>Филимону</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>Иоил.</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>сельское хозяйство</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Hosea" xml:space="preserve">
+    <value>Осия</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>Есфирь (евр.)</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>Агг.</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2Петр.</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>Найденный</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>Наум</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>Ев. от Марка</value>
+  </data>
+  <data name="1_Corinthians" xml:space="preserve">
+    <value>1 Коринфянам</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>Лев.</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>Пс.</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>Захария</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>Ам.</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>Дан.</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>Ев. от Иоанна</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>Исход</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>Исх.</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>Быт.</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Ezra" xml:space="preserve">
+    <value>1 Ездры</value>
+  </data>
+  <data name="TargetContextZoomOut" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2Ин.</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>Левит</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2Пар.</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>Лк.</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>Числа</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1Тим.</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2Цар.</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>Есф.</value>
+  </data>
+  <data name="Isaiah" xml:space="preserve">
+    <value>Исаия</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>Евреям</value>
   </data>
 </root>

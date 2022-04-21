@@ -7,12 +7,14 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     d:DataContext="{d:DesignInstance Type=viewModels:TargetContextViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding FlowDirection}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
@@ -39,14 +41,14 @@
                     <RadioButton
                         x:Name="radUnformatted"
                         Checked="radUnformatted_Checked"
-                        Content="Unformatted"
+                        Content="{helpers:Loc TargetContextUnformatted}"
                         IsChecked="True"
                         Style="{StaticResource MaterialDesignRadioButton}" />
                     <RadioButton
                         x:Name="radFormatted"
                         Margin="10,0,0,0"
                         Checked="radFormatted_Checked"
-                        Content="Formatted"
+                        Content="{helpers:Loc TargetContextFormatted}"
                         Style="{StaticResource MaterialDesignRadioButton}" />
 
                     <Button
@@ -55,18 +57,21 @@
                         Margin="25,0,5,0"
                         Padding="-5,-7,-5,-5"
                         VerticalAlignment="Center"
-                        Command="{Binding ZoomInCommand}"
-                        FontSize="20">
-                        -
+                        Command="{Binding ZoomOutCommand}"
+                        FontSize="20"
+                        ToolTip="{helpers:Loc TargetContextZoomIn}">
+                        +
                     </Button>
+
                     <Button
                         Width="25"
                         Height="25"
                         Padding="-5,-7,-5,-5"
                         VerticalAlignment="Center"
-                        Command="{Binding ZoomOutCommand}"
-                        FontSize="20">
-                        +
+                        Command="{Binding ZoomInCommand}"
+                        FontSize="20"
+                        ToolTip="{helpers:Loc TargetContextZoomOut}">
+                        -
                     </Button>
                 </StackPanel>
             </Border>

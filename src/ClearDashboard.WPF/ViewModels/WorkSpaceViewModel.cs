@@ -179,7 +179,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
+        public WorkSpaceViewModel(INavigationService navigationService, 
+            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
