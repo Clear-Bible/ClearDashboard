@@ -1,6 +1,5 @@
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
@@ -114,9 +113,6 @@ namespace ClearDashboard.Wpf.ViewModels
             BtDomainsWisdomUnderstanding = 41,
         }
 
-        public ILogger _logger { get; set; }
-        public INavigationService _navigationService { get; set; }
-        public ProjectManager _projectManager { get; set; }
         private string _currentVerse = "";
 
 
@@ -414,10 +410,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
-            _navigationService = navigationService;
-            _logger = logger;
-            _projectManager = projectManager;
-            
+         
             Title = "🕮 BIBLICAL TERMS";
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
@@ -425,10 +418,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // listen to the DAL event messages coming in
-            _projectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
-            FlowDirection = _projectManager.CurrentLanguageFlowDirection;
-
+           
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             DataRowView drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
@@ -493,7 +485,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         _currentVerse = pipeMessage.Text;
                         // ask for Biblical Terms
-                        await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
+                        await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
                             .ConfigureAwait(false);
                     }
                     else
@@ -518,7 +510,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
+                            Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
                         }
 
                         if (biblicalTermsList.Count > 0)
@@ -565,7 +557,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe from events
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             Logger.LogInformation("Dispose");
             base.Dispose(disposing);
@@ -600,7 +592,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(_navigationService, _logger, _projectManager,
+                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager,
                         verses[0]), null, null);
             }
         }
@@ -620,11 +612,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
                 }
                 else
                 {
-                    await _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
                 }
 
                 _lastSelectedBtEnum = _selectedBiblicalTermsType;
@@ -669,7 +661,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                     if (loc.Length > 1)
                     {
-                        localizedString = GetLocalizationString.Get(loc[0], _logger) + $" {loc[1]}";
+                        localizedString = LocalizationStrings.Get(loc[0], Logger) + $" {loc[1]}";
                     }
 
                     _selectedItemVerses.Add(new Verse
@@ -846,7 +838,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 // filter down to scope if present
                 if (selectedScope != FilterScopeEnum.BtBcvAll.ToString())
                 {
-                    if (_projectManager.CurrentVerse.Length != 8)
+                    if (ProjectManager.CurrentVerse.Length != 8)
                     {
                         return false;
                     }
@@ -859,7 +851,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 foreach (var term in terms.References)
                                 {
                                     string book = term.Substring(0, 2);
-                                    if (book == _projectManager.CurrentVerse.Substring(0, 2))
+                                    if (book == ProjectManager.CurrentVerse.Substring(0, 2))
                                     {
                                         // found the book
                                         isBcbFound = true;
@@ -872,7 +864,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 foreach (var term in terms.References)
                                 {
                                     string chapter = term.Substring(0, 5);
-                                    if (chapter == _projectManager.CurrentVerse.Substring(0, 5))
+                                    if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
                                     {
                                         // found the chapter
                                         isBcbFound = true;
@@ -884,7 +876,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvVerse":
                                 foreach (var term in terms.References)
                                 {
-                                    if (term == _projectManager.CurrentVerse)
+                                    if (term == ProjectManager.CurrentVerse)
                                     {
                                         // found the verse
                                         isBcbFound = true;
@@ -980,7 +972,7 @@ namespace ClearDashboard.Wpf.ViewModels
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = GetLocalizationString.Get(loc, _logger);
+                var localizedString = LocalizationStrings.Get(loc, Logger);
                 _scope.Rows.Add(localizedString, loc);
             }
         }
@@ -995,7 +987,7 @@ namespace ClearDashboard.Wpf.ViewModels
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = GetLocalizationString.Get(loc, _logger);
+                var localizedString = LocalizationStrings.Get(loc, Logger);
                 _renderingsFilters.Rows.Add(localizedString, loc);
             }
         }
@@ -1015,7 +1007,7 @@ namespace ClearDashboard.Wpf.ViewModels
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = GetLocalizationString.Get(loc, _logger);
+                var localizedString = LocalizationStrings.Get(loc, Logger);
                 _domains.Rows.Add(localizedString, loc);
             }
 

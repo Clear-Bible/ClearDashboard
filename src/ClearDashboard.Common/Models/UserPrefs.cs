@@ -105,8 +105,10 @@ namespace ClearDashboard.Common.Models
                 // serialize JSON directly to a file
                 using (StreamWriter file = File.CreateText(path))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    var serializer = new JsonSerializer
+                    {
+                        Formatting = Newtonsoft.Json.Formatting.Indented
+                    };
                     serializer.Serialize(file, upNew);
                 }
             }

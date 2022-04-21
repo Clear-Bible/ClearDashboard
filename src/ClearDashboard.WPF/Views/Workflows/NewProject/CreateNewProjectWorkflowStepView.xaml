@@ -1,5 +1,5 @@
-﻿<Page
-    x:Class="ClearDashboard.Wpf.Views.CreateNewProjectsView"
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Views.Workflows.NewProject.CreateNewProjectWorkflowStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
@@ -9,11 +9,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    Title="NewProjects"
-    cm:Action.TargetWithoutContext=""
+    xmlns:newProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.NewProject"
     cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
-    d:DataContext="{d:DesignInstance Type=viewModels:CreateNewProjectsViewModel,
+    d:DataContext="{d:DesignInstance Type=newProject:CreateNewProjectWorkflowStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
@@ -24,14 +22,14 @@
         [Event Loaded] = [Action Page_Loaded($source,$eventArgs)];
     -->
 
-    <Page.Resources>
+    <UserControl.Resources>
         <ControlTemplate x:Key="validationTemplate">
             <DockPanel>
                 <TextBlock FontSize="20" Foreground="Red">!</TextBlock>
                 <AdornedElementPlaceholder />
             </DockPanel>
         </ControlTemplate>
-    </Page.Resources>
+    </UserControl.Resources>
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
@@ -362,4 +360,4 @@
         </Grid>
 
     </Grid>
-</Page>
+</UserControl>

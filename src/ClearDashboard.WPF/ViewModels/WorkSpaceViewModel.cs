@@ -2,8 +2,8 @@
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -79,21 +78,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
+       
 
         private string _verseRef;
         public string VerseRef
         {
-            get { return _verseRef; }
+            get => _verseRef;
             set
             {
                 _verseRef = value;
@@ -192,7 +182,6 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
@@ -435,7 +424,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {
@@ -453,7 +442,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
             }
 
-            Debug.WriteLine($"{pipeMessage.Text}");
+            Logger.LogInformation($"{pipeMessage.Text}");
         }
 
         public override event PropertyChangedEventHandler PropertyChanged;

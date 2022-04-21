@@ -1,12 +1,8 @@
-﻿using System;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Views;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -25,17 +21,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ObservableCollection<ItemInfo> observableCollection { get; set; } = new ObservableCollection<ItemInfo>();
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
         #endregion //Observable Properties
 
         #region Constructor
@@ -53,8 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels
             : base(navigationService, logger, projectManager)
         {
            
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
+         
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/NewProject_Icon_96.png", ImageName = "NEW" });
             observableCollection.Add(new ItemInfo() { ImagePath = @"/Resources/settings_logo_96.png", ImageName = "SETTINGS" });
         }

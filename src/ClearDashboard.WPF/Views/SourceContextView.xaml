@@ -12,7 +12,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    FlowDirection="{Binding flowDirection}"
+    FlowDirection="{Binding FlowDirection}"
     mc:Ignorable="d">
     <Grid>
         <helpers:ScrollToItemListbox

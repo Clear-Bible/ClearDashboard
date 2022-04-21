@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.Logging;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Caliburn.Micro;
-using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Helpers;
-using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
-using SIL.Machine.Corpora;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -24,9 +12,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region   Member Variables
 
-        private readonly INavigationService _navigationService;
-        private readonly ProjectManager _projectManager;
-        private readonly ILogger _logger;
+       
         private Verse _verse;
         
         private DataTable _dt = new DataTable();
@@ -85,7 +71,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-
         #region Constructor
 
         public VersePopUpViewModel()
@@ -97,14 +82,11 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager projectManager, Verse verse)
             : base(navigationService, logger, projectManager)
         {
-            _navigationService = navigationService;
-            _projectManager = projectManager;
-            _logger = logger;
             _verse = verse;
 
             BookChapter = verse.VerseID.Substring(0, verse.VerseID.IndexOf(':'));
 
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         /// <summary>
@@ -113,11 +95,11 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <param name="view"></param>
         protected override void OnViewReady(object view)
         {
-            var project = _projectManager.CurrentDashboardProject;
+            var project = ProjectManager.CurrentDashboardProject;
             _dt.Columns.Add("Highlight", typeof(bool));
             _dt.Columns.Add("Verse", typeof(string));
             _dt.Columns.Add(project.TargetProject.Name, typeof(string));
-            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(_logger, project.TargetProject, _verse);
+            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, project.TargetProject, _verse);
 
             foreach (var verse in verses)
             {
@@ -147,7 +129,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // add each back translation to grid
             foreach (var btProject in project.BackTranslationProjects)
             {
-                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(_logger, btProject, _verse);
+                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, btProject, _verse);
                 if (verses.Count > 0)
                 {
                     _dt.Columns.Add(btProject.Name);

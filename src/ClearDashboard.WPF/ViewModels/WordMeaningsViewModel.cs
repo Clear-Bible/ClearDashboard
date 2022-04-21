@@ -1,8 +1,8 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
@@ -15,9 +15,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
-using ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests;
-using ClearDashboard.DataAccessLayer.Wpf;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -27,8 +24,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
+        //private readonly ILogger _logger;
+        //private readonly ProjectManager _projectManager;
         private readonly TranslationSource _translationSource;
 
         private string _currentVerse = "";
@@ -55,17 +52,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
+       
         private bool _isOT;
         public bool IsOT
         {
@@ -111,10 +98,7 @@ namespace ClearDashboard.Wpf.ViewModels
         ObservableCollection<Inline> _targetInlinesText = new ObservableCollection<Inline>();
         public ObservableCollection<Inline> TargetInlinesText
         {
-            get
-            {
-                return _targetInlinesText;
-            }
+            get => _targetInlinesText;
             set
             {
                 _targetInlinesText = value;
@@ -136,10 +120,7 @@ namespace ClearDashboard.Wpf.ViewModels
         ObservableCollection<Inline> _sourceInlinesText = new ObservableCollection<Inline>();
         public ObservableCollection<Inline> SourceInlinesText
         {
-            get
-            {
-                return _sourceInlinesText;
-            }
+            get => _sourceInlinesText;
             set
             {
                 _sourceInlinesText = value;
@@ -179,20 +160,16 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager, TranslationSource translationSource)
             : base(navigationService, logger, projectManager)
         {
-            this.Title = "⌺ WORD MEANINGS";
-            this.ContentId = "WORDMEANINGS";
-            this.DockSide = EDockSide.Left;
+            Title = "⌺ WORD MEANINGS";
+            ContentId = "WORDMEANINGS";
+            DockSide = EDockSide.Left;
 
-            _logger = logger;
             _translationSource = translationSource;
-            _projectManager = projectManager;
 
-            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
             // listen to the DAL event messages coming in
-            _projectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
@@ -207,7 +184,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe to the pipes listener
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             base.Dispose(disposing);    
         }
@@ -219,8 +196,8 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            MARBLEresource mr = (MARBLEresource)obj;
-            if (mr.TotalSenses == 1)
+            var marbleResource = (MARBLEresource)obj;
+            if (marbleResource.TotalSenses == 1)
             {
                 return;
             }
@@ -232,10 +209,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-
-            int ID = mr.ID;
-
-            var items = _whatIsThisWord.Where(p => p.ID == ID);
+            var items = _whatIsThisWord.Where(p => p.ID == marbleResource.ID);
 
             WordData.Clear();
             foreach (var item in items)
@@ -253,20 +227,20 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            MARBLEresource mr = (MARBLEresource)obj;
+            var marbleResource = (MARBLEresource)obj;
 
             // OT or NT?
             if (CurrentBcv.BookNum < 40)
             {
                 // Hebrew link
                 string hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
-                LaunchWebPage.TryOpenUrl(hebrewPrefix + mr.LogosRef);
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + marbleResource.LogosRef);
             }
             else
             {
                 // Greek link
                 string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
-                LaunchWebPage.TryOpenUrl(greekPrefix + mr.LogosRef);
+                LaunchWebPage.TryOpenUrl(greekPrefix + marbleResource.LogosRef);
             }
 
         }
@@ -281,7 +255,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {
@@ -302,8 +276,10 @@ namespace ClearDashboard.Wpf.ViewModels
                         else
                         {
                             // a normal verse
-                            Verse  verse = new Verse();
-                            verse.VerseBBCCCVVV = _currentVerse;
+                            var  verse = new Verse
+                            {
+                                VerseBBCCCVVV = _currentVerse
+                            };
 
                             if (verse.BookNum < 40)
                             {
