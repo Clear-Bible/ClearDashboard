@@ -135,6 +135,10 @@ namespace ClearDashboardPlugin
             //}
 
 
+
+
+
+
             Load += OnLoad;
 
             // use a customized formatter for receiving classes so that the pipes knows
@@ -633,7 +637,49 @@ namespace ClearDashboardPlugin
                     break;
             }
 
+            project.BCVDictionary = GetBCV_Dictionary();
+
             return project;
+        }
+
+        private Dictionary<string, string> GetBCV_Dictionary()
+        {
+            Dictionary<string, string> bcvDict = new Dictionary<string, string>();
+
+            // loop through all the bible books capturing the BBCCCVVV for every verse
+            for (int bookNum = 0; bookNum < m_project.AvailableBooks.Count; bookNum++)
+            {
+                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
+                {
+                    IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+                    try
+                    {
+                        // get tokens by book number (from object) and chapter
+                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[bookNum].Number);
+                    }
+                    catch (Exception)
+                    {
+                       AppendText(MainWindow.MsgColor.Orange, $"No Scripture for {bookNum}");
+                    }
+
+                    foreach (var token in tokens)
+                    {
+                        if (token is IUSFMMarkerToken marker)
+                        {
+                            // a verse token
+                            if (marker.Type == MarkerType.Verse)
+                            {
+                                string verseID = marker.VerseRef.BBBCCCVVV.ToString().PadLeft(8,'0');
+                                if (! bcvDict.ContainsKey(verseID))
+                                {
+                                    bcvDict.Add(verseID, verseID);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return bcvDict;
         }
 
         /// <summary>

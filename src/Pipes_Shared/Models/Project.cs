@@ -89,5 +89,12 @@ namespace Pipes_Shared.Models
         }
 
 
+        private Dictionary<string, string> _bcvDictionary;
+        public Dictionary<string, string> BCVDictionary
+        {
+            get => _bcvDictionary;
+            set { SetProperty(ref _bcvDictionary, value, nameof(BCVDictionary)); }
+        }
+
     }
 }
