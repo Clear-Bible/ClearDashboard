@@ -44,7 +44,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public ConcordanceViewModel(INavigationService navigationService, ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager)
+        public ConcordanceViewModel(INavigationService navigationService, 
+            ILogger<CreateNewProjectsViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
             this.Title = "🆎 CONCORDANCE TOOL";
             this.ContentId = "CONCORDANCETOOL";

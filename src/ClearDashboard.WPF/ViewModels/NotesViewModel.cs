@@ -43,7 +43,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public NotesViewModel(INavigationService navigationService, ILogger<NotesViewModel> logger, ProjectManager projectManager)
+        public NotesViewModel(INavigationService navigationService, 
+            ILogger<NotesViewModel> logger, ProjectManager projectManager)
+            : base(navigationService, logger, projectManager)
         {
             _projectManager = projectManager;
 

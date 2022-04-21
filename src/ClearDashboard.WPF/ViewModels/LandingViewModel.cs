@@ -49,7 +49,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger): base(navigationService, logger, projectManager)
+        public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger)
+            : base(navigationService, logger, projectManager)
         {
            
             flowDirection = ProjectManager.CurrentLanguageFlowDirection;

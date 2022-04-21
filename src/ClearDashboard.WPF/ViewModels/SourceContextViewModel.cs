@@ -93,7 +93,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public SourceContextViewModel(INavigationService navigationService, ILogger<SourceContextViewModel> logger, ProjectManager projectManager) : base(navigationService, logger, projectManager)
+        public SourceContextViewModel(INavigationService navigationService, 
+            ILogger<SourceContextViewModel> logger, ProjectManager projectManager) 
+            : base(navigationService, logger, projectManager)
         {
            
 
