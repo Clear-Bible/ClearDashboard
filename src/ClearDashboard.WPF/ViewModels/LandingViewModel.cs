@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Slices.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -23,16 +24,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Objects
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
+       
 
         public ObservableCollection<DashboardProject> DashboardProjects { get; set; } =
             new ObservableCollection<DashboardProject>();
@@ -52,9 +44,6 @@ namespace ClearDashboard.Wpf.ViewModels
         public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager)
         {
-           
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
             Logger.LogError("LandingViewModel constructor called.");
         }
 
@@ -73,14 +62,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-
-
         #region Methods
 
         public void CreateNewProject()
         {
             Logger.LogInformation("CreateNewProject called.");
-            NavigationService.NavigateToViewModel<CreateNewProjectsViewModel>();
+            NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
         public void Workspace(DashboardProject project)

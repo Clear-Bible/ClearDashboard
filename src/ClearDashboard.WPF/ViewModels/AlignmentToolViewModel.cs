@@ -11,9 +11,6 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
         #endregion //Member Variables
 
         #region Public Properties
@@ -24,16 +21,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
+       
 
         #endregion //Observable Properties
 
@@ -44,11 +32,10 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "ALIGNMENTTOOL";
         }
 
-        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, ProjectManager projectManager)
+        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, ProjectManager projectManager) :
+            base(navigationService, logger, projectManager)
         {
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
+ 
         }
 
         #endregion //Constructor

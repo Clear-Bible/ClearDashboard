@@ -1,15 +1,9 @@
-﻿using ClearDashboard.Common.Models;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using ClearDashboard.Wpf.Helpers;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -17,8 +11,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class DashboardViewModel : PaneViewModel
     {
         #region Member Variables
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
+      
         private bool _firstLoad;
 
         #endregion //Member Variables
@@ -32,17 +25,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
+       
         #endregion //Observable Properties
 
 
@@ -55,15 +38,10 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, ProjectManager projectManager) 
+        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, ProjectManager projectManager)
             : base(navigationService, logger, projectManager)
         {
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-            _logger = logger;
             Initialize();
-
         }
 
         private void Initialize()
@@ -74,7 +52,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (!_firstLoad)
             {
-                Debug.WriteLine("Not the first load");
+                Logger.LogInformation("Not the first load");
             }
         }
 

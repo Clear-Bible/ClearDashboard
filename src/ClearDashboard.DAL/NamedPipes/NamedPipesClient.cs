@@ -2,12 +2,15 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using H.Pipes;
+using Microsoft.Extensions.Logging;
 using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes
 {
     public class NamedPipesClient : IDisposable
     {
+        private readonly ILogger<NamedPipesClient> _logger;
+
         #region Events
 
         public delegate void PipesEventHandler(object sender, PipeEventArgs args);
@@ -31,6 +34,10 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         #region startup
 
+        public NamedPipesClient(ILogger<NamedPipesClient> logger)
+        {
+            _logger = logger;
+        }
         #endregion
 
         #region Methods
@@ -106,7 +113,7 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         private void OnExceptionOccurred(Exception exception)
         {
-            Debug.WriteLine($"An exception occurred: {exception}");
+            _logger.LogError(exception, $"An unexpected exception occurred.");
         }
 
         public void Dispose()
@@ -119,7 +126,7 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         public async Task WriteAsync(PipeMessage message)
         {
-            await _client.WriteAsync(message);
+            await _client?.WriteAsync(message);
         }
     }
 }

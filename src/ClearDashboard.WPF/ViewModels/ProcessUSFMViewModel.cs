@@ -3,11 +3,9 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -19,20 +17,9 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
 
         #endregion
-
-
+        
         #region Observable Objects
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => FlowDirection);
-            }
-        }
 
         private ObservableCollection<AlignmentPlan> _alignmentPlan = new ();
         public ObservableCollection<AlignmentPlan> AlignmentPlan
@@ -47,8 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         #endregion
-
-
+        
         #region Constructor
         public ProcessUSFMViewModel()
         {
@@ -58,7 +44,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public ProcessUSFMViewModel(ProjectManager projectManager, INavigationService navigationService, 
             ILogger<LandingViewModel> logger) : base(navigationService, logger, projectManager)
         {
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -114,9 +100,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion
-
-
-
+        
         #region Methods
 
 

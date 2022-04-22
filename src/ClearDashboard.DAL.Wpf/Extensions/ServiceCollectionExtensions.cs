@@ -30,7 +30,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             serviceCollection.AddSingleton<NamedPipesClient>(sp =>
             {
                 var logger = sp.GetService<ILogger<NamedPipesClient>>();
-                var namedPipesClient = new NamedPipesClient();
+                var namedPipesClient = new NamedPipesClient(logger);
                 namedPipesClient.InitializeAsync().ContinueWith(t =>
                     {
                         logger?.LogError($"Error while connecting to pipe server: {t.Exception}");

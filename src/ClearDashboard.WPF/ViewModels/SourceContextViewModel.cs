@@ -62,17 +62,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
+       
         private ObservableCollection<SourceVerses> _sourceInlinesText = new ObservableCollection<SourceVerses>();
         public ObservableCollection<SourceVerses> SourceInlinesText
         { 
@@ -97,10 +87,6 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<SourceContextViewModel> logger, ProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
-           
-
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
             this.Title = "⬒ SOURCE CONTEXT";
             this.ContentId = "SOURCECONTEXT";
 
@@ -171,7 +157,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {

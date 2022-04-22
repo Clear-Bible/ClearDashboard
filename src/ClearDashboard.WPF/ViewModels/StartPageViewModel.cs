@@ -1,14 +1,4 @@
-﻿using ClearDashboard.Common;
-using ClearDashboard.Common.Models;
-using MvvmHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
@@ -22,9 +12,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
+      
         #endregion //Member Variables
 
         #region Public Properties
@@ -35,17 +23,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion //Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
         #region Constructor
 
         public StartPageViewModel()
@@ -53,18 +30,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public StartPageViewModel(INavigationService navigationService, 
-            ILogger<StartPageViewModel> logger, ProjectManager projectManager)
-            : base(navigationService, logger, projectManager)
+        public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, ProjectManager projectManager):base(navigationService, logger, projectManager)
         {
             this.Title = "⌂ START PAGE";
             this.ContentId = "{StartPage_ContentId}";
-
-            _logger = logger;
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-
         }
 
         #endregion //Constructor

@@ -1,19 +1,17 @@
-﻿using ClearDashboard.Common.Models;
+﻿using Caliburn.Micro;
+using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Caliburn.Micro;
-using System.Threading;
-using System.Windows;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -22,10 +20,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
-
-
+      
         private string _paratextInstallPath = "";
 
         private string _paratextProjectPath = "";
@@ -136,37 +131,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
-
-
         #endregion //Observable Properties
 
         #region Constructor
         public PinsViewModel()
         {
-
-
-
         }
 
-        public PinsViewModel(INavigationService navigationService, 
-            ILogger<PinsViewModel> logger, ProjectManager projectManager) 
-            : base(navigationService, logger, projectManager)
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, ProjectManager projectManager): base(navigationService,logger, projectManager)
         {
-            _logger = logger;
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-
+           
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
 

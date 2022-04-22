@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using Pipes_Shared;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -27,9 +20,6 @@ namespace ClearDashboard.Wpf.ViewModels
     {
 
         #region Member Variables
-
-        private readonly ILogger _logger;
-        private readonly ProjectManager _projectManager;
 
         private string _currentVerse = "";
         private string _currentBook = "";
@@ -163,24 +153,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
-        {
-            get => _flowDirection;
-            set
-            {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
-            }
-        }
+      
 
         ObservableCollection<Inline> _targetInlinesText = new ObservableCollection<Inline>();
         public ObservableCollection<Inline> TargetInlinesText
         {
-            get
-            {
-                return _targetInlinesText;
-            }
+            get => _targetInlinesText;
             set
             {
                 _targetInlinesText = value;
@@ -208,27 +186,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-
         #region Constructor
         public TargetContextViewModel()
         {
 
         }
 
-        public TargetContextViewModel(INavigationService navigationService, 
-            ILogger<TargetContextViewModel> logger, ProjectManager projectManager)
-            : base(navigationService, logger, projectManager)
+        public TargetContextViewModel(INavigationService navigationService, ILogger<TargetContextViewModel> logger, ProjectManager projectManager):base(navigationService, logger, projectManager)
         {
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";
 
-            _logger = logger;
-            _projectManager = projectManager;
-
-            flowDirection = _projectManager.CurrentLanguageFlowDirection;
-
             // listen to the DAL event messages coming in
-            _projectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             // wire up the commands
             ZoomInCommand = new RelayCommand(ZoomIn);
@@ -253,7 +223,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void Dispose(bool disposing)
         {
             // unsubscribe to the pipes listener
-            _projectManager.NamedPipeChanged -= HandleEventAsync;
+            ProjectManager.NamedPipeChanged -= HandleEventAsync;
 
             base.Dispose(disposing);
         }
@@ -268,7 +238,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+            var pipeMessage = args.PipeMessage;
 
             switch (pipeMessage.Action)
             {
@@ -282,7 +252,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             _currentBook = newBook;
 
                             // send a message to get this book
-                            _projectManager.SendPipeMessage(ProjectManager.PipeAction.GetUSX, newBook);
+                            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetUSX, newBook);
 
                             _currentVerse = pipeMessage.Text;
                             CurrentBcv.SetVerseFromId(_currentVerse);
@@ -297,8 +267,10 @@ namespace ClearDashboard.Wpf.ViewModels
                             else
                             {
                                 // a normal verse
-                                Verse verse = new Verse();
-                                verse.VerseBBCCCVVV = _currentVerse;
+                                var verse = new Verse
+                                {
+                                    VerseBBCCCVVV = _currentVerse
+                                };
 
                                 if (verse.BookNum < 40)
                                 {
@@ -335,18 +307,18 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 string fontFamily = "Doulos SIL";
                 double fontSize = 16;
-                if (_projectManager.ParatextProject is not null)
+                if (ProjectManager.ParatextProject is not null)
                 {
                     // pull out the project font family
-                    fontFamily = _projectManager.ParatextProject.Language.FontFamily;
-                    fontSize = _projectManager.ParatextProject.Language.Size / (double)12;
+                    fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
+                    fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
                 }
 
 
                 // Make the Unformatted version
                 _targetInlinesText.Clear();
                 var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, fontFamily, fontSize);
-                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "unformatted.html");
+                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "unformatted.html");
 
                 UnformattedHTML = usfmHtml;
                 UnformattedAnchorRef = CurrentBcv.GetVerseId();
@@ -357,11 +329,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 catch (Exception e)
                 {
+                    Logger.LogError(e, "An unexpected error occurred.");
                     Console.WriteLine(e);
                     throw;
                 }
-
-
 
                 // Make the Formatted version
                 string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
@@ -382,7 +353,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
 
-                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(_projectManager), "formatted.html");
+                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "formatted.html");
 
                 try
                 {
