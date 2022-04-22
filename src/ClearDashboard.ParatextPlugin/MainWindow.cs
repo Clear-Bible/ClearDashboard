@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -98,7 +99,7 @@ namespace ClearDashboardPlugin
 
             _jsonOptions = new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = false,
             };
 
 
@@ -275,36 +276,61 @@ namespace ClearDashboardPlugin
             switch (message.Action)
             {
                 case ActionType.SendText:
+                {
                     AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;
+                }
+
                 case ActionType.GetCurrentVerse:
+                {
                     // send the current BCV location of Paratext
                     GetCurrentVerseAsync().Forget();
 
                     break;
+                }
+
                 case ActionType.GetBibilicalTermsAll:
+                {
                     // fire off into background
                     GetBiblicalTermsAllBackgroundAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetBibilicalTermsProject:
+                {
                     // fire off into background
                     GetBiblicalTermsProjectBackgroundAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetTargetVerses:
+                {
                     // fire off into background
                     GetUSXScriptureAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetNotes:
+                {
                     await GetNoteListAsync(message).ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.GetUSFM:
+                {
                     //await ShowUSFMScripture().ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.GetUSX:
+                {
                     AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
                     await GetUSXScriptureAsync().ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.OnConnected:
+                {
                     AppendText(MsgColor.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
@@ -323,16 +349,40 @@ namespace ClearDashboardPlugin
                     });
                     AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
                     break;
+                }
+
                 case ActionType.OnDisconnected:
+                {
                     AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
 
                     await Task.Delay(1000).ConfigureAwait(true);
 
                     //btnRestart_Click(null, null);
                     break;
+                }
+
+                case ActionType.GetProject:
+                {
+                    // get the paratext project info and send that over
+                    var proj = BuildProjectObject();
+                    var payload = JsonSerializer.Serialize(proj, _jsonOptions);
+
+                    AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
+                    await WriteMessageToPipeAsync(new PipeMessage
+                    {
+                        Action = ActionType.SetProject,
+                        Text = "Project Object",
+                        Payload = payload
+                    });
+                    AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
+                    break;
+                }
+
                 default:
+                {
                     AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
                     break;
+                }
             }
         }
 
@@ -709,8 +759,9 @@ namespace ClearDashboardPlugin
             var bookNum = 0;
             var chapNum = 0;
 
-            var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Payload);
+            var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Text);
             //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
+            AppendText(MsgColor.Blue, $"GetNotesListAsync received: Book: {data.BookID}, Chapter: {data.ChapterID}, IncludeResolved: {data.IncludeResolved}");
 
             if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
             {
@@ -722,7 +773,11 @@ namespace ClearDashboardPlugin
                 AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
 
 
-                var dataPayload = JsonSerializer.Serialize(m_noteList, _jsonOptions);
+                var dataPayload = JsonSerializer.Serialize(m_noteList, new JsonSerializerOptions
+                                                                                {
+                                                                                    WriteIndented = true,
+                                                                                    MaxDepth = 1024 * 100000
+                                                                                });
 
 
                 try
