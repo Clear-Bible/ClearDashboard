@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+	<PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Plugin.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Plugin.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.8" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.1.46" />
+    <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.9" />
+    <PackageReference Include="ParatextPluginInterfaces" Version="2.0.9" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="H.Formatters">
+      <HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>
+    </Reference>
+    <Reference Include="H.Formatters.BinaryFormatter">
+      <HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.BinaryFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="H.Pipes">
+      <HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call $(ProjectDir)postbuild.bat" />
+  </Target>
+
+</Project>
