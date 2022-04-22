@@ -116,7 +116,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
         {
             IsPipeConnected = false;
             _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            _namedPipesClient.Dispose();
+            _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
         }
 
         #endregion
@@ -342,7 +342,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
         {
             IsPipeConnected = false;
             _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            _namedPipesClient.Dispose();
+            _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
         }
 
 
