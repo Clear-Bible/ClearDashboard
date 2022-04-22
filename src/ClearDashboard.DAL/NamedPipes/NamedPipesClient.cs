@@ -7,7 +7,7 @@ using Pipes_Shared;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes
 {
-    public class NamedPipesClient : IDisposable
+    public class NamedPipesClient : IAsyncDisposable  // IDisposable, 
     {
         private readonly ILogger<NamedPipesClient> _logger;
 
@@ -29,6 +29,8 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
 
         private const string PipeName = "ClearDashboard";
         private PipeClient<PipeMessage>? _client;
+
+        public bool IsConnected => _client is { IsConnected: true };
 
         #endregion
 
@@ -62,7 +64,7 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
                 Action = ActionType.OnDisconnected,
                 Text = "Disconnected from server",
             });
-            _client.Connected += (o, args) => Debug.WriteLine("Connected to server");
+            _client.Connected += (o, args) =>_logger.LogDebug("Connected to server");
             _client.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
 
             await _client.ConnectAsync();
@@ -116,17 +118,28 @@ namespace ClearDashboard.DataAccessLayer.NamedPipes
             _logger.LogError(exception, $"An unexpected exception occurred.");
         }
 
-        public void Dispose()
-        {
-            _client?.DisposeAsync().GetAwaiter().GetResult();
-            _client = null;
-        }
+        //public void Dispose()
+        //{
+        //    _client.DisconnectAsync().GetAwaiter().GetResult();
+        //    _client?.DisposeAsync().GetAwaiter().GetResult();
+        //    _client = null;
+        //}
 
         #endregion
 
         public async Task WriteAsync(PipeMessage message)
         {
-            await _client?.WriteAsync(message);
+            await _client?.WriteAsync(message)!;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_client != null)
+            {
+                await _client.DisconnectAsync();
+                await _client.DisposeAsync();
+                _client = null;
+            }
         }
     }
 }
