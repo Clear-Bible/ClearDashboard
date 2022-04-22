@@ -40,6 +40,9 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
             var step1 = ServiceProvider.GetService<CreateNewProjectWorkflowStepViewModel>();
             Steps.Add(step1);
 
+            var step2 = ServiceProvider.GetService<ProcessUSFMWorkflowStepViewModel>();
+            Steps.Add(step2);
+
             CurrentStep = Steps[0];
             IsLastWorkflowStep = (Steps.Count == 1);
             await ActivateItemAsync(Steps[0], cancellationToken);

@@ -349,7 +349,7 @@
                 </TextBox>
 
                 <Button
-                    x:Name="CreateNewProject"
+                    x:Name="MoveForwards"
                     Margin="5,5,0,0"
                     Padding="3"
                     HorizontalAlignment="Center"

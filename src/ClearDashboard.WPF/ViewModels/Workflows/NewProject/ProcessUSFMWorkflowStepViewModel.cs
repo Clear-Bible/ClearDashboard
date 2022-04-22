@@ -1,15 +1,15 @@
-﻿using Caliburn.Micro;
+﻿using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 {
-    public class ProcessUSFMViewModel : ApplicationScreen
+    public class ProcessUSFMWorkflowStepViewModel : WorkflowStepViewModel
     {
         #region   Member Variables
 
@@ -36,19 +36,21 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
         
         #region Constructor
-        public ProcessUSFMViewModel()
+        public ProcessUSFMWorkflowStepViewModel()
         {
             
         }
 
-        public ProcessUSFMViewModel(ProjectManager projectManager, INavigationService navigationService, 
-            ILogger<LandingViewModel> logger) : base(navigationService, logger, projectManager)
+        public ProcessUSFMWorkflowStepViewModel(IEventAggregator eventAggregator, ProjectManager projectManager, INavigationService navigationService, 
+            ILogger<LandingViewModel> logger) : base(eventAggregator, navigationService, logger, projectManager)
         {
             
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            DashboardProject = ProjectManager.CurrentDashboardProject;
+
             var target = DashboardProject.TargetProject.Name;
             var targetId = DashboardProject.TargetProject.Guid;
 
