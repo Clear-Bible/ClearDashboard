@@ -330,6 +330,18 @@ namespace ClearDashboardPlugin
 
                     //btnRestart_Click(null, null);
                     break;
+
+                case ActionType.SetCurrentVerse:
+                    //incoming verse change
+                    AppendText(MsgColor.Purple, message.Text);
+
+                    //IVerseRef verseRef = ;
+                    //verseRef.VerseNum = "001001001";
+
+                    //TODO Currently waiting an API change so we can set an IVerseRef
+
+                    //m_host.SetReferenceForSyncGroup(m_verseRef, m_host.ActiveWindowState.SyncReferenceGroup);
+                    break;
                 default:
                     AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
                     break;

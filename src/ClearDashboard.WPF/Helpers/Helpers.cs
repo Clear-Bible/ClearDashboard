@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Helpers
 {
@@ -65,6 +66,24 @@ namespace ClearDashboard.Wpf.Helpers
         // Paratext list from https://ubsicap.github.io/usfm/identification/books.html
         // and normalized to the CLEAR standard of having Matthew as book 40 not book 41
         public static string GetBookNameFromBookNum(string value)
+        {
+            var lookup = GetBookIdDictionary();
+
+            string sTmp;
+            try
+            {
+                sTmp = lookup[value];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                sTmp = "";
+            }
+
+            return sTmp;
+        }
+
+        public static Dictionary<string, string> GetBookIdDictionary()
         {
             Dictionary<string, string> lookup = new Dictionary<string, string>
             {
@@ -135,19 +154,7 @@ namespace ClearDashboard.Wpf.Helpers
                 { "65", "JUD"},
                 { "66", "REV"}
             };
-
-            string sTmp;
-            try
-            {
-                sTmp = lookup[value];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                sTmp = "";
-            }
-
-            return sTmp;
+            return lookup;
         }
 
         public static string GetBookNumFromBookName(string value)

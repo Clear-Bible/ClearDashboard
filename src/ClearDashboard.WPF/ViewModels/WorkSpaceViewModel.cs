@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -32,10 +33,23 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-       
+
         #endregion //Member Variables
 
         #region Public Properties
+
+        private bool _paratextSync = true;
+        public bool ParatextSync
+        {
+            get => _paratextSync;
+            set
+            {
+                _paratextSync = value;
+                NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+
         public event EventHandler ActiveDocumentChanged;
         private FileViewModel _activeDocument = null;
         public FileViewModel ActiveDocument
@@ -54,6 +68,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public bool IsRtl { get; set; } = false;
+
+        public bool OutGoingChangesStarted { get; set; } = false;
 
         #endregion //Public Properties
 
@@ -78,7 +94,39 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-       
+        private ObservableCollection<int> _verseNums = new();
+        public ObservableCollection<int> VerseNums
+        {
+            get => _verseNums;
+            set
+            {
+                _verseNums = value;
+                NotifyOfPropertyChange(() => VerseNums);
+            }
+        }
+        
+        private Dictionary<string, string> _BCVDictionary;
+        public Dictionary<string, string> BCVDictionary
+        {
+            get => _BCVDictionary;
+            set
+            {
+                _BCVDictionary = value;
+                NotifyOfPropertyChange(() => BCVDictionary);
+            }
+        }
+
+        private ObservableCollection<string> _bookNames = new();
+        public ObservableCollection<string> BookNames
+        {
+            get => _bookNames;
+            set
+            {
+                _bookNames = value;
+                NotifyOfPropertyChange(() => BookNames);
+            }
+        }
+
 
         private string _verseRef;
         public string VerseRef
@@ -166,6 +214,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -178,14 +229,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService, 
-            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+        public WorkSpaceViewModel(INavigationService navigationService,
+            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
             : base(navigationService, logger, projectManager)
         {
+
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
-            
+
             Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
@@ -223,6 +275,10 @@ namespace ClearDashboard.Wpf.ViewModels
                     DashboardProject = (Application.Current as App)?.SelectedDashboardProject;
                 }
             }
+
+
+            // Subscribe to changes of the Book Chapter Verse data object.
+            CurrentBcv.PropertyChanged += BcvChanged;
         }
 
         public async void Init()
@@ -282,8 +338,31 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            if (ProjectManager.ParatextProject is not null)
+            {
+                // unique ids for all the verses in the project
+                BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
+            }
 
+            // add in the books
+            var books = Helpers.Helpers.GetBookIdDictionary();
+
+            // ensure that the book is in the project
+            foreach (var book in ProjectManager.CurrentDashboardProject.TargetProject.BooksList)
+            {
+                if (book.Available)
+                {
+                    var bookID = book.BookId.ToString();
+                    if (books.ContainsKey(bookID))
+                    {
+                        _bookNames.Add(books[bookID]);
+                    }
+                }
+            }
+
+            NotifyOfPropertyChange(() => BookNames);
+
+            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -430,11 +509,37 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 case ActionType.CurrentVerse:
                     this.VerseRef = pipeMessage.Text;
-                    if (pipeMessage.Text != CurrentBcv.GetVerseId())
+                    if (ParatextSync)
                     {
-                        _currentBcv.SetVerseFromId(pipeMessage.Text);
-                        NotifyOfPropertyChange(() => CurrentBcv);
+                        OutGoingChangesStarted = true;
+                        if (pipeMessage.Text != CurrentBcv.VerseLocationId)
+                        {
+                            if (BCVDictionary is null)
+                            {
+                                return;
+                            }
+
+                            if (BCVDictionary.Count == 0 || CurrentBcv is null)
+                            {
+                                return;
+                            }
+
+                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+
+                            CalculateChapters();
+
+                            CalculateVerses();
+
+                            // during the resetting of all the chapters & verse lists from the above,
+                            // this defaults back to {book}001001
+                            // so we need to reset it again with this call
+                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+
+                            NotifyOfPropertyChange(() => CurrentBcv);
+                        }
+                        OutGoingChangesStarted = false;
                     }
+
                     break;
                 case ActionType.OnConnected:
                     break;
@@ -445,6 +550,67 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation($"{pipeMessage.Text}");
         }
 
+
+        private void CalculateChapters()
+        {
+            // CHAPTERS
+            string bookID = CurrentBcv.Book;
+            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(2, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                CurrentBcv.ChapterNumbers = chapterNumbers;
+            });
+        }
+
+        private async void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (ParatextSync && OutGoingChangesStarted == false)
+            {
+                var newVerse = CurrentBcv.GetVerseId();
+                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.SetCurrentVerse, newVerse).ConfigureAwait(false);
+                Console.WriteLine("");
+            }
+        }
+
+        private void CalculateVerses()
+        {
+            // VERSES
+            string bookID = CurrentBcv.Book;
+            string chapID = CurrentBcv.ChapterIdText;
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookID + chapID)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(5);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                CurrentBcv.VerseNumbers = verseNumbers;
+            });
+        }
+
         public override event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
@@ -452,118 +618,7 @@ namespace ClearDashboard.Wpf.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-
-
         #endregion // Methods
-
-        #region BCV Navigation
-
-        /// <summary>
-        /// Given a book ID, this fills the ChapNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
-        /// </summary>
-        /// <param name="bookId">What book do you want a chapter list and verse ID from?</param>
-        /// <param name="sVerseId">If set, this value is returned.</param>
-        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
-        private string GetNumberOfChapters(string bookId, string sVerseId)
-        {
-            return "";
-
-            //if (Alignment == null)
-            //{
-            //    return string.Empty;
-            //}
-
-            //CurrentBcv.ChapterNumbers = new List<int>(Alignment.verses
-            //    .Where(w => w.VerseId.Substring(0, 2).Equals(bookId, StringComparison.Ordinal))
-            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(2, 3)))
-            //    .Distinct().OrderBy(o => o));
-
-            //if (sVerseId == "")
-            //{
-            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 2)
-            //        .Equals(bookId, StringComparison.Ordinal))
-            //        .Distinct().OrderBy(o => o.VerseId)
-            //        .First().VerseId;
-            //}
-            //else
-            //{
-            //    return sVerseId;
-            //}
-        }
-
-        /// <summary>
-        /// Given a book and chapter ID, this fills the VerseNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
-        /// </summary>
-        /// <param name="bookChapNum">What book and chapter do you want a verse list and verse ID from?</param>
-        /// <param name="sVerseId">If set, this value is returned.</param>
-        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
-        private string GetVerseNumberList(string bookChapNum, string sVerseId)
-        {
-            return "";
-
-            //if (Alignment == null)
-            //{
-            //    return string.Empty;
-            //}
-
-            //CurrentBcv.VerseNumbers = new List<int>(Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
-            //.Equals(bookChapNum, StringComparison.Ordinal))
-            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(5, 3)))
-            //    .Distinct().OrderBy(o => o));
-
-            //if (sVerseId == "" && CurrentBcv.VerseNumbers.Count != 0)
-            //{
-            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
-            //        .Equals(bookChapNum, StringComparison.Ordinal))
-            //        .Distinct().OrderBy(o => o.VerseId)
-            //        .FirstOrDefault().VerseId;
-            //}
-            //else
-            //{
-            //    return sVerseId;
-            //}
-        }
-
-        public void VerseChanged(string verseNum)
-        {
-            CurrentBcv.Verse = Convert.ToInt32(verseNum);
-            // SwitchVerse();
-        }
-
-
-        /// <summary>
-        /// Triggered when any change is reported for the data fields or properties of the Book Chapter Verse object.
-        /// </summary>
-        /// <param name="sender">This should always be the CurrentBcv object.</param>
-        /// <param name="e">Has information about what property changed.</param>
-        private void BcvChanged(object sender, PropertyChangedEventArgs e)
-        {
-            BookChapterVerse bcv = (BookChapterVerse)sender;
-            string bookChapNum = string.Concat(bcv.Book, bcv.ChapterIdText);
-
-            if (e.PropertyName == "BookName")
-            {
-                _ = GetNumberOfChapters(bcv.Book, bcv.VerseIdText);
-            }
-            else if (e.PropertyName == "Chapter")
-            {
-                _ = GetVerseNumberList(bookChapNum, "");
-            }
-
-            if (e.PropertyName == "VerseLocationId") // This is triggered by any change to the Book, Chapter, or Verse.
-            {
-                //SwitchVerse();
-                //VerseIdFull = $"{bcv.BookName} {bcv.Chapter}:{bcv.Verse}";
-
-                if (bcv.VerseNumbers.Count < 2)
-                {
-                    _ = GetVerseNumberList(bookChapNum, "");
-                }
-            }
-
-
-        }
-        #endregion
     }
 
     public class WorkspaceLayoutNames
@@ -580,6 +635,5 @@ namespace ClearDashboard.Wpf.ViewModels
         public const string TextCollection = "TEXTCOLLECTION";
         public const string TreeDown = "TREEDOWN";
         public const string WordMeanings = "WORDMEANINGS";
-
     }
 }

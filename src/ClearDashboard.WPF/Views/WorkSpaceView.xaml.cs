@@ -129,8 +129,6 @@ namespace ClearDashboard.Wpf.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-
-
             _vm = this.DataContext as WorkSpaceViewModel;
 
             INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;

@@ -40,6 +40,7 @@ namespace Pipes_Shared
         SetUSFM,
         SetNotesObject,
         SetProject,
+        SetCurrentVerse,
 
         CurrentVerse,
     }

@@ -55,6 +55,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
             GetProject,
             GetCurrentVerse,
             GetUSX,
+            SetCurrentVerse,
         }
         #endregion
 
@@ -313,6 +314,10 @@ namespace ClearDashboard.DataAccessLayer.Wpf
                     break;
                 case PipeAction.GetUSX:
                     message.Action = ActionType.GetUSX;
+                    message.Text = text;
+                    break;
+                case PipeAction.SetCurrentVerse:
+                    message.Action = ActionType.SetCurrentVerse;
                     message.Text = text;
                     break;
                 default:

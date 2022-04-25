@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Models"
     d:DesignHeight="50"
-    d:DesignWidth="460"
+    d:DesignWidth="450"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
@@ -16,7 +16,7 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d" Loaded="UserControl_Loaded">
+    mc:Ignorable="d">
     <Grid
         Name="LayoutRoot"
         Grid.Row="1"
@@ -27,160 +27,129 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <!--  left book arrow [0]  -->
+            <!--  sync [0]  -->
+            <ColumnDefinition Width="75" />
+            <!--  left book arrow [1]  -->
             <ColumnDefinition Width="25" />
-            <!--  book combo [1]  -->
-            <ColumnDefinition Width="130" />
-            <!--  right book arrow [2]  -->
+            <!--  book combo [2]  -->
+            <ColumnDefinition Width="90" />
+            <!--  right book arrow [3]  -->
             <ColumnDefinition Width="30" />
-            <!--  left chapter arrow [3]  -->
+            <!--  left chapter arrow [4]  -->
             <ColumnDefinition Width="30" />
-            <!--  chapter combo [4]  -->
+            <!--  chapter combo [5]  -->
             <ColumnDefinition Width="60" />
-            <!--  right chapter arrow [5]  -->
+            <!--  right chapter arrow [6]  -->
             <ColumnDefinition Width="30" />
-            <!--  left Verse arrow [6]  -->
+            <!--  left Verse arrow [7]  -->
             <ColumnDefinition Width="30" />
-            <!--  book Verse [7]  -->
+            <!--  book Verse [8]  -->
             <ColumnDefinition Width="50" />
-            <!--  right Verse arrow [8]  -->
+            <!--  right Verse arrow [9]  -->
             <ColumnDefinition Width="25" />
-            <!--  Scroll Group [9]  -->
-            <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
 
         <Border
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            Grid.ColumnSpan="9"
+            Grid.ColumnSpan="10"
             Margin="-1,-1,-1,0"
             BorderBrush="{StaticResource MaterialDesignLightSeparatorBackground}"
             BorderThickness="2" />
 
         <TextBlock
             Grid.Row="0"
-            Grid.Column="1"
+            Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{DynamicResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Text="SYNC" />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
             Text="BOOK" />
         <TextBlock
             Grid.Row="0"
-            Grid.Column="4"
+            Grid.Column="5"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{DynamicResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
             Text="CHAPTER" />
         <TextBlock
             Grid.Row="0"
-            Grid.Column="7"
+            Grid.Column="8"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{DynamicResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
             Text="VERSE" />
-        <!--<TextBlock
-            Grid.Row="0"
-            Grid.Column="9"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="12"
-            Foreground="{DynamicResource PrimaryHueLightBrush}"
-            Text="SCROLL" />-->
 
         <ComboBox
             x:Name="cboBook"
             Grid.Row="1"
-            Grid.Column="1"
-            MinWidth="100"
+            Grid.Column="2"
+            MinWidth="60"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.BookName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectionChanged="SelectionChanged" />
+            ItemsSource="{Binding BookNames, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedValue="{Binding CurrentBcv.BookName, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
         <ComboBox
             x:Name="cboChapter"
             Grid.Row="1"
-            Grid.Column="4"
+            Grid.Column="5"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.Chapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectionChanged="SelectionChanged" />
+            ItemsSource="{Binding CurrentBcv.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
         <ComboBox
             x:Name="cboVerse"
             Grid.Row="1"
-            Grid.Column="7"
+            Grid.Column="8"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding CurrentBCV.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.Verse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectionChanged="SelectionChanged" />
+            ItemsSource="{Binding CurrentBcv.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+            SelectedValue="{Binding CurrentBcv.Verse, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
 
-        <!--  Scroll Group  -->
-        <!--<Border
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="9"
-            Margin="-1,-1,-1,0"
-            BorderBrush="{StaticResource MaterialDesignLightSeparatorBackground}"
-            BorderThickness="2" />-->
-
-        <!--<ComboBox
-            x:Name="cboScrollGroup"
+        <!--  SYNC BUTTON  -->
+        <ToggleButton
+            x:Name="toogle"
             Grid.Row="1"
-            Grid.Column="9"
-            MinWidth="30"
-            Margin="5,0,5,3"
-            ItemTemplateSelector="{DynamicResource itemTemplateSelector}"
-            ItemsSource="{Binding ScrollGroups}">
-            <ComboBox.Resources>
-                <DataTemplate x:Key="selectedTemplate">
-                    <TextBlock Text="{Binding Path=ShortName}" />
-                </DataTemplate>
-                <DataTemplate x:Key="dropDownTemplate">
-                    <TextBlock Text="{Binding Path=ItemName}" />
-                </DataTemplate>
-                <models:ComboBoxItemTemplateSelector
-                    x:Key="itemTemplateSelector"
-                    DropDownTemplate="{StaticResource dropDownTemplate}"
-                    SelectedTemplate="{StaticResource selectedTemplate}" />
-            </ComboBox.Resources>
-        </ComboBox>-->
+            IsChecked="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
 
         <!--  BOOK LEFT ARROW  -->
         <Button
             x:Name="btnBookLeft"
             Grid.Row="1"
-            Grid.Column="0"
+            Grid.Column="1"
             Width="15"
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookUpArrow_Click"
             IsEnabled="False"
             ToolTip="Previous Book">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
             <TextBlock
                 Name="PreviousBookArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  BOOK RIGHT ARROW  -->
         <Button
             x:Name="btnBookRight"
             Grid.Row="1"
-            Grid.Column="2"
+            Grid.Column="3"
             Width="15"
             Height="18"
             MinWidth="20"
@@ -199,7 +168,7 @@
             <TextBlock
                 Name="NextBookArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
 
@@ -207,7 +176,7 @@
         <Button
             x:Name="btnChapterLeft"
             Grid.Row="1"
-            Grid.Column="3"
+            Grid.Column="4"
             Width="15"
             Height="18"
             MinWidth="20"
@@ -226,14 +195,14 @@
             <TextBlock
                 Name="PreviousChapterArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  CHAPTER RIGHT ARROW  -->
         <Button
             x:Name="btnChapterRight"
             Grid.Row="1"
-            Grid.Column="5"
+            Grid.Column="6"
             Width="15"
             Height="18"
             MinWidth="20"
@@ -252,7 +221,7 @@
             <TextBlock
                 Name="NextChapterArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
 
@@ -261,7 +230,7 @@
         <Button
             x:Name="btnVerseLeft"
             Grid.Row="1"
-            Grid.Column="6"
+            Grid.Column="7"
             Width="15"
             Height="18"
             MinWidth="20"
@@ -280,14 +249,14 @@
             <TextBlock
                 Name="PreviousVerseArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  VERSE RIGHT ARROW  -->
         <Button
             x:Name="btnVerseRight"
             Grid.Row="1"
-            Grid.Column="8"
+            Grid.Column="9"
             Width="15"
             Height="18"
             MinWidth="20"
@@ -306,9 +275,8 @@
             <TextBlock
                 Name="NextVerseArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
         </Button>
-
 
     </Grid>
 </UserControl>
