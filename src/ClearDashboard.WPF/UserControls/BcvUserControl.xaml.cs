@@ -4,7 +4,9 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -16,7 +18,22 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class BcvUserControl : UserControl
     {
+        #region Member Variables
+
+
+        #endregion
+
         #region Observable Properties
+
+        public static readonly DependencyProperty _paratextSync =
+            DependencyProperty.Register("ParatextSync", typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true));
+        public bool ParatextSync
+        {
+            get => (bool)GetValue(_paratextSync);
+            set => SetValue(_paratextSync, value);
+        }
+
 
         public static readonly DependencyProperty _isRtl =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
@@ -27,6 +44,7 @@ namespace ClearDashboard.Wpf.UserControls
             get => (bool)GetValue(_isRtl);
             set => SetValue(_isRtl, value);
         }
+
 
         public static readonly DependencyProperty _currentBcv =
             DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerse), typeof(BcvUserControl),
@@ -88,37 +106,9 @@ namespace ClearDashboard.Wpf.UserControls
             btnVerseRight.IsEnabled = true;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) => {
-                if (args.PropertyName.Equals("CurrentBcv"))
-
-
-
-                    return;
-                // execute code here.
-            };
-        }
-
         #endregion
 
         #region Methods
-
-        private void SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (e.RoutedEvent.Name == "SelectionChanged" && ((FrameworkElement)(UIElement)e.OriginalSource).IsEnabled)
-            //{
-            //    if (((FrameworkElement)e.OriginalSource).Name == "cboBook")
-            //    {
-            //        cboChapter.SelectedIndex = 0;
-            //    }
-            //    else if (((FrameworkElement)e.OriginalSource).Name == "cboChapter")
-            //    {
-            //        cboVerse.SelectedIndex = 0;
-            //    }
-            //}
-        }
 
         private void BookUpArrow_Click(object sender, RoutedEventArgs e)
         {
