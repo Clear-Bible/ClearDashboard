@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -32,7 +33,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-       
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -78,10 +79,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-       
+        private ObservableCollection<int> _verseNums = new();
+        public ObservableCollection<int> VerseNums
+        {
+            get => _verseNums;
+            set
+            {
+                _verseNums = value;
+                NotifyOfPropertyChange(() => VerseNums);
+            }
+        }
 
-        private Dictionary<string,string> _BCVDictionary;
-        public Dictionary<string,string> BCVDictionary
+
+        private Dictionary<string, string> _BCVDictionary;
+        public Dictionary<string, string> BCVDictionary
         {
             get => _BCVDictionary;
             set
@@ -97,7 +108,7 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _bookNames;
             set
             {
-                _bookNames = value; 
+                _bookNames = value;
                 NotifyOfPropertyChange(() => BookNames);
             }
         }
@@ -189,6 +200,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -201,14 +215,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService, 
-            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+        public WorkSpaceViewModel(INavigationService navigationService,
+            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
             : base(navigationService, logger, projectManager)
         {
+
             ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
-            
+
             Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
@@ -304,17 +319,30 @@ namespace ClearDashboard.Wpf.ViewModels
             // trigger property changed event
             Tools.Add(new TextCollectionViewModel());
 
-            var books = Helpers.Helpers.GetBookIdDictionary();
-            foreach (KeyValuePair<string, string> entry in books)
-            {
-                _bookNames.Add(entry.Value);
-            }
-            NotifyOfPropertyChange(() => BookNames);
 
             if (ProjectManager.ParatextProject is not null)
             {
+                // unique ids for all the verses in the project
                 BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
             }
+
+            // add in the books
+            var books = Helpers.Helpers.GetBookIdDictionary();
+
+            // ensure that the book is in the project
+            foreach (var book in ProjectManager.CurrentDashboardProject.TargetProject.BooksList)
+            {
+                if (book.Available)
+                {
+                    var bookID = book.BookId.ToString();
+                    if (books.ContainsKey(bookID))
+                    {
+                        _bookNames.Add(books[bookID]);
+                    }
+                }
+            }
+
+            NotifyOfPropertyChange(() => BookNames);
 
             await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
         }
@@ -463,10 +491,29 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 case ActionType.CurrentVerse:
                     this.VerseRef = pipeMessage.Text;
-                    if (pipeMessage.Text != CurrentBcv.GetVerseId())
+                    if (pipeMessage.Text != CurrentBcv.VerseLocationId)
                     {
+
+                        if (BCVDictionary is null)
+                        {
+                            return;
+                        }
+
+                        if (BCVDictionary.Count == 0 || CurrentBcv is null)
+                        {
+                            return;
+                        }
+
+
                         _currentBcv.SetVerseFromId(pipeMessage.Text);
+
+                        CalculateChapters();
+
+                        CalculateVerses();
+
                         NotifyOfPropertyChange(() => CurrentBcv);
+
+                        //CurrentChapter = CurrentBcv.ChapterText;
                     }
                     break;
                 case ActionType.OnConnected:
@@ -485,6 +532,57 @@ namespace ClearDashboard.Wpf.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+
+
+        private void CalculateChapters()
+        {
+            // CHAPTERS
+            string bookID = CurrentBcv.Book;
+            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(2, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                CurrentBcv.ChapterNumbers = chapterNumbers;
+            });
+        }
+
+        private void CalculateVerses()
+        {
+            // VERSES
+            string bookID = CurrentBcv.Book;
+            string chapID = CurrentBcv.ChapterIdText;
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookID + chapID)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(5);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                CurrentBcv.VerseNumbers = verseNumbers;
+            });
+        }
 
 
         #endregion // Methods

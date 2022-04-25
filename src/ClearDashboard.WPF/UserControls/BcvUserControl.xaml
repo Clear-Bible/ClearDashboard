@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Models"
     d:DesignHeight="50"
-    d:DesignWidth="460"
+    d:DesignWidth="500"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Loaded="UserControl_Loaded"
@@ -31,7 +31,7 @@
             <!--  left book arrow [0]  -->
             <ColumnDefinition Width="25" />
             <!--  book combo [1]  -->
-            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="90" />
             <!--  right book arrow [2]  -->
             <ColumnDefinition Width="30" />
             <!--  left chapter arrow [3]  -->
@@ -46,8 +46,10 @@
             <ColumnDefinition Width="50" />
             <!--  right Verse arrow [8]  -->
             <ColumnDefinition Width="25" />
-            <!--  Scroll Group [9]  -->
-            <ColumnDefinition Width="50" />
+
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
         <Border
@@ -83,23 +85,15 @@
             FontSize="12"
             Foreground="{DynamicResource PrimaryHueLightBrush}"
             Text="VERSE" />
-        <!--<TextBlock
-            Grid.Row="0"
-            Grid.Column="9"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="12"
-            Foreground="{DynamicResource PrimaryHueLightBrush}"
-            Text="SCROLL" />-->
 
         <ComboBox
             x:Name="cboBook"
             Grid.Row="1"
             Grid.Column="1"
-            MinWidth="100"
+            MinWidth="60"
             Margin="5,0,5,3"
             ItemsSource="{Binding BookNames, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.BookName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedValue="{Binding CurrentBcv.BookName, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectionChanged="SelectionChanged" />
         <ComboBox
             x:Name="cboChapter"
@@ -107,8 +101,8 @@
             Grid.Column="4"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding ChapNums, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.Chapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding CurrentBcv.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectionChanged="SelectionChanged" />
         <ComboBox
             x:Name="cboVerse"
@@ -116,9 +110,12 @@
             Grid.Column="7"
             MinWidth="30"
             Margin="5,0,5,3"
-            ItemsSource="{Binding VerseNums, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBCV.Verse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding CurrentBcv.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+            SelectedValue="{Binding CurrentBcv.Verse, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
             SelectionChanged="SelectionChanged" />
+
+
+
 
         <!--  Scroll Group  -->
         <!--<Border
@@ -160,21 +157,17 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookUpArrow_Click"
             IsEnabled="False"
             ToolTip="Previous Book">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
             <TextBlock
                 Name="PreviousBookArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  BOOK RIGHT ARROW  -->
@@ -200,7 +193,7 @@
             <TextBlock
                 Name="NextBookArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
 
@@ -227,7 +220,7 @@
             <TextBlock
                 Name="PreviousChapterArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  CHAPTER RIGHT ARROW  -->
@@ -253,7 +246,7 @@
             <TextBlock
                 Name="NextChapterArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
 
@@ -281,7 +274,7 @@
             <TextBlock
                 Name="PreviousVerseArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
 
         </Button>
         <!--  VERSE RIGHT ARROW  -->
@@ -307,9 +300,27 @@
             <TextBlock
                 Name="NextVerseArrow"
                 FontWeight="ExtraBold"
-                Text="&#x27A0;" />
+                Text="⏵" />
         </Button>
 
 
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="9"
+            Background="Beige"
+            Foreground="Red"
+            Text="{Binding CurrentBook}" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="10"
+            Background="Beige"
+            Foreground="LightBlue"
+            Text="{Binding CurrentChapter}" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="11"
+            Background="Beige"
+            Foreground="Green"
+            Text="{Binding CurrentVerse}" />
     </Grid>
 </UserControl>

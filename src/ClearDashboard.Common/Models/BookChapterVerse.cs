@@ -72,7 +72,7 @@ namespace ClearDashboard.Common.Models
         /// </summary>
         public string Book => BookNum.ToString().PadLeft(2, '0');
 
-        private string _bookName { get; set; } = "Genesis";
+        private string _bookName { get; set; } = "GEN";
         /// <summary>
         /// The book name. Defaults to Genesis
         /// </summary>
@@ -123,7 +123,12 @@ namespace ClearDashboard.Common.Models
         /// </summary>
         public string ChapterIdText => Chapter.ToString().PadLeft(3, '0');
 
-        private int? _verse { get; set; } = 1;
+        /// <summary>
+        /// Chapter number as padded text. Automatically calculated from Chapter.
+        /// </summary>
+        public string ChapterText => Chapter.ToString();
+
+        private int? _verse { get; set; } = 0;
         /// <summary>
         /// The verse number as an int.
         /// </summary>
@@ -134,10 +139,10 @@ namespace ClearDashboard.Common.Models
             {
                 if (_verse != value)
                 {
-                    if (value == 0)
-                    {
-                        value = 1;
-                    }
+                    //if (value == 0)
+                    //{
+                    //    value = 1;
+                    //}
 
                     _verse = value;
                     OnPropertyChanged(nameof(Verse));

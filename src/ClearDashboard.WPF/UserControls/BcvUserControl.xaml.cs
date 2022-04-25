@@ -18,10 +18,6 @@ namespace ClearDashboard.Wpf.UserControls
     {
         #region Observable Properties
 
-        
-
-
-
         public static readonly DependencyProperty _isRtl =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
@@ -32,35 +28,16 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(_isRtl, value);
         }
 
-        public static readonly DependencyProperty _currentBCV =
-            DependencyProperty.Register("CurrentBCV", typeof(BookChapterVerse), typeof(BcvUserControl),
+        public static readonly DependencyProperty _currentBcv =
+            DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerse), typeof(BcvUserControl),
                 new PropertyMetadata(new BookChapterVerse()));
 
-        public BookChapterVerse CurrentBCV
+        public BookChapterVerse CurrentBcv
         {
-            get
-            {
-                var bcv = (BookChapterVerse)GetValue(_currentBCV);
-                return (BookChapterVerse)GetValue(_currentBCV);
-            }
+            get => (BookChapterVerse)GetValue(_currentBcv);
             set
             {
-                SetValue(_currentBCV, value);
-            }
-        }
-
-        public static readonly DependencyProperty _BCVDictionary =
-            DependencyProperty.Register("BCVDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
-                new PropertyMetadata(new Dictionary<string, string>()));
-        public Dictionary<string, string> BCVDictionary
-        {
-            get
-            {
-                return (Dictionary<string, string>)GetValue(_BCVDictionary);
-            }
-            set
-            {
-                SetValue(_BCVDictionary, value);
+                SetValue(_currentBcv, value);
             }
         }
 
@@ -73,26 +50,6 @@ namespace ClearDashboard.Wpf.UserControls
         {
             get => (ObservableCollection<string>)GetValue(_bookNames);
             set => SetValue(_bookNames, value);
-        }
-
-        public static readonly DependencyProperty _chapNums =
-            DependencyProperty.Register("ChapNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
-            new PropertyMetadata(new ObservableCollection<int>()));
-
-        public ObservableCollection<int> ChapNums
-        {
-            get => (ObservableCollection<int>)GetValue(_chapNums);
-            set => SetValue(_chapNums, value);
-        }
-
-        public static readonly DependencyProperty _verseNums =
-            DependencyProperty.Register("VerseNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
-            new PropertyMetadata(new ObservableCollection<int>()));
-
-        public ObservableCollection<int> VerseNums
-        {
-            get => (ObservableCollection<int>)GetValue(_verseNums);
-            set => SetValue(_verseNums, value);
         }
 
         #endregion
@@ -142,50 +99,6 @@ namespace ClearDashboard.Wpf.UserControls
                     return;
                 // execute code here.
             };
-
-            ProcessBCV();
-        }
-
-        private void ProcessBCV()
-        {
-            if (BCVDictionary is null)
-            {
-                return;
-            }
-
-            if (BCVDictionary.Count == 0 || CurrentBCV is null)
-            {
-                return;
-            }
-
-            string bookNum = CurrentBCV.BookNum.ToString();
-            string chapNum = CurrentBCV.ChapterNum.ToString().PadLeft(3,'0');
-
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookNum + chapNum)).ToList();
-            for (int i = 0; i < verses.Count; i++)
-            {
-                verses[i] = verses[i].Substring(5);
-            }
-            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            VerseNums.Clear();
-            foreach (var verse in verses)
-            {
-                VerseNums.Add(Convert.ToInt32(verse));
-            }
-
-            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookNum)).ToList();
-            for (int i = 0; i < chapters.Count; i++)
-            {
-                chapters[i] = chapters[i].Substring(2,3);
-            }
-            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            ChapNums.Clear();
-            foreach (var chapter in chapters)
-            {
-                ChapNums.Add(Convert.ToInt32(chapter));
-            }
-
-            Console.WriteLine(BookNames.Count);
         }
 
         #endregion
@@ -194,17 +107,17 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.RoutedEvent.Name == "SelectionChanged" && ((FrameworkElement)(UIElement)e.OriginalSource).IsEnabled)
-            {
-                if (((FrameworkElement)e.OriginalSource).Name == "cboBook")
-                {
-                    cboChapter.SelectedIndex = 0;
-                }
-                else if (((FrameworkElement)e.OriginalSource).Name == "cboChapter")
-                {
-                    cboVerse.SelectedIndex = 0;
-                }
-            }
+            //if (e.RoutedEvent.Name == "SelectionChanged" && ((FrameworkElement)(UIElement)e.OriginalSource).IsEnabled)
+            //{
+            //    if (((FrameworkElement)e.OriginalSource).Name == "cboBook")
+            //    {
+            //        cboChapter.SelectedIndex = 0;
+            //    }
+            //    else if (((FrameworkElement)e.OriginalSource).Name == "cboChapter")
+            //    {
+            //        cboVerse.SelectedIndex = 0;
+            //    }
+            //}
         }
 
         private void BookUpArrow_Click(object sender, RoutedEventArgs e)

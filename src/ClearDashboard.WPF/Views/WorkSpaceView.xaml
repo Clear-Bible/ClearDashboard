@@ -116,15 +116,23 @@
             <userControls:BcvUserControl
                 x:Name="BCVcontrol"
                 Grid.Column="3"
-                BCVDictionary="{Binding BCVDictionary}"
                 BookNames="{Binding BookNames}"
-                CurrentBCV="{Binding CurrentBcv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                CurrentBcv="{Binding CurrentBcv}"
                 IsRtl="{Binding IsRtl}" />
+
+            <!--
+                ChapNums="{Binding ChapNums}"
+                VerseNums="{Binding VerseNums}"
+                CurrentBook="{Binding CurrentBcv.BookName}"
+                CurrentChapter="{Binding CurrentBcv.ChapterText}"
+                CurrentVerse="{Binding CurrentBcv.VerseNum}"
+            -->
+            <!--  CurrentVerse="{Binding CurrentBcv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  -->
 
             <TextBlock
                 Grid.Column="4"
                 Foreground="Pink"
-                Text="{Binding VerseRef}" />
+                Text="{Binding VerseRef, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
 
