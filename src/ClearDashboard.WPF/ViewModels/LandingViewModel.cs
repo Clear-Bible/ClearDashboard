@@ -44,7 +44,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager)
         {
-            Logger.LogError("LandingViewModel constructor called.");
+            Logger.LogInformation("LandingViewModel constructor called.");
         }
 
         protected override void OnViewAttached(object view, object context)
