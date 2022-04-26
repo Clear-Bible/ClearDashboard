@@ -4,24 +4,24 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     public class GetNotesData : ObservableObject
     {
-        private int _bookID;
-        public int BookID
+        private int _bookId;
+        public int BookId
         {
-            get => _bookID;
+            get => _bookId;
             set
             {
-                _bookID = value;
+                _bookId = value;
                 OnPropertyChanged();
             }
         }
 
-        private int _chapterID;
-        public int ChapterID
+        private int _chapterId;
+        public int ChapterId
         {
-            get => _chapterID;
+            get => _chapterId;
             set
             {
-                _chapterID = value;
+                _chapterId = value;
                 OnPropertyChanged();
             }
         }

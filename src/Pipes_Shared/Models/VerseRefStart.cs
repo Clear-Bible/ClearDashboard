@@ -5,60 +5,60 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     public class VerseRefStart : ObservableObject
     {
-        private string _BookCode;
+        private string _bookCode;
         public string BookCode
         {
-            get => _BookCode;
-            set { SetProperty(ref _BookCode, value); }
+            get => _bookCode;
+            set => SetProperty(ref _bookCode, value);
         }
 
-        private int _BookNum;
+        private int _bookNum;
         public int BookNum
         {
-            get => _BookNum;
-            set { SetProperty(ref _BookNum, value); }
+            get => _bookNum;
+            set => SetProperty(ref _bookNum, value);
         }
 
-        private int _ChapterNum;
+        private int _chapterNum;
         public int ChapterNum
         {
-            get => _ChapterNum;
-            set { SetProperty(ref _ChapterNum, value); }
+            get => _chapterNum;
+            set => SetProperty(ref _chapterNum, value);
         }
 
-        private int _VerseNum;
+        private int _verseNum;
         public int VerseNum
         {
-            get => _VerseNum;
-            set { SetProperty(ref _VerseNum, value); }
+            get => _verseNum;
+            set => SetProperty(ref _verseNum, value);
         }
 
-        private int _BBBCCCVVV;
-        public int BBBCCCVVV
+        private int _bbbcccvvv;
+        public int Bbbcccvvv
         {
-            get => _BBBCCCVVV;
-            set { SetProperty(ref _BBBCCCVVV, value); }
+            get => _bbbcccvvv;
+            set => SetProperty(ref _bbbcccvvv, value);
         }
 
-        private Versification _Versification;
+        private Versification _versification;
         public Versification Versification
         {
-            get => _Versification;
-            set { SetProperty(ref _Versification, value); }
+            get => _versification;
+            set => SetProperty(ref _versification, value);
         }
 
-        private bool _RepresentsMultipleVerses;
+        private bool _representsMultipleVerses;
         public bool RepresentsMultipleVerses
         {
-            get => _RepresentsMultipleVerses;
-            set { SetProperty(ref _RepresentsMultipleVerses, value); }
+            get => _representsMultipleVerses;
+            set => SetProperty(ref _representsMultipleVerses, value);
         }
 
-        private List<object> _AllVerses;
+        private List<object> _allVerses;
         public List<object> AllVerses
         {
-            get => _AllVerses;
-            set { SetProperty(ref _AllVerses, value); }
+            get => _allVerses;
+            set => SetProperty(ref _allVerses, value);
         }
     }
 }

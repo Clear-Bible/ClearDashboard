@@ -2,11 +2,11 @@
 {
     public class BookInfo : BindableBase
     {
-        private string _Code;
+        private string _code;
         public string Code
         {
-            get => _Code;
-            set { SetProperty(ref _Code, value, nameof(Code)); }
+            get => _code;
+            set => SetProperty(ref _code, value, nameof(Code));
         }
 
 
@@ -14,15 +14,15 @@
         public bool InProjectScope
         {
             get => _inProjectScope;
-            set { SetProperty(ref _inProjectScope, value, nameof(InProjectScope)); }
+            set => SetProperty(ref _inProjectScope, value, nameof(InProjectScope));
         }
 
 
-        private int _Number;
+        private int _number;
         public int Number
         {
-            get => _Number;
-            set { SetProperty(ref _Number, value, nameof(Number)); }
+            get => _number;
+            set => SetProperty(ref _number, value, nameof(Number));
         }
     }
 }

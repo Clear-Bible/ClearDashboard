@@ -4,18 +4,18 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     public  class Versification : ObservableObject
     {
-        private int _Type;
+        private int _type;
         public int Type
         {
-            get => _Type;
-            set { SetProperty(ref _Type, value); }
+            get => _type;
+            set => SetProperty(ref _type, value);
         }
 
-        private bool _IsCustomized;
+        private bool _isCustomized;
         public bool IsCustomized
         {
-            get => _IsCustomized;
-            set { SetProperty(ref _IsCustomized, value); }
+            get => _isCustomized;
+            set => SetProperty(ref _isCustomized, value);
         }
     }
 }

@@ -27,73 +27,73 @@ namespace Pipes_Shared.Models
 
 
 
-        private string _ID = "";
-        public string ID
+        private string _id = "";
+        public string Id
         {
-            get => _ID;
-            set { SetProperty(ref _ID, value); }
+            get => _id;
+            set => SetProperty(ref _id, value);
         }
 
-        private string _ShortName = "";
+        private string _shortName = "";
         public string ShortName
         {
-            get => _ShortName;
-            set { SetProperty(ref _ShortName, value); }
+            get => _shortName;
+            set => SetProperty(ref _shortName, value);
         }
 
 
-        private string _LongName = "";
+        private string _longName = "";
         public string LongName
         {
-            get => _LongName;
-            set { SetProperty(ref _LongName, value, nameof(LongName)); }
+            get => _longName;
+            set => SetProperty(ref _longName, value, nameof(LongName));
         }
 
 
-        private string _LanguageName = "";
+        private string _languageName = "";
         public string LanguageName
         {
-            get => _LanguageName;
-            set { SetProperty(ref _LanguageName, value); }
+            get => _languageName;
+            set => SetProperty(ref _languageName, value);
         }
 
-        private List<BookInfo> _AvailableBooks = new List<BookInfo>();
+        private List<BookInfo> _availableBooks = new List<BookInfo>();
         public List<BookInfo> AvailableBooks
         {
-            get => _AvailableBooks;
-            set { SetProperty(ref _AvailableBooks, value, nameof(AvailableBooks)); }
+            get => _availableBooks;
+            set => SetProperty(ref _availableBooks, value, nameof(AvailableBooks));
         }
 
 
-        private List<string> _NonObservers = new List<string>();
+        private List<string> _nonObservers = new List<string>();
         public List<string> NonObservers
         {
-            get => _NonObservers;
-            set { SetProperty(ref _NonObservers, value, nameof(NonObservers)); }
+            get => _nonObservers;
+            set => SetProperty(ref _nonObservers, value, nameof(NonObservers));
         }
 
 
-        private ProjectType _Type;
+        private ProjectType _type;
         public ProjectType Type
         {
-            get => _Type;
-            set { SetProperty(ref _Type, value, nameof(Type)); }
+            get => _type;
+            set => SetProperty(ref _type, value, nameof(Type));
         }
 
 
-        private ScrLanguageWrapper _Language;
+        private ScrLanguageWrapper _language;
         public ScrLanguageWrapper Language
         {
-            get => _Language;
-            set { SetProperty(ref _Language, value, nameof(Language)); }
+            get => _language;
+            set => SetProperty(ref _language, value, nameof(Language));
         }
 
 
         private Dictionary<string, string> _bcvDictionary;
-        public Dictionary<string, string> BCVDictionary
+        public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
-            set { SetProperty(ref _bcvDictionary, value, nameof(BCVDictionary)); }
+            set => SetProperty(ref _bcvDictionary, value, nameof(BcvDictionary));
         }
 
     }

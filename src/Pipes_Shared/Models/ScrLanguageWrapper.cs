@@ -3,32 +3,32 @@
     public class ScrLanguageWrapper : BindableBase
     {
 
-        private string _FontFamily = "Segoe UI";
+        private string _fontFamily = "Segoe UI";
         public string FontFamily
         {
-            get => _FontFamily;
-            set { SetProperty(ref _FontFamily, value, nameof(FontFamily)); }
+            get => _fontFamily;
+            set => SetProperty(ref _fontFamily, value, nameof(FontFamily));
         }
 
-        private float _Size = 13;
+        private float _size = 13;
         public float Size
         {
-            get => _Size;
-            set { SetProperty(ref _Size, value, nameof(Size)); }
+            get => _size;
+            set => SetProperty(ref _size, value, nameof(Size));
         }
 
-        private bool _IsRtol;
+        private bool _isRtol;
         public bool IsRtol
         {
-            get => _IsRtol;
-            set { SetProperty(ref _IsRtol, value, nameof(IsRtol)); }
+            get => _isRtol;
+            set => SetProperty(ref _isRtol, value, nameof(IsRtol));
         }
 
         private ScrLanguage _language;
-        public ScrLanguage language
+        public ScrLanguage Language
         {
             get => _language;
-            set { SetProperty(ref _language, value, nameof(language)); }
+            set => SetProperty(ref _language, value, nameof(Language));
         }
 
     }

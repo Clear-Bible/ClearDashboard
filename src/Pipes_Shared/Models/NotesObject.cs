@@ -5,46 +5,46 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     internal class NotesObject : ObservableObject
     {
-        private Anchor _Anchor;
+        private Anchor _anchor;
         public Anchor Anchor
         {
-            get => _Anchor;
-            set { SetProperty(ref _Anchor, value); }
+            get => _anchor;
+            set => SetProperty(ref _anchor, value);
         }
 
-        private List<Comment> comments;
+        private List<Comment> _comments;
         public List<Comment> Comments
         {
-            get => comments;
-            set { SetProperty(ref comments, value); }
+            get => _comments;
+            set => SetProperty(ref _comments, value);
         }
 
         private bool _isRead;
         public bool IsRead
         {
             get => _isRead;
-            set { SetProperty(ref _isRead, value); }
+            set => SetProperty(ref _isRead, value);
         }
 
-        private bool _IsResolved;
+        private bool _isResolved;
         public bool IsResolved
         {
-            get => _IsResolved;
-            set { SetProperty(ref _IsResolved, value); }
+            get => _isResolved;
+            set => SetProperty(ref _isResolved, value);
         }
 
-        private AssignedUser _AssignedUser;
+        private AssignedUser _assignedUser;
         public AssignedUser AssignedUser
         {
-            get => _AssignedUser;
-            set { SetProperty(ref _AssignedUser, value); }
+            get => _assignedUser;
+            set => SetProperty(ref _assignedUser, value);
         }
 
-        private object _ReplyToUser;
+        private object _replyToUser;
         public object ReplyToUser
         {
-            get => _ReplyToUser;
-            set { SetProperty(ref _ReplyToUser, value); }
+            get => _replyToUser;
+            set => SetProperty(ref _replyToUser, value);
         }
 
 

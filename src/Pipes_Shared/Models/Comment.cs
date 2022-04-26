@@ -6,39 +6,39 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Comment : ObservableObject
     {
-        private List<Content> _Contents;
+        private List<Content> _contents;
         public List<Content> Contents
         {
-            get => _Contents;
-            set { SetProperty(ref _Contents, value); }
+            get => _contents;
+            set => SetProperty(ref _contents, value);
         }
 
-        private Author _Author;
+        private Author _author;
         public Author Author
         {
-            get => _Author;
-            set { SetProperty(ref _Author, value); }
+            get => _author;
+            set => SetProperty(ref _author, value);
         }
 
-        private DateTimeOffset _Created;
+        private DateTimeOffset _created;
         public DateTimeOffset Created
         {
-            get => _Created;
-            set { SetProperty(ref _Created, value); }
+            get => _created;
+            set => SetProperty(ref _created, value);
         }
 
-        private Language _Language;
-        public Language Language
+        private SelectedLanguage _selectedLanguage;
+        public SelectedLanguage SelectedLanguage
         {
-            get => _Language;
-            set { SetProperty(ref _Language, value); }
+            get => _selectedLanguage;
+            set => SetProperty(ref _selectedLanguage, value);
         }
 
-        private AssignedUser _AssignedUser;
+        private AssignedUser _assignedUser;
         public AssignedUser AssignedUser
         {
-            get => _AssignedUser;
-            set { SetProperty(ref _AssignedUser, value); }
+            get => _assignedUser;
+            set => SetProperty(ref _assignedUser, value);
         }
     }
 }

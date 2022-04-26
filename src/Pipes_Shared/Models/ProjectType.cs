@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Pipes_Shared.Models
 {
-    public interface EnumType
+    public interface IEnumType
     {
     }
 
-    public class ProjectType : EnumType
+    public class ProjectType : IEnumType
     {
         public static readonly Enum<ProjectType> Standard = new Enum<ProjectType>(nameof(Standard));
         public static readonly Enum<ProjectType> Resource = new Enum<ProjectType>(nameof(Resource));

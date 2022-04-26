@@ -3,49 +3,49 @@ using System.ComponentModel;
 
 namespace ClearDashboard.Pipes_Shared.Models
 {
-    public class Language : ObservableObject
+    public class SelectedLanguage : ObservableObject
     {
-        private string _FontFamily;
+        private string _fontFamily;
         public string FontFamily
         {
-            get => _FontFamily;
-            set { SetProperty(ref _FontFamily, value); }
+            get => _fontFamily;
+            set => SetProperty(ref _fontFamily, value);
         }
 
-        private double _Size;
+        private double _size;
         public double Size
         {
-            get => _Size;
-            set { SetProperty(ref _Size, value); }
+            get => _size;
+            set => SetProperty(ref _size, value);
         }
 
         private string _language;
         [DisplayName("Language")]
-        public string language
+        public string Language
         {
             get => _language;
-            set { SetProperty(ref _language, value); }
+            set => SetProperty(ref _language, value);
         }
 
-        private string _Features;
+        private string _features;
         public string Features
         {
-            get => _Features;
-            set { SetProperty(ref _Features, value); }
+            get => _features;
+            set => SetProperty(ref _features, value);
         }
 
-        private string _Id;
+        private string _id;
         public string Id
         {
-            get => _Id;
-            set { SetProperty(ref _Id, value); }
+            get => _id;
+            set => SetProperty(ref _id, value);
         }
 
-        private bool _IsRtoL;
+        private bool _isRtoL;
         public bool IsRtoL
         {
-            get => _IsRtoL;
-            set { SetProperty(ref _IsRtoL, value); }
+            get => _isRtoL;
+            set => SetProperty(ref _isRtoL, value);
         }
     }
 }

@@ -3,19 +3,19 @@
     public class ScrLanguage : BindableBase
     {
 
-        private string _DisplayName;
+        private string _displayName;
         public string DisplayName
         {
-            get => _DisplayName;
-            set { SetProperty(ref _DisplayName, value, nameof(DisplayName)); }
+            get => _displayName;
+            set => SetProperty(ref _displayName, value, nameof(DisplayName));
         }
 
 
-        private string _LanguageTag;
+        private string _languageTag;
         public string LanguageTag
         {
-            get => _LanguageTag;
-            set { SetProperty(ref _LanguageTag, value, nameof(LanguageTag)); }
+            get => _languageTag;
+            set => SetProperty(ref _languageTag, value, nameof(LanguageTag));
         }
 
     }

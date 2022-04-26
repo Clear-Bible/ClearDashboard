@@ -5,46 +5,46 @@ namespace ClearDashboard.Pipes_Shared.Models
 {
     public class Anchor : ObservableObject
     {
-        private VerseRefStart _VerseRefStart;
+        private VerseRefStart _verseRefStart;
         public VerseRefStart VerseRefStart
         {
-            get => _VerseRefStart;
-            set { SetProperty(ref _VerseRefStart, value); }
+            get => _verseRefStart;
+            set => SetProperty(ref _verseRefStart, value);
         }
 
-        private VerseRefEnd _VerseRefEnd;
+        private VerseRefEnd _verseRefEnd;
         public VerseRefEnd VerseRefEnd
         {
-            get => _VerseRefEnd;
-            set { SetProperty(ref _VerseRefEnd, value); }
+            get => _verseRefEnd;
+            set => SetProperty(ref _verseRefEnd, value);
         }
 
-        private string _SelectedText;
+        private string _selectedText;
         public string SelectedText
         {
-            get => _SelectedText;
-            set { SetProperty(ref _SelectedText, value); }
+            get => _selectedText;
+            set => SetProperty(ref _selectedText, value);
         }
 
-        private int _Offset;
+        private int _offset;
         public int Offset
         {
-            get => _Offset;
-            set { SetProperty(ref _Offset, value); }
+            get => _offset;
+            set => SetProperty(ref _offset, value);
         }
 
-        private string _BeforeContext;
+        private string _beforeContext;
         public string BeforeContext
         {
-            get => _BeforeContext;
-            set { SetProperty(ref _BeforeContext, value); }
+            get => _beforeContext;
+            set => SetProperty(ref _beforeContext, value);
         }
 
-        private string _AfterContext;
+        private string _afterContext;
         public string AfterContext
         {
-            get => _AfterContext;
-            set { SetProperty(ref _AfterContext, value); }
+            get => _afterContext;
+            set => SetProperty(ref _afterContext, value);
         }
     }
 }
