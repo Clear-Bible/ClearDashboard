@@ -1,27 +1,20 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace ClearDashboard.ParatextPlugin
+namespace ClearDashboard.ParatextPlugin.Extensions
 {
-    static class cRTB
+    public static class RichTextBoxExtensions
     {
-        private delegate void AppendTextDelegate(string text, Color color, RichTextBox rtb);
+        private delegate void AppendTextDelegate(RichTextBox rtb, string text, Color color);
         private delegate void AppendTextFontSizeDelegate(string text, Color color, float iFontSize, RichTextBox rtb);
 
-        /// <summary>
-        /// Add in colored text to the RichTextBox
-        /// </summary>
-        /// <param abbr="text">Text to add</param>
-        /// <param abbr="color">Color of text</param>
-        public static void AppendText(string text, Color color, RichTextBox rtb)
+        public static void AppendText(this RichTextBox rtb, string text, Color color)
         {
             //check for threading issues
             if (rtb.InvokeRequired)
             {
-                rtb.Invoke(new AppendTextDelegate(AppendText), new object[] { text, color, rtb });
-
-                //AppendTextDelegate d = new AppendTextDelegate(AppendText);
-                //d(text, color);
+                text = text + " ****** other thread ******";
+                rtb.Invoke(new AppendTextDelegate(AppendText), new object[] { rtb, text, color});
             }
             else
             {
@@ -41,6 +34,5 @@ namespace ClearDashboard.ParatextPlugin
 
 
         }
-
     }
 }
