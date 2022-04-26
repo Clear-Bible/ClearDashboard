@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Context
 {
     public interface IProjectNameDbContextFactory<TDbContext> where TDbContext : DbContext
     {
-        Task<ProjectAssets> Create(string connectionString);
+        Task<ProjectAssets> Get(string connectionString);
     }
 
     public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
@@ -25,7 +25,7 @@ namespace ClearDashboard.DataAccessLayer.Context
             _logger = logger;
         }
 
-        public async Task<ProjectAssets> Create(string projectName)
+        public async Task<ProjectAssets> Get(string projectName)
         {
             var projectAssets = new ProjectAssets
             {

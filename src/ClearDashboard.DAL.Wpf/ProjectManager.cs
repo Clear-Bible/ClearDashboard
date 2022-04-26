@@ -324,7 +324,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
-            var projectAssets = await _projectNameDbContextFactory.Create(dashboardProject.ProjectName);
+            var projectAssets = await _projectNameDbContextFactory.Get(dashboardProject.ProjectName);
             // Populate ProjectInfo table
             // Identify relationships
             //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
