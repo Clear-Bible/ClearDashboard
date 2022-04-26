@@ -9,8 +9,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.WebApiParatextPlugin.Hubs;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -48,15 +52,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         //private ISet<string> Clients { get; } = new HashSet<string>();
 
 
-        public enum MsgColor
-        {
-            Red,
-            Green,
-            Blue,
-            Orange,
-            Purple,
-        }
-
         #endregion
 
         #region startup
@@ -89,7 +84,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
            
 
-            AppendText(Color.Green, "Owin Web Api host started");
+            
 
 
 
@@ -97,7 +92,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-
+            AppendText(Color.Green, "MainWindow_Load called.");
         }
 
         #endregion
@@ -161,22 +156,55 @@ namespace ClearDashboard.WebApiParatextPlugin
             _project = parent.CurrentState.Project;
             _parent = parent;
 
+
+            AppendText(Color.Green, $"OnAddedToParent called");
             StartWebApplication();
+          
         }
 
+        private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
+        {
+            // Get just the name of assembly without version and other metadata
+            var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
+            
+            // Load the most up to date version
+            var assembly = Assembly.Load(truncatedName);
+            AppendText(Color.Red, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
+
+            return assembly;
+        }
+
+        private Startup _webAppStartup;
         private void StartWebApplication()
         {
-            var baseAddress = "http://localhost:9000/";
 
-            WebAppProxy?.Dispose();
+            AppendText(Color.Green, $"StartWebApplication called");
 
-            // Start OWIN host 
-            WebAppProxy = WebApp.Start(baseAddress,
-                (appBuilder) =>
-                {
-                    var startup = new Startup(_project, _verseRef);
-                    startup.Configuration(appBuilder);
-                });
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
+
+            try
+            {
+                var baseAddress = "http://localhost:9000/";
+
+                WebAppProxy?.Dispose();
+
+                // Start OWIN host 
+                WebAppProxy = WebApp.Start(baseAddress,
+                    (appBuilder) =>
+                    {
+                        _webAppStartup = new Startup(_project, _verseRef, this);
+                        _webAppStartup.Configuration(appBuilder);
+                    });
+
+                AppendText(Color.Green, "Owin Web Api host started");
+            }
+            finally
+            {
+                currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
+            }
+
+          
         }
 
 
@@ -565,6 +593,15 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            //var hubProxy = (IHubContext<PluginHub>)GlobalHost.DependencyResolver.GetService(typeof(IHubContext<PluginHub>)); //.GetService<IHubContext<PluginHub>>();
+            var hubProxy = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+            if (hubProxy == null)
+            {
+                AppendText(Color.Red, "HubContext is null");
+                return;
+            }
+
+            hubProxy.Clients.All.Send(Guid.NewGuid(), @"Can you hear me?");
             //GetNotesData data = new GetNotesData();
             //data.BookID = 5;
             //data.ChapterID = 1;

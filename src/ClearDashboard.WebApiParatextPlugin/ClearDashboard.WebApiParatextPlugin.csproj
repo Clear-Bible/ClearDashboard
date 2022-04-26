@@ -19,12 +19,15 @@
 
   <ItemGroup>
 	<!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
-	<PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.2.1" />
+	<PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
 	<PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.8" />
 	<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Owin.Cors" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Owin.Cors" Version="4.2.1" />
+    <!--<PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.1" />-->
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.1.46" />
     <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.9" />
     <PackageReference Include="ParatextPluginInterfaces" Version="2.0.9" />

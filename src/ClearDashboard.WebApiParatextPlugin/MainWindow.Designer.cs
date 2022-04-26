@@ -66,16 +66,17 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnRestart.TabIndex = 22;
             this.btnRestart.Text = "Restart Pipe";
             this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Visible = false;
             this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // btnTest
             // 
             this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTest.Location = new System.Drawing.Point(374, 47);
+            this.btnTest.Location = new System.Drawing.Point(236, 47);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.Size = new System.Drawing.Size(213, 23);
             this.btnTest.TabIndex = 23;
-            this.btnTest.Text = "Test Notes";
+            this.btnTest.Text = "Send Message";
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 

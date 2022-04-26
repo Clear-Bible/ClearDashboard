@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Web.Http.Controllers;
 using ClearDashboard.WebApiParatextPlugin.Controllers;
+using ClearDashboard.WebApiParatextPlugin.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
 //using Microsoft.AspNet.SignalR;
@@ -28,11 +29,17 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IReadOnlyList<IProjectNote> _noteList;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
+        private MainWindow _mainWindow;
 
-        public Startup(IProject project, IVerseRef verseRef)
+        public IServiceProvider ServiceProvider { get; private set; }
+
+        public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
+
+        public Startup(IProject project, IVerseRef verseRef, MainWindow mainWindow)
         {
             _project = project;
             _verseRef = verseRef;
+            _mainWindow = mainWindow;
         }
 
         // This code configures Web API. The Startup class is specified as a type
@@ -48,10 +55,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                 HttpConfiguration config = new HttpConfiguration();
 
                 var serviceProvider = SetupDependencyInjection();
+                ServiceProvider = serviceProvider;
                 var dependencyResolver = new DefaultDependencyResolver(serviceProvider);
                 config.DependencyResolver = dependencyResolver;
 
 
+                config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
 
                 config.Formatters.Remove(config.Formatters.XmlFormatter);
                 config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
@@ -66,16 +75,30 @@ namespace ClearDashboard.WebApiParatextPlugin
                 //config.EnsureInitialized(); //Nice to check for issues before first request
                 appBuilder.UseCors(CorsOptions.AllowAll);
 
-                var signalRDependencyResolver = new Microsoft.AspNet.SignalR.DefaultDependencyResolver();
+                appBuilder.Map("/cors", map =>
+                {
+                    map.UseCors(CorsOptions.AllowAll);
+                    //map.MapSignalR<RawConnection>("/raw-connection");
+                    map.MapSignalR(new HubConfiguration()
+                    {
+#if DEBUG
+                        EnableDetailedErrors = true,
+                        //  Resolver = SignalRServiceResolver
+#endif
+                    });
+                });
+
+                // SignalRServiceResolver = new Microsoft.AspNet.SignalR.DefaultDependencyResolver();
                 appBuilder.MapSignalR(new HubConfiguration()
                 {
 #if DEBUG
                     EnableDetailedErrors = true,
-                    Resolver = signalRDependencyResolver
+                    //  Resolver = SignalRServiceResolver
 #endif
                 });
 
-                GlobalHost.DependencyResolver = signalRDependencyResolver;
+               // GlobalHost.DependencyResolver = SignalRServiceResolver;
+
 
                 appBuilder.UseWebApi(config);
 
@@ -91,16 +114,16 @@ namespace ClearDashboard.WebApiParatextPlugin
            
         }
 
-        private static IServiceProvider SetupDependencyInjection()
+        private IServiceProvider SetupDependencyInjection()
         {
             var services = new ServiceCollection();
             services.AddLogging();
 
-           
+            services.AddSingleton<MainWindow>(sp => _mainWindow);
 
 
             //services.AddSerilog();
-
+            
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
             //services.AddScoped<HelloMessageFactory>();

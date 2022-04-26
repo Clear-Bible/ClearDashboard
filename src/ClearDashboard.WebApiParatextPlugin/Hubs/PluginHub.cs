@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
+
+    [HubName("Plugin")]
     public class PluginHub : Hub
     {
         public void Send(string name, string message)
