@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
+using ClearDashboard.WebApiParatextPlugin.Helpers;
+using Microsoft.Owin.Hosting;
 using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Serilog;
-using ClearDashboard.WebApiParatextPlugin;
-using ClearDashboard.WebApiParatextPlugin.Helpers;
-using Microsoft.Owin.Hosting;
-using System.Net.Http;
-
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -39,8 +36,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         private readonly IBiblicalTermList _listAll;
 
         private readonly JsonSerializerOptions _jsonOptions;
-        private delegate void AppendMsgTextDelegate(MsgColor color, string text);
+        private delegate void AppendMsgTextDelegate(Color color, string text);
         private Form _parentForm;
+
+        private IDisposable WebAppProxy { get; set; }
 
 
         // Named Pipe Props
@@ -70,7 +69,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
-                .WriteTo.File("Plugin.log", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("d:\\temp\\Plugin.log", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             // set instance to global logger
             Log.Logger = log;
@@ -90,7 +89,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
            
 
-            AppendText(MsgColor.Green, "Owin Web Api host started");
+            AppendText(Color.Green, "Owin Web Api host started");
 
 
 
@@ -118,22 +117,15 @@ namespace ClearDashboard.WebApiParatextPlugin
        
         }
 
-    
-
-
         private void OnExceptionOccurred(Exception exception)
         {
             // write to Serilog
             Log.Error($"OnLoad {exception.Message}");
-            AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
+            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
-
-    
-
         #endregion
 
         #region Paratext overrides - standard functions
-
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
@@ -154,7 +146,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                 // get a reference to the Paratext calling form
                 _parentForm = this.ParentForm;
             }
-
         }
 
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
@@ -170,17 +161,23 @@ namespace ClearDashboard.WebApiParatextPlugin
             _project = parent.CurrentState.Project;
             _parent = parent;
 
-            string baseAddress = "http://localhost:9000/";
+            StartWebApplication();
+        }
+
+        private void StartWebApplication()
+        {
+            var baseAddress = "http://localhost:9000/";
+
+            WebAppProxy?.Dispose();
 
             // Start OWIN host 
-            var webApp = WebApp.Start(baseAddress,
+            WebAppProxy = WebApp.Start(baseAddress,
                 (appBuilder) =>
                 {
-                    var startup = new Startup(_project,_verseRef);
+                    var startup = new Startup(_project, _verseRef);
                     startup.Configuration(appBuilder);
                 });
         }
-
 
 
         /// <summary>
@@ -212,6 +209,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         private void SetProject(IProject newProject)
         {
             _project = newProject;
+
+            //StartWebApplication();
         }
 
         /// <summary>
@@ -225,6 +224,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (newReference != _verseRef)
             {
                 _verseRef = newReference;
+                //StartWebApplication();
                 GetCurrentVerseAsync().Forget();
             }
         }
@@ -509,39 +509,20 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param name="sMsg"></param>
+        /// <param name="message"></param>
         /// <param name="color"></param>
-        public void AppendText(MsgColor color, string sMsg)
+        public void AppendText(Color color, string message)
         {
             //check for threading issues
             if (this.InvokeRequired)
             {
-                this.Invoke(new AppendMsgTextDelegate(AppendText), new object[] { color, sMsg });
+                this.Invoke(new AppendMsgTextDelegate(AppendText), new object[] { color, message });
             }
             else
             {
-                sMsg += $"{Environment.NewLine}";
-                switch (color)
-                {
-                    case MsgColor.Blue:
-                        ColoredRichTextBox.AppendText(sMsg, Color.Blue, this.rtb);
-                        break;
-                    case MsgColor.Red:
-                        ColoredRichTextBox.AppendText(sMsg, Color.Red, this.rtb);
-                        break;
-                    case MsgColor.Green:
-                        ColoredRichTextBox.AppendText(sMsg, Color.Green, this.rtb);
-                        break;
-                    case MsgColor.Orange:
-                        ColoredRichTextBox.AppendText(sMsg, Color.Orange, this.rtb);
-                        break;
-                    case MsgColor.Purple:
-                        ColoredRichTextBox.AppendText(sMsg, Color.Purple, this.rtb);
-                        break;
-                }
-
-                // write to Serilog
-                Log.Information(sMsg);
+                message += $"{Environment.NewLine}";
+                this.rtb.AppendText(message, color);
+                Log.Information(message);
             }
         }
 
@@ -577,8 +558,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                 rtb.Clear();
             }
 
-            AppendText(MsgColor.Green, DateTime.Now.ToShortTimeString());
-            AppendText(MsgColor.Green, "_PipeServer Pipe Restarted");
+            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
+            AppendText(Color.Green, "_PipeServer Pipe Restarted");
 
         }
 

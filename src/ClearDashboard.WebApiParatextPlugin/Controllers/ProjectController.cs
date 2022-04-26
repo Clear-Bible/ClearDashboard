@@ -37,7 +37,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Controllers
         {
             var project = new Project
             {
-                ID = _project.ID,
+                Id = _project.ID,
                 LanguageName = _project.LanguageName,
                 ShortName = _project.ShortName,
                 LongName = _project.LongName
@@ -74,7 +74,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Controllers
                     break;
             }
 
-            project.BCVDictionary = GetBCV_Dictionary();
+            project.BcvDictionary = GetBCV_Dictionary();
 
             return project;
         }

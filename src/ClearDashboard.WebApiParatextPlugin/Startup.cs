@@ -10,7 +10,12 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Web.Http.Controllers;
 using ClearDashboard.WebApiParatextPlugin.Controllers;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
+//using Microsoft.AspNet.SignalR;
+//using Microsoft.AspNet.SignalR;
 using Paratext.PluginInterfaces;
+using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -36,13 +41,18 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             try
             {
+
+               
+
                 // Configure Web API for self-host. 
                 HttpConfiguration config = new HttpConfiguration();
 
                 var serviceProvider = SetupDependencyInjection();
-                config.DependencyResolver = new DefaultDependencyResolver(serviceProvider);
+                var dependencyResolver = new DefaultDependencyResolver(serviceProvider);
+                config.DependencyResolver = dependencyResolver;
 
-              
+
+
                 config.Formatters.Remove(config.Formatters.XmlFormatter);
                 config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
                 config.Routes.MapHttpRoute(
@@ -51,7 +61,28 @@ namespace ClearDashboard.WebApiParatextPlugin
                     defaults: new { id = RouteParameter.Optional }
                 );
 
+               
+
+                //config.EnsureInitialized(); //Nice to check for issues before first request
+                appBuilder.UseCors(CorsOptions.AllowAll);
+
+                var signalRDependencyResolver = new Microsoft.AspNet.SignalR.DefaultDependencyResolver();
+                appBuilder.MapSignalR(new HubConfiguration()
+                {
+#if DEBUG
+                    EnableDetailedErrors = true,
+                    Resolver = signalRDependencyResolver
+#endif
+                });
+
+                GlobalHost.DependencyResolver = signalRDependencyResolver;
+
                 appBuilder.UseWebApi(config);
+
+                //appBuilder.UseEndpoints(endpoints =>
+                //    {
+                //        endpoints.MapHub<SensorHub>("/sensor");
+
             }
             catch(Exception ex)
             {
@@ -64,11 +95,15 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             var services = new ServiceCollection();
             services.AddLogging();
+
+           
+
+
             //services.AddSerilog();
 
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
-            services.AddScoped<HelloMessageFactory>();
+            //services.AddScoped<HelloMessageFactory>();
 
             services.AddControllersAsServices(typeof(Startup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
