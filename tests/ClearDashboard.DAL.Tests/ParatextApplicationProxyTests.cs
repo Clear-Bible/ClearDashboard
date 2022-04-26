@@ -77,7 +77,7 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetNotesTest()
         {
             var proxy = ServiceProvider.GetService<IParatextApplicationProxy>();
-            var notes = await proxy.GetNotes(new GetNotesData {BookID = 1, ChapterID = 2, IncludeResolved = true});
+            var notes = await proxy.GetNotes(new GetNotesData {BookId = 1, ChapterId = 2, IncludeResolved = true});
             Assert.NotNull(notes);
             Output.WriteLine($"Received {notes.Count} notes from Paratext.");
 
