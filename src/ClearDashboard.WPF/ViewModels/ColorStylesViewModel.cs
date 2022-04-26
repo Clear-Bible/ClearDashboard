@@ -24,17 +24,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ColorStylesViewModel()
         {
-            _InlinesText.Add(new Run("First text")
+            InlinesText.Add(new Run("First text")
             {
                 Background = Brushes.BurlyWood,
                 Foreground = Brushes.Red
             });
-            _InlinesText.Add(new Run("Second text")
+            InlinesText.Add(new Run("Second text")
             {
                 Background = Brushes.Cyan,
                 Foreground = Brushes.Green
             });
-            _InlinesText.Add(new Run("Third text")
+            InlinesText.Add(new Run("Third text")
             {
                 Background = Brushes.Cornsilk,
                 Foreground = Brushes.DarkBlue

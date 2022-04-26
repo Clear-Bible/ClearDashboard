@@ -61,7 +61,8 @@
                 <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
-            <WrapPanel Grid.Column="1">
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <WrapPanel>
                 <Menu VerticalAlignment="Center">
                     <MenuItem Header="Layout">
                         <MenuItem
@@ -85,13 +86,14 @@
                             Tag="BiblicalTerms" />
                     </MenuItem>
                 </Menu>
-                <ComboBox
-                    VerticalContentAlignment="Center"
-                    DisplayMemberPath="Item1"
-                    ItemsSource="{Binding Themes}"
-                    SelectedItem="{Binding SelectedTheme}" />
-            </WrapPanel>
 
+            </WrapPanel>
+            <!--<ComboBox
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="Item1"
+                ItemsSource="{Binding Themes}"
+                SelectedItem="{Binding SelectedTheme}" />-->
+            </StackPanel>
 
             <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>

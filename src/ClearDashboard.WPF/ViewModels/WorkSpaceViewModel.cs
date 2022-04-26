@@ -303,8 +303,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
                         new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
                         new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new MenuItemViewModel
-                            { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
                     }
                 },
                 new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
@@ -322,8 +321,8 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Add(IoC.Get<ConcordanceViewModel>());
             _files.Add(IoC.Get<StartPageViewModel>());
             _files.Add(IoC.Get<AlignmentToolViewModel>());
-            // trigger property changed event
-            Files.Add(IoC.Get<TreeDownViewModel>());
+            _files.Add(IoC.Get<TreeDownViewModel>());
+            NotifyOfPropertyChange(() => Files);
 
 
             // add in the tool panes
@@ -334,8 +333,8 @@ namespace ClearDashboard.Wpf.ViewModels
             _tools.Add(IoC.Get<TargetContextViewModel>());
             _tools.Add(IoC.Get<NotesViewModel>());
             _tools.Add(IoC.Get<PinsViewModel>());
-            // trigger property changed event
-            Tools.Add(new TextCollectionViewModel());
+            _tools.Add(new TextCollectionViewModel());
+            NotifyOfPropertyChange(() => Tools);
 
 
             if (ProjectManager.ParatextProject is not null)

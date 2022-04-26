@@ -259,6 +259,7 @@
                         <Setter Property="BorderBrush" Value="{DynamicResource PurpleDarkBrush}" />
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                     </Style>
+
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Name="ClearLogo" Source="Assets/ClearLogo.xaml" />

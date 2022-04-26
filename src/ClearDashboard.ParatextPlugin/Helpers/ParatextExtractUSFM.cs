@@ -165,7 +165,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                     {
                                         sb.AppendLine();
                                     }
-                                    sb.Append($@"\v {marker.Data} ");
+                                    sb.Append($@"\v {marker.Data.ToString().Trim()} ");
                                 }
                                 else
                                 {
@@ -236,7 +236,15 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                     }
                                     else
                                     {
-                                        sb.Append(textToken.Text);
+                                        if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                        {
+                                            sb.Append(textToken.Text.TrimStart());
+                                        }
+                                        else
+                                        {
+                                            sb.Append(textToken.Text);
+                                        }
+                                        
                                     }
 
                                     lastTokenText = true;
