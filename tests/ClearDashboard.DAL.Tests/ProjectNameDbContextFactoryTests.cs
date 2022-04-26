@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Tests
 
             Assert.NotNull(factory);
 
-            var context1 = await factory?.Create(projectName)!;
+            var context1 = await factory?.Get(projectName)!;
 
             Assert.NotNull(context1);
             var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
