@@ -4,6 +4,7 @@ using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.ViewModels;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -184,7 +185,19 @@ namespace ClearDashboard.Wpf.Views
             // find the pane in the dockmanager with this contentID
             var windowPane = dockManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
-                .SingleOrDefault(a => a.ContentId.ToUpper() == windowTag.ToUpper());
+                .SingleOrDefault(a =>
+                {
+                    Debug.WriteLine(a.Title);
+                    if (a.ContentId is not null)
+                    {
+                        return a.ContentId.ToUpper() == windowTag.ToUpper();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                });
 
             if (windowPane != null)
             {

@@ -6,6 +6,9 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    Title="Color Styles"
+    Width="1000"
+    Height="950"
     d:DataContext="{d:DesignInstance Type=viewModels:ColorStylesViewModel}"
     d:DesignHeight="850"
     d:DesignWidth="800"
@@ -97,138 +100,200 @@
                 Content="SecondaryHueDarkForegroundBrush"
                 FontSize="10" />
 
-            <Button
-                Height="20"
-                Margin="2,30,2,2"
-                Background="{DynamicResource PurpleLightBrush}"
-                Content="PurpleLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource PurpleMidBrush}"
-                Content="PurpleMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource PurpleDarkBrush}"
-                Content="PurpleDarkBrush"
-                FontSize="10" />
 
-            <Button
-                Height="20"
-                Margin="2,2,2,2"
-                Background="{DynamicResource BlueLightBrush}"
-                Content="BlueLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource BlueMidBrush}"
-                Content="BlueMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource BlueDarkBrush}"
-                Content="BlueDarkBrush"
-                FontSize="10" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource IndigoLightBrush}"
+                    Content="IndigoLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource IndigoMidBrush}"
+                    Content="IndigoMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource IndigoDarkBrush}"
+                    Content="IndigoDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
 
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource RedLightBrush}"
-                Content="RedLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource RedMidBrush}"
-                Content="RedeMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource RedDarkBrush}"
-                Content="RedDarkBrush"
-                FontSize="10" />
 
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource GreenLightBrush}"
-                Content="GreenLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource GreenMidBrush}"
-                Content="GreenMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource GreenDarkBrush}"
-                Content="GreenDarkBrush"
-                FontSize="10" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource PurpleLightBrush}"
+                    Content="PurpleLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource PurpleMidBrush}"
+                    Content="PurpleMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource PurpleDarkBrush}"
+                    Content="PurpleDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
 
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource OrangeLightBrush}"
-                Content="OrangeLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource OrangeMidBrush}"
-                Content="OrangeMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource OrangeDarkBrush}"
-                Content="OrangeDarkBrush"
-                FontSize="10" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource MauveLightBrush}"
+                    Content="MauveLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource MauveMidBrush}"
+                    Content="MauveMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource MauveDarkBrush}"
+                    Content="MauveDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
 
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource YellowLightBrush}"
-                Content="YellowLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource YellowMidBrush}"
-                Content="YellowMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource YellowDarkBrush}"
-                Content="YellowDarkBrush"
-                FontSize="10" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2,2,2,2"
+                    Background="{StaticResource BlueLightBrush}"
+                    Content="BlueLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource BlueMidBrush}"
+                    Content="BlueMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource BlueDarkBrush}"
+                    Content="BlueDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource BlueVeryDarkBrush}"
+                    Content="BlueVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
 
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource TealLightBrush}"
-                Content="TealLightBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource TealMidBrush}"
-                Content="TealMidBrush"
-                FontSize="10" />
-            <Button
-                Height="20"
-                Margin="2"
-                Background="{DynamicResource TealDarkBrush}"
-                Content="TealDarkBrush"
-                FontSize="10" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource RedLightBrush}"
+                    Content="RedLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource RedMidBrush}"
+                    Content="RedMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource RedDarkBrush}"
+                    Content="RedDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource RedVeryDarkBrush}"
+                    Content="RedVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource GreenLightBrush}"
+                    Content="GreenLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource GreenMidBrush}"
+                    Content="GreenMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource GreenDarkBrush}"
+                    Content="GreenDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource GreenVeryDarkBrush}"
+                    Content="GreenVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource OrangeLightBrush}"
+                    Content="OrangeLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource OrangeMidBrush}"
+                    Content="OrangeMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource OrangeDarkBrush}"
+                    Content="OrangeDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource OrangeVeryDarkBrush}"
+                    Content="OrangeVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource YellowLightBrush}"
+                    Content="YellowLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource YellowMidBrush}"
+                    Content="YellowMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource YellowDarkBrush}"
+                    Content="YellowDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource YellowVeryDarkBrush}"
+                    Content="YellowVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Margin="2"
+                    Background="{StaticResource TealLightBrush}"
+                    Content="TealLightBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource TealMidBrush}"
+                    Content="TealMidBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource TealDarkBrush}"
+                    Content="TealDarkBrush"
+                    FontSize="10" />
+                <Button
+                    Margin="2"
+                    Background="{StaticResource TealVeryDarkBrush}"
+                    Content="TealVeryDarkBrush"
+                    FontSize="10" />
+            </StackPanel>
+
 
         </StackPanel>
 
@@ -431,6 +496,13 @@
                     Content="BlueDarkButton"
                     FontSize="10"
                     Style="{DynamicResource BlueDarkButton}" />
+                <Button
+                    Width="120"
+                    Height="20"
+                    Margin="2"
+                    Content="BlueVeryDarkButton"
+                    FontSize="10"
+                    Style="{DynamicResource BlueVeryDarkButton}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -559,16 +631,12 @@
                     VerticalAlignment="Center">
                     BINDABLE INLINES EXAMPLE
                 </Label>
-                <helpers:BindableTextBlock
-                    Margin="5"
-                    HorizontalAlignment="Center"
-                    InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}" />
-                <Button
-                    MaxWidth="120"
-                    Margin="8,2,8,2"
-                    FontSize="12">
-                    CLOSE
-                </Button>
+                <Border BorderBrush="{StaticResource RedLightBrush}" BorderThickness="1">
+                    <helpers:BindableTextBlock
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        InlineList="{Binding Path=InlinesText, UpdateSourceTrigger=PropertyChanged}" />
+                </Border>
             </StackPanel>
         </StackPanel>
     </Grid>
