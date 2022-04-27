@@ -10,22 +10,6 @@ using ClearDashboard.ParatextPlugin.Models;
 
 namespace ClearDashboard.ParatextPlugin.Actions
 {
-    public class ListType
-    {
-        public string label;
-        public bool isProject;
-        public BiblicalTermListType type;
-
-        public ListType(string label, bool isProject, BiblicalTermListType type)
-        {
-            this.label = label;
-            this.isProject = isProject;
-            this.type = type;
-        }
-
-        public override string ToString() => label;
-    }
-
     public class BibilicalTerms
     {
         private string _lastBookCode = "";
