@@ -43,18 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="H.Formatters">
-      <HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>
-    </Reference>
-    <Reference Include="H.Formatters.BinaryFormatter">
-      <HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.BinaryFormatter.dll</HintPath>
-    </Reference>
-    <Reference Include="H.Pipes">
-      <HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

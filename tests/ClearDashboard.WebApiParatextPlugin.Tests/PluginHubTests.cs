@@ -8,8 +8,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
     public class PluginHubTests
     {
-        private ITestOutputHelper _output;
-        private string _message;
+        private readonly ITestOutputHelper _output;
+        private string? _message;
+
         public PluginHubTests(ITestOutputHelper output)
         {
             _output = output;
@@ -27,16 +28,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 _output.WriteLine(_message);
             });
 
-          
             await connection.Start();
-
             Console.Read();
-
-        }
-
-        private void ConnectionOnReceived(string obj)
-        {
-            throw new NotImplementedException();
         }
     }
 }

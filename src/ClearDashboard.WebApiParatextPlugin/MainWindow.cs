@@ -1,5 +1,7 @@
 ﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
+using ClearDashboard.WebApiParatextPlugin.Hubs;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
@@ -12,9 +14,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ClearDashboard.WebApiParatextPlugin.Hubs;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -29,29 +28,22 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
 
+        private WebHostStartup WebHostStartup { get; set; }
 
-        //private List<BiblicalTermsData> _termsList;
-        //private readonly ListType _projectList = new ListType("Project", true, BiblicalTermListType.All);
-        //private readonly ListType _allList = new ListType("All", false, BiblicalTermListType.All);
-        //private readonly ListType _majorList = new ListType("Major", false, BiblicalTermListType.Major);
+        private IDisposable WebAppProxy { get; set; }
 
         private readonly IBiblicalTermList _listProject;
         // ReSharper disable once InconsistentNaming
         private readonly IBiblicalTermList _listAll;
 
-        private readonly JsonSerializerOptions _jsonOptions;
+
         private delegate void AppendMsgTextDelegate(Color color, string text);
-        private Form _parentForm;
+        //private Form _parentForm;
 
-        private IDisposable WebAppProxy { get; set; }
-
-
-        // Named Pipe Props
-        //private const string PipeName = "ClearDashboard";
-        //private PipeServer<PipeMessage> _PipeServer { get; }
-        //private ISet<string> Clients { get; } = new HashSet<string>();
+        
 
 
+       
         #endregion
 
         #region startup
@@ -59,7 +51,20 @@ namespace ClearDashboard.WebApiParatextPlugin
         public MainWindow()
         {
             InitializeComponent();
+            ConfigureLogging();
+            DisplayPluginVersion();
+            Disposed += HandleWindowDisposed;
+        }
 
+        private void DisplayPluginVersion()
+        {
+            // get the version information
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            lblVersion.Text = string.Format($@"Plugin Version: {version}");
+        }
+
+        private static void ConfigureLogging()
+        {
             // configure Serilog
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -68,48 +73,16 @@ namespace ClearDashboard.WebApiParatextPlugin
                 .CreateLogger();
             // set instance to global logger
             Log.Logger = log;
-
-
-            // get the version information
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            lblVersion.Text = string.Format($@"Plugin Version: {version}");
-
-            // hook up an event when the window is closed so we can kill off the pipe
-            this.Disposed += MainWindow_Disposed;
-
-            _jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = false,
-            };
-
-           
-
-            
-
-
-
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-            AppendText(Color.Green, "MainWindow_Load called.");
         }
 
         #endregion
 
-        #region pipes section
+      
 
-       
-        /// <summary>
-        /// this window is closing event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-#pragma warning disable VSTHRD100 // Avoid async void methods
-        private async void MainWindow_Disposed(object sender, EventArgs e)
-#pragma warning restore VSTHRD100 // Avoid async void methods
+        private void HandleWindowDisposed(object sender, EventArgs e)
         {
-       
+            WebAppProxy?.Dispose();
+            WebAppProxy = null;
         }
 
         private void OnExceptionOccurred(Exception exception)
@@ -118,31 +91,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             Log.Error($"OnLoad {exception.Message}");
             AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
-        #endregion
+  
 
         #region Paratext overrides - standard functions
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-
-            if (this.ParentForm != null)
-            {
-                // get a reference to the Paratext calling form
-                _parentForm = this.ParentForm;
-            }
-        }
-
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            base.OnVisibleChanged(e);
-
-            if (this.ParentForm != null)
-            {
-                // get a reference to the Paratext calling form
-                _parentForm = this.ParentForm;
-            }
-        }
-
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
             parent.SetTitle(ClearDashboardWebApiPlugin.PluginName);
@@ -150,16 +101,25 @@ namespace ClearDashboard.WebApiParatextPlugin
             parent.VerseRefChanged += VerseRefChanged;
 
             SetProject(parent.CurrentState.Project);
-            _verseRef = parent.CurrentState.VerseRef;
+            SetVerseRef(parent.CurrentState.VerseRef);
 
             _host = host;
             _project = parent.CurrentState.Project;
             _parent = parent;
-
-
             AppendText(Color.Green, $"OnAddedToParent called");
-            StartWebApplication();
-          
+        }
+
+     
+
+        public override string GetState()
+        {
+            // override required by base class, return null string.
+            return null;
+        }
+
+        public override void DoLoad(IProgressInfo progressInfo)
+        {
+            StartWebHost();
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -174,8 +134,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             return assembly;
         }
 
-        private Startup _webAppStartup;
-        private void StartWebApplication()
+       
+        private void StartWebHost()
         {
 
             AppendText(Color.Green, $"StartWebApplication called");
@@ -193,8 +153,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                 WebAppProxy = WebApp.Start(baseAddress,
                     (appBuilder) =>
                     {
-                        _webAppStartup = new Startup(_project, _verseRef, this);
-                        _webAppStartup.Configuration(appBuilder);
+                        WebHostStartup = new WebHostStartup(_project, _verseRef, this);
+                        WebHostStartup.Configuration(appBuilder);
                     });
 
                 AppendText(Color.Green, "Owin Web Api host started");
@@ -203,8 +163,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             }
-
-          
         }
 
 
@@ -212,33 +170,34 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// Gets the current state of the control, from which the control must know how to
         /// restore itself EmbeddedPluginControl.OnAddedToParent(Paratext.PluginInterfaces.IPluginChildWindow,Paratext.PluginInterfaces.IWindowPluginHost,System.String) is called).
         /// </summary>
-		public override string GetState()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Will always be called after
-        /// EmbeddedPluginControl.OnAddedToParent(Paratext.PluginInterfaces.IPluginChildWindow,Paratext.PluginInterfaces.IWindowPluginHost,System.String) on a separate thread from the main UI thread.
-        /// Long-running tasks needed for loading should be done here.
-        /// The control's content will not be visible until this method returns.
-        /// </summary>
-		public override void DoLoad(IProgressInfo progressInfo)
-        {
-
-        }
+		//public override string GetState()
+  //      {
+  //          return null;
+  //      }
 
 
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
-            SetProject(newProject);
+            SetProject(newProject, reloadWebHost:true);
         }
 
-        private void SetProject(IProject newProject)
+
+        private void SetVerseRef(IVerseRef verseRef, bool reloadWebHost = false)
+        {
+            _verseRef = verseRef;
+            if (reloadWebHost)
+            {
+                StartWebHost();
+            }
+        }
+
+        private void SetProject(IProject newProject, bool reloadWebHost = false)
         {
             _project = newProject;
-
-            //StartWebApplication();
+            if (reloadWebHost)
+            {
+                StartWebHost();
+            }
         }
 
         /// <summary>
@@ -269,18 +228,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <returns></returns>
         private async Task GetCurrentVerseAsync()
         {
-            //string verseId = _verseRef.BBBCCCVVV.ToString();
-            //if (verseId.Length < 8)
-            //{
-            //    verseId = verseId.PadLeft(8, '0');
-            //}
+            string verseId = _verseRef.BBBCCCVVV.ToString();
+            if (verseId.Length < 8)
+            {
+                verseId = verseId.PadLeft(8, '0');
+            }
 
-            //await WriteMessageToPipeAsync(new PipeMessage
-            //{
-            //    Action = ActionType.CurrentVerse,
-            //    Text = verseId,
-            //}).ConfigureAwait(false);
-            //AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {_verseRef}");
+           
         }
 
         /// <summary>
@@ -304,13 +258,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             //});
 
-            //await WriteMessageToPipeAsync(new PipeMessage
-            //{
-            //    Action = ActionType.SetBiblicalTerms,
-            //    Text = "Project Object",
-            //    Payload = payloadBTAll
-            //}).ConfigureAwait(false);
-            //AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsAll");
+          
         }
 
         /// <summary>
@@ -330,13 +278,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             //    payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
             //});
 
-            //await WriteMessageToPipeAsync(new PipeMessage
-            //{
-            //    Action = ActionType.SetBiblicalTerms,
-            //    Text = "Project Object",
-            //    Payload = payloadBT
-            //}).ConfigureAwait(false);
-            //AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsProject");
+          
         }
 
         /// <summary>
@@ -367,13 +309,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             ////{
             ////    var dataPayload = JsonSerializer.Serialize(usfm);
 
-            ////    await WriteMessageToPipeAsync(new PipeMessage
-            ////    {
-            ////        Action = ActionType.SetUSFM,
-            ////        Text = "Set USFM",
-            ////        Payload = dataPayload,
-            ////    }).ConfigureAwait(false);
-            ////}
+           
         }
 
         ///// <summary>

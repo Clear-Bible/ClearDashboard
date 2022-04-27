@@ -113,7 +113,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.Controls.Add(this.rtb);
             this.Name = "MainWindow";
             this.Size = new System.Drawing.Size(465, 374);
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
