@@ -23,6 +23,7 @@ namespace ClearDashboard.Paratext.Plugin.Tests
         [InlineData("0851c4dcaee3893d9ccdc7c59de9cdd661a586d6")]
         [InlineData("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
         [InlineData("64f96631883240818dc01c345e58a1bff75e18e1")]
+        [InlineData("80bbd0dbab94dbc97d5dc64d8c09fb687e066b26")]
         ///
         /// NOTE: the data in the \MockData\USFM\ directories are snippets from the export
         /// of USFM from the plugin.

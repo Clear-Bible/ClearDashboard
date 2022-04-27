@@ -155,42 +155,12 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                             if (marker.Type == MarkerType.Verse)
                             {
                                 lastTokenText = false;
-                                // ReSharper disable once NotAccessedVariable
-                                int p = 0;
-                                bool result = int.TryParse(marker.Data, out p);
-
-                                if (result)
+                                if (!lastTokenChapter || lastVerseZero)
                                 {
-                                    if (!lastTokenChapter || lastVerseZero)
-                                    {
-                                        sb.AppendLine();
-                                    }
-                                    sb.Append($@"\v {marker.Data.ToString().Trim()} ");
+                                    sb.AppendLine();
                                 }
-                                else
-                                {
-                                    // verse span so bust up the verse span
-                                    string[] nums = marker.Data.Split('-');
-                                    if (nums.Length > 1)
-                                    {
-                                        if (int.TryParse(nums[0], out p))
-                                        {
-                                            if (int.TryParse(nums[1], out p))
-                                            {
-                                                int start = Convert.ToInt16(nums[0]);
-                                                int end = Convert.ToInt16(nums[1]);
-                                                for (int j = start; j < end + 1; j++)
-                                                {
-                                                    if (!lastTokenChapter)
-                                                    {
-                                                        sb.AppendLine();
-                                                    }
-                                                    sb.Append($@"\v {j} ");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                // this includes single verses (\v 1) and multiline (\v 1-3)
+                                sb.Append($@"\v {marker.Data.ToString().Trim()} ");
                                 lastTokenChapter = false;
                                 lastVerseZero = false;
                             }
@@ -223,7 +193,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                     {
                                         sb.Append(textToken.Text);
                                     }
-                                    
+
                                     lastVerseZero = true;
                                     lastTokenText = true;
                                 }
@@ -244,7 +214,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                         {
                                             sb.Append(textToken.Text);
                                         }
-                                        
+
                                     }
 
                                     lastTokenText = true;
@@ -262,7 +232,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     {
                         mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
                     }
-                    
+
                 }
             }
         }

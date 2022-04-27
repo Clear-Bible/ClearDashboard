@@ -17,6 +17,7 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.ParatextPlugin.Models;
 
 namespace ClearDashboardPlugin
 {
@@ -590,19 +591,6 @@ namespace ClearDashboardPlugin
                 }
             });
             AppendText(MsgColor.Orange, "OUTBOUND -> SetUSX");
-
-            //var usfm = m_project.GetUSFM(m_verseRef.BookNum);
-            //if (usfm != null)
-            //{
-            //    var dataPayload = JsonSerializer.Serialize(usfm);
-
-            //    await WriteMessageToPipeAsync(new PipeMessage
-            //    {
-            //        Action = ActionType.SetUSFM,
-            //        Text = "Set USFM",
-            //        Payload = dataPayload,
-            //    }).ConfigureAwait(false);
-            //}
         }
 
         /// <summary>
@@ -654,6 +642,11 @@ namespace ClearDashboardPlugin
             return project;
         }
 
+
+        /// <summary>
+        /// Generate a dictionary of all the unique verse IDs in the project
+        /// </summary>
+        /// <returns></returns>
         private Dictionary<string, string> GetBCV_Dictionary()
         {
             Dictionary<string, string> bcvDict = new Dictionary<string, string>();
