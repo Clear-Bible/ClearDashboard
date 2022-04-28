@@ -5,7 +5,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -13,6 +12,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ParaTextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

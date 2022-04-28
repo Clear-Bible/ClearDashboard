@@ -25,7 +25,7 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Progra
 		IORedirection = Auto
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipes_Shared", "pipes_shared\Pipes_Shared.csproj", "{3DC8DE7E-F63F-4439-8188-ED6A71409BF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParaTextPlugin.Data", "pipes_shared\ParaTextPlugin.Data.csproj", "{3DC8DE7E-F63F-4439-8188-ED6A71409BF9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject

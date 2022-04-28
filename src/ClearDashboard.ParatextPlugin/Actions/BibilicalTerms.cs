@@ -1,5 +1,4 @@
 ﻿using System;
-using ClearDashboard.Pipes_Shared.Models;
 using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using ClearDashboard.ParatextPlugin.Models;
+using ParaTextPlugin.Data.Models;
 
 namespace ClearDashboard.ParatextPlugin.Actions
 {
@@ -46,42 +46,42 @@ namespace ClearDashboard.ParatextPlugin.Actions
             }
         }
 
-        public List<BiblicalTermsData> ProcessBiblicalTerms(IProject m_project)
+        public List<BiblicalTermsData> ProcessBiblicalTerms(IProject project)
         {
             var biblicalTermList = this.BiblicalTermList.ToList();
 
-            List<BiblicalTermsData> btList = new List<BiblicalTermsData>();
-            int recordNum = 0;
+            var btList = new List<BiblicalTermsData>();
+            var recordNum = 0;
 
             foreach (var biblicalTerm in biblicalTermList)
             {
-                BiblicalTermsData bterm = new BiblicalTermsData();
-                PropertyInfo[] properties = biblicalTerm.GetType().GetProperties();
+                var biblicalTermsData = new BiblicalTermsData();
+                var properties = biblicalTerm.GetType().GetProperties();
 
                 recordNum++;
-                foreach (PropertyInfo pi in properties)
+                foreach (var pi in properties)
                 {
                     var term = pi.GetValue(biblicalTerm, null);
 
-                    PropertyInfo[] property = term.GetType().GetProperties();
+                    var property = term.GetType().GetProperties();
 
-                    foreach (PropertyInfo termProperty in property)
+                    foreach (var termProperty in property)
                     {
                         switch (termProperty.Name)
                         {
                             case "Id":
-                                bterm.Id = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Id = termProperty.GetValue(term, null).ToString();
                                 break;
                             case "Lemma":
-                                bterm.Lemma = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Lemma = termProperty.GetValue(term, null).ToString();
                                 break;
                             case "Transliteration":
-                                bterm.Transliteration = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Transliteration = termProperty.GetValue(term, null).ToString();
                                 break;
                             case "SemanticDomain":
                                 if (termProperty.GetValue(term, null) != null)
                                 {
-                                    bterm.SemanticDomain = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.SemanticDomain = termProperty.GetValue(term, null).ToString();
                                 }
                                 break;
                             case "CategoryIds":
@@ -93,7 +93,7 @@ namespace ClearDashboard.ParatextPlugin.Actions
                             case "LocalGloss":
                                 try
                                 {
-                                    bterm.LocalGloss = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.LocalGloss = termProperty.GetValue(term, null).ToString();
                                 }
                                 catch (Exception e)
                                 {
@@ -101,12 +101,12 @@ namespace ClearDashboard.ParatextPlugin.Actions
                                 }
                                 break;
                             case "Gloss":
-                                bterm.Gloss = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Gloss = termProperty.GetValue(term, null).ToString();
                                 break;
                             case "LinkString":
                                 if (termProperty.GetValue(term, null) != null)
                                 {
-                                    bterm.LinkString = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.LinkString = termProperty.GetValue(term, null).ToString();
                                 }
                                 break;
                         }
@@ -115,35 +115,35 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 }
 
                 // get the renderings
-                IBiblicalTerm termRendering = (IBiblicalTerm)biblicalTerm;
-                var renderings = m_project.GetBiblicalTermRenderings(termRendering, false);
+                var termRendering = (IBiblicalTerm)biblicalTerm;
+                var renderings = project.GetBiblicalTermRenderings(termRendering, false);
                 var renderingArray = renderings.Renderings.ToArray();
 
                 foreach (var biblicalTermRendering in renderingArray)
                 {
-                    bterm.Renderings.Add(biblicalTermRendering);
+                    biblicalTermsData.Renderings.Add(biblicalTermRendering);
                 }
 
 
-                List<string> VerseRef = new List<string>();
-                List<string> VerseRefLong = new List<string>();
-                List<string> VerseRefText = new List<string>();
+                var verseRefs = new List<string>();
+                var longVerseRefs = new List<string>();
+                var verseRefTexts = new List<string>();
                 foreach (var occurrence in biblicalTerm.Occurrences)
                 {
-                    VerseRef.Add(occurrence.BBBCCCVVV.ToString());
-                    VerseRefLong.Add($"{occurrence.BookCode} {occurrence.ChapterNum}:{occurrence.VerseNum}");
+                    verseRefs.Add(occurrence.BBBCCCVVV.ToString());
+                    longVerseRefs.Add($"{occurrence.BookCode} {occurrence.ChapterNum}:{occurrence.VerseNum}");
 
-                    VerseRefText.Add(LookupVerseText(m_project, occurrence.BookNum, occurrence.ChapterNum, occurrence.VerseNum));
+                    verseRefTexts.Add(LookupVerseText(project, occurrence.BookNum, occurrence.ChapterNum, occurrence.VerseNum));
                 }
 
-                bterm.References = VerseRef;
-                bterm.ReferencesLong = VerseRefLong;
-                bterm.ReferencesListText = VerseRefText;
+                biblicalTermsData.References = verseRefs;
+                biblicalTermsData.ReferencesLong = longVerseRefs;
+                biblicalTermsData.ReferencesListText = verseRefTexts;
 
 
                 // check the renderings to see if they are completed
-                List<BiblicalTermsCount> Counts = new List<BiblicalTermsCount> {};
-                foreach (var verseRef in VerseRef)
+                var Counts = new List<BiblicalTermsCount> {};
+                foreach (var verseRef in verseRefs)
                 {
                     Counts.Add(new BiblicalTermsCount
                     {
@@ -152,20 +152,20 @@ namespace ClearDashboard.ParatextPlugin.Actions
                     });
                 }
                 // loop through each text testing to see if any rendering matches
-                for (int i = 0; i < VerseRefText.Count; i++)
+                for (var i = 0; i < verseRefTexts.Count; i++)
                 {
                     foreach (var render in renderingArray)
                     {
-                        if (VerseRefText[i].IndexOf(render) > -1)
+                        if (verseRefTexts[i].IndexOf(render, StringComparison.Ordinal) > -1)
                         {
                             Counts[i].Found = true;
                         }
                     }
                 }
                 var count = Counts.Where(c => c.Found == true);
-                bterm.RenderingCount = count.Count();
+                biblicalTermsData.RenderingCount = count.Count();
 
-                btList.Add(bterm);
+                btList.Add(biblicalTermsData);
             }
 
             return btList;
@@ -177,13 +177,13 @@ namespace ClearDashboard.ParatextPlugin.Actions
             _lastChapterNum = 0;
             _lastScript = new List<string>();
 
-            IEnumerable<IUSFMToken> tokens = mProject.GetUSFMTokens(BookNum, ChapterNum);
+            var tokens = mProject.GetUSFMTokens(BookNum, ChapterNum);
             if (tokens is null)
             {
                 return "";
             }
 
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
             foreach (var token in tokens)
             {
                 if (token is IUSFMMarkerToken marker)
@@ -191,8 +191,8 @@ namespace ClearDashboard.ParatextPlugin.Actions
                     if (marker.Type == MarkerType.Verse)
                     {
                         // skip if the verses are beyond what we are looking for
-                        int i = 0;
-                        bool result = int.TryParse(marker.Data, out i);
+                        var i = 0;
+                        var result = int.TryParse(marker.Data, out i);
 
                         if (result)
                         {
@@ -205,7 +205,7 @@ namespace ClearDashboard.ParatextPlugin.Actions
                         else
                         {
                             // verse span so bust up the verse span
-                            string[] nums = marker.Data.Split('-');
+                            var nums = marker.Data.Split('-');
                             if (nums.Length > 1)
                             {
                                 if (int.TryParse(nums[0], out i))
@@ -214,7 +214,7 @@ namespace ClearDashboard.ParatextPlugin.Actions
                                     {
                                         int start = Convert.ToInt16(nums[0]);
                                         int end = Convert.ToInt16(nums[1]);
-                                        for (int j = start; j < end + 1; j++)
+                                        for (var j = start; j < end + 1; j++)
                                         {
                                             lines.Add($"Verse [{j}]");
                                         }
@@ -235,25 +235,24 @@ namespace ClearDashboard.ParatextPlugin.Actions
                 }
             }
 
-            string sText = "";
-
-            for (int i = 0; i < lines.Count; i++)
+            var text = "";
+            for (var i = 0; i < lines.Count; i++)
             {
                 if (lines[i].Contains($"Verse [{VerseNum}]"))
                 {
                     // get the next lines until the next verse
-                    for (int j = i; j < lines.Count; j++)
+                    for (var j = i; j < lines.Count; j++)
                     {
                         if (lines[j].StartsWith("Text Token: "))
                         {
-                            sText += lines[j].Substring(12);
+                            text += lines[j].Substring(12);
                         }
                     }
                     break;
                 }
             }
 
-            return sText;
+            return text;
         }
     }
 }

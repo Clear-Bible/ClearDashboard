@@ -2,8 +2,8 @@
 
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.Pipes_Shared.Models;
 using Microsoft.Extensions.DependencyInjection;
+using ParaTextPlugin.Data.Models;
 using Xunit;
 using Xunit.Abstractions;
 

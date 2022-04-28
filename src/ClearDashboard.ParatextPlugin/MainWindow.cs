@@ -1,26 +1,23 @@
-﻿using ClearDashboard.ParatextPlugin;
-using ClearDashboard.ParatextPlugin.Actions;
-using ClearDashboard.ParatextPlugin.Helpers;
-using ClearDashboard.Pipes_Shared.Models;
-using H.Formatters;
-using H.Pipes;
-using Microsoft.VisualStudio.Threading;
-using Paratext.PluginInterfaces;
-using Pipes_Shared;
-using Pipes_Shared.Models;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.ParatextPlugin.Actions;
 using ClearDashboard.ParatextPlugin.Extensions;
+using ClearDashboard.ParatextPlugin.Helpers;
+using H.Formatters;
+using H.Pipes;
+using Microsoft.VisualStudio.Threading;
+using Paratext.PluginInterfaces;
+using ParaTextPlugin.Data;
+using ParaTextPlugin.Data.Models;
+using Serilog;
 
-namespace ClearDashboardPlugin
+namespace ClearDashboard.ParatextPlugin
 {
     public partial class MainWindow : EmbeddedPluginControl
     {

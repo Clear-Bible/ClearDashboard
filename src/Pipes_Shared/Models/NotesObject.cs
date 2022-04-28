@@ -1,7 +1,7 @@
-﻿using MvvmHelpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MvvmHelpers;
 
-namespace ClearDashboard.Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     internal class NotesObject : ObservableObject
     {

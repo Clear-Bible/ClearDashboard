@@ -1,4 +1,4 @@
-﻿namespace Pipes_Shared.Models
+﻿namespace ParaTextPlugin.Data.Models
 {
     public class ScrLanguage : BindableBase
     {

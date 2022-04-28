@@ -1,7 +1,4 @@
-﻿using ClearDashboard.DataAccessLayer.Context;
-using ClearDashboard.DataAccessLayer.Data;
-
-namespace ClearDashboard.DataAccessLayer.Models
+﻿namespace ClearDashboard.DataAccessLayer.Data.Models
 {
     public  class ProjectAssets
     {

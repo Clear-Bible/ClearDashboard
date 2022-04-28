@@ -7,13 +7,13 @@ using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ParaTextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

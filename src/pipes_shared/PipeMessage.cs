@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pipes_Shared
+namespace ParaTextPlugin.Data
 {
     [Serializable]
     public class PipeMessage 

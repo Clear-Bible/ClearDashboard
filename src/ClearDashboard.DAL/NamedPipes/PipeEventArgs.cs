@@ -1,5 +1,5 @@
 ﻿using System;
-using Pipes_Shared;
+using ParaTextPlugin.Data;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes;
 

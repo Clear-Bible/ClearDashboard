@@ -8,10 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClearDashboard.ParatextPlugin.Properties {
-    using System;
-    
-    
+namespace ClearDashboard.WebApiParatextPlugin.Properties {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

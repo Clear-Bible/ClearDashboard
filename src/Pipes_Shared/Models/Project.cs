@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     public class Project : BindableBase
     {

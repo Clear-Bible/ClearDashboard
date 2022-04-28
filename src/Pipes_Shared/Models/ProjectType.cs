@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pipes_Shared.Models
+﻿namespace ParaTextPlugin.Data.Models
 {
     public interface IEnumType
     {

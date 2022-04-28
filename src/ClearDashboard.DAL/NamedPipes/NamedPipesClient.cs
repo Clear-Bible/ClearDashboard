@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using H.Pipes;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
+using ParaTextPlugin.Data;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes
 {

@@ -1,7 +1,6 @@
 ﻿using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
-using ClearDashboardPlugin;
 
 namespace ClearDashboard.ParatextPlugin
 {

@@ -1,8 +1,8 @@
-﻿using MvvmHelpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MvvmHelpers;
 
-namespace ClearDashboard.Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     public class Comment : ObservableObject
     {

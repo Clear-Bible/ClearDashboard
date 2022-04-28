@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboardPlugin;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 

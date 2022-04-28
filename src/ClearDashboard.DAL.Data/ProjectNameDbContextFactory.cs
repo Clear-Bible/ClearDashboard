@@ -1,13 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Context
+namespace ClearDashboard.DataAccessLayer.Data
 {
     public interface IProjectNameDbContextFactory<TDbContext> where TDbContext : DbContext
     {

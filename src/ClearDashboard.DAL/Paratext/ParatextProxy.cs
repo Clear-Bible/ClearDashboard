@@ -7,16 +7,15 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.Common.Models;
-                                                                             using ClearDashboard.DataAccessLayer.NamedPipes;
-                                                                             using ClearDashboard.Pipes_Shared.Models;
-                                                                             using Microsoft.Extensions.Logging;
+using ClearDashboard.DataAccessLayer.NamedPipes;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-                                                                             using Paratext.PluginInterfaces;
-                                                                             using Pipes_Shared;
-                                                                             using Pipes_Shared.Models;
-                                                                             using BiblicalTermsData = ClearDashboard.Common.Models.BiblicalTermsData;
+using Paratext.PluginInterfaces;
+using ParaTextPlugin.Data;
+using ParaTextPlugin.Data.Models;
+using BiblicalTermsData = ClearDashboard.Common.Models.BiblicalTermsData;
 
-                                                                             namespace ClearDashboard.DataAccessLayer.Paratext
+namespace ClearDashboard.DataAccessLayer.Paratext
 {
     public interface IParatextApplicationProxy
     {

@@ -1,14 +1,13 @@
 ﻿using System;
-using ClearDashboard.Pipes_Shared.Models;
-using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using ClearDashboard.ParatextPlugin.Models;
+using ClearDashboard.WebApiParatextPlugin.Models;
+using Paratext.PluginInterfaces;
+using ParaTextPlugin.Data.Models;
 
-namespace ClearDashboard.ParatextPlugin.Actions
+namespace ClearDashboard.WebApiParatextPlugin.Actions
 {
     public class ListType
     {

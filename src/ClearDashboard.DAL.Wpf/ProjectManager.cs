@@ -1,5 +1,4 @@
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.Context;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
@@ -9,14 +8,14 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
-using Pipes_Shared;
-using Pipes_Shared.Models;
 using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ParaTextPlugin.Data;
+using ParaTextPlugin.Data.Models;
 
 namespace ClearDashboard.DataAccessLayer.Wpf
 {

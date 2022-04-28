@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Pipes_Shared.Models
+﻿namespace ParaTextPlugin.Data.Models
 {
     // Inherits everything from VerseRefStart
     public class VerseRefEnd : VerseRefStart

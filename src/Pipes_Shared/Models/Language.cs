@@ -1,7 +1,7 @@
-﻿using MvvmHelpers;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using MvvmHelpers;
 
-namespace ClearDashboard.Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     public class SelectedLanguage : ObservableObject
     {

@@ -1,10 +1,10 @@
 using System.IO;
-using ClearDashboard.DataAccessLayer.Context;
 using Xunit;
 using Xunit.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.DAL.Tests
 {

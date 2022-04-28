@@ -5,7 +5,6 @@ using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +21,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ParaTextPlugin.Data;
 using Point = System.Windows.Point;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedMember.Local

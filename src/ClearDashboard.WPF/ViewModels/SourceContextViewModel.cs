@@ -5,13 +5,13 @@ using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ParaTextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

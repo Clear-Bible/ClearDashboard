@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     [Serializable]
     public struct Enum<T> : IComparable<Enum<T>> where T : class, IEnumType

@@ -1,14 +1,17 @@
 ﻿using Owin;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using MediatR;
 using Serilog;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Controllers;
+using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Mvc;
 using Microsoft.AspNet.SignalR;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Owin.Cors;
 using Paratext.PluginInterfaces;
 
@@ -20,16 +23,18 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IProject _project;
         private static IVerseRef _verseRef;
         private static MainWindow _mainWindow;
+        private static IWindowPluginHost _pluginHost;
 
         public IServiceProvider ServiceProvider { get; private set; }
 
         //public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
 
-        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow)
+        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IWindowPluginHost pluginHost)
         {
             _project = project;
             _verseRef = verseRef;
             _mainWindow = mainWindow;
+            _pluginHost = pluginHost;
         }
 
         // This code configures Web API. The Startup class is specified as a type
@@ -77,7 +82,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             var config = new HttpConfiguration();
             config.DependencyResolver = new DefaultDependencyResolver(ServiceProvider);
-            config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
+           // config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             config.Routes.MapHttpRoute(
@@ -98,9 +103,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             services.AddSingleton<MainWindow>(sp => _mainWindow);
             //services.AddSerilog();
+
+            services.AddMediatR(typeof(GetCurrentProjectCommandHandler));
             
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
+            services.AddSingleton<IWindowPluginHost>(sp =>_pluginHost);
            
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)

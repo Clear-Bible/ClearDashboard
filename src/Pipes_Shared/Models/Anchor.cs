@@ -1,7 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using MvvmHelpers;
+﻿using MvvmHelpers;
 
-namespace ClearDashboard.Pipes_Shared.Models
+namespace ParaTextPlugin.Data.Models
 {
     public class Anchor : ObservableObject
     {
