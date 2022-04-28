@@ -11,6 +11,7 @@ if exist "%ParatextInstallDir%\plugins\%ProjectName%"\ (
 xcopy "%TargetPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 xcopy "%TargetPath%\*.pdb" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 xcopy "%TargetPath%\Plugin.bmp" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
+xcopy "%TargetPath%\*.ico" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 
 rename "%ParatextInstallDir%\plugins\%ProjectName%\ClearDashboard.ParatextPlugin.dll" "ClearDashboard.ParatextPlugin.ptxplg"
 

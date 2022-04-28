@@ -12,12 +12,14 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClearDashboard.ParatextPlugin.Models;
+using ClearDashboard.ParatextPlugin.Properties;
 
 namespace ClearDashboardPlugin
 {
@@ -134,10 +136,6 @@ namespace ClearDashboardPlugin
             //{
             //    // TODO Do some alert now that ClearDashboard is NOT installed
             //}
-
-
-
-
 
 
             Load += OnLoad;
@@ -428,8 +426,25 @@ namespace ClearDashboardPlugin
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
+            var startupPath = Application.StartupPath;
+            string iconPath = Path.Combine(startupPath, @"plugins\ClearDashboardPlugin\icon.ico");
+            if (File.Exists(iconPath))
+            {
+                Icon icon = new Icon(iconPath);
+                try
+                {
+                    parent.Icon = icon;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            
             parent.ProjectChanged += ProjectChanged;
             parent.VerseRefChanged += VerseRefChanged;
+            parent.WindowClosing += Parent_WindowClosing;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -485,6 +500,11 @@ namespace ClearDashboardPlugin
                 m_verseRef = newReference;
                 GetCurrentVerseAsync().Forget();
             }
+        }
+
+        private void Parent_WindowClosing(IPluginChildWindow sender, System.ComponentModel.CancelEventArgs args)
+        {
+
         }
 
         #endregion Paratext overrides - standard functions
