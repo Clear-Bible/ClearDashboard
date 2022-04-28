@@ -13,6 +13,14 @@ namespace ClearDashboard.ParatextPlugin.Helpers
 {
     public class ParatextExtractUSFM
     {
+        /// <summary>
+        /// This method iterates over the tokenized USFM objects and pulls out only the chapter, verse, and
+        /// verse text data and saves each USFM book into the user's:
+        ///     \MyDocuments\ClearDashboard_Projects\DataFiles\{projectID} directory along with
+        /// the settings.xml and the custom versification files
+        /// </summary>
+        /// <param name="m_project"></param>
+        /// <param name="mainWindow"></param>
         public void ExportUSFMScripture(IProject m_project, MainWindow mainWindow)
         {
             string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -106,10 +114,10 @@ namespace ClearDashboard.ParatextPlugin.Helpers
             {
                 if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
                 {
-                    if (m_project.AvailableBooks[bookNum].Code == "PSA")
-                    {
-                        Console.WriteLine();
-                    }
+                    //if (m_project.AvailableBooks[bookNum].Code == "PSA")
+                    //{
+                    //    Console.WriteLine();
+                    //}
 
 
                     mainWindow.AppendText(MainWindow.MsgColor.Blue, $"Processing {m_project.AvailableBooks[bookNum].Code}");

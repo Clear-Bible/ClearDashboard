@@ -6,7 +6,6 @@ namespace ClearDashboard.ParatextPlugin
     static class cRTB
     {
         private delegate void AppendTextDelegate(string text, Color color, RichTextBox rtb);
-        private delegate void AppendTextFontSizeDelegate(string text, Color color, float iFontSize, RichTextBox rtb);
 
         /// <summary>
         /// Add in colored text to the RichTextBox
@@ -19,9 +18,6 @@ namespace ClearDashboard.ParatextPlugin
             if (rtb.InvokeRequired)
             {
                 rtb.Invoke(new AppendTextDelegate(AppendText), new object[] { text, color, rtb });
-
-                //AppendTextDelegate d = new AppendTextDelegate(AppendText);
-                //d(text, color);
             }
             else
             {
@@ -36,10 +32,7 @@ namespace ClearDashboard.ParatextPlugin
                 rtb.SelectionStart = rtb.Text.Length;
                 // scroll it automatically
                 rtb.ScrollToCaret();
-
             }
-
-
         }
 
     }

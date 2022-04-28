@@ -326,6 +326,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ICollectionView BiblicalTermsCollectionView { get; }
 
+
         private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
         public ObservableCollection<BiblicalTermsData> BiblicalTerms
         {
@@ -384,7 +385,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         private Visibility _progressBarVisibility = Visibility.Visible;
-
         public Visibility ProgressBarVisibility
         {
             get => _progressBarVisibility;
@@ -423,6 +423,7 @@ namespace ClearDashboard.Wpf.ViewModels
            
             // populate the combo box for semantic domains
             SetupSemanticDomains();
+            // select the first one
             DataRowView drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
             SelectedDomain = drv;
 
@@ -434,6 +435,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // populate the combo box for rendering filters
             SetupRenderingFilters();
+            // select the first one
             drv = RenderingsFilters.DefaultView[RenderingsFilters.Rows.IndexOf(RenderingsFilters.Rows[0])];
             RenderingFilter = drv;
 
@@ -454,17 +456,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 _fontSize = projectManager.ParatextProject.Language.Size;
                 IsRtl = projectManager.ParatextProject.Language.IsRtol;
             }
-        }
-
-
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            return base.OnInitializeAsync(cancellationToken);
-        }
-
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            return base.OnActivateAsync(cancellationToken);
         }
 
         /// <summary>
@@ -567,17 +558,21 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void ToggleCurrentVerse()
-        {
-            //refresh the biblical terms collection so the filter runs
-            BiblicalTermsCollectionView.Refresh();
-        }
-
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="NotImplementedException"></exception>
         private void ShowNotes(object obj)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// User has clicked on a verse link.  The VersePopUp window comes up with
+        /// all the various verse renderings
+        /// </summary>
+        /// <param name="obj"></param>
         private void VerseClick(object obj)
         {
             if (obj is null)
@@ -623,6 +618,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
         /// <summary>
         /// Turn on/off the progress bar asynchronously so the UI can render it
         /// </summary>
@@ -635,7 +631,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         /// <summary>
-        /// On BiblicalTerms Click - these are the bottom verse/verse references
+        /// On BiblicalTerms Click - these generate the bottom verse & verse references
         /// </summary>
         /// <param name="selectedBiblicalTermsData"></param>
         private void UpdateSelectedTerm(BiblicalTermsData selectedBiblicalTermsData)
@@ -735,40 +731,6 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         // Syntax error in the regular expression
                     }
-
-                    //// iterate through in while loop
-                    //int index = verseText.IndexOf(render, StringComparison.InvariantCultureIgnoreCase);
-                    //if (index == -1)
-                    //{
-                    //    verse.Inlines.Add(new Run(verseText));
-                    //    verse.Found = false;
-                    //}
-                    //else
-                    //{
-                    //    verse.Found = true;
-                    //    while (true)
-                    //    {
-                    //        verse.Inlines.AddRange(new Inline[]
-                    //        {
-                    //            new Run(verseText.Substring(0, index)),
-                    //            new Run(verseText.Substring(index, render.Length))
-                    //            {
-                    //                FontWeight = FontWeights.Bold,
-                    //                Foreground = Brushes.Orange
-                    //            }
-                    //        });
-
-                    //        verseText = verseText.Substring(index + render.Length);
-                    //        index = verseText.IndexOf(render, StringComparison.InvariantCultureIgnoreCase);
-
-                    //        if (index < 0)
-                    //        {
-                    //            verse.Inlines.Add(new Run(verseText));
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-
                 }
 
                 verseText = verse.VerseText;
@@ -823,14 +785,15 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         /// <summary>
-        /// This is the filter callback for the grid
+        /// This is the filter callback for the grid that runs through all the user's filtering
+        /// and updates the grid with only those things the user wants to see
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         private bool FilterGridItems(object obj)
         {
             // first check if the row is filtered by the book or not
-            bool isBcbFound = false;
+            bool isBcvFound = false;
             if (SelectedScope is { } rowView)
             {
                 var selectedScope = rowView[1].ToString();
@@ -854,7 +817,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                     if (book == ProjectManager.CurrentVerse.Substring(0, 2))
                                     {
                                         // found the book
-                                        isBcbFound = true;
+                                        isBcvFound = true;
                                         break;
                                     }
                                 }
@@ -867,7 +830,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                     if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
                                     {
                                         // found the chapter
-                                        isBcbFound = true;
+                                        isBcvFound = true;
                                         break;
                                     }
                                 }
@@ -879,7 +842,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                     if (term == ProjectManager.CurrentVerse)
                                     {
                                         // found the verse
-                                        isBcbFound = true;
+                                        isBcvFound = true;
                                         break;
                                     }
                                 }
@@ -887,7 +850,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     }
 
-                    if (!isBcbFound)
+                    if (!isBcvFound)
                     {
                         return false;
                     }
@@ -898,11 +861,6 @@ namespace ClearDashboard.Wpf.ViewModels
             bool bFoundSemanticDomain = false;
             if (obj is BiblicalTermsData bt)
             {
-                //if (! filters.ContainsKey(bt.SemanticDomain))
-                //{
-                //    filters.Add(bt.SemanticDomain, bt.SemanticDomain);
-                //    Debug.WriteLine($"SEMANTIC DOMAIN: {bt.SemanticDomain}");
-                //}
                 if (SelectedDomain is not null)
                 {
                     bFoundSemanticDomain = SelectedDomain[1].ToString() == "BtDomainsAll" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
@@ -962,6 +920,9 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
+        /// <summary>
+        /// populates the Scopes list for the view's combobox
+        /// </summary>
         private void SetupScopes()
         {
             _scope = new DataTable();
@@ -977,6 +938,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        /// <summary>
+        /// populates the rendering filters for the view's combobox
+        /// </summary>
         private void SetupRenderingFilters()
         {
             _renderingsFilters = new DataTable();
@@ -994,8 +958,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         /// <summary>
         /// Combo box for the domains
-        /// TODO once Paratext fixes their API, we need to collect this information from the ALL Biblical Terms
-        /// as right now, this information is null on ALL but filled in for Project
         /// </summary>
         private void SetupSemanticDomains()
         {

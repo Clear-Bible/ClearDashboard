@@ -12,12 +12,14 @@ namespace ClearDashboard.ParatextPlugin.Actions
 {
     public class BibilicalTerms
     {
-        private string _lastBookCode = "";
-        private int _lastChapterNum;
-        private List<string> _lastScript = new List<string>();
-
         public IBiblicalTermList BiblicalTermList { get; set; }
 
+        /// <summary>
+        /// Set the type of Biblical Terms we want (Project/All)
+        /// </summary>
+        /// <param name="listType"></param>
+        /// <param name="project"></param>
+        /// <param name="host"></param>
         public BibilicalTerms(ListType listType, IProject project, IWindowPluginHost host)
         {
             if (listType.isProject)
@@ -30,6 +32,12 @@ namespace ClearDashboard.ParatextPlugin.Actions
             }
         }
 
+
+        /// <summary>
+        /// Create a list of biblical terms for sending across the pipe
+        /// </summary>
+        /// <param name="m_project"></param>
+        /// <returns></returns>
         public List<BiblicalTermsData> ProcessBiblicalTerms(IProject m_project)
         {
             var biblicalTermList = this.BiblicalTermList.ToList();
@@ -68,12 +76,12 @@ namespace ClearDashboard.ParatextPlugin.Actions
                                     bterm.SemanticDomain = termProperty.GetValue(term, null).ToString();
                                 }
                                 break;
-                            case "CategoryIds":
-                                foreach (var t in (List<string>)termProperty.GetValue(term, null))
-                                {
-                                    //Debug.WriteLine("CategoryIds:" + t);
-                                }
-                                break;
+                            //case "CategoryIds":
+                            //    foreach (var t in (List<string>)termProperty.GetValue(term, null))
+                            //    {
+                            //        //Debug.WriteLine("CategoryIds:" + t);
+                            //    }
+                            //    break;
                             case "LocalGloss":
                                 try
                                 {
@@ -155,12 +163,17 @@ namespace ClearDashboard.ParatextPlugin.Actions
             return btList;
         }
 
+
+        /// <summary>
+        /// Retrieves the verse text from the specified BCV
+        /// </summary>
+        /// <param name="mProject"></param>
+        /// <param name="BookNum"></param>
+        /// <param name="ChapterNum"></param>
+        /// <param name="VerseNum"></param>
+        /// <returns></returns>
         private string LookupVerseText(IProject mProject, int BookNum, int ChapterNum, int VerseNum)
         {
-            _lastBookCode = "";
-            _lastChapterNum = 0;
-            _lastScript = new List<string>();
-
             IEnumerable<IUSFMToken> tokens = mProject.GetUSFMTokens(BookNum, ChapterNum);
             if (tokens is null)
             {
