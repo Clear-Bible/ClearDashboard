@@ -144,7 +144,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
       
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, ProjectManager projectManager) 
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             _translationSource = translationSource;

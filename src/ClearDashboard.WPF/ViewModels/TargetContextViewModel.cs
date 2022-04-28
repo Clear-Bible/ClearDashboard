@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer;
 using ParaTextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -192,7 +193,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public TargetContextViewModel(INavigationService navigationService, ILogger<TargetContextViewModel> logger, ProjectManager projectManager):base(navigationService, logger, projectManager)
+        public TargetContextViewModel(INavigationService navigationService, ILogger<TargetContextViewModel> logger, DashboardProjectManager projectManager):base(navigationService, logger, projectManager)
         {
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";
@@ -252,7 +253,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             _currentBook = newBook;
 
                             // send a message to get this book
-                            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetUSX, newBook);
+                            await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
 
                             _currentVerse = pipeMessage.Text;
                             CurrentBcv.SetVerseFromId(_currentVerse);

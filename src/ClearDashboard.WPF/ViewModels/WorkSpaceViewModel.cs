@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
 using ParaTextPlugin.Data;
 
 
@@ -179,7 +180,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public WorkSpaceViewModel(INavigationService navigationService, 
-            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             ProjectManager.NamedPipeChanged += HandleEventAsync;
@@ -282,7 +283,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Tools.Add(new TextCollectionViewModel());
 
 
-            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 

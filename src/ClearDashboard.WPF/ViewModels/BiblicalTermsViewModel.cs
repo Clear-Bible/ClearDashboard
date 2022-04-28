@@ -20,6 +20,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ParaTextPlugin.Data;
 using Point = System.Windows.Point;
@@ -407,7 +408,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, 
-            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager) 
+            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
          
@@ -485,7 +486,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         _currentVerse = pipeMessage.Text;
                         // ask for Biblical Terms
-                        await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject)
+                        await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject)
                             .ConfigureAwait(false);
                     }
                     else
@@ -612,11 +613,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
                 }
                 else
                 {
-                    await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
+                    await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
                 }
 
                 _lastSelectedBtEnum = _selectedBiblicalTermsType;

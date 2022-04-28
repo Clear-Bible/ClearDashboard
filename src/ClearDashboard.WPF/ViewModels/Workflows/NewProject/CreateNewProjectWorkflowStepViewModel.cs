@@ -137,7 +137,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
         }
 
         public CreateNewProjectWorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, 
-            ILogger<CreateNewProjectWorkflowStepViewModel> logger, ProjectManager projectManager) : base(eventAggregator, navigationService, logger, projectManager)
+            ILogger<CreateNewProjectWorkflowStepViewModel> logger, DashboardProjectManager projectManager) : base(eventAggregator, navigationService, logger, projectManager)
         {
            
         }

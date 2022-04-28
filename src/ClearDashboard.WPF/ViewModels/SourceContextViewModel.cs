@@ -84,7 +84,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public SourceContextViewModel(INavigationService navigationService, 
-            ILogger<SourceContextViewModel> logger, ProjectManager projectManager) 
+            ILogger<SourceContextViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             this.Title = "⬒ SOURCE CONTEXT";

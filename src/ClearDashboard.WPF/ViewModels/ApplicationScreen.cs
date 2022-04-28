@@ -13,7 +13,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         public ILogger Logger { get; private set; }
         public INavigationService NavigationService { get; private set; }
-        public ProjectManager ProjectManager { get; private set; }
+        public DashboardProjectManager ProjectManager { get; private set; }
 
         private bool isBusy_;
         public bool IsBusy
@@ -34,7 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public ApplicationScreen(INavigationService navigationService, ILogger logger, ProjectManager projectManager)
+        public ApplicationScreen(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager)
         {
             NavigationService = navigationService;
             Logger = logger;

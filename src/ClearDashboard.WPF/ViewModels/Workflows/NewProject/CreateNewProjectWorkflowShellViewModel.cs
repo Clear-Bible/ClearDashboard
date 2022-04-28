@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 {
     public class CreateNewProjectWorkflowShellViewModel : WorkflowShellViewModel
     {
-        public CreateNewProjectWorkflowShellViewModel(ProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
+        public CreateNewProjectWorkflowShellViewModel(DashboardProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
         {
            
         }

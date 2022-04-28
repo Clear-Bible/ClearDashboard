@@ -9,7 +9,7 @@ namespace ClearDashboard.Wpf.Interfaces
     {
         ILogger Logger { get; }
         INavigationService NavigationService { get;}
-        ProjectManager ProjectManager { get;  }
+        DashboardProjectManager ProjectManager { get;  }
 
         void HandleEventAsync(object sender, PipeEventArgs args);
         //void OnViewAttached(object view, object context);

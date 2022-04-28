@@ -18,7 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
         public List<WorkflowStepViewModel> Steps { get; set; }
         protected IEventAggregator EventAggregator { get; set; }
         protected INavigationService NavigationService { get; set; }
-        protected ProjectManager ProjectManager { get; set; }
+        protected DashboardProjectManager ProjectManager { get; set; }
 
 
         private FlowDirection _flowDirection = FlowDirection.LeftToRight;
@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             }
         }
 
-        protected WorkflowShellViewModel(ProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator)
+        protected WorkflowShellViewModel(DashboardProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             ProjectManager = projectManager;
             ServiceProvider = serviceProvider;

@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, ProjectManager projectManager):base(navigationService, logger, projectManager)
+        public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, DashboardProjectManager projectManager):base(navigationService, logger, projectManager)
         {
             this.Title = "⌂ START PAGE";
             this.ContentId = "{StartPage_ContentId}";

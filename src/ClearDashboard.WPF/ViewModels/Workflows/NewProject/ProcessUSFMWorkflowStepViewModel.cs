@@ -41,7 +41,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
             
         }
 
-        public ProcessUSFMWorkflowStepViewModel(IEventAggregator eventAggregator, ProjectManager projectManager, INavigationService navigationService, 
+        public ProcessUSFMWorkflowStepViewModel(IEventAggregator eventAggregator, DashboardProjectManager projectManager, INavigationService navigationService, 
             ILogger<LandingViewModel> logger) : base(eventAggregator, navigationService, logger, projectManager)
         {
             
