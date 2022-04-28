@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ParaTextPlugin.Data.Features;
 using ParaTextPlugin.Data.Features.Project;
+
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
     public class ProjectController : FeatureSliceController
