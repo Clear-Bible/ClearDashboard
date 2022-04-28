@@ -65,18 +65,18 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                         switch (termProperty.Name)
                         {
                             case "Id":
-                                biblicalTermsData.Id = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Id = termProperty.GetValue(term, null)?.ToString();
                                 break;
                             case "Lemma":
-                                biblicalTermsData.Lemma = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Lemma = termProperty.GetValue(term, null)?.ToString();
                                 break;
                             case "Transliteration":
-                                biblicalTermsData.Transliteration = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Transliteration = termProperty.GetValue(term, null)?.ToString();
                                 break;
                             case "SemanticDomain":
                                 if (termProperty.GetValue(term, null) != null)
                                 {
-                                    biblicalTermsData.SemanticDomain = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.SemanticDomain = termProperty.GetValue(term, null)?.ToString();
                                 }
                                 break;
                             case "CategoryIds":
@@ -88,7 +88,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                             case "LocalGloss":
                                 try
                                 {
-                                    biblicalTermsData.LocalGloss = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.LocalGloss = termProperty.GetValue(term, null)?.ToString();
                                 }
                                 catch (Exception e)
                                 {
@@ -96,12 +96,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                                 }
                                 break;
                             case "Gloss":
-                                biblicalTermsData.Gloss = termProperty.GetValue(term, null).ToString();
+                                biblicalTermsData.Gloss = termProperty.GetValue(term, null)?.ToString();
                                 break;
                             case "LinkString":
                                 if (termProperty.GetValue(term, null) != null)
                                 {
-                                    biblicalTermsData.LinkString = termProperty.GetValue(term, null).ToString();
+                                    biblicalTermsData.LinkString = termProperty.GetValue(term, null)?.ToString();
                                 }
                                 break;
                         }
