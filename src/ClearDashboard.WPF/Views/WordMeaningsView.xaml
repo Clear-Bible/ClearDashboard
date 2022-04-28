@@ -49,10 +49,10 @@
                                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
-                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -94,10 +94,10 @@
                                     Orientation="Horizontal">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
-                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
