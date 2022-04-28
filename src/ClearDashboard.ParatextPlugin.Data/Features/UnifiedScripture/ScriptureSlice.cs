@@ -5,12 +5,12 @@ using MediatR;
 
 namespace ParaTextPlugin.Data.Features.UnifiedScripture
 {
-    public record GetUsxCommand() : IRequest<QueryResult<string>>
+    public record GetUsxQuery() : IRequest<QueryResult<string>>
     {
 
     }
 
-    public record GetUsfmCommand() : IRequest<QueryResult<string>>
+    public record GetUsfmQuery() : IRequest<QueryResult<string>>
     {
 
     }
