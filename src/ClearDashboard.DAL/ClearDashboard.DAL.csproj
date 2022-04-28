@@ -517,7 +517,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
-    <ProjectReference Include="..\pipes_shared\ParaTextPlugin.Data.csproj" />
+    <ProjectReference Include="..\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
   </ItemGroup>
 
 

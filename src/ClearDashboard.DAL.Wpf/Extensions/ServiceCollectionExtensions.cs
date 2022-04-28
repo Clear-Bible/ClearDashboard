@@ -24,7 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 
             serviceCollection.AddMediatR(typeof(GetManuscriptVerseByIdQuery));
 
-            serviceCollection.AddSingleton<ProjectManager>();
+            serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddScoped<ParatextProxy>();
             serviceCollection.AddSingleton<NamedPipesClient>(sp =>
             {

@@ -1,3 +1,8 @@
+using System;
+using System.IO;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Events;
@@ -8,18 +13,13 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
-using System;
-using System.IO;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using ParaTextPlugin.Data;
 using ParaTextPlugin.Data.Models;
 
-namespace ClearDashboard.DataAccessLayer.Wpf
+namespace ClearDashboard.DataAccessLayer
 {
-    public class ProjectManager : IDisposable
+
+   public class ProjectManager : IDisposable
     {
         #region Properties
 
@@ -41,20 +41,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
 
       
 
-        public enum PipeAction
-        {
-            OnConnected,
-            OnDisconnected,
-            SendText,
-            GetBiblicalTermsAll,
-            GetBiblicalTermsProject,
-            GetSourceVerses,
-            GetTargetVerses,
-            GetNotes,
-            GetProject,
-            GetCurrentVerse,
-            GetUSX,
-        }
+        
         #endregion
 
         #region Events
@@ -261,7 +248,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
-        public FlowDirection CurrentLanguageFlowDirection { get; set; }
+       
 
         public DashboardProject CreateDashboardProject()
         {
