@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -220,7 +221,7 @@ namespace ClearDashboard.ParatextPlugin
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
                 base.BindToName(serializedType, out assemblyName, out typeName);
-                assemblyName = "Pipes_Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                assemblyName = "ClearDashboard.ParatextPlugin.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
             }
         }
 
@@ -574,6 +575,8 @@ namespace ClearDashboard.ParatextPlugin
         /// <returns></returns>
         private async Task GetBiblicalTermsProjectBackgroundAsync()
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 // ReSharper disable once InconsistentNaming
@@ -601,6 +604,12 @@ namespace ClearDashboard.ParatextPlugin
                 AppendText(Color.Red, ex.Message);
                 throw;
             }
+            finally
+            {
+                stopwatch.Stop();
+                AppendText(Color.Orange, $"ELAPSED TIME -> SetBiblicalTermsProject : {stopwatch.ElapsedMilliseconds} milliseconds");
+
+            }
           
         }
 
@@ -612,6 +621,7 @@ namespace ClearDashboard.ParatextPlugin
         {
             await Task.Run(async () =>
             {
+                //m_project.GetUSFM()
                 var usx = m_project.GetUSX(m_verseRef.BookNum);
                 if (usx != null)
                 {
