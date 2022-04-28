@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin", "ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj", "{49AB6A7B-F2D7-43AE-8435-3B31BD1E4068}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParaTextPlugin.Data", "pipes_shared\ParaTextPlugin.Data.csproj", "{B983629C-50EA-4571-ACF0-CCC25D8EF917}"
 EndProject
 Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "C:\Program Files\Paratext 9\Paratext.exe", "{B5332AFA-60E4-458A-AD0F-04F319177302}"
 	ProjectSection(DebuggerProjectSystem) = preProject
@@ -20,6 +18,8 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "C:\Program File
 		AttachLaunchAction = No
 		IORedirection = Auto
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin.Data", "ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj", "{0D68BF98-E098-4C9C-8719-A63244014A41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +37,18 @@ Global
 		{49AB6A7B-F2D7-43AE-8435-3B31BD1E4068}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49AB6A7B-F2D7-43AE-8435-3B31BD1E4068}.Release|x64.ActiveCfg = Release|Any CPU
 		{49AB6A7B-F2D7-43AE-8435-3B31BD1E4068}.Release|x64.Build.0 = Release|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Debug|x64.Build.0 = Debug|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Release|x64.ActiveCfg = Release|Any CPU
-		{B983629C-50EA-4571-ACF0-CCC25D8EF917}.Release|x64.Build.0 = Release|Any CPU
 		{B5332AFA-60E4-458A-AD0F-04F319177302}.Debug|Any CPU.ActiveCfg = Release|x64
 		{B5332AFA-60E4-458A-AD0F-04F319177302}.Debug|x64.ActiveCfg = Release|x64
 		{B5332AFA-60E4-458A-AD0F-04F319177302}.Release|Any CPU.ActiveCfg = Release|x64
 		{B5332AFA-60E4-458A-AD0F-04F319177302}.Release|x64.ActiveCfg = Release|x64
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Debug|x64.Build.0 = Debug|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Release|x64.ActiveCfg = Release|Any CPU
+		{0D68BF98-E098-4C9C-8719-A63244014A41}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
