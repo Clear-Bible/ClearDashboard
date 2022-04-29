@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
 using MediatR;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
@@ -24,10 +25,12 @@ namespace ClearDashboard.DataAccessLayer
         #region Properties
 
         private readonly ILogger _logger;
-        private readonly NamedPipesClient _namedPipesClient;
+        //private readonly NamedPipesClient _namedPipesClient;
         private readonly ParatextProxy _paratextProxy;
         private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
         private readonly IMediator _mediator;
+        private HubConnection _hubConnection;
+        private IHubProxy _hubProxy;
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
 
@@ -88,10 +91,31 @@ namespace ClearDashboard.DataAccessLayer
             _paratextProxy = paratextProxy;
             _logger.LogInformation("'ProjectManager' ctor called.");
 
-            _namedPipesClient = namedPipeClient;
-            _namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
+            //_namedPipesClient = namedPipeClient;
+            //_namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
 
             _mediator = mediator;
+
+        }
+
+        public async Task<HubConnection> ConfigureSignalRClient()
+        {
+            var hubConnection = new HubConnection("http://localhost:9000/signalr");
+
+          _hubProxy = hubConnection.CreateHubProxy("Plugin");
+
+          _hubProxy.On<string>("sendVerse", (verse) =>
+           {
+               CurrentVerse = verse;
+           });
+
+          _hubProxy.On<Project>("sendProject", (project) =>
+           {
+               ParatextProject = project;
+           });
+
+           await hubConnection.Start();
+           return hubConnection;
         }
 
         #endregion
@@ -101,46 +125,47 @@ namespace ClearDashboard.DataAccessLayer
         public void OnClosing()
         {
             IsPipeConnected = false;
-            _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
+            //_namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
+            //_namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
         }
 
         #endregion
 
         #region Methods
 
-        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
-        {
-            var pipeMessage = args.PipeMessage;
+        //private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
+        //{
+        //    var pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.OnConnected:
-                    IsPipeConnected = true;
-                    break;
-                case ActionType.OnDisconnected:
-                    IsPipeConnected= false;
-                    break;
-                case ActionType.SetProject:
-                {
-                    // intercept and keep a copy of the current project
-                    var payload = pipeMessage.Payload;
-                    ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
-                    break;
-                }
-                case ActionType.CurrentVerse:
-                    CurrentVerse = pipeMessage.Text;
-                    break;
-                default:
-                    // Nothing to do.
-                    break;
-            }
+        //    switch (pipeMessage.Action)
+        //    {
+        //        case ActionType.OnConnected:
+        //            IsPipeConnected = true;
+        //            break;
+        //        case ActionType.OnDisconnected:
+        //            IsPipeConnected= false;
+        //            break;
+        //        case ActionType.SetProject:
+        //        {
+        //            // intercept and keep a copy of the current project
+        //            var payload = pipeMessage.Payload;
+        //            ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
+        //            break;
+        //        }
+        //        case ActionType.CurrentVerse:
+        //            CurrentVerse = pipeMessage.Text;
+        //            break;
+        //        default:
+        //            // Nothing to do.
+        //            break;
+        //    }
             
-            RaisePipesChangedEvent(pipeMessage);
-        }
+        //    RaisePipesChangedEvent(pipeMessage);
+        //}
 
-        public void Initialize()
+        public async Task Initialize()
         {
+            _hubConnection = await ConfigureSignalRClient();
             GetParatextUserName();
             EnsureDashboardProjectDirectory();
         }
@@ -261,52 +286,52 @@ namespace ClearDashboard.DataAccessLayer
             return CurrentDashboardProject;
         }
 
-        public async Task SendPipeMessage(PipeAction action, string text = "")
-        {
-            var message = new PipeMessage();
-            switch (action)
-            {
-                case PipeAction.OnConnected:
-                    message.Action = ActionType.OnConnected;
-                    break;
-                case PipeAction.OnDisconnected:
-                    message.Action = ActionType.OnDisconnected;
-                    break;
-                case PipeAction.GetCurrentVerse:
-                    message.Action = ActionType.GetCurrentVerse;
-                    break;
-                case PipeAction.SendText:
-                    message.Action = ActionType.SendText;
-                    message.Text = text;
-                    break;
-                case PipeAction.GetBiblicalTermsAll:
-                    message.Action = ActionType.GetBibilicalTermsAll;
-                    break;
-                case PipeAction.GetBiblicalTermsProject:
-                    message.Action = ActionType.GetBibilicalTermsProject;
-                    break;
-                case PipeAction.GetSourceVerses:
-                    message.Action = ActionType.GetSourceVerses;
-                    break;
-                case PipeAction.GetTargetVerses:
-                    message.Action= ActionType.GetTargetVerses;
-                    break;
-                case PipeAction.GetNotes:
-                    message.Action = ActionType.GetNotes;
-                    break;
-                case PipeAction.GetProject:
-                    message.Action = ActionType.GetProject;
-                    break;
-                case PipeAction.GetUSX:
-                    message.Action = ActionType.GetUSX;
-                    message.Text = text;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
-            }
+        //public async Task SendPipeMessage(PipeAction action, string text = "")
+        //{
+        //    var message = new PipeMessage();
+        //    switch (action)
+        //    {
+        //        case PipeAction.OnConnected:
+        //            message.Action = ActionType.OnConnected;
+        //            break;
+        //        case PipeAction.OnDisconnected:
+        //            message.Action = ActionType.OnDisconnected;
+        //            break;
+        //        case PipeAction.GetCurrentVerse:
+        //            message.Action = ActionType.GetCurrentVerse;
+        //            break;
+        //        case PipeAction.SendText:
+        //            message.Action = ActionType.SendText;
+        //            message.Text = text;
+        //            break;
+        //        case PipeAction.GetBiblicalTermsAll:
+        //            message.Action = ActionType.GetBibilicalTermsAll;
+        //            break;
+        //        case PipeAction.GetBiblicalTermsProject:
+        //            message.Action = ActionType.GetBibilicalTermsProject;
+        //            break;
+        //        case PipeAction.GetSourceVerses:
+        //            message.Action = ActionType.GetSourceVerses;
+        //            break;
+        //        case PipeAction.GetTargetVerses:
+        //            message.Action= ActionType.GetTargetVerses;
+        //            break;
+        //        case PipeAction.GetNotes:
+        //            message.Action = ActionType.GetNotes;
+        //            break;
+        //        case PipeAction.GetProject:
+        //            message.Action = ActionType.GetProject;
+        //            break;
+        //        case PipeAction.GetUSX:
+        //            message.Action = ActionType.GetUSX;
+        //            message.Text = text;
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(action), action, null);
+        //    }
 
-            await _namedPipesClient.WriteAsync(message);
-        }
+        //    await _namedPipesClient.WriteAsync(message);
+        //}
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
@@ -327,8 +352,8 @@ namespace ClearDashboard.DataAccessLayer
         public void Dispose()
         {
             IsPipeConnected = false;
-            _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
+           // _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
+           // _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
         }
 
 
