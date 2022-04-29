@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static MainWindow _mainWindow;
         private static IWindowPluginHost _pluginHost;
 
-        public IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
 
         //public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
 
@@ -56,16 +56,16 @@ namespace ClearDashboard.WebApiParatextPlugin
                     });
                 });
 
-                // SignalRServiceResolver = new Microsoft.AspNet.SignalR.DefaultDependencyResolver();
+                //var signalRServiceResolver = new CustomSignalRDependencyResolver(ServiceProvider);
                 appBuilder.MapSignalR(new HubConfiguration()
                 {
 #if DEBUG
-                    EnableDetailedErrors = true,
-                    //  Resolver = SignalRServiceResolver
+                    EnableDetailedErrors = true, 
+                    //Resolver = signalRServiceResolver
 #endif
                 });
 
-                // GlobalHost.DependencyResolver = SignalRServiceResolver;
+                //GlobalHost.DependencyResolver = signalRServiceResolver;
 
                 var config = InitializeHttpConfiguration();
                 appBuilder.UseWebApi(config);
@@ -106,6 +106,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             services.AddMediatR(typeof(GetCurrentProjectCommandHandler));
             
+            
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
             services.AddSingleton<IWindowPluginHost>(sp =>_pluginHost);
@@ -131,6 +132,26 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             return services;
+        }
+    }
+
+    public class CustomSignalRDependencyResolver : Microsoft.AspNet.SignalR.DefaultDependencyResolver
+    {
+        private readonly IServiceProvider _serviceProvider;
+
+        public CustomSignalRDependencyResolver(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public override object GetService(Type serviceType)
+        {
+            return _serviceProvider.GetService(serviceType);
+        }
+
+        public override IEnumerable<object> GetServices(Type serviceType)
+        {
+            return _serviceProvider.GetServices(serviceType);
         }
     }
 }

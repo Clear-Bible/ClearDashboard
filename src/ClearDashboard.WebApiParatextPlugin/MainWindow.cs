@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using Microsoft.VisualStudio.Threading;
@@ -14,6 +15,9 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MediatR;
+using ParaTextPlugin.Data.Features.Project;
+using ParaTextPlugin.Data.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -28,6 +32,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
 
+        private IMediator _mediator;
+        private IHubContext _hubContext;
+
         private WebHostStartup WebHostStartup { get; set; }
 
         private IDisposable WebAppProxy { get; set; }
@@ -40,10 +47,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         private delegate void AppendMsgTextDelegate(Color color, string text);
         //private Form _parentForm;
 
-        
-
-
-       
         #endregion
 
         #region startup
@@ -76,8 +79,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         #endregion
-
-      
 
         private void HandleWindowDisposed(object sender, EventArgs e)
         {
@@ -120,6 +121,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
+            ConfigureSignalRHubContext().Forget();
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -127,6 +129,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
             
+            //if (truncatedName == "ParatextData.XmlSerializers")
+            //{
+            //    return null;
+            //}
             // Load the most up to date version
             var assembly = Assembly.Load(truncatedName);
             AppendText(Color.Red, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
@@ -134,6 +140,36 @@ namespace ClearDashboard.WebApiParatextPlugin
             return assembly;
         }
 
+
+        private async Task ConfigureSignalRHubContext()
+        {
+           _hubContext = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+            if (_hubContext == null)
+            {
+                AppendText(Color.Red, "HubContext is null");
+                return;
+            }
+
+            _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
+
+            {
+                var result = await _mediator.Send(new GetCurrentVerseCommand());
+                if (result.Success)
+                {
+                    AppendText(Color.Orange, $"Sending verse: {result.Data}");
+                    _hubContext.Clients.All.SendVerse(result.Data);
+                }
+            }
+
+            {
+                var result = await _mediator.Send(new GetCurrentProjectCommand());
+                if (result.Success)
+                {
+                    AppendText(Color.Orange, $"Sending project: {result.Data.ShortName}");
+                    _hubContext.Clients.All.SendProject(result.Data);
+                }
+            }
+        }
        
         private void StartWebHost()
         {
