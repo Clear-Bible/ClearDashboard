@@ -259,7 +259,14 @@
                         <Setter Property="BorderBrush" Value="{DynamicResource PurpleDarkBrush}" />
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                     </Style>
-
+                    <Style
+                        x:Key="GrayDarkButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="DarkGray" />
+                        <Setter Property="BorderBrush" Value="Gray" />
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Name="ClearLogo" Source="Assets/ClearLogo.xaml" />

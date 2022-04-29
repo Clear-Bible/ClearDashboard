@@ -74,46 +74,7 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
         {
             if (ViewModel != null)
             {
-
-                Debug.WriteLine(Id);
-                switch (Id)
-                {
-                    case "LayoutID":
-                        break;
-                    case "AlignmentToolID":
-                        ViewModel.WindowIDToLoad = "ALIGNMENTTOOL";
-                        break;
-                    case "BiblicalTermsID":
-                        ViewModel.WindowIDToLoad = "BIBLICALTERMS";
-                        break;
-                    case "ConcordanceToolID":
-                        ViewModel.WindowIDToLoad = "CONCORDANCETOOL";
-                        break;
-                    case "DashboardID":
-                        ViewModel.WindowIDToLoad = "DASHBOARD";
-                        break;
-                    case "NotesID":
-                        ViewModel.WindowIDToLoad = "NOTES";
-                        break;
-                    case "PINSID":
-                        ViewModel.WindowIDToLoad = "PINS";
-                        break;
-                    case "WordMeaningsID":
-                        ViewModel.WindowIDToLoad = "WORDMEANINGS";
-                        break;
-                    case "SourceContextID":
-                        ViewModel.WindowIDToLoad = "SOURCECONTEXT";
-                        break;
-                    case "StartPageID":
-                        ViewModel.WindowIDToLoad = "STARTPAGE";
-                        break;
-                    case "TargetContextID":
-                        ViewModel.WindowIDToLoad = "TARGETCONTEXT";
-                        break;
-                    case "TextCollectionID":
-                        ViewModel.WindowIDToLoad = "TEXTCOLLECTION";
-                        break;
-                }
+                ViewModel.WindowIDToLoad = Id;
             }
         }
     }

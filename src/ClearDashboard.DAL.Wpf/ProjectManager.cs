@@ -55,7 +55,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf
             GetProject,
             GetCurrentVerse,
             GetUSX,
-            SetCurrentVerse,
+            SetCurrentVerse
         }
         #endregion
 
