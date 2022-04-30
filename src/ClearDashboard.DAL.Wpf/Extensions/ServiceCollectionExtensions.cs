@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
