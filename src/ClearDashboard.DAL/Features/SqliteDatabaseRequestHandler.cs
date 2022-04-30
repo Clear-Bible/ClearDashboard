@@ -4,7 +4,7 @@ using ClearDashboard.DataAccessLayer.Sqlite;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Slices;
+namespace ClearDashboard.DataAccessLayer.Features;
 
 /// <summary>
 /// A base class used to query data from Sqlite databases - typically found in the "Resources" folder found in the directory of the executable.

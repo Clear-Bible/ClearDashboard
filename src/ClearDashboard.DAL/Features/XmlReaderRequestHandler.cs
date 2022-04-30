@@ -3,7 +3,7 @@ using System.Xml;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Slices;
+namespace ClearDashboard.DataAccessLayer.Features;
 
 public abstract class XmlReaderRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
     where TRequest : IRequest<TResponse>

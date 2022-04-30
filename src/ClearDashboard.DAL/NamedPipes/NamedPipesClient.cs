@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using ClearDashboard.ParatextPlugin.Data;
 using H.Pipes;
 using Microsoft.Extensions.Logging;
-using ParaTextPlugin.Data;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes
 {

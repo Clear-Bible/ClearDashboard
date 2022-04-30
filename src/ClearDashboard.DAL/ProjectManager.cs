@@ -9,42 +9,42 @@ using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using MediatR;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
-using ParaTextPlugin.Data;
-using ParaTextPlugin.Data.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
 
-   public class ProjectManager : IDisposable
+    public class ProjectManager : IDisposable
     {
         #region Properties
 
-        private readonly ILogger _logger;
+        protected ILogger Logger { get; private set; }
         //private readonly NamedPipesClient _namedPipesClient;
-        private readonly ParatextProxy _paratextProxy;
-        private readonly ProjectNameDbContextFactory _projectNameDbContextFactory;
-        private readonly IMediator _mediator;
-        private HubConnection _hubConnection;
-        private IHubProxy _hubProxy;
+        protected ParatextProxy ParatextProxy { get; private set; }
+        protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        protected IMediator Mediator { get; private set; }
+        protected HubConnection HubConnection { get; private set; }
+        protected IHubProxy HubProxy { get; private set; }
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new ();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new ();
+        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-        public Project ParatextProject { get; private set; }
+        public Project ParatextProject { get; protected set; }
 
         public bool ParatextVisible = false;
 
         public bool IsPipeConnected { get; set; }
 
-      
 
-        
+
+
         #endregion
 
         #region Events
@@ -86,40 +86,46 @@ namespace ClearDashboard.DataAccessLayer
 
         public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
         {
-            _logger = logger;
-            _projectNameDbContextFactory = projectNameDbContextFactory;
-            _paratextProxy = paratextProxy;
-            _logger.LogInformation("'ProjectManager' ctor called.");
+            Logger = logger;
+            ProjectNameDbContextFactory = projectNameDbContextFactory;
+            ParatextProxy = paratextProxy;
+            Logger.LogInformation("'ProjectManager' ctor called.");
 
             //_namedPipesClient = namedPipeClient;
             //_namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
 
-            _mediator = mediator;
+            Mediator = mediator;
 
         }
 
-        public async Task<HubConnection> ConfigureSignalRClient()
+        protected virtual async Task HookSignalREvents()
+        {
+            HubProxy.On<string>("sendVerse", (verse) =>
+            {
+                CurrentVerse = verse;
+            });
+
+            HubProxy.On<Project>("sendProject", (project) =>
+            {
+                ParatextProject = project;
+            });
+
+            await Task.CompletedTask;
+        }
+
+        protected async Task<HubConnection> ConfigureSignalRClient()
         {
             var hubConnection = new HubConnection("http://localhost:9000/signalr");
 
-          _hubProxy = hubConnection.CreateHubProxy("Plugin");
+            HubProxy = hubConnection.CreateHubProxy("Plugin");
 
-          _hubProxy.On<string>("sendVerse", (verse) =>
-           {
-               CurrentVerse = verse;
-           });
-
-          _hubProxy.On<Project>("sendProject", (project) =>
-           {
-               ParatextProject = project;
-           });
-
-           await hubConnection.Start();
-           return hubConnection;
+            await HookSignalREvents();
+            await hubConnection.Start();
+            return hubConnection;
         }
 
         #endregion
-          
+
         #region Shutdown
 
         public void OnClosing()
@@ -159,13 +165,13 @@ namespace ClearDashboard.DataAccessLayer
         //            // Nothing to do.
         //            break;
         //    }
-            
+
         //    RaisePipesChangedEvent(pipeMessage);
         //}
 
         public async Task Initialize()
         {
-            _hubConnection = await ConfigureSignalRClient();
+            HubConnection = await ConfigureSignalRClient();
             GetParatextUserName();
             EnsureDashboardProjectDirectory();
         }
@@ -181,7 +187,7 @@ namespace ClearDashboard.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex,
+                    Logger.LogError(ex,
                         $"An unexpected error occurred while creating '{FilePathTemplates.ProjectBaseDirectory}");
                 }
             }
@@ -220,14 +226,14 @@ namespace ClearDashboard.DataAccessLayer
         public async Task SetupParatext()
         {
             // detect if Paratext is installed
-           
-            ParatextVisible = _paratextProxy.IsParatextInstalled();
+
+            ParatextVisible = ParatextProxy.IsParatextInstalled();
 
             if (ParatextVisible)
             {
                 // get all the Paratext Projects (Projects/Backtranslations)
                 ParatextProjects.Clear();
-                var projects = await _paratextProxy.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
+                var projects = await ParatextProxy.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -238,12 +244,12 @@ namespace ClearDashboard.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unexpected error while initializing");
+                    Logger.LogError(ex, "Unexpected error while initializing");
                 }
 
                 // get all the Paratext Resources (LWC)
                 ParatextResources.Clear();
-                var resources = _paratextProxy.GetParatextResources();
+                var resources = ParatextProxy.GetParatextResources();
                 try
                 {
                     TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
@@ -254,7 +260,7 @@ namespace ClearDashboard.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unexpected error while initializing");
+                    Logger.LogError(ex, "Unexpected error while initializing");
                 }
             }
         }
@@ -264,7 +270,7 @@ namespace ClearDashboard.DataAccessLayer
             // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
             // the Paratext API
-            var user = _paratextProxy.GetCurrentParatextUser();
+            var user = ParatextProxy.GetCurrentParatextUser();
 
             ParatextUserName = user;
 
@@ -273,7 +279,7 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
-       
+
 
         public DashboardProject CreateDashboardProject()
         {
@@ -335,7 +341,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
-            var projectAssets = await _projectNameDbContextFactory.Get(dashboardProject.ProjectName);
+            var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
             // Populate ProjectInfo table
             // Identify relationships
             //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
@@ -352,8 +358,8 @@ namespace ClearDashboard.DataAccessLayer
         public void Dispose()
         {
             IsPipeConnected = false;
-           // _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-           // _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
+            // _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
+            // _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
         }
 
 
@@ -363,7 +369,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            return _mediator.Send(request, cancellationToken);
+            return Mediator.Send(request, cancellationToken);
         }
         #endregion
 

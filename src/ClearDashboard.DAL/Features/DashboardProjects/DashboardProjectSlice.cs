@@ -1,14 +1,15 @@
-﻿using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.Data;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Common.Models;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Slices.DashboardProjects
+namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {
     public record GetDashboardProjectsCommand : IRequest<QueryResult<ObservableCollection<DashboardProject>>>;
 

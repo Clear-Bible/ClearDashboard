@@ -1,5 +1,5 @@
 ﻿using System;
-using ParaTextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.DataAccessLayer.NamedPipes;
 

@@ -7,11 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClearDashboard.Common.Models;
+using ClearDashboard.DAL.CQRS;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Unidecode.NET;
 
-namespace ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests
+namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
  
         public record GetWhatIsThisWordByBcvQuery(BookChapterVerse bcv, string languageCode) : IRequest<QueryResult<List<MarbleResource>>>;

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
+using ClearDashboard.DAL.CQRS;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses
+namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
 {
     public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<QueryResult<List<CoupleOfStrings>>>;
 

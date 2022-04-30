@@ -1,19 +1,19 @@
-﻿                                                                             using System;
+﻿using System;
 using System.Collections.Generic;
-                                                                             using System.Data.Entity.Core.Metadata.Edm;
-                                                                             using System.IO;
-                                                                             using System.Text.Json;
-                                                                             using System.Threading.Tasks;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.NamedPipes;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data;
-using ParaTextPlugin.Data.Models;
-using BiblicalTermsData = ClearDashboard.Common.Models.BiblicalTermsData;
+//using BiblicalTermsData = ClearDashboard.Common.Models.BiblicalTermsData;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
