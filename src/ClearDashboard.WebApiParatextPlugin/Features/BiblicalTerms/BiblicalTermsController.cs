@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.BiblicalTerms;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Models;
+
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
 {

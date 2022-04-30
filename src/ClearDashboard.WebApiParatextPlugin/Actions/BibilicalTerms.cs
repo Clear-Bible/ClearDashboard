@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.WebApiParatextPlugin.Models;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data.Models;
 
 namespace ClearDashboard.WebApiParatextPlugin.Actions
 {

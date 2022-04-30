@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ParaTextPlugin.Data.Features;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features
 {

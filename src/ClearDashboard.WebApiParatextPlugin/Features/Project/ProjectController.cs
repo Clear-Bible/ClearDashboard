@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.Project;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
@@ -16,9 +16,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         }
 
         [HttpPost]
-        public async Task<QueryResult<ParaTextPlugin.Data.Models.Project>> GetAsync([FromBody]GetCurrentProjectCommand command)
+        public async Task<QueryResult<ParatextPlugin.Data.Models.Project>> GetAsync([FromBody]GetCurrentProjectCommand command)
         {
-            return await ExecuteCommandAsync<QueryResult<ParaTextPlugin.Data.Models.Project>, ParaTextPlugin.Data.Models.Project>(command, CancellationToken.None);
+            return await ExecuteCommandAsync<QueryResult<ParatextPlugin.Data.Models.Project>, ParatextPlugin.Data.Models.Project>(command, CancellationToken.None);
 
         }
 

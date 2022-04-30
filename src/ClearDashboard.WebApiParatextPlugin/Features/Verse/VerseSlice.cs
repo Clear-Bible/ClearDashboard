@@ -3,13 +3,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.Verse;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
 {

@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Features.Verse;
-using ParaTextPlugin.Data.Models;
 using System.Threading.Tasks;
+using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.Data.Features.Verse;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs

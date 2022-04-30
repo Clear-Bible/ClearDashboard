@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.UnifiedScripture;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.UnifiedScripture;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 {

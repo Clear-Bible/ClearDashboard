@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.WebApiParatextPlugin.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.BiblicalTerms;
-using ParaTextPlugin.Data.Models;
+
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
 {

@@ -15,9 +15,9 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.Data.Features.Verse;
 using MediatR;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {

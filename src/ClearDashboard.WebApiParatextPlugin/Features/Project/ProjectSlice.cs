@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Models;
+
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
-    public class GetCurrentProjectCommandHandler : IRequestHandler<GetCurrentProjectCommand, QueryResult<ParaTextPlugin.Data.Models.Project>>
+    public class GetCurrentProjectCommandHandler : IRequestHandler<GetCurrentProjectCommand, QueryResult<ParatextPlugin.Data.Models.Project>>
     {
         private readonly IProject _project;
         private readonly ILogger<GetCurrentProjectCommandHandler> _logger;
@@ -22,10 +23,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             _project = project;
             _logger = logger;
         }
-        public Task<QueryResult<ParaTextPlugin.Data.Models.Project>> Handle(GetCurrentProjectCommand request, CancellationToken cancellationToken)
+        public Task<QueryResult<ParatextPlugin.Data.Models.Project>> Handle(GetCurrentProjectCommand request, CancellationToken cancellationToken)
         {
             var project = BuildProject();
-            var result = new QueryResult<ParaTextPlugin.Data.Models.Project>(project);
+            var result = new QueryResult<ParatextPlugin.Data.Models.Project>(project);
             return Task.FromResult(result);
         }
 
@@ -34,9 +35,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         /// of what is available in the m_project object
         /// </summary>
         /// <returns></returns>
-        private ParaTextPlugin.Data.Models.Project BuildProject()
+        private ParatextPlugin.Data.Models.Project BuildProject()
         {
-            var project = new ParaTextPlugin.Data.Models.Project
+            var project = new ParatextPlugin.Data.Models.Project
             {
                 Id = _project.ID,
                 LanguageName = _project.LanguageName,
@@ -68,10 +69,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             switch (_project.Type)
             {
                 case Paratext.PluginInterfaces.ProjectType.Standard:
-                    project.Type = ParaTextPlugin.Data.Models.Project.ProjectType.Standard;
+                    project.Type = ParatextPlugin.Data.Models.Project.ProjectType.Standard;
                     break;
                 default:
-                    project.Type = ParaTextPlugin.Data.Models.Project.ProjectType.NotSelected;
+                    project.Type = ParatextPlugin.Data.Models.Project.ProjectType.NotSelected;
                     break;
             }
 
