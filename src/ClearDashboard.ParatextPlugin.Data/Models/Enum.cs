@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace ParaTextPlugin.Data.Models
+namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     [Serializable]
     public struct Enum<T> : IComparable<Enum<T>> where T : class, IEnumType

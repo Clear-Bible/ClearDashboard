@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParaTextPlugin.Data
+namespace ClearDashboard.ParatextPlugin.Data
 {
     [Serializable]
     public class PipeMessage 

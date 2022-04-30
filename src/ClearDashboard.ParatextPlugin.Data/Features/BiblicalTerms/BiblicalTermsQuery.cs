@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using MediatR;
-using ParaTextPlugin.Data.Models;
 
-
-
-namespace ParaTextPlugin.Data.Features.BiblicalTerms
+namespace ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms
 {
     public enum BiblicalTermsType
     {

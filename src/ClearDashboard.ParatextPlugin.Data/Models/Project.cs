@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ParaTextPlugin.Data.Models
+namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     public class Project : BindableBase
     {

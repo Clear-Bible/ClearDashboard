@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ClearDashboard.DAL.CQRS;
 using MediatR;
 
-namespace ParaTextPlugin.Data.Features.UnifiedScripture
+namespace ClearDashboard.ParatextPlugin.Data.Features.UnifiedScripture
 {
     public record GetUsxQuery() : IRequest<QueryResult<string>>
     {

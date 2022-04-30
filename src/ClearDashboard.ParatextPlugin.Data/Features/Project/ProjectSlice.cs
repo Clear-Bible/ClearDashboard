@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using ClearDashboard.DAL.CQRS;
+using MediatR;
 
-namespace ParaTextPlugin.Data.Features.Project
+namespace ClearDashboard.ParatextPlugin.Data.Features.Project
 {
     public record GetCurrentProjectCommand() : IRequest<QueryResult<Models.Project>>;
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MvvmHelpers;
 
-namespace ParaTextPlugin.Data.Models
+namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     internal class NotesObject : ObservableObject
     {

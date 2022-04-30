@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using MvvmHelpers;
 
-namespace ParaTextPlugin.Data.Models
+namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     public class SelectedLanguage : ObservableObject
     {

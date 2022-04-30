@@ -1,4 +1,4 @@
-﻿namespace ParaTextPlugin.Data.Models
+﻿namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     public class ScrLanguageWrapper : BindableBase
     {

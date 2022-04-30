@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using ClearDashboard.DAL.CQRS;
+using MediatR;
 
-namespace ParaTextPlugin.Data.Features.Verse
+namespace ClearDashboard.ParatextPlugin.Data.Features.Verse
 {
     public record GetCurrentVerseCommand() : IRequest<QueryResult<string>>;
 }

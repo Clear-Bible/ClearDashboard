@@ -1,6 +1,6 @@
 ﻿using MvvmHelpers;
 
-namespace ParaTextPlugin.Data.Models
+namespace ClearDashboard.ParatextPlugin.Data.Models
 {
     public class AssignedUser : ObservableObject
     {

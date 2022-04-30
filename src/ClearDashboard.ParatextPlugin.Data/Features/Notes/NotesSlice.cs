@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Models;
+using MediatR;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data.Models;
-using System.Collections.Generic;
 
-namespace ParaTextPlugin.Data.Features.Notes
+namespace ClearDashboard.ParatextPlugin.Data.Features.Notes
 {
     public record GetNotesQuery(GetNotesData Data) : IRequest<QueryResult<IReadOnlyList<IProjectNote>>>
     {
