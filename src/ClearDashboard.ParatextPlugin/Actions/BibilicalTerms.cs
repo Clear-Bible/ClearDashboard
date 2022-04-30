@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.ParatextPlugin.Models;
-using ParaTextPlugin.Data.Models;
 
 namespace ClearDashboard.ParatextPlugin.Actions
 {

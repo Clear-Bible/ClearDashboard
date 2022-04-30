@@ -8,14 +8,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClearDashboard.ParatextPlugin.Actions;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.ParatextPlugin.Extensions;
 using ClearDashboard.ParatextPlugin.Helpers;
 using H.Formatters;
 using H.Pipes;
 using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
-using ParaTextPlugin.Data;
-using ParaTextPlugin.Data.Models;
 using Serilog;
 
 namespace ClearDashboard.ParatextPlugin
