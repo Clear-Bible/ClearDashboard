@@ -15,7 +15,8 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using ClearDashboard.DataAccessLayer;
-using ParaTextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.Wpf.Models;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -23,7 +24,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class WorkSpaceViewModel : ApplicationScreen
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive//ApplicationScreen
     {
         #region Member Variables
 
@@ -79,7 +80,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-       
+        private bool _gridIsVisible = true;
+        public bool GridIsVisible
+        {
+            get => _gridIsVisible;
+            set
+            {
+                _gridIsVisible = value;
+                Set(ref _gridIsVisible, value);
+                //NotifyOfPropertyChange(() => GridIsVisible);
+            }
+        }
 
         private string _verseRef;
         public string VerseRef
@@ -121,16 +132,16 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
-        public ObservableCollection<ToolViewModel> Tools
-        {
-            get => _tools;
-            set
-            {
-                _tools = value;
-                NotifyOfPropertyChange(() => Tools);
-            }
-        }
+        //ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
+        //public ObservableCollection<ToolViewModel> Tools
+        //{
+        //    get => _tools;
+        //    set
+        //    {
+        //        _tools = value;
+        //        NotifyOfPropertyChange(() => Tools);
+        //    }
+        //}
 
 
         ObservableCollection<PaneViewModel> _files = new ObservableCollection<PaneViewModel>();
@@ -167,6 +178,29 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private LayoutFile _SelectedLayout;
+        public LayoutFile SelectedLayout
+        {
+            get => _SelectedLayout;
+            set
+            {
+                _SelectedLayout = value;
+                NotifyOfPropertyChange(nameof(SelectedLayout));
+            }
+        }
+
+        private string _selectedLayoutText;
+
+        public string SelectedLayoutText
+        {
+            get => _selectedLayoutText;
+            set
+            {
+                _selectedLayoutText = value;
+                NotifyOfPropertyChange(() => SelectedLayoutText);
+            }
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -179,11 +213,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
+        private DashboardProjectManager ProjectManager { get; set; }
+        private ILogger<WorkSpaceViewModel> Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
+
         public WorkSpaceViewModel(INavigationService navigationService, 
             ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
-            : base(navigationService, logger, projectManager)
+            
         {
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
+            ProjectManager = projectManager;
+            Logger = logger;  
+            NavigationService = navigationService;
+
+            //ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
             
@@ -272,18 +314,30 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // add in the tool panes
-            _tools.Clear();
-            _tools.Add(IoC.Get<BiblicalTermsViewModel>());
-            _tools.Add(IoC.Get<WordMeaningsViewModel>());
-            _tools.Add(IoC.Get<SourceContextViewModel>());
-            _tools.Add(IoC.Get<TargetContextViewModel>());
-            _tools.Add(IoC.Get<NotesViewModel>());
-            _tools.Add(IoC.Get<PinsViewModel>());
-            // trigger property changed event
-            Tools.Add(new TextCollectionViewModel());
+            //_tools.Clear();
+            //_tools.Add(IoC.Get<BiblicalTermsViewModel>());
+            //_tools.Add(IoC.Get<WordMeaningsViewModel>());
+            //_tools.Add(IoC.Get<SourceContextViewModel>());
+            //_tools.Add(IoC.Get<TargetContextViewModel>());
+            //_tools.Add(IoC.Get<NotesViewModel>());
+            //_tools.Add(IoC.Get<PinsViewModel>());
+            //// trigger property changed event
+            //Tools.Add(new TextCollectionViewModel());
+
+            Items.Clear();
+
+            await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
+            await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
+            await ActivateItemAsync(IoC.Get<SourceContextViewModel>());
+            await ActivateItemAsync(IoC.Get<TargetContextViewModel>());
+            await ActivateItemAsync(IoC.Get<NotesViewModel>());
+            await ActivateItemAsync(IoC.Get<PinsViewModel>());
+            await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
 
 
-            await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
+
+
+            //await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
         }
 
@@ -293,15 +347,34 @@ namespace ClearDashboard.Wpf.ViewModels
             Init();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    ProjectManager.NamedPipeChanged -= HandleEventAsync;
+        //    base.Dispose(disposing);
+        //}
 
         #endregion //Constructor
 
         #region Methods
+
+        public void OkSave()
+        {
+            // todo
+            if (SelectedLayout is not null)
+            {
+                Debug.WriteLine(SelectedLayout.LayoutPath);
+            }
+            else
+            {
+                Debug.WriteLine(SelectedLayoutText);
+            }
+            GridIsVisible = false;
+        }
+
+        public void CancelSave()
+        {
+            GridIsVisible = false;
+        }
 
         private void WorkSpaceViewModel_ThemeChanged()
         {

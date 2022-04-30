@@ -2,7 +2,6 @@
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,8 +9,9 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ParaTextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

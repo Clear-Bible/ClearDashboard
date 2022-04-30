@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ParaTextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -160,7 +160,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            ProjectManager.Initialize();
+            await ProjectManager.Initialize();
             await base.OnActivateAsync(cancellationToken);
         }
 

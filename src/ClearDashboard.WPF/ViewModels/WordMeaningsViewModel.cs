@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -14,7 +13,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using ParaTextPlugin.Data;
+using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.ParatextPlugin.Data;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
