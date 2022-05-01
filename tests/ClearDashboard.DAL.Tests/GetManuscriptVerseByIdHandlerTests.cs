@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
+using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

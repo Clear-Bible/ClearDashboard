@@ -4,10 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.BiblicalTerms;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Models;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using Xunit;
 using Xunit.Abstractions;
 

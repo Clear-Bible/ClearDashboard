@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.Project;
-using ParaTextPlugin.Data.Models;
 using Xunit;
 using Xunit.Abstractions;
 

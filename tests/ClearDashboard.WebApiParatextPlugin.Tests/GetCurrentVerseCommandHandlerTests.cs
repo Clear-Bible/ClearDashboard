@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using ParaTextPlugin.Data.Features;
-using ParaTextPlugin.Data.Features.Verse;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.ParatextPlugin.Data.Features.Verse;
 using Xunit;
 using Xunit.Abstractions;
 
