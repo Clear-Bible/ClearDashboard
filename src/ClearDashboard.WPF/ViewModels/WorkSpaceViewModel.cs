@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -203,51 +204,62 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _windowIdToLoad;
             set
             {
-                switch (value)
+                if (value.StartsWith("Layout:"))
                 {
-                    case "LayoutID":
-                        break;
-                    case "AlignmentToolID":
-                        _windowIdToLoad = "ALIGNMENTTOOL";
-                        break;
-                    case "BiblicalTermsID":
-                        _windowIdToLoad = "BIBLICALTERMS";
-                        break;
-                    case "ConcordanceToolID":
-                        _windowIdToLoad = "CONCORDANCETOOL";
-                        break;
-                    case "DashboardID":
-                        _windowIdToLoad = "DASHBOARD";
-                        break;
-                    case "NotesID":
-                        _windowIdToLoad = "NOTES";
-                        break;
-                    case "PINSID":
-                        _windowIdToLoad = "PINS";
-                        break;
-                    case "WordMeaningsID":
-                        _windowIdToLoad = "WORDMEANINGS";
-                        break;
-                    case "SourceContextID":
-                        _windowIdToLoad = "SOURCECONTEXT";
-                        break;
-                    case "StartPageID":
-                        _windowIdToLoad = "STARTPAGE";
-                        break;
-                    case "TargetContextID":
-                        _windowIdToLoad = "TARGETCONTEXT";
-                        break;
-                    case "TextCollectionID":
-                        _windowIdToLoad = "TEXTCOLLECTION";
-                        break;
-                    case "SaveID":
-                        GridIsVisible = true;
-                        break;
-                    default:
-                        _windowIdToLoad = value;
-                        break;
+                    LoadLayoutByID(value);
+                }
+                else
+                {
+                    switch (value)
+                    {
+                        case "LayoutID":
+                            break;
+                        case "AlignmentToolID":
+                            _windowIdToLoad = "ALIGNMENTTOOL";
+                            break;
+                        case "BiblicalTermsID":
+                            _windowIdToLoad = "BIBLICALTERMS";
+                            break;
+                        case "ConcordanceToolID":
+                            _windowIdToLoad = "CONCORDANCETOOL";
+                            break;
+                        case "DashboardID":
+                            _windowIdToLoad = "DASHBOARD";
+                            break;
+                        case "NotesID":
+                            _windowIdToLoad = "NOTES";
+                            break;
+                        case "PINSID":
+                            _windowIdToLoad = "PINS";
+                            break;
+                        case "WordMeaningsID":
+                            _windowIdToLoad = "WORDMEANINGS";
+                            break;
+                        case "SourceContextID":
+                            _windowIdToLoad = "SOURCECONTEXT";
+                            break;
+                        case "StartPageID":
+                            _windowIdToLoad = "STARTPAGE";
+                            break;
+                        case "TargetContextID":
+                            _windowIdToLoad = "TARGETCONTEXT";
+                            break;
+                        case "TextCollectionID":
+                            _windowIdToLoad = "TEXTCOLLECTION";
+                            break;
+                        case "SaveID":
+                            GridIsVisible = true;
+                            break;
+                        case "LoadID":
+
+                            break;
+                        default:
+                            _windowIdToLoad = value;
+                            break;
+                    }
                 }
 
+                
                 NotifyOfPropertyChange(() => WindowIDToLoad);
                 OnPropertyChanged("WindowIDToLoad");
             }
@@ -386,21 +398,21 @@ namespace ClearDashboard.Wpf.ViewModels
             FileLayouts = GetFileLayouts();
             ObservableCollection<MenuItemViewModel> layouts = new ();
 
+
             // add in the standard menu items
-            layouts.Add(new MenuItemViewModel { Header = "Save Current Layout", Id = "SaveID", ViewModel = this, });
-            layouts.Add(new MenuItemViewModel { Header = "Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
+            layouts.Add(new MenuItemViewModel { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon=null });
+            layouts.Add(new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
             layouts.Add(new MenuItemViewModel { Header = "_________________________", Id = "SeparatorID", ViewModel = this, });
 
             foreach (var fileLayout in FileLayouts)
             {
                 layouts.Add(new MenuItemViewModel
                 {
-                    Header = fileLayout.LayoutName,
+                    Header = "🝆 " + fileLayout.LayoutName,
                     Id = fileLayout.LayoutID,
                     ViewModel = this,
                 });
             }
-
 
             // initiate the menu system
             MenuItems.Clear();
@@ -416,17 +428,18 @@ namespace ClearDashboard.Wpf.ViewModels
                     Header = "Windows", Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this,},
+                        new MenuItemViewModel { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
                     }
                 },
                 new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
@@ -525,6 +538,22 @@ namespace ClearDashboard.Wpf.ViewModels
             GridIsVisible = false;
         }
 
+        private void LoadLayoutByID(string layoutId)
+        {
+            var file = FileLayouts.Where(f => f.LayoutID == layoutId);
+
+            if (file is null)
+            {
+                return;
+            }
+
+            // remove all existing windows
+            _dockingManager.AnchorablesSource = null;
+            _dockingManager.DocumentsSource = null;
+            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+            LoadLayout(layoutSerializer);
+
+        }
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
@@ -542,7 +571,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public void LoadLayout(XmlLayoutSerializer layoutSerializer)
+        public void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
         {
             // Here I've implemented the LayoutSerializationCallback just to show
             //  a way to feed layout deserialization with content loaded at runtime
@@ -595,7 +624,23 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                 }
             };
-            layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
+            try
+            {
+                layoutSerializer.Deserialize(filePath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
+            finally
+            {
+                filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
+                if (! File.Exists(filePath))
+                {
+                    layoutSerializer.Deserialize(filePath);
+                }
+            }
+
         }
 
         public (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
@@ -872,6 +917,12 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
+        public void SetLayoutSaveName(string cboNamesText)
+        {
+            // todo
+            Console.WriteLine();
+        }
+
         public override event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
@@ -880,12 +931,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion // Methods
-
-        public void SetLayoutSaveName(string cboNamesText)
-        {
-            // todo
-            Console.WriteLine();
-        }
     }
 
     public class WorkspaceLayoutNames

@@ -60,11 +60,11 @@
             <ComboBox
                 x:Name="cboNames"
                 Grid.Row="1"
+                DisplayMemberPath="LayoutName"
                 IsEditable="True"
                 ItemsSource="{Binding Path=FileLayouts}"
-                DisplayMemberPath="LayoutName"
-                Text="{Binding SelectedLayoutText, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Path=SelectedLayout, Mode=OneWayToSource}"/>
+                SelectedItem="{Binding Path=SelectedLayout, Mode=OneWayToSource}"
+                Text="{Binding SelectedLayoutText, UpdateSourceTrigger=PropertyChanged}" />
             <DockPanel Grid.Row="2">
                 <Button
                     x:Name="OkSave"
@@ -93,7 +93,12 @@
             </DockPanel>
         </Grid>
 
-        <Button x:Name="FlipVisibility" Margin="-500 0 0 0" Width="80">Flip</Button>
+        <Button
+            x:Name="FlipVisibility"
+            Width="80"
+            Margin="-500,0,0,0">
+            Flip
+        </Button>
 
         <StackPanel Grid.Row="1" AllowDrop="True">
             <ListView

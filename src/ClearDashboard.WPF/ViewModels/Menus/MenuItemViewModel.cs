@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Input;
 using Caliburn.Micro;
 
@@ -18,7 +19,7 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
 
         public WorkSpaceViewModel ViewModel
         {
-            get { return _workSpaceViewModel; }
+            get => _workSpaceViewModel;
             set { _workSpaceViewModel = value; }
         }
 
@@ -32,6 +33,29 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
             {
                 _isChecked = value;
                 NotifyOfPropertyChange(() => IsChecked);
+            }
+        }
+
+
+        private Icon _icon;
+        public Icon Icon
+        {
+            get => _icon; 
+            set
+            {
+                _icon = value; 
+                NotifyOfPropertyChange(() => Icon);
+            }
+        }
+
+        private string _iconSource;
+        public string IconSource
+        {
+            get => _iconSource;
+            set
+            {
+                _iconSource = value;
+                NotifyOfPropertyChange(() => IconSource);
             }
         }
 
