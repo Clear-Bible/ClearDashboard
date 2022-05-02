@@ -61,34 +61,34 @@
                 <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
-            <StackPanel Orientation="Horizontal" Grid.Column="1">
-            <WrapPanel>
-                <Menu VerticalAlignment="Center">
-                    <MenuItem Header="Layout">
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Load"
-                            Icon=""
-                            Tag="Load" />
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Save"
-                            Icon=""
-                            Tag="Save" />
-                    </MenuItem>
-                </Menu>
-                <Menu VerticalAlignment="Center">
-                    <MenuItem Header="Windows">
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Biblical Terms"
-                            Icon=""
-                            Tag="BiblicalTerms" />
-                    </MenuItem>
-                </Menu>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <WrapPanel>
+                    <Menu VerticalAlignment="Center">
+                        <MenuItem Header="Layout">
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Load"
+                                Icon=""
+                                Tag="Load" />
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Save"
+                                Icon=""
+                                Tag="Save" />
+                        </MenuItem>
+                    </Menu>
+                    <Menu VerticalAlignment="Center">
+                        <MenuItem Header="Windows">
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Biblical Terms"
+                                Icon=""
+                                Tag="BiblicalTerms" />
+                        </MenuItem>
+                    </Menu>
 
-            </WrapPanel>
-            <!--<ComboBox
+                </WrapPanel>
+                <!--<ComboBox
                 VerticalContentAlignment="Center"
                 DisplayMemberPath="Item1"
                 ItemsSource="{Binding Themes}"
