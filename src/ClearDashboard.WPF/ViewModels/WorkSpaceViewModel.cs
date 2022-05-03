@@ -22,9 +22,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
     {
         #region Member Variables
@@ -108,14 +105,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-        private ObservableCollection<int> _verseNums = new();
-        public ObservableCollection<int> VerseNums
+        private ObservableCollection<int> _verseNumbers = new();
+        public ObservableCollection<int> VerseNumbers
         {
-            get => _verseNums;
+            get => _verseNumbers;
             set
             {
-                _verseNums = value;
-                NotifyOfPropertyChange(() => VerseNums);
+                _verseNumbers = value;
+                NotifyOfPropertyChange(() => VerseNumbers);
             }
         }
         
@@ -154,7 +151,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private string _windowIdToLoad;
-        public string WindowIDToLoad
+        public string WindowIdToLoad
         {
             get => _windowIdToLoad;
             set
@@ -215,7 +212,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
 
                 
-                NotifyOfPropertyChange(() => WindowIDToLoad);
+                NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
 
@@ -330,7 +327,6 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager = projectManager;
             Logger = logger;  
             NavigationService = navigationService;
-
             FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             _this = this;
@@ -874,9 +870,6 @@ namespace ClearDashboard.Wpf.ViewModels
             // todo
             Console.WriteLine();
         }
-
-        public override event PropertyChangedEventHandler PropertyChanged;
-
 
         #endregion // Methods
     }
