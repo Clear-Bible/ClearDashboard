@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.ParatextPlugin.Data.Models;
 using MediatR;
@@ -19,7 +18,7 @@ public class DashboardProjectManager : ProjectManager
 {
     private IEventAggregator EventAggregator { get; set; }
 
-    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, NamedPipesClient namedPipeClient, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory) : base(mediator, namedPipeClient, paratextProxy, logger, projectNameDbContextFactory)
+    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
     {
         EventAggregator = eventAggregator;
     }
@@ -42,5 +41,7 @@ public class DashboardProjectManager : ProjectManager
         });
 
         // ReSharper restore AsyncVoidLambda
+
+        await Task.CompletedTask;
     }
 }

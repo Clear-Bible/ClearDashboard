@@ -13,10 +13,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Core\Caliburn.Micro.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform.Core\Caliburn.Micro.Platform.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform\Caliburn.Micro.Platform.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro.Core">
+      <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform">
+      <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core">
+      <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

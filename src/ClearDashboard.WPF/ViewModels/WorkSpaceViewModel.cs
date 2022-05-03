@@ -4,9 +4,6 @@ using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.Data;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -20,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -693,55 +691,56 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void HandleEventAsync(object sender, PipeEventArgs args)
+        private void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
+            //if (args == null) return;
 
-            var pipeMessage = args.PipeMessage;
+            //var pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    this.VerseRef = pipeMessage.Text;
-                    if (ParatextSync)
-                    {
-                        OutGoingChangesStarted = true;
-                        if (pipeMessage.Text != CurrentBcv.VerseLocationId)
-                        {
-                            if (BCVDictionary is null)
-                            {
-                                return;
-                            }
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        this.VerseRef = pipeMessage.Text;
+            //        if (ParatextSync)
+            //        {
+            //            OutGoingChangesStarted = true;
+            //            if (pipeMessage.Text != CurrentBcv.VerseLocationId)
+            //            {
+            //                if (BCVDictionary is null)
+            //                {
+            //                    return;
+            //                }
 
-                            if (BCVDictionary.Count == 0 || CurrentBcv is null)
-                            {
-                                return;
-                            }
+            //                if (BCVDictionary.Count == 0 || CurrentBcv is null)
+            //                {
+            //                    return;
+            //                }
 
-                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
 
-                            CalculateChapters();
+            //                CalculateChapters();
 
-                            CalculateVerses();
+            //                CalculateVerses();
 
-                            // during the resetting of all the chapters & verse lists from the above,
-                            // this defaults back to {book}001001
-                            // so we need to reset it again with this call
-                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                // during the resetting of all the chapters & verse lists from the above,
+            //                // this defaults back to {book}001001
+            //                // so we need to reset it again with this call
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
 
-                            NotifyOfPropertyChange(() => CurrentBcv);
-                        }
-                        OutGoingChangesStarted = false;
-                    }
+            //                NotifyOfPropertyChange(() => CurrentBcv);
+            //            }
+            //            OutGoingChangesStarted = false;
+            //        }
 
-                    break;
-                case ActionType.OnConnected:
-                    break;
-                case ActionType.OnDisconnected:
-                    break;
-            }
+            //        break;
+            //    case ActionType.OnConnected:
+            //        break;
+            //    case ActionType.OnDisconnected:
+            //        break;
+            //}
 
-            Logger.LogInformation($"{pipeMessage.Text}");
+            //Logger.LogInformation($"{pipeMessage.Text}");
         }
 
 

@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -198,9 +197,6 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";
 
-            // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
-
             // wire up the commands
             ZoomInCommand = new RelayCommand(ZoomIn);
             ZoomOutCommand = new RelayCommand(ZoomOut);
@@ -223,9 +219,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            // unsubscribe to the pipes listener
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-
             base.Dispose(disposing);
         }
 
@@ -235,66 +228,68 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, PipeEventArgs args)
+        public async void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
 
-            var pipeMessage = args.PipeMessage;
+            //if (args == null) return;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    if (_currentVerse != pipeMessage.Text)
-                    {
-                        // check for book change
-                        string newBook = pipeMessage.Text.Substring(0, 2);
-                        if (_currentBook != newBook)
-                        {
-                            _currentBook = newBook;
+            //var pipeMessage = args.PipeMessage;
 
-                            // send a message to get this book
-                            //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse != pipeMessage.Text)
+            //        {
+            //            // check for book change
+            //            string newBook = pipeMessage.Text.Substring(0, 2);
+            //            if (_currentBook != newBook)
+            //            {
+            //                _currentBook = newBook;
 
-                            _currentVerse = pipeMessage.Text;
-                            CurrentBcv.SetVerseFromId(_currentVerse);
-                            if (_currentVerse.EndsWith("000"))
-                            {
-                                // a zero based verse
-                                TargetInlinesText.Clear();
-                                NotifyOfPropertyChange(() => TargetInlinesText);
-                                FormattedHTML = "";
-                                UnformattedHTML = "";
-                            }
-                            else
-                            {
-                                // a normal verse
-                                var verse = new Verse
-                                {
-                                    VerseBBCCCVVV = _currentVerse
-                                };
+            //                // send a message to get this book
+            //                //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
 
-                                if (verse.BookNum < 40)
-                                {
-                                    _isOT = true;
-                                }
-                                else
-                                {
-                                    _isOT = false;
-                                }
-                            }
-                        } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
-                        {
-                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
-                            FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
-                            UnformattedAnchorRef = CurrentBcv.GetVerseId();
-                        }
-                    }
-                    break;
+            //                _currentVerse = pipeMessage.Text;
+            //                CurrentBcv.SetVerseFromId(_currentVerse);
+            //                if (_currentVerse.EndsWith("000"))
+            //                {
+            //                    // a zero based verse
+            //                    TargetInlinesText.Clear();
+            //                    NotifyOfPropertyChange(() => TargetInlinesText);
+            //                    FormattedHTML = "";
+            //                    UnformattedHTML = "";
+            //                }
+            //                else
+            //                {
+            //                    // a normal verse
+            //                    var verse = new Verse
+            //                    {
+            //                        VerseBBCCCVVV = _currentVerse
+            //                    };
 
-                case ActionType.SetUSX:
-                    ProcessTargetVerseData(pipeMessage);
-                    break;
-            }
+            //                    if (verse.BookNum < 40)
+            //                    {
+            //                        _isOT = true;
+            //                    }
+            //                    else
+            //                    {
+            //                        _isOT = false;
+            //                    }
+            //                }
+            //            } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
+            //            {
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+            //                UnformattedAnchorRef = CurrentBcv.GetVerseId();
+            //            }
+            //        }
+            //        break;
+
+            //    case ActionType.SetUSX:
+            //        ProcessTargetVerseData(pipeMessage);
+            //        break;
+            //}
         }
 
         private void ProcessTargetVerseData(PipeMessage message)

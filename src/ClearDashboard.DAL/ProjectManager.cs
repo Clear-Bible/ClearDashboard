@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
 using ClearDashboard.ParatextPlugin.Data;
@@ -53,7 +52,6 @@ namespace ClearDashboard.DataAccessLayer
 
         // event handler to be raised when the Paratext Username changes
         public event EventHandler ParatextUserNameEventHandler;
-        public event NamedPipesClient.PipesEventHandler NamedPipeChanged;
         public string ParatextUserName { get; set; } = "";
 
 
@@ -76,26 +74,17 @@ namespace ClearDashboard.DataAccessLayer
         }
 
 
-        private void RaisePipesChangedEvent(PipeMessage pm)
-        {
-            var args = new PipeEventArgs(pm);
-            NamedPipeChanged?.Invoke(this, args);
-        }
 
         #endregion
 
         #region Startup
 
-        public ProjectManager(IMediator mediator, NamedPipesClient namedPipeClient, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        public ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
         {
             Logger = logger;
             ProjectNameDbContextFactory = projectNameDbContextFactory;
             ParatextProxy = paratextProxy;
             Logger.LogInformation("'ProjectManager' ctor called.");
-
-            //_namedPipesClient = namedPipeClient;
-            //_namedPipesClient.NamedPipeChanged += HandleNamedPipeChanged;
-
             Mediator = mediator;
 
         }

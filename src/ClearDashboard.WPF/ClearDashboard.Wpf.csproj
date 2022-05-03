@@ -67,21 +67,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="H.Formatters">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>
-		</Reference>
-		<Reference Include="H.Formatters.BinaryFormatter">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.BinaryFormatter.dll</HintPath>
-		</Reference>
-		<Reference Include="H.Pipes">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Core\Caliburn.Micro.Core.csproj" />
-		<ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform.Core\Caliburn.Micro.Platform.Core.csproj" />
-		<ProjectReference Include="..\..\..\..\..\..\temp\Caliburn.Micro Projects\Caliburn.Micro\src\Caliburn.Micro.Platform\Caliburn.Micro.Platform.csproj" />
 		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
 	</ItemGroup>
 
@@ -124,6 +109,18 @@
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Caliburn.Micro.Core">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Caliburn.Micro.Platform">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Caliburn.Micro.Platform.Core">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>

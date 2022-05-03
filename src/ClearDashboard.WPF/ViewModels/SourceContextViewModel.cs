@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System;
@@ -89,9 +87,6 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             this.Title = "⬒ SOURCE CONTEXT";
             this.ContentId = "SOURCECONTEXT";
-
-            // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
         }
 
 
@@ -153,32 +148,32 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, PipeEventArgs args)
+        public async void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
 
-            var pipeMessage = args.PipeMessage;
+            //if (args == null) return;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    if (_currentVerse != pipeMessage.Text)
-                    {
-                        _currentVerse = pipeMessage.Text;
-                        CurrentBcv.SetVerseFromId(_currentVerse);
+            //var pipeMessage = args.PipeMessage;
 
-                        await ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
-                    }
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse != pipeMessage.Text)
+            //        {
+            //            _currentVerse = pipeMessage.Text;
+            //            CurrentBcv.SetVerseFromId(_currentVerse);
 
-                    break;
-            }
+            //            await ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+            //        }
+
+            //        break;
+            //}
         }
 
         protected override void Dispose(bool disposing)
         {
-            // unsubscribe to the pipes listener
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-
+            
             base.Dispose(disposing);
         }
 

@@ -2,7 +2,6 @@
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,18 +25,6 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddScoped<ParatextProxy>();
-            serviceCollection.AddSingleton<NamedPipesClient>(sp =>
-            {
-                var logger = sp.GetService<ILogger<NamedPipesClient>>();
-                var namedPipesClient = new NamedPipesClient(logger);
-                namedPipesClient.InitializeAsync().ContinueWith(t =>
-                    {
-                        logger?.LogError($"Error while connecting to pipe server: {t.Exception}");
-                    },
-                    TaskContinuationOptions.OnlyOnFaulted);
-                return namedPipesClient;
-            });
-
             serviceCollection.AddProjectNameDatabaseContextFactory();
 
             // QUESTION:  Can we run the HostedService as a scoped service?

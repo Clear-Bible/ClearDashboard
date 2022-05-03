@@ -1,6 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -168,9 +168,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
             CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
-            // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
-
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
             LaunchSensesCommand = new RelayCommand(ShowSenses);
@@ -183,9 +180,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            // unsubscribe to the pipes listener
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-
             base.Dispose(disposing);    
         }
 
@@ -251,51 +245,52 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, PipeEventArgs args)
+        public async void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
+            //if (args == null) return;
 
-            var pipeMessage = args.PipeMessage;
+            //var pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    if (_currentVerse != pipeMessage.Text)
-                    {
-                        _currentVerse = pipeMessage.Text;
-                        CurrentBcv.SetVerseFromId(_currentVerse);
-                        if (_currentVerse.EndsWith("000"))
-                        {
-                            // a zero based verse
-                            TargetInlinesText.Clear();
-                            NotifyOfPropertyChange(() => TargetInlinesText);
-                            TargetHTML = "";
-                            WordData.Clear();
-                            NotifyOfPropertyChange(() => WordData);
-                        }
-                        else
-                        {
-                            // a normal verse
-                            var  verse = new Verse
-                            {
-                                VerseBBCCCVVV = _currentVerse
-                            };
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse != pipeMessage.Text)
+            //        {
+            //            _currentVerse = pipeMessage.Text;
+            //            CurrentBcv.SetVerseFromId(_currentVerse);
+            //            if (_currentVerse.EndsWith("000"))
+            //            {
+            //                // a zero based verse
+            //                TargetInlinesText.Clear();
+            //                NotifyOfPropertyChange(() => TargetInlinesText);
+            //                TargetHTML = "";
+            //                WordData.Clear();
+            //                NotifyOfPropertyChange(() => WordData);
+            //            }
+            //            else
+            //            {
+            //                // a normal verse
+            //                var  verse = new Verse
+            //                {
+            //                    VerseBBCCCVVV = _currentVerse
+            //                };
 
-                            if (verse.BookNum < 40)
-                            {
-                                _isOT = true;
-                            }
-                            else
-                            {
-                                _isOT = false;
-                            }
+            //                if (verse.BookNum < 40)
+            //                {
+            //                    _isOT = true;
+            //                }
+            //                else
+            //                {
+            //                    _isOT = false;
+            //                }
 
-                            _ = ReloadWordMeanings();
-                        }
-                    }
+            //                _ = ReloadWordMeanings();
+            //            }
+            //        }
 
-                    break;
-            }
+            //        break;
+            //}
         }
 
         /// <summary>

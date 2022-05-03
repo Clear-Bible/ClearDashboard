@@ -1,7 +1,6 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
@@ -156,7 +155,6 @@ namespace ClearDashboard.Wpf.ViewModels
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
             ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -207,8 +205,6 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
-
             ProjectManager.Dispose();
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -217,23 +213,25 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, EventArgs args)
         {
-            if (args == null) return;
-            var pipeMessage = args.PipeMessage;
-            switch (pipeMessage.Action)
-            {
-                case ActionType.OnConnected:
-                    this.Connected = true;
-                    break;
-                case ActionType.OnDisconnected:
-                    this.Connected = false;
-                    break;
-            }
-            Logger.LogDebug(pipeMessage.Text);
-            
+            //TODO:  Refactor to use EventAggregator
+
+            //if (args == null) return;
+            //var pipeMessage = args.PipeMessage;
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.OnConnected:
+            //        this.Connected = true;
+            //        break;
+            //    case ActionType.OnDisconnected:
+            //        this.Connected = false;
+            //        break;
+            //}
+            //Logger.LogDebug(pipeMessage.Text);
+
         }
-        
+
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>

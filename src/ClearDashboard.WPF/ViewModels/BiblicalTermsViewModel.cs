@@ -1,6 +1,5 @@
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -413,7 +412,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, 
-            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
+                                        ILogger<WorkSpaceViewModel> logger, 
+                                        DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
          
@@ -421,11 +421,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
 
-
-
-            // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
-
+           
            
             // populate the combo box for semantic domains
             SetupSemanticDomains();
@@ -474,66 +470,67 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, PipeEventArgs args)
+        public async void HandleEventAsync(object sender, EventArgs args)
         {
+            //TODO:  Refactor to use EventAggregator
             if (args == null) return;
 
-            PipeMessage pipeMessage = args.PipeMessage;
+           // PipeMessage pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    if (_currentVerse == "")
-                    {
-                        _currentVerse = pipeMessage.Text;
-                        // ask for Biblical Terms
-                        //await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject)
-                        //    .ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        _currentVerse = pipeMessage.Text;
-                    }
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse == "")
+            //        {
+            //            _currentVerse = pipeMessage.Text;
+            //            // ask for Biblical Terms
+            //            //await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject)
+            //            //    .ConfigureAwait(false);
+            //        }
+            //        else
+            //        {
+            //            _currentVerse = pipeMessage.Text;
+            //        }
 
-                    break;
-                case ActionType.SetBiblicalTerms:
-                    await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
-                    // invoke to get it to run in STA mode
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        _biblicalTerms.Clear();
+            //        break;
+            //    case ActionType.SetBiblicalTerms:
+            //        await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+            //        // invoke to get it to run in STA mode
+            //        Application.Current.Dispatcher.Invoke(delegate
+            //        {
+            //            _biblicalTerms.Clear();
 
-                        // deserialize the list
-                        var biblicalTermsList = new List<BiblicalTermsData>();
-                        try
-                        {
-                            string json = pipeMessage.Payload.ToString();
-                            biblicalTermsList = JsonSerializer.Deserialize<List<BiblicalTermsData>>(json);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-                        }
+            //            // deserialize the list
+            //            var biblicalTermsList = new List<BiblicalTermsData>();
+            //            try
+            //            {
+            //                string json = pipeMessage.Payload.ToString();
+            //                biblicalTermsList = JsonSerializer.Deserialize<List<BiblicalTermsData>>(json);
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
+            //            }
 
-                        if (biblicalTermsList.Count > 0)
-                        {
-                            for (int i = 0; i < biblicalTermsList.Count; i++)
-                            {
-                                _biblicalTerms.Add(biblicalTermsList[i]);
+            //            if (biblicalTermsList.Count > 0)
+            //            {
+            //                for (int i = 0; i < biblicalTermsList.Count; i++)
+            //                {
+            //                    _biblicalTerms.Add(biblicalTermsList[i]);
 
-                                foreach (var rendering in biblicalTermsList[i].Renderings)
-                                {
-                                    _biblicalTerms[i].RenderingString += rendering + " ";
-                                }
-                            }
+            //                    foreach (var rendering in biblicalTermsList[i].Renderings)
+            //                    {
+            //                        _biblicalTerms[i].RenderingString += rendering + " ";
+            //                    }
+            //                }
 
-                            NotifyOfPropertyChange(() => BiblicalTerms);
-                        }
-                    });
+            //                NotifyOfPropertyChange(() => BiblicalTerms);
+            //            }
+            //        });
 
-                    await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
-                    break;
-            }
+            //        await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+            //        break;
+            //}
         }
 
 
@@ -558,9 +555,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            // unsubscribe from events
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-
             Logger.LogInformation("Dispose");
             base.Dispose(disposing);
         }
