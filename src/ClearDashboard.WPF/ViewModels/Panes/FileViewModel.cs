@@ -51,9 +51,6 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 				if (_filePath != value)
 				{
 					_filePath = value;
-					//RaisePropertyChanged(nameof(FilePath));
-					//RaisePropertyChanged(nameof(FileName));
-					//RaisePropertyChanged(nameof(Title));
 
 					if (File.Exists(_filePath))
 					{
@@ -71,7 +68,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 				if (FilePath == null)
 					return "Noname" + (IsDirty ? "*" : "");
 
-				return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+				return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
 			}
 		}
 
@@ -83,7 +80,6 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 				if (_textContent != value)
 				{
 					_textContent = value;
-					//RaisePropertyChanged(nameof(TextContent));
 					IsDirty = true;
 				}
 			}
@@ -95,11 +91,9 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 			set
 			{
 				if (_isDirty != value)
-				{
-					_isDirty = value;
-					//RaisePropertyChanged(nameof(IsDirty));
-					//RaisePropertyChanged(nameof(FileName));
-				}
+                {
+                    _isDirty = value;
+                }
 			}
 		}
 

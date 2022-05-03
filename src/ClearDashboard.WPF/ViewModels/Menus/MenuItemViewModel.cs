@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Input;
 using Caliburn.Micro;
 
@@ -18,7 +19,7 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
 
         public WorkSpaceViewModel ViewModel
         {
-            get { return _workSpaceViewModel; }
+            get => _workSpaceViewModel;
             set { _workSpaceViewModel = value; }
         }
 
@@ -32,6 +33,29 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
             {
                 _isChecked = value;
                 NotifyOfPropertyChange(() => IsChecked);
+            }
+        }
+
+
+        private Icon _icon;
+        public Icon Icon
+        {
+            get => _icon; 
+            set
+            {
+                _icon = value; 
+                NotifyOfPropertyChange(() => Icon);
+            }
+        }
+
+        private string _iconSource;
+        public string IconSource
+        {
+            get => _iconSource;
+            set
+            {
+                _iconSource = value;
+                NotifyOfPropertyChange(() => IconSource);
             }
         }
 
@@ -74,46 +98,7 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
         {
             if (ViewModel != null)
             {
-
-                Debug.WriteLine(Id);
-                switch (Id)
-                {
-                    case "LayoutID":
-                        break;
-                    case "AlignmentToolID":
-                        ViewModel.WindowIDToLoad = "ALIGNMENTTOOL";
-                        break;
-                    case "BiblicalTermsID":
-                        ViewModel.WindowIDToLoad = "BIBLICALTERMS";
-                        break;
-                    case "ConcordanceToolID":
-                        ViewModel.WindowIDToLoad = "CONCORDANCETOOL";
-                        break;
-                    case "DashboardID":
-                        ViewModel.WindowIDToLoad = "DASHBOARD";
-                        break;
-                    case "NotesID":
-                        ViewModel.WindowIDToLoad = "NOTES";
-                        break;
-                    case "PINSID":
-                        ViewModel.WindowIDToLoad = "PINS";
-                        break;
-                    case "WordMeaningsID":
-                        ViewModel.WindowIDToLoad = "WORDMEANINGS";
-                        break;
-                    case "SourceContextID":
-                        ViewModel.WindowIDToLoad = "SOURCECONTEXT";
-                        break;
-                    case "StartPageID":
-                        ViewModel.WindowIDToLoad = "STARTPAGE";
-                        break;
-                    case "TargetContextID":
-                        ViewModel.WindowIDToLoad = "TARGETCONTEXT";
-                        break;
-                    case "TextCollectionID":
-                        ViewModel.WindowIDToLoad = "TEXTCOLLECTION";
-                        break;
-                }
+                ViewModel.WindowIDToLoad = Id;
             }
         }
     }

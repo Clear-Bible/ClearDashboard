@@ -13,7 +13,6 @@
                 <!--  Caliburn Micro Bootstrapper  -->
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper" />
-                    <SolidColorBrush x:Key="BackgroundBrush" Color="#FF225378" />
                 </ResourceDictionary>
 
 
@@ -29,6 +28,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
 
                 <ResourceDictionary>
+                    <SolidColorBrush x:Key="BackgroundBrush" Color="#FF225378" />
                     <!--  Additional Design Colors - DARK  -->
                     <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
                     <Brush x:Key="BlueMidBrush">#5B8DEE</Brush>
@@ -259,7 +259,14 @@
                         <Setter Property="BorderBrush" Value="{DynamicResource PurpleDarkBrush}" />
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                     </Style>
-
+                    <Style
+                        x:Key="GrayDarkButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="DarkGray" />
+                        <Setter Property="BorderBrush" Value="Gray" />
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Name="ClearLogo" Source="Assets/ClearLogo.xaml" />
