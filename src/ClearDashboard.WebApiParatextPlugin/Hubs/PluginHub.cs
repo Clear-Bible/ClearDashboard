@@ -6,6 +6,7 @@ using ClearDashboard.ParatextPlugin.Data.Features.Project;
 using ClearDashboard.ParatextPlugin.Data.Features.Verse;
 using ClearDashboard.ParatextPlugin.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -14,11 +15,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
     public class PluginHub : Hub
     {
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
         public PluginHub()
         {
             // TODO:  Investigate how to get SignalR to inject the mediator for us.
             //        I really hate this tight coupling.
             _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
+            _logger = WebHostStartup.ServiceProvider.GetService<ILogger<PluginHub>>();
         }
         public void Send(string name, string message)
         {
@@ -38,6 +41,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         public override async Task OnConnected()
         {
             {
+                _logger.LogInformation($"New client connected - {Context.ConnectionId}");
                 var result = await _mediator.Send(new GetCurrentVerseCommand());
                 if (result.Success)
                 {
