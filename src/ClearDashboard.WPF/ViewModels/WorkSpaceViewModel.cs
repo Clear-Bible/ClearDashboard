@@ -1,11 +1,16 @@
-﻿using AvalonDock.Layout.Serialization;
+﻿using AvalonDock;
+using AvalonDock.Layout;
+using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,11 +18,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Windows;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.ParatextPlugin.Data;
-using ClearDashboard.Wpf.Models;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -35,7 +37,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-        DockingManager _dockingManager = new DockingManager();
+        private DockingManager _dockingManager = new DockingManager();
         
         #endregion //Member Variables
 
@@ -91,16 +93,7 @@ namespace ClearDashboard.Wpf.ViewModels
           
         }
 
-        private LayoutFile _SelectedLayout;
-        public LayoutFile SelectedLayout
-        {
-            get => _SelectedLayout;
-            set
-            {
-                _SelectedLayout = value; 
-                NotifyOfPropertyChange(nameof(SelectedLayout));
-            }
-        }
+      
 
         private string _selectedLayoutText;
 
@@ -297,18 +290,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private string _selectedLayoutText;
-
-        public string SelectedLayoutText
-        {
-            get => _selectedLayoutText;
-            set
-            {
-                _selectedLayoutText = value;
-                NotifyOfPropertyChange(() => SelectedLayoutText);
-            }
-        }
-
+       
         #endregion //Observable Properties
 
         #region Constructor
@@ -514,17 +496,6 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Add(IoC.Get<TreeDownViewModel>());
             NotifyOfPropertyChange(() => Files);
 
-            // add in the tool panes
-            //_tools.Clear();
-            //_tools.Add(IoC.Get<BiblicalTermsViewModel>());
-            //_tools.Add(IoC.Get<WordMeaningsViewModel>());
-            //_tools.Add(IoC.Get<SourceContextViewModel>());
-            //_tools.Add(IoC.Get<TargetContextViewModel>());
-            //_tools.Add(IoC.Get<NotesViewModel>());
-            //_tools.Add(IoC.Get<PinsViewModel>());
-            //// trigger property changed event
-            //Tools.Add(new TextCollectionViewModel());
-
             Items.Clear();
 
             await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
@@ -607,20 +578,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        private void WorkSpaceViewModel_ThemeChanged()
-        {
-            var newTheme = ((App)Application.Current).Theme;
-            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                // toggle the Dark theme for AvalonDock
-                this.SelectedTheme = Themes[0];
-            }
-            else
-            {
-                // toggle the light theme for AvalonDock
-                this.SelectedTheme = Themes[1];
-            }
-        }
+      
 
 
         public void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
@@ -822,7 +780,6 @@ namespace ClearDashboard.Wpf.ViewModels
             if (ParatextSync && OutGoingChangesStarted == false)
             {
                 var newVerse = CurrentBcv.GetVerseId();
-                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.SetCurrentVerse, newVerse).ConfigureAwait(false);
                 Console.WriteLine("");
             }
         }
@@ -916,57 +873,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<LayoutFile> GetFileLayouts()
-        {
-            int id = 0;
-            ObservableCollection<LayoutFile> fileLayouts = new();
-            // add in the default layouts
-            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
-            if (Directory.Exists(path))
-            {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                    fileLayouts.Add(new LayoutFile
-                    {
-                        LayoutName=name,
-                        LayoutID= "Layout:" + id.ToString(),
-                        LayoutPath=file,
-                    });
-                    id++;
-                }
-            }
-            
-            // get the project layouts
-            if (_projectManager is not null)
-            {
-                path = _projectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
-                if (Directory.Exists(path))
-                {
-                    var files = Directory.GetFiles(path, "*.Layout.config");
-
-                    foreach (var file in files)
-                    {
-                        FileInfo fileInfo = new FileInfo(file);
-                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                        fileLayouts.Add(new LayoutFile
-                        {
-                            LayoutName = name,
-                            LayoutID = "ProjectLayout:" + id.ToString(),
-                            LayoutPath = file,
-                        });
-                        id++;
-                    }
-                }
-            }
-
-            return fileLayouts;
-        }
+   
 
 
         public void SetLayoutSaveName(string cboNamesText)
