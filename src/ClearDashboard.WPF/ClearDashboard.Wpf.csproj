@@ -12,6 +12,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Stores\**" />
+	  <Compile Remove="Themes\**" />
+	  <EmbeddedResource Remove="Stores\**" />
+	  <EmbeddedResource Remove="Themes\**" />
+	  <None Remove="Stores\**" />
+	  <None Remove="Themes\**" />
+	  <Page Remove="Stores\**" />
+	  <Page Remove="Themes\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="HelpFiles\NewProjectHelp_us.md" />
 		<None Remove="Resources\BiblicalTerms_logo_32.png" />
 		<None Remove="Resources\ClearDashboard_logo_128.png" />
@@ -34,11 +45,6 @@
 		<Content Include="Resources\Layouts\Dashboard.Layout.config">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Stores\" />
-		<Folder Include="Themes\" />
 	</ItemGroup>
 
 	<ItemGroup>
