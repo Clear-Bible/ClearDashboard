@@ -75,20 +75,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Commands
 
-        //private RelayCommand _openCommand = null;
-        //public ICommand OpenCommand
-        //{
-        //    get
-        //    {
-        //        if (_openCommand == null)
-        //        {
-        //            _openCommand = new RelayCommand((p) => LoadLayout(p), null);
-        //        }
-
-        //        return _openCommand;
-        //    }
-        //}
-
 
         #endregion  //Commands
 
@@ -147,7 +133,6 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 _windowIdToLoad = value;
                 NotifyOfPropertyChange(() => WindowIDToLoad);
-                OnPropertyChanged("WindowIDToLoad");
             }
         }
 
@@ -313,8 +298,6 @@ namespace ClearDashboard.Wpf.ViewModels
             // add in the document panes
             _files.Clear();
 
-
-            Debug.WriteLine(DashboardProject.Name);
             _dashboardViewModel = IoC.Get<DashboardViewModel>();
             _files.Add(_dashboardViewModel);
 
@@ -323,7 +306,6 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Add(IoC.Get<AlignmentToolViewModel>());
             _files.Add(IoC.Get<TreeDownViewModel>());
             NotifyOfPropertyChange(() => Files);
-
 
             // add in the tool panes
             _tools.Clear();
@@ -610,12 +592,7 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        public override event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         #endregion // Methods
     }
