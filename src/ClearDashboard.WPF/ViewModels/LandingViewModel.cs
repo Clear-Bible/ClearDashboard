@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Slices.DashboardProjects;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
 using Microsoft.Extensions.Logging;
@@ -41,10 +41,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(ProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger)
+        public LandingViewModel(DashboardProjectManager projectManager, INavigationService navigationService, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager)
         {
-            Logger.LogError("LandingViewModel constructor called.");
+            Logger.LogInformation("LandingViewModel constructor called.");
         }
 
         protected override void OnViewAttached(object view, object context)

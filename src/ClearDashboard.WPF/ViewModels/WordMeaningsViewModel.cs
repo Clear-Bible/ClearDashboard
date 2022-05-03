@@ -1,12 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Slices.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.ParatextPlugin.Data;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private string _currentVerse = "";
 
-        List<MARBLEresource> _whatIsThisWord = new List<MARBLEresource>();
+        List<MarbleResource> _whatIsThisWord = new List<MarbleResource>();
 
         #endregion //Member Variables
 
@@ -84,8 +84,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<MARBLEresource> _wordData = new ObservableCollection<MARBLEresource>();
-        public ObservableCollection<MARBLEresource> WordData
+        private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
+        public ObservableCollection<MarbleResource> WordData
         {
             get => _wordData;
             set
@@ -157,7 +157,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, 
-            ILogger<WordMeaningsViewModel> logger, ProjectManager projectManager, TranslationSource translationSource)
+            ILogger<WordMeaningsViewModel> logger, DashboardProjectManager projectManager, TranslationSource translationSource)
             : base(navigationService, logger, projectManager)
         {
             Title = "⌺ WORD MEANINGS";
@@ -167,9 +167,6 @@ namespace ClearDashboard.Wpf.ViewModels
             _translationSource = translationSource;
 
             CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-
-            // listen to the DAL event messages coming in
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
@@ -183,9 +180,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void Dispose(bool disposing)
         {
-            // unsubscribe to the pipes listener
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-
             base.Dispose(disposing);    
         }
 
@@ -196,7 +190,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var marbleResource = (MARBLEresource)obj;
+            var marbleResource = (MarbleResource)obj;
             if (marbleResource.TotalSenses == 1)
             {
                 return;
@@ -209,7 +203,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var items = _whatIsThisWord.Where(p => p.ID == marbleResource.ID);
+            var items = _whatIsThisWord.Where(p => p.Id == marbleResource.Id);
 
             WordData.Clear();
             foreach (var item in items)
@@ -227,7 +221,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            var marbleResource = (MARBLEresource)obj;
+            var marbleResource = (MarbleResource)obj;
 
             // OT or NT?
             if (CurrentBcv.BookNum < 40)
@@ -251,51 +245,52 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, PipeEventArgs args)
+        public async void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
+            //if (args == null) return;
 
-            var pipeMessage = args.PipeMessage;
+            //var pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    if (_currentVerse != pipeMessage.Text)
-                    {
-                        _currentVerse = pipeMessage.Text;
-                        CurrentBcv.SetVerseFromId(_currentVerse);
-                        if (_currentVerse.EndsWith("000"))
-                        {
-                            // a zero based verse
-                            TargetInlinesText.Clear();
-                            NotifyOfPropertyChange(() => TargetInlinesText);
-                            TargetHTML = "";
-                            WordData.Clear();
-                            NotifyOfPropertyChange(() => WordData);
-                        }
-                        else
-                        {
-                            // a normal verse
-                            var  verse = new Verse
-                            {
-                                VerseBBCCCVVV = _currentVerse
-                            };
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse != pipeMessage.Text)
+            //        {
+            //            _currentVerse = pipeMessage.Text;
+            //            CurrentBcv.SetVerseFromId(_currentVerse);
+            //            if (_currentVerse.EndsWith("000"))
+            //            {
+            //                // a zero based verse
+            //                TargetInlinesText.Clear();
+            //                NotifyOfPropertyChange(() => TargetInlinesText);
+            //                TargetHTML = "";
+            //                WordData.Clear();
+            //                NotifyOfPropertyChange(() => WordData);
+            //            }
+            //            else
+            //            {
+            //                // a normal verse
+            //                var  verse = new Verse
+            //                {
+            //                    VerseBBCCCVVV = _currentVerse
+            //                };
 
-                            if (verse.BookNum < 40)
-                            {
-                                _isOT = true;
-                            }
-                            else
-                            {
-                                _isOT = false;
-                            }
+            //                if (verse.BookNum < 40)
+            //                {
+            //                    _isOT = true;
+            //                }
+            //                else
+            //                {
+            //                    _isOT = false;
+            //                }
 
-                            _ = ReloadWordMeanings();
-                        }
-                    }
+            //                _ = ReloadWordMeanings();
+            //            }
+            //        }
 
-                    break;
-            }
+            //        break;
+            //}
         }
 
         /// <summary>
@@ -329,7 +324,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
             }
 
-            var queryResult = await ExecuteCommand(new GetWhatIsThisWordSlice.GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteCommand(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);

@@ -1,16 +1,6 @@
-﻿using ClearDashboard.ParatextPlugin;
-using ClearDashboard.ParatextPlugin.Actions;
-using ClearDashboard.ParatextPlugin.Helpers;
-using ClearDashboard.Pipes_Shared.Models;
-using H.Formatters;
-using H.Pipes;
-using Microsoft.VisualStudio.Threading;
-using Paratext.PluginInterfaces;
-using Pipes_Shared;
-using Pipes_Shared.Models;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -18,10 +8,19 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.ParatextPlugin.Actions;
+using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.ParatextPlugin.Data.Models;
+using ClearDashboard.ParatextPlugin.Extensions;
+using ClearDashboard.ParatextPlugin.Helpers;
 using ClearDashboard.ParatextPlugin.Models;
-using ClearDashboard.ParatextPlugin.Properties;
+using H.Formatters;
+using H.Pipes;
+using Microsoft.VisualStudio.Threading;
+using Paratext.PluginInterfaces;
+using Serilog;
 
-namespace ClearDashboardPlugin
+namespace ClearDashboard.ParatextPlugin
 {
     public partial class MainWindow : EmbeddedPluginControl
     {
@@ -54,7 +53,7 @@ namespace ClearDashboardPlugin
         private readonly IBiblicalTermList m_listAll;
 
         private readonly JsonSerializerOptions _jsonOptions;
-        private delegate void AppendMsgTextDelegate(MsgColor color, string text);
+        private delegate void AppendMsgTextDelegate(Color color, string text);
         private Form _parentForm;
 
 
@@ -62,16 +61,6 @@ namespace ClearDashboardPlugin
         private const string PipeName = "ClearDashboard";
         private PipeServer<PipeMessage> _PipeServer { get; }
         private ISet<string> Clients { get; } = new HashSet<string>();
-
-
-        public enum MsgColor
-        {
-            Red,
-            Green,
-            Blue,
-            Orange,
-            Purple,
-        }
 
         #endregion
 
@@ -101,7 +90,7 @@ namespace ClearDashboardPlugin
 
             _jsonOptions = new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = false,
             };
 
 
@@ -154,12 +143,12 @@ namespace ClearDashboardPlugin
                 Clients.Add(args.Connection.PipeName);
                 UpdateClientList();
 
-                AppendText(MsgColor.Green, $"{args.Connection.PipeName} connected!");
+                AppendText(Color.Green, $"{args.Connection.PipeName} connected!");
 
                 try
                 {
                     // send notice to client that we are connected
-                    AppendText(MsgColor.Green, "Sending OnConnected Message to Client");
+                    AppendText(Color.Green, "Sending OnConnected Message to Client");
                     await args.Connection.WriteAsync(new PipeMessage
                     {
                         Action = ActionType.OnConnected,
@@ -184,7 +173,7 @@ namespace ClearDashboardPlugin
                 Clients.Remove(args.Connection.PipeName);
                 UpdateClientList();
 
-                AppendText(MsgColor.Green, $"{args.Connection.PipeName} disconnected!");
+                AppendText(Color.Green, $"{args.Connection.PipeName} disconnected!");
             };
 
 #pragma warning disable VSTHRD101 // Avoid unsupported async delegates
@@ -230,7 +219,7 @@ namespace ClearDashboardPlugin
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
                 base.BindToName(serializedType, out assemblyName, out typeName);
-                assemblyName = "Pipes_Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                assemblyName = "ClearDashboard.ParatextPlugin.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
             }
         }
 
@@ -268,43 +257,68 @@ namespace ClearDashboardPlugin
 
         private async Task OnMessageReceivedAsync(PipeMessage message)
         {
-            AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
+            AppendText(Color.Purple, "INBOUND <- " + message.Action.ToString());
 
             // Do the command's action
             switch (message.Action)
             {
                 case ActionType.SendText:
-                    AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
+                {
+                    AppendText(Color.Purple, "INBOUND <- " + message.Action.ToString() + ": " + message.Text);
                     break;
+                }
+
                 case ActionType.GetCurrentVerse:
+                {
                     // send the current BCV location of Paratext
                     GetCurrentVerseAsync().Forget();
 
                     break;
+                }
+
                 case ActionType.GetBibilicalTermsAll:
+                {
                     // fire off into background
                     GetBiblicalTermsAllBackgroundAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetBibilicalTermsProject:
+                {
                     // fire off into background
                     GetBiblicalTermsProjectBackgroundAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetTargetVerses:
+                {
                     // fire off into background
                     GetUSXScriptureAsync().Forget();
                     break;
+                }
+
                 case ActionType.GetNotes:
+                {
                     await GetNoteListAsync(message).ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.GetUSFM:
+                {
                     //await ShowUSFMScripture().ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.GetUSX:
-                    AppendText(MsgColor.Purple, "INBOUND <- " + message.Action.ToString());
+                {
+                    AppendText(Color.Purple, "INBOUND <- " + message.Action.ToString());
                     await GetUSXScriptureAsync().ConfigureAwait(false);
                     break;
+                }
+
                 case ActionType.OnConnected:
-                    AppendText(MsgColor.Green, "ClearDashboard Connected");
+                {
+                    AppendText(Color.Green, "ClearDashboard Connected");
 
                     // send the current BCV location of Paratext
                     GetCurrentVerseAsync().Forget();
@@ -313,37 +327,31 @@ namespace ClearDashboardPlugin
                     Project proj = BuildProjectObject();
                     var payload = JsonSerializer.Serialize(proj, _jsonOptions);
 
-                    AppendText(MsgColor.Orange, "OUTBOUND -> Sending Project Information");
+                    AppendText(Color.Orange, "OUTBOUND -> Sending Project Information");
                     await WriteMessageToPipeAsync(new PipeMessage
                     {
                         Action = ActionType.SetProject,
                         Text = "Project Object",
                         Payload = payload
                     });
-                    AppendText(MsgColor.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
+                    AppendText(Color.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
                     break;
+                }
+
                 case ActionType.OnDisconnected:
-                    AppendText(MsgColor.Orange, "ClearDashboard DisConnected");
+                {
+                    AppendText(Color.Orange, "ClearDashboard DisConnected");
 
                     await Task.Delay(1000).ConfigureAwait(true);
 
                     //btnRestart_Click(null, null);
                     break;
-
-                case ActionType.SetCurrentVerse:
-                    //incoming verse change
-                    AppendText(MsgColor.Purple, message.Text);
-
-                    //IVerseRef verseRef = ;
-                    //verseRef.VerseNum = "001001001";
-
-                    //TODO Currently waiting an API change so we can set an IVerseRef
-
-                    //m_host.SetReferenceForSyncGroup(m_verseRef, m_host.ActiveWindowState.SyncReferenceGroup);
-                    break;
+                }
                 default:
-                    AppendText(MsgColor.Red, $"Method {message.Action} not implemented");
+                {
+                    AppendText(Color.Red, $"Method {message.Action} not implemented");
                     break;
+                }
             }
         }
 
@@ -365,14 +373,14 @@ namespace ClearDashboardPlugin
         {
             try
             {
-                AppendText(MsgColor.Green, "PipeServer starting...");
+                AppendText(Color.Green, "PipeServer starting...");
                 _ = new PipeMessage();
                 await _PipeServer.StartAsync().ConfigureAwait(false);
-                AppendText(MsgColor.Green, "PipeServer is started!");
+                AppendText(Color.Green, "PipeServer is started!");
             }
             catch (Exception exception)
             {
-                AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
+                AppendText(Color.Red, $"OnLoad {exception.Message}");
                 OnExceptionOccurred(exception);
             }
         }
@@ -381,7 +389,7 @@ namespace ClearDashboardPlugin
         {
             // write to Serilog
             Log.Error($"OnLoad {exception.Message}");
-            AppendText(MsgColor.Red, $"OnLoad {exception.Message}");
+            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
         private void UpdateClientList()
@@ -530,7 +538,7 @@ namespace ClearDashboardPlugin
                 Action = ActionType.CurrentVerse,
                 Text = verseId,
             }).ConfigureAwait(false);
-            AppendText(MsgColor.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef}");
+            AppendText(Color.Orange, $"OUTBOUND -> Sent Current Verse: {m_verseRef}");
         }
 
         /// <summary>
@@ -560,7 +568,7 @@ namespace ClearDashboardPlugin
                 Text = "Project Object",
                 Payload = payloadBTAll
             }).ConfigureAwait(false);
-            AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsAll");
+            AppendText(Color.Orange, "OUTBOUND -> SetBiblicalTermsAll");
         }
 
         /// <summary>
@@ -569,24 +577,42 @@ namespace ClearDashboardPlugin
         /// <returns></returns>
         private async Task GetBiblicalTermsProjectBackgroundAsync()
         {
-            // ReSharper disable once InconsistentNaming
-            string payloadBT = "";
-
-            BibilicalTerms bt = new BibilicalTerms(_projectList, m_project, m_host);
-
-            await Task.Run(() =>
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
             {
-                var btList = bt.ProcessBiblicalTerms(m_project);
-                payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
-            });
+                // ReSharper disable once InconsistentNaming
+                string payloadBT = "";
 
-            await WriteMessageToPipeAsync(new PipeMessage
+                BibilicalTerms bt = new BibilicalTerms(_projectList, m_project, m_host);
+
+                AppendText(Color.Orange, "EXECUTING -> GetBiblicalTermsProjectBackgroundAsync");
+                await Task.Run(() =>
+                {
+                    var btList = bt.ProcessBiblicalTerms(m_project);
+                    payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
+                });
+
+                await WriteMessageToPipeAsync(new PipeMessage
+                {
+                    Action = ActionType.SetBiblicalTerms,
+                    Text = "Project Object",
+                    Payload = payloadBT
+                }).ConfigureAwait(false);
+                AppendText(Color.Orange, "OUTBOUND -> SetBiblicalTermsProject");
+            }
+            catch (Exception ex)
             {
-                Action = ActionType.SetBiblicalTerms,
-                Text = "Project Object",
-                Payload = payloadBT
-            }).ConfigureAwait(false);
-            AppendText(MsgColor.Orange, "OUTBOUND -> SetBiblicalTermsProject");
+                AppendText(Color.Red, ex.Message);
+                throw;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                AppendText(Color.Orange, $"ELAPSED TIME -> SetBiblicalTermsProject : {stopwatch.ElapsedMilliseconds} milliseconds");
+
+            }
+          
         }
 
         /// <summary>
@@ -597,6 +623,7 @@ namespace ClearDashboardPlugin
         {
             await Task.Run(async () =>
             {
+                //m_project.GetUSFM()
                 var usx = m_project.GetUSX(m_verseRef.BookNum);
                 if (usx != null)
                 {
@@ -610,7 +637,20 @@ namespace ClearDashboardPlugin
                     }).ConfigureAwait(false);
                 }
             });
-            AppendText(MsgColor.Orange, "OUTBOUND -> SetUSX");
+            AppendText(Color.Orange, "OUTBOUND -> SetUSX");
+
+            //var usfm = m_project.GetUSFM(m_verseRef.BookNum);
+            //if (usfm != null)
+            //{
+            //    var dataPayload = JsonSerializer.Serialize(usfm);
+
+            //    await WriteMessageToPipeAsync(new PipeMessage
+            //    {
+            //        Action = ActionType.SetUSFM,
+            //        Text = "Set USFM",
+            //        Payload = dataPayload,
+            //    }).ConfigureAwait(false);
+            //}
         }
 
         /// <summary>
@@ -621,7 +661,7 @@ namespace ClearDashboardPlugin
         private Project BuildProjectObject()
         {
             Project project = new Project();
-            project.ID = m_project.ID;
+            project.Id = m_project.ID;
             project.LanguageName = m_project.LanguageName;
             project.ShortName = m_project.ShortName;
             project.LongName = m_project.LongName;
@@ -657,7 +697,7 @@ namespace ClearDashboardPlugin
                     break;
             }
 
-            project.BCVDictionary = GetBCV_Dictionary();
+            project.BcvDictionary = GetBCV_Dictionary();
 
             return project;
         }
@@ -684,7 +724,7 @@ namespace ClearDashboardPlugin
                     }
                     catch (Exception)
                     {
-                       AppendText(MainWindow.MsgColor.Orange, $"No Scripture for {bookNum}");
+                       AppendText(Color.Orange, $"No Scripture for {bookNum}");
                     }
 
                     foreach (var token in tokens)
@@ -734,20 +774,25 @@ namespace ClearDashboardPlugin
             var bookNum = 0;
             var chapNum = 0;
 
-            var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Payload);
+            var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Text);
             //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
+            AppendText(Color.Blue, $"GetNotesListAsync received: Book: {data.BookId}, Chapter: {data.ChapterId}, IncludeResolved: {data.IncludeResolved}");
 
-            if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
+            if (data.BookId >= 0 && data.BookId <= 66 && data.ChapterId > 0)
             {
-                m_booknum = m_project.AvailableBooks[data.BookID].Number;
-                int chapter = data.ChapterID;
+                m_booknum = m_project.AvailableBooks[data.BookId].Number;
+                int chapter = data.ChapterId;
                 // include resolved notes
                 bool onlyUnresolved = !data.IncludeResolved;
                 m_noteList = m_project.GetNotes(m_booknum, chapter, onlyUnresolved);
-                AppendText(MsgColor.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
+                AppendText(Color.Green, $"Book Num: {m_booknum} / {chapter}: {m_noteList.Count.ToString()}");
 
 
-                var dataPayload = JsonSerializer.Serialize(m_noteList, _jsonOptions);
+                var dataPayload = JsonSerializer.Serialize(m_noteList, new JsonSerializerOptions
+                                                                                {
+                                                                                    WriteIndented = true,
+                                                                                    MaxDepth = 1024 * 100000
+                                                                                });
 
 
                 try
@@ -765,7 +810,7 @@ namespace ClearDashboardPlugin
                 }
                 catch (Exception e)
                 {
-                    AppendText(MsgColor.Red, e.Message);
+                    AppendText(Color.Red, e.Message);
                 }
             }
         }
@@ -774,45 +819,26 @@ namespace ClearDashboardPlugin
         /// <summary>
         /// Append colored text to the rich text box
         /// </summary>
-        /// <param name="sMsg"></param>
+        /// <param name="message"></param>
         /// <param name="color"></param>
-        public void AppendText(MsgColor color, string sMsg)
+        public void AppendText(Color color, string message)
         {
             //check for threading issues
             if (this.InvokeRequired)
             {
-                this.Invoke(new AppendMsgTextDelegate(AppendText), new object[] { color, sMsg });
+                this.Invoke(new AppendMsgTextDelegate(AppendText), new object[] { color, message });
             }
             else
             {
-                sMsg += $"{Environment.NewLine}";
-                switch (color)
-                {
-                    case MsgColor.Blue:
-                        cRTB.AppendText(sMsg, Color.Blue, this.rtb);
-                        break;
-                    case MsgColor.Red:
-                        cRTB.AppendText(sMsg, Color.Red, this.rtb);
-                        break;
-                    case MsgColor.Green:
-                        cRTB.AppendText(sMsg, Color.Green, this.rtb);
-                        break;
-                    case MsgColor.Orange:
-                        cRTB.AppendText(sMsg, Color.Orange, this.rtb);
-                        break;
-                    case MsgColor.Purple:
-                        cRTB.AppendText(sMsg, Color.Purple, this.rtb);
-                        break;
-                }
-
-                // write to Serilog
-                Log.Information(sMsg);
+                message += $"{Environment.NewLine}";
+                this.rtb.AppendText(message, color);
+                Log.Information(message);
             }
         }
 
         private void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+            var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(m_project, this);
         }
 
@@ -842,8 +868,8 @@ namespace ClearDashboardPlugin
                 rtb.Clear();
             }
 
-            AppendText(MsgColor.Green, DateTime.Now.ToShortTimeString());
-            AppendText(MsgColor.Green, "_PipeServer Pipe Restarted");
+            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
+            AppendText(Color.Green, "_PipeServer Pipe Restarted");
 
         }
 

@@ -10,7 +10,7 @@ namespace ClearDashboard.Wpf.Helpers
 {
     public static class ProjectPath
     {
-        public static string GetProjectPath(ProjectManager _projectManager)
+        public static string GetProjectPath(DashboardProjectManager _projectManager)
         { 
             // check to see if the project directory already exists:
             // get the projects directory

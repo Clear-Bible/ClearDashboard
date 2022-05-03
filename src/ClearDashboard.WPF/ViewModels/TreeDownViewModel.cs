@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public TreeDownViewModel(INavigationService navigationService, ILogger<TreeDownViewModel> logger, ProjectManager projectManager)
+        public TreeDownViewModel(INavigationService navigationService, ILogger<TreeDownViewModel> logger, DashboardProjectManager projectManager)
             : base(navigationService, logger, projectManager)
         {
             this.Title = "⯭ TREEDOWN";

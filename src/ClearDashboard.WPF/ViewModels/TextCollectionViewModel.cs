@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public TextCollectionViewModel(INavigationService navigationService, ILogger<TextCollectionViewModel> logger, ProjectManager projectManager) 
+        public TextCollectionViewModel(INavigationService navigationService, ILogger<TextCollectionViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             this.Title = "🗐 TEXT COLLECTION";

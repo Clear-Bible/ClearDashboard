@@ -1,17 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Context
+namespace ClearDashboard.DataAccessLayer.Data
 {
     public interface IProjectNameDbContextFactory<TDbContext> where TDbContext : DbContext
     {
-        Task<ProjectAssets> Create(string connectionString);
+        Task<ProjectAssets> Get(string connectionString);
     }
 
     public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
@@ -25,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Context
             _logger = logger;
         }
 
-        public async Task<ProjectAssets> Create(string projectName)
+        public async Task<ProjectAssets> Get(string projectName)
         {
             var projectAssets = new ProjectAssets
             {

@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 {
     public class CreateNewProjectWorkflowShellViewModel : WorkflowShellViewModel
     {
-        public CreateNewProjectWorkflowShellViewModel(ProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
+        public CreateNewProjectWorkflowShellViewModel(DashboardProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
         {
            
         }
@@ -39,6 +39,9 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 
             var step1 = ServiceProvider.GetService<CreateNewProjectWorkflowStepViewModel>();
             Steps.Add(step1);
+
+            var step2 = ServiceProvider.GetService<ProcessUSFMWorkflowStepViewModel>();
+            Steps.Add(step2);
 
             CurrentStep = Steps[0];
             IsLastWorkflowStep = (Steps.Count == 1);

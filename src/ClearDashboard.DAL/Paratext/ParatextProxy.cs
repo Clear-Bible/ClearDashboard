@@ -1,15 +1,17 @@
-﻿                                                                             using System;
+﻿using ClearDashboard.Common.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using ClearDashboard.Common.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.Win32;
+
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
+
     public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;

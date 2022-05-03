@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboard.DataAccessLayer.Slices;
-using ClearDashboard.DataAccessLayer.Slices.ManuscriptVerses;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Features;
+using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

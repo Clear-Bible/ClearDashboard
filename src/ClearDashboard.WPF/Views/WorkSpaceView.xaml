@@ -130,7 +130,7 @@
             Grid.Row="1"
             ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
             AllowMixedOrientation="True"
-            AnchorablesSource="{Binding Tools}"
+            AnchorablesSource="{Binding Items}"
             DocumentsSource="{Binding Files}"
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
@@ -252,6 +252,7 @@
 
         <Grid
             x:Name="GridIsVisible"
+            Visibility="{Binding GridIsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
             Grid.Row="0"
             Grid.Column="0"
             Width="250"
@@ -297,14 +298,6 @@
                 </Button>
             </DockPanel>
         </Grid>
-
-        <!--<userControls:SaveLayout
-            x:Name="saveLayout"
-            Grid.Row="0"
-            Grid.Column="0"
-            Width="250"
-            Background="{DynamicResource SecondaryHueMidBrush}"
-            Visibility="{Binding SaveLayoutVisibility}" />-->
 
     </Grid>
 

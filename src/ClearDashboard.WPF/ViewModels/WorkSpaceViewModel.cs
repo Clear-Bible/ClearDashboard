@@ -1,40 +1,29 @@
-﻿using AvalonDock.Layout.Serialization;
+﻿using AvalonDock;
+using AvalonDock.Layout;
+using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.NamedPipes;
-using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using AvalonDock;
-using AvalonDock.Layout;
-using ClearDashboard.Wpf.Models;
-using ClearDashboard.Wpf.Views;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class WorkSpaceViewModel : ApplicationScreen
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
     {
-        private readonly INavigationService _navigationService;
-        private readonly ILogger<WorkSpaceViewModel> _logger;
-        private readonly ProjectManager _projectManager;
-
         #region Member Variables
 
         private static WorkSpaceViewModel _this;
@@ -43,7 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-        DockingManager _dockingManager = new DockingManager();
+        private DockingManager _dockingManager = new DockingManager();
         
         #endregion //Member Variables
 
@@ -91,38 +80,15 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private bool _gridIsVisible = false;
+        private bool _gridIsVisible;
         public bool GridIsVisible
         {
             get => _gridIsVisible;
-            set
-            {
-                _gridIsVisible = value; 
-                NotifyOfPropertyChange(() => GridIsVisible);
-            }
+            set => Set(ref _gridIsVisible, value);
+          
         }
 
-        private ObservableCollection<LayoutFile> _fileLayouts = new();
-        public ObservableCollection<LayoutFile> FileLayouts
-        {
-            get => _fileLayouts;
-            set
-            {
-                _fileLayouts = value; 
-                NotifyOfPropertyChange(() => FileLayouts);
-            }
-        }
-
-        private LayoutFile _SelectedLayout;
-        public LayoutFile SelectedLayout
-        {
-            get => _SelectedLayout;
-            set
-            {
-                _SelectedLayout = value; 
-                NotifyOfPropertyChange(nameof(SelectedLayout));
-            }
-        }
+      
 
         private string _selectedLayoutText;
 
@@ -139,24 +105,24 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-        private ObservableCollection<int> _verseNums = new();
-        public ObservableCollection<int> VerseNums
+        private ObservableCollection<int> _verseNumbers = new();
+        public ObservableCollection<int> VerseNumbers
         {
-            get => _verseNums;
+            get => _verseNumbers;
             set
             {
-                _verseNums = value;
-                NotifyOfPropertyChange(() => VerseNums);
+                _verseNumbers = value;
+                NotifyOfPropertyChange(() => VerseNumbers);
             }
         }
         
-        private Dictionary<string, string> _BCVDictionary;
+        private Dictionary<string, string> _bcvDictionary;
         public Dictionary<string, string> BCVDictionary
         {
-            get => _BCVDictionary;
+            get => _bcvDictionary;
             set
             {
-                _BCVDictionary = value;
+                _bcvDictionary = value;
                 NotifyOfPropertyChange(() => BCVDictionary);
             }
         }
@@ -185,7 +151,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private string _windowIdToLoad;
-        public string WindowIDToLoad
+        public string WindowIdToLoad
         {
             get => _windowIdToLoad;
             set
@@ -246,7 +212,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
 
                 
-                NotifyOfPropertyChange(() => WindowIDToLoad);
+                NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
 
@@ -308,9 +274,18 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private LayoutFile _selectedLayout;
+        public LayoutFile SelectedLayout
+        {
+            get => _selectedLayout;
+            set
+            {
+                _selectedLayout = value;
+                NotifyOfPropertyChange(nameof(SelectedLayout));
+            }
+        }
 
-
-
+       
         #endregion //Observable Properties
 
         #region Constructor
@@ -323,15 +298,36 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public WorkSpaceViewModel(INavigationService navigationService,
-            ILogger<WorkSpaceViewModel> logger, ProjectManager projectManager)
-            : base(navigationService, logger, projectManager)
-        {
-            _navigationService = navigationService;
-            _logger = logger;
-            _projectManager = projectManager;
+        private DashboardProjectManager ProjectManager { get; set; }
+        private ILogger<WorkSpaceViewModel> Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
 
-            ProjectManager.NamedPipeChanged += HandleEventAsync;
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection FlowDirection
+        {
+            get => _flowDirection;
+            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+        }
+
+        private ObservableCollection<LayoutFile> _fileLayouts = new();
+        public ObservableCollection<LayoutFile> FileLayouts
+        {
+            get => _fileLayouts;
+            set
+            {
+                _fileLayouts = value;
+                NotifyOfPropertyChange(() => FileLayouts);
+            }
+        }
+
+        public WorkSpaceViewModel(INavigationService navigationService, 
+            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
+            
+        {
+            ProjectManager = projectManager;
+            Logger = logger;  
+            NavigationService = navigationService;
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             _this = this;
 
@@ -378,6 +374,58 @@ namespace ClearDashboard.Wpf.ViewModels
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
+
+        private ObservableCollection<LayoutFile> GetFileLayouts()
+        {
+            int id = 0;
+            ObservableCollection<LayoutFile> fileLayouts = new();
+            // add in the default layouts
+            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
+            if (Directory.Exists(path))
+            {
+                var files = Directory.GetFiles(path, "*.Layout.config");
+
+                foreach (var file in files)
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                    fileLayouts.Add(new LayoutFile
+                    {
+                        LayoutName = name,
+                        LayoutID = "Layout:" + id.ToString(),
+                        LayoutPath = file,
+                    });
+                    id++;
+                }
+            }
+
+            // get the project layouts
+            if (ProjectManager is not null)
+            {
+                path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*.Layout.config");
+
+                    foreach (var file in files)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                        fileLayouts.Add(new LayoutFile
+                        {
+                            LayoutName = name,
+                            LayoutID = "ProjectLayout:" + id.ToString(),
+                            LayoutPath = file,
+                        });
+                        id++;
+                    }
+                }
+            }
+
+            return fileLayouts;
+        }
         public async void Init()
         {
             FileLayouts = GetFileLayouts();
@@ -440,43 +488,22 @@ namespace ClearDashboard.Wpf.ViewModels
             _files.Add(IoC.Get<TreeDownViewModel>());
             NotifyOfPropertyChange(() => Files);
 
-            // add in the tool panes
-            _tools.Clear();
-            _tools.Add(IoC.Get<BiblicalTermsViewModel>());
-            _tools.Add(IoC.Get<WordMeaningsViewModel>());
-            _tools.Add(IoC.Get<SourceContextViewModel>());
-            _tools.Add(IoC.Get<TargetContextViewModel>());
-            _tools.Add(IoC.Get<NotesViewModel>());
-            _tools.Add(IoC.Get<PinsViewModel>());
-            _tools.Add(IoC.Get<TextCollectionViewModel>());
-            NotifyOfPropertyChange(() => Tools);
+            Items.Clear();
+
+            await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
+            await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
+            await ActivateItemAsync(IoC.Get<SourceContextViewModel>());
+            await ActivateItemAsync(IoC.Get<TargetContextViewModel>());
+            await ActivateItemAsync(IoC.Get<NotesViewModel>());
+            await ActivateItemAsync(IoC.Get<PinsViewModel>());
+            await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
 
 
-            if (ProjectManager.ParatextProject is not null)
-            {
-                // unique ids for all the verses in the project
-                BCVDictionary = ProjectManager.ParatextProject.BCVDictionary;
-            }
-
-            // add in the books
-            var books = Helpers.Helpers.GetBookIdDictionary();
-
-            // ensure that the book is in the project
-            foreach (var book in ProjectManager.CurrentDashboardProject.TargetProject.BooksList)
-            {
-                if (book.Available)
-                {
-                    var bookID = book.BookId.ToString();
-                    if (books.ContainsKey(bookID))
-                    {
-                        _bookNames.Add(books[bookID]);
-                    }
-                }
-            }
 
             NotifyOfPropertyChange(() => BookNames);
 
-            await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.GetCurrentVerse).ConfigureAwait(false);
+            //await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
+
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -492,11 +519,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Init();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            ProjectManager.NamedPipeChanged -= HandleEventAsync;
-            base.Dispose(disposing);
-        }
+      
 
         #endregion //Constructor
 
@@ -521,6 +544,11 @@ namespace ClearDashboard.Wpf.ViewModels
             GridIsVisible = false;
         }
 
+        private void WorkSpaceViewModel_ThemeChanged()
+        {
+            GridIsVisible = false;
+        }
+
         private void LoadLayoutByID(string layoutId)
         {
             var layoutFile = FileLayouts.SingleOrDefault(f => f.LayoutID == layoutId);
@@ -538,20 +566,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        private void WorkSpaceViewModel_ThemeChanged()
-        {
-            var newTheme = ((App)Application.Current).Theme;
-            if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                // toggle the Dark theme for AvalonDock
-                this.SelectedTheme = Themes[0];
-            }
-            else
-            {
-                // toggle the light theme for AvalonDock
-                this.SelectedTheme = Themes[1];
-            }
-        }
+      
 
 
         public void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
@@ -672,55 +687,56 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void HandleEventAsync(object sender, PipeEventArgs args)
+        private void HandleEventAsync(object sender, EventArgs args)
         {
-            if (args == null) return;
+            //TODO:  Refactor to use EventAggregator
+            //if (args == null) return;
 
-            var pipeMessage = args.PipeMessage;
+            //var pipeMessage = args.PipeMessage;
 
-            switch (pipeMessage.Action)
-            {
-                case ActionType.CurrentVerse:
-                    this.VerseRef = pipeMessage.Text;
-                    if (ParatextSync)
-                    {
-                        OutGoingChangesStarted = true;
-                        if (pipeMessage.Text != CurrentBcv.VerseLocationId)
-                        {
-                            if (BCVDictionary is null)
-                            {
-                                return;
-                            }
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        this.VerseRef = pipeMessage.Text;
+            //        if (ParatextSync)
+            //        {
+            //            OutGoingChangesStarted = true;
+            //            if (pipeMessage.Text != CurrentBcv.VerseLocationId)
+            //            {
+            //                if (BCVDictionary is null)
+            //                {
+            //                    return;
+            //                }
 
-                            if (BCVDictionary.Count == 0 || CurrentBcv is null)
-                            {
-                                return;
-                            }
+            //                if (BCVDictionary.Count == 0 || CurrentBcv is null)
+            //                {
+            //                    return;
+            //                }
 
-                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
 
-                            CalculateChapters();
+            //                CalculateChapters();
 
-                            CalculateVerses();
+            //                CalculateVerses();
 
-                            // during the resetting of all the chapters & verse lists from the above,
-                            // this defaults back to {book}001001
-                            // so we need to reset it again with this call
-                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                // during the resetting of all the chapters & verse lists from the above,
+            //                // this defaults back to {book}001001
+            //                // so we need to reset it again with this call
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
 
-                            NotifyOfPropertyChange(() => CurrentBcv);
-                        }
-                        OutGoingChangesStarted = false;
-                    }
+            //                NotifyOfPropertyChange(() => CurrentBcv);
+            //            }
+            //            OutGoingChangesStarted = false;
+            //        }
 
-                    break;
-                case ActionType.OnConnected:
-                    break;
-                case ActionType.OnDisconnected:
-                    break;
-            }
+            //        break;
+            //    case ActionType.OnConnected:
+            //        break;
+            //    case ActionType.OnDisconnected:
+            //        break;
+            //}
 
-            Logger.LogInformation($"{pipeMessage.Text}");
+            //Logger.LogInformation($"{pipeMessage.Text}");
         }
 
 
@@ -753,7 +769,6 @@ namespace ClearDashboard.Wpf.ViewModels
             if (ParatextSync && OutGoingChangesStarted == false)
             {
                 var newVerse = CurrentBcv.GetVerseId();
-                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.SetCurrentVerse, newVerse).ConfigureAwait(false);
                 Console.WriteLine("");
             }
         }
@@ -847,57 +862,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<LayoutFile> GetFileLayouts()
-        {
-            int id = 0;
-            ObservableCollection<LayoutFile> fileLayouts = new();
-            // add in the default layouts
-            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
-            if (Directory.Exists(path))
-            {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                    fileLayouts.Add(new LayoutFile
-                    {
-                        LayoutName=name,
-                        LayoutID= "Layout:" + id.ToString(),
-                        LayoutPath=file,
-                    });
-                    id++;
-                }
-            }
-            
-            // get the project layouts
-            if (_projectManager is not null)
-            {
-                path = _projectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
-                if (Directory.Exists(path))
-                {
-                    var files = Directory.GetFiles(path, "*.Layout.config");
-
-                    foreach (var file in files)
-                    {
-                        FileInfo fileInfo = new FileInfo(file);
-                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                        fileLayouts.Add(new LayoutFile
-                        {
-                            LayoutName = name,
-                            LayoutID = "ProjectLayout:" + id.ToString(),
-                            LayoutPath = file,
-                        });
-                        id++;
-                    }
-                }
-            }
-
-            return fileLayouts;
-        }
+   
 
 
         public void SetLayoutSaveName(string cboNamesText)
@@ -905,9 +870,6 @@ namespace ClearDashboard.Wpf.ViewModels
             // todo
             Console.WriteLine();
         }
-
-        public override event PropertyChangedEventHandler PropertyChanged;
-
 
         #endregion // Methods
     }

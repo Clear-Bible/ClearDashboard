@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "ALIGNMENTTOOL";
         }
 
-        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, ProjectManager projectManager) :
+        public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, DashboardProjectManager projectManager) :
             base(navigationService, logger, projectManager)
         {
  

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboardPlugin;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 
@@ -34,7 +34,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                 }
                 catch (Exception e)
                 {
-                    mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                    mainWindow.AppendText(Color.Red, e.Message);
                     return;
                 }
             }
@@ -49,7 +49,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                 }
                 catch (Exception e)
                 {
-                    mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                    mainWindow.AppendText(Color.Red, e.Message);
                 }
 
                 FixParatextSettingsFile(Path.Combine(exportPath, "settings.xml"));
@@ -66,7 +66,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                 }
                 catch (Exception e)
                 {
-                    mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                    mainWindow.AppendText(Color.Red, e.Message);
                 }
             }
 
@@ -86,7 +86,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                         }
                         catch (Exception e)
                         {
-                            mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                            mainWindow.AppendText(Color.Red, e.Message);
                         }
                     }
                 }
@@ -104,7 +104,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     }
                     catch (Exception e)
                     {
-                        mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                        mainWindow.AppendText(Color.Red, e.Message);
                     }
                 }
             }
@@ -120,7 +120,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     //}
 
 
-                    mainWindow.AppendText(MainWindow.MsgColor.Blue, $"Processing {m_project.AvailableBooks[bookNum].Code}");
+                    mainWindow.AppendText(Color.Blue, $"Processing {m_project.AvailableBooks[bookNum].Code}");
 
                     StringBuilder sb = new StringBuilder();
                     // do the header
@@ -148,7 +148,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     }
                     catch (Exception)
                     {
-                        mainWindow.AppendText(MainWindow.MsgColor.Orange, $"No Scripture for {bookNum}");
+                        mainWindow.AppendText(Color.Orange, $"No Scripture for {bookNum}");
                     }
 
 
@@ -238,7 +238,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     }
                     catch (Exception e)
                     {
-                        mainWindow.AppendText(MainWindow.MsgColor.Red, e.Message);
+                        mainWindow.AppendText(Color.Red, e.Message);
                     }
 
                 }

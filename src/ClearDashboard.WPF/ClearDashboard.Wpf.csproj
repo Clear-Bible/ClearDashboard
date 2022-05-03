@@ -12,6 +12,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Stores\**" />
+	  <Compile Remove="Themes\**" />
+	  <EmbeddedResource Remove="Stores\**" />
+	  <EmbeddedResource Remove="Themes\**" />
+	  <None Remove="Stores\**" />
+	  <None Remove="Themes\**" />
+	  <Page Remove="Stores\**" />
+	  <Page Remove="Themes\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="HelpFiles\NewProjectHelp_us.md" />
 		<None Remove="Resources\BiblicalTerms_logo_32.png" />
 		<None Remove="Resources\ClearDashboard_logo_128.png" />
@@ -37,11 +48,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Stores\" />
-		<Folder Include="Themes\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.1" />
@@ -64,27 +70,6 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SIL.Machine" Version="2.5.11" />
 		<PackageReference Include="TinyMapper" Version="3.0.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="Caliburn.Micro.Core">
-		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="Caliburn.Micro.Platform">
-		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
-		</Reference>
-		<Reference Include="Caliburn.Micro.Platform.Core">
-		  <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="H.Formatters">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>
-		</Reference>
-		<Reference Include="H.Formatters.BinaryFormatter">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.BinaryFormatter.dll</HintPath>
-		</Reference>
-		<Reference Include="H.Pipes">
-			<HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -130,7 +115,18 @@
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
-		<ProjectReference Include="..\pipes_shared\Pipes_Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Caliburn.Micro.Core">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Caliburn.Micro.Platform">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Caliburn.Micro.Platform.Core">
+	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,10 +1,10 @@
 using System.IO;
-using ClearDashboard.DataAccessLayer.Context;
 using Xunit;
 using Xunit.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.DAL.Tests
 {
@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Tests
 
             Assert.NotNull(factory);
 
-            var context1 = await factory?.Create(projectName)!;
+            var context1 = await factory?.Get(projectName)!;
 
             Assert.NotNull(context1);
             var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";

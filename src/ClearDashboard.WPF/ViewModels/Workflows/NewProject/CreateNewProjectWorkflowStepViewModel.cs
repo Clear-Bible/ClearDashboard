@@ -137,7 +137,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
         }
 
         public CreateNewProjectWorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, 
-            ILogger<CreateNewProjectWorkflowStepViewModel> logger, ProjectManager projectManager) : base(eventAggregator, navigationService, logger, projectManager)
+            ILogger<CreateNewProjectWorkflowStepViewModel> logger, DashboardProjectManager projectManager) : base(eventAggregator, navigationService, logger, projectManager)
         {
            
         }
@@ -1246,6 +1246,8 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
         #endregion
 
         #region Methods
+
+
         public async void CreateNewProject()
         {
             if (DashboardProject.TargetProject == null)
@@ -1262,7 +1264,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
             //NavigationService.For<ProcessUSFMViewModel>()
             //    .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
 
-            await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+            //await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
         #endregion

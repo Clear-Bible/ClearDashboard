@@ -1,19 +1,19 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.DataAccessLayer.NamedPipes;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
-using Pipes_Shared;
 using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -144,7 +144,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
       
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, ProjectManager projectManager) 
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager) 
             : base(navigationService, logger, projectManager)
         {
             _translationSource = translationSource;
@@ -155,16 +155,36 @@ namespace ClearDashboard.Wpf.ViewModels
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
             ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
-            ProjectManager.NamedPipeChanged += HandleNamedPipeChanged;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            ProjectManager.Initialize();
+            InitializeProjectManager();
             await base.OnActivateAsync(cancellationToken);
         }
 
-      
+        private void InitializeProjectManager()
+        {
+            // delay long enough for the application to be rendered before 
+            // asking the ProjectManager to initialize.  This is due to
+            // the blocking nature of connecting to SignalR.
+            var dispatcherTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(100)
+            };
+
+            async void OnTickHandler(object sender, EventArgs args)
+            {
+                dispatcherTimer.Stop();
+                await ProjectManager.Initialize();
+                dispatcherTimer.Tick -= OnTickHandler;
+            };
+
+            dispatcherTimer.Tick += OnTickHandler;
+            dispatcherTimer.Start();
+        }
+
+
         protected override void OnViewLoaded(object view)
         {
             SetLanguage();
@@ -185,8 +205,6 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
-
             ProjectManager.Dispose();
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -195,23 +213,25 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
+        private void HandleNamedPipeChanged(object sender, EventArgs args)
         {
-            if (args == null) return;
-            var pipeMessage = args.PipeMessage;
-            switch (pipeMessage.Action)
-            {
-                case ActionType.OnConnected:
-                    this.Connected = true;
-                    break;
-                case ActionType.OnDisconnected:
-                    this.Connected = false;
-                    break;
-            }
-            Logger.LogDebug(pipeMessage.Text);
-            
+            //TODO:  Refactor to use EventAggregator
+
+            //if (args == null) return;
+            //var pipeMessage = args.PipeMessage;
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.OnConnected:
+            //        this.Connected = true;
+            //        break;
+            //    case ActionType.OnDisconnected:
+            //        this.Connected = false;
+            //        break;
+            //}
+            //Logger.LogDebug(pipeMessage.Text);
+
         }
-        
+
         /// <summary>
         /// Show the ColorStyles form
         /// </summary>

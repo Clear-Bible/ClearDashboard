@@ -98,7 +98,7 @@ namespace ClearDashboard.Wpf.ViewModels.Menus
         {
             if (ViewModel != null)
             {
-                ViewModel.WindowIDToLoad = Id;
+                ViewModel.WindowIdToLoad = Id;
             }
         }
     }
