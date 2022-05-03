@@ -1,34 +1,35 @@
-﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
+﻿using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.Data.Features.Verse;
+using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
-using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 using Microsoft.AspNet.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin.Hosting;
 using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ClearDashboard.ParatextPlugin.Data.Features.Project;
-using ClearDashboard.ParatextPlugin.Data.Features.Verse;
-using MediatR;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
-    public partial class MainWindow : EmbeddedPluginControl
+    public interface IPluginLogger
+    {
+        void AppendText(Color color, string message);
+    }
+    public partial class MainWindow : EmbeddedPluginControl, IPluginLogger
     {
         #region props
 
         private IProject _project;
-        private int _bookNumber;
+        
         private IVerseRef _verseRef;
-        private IReadOnlyList<IProjectNote> _noteList;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
 
@@ -39,13 +40,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private IDisposable WebAppProxy { get; set; }
 
-        private readonly IBiblicalTermList _listProject;
-        // ReSharper disable once InconsistentNaming
-        private readonly IBiblicalTermList _listAll;
-
-
         private delegate void AppendMsgTextDelegate(Color color, string text);
-        //private Form _parentForm;
 
         #endregion
 
@@ -152,6 +147,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
 
+            if (_mediator == null)
+            {
+                throw new NullReferenceException(
+                    "The 'IMediator' instance is null. Please ensure Mediator has been properly configured with the DI container.");
+            }
+
             {
                 var result = await _mediator.Send(new GetCurrentVerseCommand());
                 if (result.Success)
@@ -165,7 +166,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 var result = await _mediator.Send(new GetCurrentProjectCommand());
                 if (result.Success)
                 {
-                    AppendText(Color.Orange, $"Sending project: {result.Data.ShortName}");
+                    AppendText(Color.Orange, $"Sending project: {result.Data?.ShortName}");
                     _hubContext.Clients.All.SendProject(result.Data);
                 }
             }
@@ -189,7 +190,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 WebAppProxy = WebApp.Start(baseAddress,
                     (appBuilder) =>
                     {
-                        WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host);
+                        WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, this);
                         WebHostStartup.Configuration(appBuilder);
                     });
 
@@ -200,17 +201,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                 currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             }
         }
-
-
-        /// <summary>
-        /// Gets the current state of the control, from which the control must know how to
-        /// restore itself EmbeddedPluginControl.OnAddedToParent(Paratext.PluginInterfaces.IPluginChildWindow,Paratext.PluginInterfaces.IWindowPluginHost,System.String) is called).
-        /// </summary>
-		//public override string GetState()
-  //      {
-  //          return null;
-  //      }
-
 
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
@@ -248,7 +238,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 _verseRef = newReference;
                 //StartWebApplication();
-                GetCurrentVerseAsync().Forget();
+               
+                // TODO:  send SignalR message when VerseRef changes.
             }
         }
 
@@ -258,20 +249,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Methods
 
 
-        /// <summary>
-        /// Send out the current verse through the pipe
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetCurrentVerseAsync()
-        {
-            string verseId = _verseRef.BBBCCCVVV.ToString();
-            if (verseId.Length < 8)
-            {
-                verseId = verseId.PadLeft(8, '0');
-            }
-
-           
-        }
+      
 
         /// <summary>
         /// Send out the Biblical Terms for ALL BTs
@@ -437,10 +415,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         //    return bcvDict;
         //}
 
-        /// <summary>
-        /// Does a registry check to ensure that ClearSuite is reachable
-        /// </summary>
-        /// <returns></returns>
+        // /// <summary>
+        // /// Does a registry check to ensure that ClearSuite is reachable
+        // /// </summary>
+        // /// <returns></returns>
         //public bool CheckIfClearSuiteInstalledAsync()
         //{
         //    //Here we peek into the registry to see if they even have clear engine controller installed
