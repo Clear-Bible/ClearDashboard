@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -160,11 +161,32 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            await ProjectManager.Initialize();
+            InitializeProjectManager();
             await base.OnActivateAsync(cancellationToken);
         }
 
-      
+        private void InitializeProjectManager()
+        {
+            // delay long enough for the application to be rendered before 
+            // asking the ProjectManager to initialize.  This is due to
+            // the blocking nature of connecting to SignalR.
+            var dispatcherTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(100)
+            };
+
+            async void OnTickHandler(object sender, EventArgs args)
+            {
+                dispatcherTimer.Stop();
+                await ProjectManager.Initialize();
+                dispatcherTimer.Tick -= OnTickHandler;
+            };
+
+            dispatcherTimer.Tick += OnTickHandler;
+            dispatcherTimer.Start();
+        }
+
+
         protected override void OnViewLoaded(object view)
         {
             SetLanguage();
