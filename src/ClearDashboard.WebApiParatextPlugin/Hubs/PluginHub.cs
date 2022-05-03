@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Drawing;
+using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Threading.Tasks;
@@ -15,13 +16,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
     public class PluginHub : Hub
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly IPluginLogger _logger;
         public PluginHub()
         {
             // TODO:  Investigate how to get SignalR to inject the mediator for us.
             //        I really hate this tight coupling.
             _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
-            _logger = WebHostStartup.ServiceProvider.GetService<ILogger<PluginHub>>();
+            _logger = WebHostStartup.ServiceProvider.GetService<IPluginLogger>();
         }
         public void Send(string name, string message)
         {
@@ -41,10 +42,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         public override async Task OnConnected()
         {
             {
-                _logger.LogInformation($"New client connected - {Context.ConnectionId}");
+                _logger.AppendText(Color.DarkOrange, $"New client connected - {Context.ConnectionId}");
                 var result = await _mediator.Send(new GetCurrentVerseCommand());
                 if (result.Success)
                 {
+                    _logger.AppendText(Color.DarkOrange, $"Sending verse - {result.Data}");
                     Clients.All.SendVerse(result.Data);
                 }
             }
@@ -53,6 +55,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                 var result = await _mediator.Send(new GetCurrentProjectCommand());
                 if (result.Success)
                 {
+                    _logger.AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");
                     Clients.All.SendProject(result.Data);
                 }
             }
