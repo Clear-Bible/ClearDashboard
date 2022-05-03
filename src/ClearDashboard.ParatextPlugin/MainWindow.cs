@@ -13,6 +13,7 @@ using ClearDashboard.ParatextPlugin.Data;
 using ClearDashboard.ParatextPlugin.Data.Models;
 using ClearDashboard.ParatextPlugin.Extensions;
 using ClearDashboard.ParatextPlugin.Helpers;
+using ClearDashboard.ParatextPlugin.Models;
 using H.Formatters;
 using H.Pipes;
 using Microsoft.VisualStudio.Threading;
@@ -345,6 +346,7 @@ namespace ClearDashboard.ParatextPlugin
 
                     //btnRestart_Click(null, null);
                     break;
+                }
                 default:
                 {
                     AppendText(Color.Red, $"Method {message.Action} not implemented");
