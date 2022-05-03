@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Views
                         dockManager.DocumentsSource = null;
                         var layoutSerializer = new XmlLayoutSerializer(dockManager);
 
-                        _vm.LoadLayout(layoutSerializer);
+                        //_vm.LoadLayout(layoutSerializer);
 
                         break;
                     case "SAVE":

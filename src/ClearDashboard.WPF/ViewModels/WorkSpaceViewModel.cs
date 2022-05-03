@@ -489,8 +489,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");
             }
 
-            //GridIsVisible = false;
-
             Init();
         }
 
@@ -525,9 +523,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void LoadLayoutByID(string layoutId)
         {
-            var file = FileLayouts.Where(f => f.LayoutID == layoutId);
+            var layoutFile = FileLayouts.SingleOrDefault(f => f.LayoutID == layoutId);
 
-            if (file is null)
+            if (layoutFile is null)
             {
                 return;
             }
@@ -536,7 +534,7 @@ namespace ClearDashboard.Wpf.ViewModels
             _dockingManager.AnchorablesSource = null;
             _dockingManager.DocumentsSource = null;
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
-            LoadLayout(layoutSerializer);
+            LoadLayout(layoutSerializer, layoutFile.LayoutPath);
 
         }
 
