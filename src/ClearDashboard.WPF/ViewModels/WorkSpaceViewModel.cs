@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using ClearDashboard.DataAccessLayer;
@@ -80,16 +81,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private bool _gridIsVisible = true;
+        private bool _gridIsVisible;
         public bool GridIsVisible
         {
             get => _gridIsVisible;
-            set
-            {
-                _gridIsVisible = value;
-                Set(ref _gridIsVisible, value);
-                //NotifyOfPropertyChange(() => GridIsVisible);
-            }
+            set => Set(ref _gridIsVisible, value);
+          
         }
 
         private string _verseRef;
@@ -111,7 +108,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 _windowIdToLoad = value;
                 NotifyOfPropertyChange(() => WindowIDToLoad);
-                OnPropertyChanged("WindowIDToLoad");
+                //OnPropertyChanged("WindowIDToLoad");
             }
         }
 
@@ -217,6 +214,24 @@ namespace ClearDashboard.Wpf.ViewModels
         private ILogger<WorkSpaceViewModel> Logger { get; set; }
         private INavigationService NavigationService { get; set; }
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection FlowDirection
+        {
+            get => _flowDirection;
+            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+        }
+
+        private ObservableCollection<LayoutFile> _fileLayouts = new();
+        public ObservableCollection<LayoutFile> FileLayouts
+        {
+            get => _fileLayouts;
+            set
+            {
+                _fileLayouts = value;
+                NotifyOfPropertyChange(() => FileLayouts);
+            }
+        }
+
         public WorkSpaceViewModel(INavigationService navigationService, 
             ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager) 
             
@@ -224,6 +239,8 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager = projectManager;
             Logger = logger;  
             NavigationService = navigationService;
+
+            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
             //ProjectManager.NamedPipeChanged += HandleEventAsync;
 
@@ -268,8 +285,79 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+
+        private ObservableCollection<LayoutFile> GetFileLayouts()
+        {
+            int id = 0;
+            ObservableCollection<LayoutFile> fileLayouts = new();
+            // add in the default layouts
+            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
+            if (Directory.Exists(path))
+            {
+                var files = Directory.GetFiles(path, "*.Layout.config");
+
+                foreach (var file in files)
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                    fileLayouts.Add(new LayoutFile
+                    {
+                        LayoutName = name,
+                        LayoutID = "Layout:" + id.ToString(),
+                        LayoutPath = file,
+                    });
+                    id++;
+                }
+            }
+
+            // get the project layouts
+            if (ProjectManager is not null)
+            {
+                path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*.Layout.config");
+
+                    foreach (var file in files)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                        fileLayouts.Add(new LayoutFile
+                        {
+                            LayoutName = name,
+                            LayoutID = "ProjectLayout:" + id.ToString(),
+                            LayoutPath = file,
+                        });
+                        id++;
+                    }
+                }
+            }
+
+            return fileLayouts;
+        }
         public async void Init()
         {
+            GridIsVisible = true;
+            FileLayouts = GetFileLayouts();
+            ObservableCollection<MenuItemViewModel> layouts = new();
+
+            // add in the standard menu items
+            layouts.Add(new MenuItemViewModel { Header = "Save Current Layout", Id = "SaveID", ViewModel = this, });
+            layouts.Add(new MenuItemViewModel { Header = "Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
+            layouts.Add(new MenuItemViewModel { Header = "_________________________", Id = "SeparatorID", ViewModel = this, });
+
+            foreach (var fileLayout in FileLayouts)
+            {
+                layouts.Add(new MenuItemViewModel
+                {
+                    Header = fileLayout.LayoutName,
+                    Id = fileLayout.LayoutID,
+                    ViewModel = this,
+                });
+            }
+
             // initiate the menu system
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
@@ -519,12 +607,12 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation($"{pipeMessage.Text}");
         }
 
-        public override event PropertyChangedEventHandler PropertyChanged;
+        //public override event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        //private void OnPropertyChanged([CallerMemberName] string name = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        //}
 
 
 
