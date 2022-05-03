@@ -168,10 +168,6 @@ namespace ClearDashboard.ParatextPlugin.Actions
         /// <returns></returns>
         private string LookupVerseText(IProject mProject, int BookNum, int ChapterNum, int VerseNum)
         {
-            _lastBookCode = "";
-            _lastChapterNum = 0;
-            _lastScript = new List<string>();
-
             var tokens = mProject.GetUSFMTokens(BookNum, ChapterNum);
             if (tokens is null)
             {
