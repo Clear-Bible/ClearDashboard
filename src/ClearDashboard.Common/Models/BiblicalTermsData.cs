@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ClearDashboard.Common.Models
 {
-    public class BiblicalTermsData : INotifyPropertyChanged
+    public class BiblicalTermsData 
     {
 
         private string _id = String.Empty;
@@ -16,7 +16,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _id = value;
-                OnPropertyChanged();
             }
         }
 
@@ -28,7 +27,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _lemma = value;
-                OnPropertyChanged();
             }
         }
 
@@ -40,7 +38,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _transliteration = value;
-                OnPropertyChanged();
             }
         }
 
@@ -52,7 +49,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _semanticDomain = value;
-                OnPropertyChanged();
             }
         }
 
@@ -64,7 +60,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _localGloss = value;
-                OnPropertyChanged();
             }
         }
 
@@ -76,7 +71,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _gloss = value;
-                OnPropertyChanged();
             }
         }
 
@@ -89,7 +83,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _linkString = value;
-                OnPropertyChanged();
             }
         }
 
@@ -101,7 +94,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _referencesList = value;
-                OnPropertyChanged();
             }
         }
 
@@ -112,7 +104,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _referencesLong = value;
-                OnPropertyChanged();
             }
         }
 
@@ -125,7 +116,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _referencesListText = value;
-                OnPropertyChanged();
             }
         }
 
@@ -137,7 +127,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _renderings = value;
-                OnPropertyChanged();
             }
         }
 
@@ -148,7 +137,6 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _renderingString = value;
-                OnPropertyChanged();
             }
         }
 
@@ -159,15 +147,8 @@ namespace ClearDashboard.Common.Models
             set
             {
                 _renderingCount = value;
-                OnPropertyChanged();
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
     }
 }

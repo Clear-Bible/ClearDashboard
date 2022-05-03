@@ -86,20 +86,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Commands
 
-        //private RelayCommand _openCommand = null;
-        //public ICommand OpenCommand
-        //{
-        //    get
-        //    {
-        //        if (_openCommand == null)
-        //        {
-        //            _openCommand = new RelayCommand((p) => LoadLayout(p), null);
-        //        }
-
-        //        return _openCommand;
-        //    }
-        //}
-
 
         #endregion  //Commands
 
@@ -261,7 +247,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 
                 NotifyOfPropertyChange(() => WindowIDToLoad);
-                OnPropertyChanged("WindowIDToLoad");
             }
         }
 
@@ -925,10 +910,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public override event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         #endregion // Methods
     }
