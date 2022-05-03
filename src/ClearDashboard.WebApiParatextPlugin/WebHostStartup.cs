@@ -24,17 +24,19 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IVerseRef _verseRef;
         private static MainWindow _mainWindow;
         private static IWindowPluginHost _pluginHost;
+        private static IPluginLogger _pluginLogger;
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
         //public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
 
-        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IWindowPluginHost pluginHost)
+        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IWindowPluginHost pluginHost, IPluginLogger pluginLogger)
         {
             _project = project;
             _verseRef = verseRef;
             _mainWindow = mainWindow;
             _pluginHost = pluginHost;
+            _pluginLogger = pluginLogger;
         }
 
         // This code configures Web API. The Startup class is specified as a type
@@ -110,6 +112,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
             services.AddSingleton<IWindowPluginHost>(sp =>_pluginHost);
+            services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
            
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
