@@ -40,6 +40,7 @@ namespace ClearDashboard.ParatextPlugin.Data
         SetUSFM,
         SetNotesObject,
         SetProject,
+        SetCurrentVerse,
 
         CurrentVerse,
     }

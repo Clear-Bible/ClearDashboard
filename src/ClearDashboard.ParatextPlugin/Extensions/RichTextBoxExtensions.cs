@@ -29,10 +29,7 @@ namespace ClearDashboard.ParatextPlugin.Extensions
                 rtb.SelectionStart = rtb.Text.Length;
                 // scroll it automatically
                 rtb.ScrollToCaret();
-
             }
-
-
         }
     }
 }

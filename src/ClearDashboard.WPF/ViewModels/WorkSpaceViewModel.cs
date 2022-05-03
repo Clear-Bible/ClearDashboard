@@ -35,10 +35,24 @@ namespace ClearDashboard.Wpf.ViewModels
         public DashboardProject DashboardProject { get; set; }
         private DashboardViewModel _dashboardViewModel;
 
-       
+        DockingManager _dockingManager = new DockingManager();
+        
         #endregion //Member Variables
 
         #region Public Properties
+
+        private bool _paratextSync = true;
+        public bool ParatextSync
+        {
+            get => _paratextSync;
+            set
+            {
+                _paratextSync = value;
+                NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+
         public event EventHandler ActiveDocumentChanged;
         private FileViewModel _activeDocument = null;
         public FileViewModel ActiveDocument
@@ -58,23 +72,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public bool IsRtl { get; set; } = false;
 
+        public bool OutGoingChangesStarted { get; set; } = false;
+
         #endregion //Public Properties
 
         #region Commands
-
-        //private RelayCommand _openCommand = null;
-        //public ICommand OpenCommand
-        //{
-        //    get
-        //    {
-        //        if (_openCommand == null)
-        //        {
-        //            _openCommand = new RelayCommand((p) => LoadLayout(p), null);
-        //        }
-
-        //        return _openCommand;
-        //    }
-        //}
 
 
         #endregion  //Commands
@@ -88,6 +90,66 @@ namespace ClearDashboard.Wpf.ViewModels
             set => Set(ref _gridIsVisible, value);
           
         }
+
+        private LayoutFile _SelectedLayout;
+        public LayoutFile SelectedLayout
+        {
+            get => _SelectedLayout;
+            set
+            {
+                _SelectedLayout = value; 
+                NotifyOfPropertyChange(nameof(SelectedLayout));
+            }
+        }
+
+        private string _selectedLayoutText;
+
+        public string SelectedLayoutText
+        {
+            get => _selectedLayoutText;
+            set
+            {
+                _selectedLayoutText = value; 
+                NotifyOfPropertyChange(() => SelectedLayoutText);
+            }
+        }
+
+
+
+
+        private ObservableCollection<int> _verseNums = new();
+        public ObservableCollection<int> VerseNums
+        {
+            get => _verseNums;
+            set
+            {
+                _verseNums = value;
+                NotifyOfPropertyChange(() => VerseNums);
+            }
+        }
+        
+        private Dictionary<string, string> _BCVDictionary;
+        public Dictionary<string, string> BCVDictionary
+        {
+            get => _BCVDictionary;
+            set
+            {
+                _BCVDictionary = value;
+                NotifyOfPropertyChange(() => BCVDictionary);
+            }
+        }
+
+        private ObservableCollection<string> _bookNames = new();
+        public ObservableCollection<string> BookNames
+        {
+            get => _bookNames;
+            set
+            {
+                _bookNames = value;
+                NotifyOfPropertyChange(() => BookNames);
+            }
+        }
+
 
         private string _verseRef;
         public string VerseRef
@@ -106,17 +168,67 @@ namespace ClearDashboard.Wpf.ViewModels
             get => _windowIdToLoad;
             set
             {
-                _windowIdToLoad = value;
+                if (value.StartsWith("Layout:"))
+                {
+                    LoadLayoutByID(value);
+                }
+                else
+                {
+                    switch (value)
+                    {
+                        case "LayoutID":
+                            break;
+                        case "AlignmentToolID":
+                            _windowIdToLoad = "ALIGNMENTTOOL";
+                            break;
+                        case "BiblicalTermsID":
+                            _windowIdToLoad = "BIBLICALTERMS";
+                            break;
+                        case "ConcordanceToolID":
+                            _windowIdToLoad = "CONCORDANCETOOL";
+                            break;
+                        case "DashboardID":
+                            _windowIdToLoad = "DASHBOARD";
+                            break;
+                        case "NotesID":
+                            _windowIdToLoad = "NOTES";
+                            break;
+                        case "PINSID":
+                            _windowIdToLoad = "PINS";
+                            break;
+                        case "WordMeaningsID":
+                            _windowIdToLoad = "WORDMEANINGS";
+                            break;
+                        case "SourceContextID":
+                            _windowIdToLoad = "SOURCECONTEXT";
+                            break;
+                        case "StartPageID":
+                            _windowIdToLoad = "STARTPAGE";
+                            break;
+                        case "TargetContextID":
+                            _windowIdToLoad = "TARGETCONTEXT";
+                            break;
+                        case "TextCollectionID":
+                            _windowIdToLoad = "TEXTCOLLECTION";
+                            break;
+                        case "SaveID":
+                            GridIsVisible = true;
+                            break;
+                        case "LoadID":
+
+                            break;
+                        default:
+                            _windowIdToLoad = value;
+                            break;
+                    }
+                }
+
+                
                 NotifyOfPropertyChange(() => WindowIDToLoad);
             }
         }
 
-        private ObservableCollection<MenuItemViewModel> _menuItems = new ObservableCollection<MenuItemViewModel>
-        {
-            new MenuItemViewModel{ Header="Layouts"},
-            new MenuItemViewModel{ Header="Windows"},
-            new MenuItemViewModel{ Header="Help"},
-        };
+        private ObservableCollection<MenuItemViewModel> _menuItems = new ();
         public ObservableCollection<MenuItemViewModel> MenuItems
         {
             get => _menuItems;
@@ -128,19 +240,19 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        //ObservableCollection<ToolViewModel> _tools = new ObservableCollection<ToolViewModel>();
-        //public ObservableCollection<ToolViewModel> Tools
-        //{
-        //    get => _tools;
-        //    set
-        //    {
-        //        _tools = value;
-        //        NotifyOfPropertyChange(() => Tools);
-        //    }
-        //}
+        ObservableCollection<ToolViewModel> _tools = new ();
+        public ObservableCollection<ToolViewModel> Tools
+        {
+            get => _tools;
+            set
+            {
+                _tools = value;
+                NotifyOfPropertyChange(() => Tools);
+            }
+        }
 
 
-        ObservableCollection<PaneViewModel> _files = new ObservableCollection<PaneViewModel>();
+        ObservableCollection<PaneViewModel> _files = new ();
         public ObservableCollection<PaneViewModel> Files
         {
             get => _files;
@@ -244,7 +356,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
-            
+
             Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
@@ -282,6 +394,10 @@ namespace ClearDashboard.Wpf.ViewModels
                     DashboardProject = (Application.Current as App)?.SelectedDashboardProject;
                 }
             }
+
+
+            // Subscribe to changes of the Book Chapter Verse data object.
+            CurrentBcv.PropertyChanged += BcvChanged;
         }
 
 
@@ -338,20 +454,20 @@ namespace ClearDashboard.Wpf.ViewModels
         }
         public async void Init()
         {
-            GridIsVisible = true;
             FileLayouts = GetFileLayouts();
-            ObservableCollection<MenuItemViewModel> layouts = new();
+            ObservableCollection<MenuItemViewModel> layouts = new ();
+
 
             // add in the standard menu items
-            layouts.Add(new MenuItemViewModel { Header = "Save Current Layout", Id = "SaveID", ViewModel = this, });
-            layouts.Add(new MenuItemViewModel { Header = "Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
+            layouts.Add(new MenuItemViewModel { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon=null });
+            layouts.Add(new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
             layouts.Add(new MenuItemViewModel { Header = "_________________________", Id = "SeparatorID", ViewModel = this, });
 
             foreach (var fileLayout in FileLayouts)
             {
                 layouts.Add(new MenuItemViewModel
                 {
-                    Header = fileLayout.LayoutName,
+                    Header = "🝆 " + fileLayout.LayoutName,
                     Id = fileLayout.LayoutID,
                     ViewModel = this,
                 });
@@ -361,24 +477,28 @@ namespace ClearDashboard.Wpf.ViewModels
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
-                new MenuItemViewModel { Header = "Layouts", Id = "LayoutID", ViewModel = this, },
+                new MenuItemViewModel
+                {
+                    Header = "Layouts", Id = "LayoutID", ViewModel = this,
+                    MenuItems = layouts,
+                },
                 new MenuItemViewModel
                 {
                     Header = "Windows", Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new MenuItemViewModel { Header = "Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Notes", Id = "NotesID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "PINS", Id = "PINSID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Source Context", Id = "SourceContextID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Start Page", Id = "StartPageID", ViewModel = this, },
-                        new MenuItemViewModel { Header = "Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new MenuItemViewModel
-                            { Header = "Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this,},
+                        new MenuItemViewModel { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
+                        new MenuItemViewModel { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
                     }
                 },
                 new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
@@ -387,18 +507,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // add in the document panes
             _files.Clear();
-
-
-            Debug.WriteLine(DashboardProject.Name);
-            _dashboardViewModel = IoC.Get<DashboardViewModel>();
-            _files.Add(_dashboardViewModel);
-
+            _files.Add(IoC.Get<DashboardViewModel>());
             _files.Add(IoC.Get<ConcordanceViewModel>());
             _files.Add(IoC.Get<StartPageViewModel>());
             _files.Add(IoC.Get<AlignmentToolViewModel>());
-            // trigger property changed event
-            Files.Add(IoC.Get<TreeDownViewModel>());
-
+            _files.Add(IoC.Get<TreeDownViewModel>());
+            NotifyOfPropertyChange(() => Files);
 
             // add in the tool panes
             //_tools.Clear();
@@ -423,6 +537,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
+            NotifyOfPropertyChange(() => BookNames);
 
             //await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
 
@@ -431,6 +546,13 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override void OnViewAttached(object view, object context)
         {
             base.OnViewAttached(view, context);
+
+            // hook up a reference to the windows dock manager
+            if (view is WorkSpaceView currentView)
+            {
+                _dockingManager = (DockingManager)currentView.FindName("dockManager");
+            }
+
             Init();
         }
 
@@ -465,8 +587,28 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
-            // TODO
+            GridIsVisible = false;
+        }
 
+        private void LoadLayoutByID(string layoutId)
+        {
+            var layoutFile = FileLayouts.SingleOrDefault(f => f.LayoutID == layoutId);
+
+            if (layoutFile is null)
+            {
+                return;
+            }
+
+            // remove all existing windows
+            _dockingManager.AnchorablesSource = null;
+            _dockingManager.DocumentsSource = null;
+            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+            LoadLayout(layoutSerializer, layoutFile.LayoutPath);
+
+        }
+
+        private void WorkSpaceViewModel_ThemeChanged()
+        {
             var newTheme = ((App)Application.Current).Theme;
             if (newTheme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
@@ -481,7 +623,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public void LoadLayout(XmlLayoutSerializer layoutSerializer)
+        public void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
         {
             // Here I've implemented the LayoutSerializationCallback just to show
             //  a way to feed layout deserialization with content loaded at runtime
@@ -491,48 +633,66 @@ namespace ClearDashboard.Wpf.ViewModels
             // not currently loaded
             layoutSerializer.LayoutSerializationCallback += (s, e) =>
             {
-                switch (e.Model.ContentId.ToUpper())
+                if (e.Model.ContentId is not null)
                 {
-                    case WorkspaceLayoutNames.Dashboard:
-                        e.Content = _dashboardViewModel ?? new DashboardViewModel();
-                        break;
-                    case WorkspaceLayoutNames.ConcordanceTool:
-                        e.Content = new ConcordanceViewModel();
-                        break;
-                    case WorkspaceLayoutNames.BiblicalTerms:
-                        e.Content = IoC.Get<BiblicalTermsViewModel>();
-                        break;
-                    case WorkspaceLayoutNames.WordMeanings:
-                        e.Content = new WordMeaningsViewModel();
-                        break;
-                    case WorkspaceLayoutNames.SourceContext:
-                        e.Content = new SourceContextViewModel();
-                        break;
-                    case WorkspaceLayoutNames.TargetContext:
-                        e.Content = new TargetContextViewModel();
-                        break;
-                    case WorkspaceLayoutNames.Notes:
-                        e.Content = new NotesViewModel();
-                        break;
-                    case WorkspaceLayoutNames.Pins:
-                        e.Content = new PinsViewModel();
-                        break;
-                    case WorkspaceLayoutNames.TextCollection:
-                        e.Content = new TextCollectionViewModel();
-                        break;
-                    case WorkspaceLayoutNames.StartPage:
-                        e.Content = new StartPageViewModel();
-                        break;
-                    case WorkspaceLayoutNames.AlignmentTool:
-                        e.Content = new AlignmentToolViewModel();
-                        break;
-                    case WorkspaceLayoutNames.TreeDown:
-                        e.Content = new TreeDownViewModel();
-                        break;
-
+                    switch (e.Model.ContentId.ToUpper())
+                    {
+                        case WorkspaceLayoutNames.Dashboard:
+                            e.Content = _dashboardViewModel ?? new DashboardViewModel();
+                            break;
+                        case WorkspaceLayoutNames.ConcordanceTool:
+                            e.Content = new ConcordanceViewModel();
+                            break;
+                        case WorkspaceLayoutNames.BiblicalTerms:
+                            e.Content = IoC.Get<BiblicalTermsViewModel>();
+                            break;
+                        case WorkspaceLayoutNames.WordMeanings:
+                            e.Content = new WordMeaningsViewModel();
+                            break;
+                        case WorkspaceLayoutNames.SourceContext:
+                            e.Content = new SourceContextViewModel();
+                            break;
+                        case WorkspaceLayoutNames.TargetContext:
+                            e.Content = new TargetContextViewModel();
+                            break;
+                        case WorkspaceLayoutNames.Notes:
+                            e.Content = new NotesViewModel();
+                            break;
+                        case WorkspaceLayoutNames.Pins:
+                            e.Content = new PinsViewModel();
+                            break;
+                        case WorkspaceLayoutNames.TextCollection:
+                            e.Content = new TextCollectionViewModel();
+                            break;
+                        case WorkspaceLayoutNames.StartPage:
+                            e.Content = new StartPageViewModel();
+                            break;
+                        case WorkspaceLayoutNames.AlignmentTool:
+                            e.Content = new AlignmentToolViewModel();
+                            break;
+                        case WorkspaceLayoutNames.TreeDown:
+                            e.Content = new TreeDownViewModel();
+                            break;
+                    }
                 }
             };
-            layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
+            try
+            {
+                layoutSerializer.Deserialize(filePath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
+            finally
+            {
+                filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
+                if (! File.Exists(filePath))
+                {
+                    layoutSerializer.Deserialize(filePath);
+                }
+            }
+
         }
 
         public (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
@@ -591,11 +751,37 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 case ActionType.CurrentVerse:
                     this.VerseRef = pipeMessage.Text;
-                    if (pipeMessage.Text != CurrentBcv.GetVerseId())
+                    if (ParatextSync)
                     {
-                        _currentBcv.SetVerseFromId(pipeMessage.Text);
-                        NotifyOfPropertyChange(() => CurrentBcv);
+                        OutGoingChangesStarted = true;
+                        if (pipeMessage.Text != CurrentBcv.VerseLocationId)
+                        {
+                            if (BCVDictionary is null)
+                            {
+                                return;
+                            }
+
+                            if (BCVDictionary.Count == 0 || CurrentBcv is null)
+                            {
+                                return;
+                            }
+
+                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+
+                            CalculateChapters();
+
+                            CalculateVerses();
+
+                            // during the resetting of all the chapters & verse lists from the above,
+                            // this defaults back to {book}001001
+                            // so we need to reset it again with this call
+                            CurrentBcv.SetVerseFromId(pipeMessage.Text);
+
+                            NotifyOfPropertyChange(() => CurrentBcv);
+                        }
+                        OutGoingChangesStarted = false;
                     }
+
                     break;
                 case ActionType.OnConnected:
                     break;
@@ -607,116 +793,192 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        #endregion // Methods
-
-        #region BCV Navigation
-
-        /// <summary>
-        /// Given a book ID, this fills the ChapNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
-        /// </summary>
-        /// <param name="bookId">What book do you want a chapter list and verse ID from?</param>
-        /// <param name="sVerseId">If set, this value is returned.</param>
-        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
-        private string GetNumberOfChapters(string bookId, string sVerseId)
+        private void CalculateChapters()
         {
-            return "";
-
-            //if (Alignment == null)
-            //{
-            //    return string.Empty;
-            //}
-
-            //CurrentBcv.ChapterNumbers = new List<int>(Alignment.verses
-            //    .Where(w => w.VerseId.Substring(0, 2).Equals(bookId, StringComparison.Ordinal))
-            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(2, 3)))
-            //    .Distinct().OrderBy(o => o));
-
-            //if (sVerseId == "")
-            //{
-            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 2)
-            //        .Equals(bookId, StringComparison.Ordinal))
-            //        .Distinct().OrderBy(o => o.VerseId)
-            //        .First().VerseId;
-            //}
-            //else
-            //{
-            //    return sVerseId;
-            //}
-        }
-
-        /// <summary>
-        /// Given a book and chapter ID, this fills the VerseNums Observable list and returns the ID of the first verse, or the verse passed in the sVerseId string.
-        /// </summary>
-        /// <param name="bookChapNum">What book and chapter do you want a verse list and verse ID from?</param>
-        /// <param name="sVerseId">If set, this value is returned.</param>
-        /// <returns>ID of the first verse, or the verse passed in the sVerseId string.</returns>
-        private string GetVerseNumberList(string bookChapNum, string sVerseId)
-        {
-            return "";
-
-            //if (Alignment == null)
-            //{
-            //    return string.Empty;
-            //}
-
-            //CurrentBcv.VerseNumbers = new List<int>(Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
-            //.Equals(bookChapNum, StringComparison.Ordinal))
-            //    .Select(x => Convert.ToInt32(x.VerseId.Substring(5, 3)))
-            //    .Distinct().OrderBy(o => o));
-
-            //if (sVerseId == "" && CurrentBcv.VerseNumbers.Count != 0)
-            //{
-            //    return Alignment.verses.Where(w => w.VerseId.Substring(0, 5)
-            //        .Equals(bookChapNum, StringComparison.Ordinal))
-            //        .Distinct().OrderBy(o => o.VerseId)
-            //        .FirstOrDefault().VerseId;
-            //}
-            //else
-            //{
-            //    return sVerseId;
-            //}
-        }
-
-        public void VerseChanged(string verseNum)
-        {
-            CurrentBcv.Verse = Convert.ToInt32(verseNum);
-            // SwitchVerse();
-        }
-
-
-        /// <summary>
-        /// Triggered when any change is reported for the data fields or properties of the Book Chapter Verse object.
-        /// </summary>
-        /// <param name="sender">This should always be the CurrentBcv object.</param>
-        /// <param name="e">Has information about what property changed.</param>
-        private void BcvChanged(object sender, PropertyChangedEventArgs e)
-        {
-            BookChapterVerse bcv = (BookChapterVerse)sender;
-            string bookChapNum = string.Concat(bcv.Book, bcv.ChapterIdText);
-
-            if (e.PropertyName == "BookName")
+            // CHAPTERS
+            string bookID = CurrentBcv.Book;
+            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
             {
-                _ = GetNumberOfChapters(bcv.Book, bcv.VerseIdText);
-            }
-            else if (e.PropertyName == "Chapter")
-            {
-                _ = GetVerseNumberList(bookChapNum, "");
+                chapters[i] = chapters[i].Substring(2, 3);
             }
 
-            if (e.PropertyName == "VerseLocationId") // This is triggered by any change to the Book, Chapter, or Verse.
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
             {
-                //SwitchVerse();
-                //VerseIdFull = $"{bcv.BookName} {bcv.Chapter}:{bcv.Verse}";
-
-                if (bcv.VerseNumbers.Count < 2)
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
                 {
-                    _ = GetVerseNumberList(bookChapNum, "");
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                CurrentBcv.ChapterNumbers = chapterNumbers;
+            });
+        }
+
+        private async void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (ParatextSync && OutGoingChangesStarted == false)
+            {
+                var newVerse = CurrentBcv.GetVerseId();
+                await ProjectManager.SendPipeMessage(ProjectManager.PipeAction.SetCurrentVerse, newVerse).ConfigureAwait(false);
+                Console.WriteLine("");
+            }
+        }
+
+        private void CalculateVerses()
+        {
+            // VERSES
+            string bookID = CurrentBcv.Book;
+            string chapID = CurrentBcv.ChapterIdText;
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookID + chapID)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(5);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                CurrentBcv.VerseNumbers = verseNumbers;
+            });
+        }
+
+        /// <summary>
+        /// Unhide window
+        /// </summary>
+        /// <param name="windowTag"></param>
+        private void UnHideWindow(string windowTag)
+        {
+            // find the pane in the dockmanager with this contentID
+            var windowPane = _dockingManager.Layout.Descendents()
+                .OfType<LayoutAnchorable>()
+                .SingleOrDefault(a =>
+                {
+                    Debug.WriteLine(a.Title);
+                    if (a.ContentId is not null)
+                    {
+                        return a.ContentId.ToUpper() == windowTag.ToUpper();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                });
+
+            if (windowPane != null)
+            {
+                if (windowPane.IsAutoHidden)
+                {
+                    windowPane.ToggleAutoHide();
+                }
+                else if (windowPane.IsHidden)
+                {
+                    windowPane.Show();
+                }
+                else if (windowPane.IsVisible)
+                {
+                    windowPane.IsActive = true;
+                }
+            }
+            else
+            {
+                // window has been closed so reload it
+                windowPane = new LayoutAnchorable
+                {
+                    ContentId = windowTag
+                };
+
+                // setup the right ViewModel for the pane
+                var obj = LoadWindow(windowTag);
+                windowPane.Content = obj.vm;
+                windowPane.Title = obj.title;
+                windowPane.IsActive = true;
+                // set where it will doc on layout
+                if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+                {
+                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                }
+                else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                {
+                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                }
+            }
+        }
+
+        private ObservableCollection<LayoutFile> GetFileLayouts()
+        {
+            int id = 0;
+            ObservableCollection<LayoutFile> fileLayouts = new();
+            // add in the default layouts
+            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
+            if (Directory.Exists(path))
+            {
+                var files = Directory.GetFiles(path, "*.Layout.config");
+
+                foreach (var file in files)
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                    fileLayouts.Add(new LayoutFile
+                    {
+                        LayoutName=name,
+                        LayoutID= "Layout:" + id.ToString(),
+                        LayoutPath=file,
+                    });
+                    id++;
+                }
+            }
+            
+            // get the project layouts
+            if (_projectManager is not null)
+            {
+                path = _projectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*.Layout.config");
+
+                    foreach (var file in files)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                        fileLayouts.Add(new LayoutFile
+                        {
+                            LayoutName = name,
+                            LayoutID = "ProjectLayout:" + id.ToString(),
+                            LayoutPath = file,
+                        });
+                        id++;
+                    }
                 }
             }
 
-
+            return fileLayouts;
         }
-        #endregion
+
+
+        public void SetLayoutSaveName(string cboNamesText)
+        {
+            // todo
+            Console.WriteLine();
+        }
+
+        public override event PropertyChangedEventHandler PropertyChanged;
+
+
+        #endregion // Methods
     }
 
     public class WorkspaceLayoutNames
@@ -733,6 +995,5 @@ namespace ClearDashboard.Wpf.ViewModels
         public const string TextCollection = "TEXTCOLLECTION";
         public const string TreeDown = "TREEDOWN";
         public const string WordMeanings = "WORDMEANINGS";
-
     }
 }

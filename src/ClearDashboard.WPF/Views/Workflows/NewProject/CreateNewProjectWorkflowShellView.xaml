@@ -9,8 +9,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:newProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.NewProject"
+    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     Title="NewProjects"
     cm:Action.TargetWithoutContext=""
     d:DataContext="{d:DesignInstance Type=newProject:CreateNewProjectWorkflowShellViewModel,
@@ -38,6 +38,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ContentControl Grid.Column="0"  x:Name="ActiveItem" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+        <ContentControl
+            x:Name="ActiveItem"
+            Grid.Column="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
     </Grid>
 </Page>

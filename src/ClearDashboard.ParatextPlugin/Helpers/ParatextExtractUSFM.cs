@@ -13,6 +13,14 @@ namespace ClearDashboard.ParatextPlugin.Helpers
 {
     public class ParatextExtractUSFM
     {
+        /// <summary>
+        /// This method iterates over the tokenized USFM objects and pulls out only the chapter, verse, and
+        /// verse text data and saves each USFM book into the user's:
+        ///     \MyDocuments\ClearDashboard_Projects\DataFiles\{projectID} directory along with
+        /// the settings.xml and the custom versification files
+        /// </summary>
+        /// <param name="m_project"></param>
+        /// <param name="mainWindow"></param>
         public void ExportUSFMScripture(IProject m_project, MainWindow mainWindow)
         {
             string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -106,10 +114,10 @@ namespace ClearDashboard.ParatextPlugin.Helpers
             {
                 if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
                 {
-                    if (m_project.AvailableBooks[bookNum].Code == "PSA")
-                    {
-                        Console.WriteLine();
-                    }
+                    //if (m_project.AvailableBooks[bookNum].Code == "PSA")
+                    //{
+                    //    Console.WriteLine();
+                    //}
 
 
                     mainWindow.AppendText(Color.Blue, $"Processing {m_project.AvailableBooks[bookNum].Code}");
@@ -155,42 +163,12 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                             if (marker.Type == MarkerType.Verse)
                             {
                                 lastTokenText = false;
-                                // ReSharper disable once NotAccessedVariable
-                                int p = 0;
-                                bool result = int.TryParse(marker.Data, out p);
-
-                                if (result)
+                                if (!lastTokenChapter || lastVerseZero)
                                 {
-                                    if (!lastTokenChapter || lastVerseZero)
-                                    {
-                                        sb.AppendLine();
-                                    }
-                                    sb.Append($@"\v {marker.Data} ");
+                                    sb.AppendLine();
                                 }
-                                else
-                                {
-                                    // verse span so bust up the verse span
-                                    string[] nums = marker.Data.Split('-');
-                                    if (nums.Length > 1)
-                                    {
-                                        if (int.TryParse(nums[0], out p))
-                                        {
-                                            if (int.TryParse(nums[1], out p))
-                                            {
-                                                int start = Convert.ToInt16(nums[0]);
-                                                int end = Convert.ToInt16(nums[1]);
-                                                for (int j = start; j < end + 1; j++)
-                                                {
-                                                    if (!lastTokenChapter)
-                                                    {
-                                                        sb.AppendLine();
-                                                    }
-                                                    sb.Append($@"\v {j} ");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                // this includes single verses (\v 1) and multiline (\v 1-3)
+                                sb.Append($@"\v {marker.Data.ToString().Trim()} ");
                                 lastTokenChapter = false;
                                 lastVerseZero = false;
                             }
@@ -223,7 +201,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                     {
                                         sb.Append(textToken.Text);
                                     }
-                                    
+
                                     lastVerseZero = true;
                                     lastTokenText = true;
                                 }
@@ -236,7 +214,15 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                                     }
                                     else
                                     {
-                                        sb.Append(textToken.Text);
+                                        if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                        {
+                                            sb.Append(textToken.Text.TrimStart());
+                                        }
+                                        else
+                                        {
+                                            sb.Append(textToken.Text);
+                                        }
+
                                     }
 
                                     lastTokenText = true;
@@ -254,7 +240,7 @@ namespace ClearDashboard.ParatextPlugin.Helpers
                     {
                         mainWindow.AppendText(Color.Red, e.Message);
                     }
-                    
+
                 }
             }
         }

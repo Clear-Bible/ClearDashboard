@@ -1,7 +1,12 @@
-﻿using ClearDashboard.Common.Models;
+﻿using System;
+using System.Collections.Generic;
+using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,6 +18,23 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class BcvUserControl : UserControl
     {
+        #region Member Variables
+
+
+        #endregion
+
+        #region Observable Properties
+
+        public static readonly DependencyProperty _paratextSync =
+            DependencyProperty.Register("ParatextSync", typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true));
+        public bool ParatextSync
+        {
+            get => (bool)GetValue(_paratextSync);
+            set => SetValue(_paratextSync, value);
+        }
+
+
         public static readonly DependencyProperty _isRtl =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
@@ -23,21 +45,20 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(_isRtl, value);
         }
 
-        public static readonly DependencyProperty _currentBCV =
-            DependencyProperty.Register("CurrentBCV", typeof(BookChapterVerse), typeof(BcvUserControl),
+
+        public static readonly DependencyProperty _currentBcv =
+            DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerse), typeof(BcvUserControl),
                 new PropertyMetadata(new BookChapterVerse()));
 
-        public BookChapterVerse CurrentBCV
+        public BookChapterVerse CurrentBcv
         {
-            get
-            {
-                return (BookChapterVerse)GetValue(_currentBCV);
-            }
+            get => (BookChapterVerse)GetValue(_currentBcv);
             set
             {
-                SetValue(_currentBCV, value);
+                SetValue(_currentBcv, value);
             }
         }
+
 
         public static readonly DependencyProperty _bookNames =
             DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
@@ -49,27 +70,9 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(_bookNames, value);
         }
 
-        public static readonly DependencyProperty _chapNums =
-            DependencyProperty.Register("ChapNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
-            new PropertyMetadata(new ObservableCollection<int>()));
+        #endregion
 
-        public ObservableCollection<int> ChapNums
-        {
-            get => (ObservableCollection<int>)GetValue(_chapNums);
-            set => SetValue(_chapNums, value);
-        }
-
-        public static readonly DependencyProperty _verseNums =
-            DependencyProperty.Register("VerseNums", typeof(ObservableCollection<int>), typeof(BcvUserControl),
-            new PropertyMetadata(new ObservableCollection<int>()));
-
-        public ObservableCollection<int> VerseNums
-        {
-            get => (ObservableCollection<int>)GetValue(_verseNums);
-            set => SetValue(_verseNums, value);
-        }
-
-
+        #region Constructor
         public BcvUserControl()
         {
             InitializeComponent();
@@ -101,24 +104,11 @@ namespace ClearDashboard.Wpf.UserControls
 
             btnVerseLeft.IsEnabled = true;
             btnVerseRight.IsEnabled = true;
-
-
         }
 
-        private void SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.RoutedEvent.Name == "SelectionChanged" && ((FrameworkElement)(UIElement)e.OriginalSource).IsEnabled)
-            {
-                if (((FrameworkElement)e.OriginalSource).Name == "cboBook")
-                {
-                    cboChapter.SelectedIndex = 0;
-                }
-                else if (((FrameworkElement)e.OriginalSource).Name == "cboChapter")
-                {
-                    cboVerse.SelectedIndex = 0;
-                }
-            }
-        }
+        #endregion
+
+        #region Methods
 
         private void BookUpArrow_Click(object sender, RoutedEventArgs e)
         {
@@ -185,23 +175,6 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) => {
-                if (args.PropertyName.Equals("CurrentBcv"))
-
-
-
-                    return;
-                // execute code here.
-            };
-
-            //if (DataContext is WorkSpaceViewModel vm)
-            //{
-            //    CurrentBCV = vm.CurrentBcv;
-            //}
-            
-        }
+        #endregion
     }
 }

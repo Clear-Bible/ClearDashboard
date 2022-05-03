@@ -36,7 +36,6 @@
         <system:Boolean x:Key="FALSE">False</system:Boolean>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -46,10 +45,9 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="32" />
-                <ColumnDefinition Width="*" MinWidth="250" />
-                <ColumnDefinition Width="*" MinWidth="250" />
+                <ColumnDefinition Width="250" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
@@ -62,42 +60,46 @@
                 <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
-            <WrapPanel Grid.Column="1">
-                <Menu VerticalAlignment="Center">
-                    <MenuItem Header="Layout">
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Load"
-                            Icon=""
-                            Tag="Load" />
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Save"
-                            Icon=""
-                            Tag="Save" />
-                    </MenuItem>
-                </Menu>
-                <Menu VerticalAlignment="Center">
-                    <MenuItem Header="Windows">
-                        <MenuItem
-                            Click="MenuItem_Click"
-                            Header="Biblical Terms"
-                            Icon=""
-                            Tag="BiblicalTerms" />
-                    </MenuItem>
-                </Menu>
-                <ComboBox
-                    VerticalContentAlignment="Center"
-                    DisplayMemberPath="Item1"
-                    ItemsSource="{Binding Themes}"
-                    SelectedItem="{Binding SelectedTheme}" />
-            </WrapPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Label Content="{Binding GridIsVisible}" Foreground="Pink" />
+                <WrapPanel>
+                    <Menu VerticalAlignment="Center">
+                        <MenuItem Header="Layout">
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Load"
+                                Icon=""
+                                Tag="Load" />
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Save"
+                                Icon=""
+                                Tag="Save" />
+                        </MenuItem>
+                    </Menu>
+                    <Menu VerticalAlignment="Center">
+                        <MenuItem Header="Windows">
+                            <MenuItem
+                                Click="MenuItem_Click"
+                                Header="Biblical Terms"
+                                Icon=""
+                                Tag="BiblicalTerms" />
+                        </MenuItem>
+                    </Menu>
 
+                </WrapPanel>
+                <!--<ComboBox
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="Item1"
+                ItemsSource="{Binding Themes}"
+                SelectedItem="{Binding SelectedTheme}" />-->
+            </StackPanel>
 
             <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Icon" Value="{Binding IconSource}" />
+                        <Setter Property="Icon" Value="{Binding Icon}" />
+                        <!--<Setter Property="Icon" Value="{Binding IconSource}" />-->
                         <Setter Property="Command" Value="{Binding Command}" />
                     </Style>
                 </Menu.ItemContainerStyle>
@@ -105,7 +107,7 @@
                 <Menu.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                         <TextBlock
-                            Margin="0,10,0,0"
+                            Margin="5,5,0,0"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             Text="{Binding Header}" />
@@ -116,18 +118,13 @@
             <userControls:BcvUserControl
                 x:Name="BCVcontrol"
                 Grid.Column="3"
-                CurrentBCV="{Binding CurrentBcv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                IsRtl="{Binding IsRtl}" />
-
-            <TextBlock
-                Grid.Column="4"
-                Foreground="Pink"
-                Text="{Binding VerseRef}" />
-
+                BookNames="{Binding BookNames}"
+                CurrentBcv="{Binding CurrentBcv}"
+                IsRtl="{Binding IsRtl}"
+                ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
 
-        <!--  AnchorablesSource="{Binding Tools}" DocumentsSource="{Binding Files}"  -->
         <DockingManager
             x:Name="dockManager"
             Grid.Row="1"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -123,10 +124,6 @@ namespace ClearDashboard.ParatextPlugin
             //{
             //    // TODO Do some alert now that ClearDashboard is NOT installed
             //}
-
-
-
-
 
 
             Load += OnLoad;
@@ -348,25 +345,6 @@ namespace ClearDashboard.ParatextPlugin
 
                     //btnRestart_Click(null, null);
                     break;
-                }
-
-                case ActionType.GetProject:
-                {
-                    // get the paratext project info and send that over
-                    var proj = BuildProjectObject();
-                    var payload = JsonSerializer.Serialize(proj, _jsonOptions);
-
-                    AppendText(Color.Orange, "OUTBOUND -> Sending Project Information");
-                    await WriteMessageToPipeAsync(new PipeMessage
-                    {
-                        Action = ActionType.SetProject,
-                        Text = "Project Object",
-                        Payload = payload
-                    });
-                    AppendText(Color.Orange, $"OUTBOUND -> Project Sent: {m_project.LongName}");
-                    break;
-                }
-
                 default:
                 {
                     AppendText(Color.Red, $"Method {message.Action} not implemented");
@@ -454,8 +432,25 @@ namespace ClearDashboard.ParatextPlugin
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
             parent.SetTitle(ClearDashboard.ParatextPlugin.ClearDashboardPlugin.pluginName);
+            var startupPath = Application.StartupPath;
+            string iconPath = Path.Combine(startupPath, @"plugins\ClearDashboardPlugin\icon.ico");
+            if (File.Exists(iconPath))
+            {
+                Icon icon = new Icon(iconPath);
+                try
+                {
+                    parent.Icon = icon;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            
             parent.ProjectChanged += ProjectChanged;
             parent.VerseRefChanged += VerseRefChanged;
+            parent.WindowClosing += Parent_WindowClosing;
 
             SetProject(parent.CurrentState.Project);
             m_verseRef = parent.CurrentState.VerseRef;
@@ -511,6 +506,11 @@ namespace ClearDashboard.ParatextPlugin
                 m_verseRef = newReference;
                 GetCurrentVerseAsync().Forget();
             }
+        }
+
+        private void Parent_WindowClosing(IPluginChildWindow sender, System.ComponentModel.CancelEventArgs args)
+        {
+
         }
 
         #endregion Paratext overrides - standard functions
@@ -700,6 +700,11 @@ namespace ClearDashboard.ParatextPlugin
             return project;
         }
 
+
+        /// <summary>
+        /// Generate a dictionary of all the unique verse IDs in the project
+        /// </summary>
+        /// <returns></returns>
         private Dictionary<string, string> GetBCV_Dictionary()
         {
             Dictionary<string, string> bcvDict = new Dictionary<string, string>();
