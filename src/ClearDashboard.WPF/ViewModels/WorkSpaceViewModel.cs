@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive//ApplicationScreen
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
     {
         #region Member Variables
 
@@ -121,13 +121,13 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
         
-        private Dictionary<string, string> _BCVDictionary;
+        private Dictionary<string, string> _bcvDictionary;
         public Dictionary<string, string> BCVDictionary
         {
-            get => _BCVDictionary;
+            get => _bcvDictionary;
             set
             {
-                _BCVDictionary = value;
+                _bcvDictionary = value;
                 NotifyOfPropertyChange(() => BCVDictionary);
             }
         }
@@ -279,13 +279,13 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private LayoutFile _SelectedLayout;
+        private LayoutFile _selectedLayout;
         public LayoutFile SelectedLayout
         {
-            get => _SelectedLayout;
+            get => _selectedLayout;
             set
             {
-                _SelectedLayout = value;
+                _selectedLayout = value;
                 NotifyOfPropertyChange(nameof(SelectedLayout));
             }
         }
@@ -334,8 +334,6 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService = navigationService;
 
             FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
-            //ProjectManager.NamedPipeChanged += HandleEventAsync;
 
             _this = this;
 
@@ -527,11 +525,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Init();
         }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    ProjectManager.NamedPipeChanged -= HandleEventAsync;
-        //    base.Dispose(disposing);
-        //}
+      
 
         #endregion //Constructor
 
