@@ -108,7 +108,6 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 _windowIdToLoad = value;
                 NotifyOfPropertyChange(() => WindowIDToLoad);
-                //OnPropertyChanged("WindowIDToLoad");
             }
         }
 
@@ -606,14 +605,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
             Logger.LogInformation($"{pipeMessage.Text}");
         }
-
-        //public override event PropertyChangedEventHandler PropertyChanged;
-
-        //private void OnPropertyChanged([CallerMemberName] string name = null)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        //}
-
 
 
         #endregion // Methods
