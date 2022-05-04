@@ -1,7 +1,7 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.Data.Features.UnifiedScripture;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,11 +1,11 @@
 ﻿
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.ParatextPlugin.Data.Features.Project;
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using Xunit;
 using Xunit.Abstractions;
 
