@@ -4,7 +4,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Paratext.PluginInterfaces;
 
-namespace ClearDashboard.ParatextPlugin.Data.Features.Notes
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
 {
     public record GetNotesQuery(GetNotesData Data) : IRequest<QueryResult<IReadOnlyList<IProjectNote>>>
     {

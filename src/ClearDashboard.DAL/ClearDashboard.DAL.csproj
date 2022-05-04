@@ -526,7 +526,6 @@
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj" />
-    <ProjectReference Include="..\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
   </ItemGroup>
 
 

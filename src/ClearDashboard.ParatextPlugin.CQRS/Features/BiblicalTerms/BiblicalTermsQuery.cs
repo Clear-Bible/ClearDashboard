@@ -3,7 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 
-namespace ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms
 {
     public enum BiblicalTermsType
     {
