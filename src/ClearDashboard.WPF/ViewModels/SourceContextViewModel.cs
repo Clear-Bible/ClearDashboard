@@ -10,7 +10,6 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

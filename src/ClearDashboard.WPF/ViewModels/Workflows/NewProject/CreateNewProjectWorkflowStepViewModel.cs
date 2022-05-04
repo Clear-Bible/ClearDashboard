@@ -1247,8 +1247,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 
         #region Methods
 
-
-        public async void CreateNewProject()
+        public async Task CreateNewProject()
         {
             if (DashboardProject.TargetProject == null)
             {
@@ -1260,11 +1259,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
             //string jsonString = JsonSerializer.Serialize(DashboardProject);
             //File.WriteAllText(@"c:\temp\project.json", jsonString);
 
-
-            //NavigationService.For<ProcessUSFMViewModel>()
-            //    .WithParam(v => v.DashboardProject, DashboardProject).Navigate();
-
-            //await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
+            await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }
 
         #endregion

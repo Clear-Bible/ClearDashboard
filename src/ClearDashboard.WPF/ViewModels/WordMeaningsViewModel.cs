@@ -15,7 +15,7 @@ using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.Data;
+
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels

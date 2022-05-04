@@ -1,6 +1,5 @@
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -21,10 +20,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using Point = System.Windows.Point;
-
-
-
 
 namespace ClearDashboard.Wpf.ViewModels
 {
