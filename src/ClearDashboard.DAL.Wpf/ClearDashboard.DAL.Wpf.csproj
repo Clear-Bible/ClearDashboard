@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
   </ItemGroup>
 

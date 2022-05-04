@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\BHSSelectedLemmaConcordance.xml" />
@@ -516,9 +522,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
   </ItemGroup>
 
@@ -563,10 +570,6 @@
     <Reference Include="H.Pipes">
       <HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

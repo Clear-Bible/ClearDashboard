@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;

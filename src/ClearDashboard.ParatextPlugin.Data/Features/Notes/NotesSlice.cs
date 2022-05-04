@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.ParatextPlugin.Data.Models;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Paratext.PluginInterfaces;
 

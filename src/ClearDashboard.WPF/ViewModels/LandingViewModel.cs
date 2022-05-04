@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
 using Microsoft.Extensions.Logging;

@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>ClearDashboard.DataAccessLayer.Models</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>ClearDashboard.DataAccessLayer.Models</RootNamespace>
+		<LangVersion>Latest</LangVersion>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="SIL.Scripture" Version="8.0.0" />
+	</ItemGroup>
 
 </Project>

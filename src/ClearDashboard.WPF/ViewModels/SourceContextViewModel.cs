@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.Data;
 
@@ -94,7 +95,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private async Task ProcessSourceVerseData(BookChapterVerse bcv)
+        private async Task ProcessSourceVerseData(BookChapterVerseViewModel bcv)
         {
             var verseDataResult = await ExecuteCommand(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
             if (verseDataResult.Success == false)

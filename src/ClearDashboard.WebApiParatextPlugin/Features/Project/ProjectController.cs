@@ -16,9 +16,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         }
 
         [HttpPost]
-        public async Task<QueryResult<ParatextPlugin.Data.Models.Project>> GetAsync([FromBody]GetCurrentProjectCommand command)
+        public async Task<QueryResult<DataAccessLayer.Models.Project>> GetAsync([FromBody]GetCurrentProjectCommand command)
         {
-            return await ExecuteCommandAsync<QueryResult<ParatextPlugin.Data.Models.Project>, ParatextPlugin.Data.Models.Project>(command, CancellationToken.None);
+            return await ExecuteCommandAsync<QueryResult<DataAccessLayer.Models.Project>, DataAccessLayer.Models.Project>(command, CancellationToken.None);
 
         }
 

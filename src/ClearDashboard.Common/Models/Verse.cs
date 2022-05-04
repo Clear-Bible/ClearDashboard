@@ -80,7 +80,8 @@ namespace ClearDashboard.Common.Models
         }
 
         public string VerseText { get; set; }
-        public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
         public bool Found { get; set; }
+        public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+     
     }
 }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
-using ClearDashboard.ParatextPlugin.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using Xunit;
 using Xunit.Abstractions;
 
