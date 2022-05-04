@@ -4,8 +4,8 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.Data.Features.Project;
-using ClearDashboard.ParatextPlugin.Data.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

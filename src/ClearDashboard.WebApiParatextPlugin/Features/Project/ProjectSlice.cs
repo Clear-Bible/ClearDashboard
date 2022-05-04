@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,4 @@
-﻿using ClearDashboard.ParatextPlugin.Data.Features.Project;
-using ClearDashboard.ParatextPlugin.Data.Features.Verse;
-using ClearDashboard.WebApiParatextPlugin.Extensions;
+﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
@@ -16,6 +14,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {

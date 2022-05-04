@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.ParatextPlugin.Data.Features.Project;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

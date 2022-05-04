@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.WebApiParatextPlugin.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;

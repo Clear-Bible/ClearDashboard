@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.ParatextPlugin.Data.Features.UnifiedScripture;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 {
