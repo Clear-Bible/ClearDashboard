@@ -101,6 +101,11 @@ namespace ClearDashboard.DataAccessLayer
             await Task.CompletedTask;
         }
 
+        protected virtual async Task SignalRConnected()
+        {
+
+        }
+
         protected async Task ConfigureSignalRClient()
         {
             HubConnection = new HubConnection("http://localhost:9000/signalr");
@@ -119,6 +124,8 @@ namespace ClearDashboard.DataAccessLayer
                     Logger.LogInformation("Connected to SignalR.");
                     HubConnection.Closed += HandleSignalRConnectionClosed;
                     HubConnection.Error += HandleSignalRConnectionError;
+                    await SignalRConnected();
+
                 }
             }
             catch (HttpRequestException ex)
@@ -218,9 +225,10 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task Initialize()
         {
-            await ConfigureSignalRClient();
             GetParatextUserName();
             EnsureDashboardProjectDirectory();
+            await ConfigureSignalRClient();
+            
         }
 
         private void EnsureDashboardProjectDirectory()

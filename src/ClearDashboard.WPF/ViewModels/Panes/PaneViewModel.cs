@@ -92,8 +92,8 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
         {
         }
 
-        public PaneViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager) :
-            base(navigationService, logger, projectManager)
+        public PaneViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager,IEventAggregator eventAggregator) :
+            base(navigationService, logger, projectManager, eventAggregator)
         {
 
         }

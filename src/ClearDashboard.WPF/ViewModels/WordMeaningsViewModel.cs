@@ -158,8 +158,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, 
-            ILogger<WordMeaningsViewModel> logger, DashboardProjectManager projectManager, TranslationSource translationSource)
-            : base(navigationService, logger, projectManager)
+            ILogger<WordMeaningsViewModel> logger, DashboardProjectManager projectManager, TranslationSource translationSource, IEventAggregator eventAggregator)
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
             Title = "⌺ WORD MEANINGS";
             ContentId = "WORDMEANINGS";

@@ -38,8 +38,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, DashboardProjectManager projectManager)
-            : base(navigationService, logger, projectManager)
+        public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
             Initialize();
         }

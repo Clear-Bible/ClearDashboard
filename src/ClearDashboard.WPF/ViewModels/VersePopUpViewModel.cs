@@ -80,8 +80,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, VerseViewModel verse)
-            : base(navigationService, logger, projectManager)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, VerseViewModel verse)
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
             _verse = verse;
 

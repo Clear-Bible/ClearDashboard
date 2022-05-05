@@ -22,7 +22,7 @@ public abstract class WorkflowStepViewModel : ApplicationScreen
         
     }
 
-    protected WorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager):base(navigationService, logger, projectManager)
+    protected WorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager) :base(navigationService, logger, projectManager, eventAggregator)
     {
         EventAggregator = eventAggregator;
         Logger = logger;

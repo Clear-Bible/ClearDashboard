@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public NotesViewModel(INavigationService navigationService, ILogger<NotesViewModel> logger, DashboardProjectManager projectManager):base(navigationService, logger, projectManager)
+        public NotesViewModel(INavigationService navigationService, ILogger<NotesViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator):base(navigationService, logger, projectManager, eventAggregator)
         {
             this.Title = "🖉 NOTES";
             this.ContentId = "NOTES";
