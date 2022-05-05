@@ -16,7 +16,7 @@ manipulation (reads and writes) should be implemented by creating a query/query 
 
 ## Project setup
 
-The query/query handler and command/command/handler pairs can be organized in the same assembly or split into individual assemblies. 
+The `query/query handler` and `command/command handler` pairs can be organized in the same assembly or split into individual assemblies. 
 The latter organizational pattern is used when a query or command is used to fetch or persist data in a distributed architecture like 
 a call to get or save data via a RESTful web API.
 
@@ -25,10 +25,23 @@ a single query is created and the client side query handler is responsible for m
 When the HTTP POST is received, tne controller deserializes the request into the query and another query handler is invoked to get the data from Paratext and return the result back to the original
 query handler, which forwards the result to the calling process.
 
+###
+
 
 ### A concrete example
 
-#### The query
+ 
+ #### The call form the Dashboard app
+
+ ``` csharp
+      var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
+      if (result.Success)
+      {
+          biblicalTermsList = result.Data;
+      }
+ ```
+
+ #### The query
 
 ``` csharp
  public record GetBiblicalTermsByTypeQuery(BiblicalTermsType BiblicalTermsType) : IRequest<RequestResult<List<BiblicalTermsData>>>
@@ -36,7 +49,6 @@ query handler, which forwards the result to the calling process.
         public BiblicalTermsType BiblicalTermsType { get; } = BiblicalTermsType;
  }
  ```
-
  #### The client side query handler
  ``` csharp
   public class GetBiblicalTermsByTypeQueryHandler : ParatextRequestHandler<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>

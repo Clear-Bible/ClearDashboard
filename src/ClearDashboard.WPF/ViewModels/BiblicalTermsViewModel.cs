@@ -405,8 +405,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public BiblicalTermsViewModel(INavigationService navigationService, 
                                         ILogger<WorkSpaceViewModel> logger, 
-                                        DashboardProjectManager projectManager) 
-            : base(navigationService, logger, projectManager)
+                                        DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
          
             Title = "🕮 BIBLICAL TERMS";
@@ -584,7 +584,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager,
+                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator,
                         verses[0]), null, null);
             }
         }

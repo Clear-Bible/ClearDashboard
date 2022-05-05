@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager): base(navigationService,logger, projectManager)
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator): base(navigationService,logger, projectManager, eventAggregator)
         {
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";

@@ -16,7 +16,7 @@ using System.Windows.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel : ApplicationScreen
+    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>
     {
         private readonly TranslationSource _translationSource;
        
@@ -143,8 +143,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
       
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager) 
-            : base(navigationService, logger, projectManager)
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
             _translationSource = translationSource;
 
@@ -264,5 +264,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+        public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
+        {
+            Connected = message.Connected;
+            await Task.CompletedTask;
+        }
     }
 }

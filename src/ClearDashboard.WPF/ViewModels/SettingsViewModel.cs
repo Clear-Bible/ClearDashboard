@@ -36,8 +36,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public SettingsViewModel(INavigationService navigationService, 
-            ILogger<SettingsViewModel> logger, DashboardProjectManager projectManager) 
-            : base(navigationService, logger, projectManager)
+            ILogger<SettingsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
            
          

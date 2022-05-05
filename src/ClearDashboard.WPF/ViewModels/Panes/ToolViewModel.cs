@@ -41,7 +41,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 
         }
 
-        public ToolViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager) : base(navigationService, logger, projectManager)
+        public ToolViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) : base(navigationService, logger, projectManager, eventAggregator)
         {
 
         }
