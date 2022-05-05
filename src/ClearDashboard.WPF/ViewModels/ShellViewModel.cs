@@ -1,6 +1,5 @@
 ﻿using AvalonDock.Properties;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
@@ -16,7 +15,7 @@ using System.Windows.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>
+    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<ParatextUserMessage>
     {
         private readonly TranslationSource _translationSource;
        
@@ -115,21 +114,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-        #region events
-
-        /// <summary>
-        /// Capture the current Paratext username
-        /// </summary>
-        /// <param abbr="e"></param>
-        private void HandleSetParatextUserNameEvent(object sender, EventArgs e)
-        {
-            var args = (CustomEvents.ParatextUsernameEventArgs)e;
-            ParatextUserName = args.ParatextUserName;
-        }
-
-        #endregion
-
-
+      
         #region Startup
 
 
@@ -153,7 +138,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-            ProjectManager.ParatextUserNameEventHandler += HandleSetParatextUserNameEvent;
+           
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -193,17 +178,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Caliburn.Micro overrides
 
-        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
-        {
-            //ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
-            //ProjectManager.NamedPipeChanged -= HandleNamedPipeChanged;
-            
-            return base.CanCloseAsync(cancellationToken);
-        }
-
+       
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            ProjectManager.ParatextUserNameEventHandler -= HandleSetParatextUserNameEvent;
             ProjectManager.Dispose();
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -264,10 +241,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
+
+        #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
             await Task.CompletedTask;
         }
+
+        public async Task HandleAsync(ParatextUserMessage message, CancellationToken cancellationToken)
+        {
+            ParatextUserName = message.ParatextUserName;
+            await Task.CompletedTask;
+        }
+
+        #endregion
     }
 }

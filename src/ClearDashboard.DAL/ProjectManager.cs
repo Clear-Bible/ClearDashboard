@@ -17,12 +17,11 @@ using System.Threading.Tasks;
 namespace ClearDashboard.DataAccessLayer
 {
 
-    public class ProjectManager : IDisposable
+    public abstract class ProjectManager : IDisposable
     {
         #region Properties
 
         protected ILogger Logger { get; private set; }
-        //private readonly NamedPipesClient _namedPipesClient;
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
@@ -37,20 +36,11 @@ namespace ClearDashboard.DataAccessLayer
         public Project ParatextProject { get; protected set; }
 
         public bool ParatextVisible = false;
-
-        public bool IsPipeConnected { get; set; }
-
-
-
-
         #endregion
 
         #region Events
 
-        // event handler to be raised when the Paratext Username changes
-        public event EventHandler ParatextUserNameEventHandler;
         public string ParatextUserName { get; set; } = "";
-
 
         private string _currentVerse;
         public string CurrentVerse
@@ -70,13 +60,11 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-
-
         #endregion
 
         #region Startup
 
-        public ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
         {
             Logger = logger;
             ProjectNameDbContextFactory = projectNameDbContextFactory;
@@ -86,25 +74,9 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        protected virtual async Task HookSignalREvents()
-        {
-            HubProxy.On<string>("sendVerse", (verse) =>
-            {
-                CurrentVerse = verse;
-            });
-
-            HubProxy.On<Project>("sendProject", (project) =>
-            {
-                ParatextProject = project;
-            });
-
-            await Task.CompletedTask;
-        }
-
-        protected virtual async Task SignalRConnected()
-        {
-
-        }
+        protected abstract  Task HookSignalREvents();
+        protected abstract Task PublishSignalRConnected(bool connected);
+        protected abstract Task PublishParatextUser(string paratextUserName);
 
         protected async Task ConfigureSignalRClient()
         {
@@ -118,13 +90,12 @@ namespace ClearDashboard.DataAccessLayer
             {
                 await HubConnection.Start();
 
-                //See @Oran Dennison's comment on @KingOfHypocrites's answer
                 if (HubConnection.State == ConnectionState.Connected)
                 {
                     Logger.LogInformation("Connected to SignalR.");
                     HubConnection.Closed += HandleSignalRConnectionClosed;
                     HubConnection.Error += HandleSignalRConnectionError;
-                    await SignalRConnected();
+                    await PublishSignalRConnected(true);
 
                 }
             }
@@ -140,8 +111,6 @@ namespace ClearDashboard.DataAccessLayer
                 await Task.Delay(10);
                 await ConfigureSignalRClient();
             }
-            
-           
         }
 
         private async void HandleSignalRConnectionError(Exception obj)
@@ -180,52 +149,14 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion
 
-        #region Shutdown
-
-        public void OnClosing()
-        {
-            IsPipeConnected = false;
-            //_namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            //_namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
-        }
-
-        #endregion
+       
 
         #region Methods
 
-        //private void HandleNamedPipeChanged(object sender, PipeEventArgs args)
-        //{
-        //    var pipeMessage = args.PipeMessage;
-
-        //    switch (pipeMessage.Action)
-        //    {
-        //        case ActionType.OnConnected:
-        //            IsPipeConnected = true;
-        //            break;
-        //        case ActionType.OnDisconnected:
-        //            IsPipeConnected= false;
-        //            break;
-        //        case ActionType.SetProject:
-        //        {
-        //            // intercept and keep a copy of the current project
-        //            var payload = pipeMessage.Payload;
-        //            ParatextProject = JsonSerializer.Deserialize<Project>((string)payload);
-        //            break;
-        //        }
-        //        case ActionType.CurrentVerse:
-        //            CurrentVerse = pipeMessage.Text;
-        //            break;
-        //        default:
-        //            // Nothing to do.
-        //            break;
-        //    }
-
-        //    RaisePipesChangedEvent(pipeMessage);
-        //}
 
         public async Task Initialize()
         {
-            GetParatextUserName();
+            await GetParatextUserName();
             EnsureDashboardProjectDirectory();
             await ConfigureSignalRClient();
             
@@ -320,7 +251,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public void GetParatextUserName()
+        public async Task GetParatextUserName()
         {
             // TODO this is a hack that reads the first user in the Paratext project's pm directory
             // from the localUsers.txt file.  This needs to be changed to the user we get from 
@@ -329,8 +260,8 @@ namespace ClearDashboard.DataAccessLayer
 
             ParatextUserName = user;
 
-            // raise the paratext username event
-            ParatextUserNameEventHandler?.Invoke(this, new CustomEvents.ParatextUsernameEventArgs(user));
+            await PublishParatextUser(ParatextUserName);
+          
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
@@ -347,52 +278,6 @@ namespace ClearDashboard.DataAccessLayer
             return CurrentDashboardProject;
         }
 
-        //public async Task SendPipeMessage(PipeAction action, string text = "")
-        //{
-        //    var message = new PipeMessage();
-        //    switch (action)
-        //    {
-        //        case PipeAction.OnConnected:
-        //            message.Action = ActionType.OnConnected;
-        //            break;
-        //        case PipeAction.OnDisconnected:
-        //            message.Action = ActionType.OnDisconnected;
-        //            break;
-        //        case PipeAction.GetCurrentVerse:
-        //            message.Action = ActionType.GetCurrentVerse;
-        //            break;
-        //        case PipeAction.SendText:
-        //            message.Action = ActionType.SendText;
-        //            message.Text = text;
-        //            break;
-        //        case PipeAction.GetBiblicalTermsAll:
-        //            message.Action = ActionType.GetBibilicalTermsAll;
-        //            break;
-        //        case PipeAction.GetBiblicalTermsProject:
-        //            message.Action = ActionType.GetBibilicalTermsProject;
-        //            break;
-        //        case PipeAction.GetSourceVerses:
-        //            message.Action = ActionType.GetSourceVerses;
-        //            break;
-        //        case PipeAction.GetTargetVerses:
-        //            message.Action= ActionType.GetTargetVerses;
-        //            break;
-        //        case PipeAction.GetNotes:
-        //            message.Action = ActionType.GetNotes;
-        //            break;
-        //        case PipeAction.GetProject:
-        //            message.Action = ActionType.GetProject;
-        //            break;
-        //        case PipeAction.GetUSX:
-        //            message.Action = ActionType.GetUSX;
-        //            message.Text = text;
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException(nameof(action), action, null);
-        //    }
-
-        //    await _namedPipesClient.WriteAsync(message);
-        //}
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
@@ -412,9 +297,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void Dispose()
         {
-            IsPipeConnected = false;
-            // _namedPipesClient.NamedPipeChanged -= HandleNamedPipeChanged;
-            // _namedPipesClient.DisposeAsync().GetAwaiter().GetResult();
+           
         }
 
 
