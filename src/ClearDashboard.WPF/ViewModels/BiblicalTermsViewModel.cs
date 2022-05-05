@@ -418,7 +418,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             // select the first one
-            DataRowView drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
+            var drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
             SelectedDomain = drv;
 
             // populate the combo box for scope
@@ -451,99 +451,32 @@ namespace ClearDashboard.Wpf.ViewModels
                 IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
             }
 
-            if (!string.IsNullOrEmpty(ProjectManager.CurrentVerse))
-            {
-                //GetBiblicalTerms().RunSynchronously();
-            }
         }
 
-        /// <summary>
-        /// Listen for changes in the DAL regarding any messages coming in
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, EventArgs args)
+        protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            //TODO:  Refactor to use EventAggregator
-            if (args == null) return;
-
-           // PipeMessage pipeMessage = args.PipeMessage;
-
-            //switch (pipeMessage.Action)
-            //{
-            //    case ActionType.CurrentVerse:
-            //        if (_currentVerse == "")
-            //        {
-            //            _currentVerse = pipeMessage.Text;
-            //            // ask for Biblical Terms
-            //            //await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject)
-            //            //    .ConfigureAwait(false);
-            //        }
-            //        else
-            //        {
-            //            _currentVerse = pipeMessage.Text;
-            //        }
-
-            //        break;
-            //    case ActionType.SetBiblicalTerms:
-            //        await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
-            //        // invoke to get it to run in STA mode
-            //        Application.Current.Dispatcher.Invoke(delegate
-            //        {
-            //            _biblicalTerms.Clear();
-
-            //            // deserialize the list
-            //            var biblicalTermsList = new List<BiblicalTermsData>();
-            //            try
-            //            {
-            //                string json = pipeMessage.Payload.ToString();
-            //                biblicalTermsList = JsonSerializer.Deserialize<List<BiblicalTermsData>>(json);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-            //            }
-
-            //            if (biblicalTermsList.Count > 0)
-            //            {
-            //                for (int i = 0; i < biblicalTermsList.Count; i++)
-            //                {
-            //                    _biblicalTerms.Add(biblicalTermsList[i]);
-
-            //                    foreach (var rendering in biblicalTermsList[i].Renderings)
-            //                    {
-            //                        _biblicalTerms[i].RenderingString += rendering + " ";
-            //                    }
-            //                }
-
-            //                NotifyOfPropertyChange(() => BiblicalTerms);
-            //            }
-            //        });
-
-            //        await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
-            //        break;
-            //}
+            await base.OnActivateAsync(cancellationToken);
+            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
+          
         }
 
+        //protected override void OnViewAttached(object view, object context)
+        //{
+        //    Logger.LogInformation("OnViewAttached");
+        //    base.OnViewAttached(view, context);
+        //}
 
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    Logger.LogInformation("OnViewLoaded");
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            Logger.LogInformation("OnViewAttached");
-            base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            Logger.LogInformation("OnViewLoaded");
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            Logger.LogInformation("OnViewReady");
-            base.OnViewReady(view);
-        }
+        //protected override void OnViewReady(object view)
+        //{
+        //    Logger.LogInformation("OnViewReady");
+        //    base.OnViewReady(view);
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -577,7 +510,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return;
             }
 
-            string verseBBCCCVVV = (string)obj;
+            var verseBBCCCVVV = (string)obj;
             var verses = SelectedItemVerses.Where(v => v.VerseBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
 
             if (verses.Count > 0)
@@ -604,11 +537,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                  //  await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject).ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
                 }
                 else
                 {
-                  //  await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsAll).ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.All).ConfigureAwait(false);
+         
                 }
 
                 _lastSelectedBtEnum = _selectedBiblicalTermsType;
@@ -640,17 +574,17 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 Gloss = selectedBiblicalTermsData.Gloss;
 
-                for (int i = 0; i < selectedBiblicalTermsData.ReferencesLong.Count; i++)
+                for (var i = 0; i < selectedBiblicalTermsData.ReferencesLong.Count; i++)
                 {
-                    string verseRef = selectedBiblicalTermsData.ReferencesLong[i];
-                    string verseText = "";
+                    var verseRef = selectedBiblicalTermsData.ReferencesLong[i];
+                    var verseText = "";
                     if (i < selectedBiblicalTermsData.ReferencesListText.Count)
                     {
                         verseText = selectedBiblicalTermsData.ReferencesListText[i];
                     }
 
                     var loc = verseRef.Split(' ');
-                    string localizedString = verseRef;
+                    var localizedString = verseRef;
 
                     if (loc.Length > 1)
                     {
@@ -682,23 +616,23 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     // we need to maintain the same verse length so we need to pad
                     // out the replacement spaces
-                    string sBlank = "".PadLeft(punc.Length, ' ');
+                    var sBlank = "".PadLeft(punc.Length, ' ');
 
                     verseText = verseText.Replace(punc, sBlank);
                 }
 
                 // create a list of all the matches within the verse
-                List<Point> points = new List<Point>();
-                List<string> words = new List<string>();
+                var points = new List<Point>();
+                var words = new List<string>();
                 foreach (var render in selectedBiblicalTermsData.Renderings)
                 {
                     // do the same for the target word that we are trying to test against
-                    string puncLessWord = render;
+                    var puncLessWord = render;
                     foreach (var punc in puncs)
                     {
                         // we need to maintain the same verse length so we need to pad
                         // out the replacement spaces
-                        string sBlank = "".PadLeft(punc.Length, ' ');
+                        var sBlank = "".PadLeft(punc.Length, ' ');
 
                         puncLessWord = puncLessWord.Replace(punc, sBlank);
                     }
@@ -707,14 +641,14 @@ namespace ClearDashboard.Wpf.ViewModels
                     try
                     {
                         // look for full word and case sensitive
-                        Regex pattern = new Regex(@"\b" + puncLessWord + @"\b");
-                        Match matchResults = pattern.Match(verseText);
+                        var pattern = new Regex(@"\b" + puncLessWord + @"\b");
+                        var matchResults = pattern.Match(verseText);
                         while (matchResults.Success)
                         {
                             // matched text: matchResults.Value
                             // match start: matchResults.Index
                             // match length: matchResults.Length
-                            Point point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
+                            var point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
                             points.Add(point);
                             words.Add(render);
 
@@ -736,12 +670,12 @@ namespace ClearDashboard.Wpf.ViewModels
                 points = points.OrderBy(o => o.X).ToList();
 
                 // iterate through in reverse
-                for (int i = points.Count - 1; i >= 0; i--)
+                for (var i = points.Count - 1; i >= 0; i--)
                 {
                     try
                     {
-                        string endPart = verseText.Substring((int)points[i].Y);
-                        string startPart = verseText.Substring(0, (int)points[i].X);
+                        var endPart = verseText.Substring((int)points[i].Y);
+                        var startPart = verseText.Substring(0, (int)points[i].X);
 
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
@@ -790,7 +724,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private bool FilterGridItems(object obj)
         {
             // first check if the row is filtered by the book or not
-            bool isBcvFound = false;
+            var isBcvFound = false;
             if (SelectedScope is { } rowView)
             {
                 var selectedScope = rowView[1].ToString();
@@ -810,7 +744,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvBook":
                                 foreach (var term in terms.References)
                                 {
-                                    string book = term.Substring(0, 2);
+                                    var book = term.Substring(0, 2);
                                     if (book == ProjectManager.CurrentVerse.Substring(0, 2))
                                     {
                                         // found the book
@@ -823,7 +757,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvChapter":
                                 foreach (var term in terms.References)
                                 {
-                                    string chapter = term.Substring(0, 5);
+                                    var chapter = term.Substring(0, 5);
                                     if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
                                     {
                                         // found the chapter
@@ -855,7 +789,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // filter based on semantic domain
-            bool bFoundSemanticDomain = false;
+            var bFoundSemanticDomain = false;
             if (obj is BiblicalTermsData bt)
             {
                 if (SelectedDomain is not null)
@@ -976,18 +910,25 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion // Methods
 
 
-        private async Task GetBiblicalTerms()
+        private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
-            await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
-            
-                _biblicalTerms.Clear();
+            try
+            {
+                await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+
+                OnUIThread(() =>
+                {
+                    _biblicalTerms.Clear();
+                });
+               
 
                 // deserialize the list
                 var biblicalTermsList = new List<BiblicalTermsData>();
                 try
                 {
                     // TODO:  
-                    var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
+                    var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
+                        .ConfigureAwait(false);
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
@@ -999,23 +940,31 @@ namespace ClearDashboard.Wpf.ViewModels
                     Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
                 }
 
-                if (biblicalTermsList.Count > 0)
+                OnUIThread(() =>
                 {
-                    for (int i = 0; i < biblicalTermsList.Count; i++)
+                    if (biblicalTermsList.Count > 0)
                     {
-                        _biblicalTerms.Add(biblicalTermsList[i]);
-
-                        foreach (var rendering in biblicalTermsList[i].Renderings)
+                        for (var i = 0; i < biblicalTermsList.Count; i++)
                         {
-                            _biblicalTerms[i].RenderingString += rendering + " ";
+                            _biblicalTerms.Add(biblicalTermsList[i]);
+
+                            foreach (var rendering in biblicalTermsList[i].Renderings)
+                            {
+                                _biblicalTerms[i].RenderingString += rendering + " ";
+                            }
                         }
+
+                        NotifyOfPropertyChange(() => BiblicalTerms);
                     }
+                });
+              
+            }
+            finally
+            {
+                await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+            }
 
-                    NotifyOfPropertyChange(() => BiblicalTerms);
-                }
-           
-
-            await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+            
         }
         public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
         {
@@ -1024,9 +973,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 _currentVerse = changedMessage.Verse;
 
                 await GetBiblicalTerms();
-                // ask for Biblical Terms
-                //await ProjectManager.SendPipeMessage(PipeAction.GetBiblicalTermsProject)
-                //    .ConfigureAwait(false);
             }
             else
             {

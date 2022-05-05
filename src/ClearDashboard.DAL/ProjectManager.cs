@@ -25,8 +25,7 @@ namespace ClearDashboard.DataAccessLayer
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
-        protected HubConnection HubConnection { get; private set; }
-        protected IHubProxy HubProxy { get; private set; }
+     
    
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
@@ -74,91 +73,20 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        protected abstract  Task HookSignalREvents();
-        protected abstract Task PublishSignalRConnected(bool connected);
-        protected abstract Task PublishParatextUser(string paratextUserName);
-
-        protected async Task ConfigureSignalRClient()
-        {
-            HubConnection = new HubConnection("http://localhost:9000/signalr");
-
-            HubProxy = HubConnection.CreateHubProxy("Plugin");
-
-
-            await HookSignalREvents();
-            try
-            {
-                await HubConnection.Start();
-
-                if (HubConnection.State == ConnectionState.Connected)
-                {
-                    Logger.LogInformation("Connected to SignalR.");
-                    HubConnection.Closed += HandleSignalRConnectionClosed;
-                    HubConnection.Error += HandleSignalRConnectionError;
-                    await PublishSignalRConnected(true);
-
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Logger.LogError("Paratext is not running, cannot connect to SignalR.");
-                await Task.Delay(10);
-                await ConfigureSignalRClient();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "An unexpected error occurred while trying to connect to Paratext.");
-                await Task.Delay(10);
-                await ConfigureSignalRClient();
-            }
-        }
-
-        private async void HandleSignalRConnectionError(Exception obj)
-        {
-            //var retryTimestamp = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
-
-            //while (DateTime.UtcNow < retryTimestamp)
-            //{
-            //    await ConfigureSignalRClient();
-            //    if (HubConnection.State == ConnectionState.Connected)
-            //    {
-            //        Logger.LogInformation("SignalR connected.");
-            //    }
-            //}
-
-            //Logger.LogInformation("SignalR Connection is closed.");
-        }
-
-        private async void HandleSignalRConnectionClosed()
-        {
-            
-            var retryTimestamp = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
-
-            while (DateTime.UtcNow < retryTimestamp)
-            {
-                await ConfigureSignalRClient();
-                if (HubConnection.State == ConnectionState.Connected)
-                {
-                    Logger.LogInformation("SignalR connected.");
-                    return;
-                }
-            }
-
-            Logger.LogInformation("SignalR Connection is closed.");
-        }
 
         #endregion
 
-       
+
 
         #region Methods
 
+        protected abstract Task PublishParatextUser(string paratextUserName);
 
-        public async Task Initialize()
+        public virtual async Task Initialize()
         {
             await GetParatextUserName();
             EnsureDashboardProjectDirectory();
-            await ConfigureSignalRClient();
+           
             
         }
 
