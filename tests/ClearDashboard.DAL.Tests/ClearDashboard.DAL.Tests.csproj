@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
