@@ -16,6 +16,8 @@ public record ProjectChangedMessage(Project Project);
 
 public record ParatextConnectedMessage(bool Connected);
 
+public record ParatextUserMessage(string ParatextUserName);
+
 public class DashboardProjectManager : ProjectManager
 {
     private IEventAggregator EventAggregator { get; set; }
@@ -26,9 +28,14 @@ public class DashboardProjectManager : ProjectManager
     }
     public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
-    protected override async Task SignalRConnected()
+    protected override async Task PublishSignalRConnected(bool connected)
     {
-        await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(true));
+        await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
+    }
+
+    protected override async Task PublishParatextUser(string paratextUserName)
+    {
+        await EventAggregator.PublishOnUIThreadAsync(new ParatextUserMessage(paratextUserName));
     }
 
     protected override async Task HookSignalREvents()
