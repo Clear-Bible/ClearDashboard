@@ -38,7 +38,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{365F13B4-F041-4552-B41E-EC2346F31509}"
 	ProjectSection(SolutionItems) = preProject
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
-		CQRS-Cheat-Sheet.md = CQRS-Cheat-Sheet.md
+		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
 	EndProjectSection
 EndProject
