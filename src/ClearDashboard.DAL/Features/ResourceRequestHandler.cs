@@ -25,9 +25,9 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
     public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     protected abstract TData ProcessData();
 
-    protected QueryResult<TResultData> ValidateResourcePath<TResultData>(TResultData data)
+    protected RequestResult<TResultData> ValidateResourcePath<TResultData>(TResultData data)
     {
-        var queryResult = new QueryResult<TResultData>(data);
+        var queryResult = new RequestResult<TResultData>(data);
 
         if (string.IsNullOrEmpty(ResourceName))
         {
@@ -43,19 +43,19 @@ public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequ
         return queryResult;
     }
 
-    protected void LogAndSetUnsuccessfulResult<TResultData>(ref QueryResult<TResultData> queryResult, string message, Exception? ex = null)
+    protected void LogAndSetUnsuccessfulResult<TResultData>(ref RequestResult<TResultData> requestResult, string message, Exception? ex = null)
     {
         if (ex != null)
         {
             Logger.LogError(ex, message);
-            queryResult.Message = string.IsNullOrEmpty(message)? ex.Message: $"{message}. {ex.Message}";
+            requestResult.Message = string.IsNullOrEmpty(message)? ex.Message: $"{message}. {ex.Message}";
         }
         else
         {
             Logger.LogError(message);
-            queryResult.Message = message;
+            requestResult.Message = message;
         }
-        queryResult.Success = false;
+        requestResult.Success = false;
     }
 
 }

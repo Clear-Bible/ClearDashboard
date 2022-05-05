@@ -3,5 +3,5 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Verse
 {
-    public record GetCurrentVerseCommand() : IRequest<QueryResult<string>>;
+    public record GetCurrentVerseQuery() : IRequest<RequestResult<string>>;
 }

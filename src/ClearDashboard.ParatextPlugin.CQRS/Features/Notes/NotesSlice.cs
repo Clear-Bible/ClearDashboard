@@ -6,7 +6,7 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
 {
-    public record GetNotesQuery(GetNotesData Data) : IRequest<QueryResult<IReadOnlyList<IProjectNote>>>
+    public record GetNotesQuery(GetNotesData Data) : IRequest<RequestResult<IReadOnlyList<IProjectNote>>>
     {
         public GetNotesData Data { get; } = Data;
     }

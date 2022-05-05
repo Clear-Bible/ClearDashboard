@@ -37,16 +37,16 @@ namespace ClearDashboard.DAL.Tests
             Services.AddLogging();
         }
 
-        protected async Task<QueryResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
-            where TRequest : IRequest<QueryResult<TData>>
-            where TResult : QueryResult<TData>, new()
+        protected async Task<RequestResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
+            where TRequest : IRequest<RequestResult<TData>>
+            where TResult : RequestResult<TData>, new()
             where TData : class, new()
         {
             var mediator = ServiceProvider.GetService<IMediator>();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var result = new QueryResult<TData>(new TData(), false);
+            var result = new RequestResult<TData>(new TData(), false);
             try
             {
                 result = await mediator.Send(query);

@@ -154,7 +154,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             {
-                var result = await _mediator.Send(new GetCurrentVerseCommand());
+                var result = await _mediator.Send(new GetCurrentVerseQuery());
                 if (result.Success)
                 {
                     AppendText(Color.Orange, $"Sending verse: {result.Data}");
@@ -163,7 +163,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             {
-                var result = await _mediator.Send(new GetCurrentProjectCommand());
+                var result = await _mediator.Send(new GetCurrentProjectQuery());
                 if (result.Success)
                 {
                     AppendText(Color.Orange, $"Sending project: {result.Data?.ShortName}");

@@ -16,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Project
 {
 
 
-    public class GetCurrentProjectCommandHandler : ParatextRequestHandler<GetCurrentProjectCommand, QueryResult<Models.Project>, Models.Project>
+    public class GetCurrentProjectCommandHandler : ParatextRequestHandler<GetCurrentProjectQuery, RequestResult<Models.Project>, Models.Project>
     {
 
         public GetCurrentProjectCommandHandler([NotNull] ILogger<GetCurrentProjectCommandHandler> logger) : base(logger)
@@ -24,7 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Project
             //no-op
         }
 
-        public override async Task<QueryResult<Models.Project>> Handle(GetCurrentProjectCommand request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<Models.Project>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("project", request, cancellationToken);
         }

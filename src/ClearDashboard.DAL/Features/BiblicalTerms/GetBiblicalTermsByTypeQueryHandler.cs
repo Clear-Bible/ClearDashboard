@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
 {
-    public class GetBiblicalTermsByTypeQueryHandler : ParatextRequestHandler<GetBiblicalTermsByTypeQuery, QueryResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>
+    public class GetBiblicalTermsByTypeQueryHandler : ParatextRequestHandler<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>
     {
 
         public GetBiblicalTermsByTypeQueryHandler([NotNull] ILogger<GetBiblicalTermsByTypeQueryHandler> logger) : base(logger)
@@ -22,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
             //no-op
         }
 
-        public override async Task<QueryResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("biblicalterms", request, cancellationToken);
         }

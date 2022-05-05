@@ -11,10 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {
-    public record GetDashboardProjectsCommand : IRequest<QueryResult<ObservableCollection<DashboardProject>>>;
+    public record GetDashboardProjectsCommand : IRequest<RequestResult<ObservableCollection<DashboardProject>>>;
 
     public class GetDashboardProjectsCommandHandler : ResourceRequestHandler<GetDashboardProjectsCommand,
-        QueryResult<ObservableCollection<DashboardProject>>, ObservableCollection<DashboardProject>>
+        RequestResult<ObservableCollection<DashboardProject>>, ObservableCollection<DashboardProject>>
     {
         public GetDashboardProjectsCommandHandler(ILogger<GetDashboardProjectsCommandHandler> logger) : base(logger)
         {
@@ -23,9 +23,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
        
         protected override string ResourceName { get; set; } = FilePathTemplates.ProjectBaseDirectory;
 
-        public override Task<QueryResult<ObservableCollection<DashboardProject>>> Handle(GetDashboardProjectsCommand request, CancellationToken cancellationToken)
+        public override Task<RequestResult<ObservableCollection<DashboardProject>>> Handle(GetDashboardProjectsCommand request, CancellationToken cancellationToken)
         {
-            var queryResult = new QueryResult<ObservableCollection<DashboardProject>>(new ObservableCollection<DashboardProject>());
+            var queryResult = new RequestResult<ObservableCollection<DashboardProject>>(new ObservableCollection<DashboardProject>());
             try
             {
                 queryResult.Data = ProcessData();

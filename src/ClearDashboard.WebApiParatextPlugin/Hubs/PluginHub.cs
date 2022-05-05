@@ -43,7 +43,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         {
             {
                 _logger.AppendText(Color.DarkOrange, $"New client connected - {Context.ConnectionId}");
-                var result = await _mediator.Send(new GetCurrentVerseCommand());
+                var result = await _mediator.Send(new GetCurrentVerseQuery());
                 if (result.Success)
                 {
                     _logger.AppendText(Color.DarkOrange, $"Sending verse - {result.Data}");
@@ -52,7 +52,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             }
 
             {
-                var result = await _mediator.Send(new GetCurrentProjectCommand());
+                var result = await _mediator.Send(new GetCurrentProjectQuery());
                 if (result.Success)
                 {
                     _logger.AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");

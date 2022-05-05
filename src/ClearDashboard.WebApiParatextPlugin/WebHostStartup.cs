@@ -106,7 +106,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<MainWindow>(sp => _mainWindow);
             //services.AddSerilog();
 
-            services.AddMediatR(typeof(GetCurrentProjectCommandHandler));
+            services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
             
             
             services.AddSingleton<IProject>(sp => _project);

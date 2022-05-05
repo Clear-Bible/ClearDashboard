@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.ViewModels
             IsBusy = true;
             try
             {
-                return ProjectManager.ExecuteCommand(request, cancellationToken);
+                return ProjectManager.ExecuteRequest(request, cancellationToken);
             }
             finally
             {

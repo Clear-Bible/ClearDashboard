@@ -11,7 +11,7 @@ namespace ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms
         All
     }
 
-    public record GetBiblicalTermsByTypeQuery(BiblicalTermsType BiblicalTermsType) : IRequest<QueryResult<List<BiblicalTermsData>>>
+    public record GetBiblicalTermsByTypeQuery(BiblicalTermsType BiblicalTermsType) : IRequest<RequestResult<List<BiblicalTermsData>>>
     {
         public BiblicalTermsType BiblicalTermsType { get; } = BiblicalTermsType;
     }

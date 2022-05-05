@@ -12,19 +12,19 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
 {
-    public class GetCurrentVerseCommandHandler : IRequestHandler<GetCurrentVerseCommand, QueryResult<string>>
+    public class GetCurrentVerseQueryHandler : IRequestHandler<GetCurrentVerseQuery, RequestResult<string>>
     {
         private readonly IVerseRef _verseRef;
-        private readonly ILogger<GetCurrentVerseCommandHandler> _logger;
+        private readonly ILogger<GetCurrentVerseQueryHandler> _logger;
 
-        public GetCurrentVerseCommandHandler(IVerseRef verseRef, ILogger<GetCurrentVerseCommandHandler> logger)
+        public GetCurrentVerseQueryHandler(IVerseRef verseRef, ILogger<GetCurrentVerseQueryHandler> logger)
         {
             _verseRef = verseRef;
             _logger = logger;
         }
-        public Task<QueryResult<string>> Handle(GetCurrentVerseCommand request, CancellationToken cancellationToken)
+        public Task<RequestResult<string>> Handle(GetCurrentVerseQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new QueryResult<string>(string.Empty);
+            var queryResult = new RequestResult<string>(string.Empty);
             try
             {
                 var verseId = _verseRef.BBBCCCVVV.ToString();

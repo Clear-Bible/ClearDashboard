@@ -21,7 +21,7 @@ public class GetUsxQueryHandlerTests : TestBase
         var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery());
 
         Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<QueryResult<string>>();
+        var result = await response.Content.ReadAsAsync<RequestResult<string>>();
 
         Assert.NotNull(result);
         Assert.True(result.Success);

@@ -414,7 +414,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Commands
 
-        public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
+        public Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
             return Mediator.Send(request, cancellationToken);
         }

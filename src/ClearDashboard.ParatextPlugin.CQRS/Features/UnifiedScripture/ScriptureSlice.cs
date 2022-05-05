@@ -3,12 +3,12 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture
 {
-    public record GetUsxQuery() : IRequest<QueryResult<string>>
+    public record GetUsxQuery() : IRequest<RequestResult<string>>
     {
 
     }
 
-    public record GetUsfmQuery() : IRequest<QueryResult<string>>
+    public record GetUsfmQuery() : IRequest<RequestResult<string>>
     {
 
     }

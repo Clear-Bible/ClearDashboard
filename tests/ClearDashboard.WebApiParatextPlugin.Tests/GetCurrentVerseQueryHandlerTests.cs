@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.WebApiParatextPlugin.Tests;
 
-public class GetCurrentVerseCommandHandlerTests : TestBase
+public class GetCurrentVerseQueryHandlerTests : TestBase
 {
-    public GetCurrentVerseCommandHandlerTests(ITestOutputHelper output) : base(output)
+    public GetCurrentVerseQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
 
@@ -18,11 +18,11 @@ public class GetCurrentVerseCommandHandlerTests : TestBase
     {
         var client = CreateHttpClient();
 
-        var response = await client.PostAsJsonAsync<GetCurrentVerseCommand>("verse",
-            new GetCurrentVerseCommand());
+        var response = await client.PostAsJsonAsync<GetCurrentVerseQuery>("verse",
+            new GetCurrentVerseQuery());
 
         Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<QueryResult<string>>();
+        var result = await response.Content.ReadAsAsync<RequestResult<string>>();
 
         Assert.NotNull(result);
         Assert.True(result.Success);

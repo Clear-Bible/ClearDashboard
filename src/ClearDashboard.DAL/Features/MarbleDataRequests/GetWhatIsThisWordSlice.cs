@@ -16,10 +16,10 @@ using Unidecode.NET;
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
  
-        public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<QueryResult<List<MarbleResource>>>;
+        public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<RequestResult<List<MarbleResource>>>;
 
         public class GetWhatIsThisWordByBCVHandler : XmlReaderRequestHandler<GetWhatIsThisWordByBcvQuery,
-            QueryResult<List<MarbleResource>>, List<MarbleResource>>
+            RequestResult<List<MarbleResource>>, List<MarbleResource>>
         {
             private BookChapterVerseViewModel _bcv;
             private string _languageCode;
@@ -32,7 +32,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
             protected override string ResourceName { get; set; } = "";
 
-            public override Task<QueryResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
+            public override Task<RequestResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
                 CancellationToken cancellationToken)
             {
                 _bcv = request.bcv;

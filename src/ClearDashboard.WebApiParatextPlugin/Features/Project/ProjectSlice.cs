@@ -13,20 +13,20 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
-    public class GetCurrentProjectCommandHandler : IRequestHandler<GetCurrentProjectCommand, QueryResult<DataAccessLayer.Models.Project>>
+    public class GetCurrentProjectQueryHandler : IRequestHandler<GetCurrentProjectQuery, RequestResult<DataAccessLayer.Models.Project>>
     {
         private readonly IProject _project;
-        private readonly ILogger<GetCurrentProjectCommandHandler> _logger;
+        private readonly ILogger<GetCurrentProjectQueryHandler> _logger;
 
-        public GetCurrentProjectCommandHandler(IProject project, ILogger<GetCurrentProjectCommandHandler> logger)
+        public GetCurrentProjectQueryHandler(IProject project, ILogger<GetCurrentProjectQueryHandler> logger)
         {
             _project = project;
             _logger = logger;
         }
-        public Task<QueryResult<DataAccessLayer.Models.Project>> Handle(GetCurrentProjectCommand request, CancellationToken cancellationToken)
+        public Task<RequestResult<DataAccessLayer.Models.Project>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
         {
             var project = BuildProject();
-            var result = new QueryResult<DataAccessLayer.Models.Project>(project);
+            var result = new RequestResult<DataAccessLayer.Models.Project>(project);
             return Task.FromResult(result);
         }
 

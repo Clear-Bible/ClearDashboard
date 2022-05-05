@@ -9,7 +9,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 {
-    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, QueryResult<string>>
+    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, RequestResult<string>>
     {
         private readonly IVerseRef _verseRef;
         private readonly IProject _project;
@@ -22,9 +22,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             _project = project;
         }
 
-        public Task<QueryResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new QueryResult<string>(string.Empty);
+            var queryResult = new RequestResult<string>(string.Empty);
             try
             {
                 queryResult.Data = _project.GetUSX(_verseRef.BookNum);
@@ -39,7 +39,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
     }
 
 
-    public class GetUsfmQueryHandler : IRequestHandler<GetUsfmQuery, QueryResult<string>>
+    public class GetUsfmQueryHandler : IRequestHandler<GetUsfmQuery, RequestResult<string>>
     {
         private readonly IVerseRef _verseRef;
         private readonly IProject _project;
@@ -52,9 +52,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             _project = project;
         }
 
-        public Task<QueryResult<string>> Handle(GetUsfmQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<string>> Handle(GetUsfmQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new QueryResult<string>(string.Empty);
+            var queryResult = new RequestResult<string>(string.Empty);
             try
             {
                 queryResult.Data = _project.GetUSFM(_verseRef.BookNum);

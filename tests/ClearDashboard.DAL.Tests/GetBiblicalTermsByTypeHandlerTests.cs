@@ -18,12 +18,12 @@ public class GetBiblicalTermsByTypeHandlerTests : TestBase
     [Fact]
     public async Task GetAllBiblicalTermsTest()
     {
-       var result =  await ExecuteAndTestRequest<GetBiblicalTermsByTypeQuery, QueryResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.All));
+       var result =  await ExecuteAndTestRequest<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.All));
     }
 
     [Fact]
     public async Task GetProjectBiblicalTermsTest()
     {
-        var result = await ExecuteAndTestRequest<GetBiblicalTermsByTypeQuery, QueryResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project));
+        var result = await ExecuteAndTestRequest<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project));
     }
 }

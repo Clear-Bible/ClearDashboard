@@ -3,5 +3,5 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Project
 {
-    public record GetCurrentProjectCommand() : IRequest<QueryResult<DataAccessLayer.Models.Project>>;
+    public record GetCurrentProjectQuery() : IRequest<RequestResult<DataAccessLayer.Models.Project>>;
 }

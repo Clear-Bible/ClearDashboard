@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Tests;
 
-public class GetCurrentProjectCommandHandlerTests : TestBase
+public class GetCurrentProjectQueryHandlerTests : TestBase
 {
-    public GetCurrentProjectCommandHandlerTests(ITestOutputHelper output) : base(output)
+    public GetCurrentProjectQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
         //no-op
     }
@@ -17,7 +17,7 @@ public class GetCurrentProjectCommandHandlerTests : TestBase
     [Fact]
     public async Task GetCurrentProjectTest()
     {
-        var result = await ExecuteAndTestRequest<GetCurrentProjectCommand, QueryResult<Project>, Project>(new GetCurrentProjectCommand());
+        var result = await ExecuteAndTestRequest<GetCurrentProjectQuery, RequestResult<Project>, Project>(new GetCurrentProjectQuery());
 
         Assert.NotNull(result.Data.ShortName);
         Output.WriteLine($"Project name: {result.Data.ShortName}");

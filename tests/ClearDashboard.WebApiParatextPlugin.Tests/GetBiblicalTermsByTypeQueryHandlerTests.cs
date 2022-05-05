@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.All));
 
             Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<QueryResult<List<BiblicalTermsData>>>();
+            var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
 
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -42,7 +42,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project));
 
             Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<QueryResult<List<BiblicalTermsData>>>();
+            var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
 
             Assert.NotNull(result);
             Assert.True(result.Success);

@@ -11,12 +11,12 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
-    public class GetCurrentProjectCommandHandlerTests : TestBase
+    public class GetCurrentProjectQueryHandlerTests : TestBase
     {
 
        
 
-        public GetCurrentProjectCommandHandlerTests(ITestOutputHelper output) : base(output)
+        public GetCurrentProjectQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -26,15 +26,15 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task TestCommand()
+        public async Task TestQuery()
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-            var response = await client.PostAsJsonAsync<GetCurrentProjectCommand>("project", new GetCurrentProjectCommand());
+            var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
 
             Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<QueryResult<Project>>();
+            var result = await response.Content.ReadAsAsync<RequestResult<Project>>();
                     
             Assert.NotNull(result);
             Assert.True(result.Success);

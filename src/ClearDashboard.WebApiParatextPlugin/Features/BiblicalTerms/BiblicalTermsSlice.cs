@@ -14,7 +14,7 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
 {
-    public class GetBiblicalTermsByTypeQueryHandler : IRequestHandler<GetBiblicalTermsByTypeQuery, QueryResult<List<BiblicalTermsData>>>
+    public class GetBiblicalTermsByTypeQueryHandler : IRequestHandler<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>>
     {
         private readonly IWindowPluginHost _host;
         private readonly IProject _project;
@@ -26,14 +26,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
             _project = project;
             _logger = logger;
         }
-        public Task<QueryResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
         {
 
             var biblicalTermList = request.BiblicalTermsType == BiblicalTermsType.All
                 ? _host.GetBiblicalTermList(BiblicalTermListType.All)
                 : _project.BiblicalTermList;
 
-            var queryResult = new QueryResult<List<BiblicalTermsData>>(new List<BiblicalTermsData>());
+            var queryResult = new RequestResult<List<BiblicalTermsData>>(new List<BiblicalTermsData>());
             try
             {
                 queryResult.Data = ProcessBiblicalTerms(_project, biblicalTermList);

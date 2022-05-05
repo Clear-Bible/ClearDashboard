@@ -23,9 +23,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
         }
 
         [HttpPost]
-        public async Task<QueryResult<List<BiblicalTermsData>>> GetAsync([FromBody] GetBiblicalTermsByTypeQuery command)
+        public async Task<RequestResult<List<BiblicalTermsData>>> GetAsync([FromBody] GetBiblicalTermsByTypeQuery command)
         {
-            var result = await ExecuteCommandAsync<QueryResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<List<BiblicalTermsData>>, List<BiblicalTermsData>>(command, CancellationToken.None);
             return result;
 
         }
