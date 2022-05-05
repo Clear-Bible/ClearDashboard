@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\BHSSelectedLemmaConcordance.xml" />
@@ -502,6 +508,7 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -516,10 +523,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
-    <ProjectReference Include="..\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj" />
+    <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
 
 
@@ -563,10 +571,6 @@
     <Reference Include="H.Pipes">
       <HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

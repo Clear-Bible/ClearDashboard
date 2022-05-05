@@ -1,25 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
-using Caliburn.Micro;
-using ClearDashboard.Common.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Views;
-using ClearDashboard.Wpf.Views.Workflows.NewProject;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Path = System.Windows.Shapes.Path;
 
 
 

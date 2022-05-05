@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -11,8 +11,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.DAL.ViewModels;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -50,8 +49,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private BookChapterVerse _currentBcv = new();
-        public BookChapterVerse CurrentBcv
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
         {
             get => _currentBcv;
             set
@@ -292,13 +291,13 @@ namespace ClearDashboard.Wpf.ViewModels
             //}
         }
 
-        private void ProcessTargetVerseData(PipeMessage message)
+        private void ProcessTargetVerseData(/*PipeMessage message*/)
         {
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((System.Action)delegate
             {
                 // deserialize the payload
-                string payload = message.Payload.ToString();
+                string payload = string.Empty;// message.Payload.ToString();
                 string xmlData = JsonSerializer.Deserialize<string>(payload);
 
                 string fontFamily = "Doulos SIL";

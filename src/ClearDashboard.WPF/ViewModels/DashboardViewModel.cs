@@ -1,9 +1,9 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using ClearDashboard.DataAccessLayer.Models;
 
 
 namespace ClearDashboard.Wpf.ViewModels

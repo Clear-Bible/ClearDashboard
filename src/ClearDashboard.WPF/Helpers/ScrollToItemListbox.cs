@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Helpers
 {

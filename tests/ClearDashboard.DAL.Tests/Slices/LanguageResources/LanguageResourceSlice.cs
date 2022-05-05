@@ -11,9 +11,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.LanguageResources
 {
-    public record GetLanguageResourcesCommand : IRequest<QueryResult<List<string>>>;
+    public record GetLanguageResourcesCommand : IRequest<RequestResult<List<string>>>;
 
-    public class GetLanguageResourcesCommandHandler : XmlReaderRequestHandler<GetLanguageResourcesCommand, QueryResult<List<string>>, List<string>>
+    public class GetLanguageResourcesCommandHandler : XmlReaderRequestHandler<GetLanguageResourcesCommand, RequestResult<List<string>>, List<string>>
     {
         public GetLanguageResourcesCommandHandler(ILogger<GetManuscriptVerseByIdHandler> logger) : base(logger)
         {
@@ -22,7 +22,7 @@ namespace ClearDashboard.DAL.Tests.Slices.LanguageResources
 
         protected override string ResourceName { get; set; } = @"xml\\languages.xml";
 
-        public override Task<QueryResult<List<string>>> Handle(GetLanguageResourcesCommand request, CancellationToken cancellationToken)
+        public override Task<RequestResult<List<string>>> Handle(GetLanguageResourcesCommand request, CancellationToken cancellationToken)
         {
             var queryResult = ValidateResourcePath(new List<string>());
             if (queryResult.Success)

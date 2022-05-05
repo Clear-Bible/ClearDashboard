@@ -1,6 +1,5 @@
 ﻿using System;
 using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -13,8 +12,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
-using ClearDashboard.ParatextPlugin.Data;
+using ClearDashboard.DataAccessLayer.Models;
+
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -64,8 +65,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private BookChapterVerse _currentBcv = new();
-        public BookChapterVerse CurrentBcv
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
         {
             get => _currentBcv;
             set

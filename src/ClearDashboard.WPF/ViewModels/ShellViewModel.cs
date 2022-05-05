@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearDashboard.ParatextPlugin.Data;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

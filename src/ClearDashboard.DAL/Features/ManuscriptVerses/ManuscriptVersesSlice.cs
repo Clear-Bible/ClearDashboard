@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
 {
-    public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<QueryResult<List<CoupleOfStrings>>>;
+    public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<RequestResult<List<CoupleOfStrings>>>;
 
-    public class GetManuscriptVerseByIdHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, QueryResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
+    public class GetManuscriptVerseByIdHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
         public GetManuscriptVerseByIdHandler(ILogger<GetManuscriptVerseByIdHandler> logger) : base(logger)
         {
@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
         
         protected override string ResourceName { get; set; } = "manuscriptverses.sqlite";
         
-        public override Task<QueryResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
+        public override Task<RequestResult<List<CoupleOfStrings>>> Handle(GetManuscriptVerseByIdQuery request, CancellationToken cancellationToken)
         {
             var queryResult = ValidateResourcePath(new List<CoupleOfStrings>());
             if (queryResult.Success)

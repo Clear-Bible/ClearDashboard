@@ -3,7 +3,6 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -17,6 +16,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 
 
@@ -263,8 +264,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private BookChapterVerse _currentBcv = new();
-        public BookChapterVerse CurrentBcv
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
         {
             get => _currentBcv;
             set

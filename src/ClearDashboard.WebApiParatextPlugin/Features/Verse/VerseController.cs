@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.ParatextPlugin.Data.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -16,9 +16,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
         }
 
         [HttpPost]
-        public async Task<QueryResult<string>> GetAsync([FromBody] GetCurrentVerseCommand command)
+        public async Task<RequestResult<string>> GetAsync([FromBody] GetCurrentVerseQuery query)
         {
-            return await ExecuteCommandAsync<QueryResult<string>, string>(command, CancellationToken.None);
+            return await ExecuteRequestAsync<RequestResult<string>, string>(query, CancellationToken.None);
 
         }
 

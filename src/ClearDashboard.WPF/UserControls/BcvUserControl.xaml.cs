@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using ClearDashboard.Common.Models;
-using ClearDashboard.Wpf.ViewModels;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.UserControls
 {

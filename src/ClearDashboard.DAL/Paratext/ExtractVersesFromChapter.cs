@@ -1,10 +1,10 @@
-﻿using ClearDashboard.Common.Models;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {

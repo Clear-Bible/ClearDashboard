@@ -1,7 +1,7 @@
 ﻿using System;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
-using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Models;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf

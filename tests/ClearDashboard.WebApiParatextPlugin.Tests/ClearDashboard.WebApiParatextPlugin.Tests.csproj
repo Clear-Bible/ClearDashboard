@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj" />
   </ItemGroup>
 

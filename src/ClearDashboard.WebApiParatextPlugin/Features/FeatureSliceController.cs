@@ -23,7 +23,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features
             Logger = logger;
         }
 
-        protected async Task<QueryResult<TData>> ExecuteCommandAsync<TResponse, TData>(IRequest<TResponse> request, CancellationToken cancellationToken) where TResponse: QueryResult<TData>
+        protected async Task<RequestResult<TData>> ExecuteRequestAsync<TResponse, TData>(IRequest<TResponse> request, CancellationToken cancellationToken) where TResponse: RequestResult<TData>
         {
             try
             {
@@ -32,7 +32,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features
             catch (Exception ex)
             {
                 Logger.LogError(ex, "An unexpected error occurred while executing a command.");
-                return new QueryResult<TData>(default(TData), false, ex.Message);
+                return new RequestResult<TData>(default(TData), false, ex.Message);
             }
         }
 

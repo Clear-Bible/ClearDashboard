@@ -1,5 +1,5 @@
 using Caliburn.Micro;
-using ClearDashboard.Common.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -10,7 +10,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,17 +18,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.Data;
-using ClearDashboard.ParatextPlugin.Data.Features.BiblicalTerms;
-using ClearDashboard.ParatextPlugin.Data.Models;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using Point = System.Windows.Point;
-using MediatR;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedMember.Local
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -355,8 +347,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<Verse> _selectedItemVerses = new();
-        public ObservableCollection<Verse> SelectedItemVerses
+        private ObservableCollection<VerseViewModel> _selectedItemVerses = new();
+        public ObservableCollection<VerseViewModel> SelectedItemVerses
         {
             get => _selectedItemVerses; 
             set
@@ -665,9 +657,9 @@ namespace ClearDashboard.Wpf.ViewModels
                         localizedString = LocalizationStrings.Get(loc[0], Logger) + $" {loc[1]}";
                     }
 
-                    _selectedItemVerses.Add(new Verse
+                    _selectedItemVerses.Add(new VerseViewModel
                     {
-                        VerseID = localizedString,
+                        VerseId = localizedString,
                         VerseBBCCCVVV = selectedBiblicalTermsData.References[i],
                         VerseText = verseText
                     });

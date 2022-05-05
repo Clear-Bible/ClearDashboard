@@ -73,10 +73,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Content Include="HelpFiles\NewProjectHelp_us.md">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
@@ -111,10 +107,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ClearDashboard.Common\ClearDashboard.Common.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
+		<ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

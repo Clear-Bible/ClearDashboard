@@ -2,7 +2,8 @@
 
 public abstract class Result<T>
 {
-    protected Result(T? result, bool success = true, string message = "Success")
+    protected Result() {}
+    protected Result(T? result = default(T), bool success = true, string message = "Success")
     {
         Success = success;
         Message = message;

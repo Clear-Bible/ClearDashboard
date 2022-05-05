@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Unidecode.NET;
@@ -15,12 +16,12 @@ using Unidecode.NET;
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
  
-        public record GetWhatIsThisWordByBcvQuery(BookChapterVerse bcv, string languageCode) : IRequest<QueryResult<List<MarbleResource>>>;
+        public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<RequestResult<List<MarbleResource>>>;
 
         public class GetWhatIsThisWordByBCVHandler : XmlReaderRequestHandler<GetWhatIsThisWordByBcvQuery,
-            QueryResult<List<MarbleResource>>, List<MarbleResource>>
+            RequestResult<List<MarbleResource>>, List<MarbleResource>>
         {
-            private BookChapterVerse _bcv;
+            private BookChapterVerseViewModel _bcv;
             private string _languageCode;
 
             public GetWhatIsThisWordByBCVHandler(ILogger<GetWhatIsThisWordByBCVHandler> logger) : base(logger)
@@ -31,7 +32,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
             protected override string ResourceName { get; set; } = "";
 
-            public override Task<QueryResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
+            public override Task<RequestResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
                 CancellationToken cancellationToken)
             {
                 _bcv = request.bcv;
@@ -44,7 +45,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 if (queryResult.Success == false)
                 {
                     LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.GetVerseId()}'");
+                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.VerseLocationId}'");
                     return Task.FromResult(queryResult);
                 }
 
@@ -55,7 +56,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 catch (Exception ex)
                 {
                     LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.GetVerseId()}'",
+                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.VerseLocationId}'",
                         ex);
                 }
 
@@ -75,7 +76,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
             /// <param name="filename"></param>
             /// <param name="bcv"></param>
             /// <returns></returns>
-            private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerse bcv,
+            private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerseViewModel bcv,
                 string languageCode)
             {
                 Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
@@ -84,7 +85,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 XmlDocument doc = new XmlDocument();
                 doc.Load(filename);
                 //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
-                string bbbcccvvv = bcv.GetVerseId().PadLeft(9, '0');
+                string bbbcccvvv = bcv.VerseLocationId.PadLeft(9, '0');
                 XmlNodeList prop =
                     doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
 

@@ -1,10 +1,11 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Common.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -13,7 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region   Member Variables
 
        
-        private Verse _verse;
+        private VerseViewModel _verse;
         
         private DataTable _dt = new DataTable();
 
@@ -79,12 +80,12 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, Verse verse)
+            DashboardProjectManager projectManager, VerseViewModel verse)
             : base(navigationService, logger, projectManager)
         {
             _verse = verse;
 
-            BookChapter = verse.VerseID.Substring(0, verse.VerseID.IndexOf(':'));
+            BookChapter = verse.VerseId.Substring(0, verse.VerseId.IndexOf(':'));
 
             flowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
@@ -99,7 +100,7 @@ namespace ClearDashboard.Wpf.ViewModels
             _dt.Columns.Add("Highlight", typeof(bool));
             _dt.Columns.Add("Verse", typeof(string));
             _dt.Columns.Add(project.TargetProject.Name, typeof(string));
-            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, project.TargetProject, _verse);
+            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, project.TargetProject, _verse.Entity);
 
             foreach (var verse in verses)
             {
@@ -129,7 +130,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // add each back translation to grid
             foreach (var btProject in project.BackTranslationProjects)
             {
-                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, btProject, _verse);
+                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, btProject, _verse.Entity);
                 if (verses.Count > 0)
                 {
                     _dt.Columns.Add(btProject.Name);
