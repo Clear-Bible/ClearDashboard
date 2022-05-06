@@ -19,10 +19,10 @@ namespace ClearDashboard.DataAccessLayer.Models
             BackTranslationProjects = new List<ParatextProject>();
             InterlinearizerProject = null;
 
-            ProjectPath = string.IsNullOrEmpty(FullFilePath) ? string.Empty : new FileInfo(FullFilePath).DirectoryName;
+            ProjectPath = (string.IsNullOrEmpty(FullFilePath) ? string.Empty : new FileInfo(FullFilePath).DirectoryName) ?? string.Empty;
 
-            this.BaseTargetName = TargetProject?.Name;
-            this.BaseTargetFullName = TargetProject?.FullName;
+            BaseTargetName = TargetProject?.Name;
+            BaseTargetFullName = TargetProject?.FullName;
         }
 
        
