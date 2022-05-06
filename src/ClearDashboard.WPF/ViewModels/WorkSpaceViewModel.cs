@@ -913,118 +913,6 @@ namespace ClearDashboard.Wpf.ViewModels
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
 
-
-        private void HandleEventAsync(object sender, EventArgs args)
-        {
-            //TODO:  Refactor to use EventAggregator
-            //if (args == null) return;
-
-            //var pipeMessage = args.PipeMessage;
-
-            //switch (pipeMessage.Action)
-            //{
-            //    case ActionType.CurrentVerse:
-            //        this.VerseRef = pipeMessage.Text;
-            //        if (ParatextSync)
-            //        {
-            //            OutGoingChangesStarted = true;
-            //            if (pipeMessage.Text != CurrentBcv.VerseLocationId)
-            //            {
-            //                if (BCVDictionary is null)
-            //                {
-            //                    return;
-            //                }
-
-            //                if (BCVDictionary.Count == 0 || CurrentBcv is null)
-            //                {
-            //                    return;
-            //                }
-
-            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
-
-            //                CalculateChapters();
-
-            //                CalculateVerses();
-
-            //                // during the resetting of all the chapters & verse lists from the above,
-            //                // this defaults back to {book}001001
-            //                // so we need to reset it again with this call
-            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
-
-            //                NotifyOfPropertyChange(() => CurrentBcv);
-            //            }
-            //            OutGoingChangesStarted = false;
-            //        }
-
-            //        break;
-            //    case ActionType.OnConnected:
-            //        break;
-            //    case ActionType.OnDisconnected:
-            //        break;
-            //}
-
-            //Logger.LogInformation($"{pipeMessage.Text}");
-        }
-
-
-        private void CalculateChapters()
-        {
-            // CHAPTERS
-            string bookID = CurrentBcv.Book;
-            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
-            for (int i = 0; i < chapters.Count; i++)
-            {
-                chapters[i] = chapters[i].Substring(2, 3);
-            }
-
-            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> chapterNumbers = new List<int>();
-                foreach (var chapter in chapters)
-                {
-                    chapterNumbers.Add(Convert.ToInt16(chapter));
-                }
-
-                CurrentBcv.ChapterNumbers = chapterNumbers;
-            });
-        }
-
-        private void BcvChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (ParatextSync && OutGoingChangesStarted == false)
-            {
-                var newVerse = CurrentBcv.GetVerseId();
-            }
-        }
-
-        private void CalculateVerses()
-        {
-            // VERSES
-            string bookID = CurrentBcv.Book;
-            string chapID = CurrentBcv.ChapterIdText;
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookID + chapID)).ToList();
-
-            for (int i = 0; i < verses.Count; i++)
-            {
-                verses[i] = verses[i].Substring(5);
-            }
-
-            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> verseNumbers = new List<int>();
-                foreach (var verse in verses)
-                {
-                    verseNumbers.Add(Convert.ToInt16(verse));
-                }
-
-                CurrentBcv.VerseNumbers = verseNumbers;
-            });
-        }
-
         /// <summary>
         /// Unhide window
         /// </summary>
@@ -1087,6 +975,64 @@ namespace ClearDashboard.Wpf.ViewModels
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
+        private void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (ParatextSync && OutGoingChangesStarted == false)
+            {
+                var newVerse = CurrentBcv.GetVerseId();
+            }
+        }
+
+
+        private void CalculateChapters()
+        {
+            // CHAPTERS
+            string bookID = CurrentBcv.Book;
+            var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(2, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                CurrentBcv.ChapterNumbers = chapterNumbers;
+            });
+        }
+
+        private void CalculateVerses()
+        {
+            // VERSES
+            string bookID = CurrentBcv.Book;
+            string chapID = CurrentBcv.ChapterIdText;
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookID + chapID)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(5);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                CurrentBcv.VerseNumbers = verseNumbers;
+            });
+        }
 
         #endregion // Methods
     }

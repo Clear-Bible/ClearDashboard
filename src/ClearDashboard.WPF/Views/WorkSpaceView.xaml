@@ -46,7 +46,7 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="32" />
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -61,41 +61,17 @@
                 <materialDesign:PackIcon Kind="ChevronLeft" />
             </Button>
 
+            <!--
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <WrapPanel>
-                    <Menu VerticalAlignment="Center">
-                        <MenuItem Header="Layout">
-                            <MenuItem
-                                Click="MenuItem_Click"
-                                Header="Load"
-                                Icon=""
-                                Tag="Load" />
-                            <MenuItem
-                                Click="MenuItem_Click"
-                                Header="Save"
-                                Icon=""
-                                Tag="Save" />
-                        </MenuItem>
-                    </Menu>
-                    <Menu VerticalAlignment="Center">
-                        <MenuItem Header="Windows">
-                            <MenuItem
-                                Click="MenuItem_Click"
-                                Header="Biblical Terms"
-                                Icon=""
-                                Tag="BiblicalTerms" />
-                        </MenuItem>
-                    </Menu>
-
-                </WrapPanel>
-                <!--<ComboBox
+                <ComboBox
                 VerticalContentAlignment="Center"
                 DisplayMemberPath="Item1"
                 ItemsSource="{Binding Themes}"
-                SelectedItem="{Binding SelectedTheme}" />-->
+                SelectedItem="{Binding SelectedTheme}" />
             </StackPanel>
+            -->
 
-            <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
+            <Menu Grid.Column="1" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MaterialDesignMenuItem}">
                         <Setter Property="Icon" Value="{Binding Icon}" />
