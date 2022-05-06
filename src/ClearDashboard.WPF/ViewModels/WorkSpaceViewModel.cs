@@ -3,7 +3,11 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
+using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
@@ -15,13 +19,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -37,6 +37,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private DashboardViewModel _dashboardViewModel;
 
         private DockingManager _dockingManager = new DockingManager();
+
+        private string _lastLayout = "";
 
         #endregion //Member Variables
 
@@ -168,11 +170,16 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     // no op
                 }
+                else if (value == "SaveID")
+                {
+                    GridIsVisible = Visibility.Visible;
+                }
                 else
                 {
                     switch (value)
                     {
                         case "LayoutID":
+                            Console.WriteLine();
                             break;
                         case "AlignmentToolID":
                             _windowIdToLoad = "ALIGNMENTTOOL";
@@ -207,15 +214,15 @@ namespace ClearDashboard.Wpf.ViewModels
                         case "TextCollectionID":
                             _windowIdToLoad = "TEXTCOLLECTION";
                             break;
-                        case "SaveID":
-                            GridIsVisible = Visibility.Visible;
-                            break;
-                        case "LoadID":
 
-                            break;
                         default:
                             _windowIdToLoad = value;
                             break;
+                    }
+
+                    if (_windowIdToLoad is not null)
+                    {
+                        UnHideWindow(WindowIdToLoad);
                     }
                 }
 
@@ -365,8 +372,6 @@ namespace ClearDashboard.Wpf.ViewModels
             // check if we are in design mode or not
             if (Application.Current != null)
             {
-                // TODO
-
                 // subscribe to change events in the parent's theme
                 ((App)Application.Current).ThemeChanged += WorkSpaceViewModel_ThemeChanged;
 
@@ -435,21 +440,69 @@ namespace ClearDashboard.Wpf.ViewModels
         }
         public async void Init()
         {
+
+            ReBuildMenu();
+
+            // load up the viewmodels from the IoC and activate them all
+            Items.Clear();
+            // documents
+            await ActivateItemAsync(IoC.Get<DashboardViewModel>());
+            await ActivateItemAsync(IoC.Get<ConcordanceViewModel>());
+            await ActivateItemAsync(IoC.Get<StartPageViewModel>());
+            await ActivateItemAsync(IoC.Get<AlignmentToolViewModel>());
+            await ActivateItemAsync(IoC.Get<TreeDownViewModel>());
+            // tools
+            await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
+            await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
+            await ActivateItemAsync(IoC.Get<SourceContextViewModel>());
+            await ActivateItemAsync(IoC.Get<TargetContextViewModel>());
+            await ActivateItemAsync(IoC.Get<NotesViewModel>());
+            await ActivateItemAsync(IoC.Get<PinsViewModel>());
+            await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
+
+
+            // remove all existing windows
+            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+
+            if (Settings.Default.LastLayout == "")
+            {
+                // bring up the default layout
+                LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
+            }
+            else
+            {
+                // check to see if the layout exists
+                string layoutPath = Settings.Default.LastLayout;
+                if (File.Exists(layoutPath))
+                {
+                    LoadLayout(layoutSerializer, layoutPath);
+                }
+                else
+                {
+                    LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
+                }
+            }
+        }
+
+        private void ReBuildMenu()
+        {
             FileLayouts = GetFileLayouts();
             ObservableCollection<MenuItemViewModel> layouts = new();
 
 
             // add in the standard menu items
-            layouts.Add(new MenuItemViewModel { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon = null });
+            layouts.Add(new MenuItemViewModel
+                { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon = null });
             layouts.Add(new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, });
-            layouts.Add(new MenuItemViewModel { Header = "_______STANDARD LAYOUTS____________", Id = "SeparatorID", ViewModel = this, });
+            layouts.Add(new MenuItemViewModel { Header = "---- STANDARD LAYOUTS ----", Id = "SeparatorID", ViewModel = this, });
 
             bool bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
                 if (fileLayout.LayoutID.StartsWith("ProjectLayout:") && bFound == false)
                 {
-                    layouts.Add(new MenuItemViewModel { Header = "_______PROJECT LAYOUTS____________", Id = "SeparatorID", ViewModel = this, });
+                    layouts.Add(new MenuItemViewModel
+                        { Header = "---- PROJECT LAYOUTS ----", Id = "SeparatorID", ViewModel = this, });
                     bFound = true;
                 }
 
@@ -476,7 +529,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     Header = "Windows", Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new MenuItemViewModel { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this,},
+                        new MenuItemViewModel { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
                         new MenuItemViewModel { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
                         new MenuItemViewModel { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
                         new MenuItemViewModel { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
@@ -492,72 +545,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 },
                 new MenuItemViewModel { Header = "Help", Id = "HelpID", ViewModel = this, }
             };
-
-
-            Items.Clear();
-            await ActivateItemAsync(IoC.Get<DashboardViewModel>());
-            await ActivateItemAsync(IoC.Get<ConcordanceViewModel>());
-            await ActivateItemAsync(IoC.Get<StartPageViewModel>());
-            await ActivateItemAsync(IoC.Get<AlignmentToolViewModel>());
-            await ActivateItemAsync(IoC.Get<TreeDownViewModel>());
-
-            await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
-            await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
-            await ActivateItemAsync(IoC.Get<SourceContextViewModel>());
-            await ActivateItemAsync(IoC.Get<TargetContextViewModel>());
-            await ActivateItemAsync(IoC.Get<NotesViewModel>());
-            await ActivateItemAsync(IoC.Get<PinsViewModel>());
-            await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
-
-
-            _tools.Clear();
-            _documents.Clear();
-
-            for (int i = 0; i < Items.Count; i++)
-            {
-                var type = Items[i];
-                switch (type)
-                {
-                    case DashboardViewModel:
-                    case ConcordanceViewModel:
-                    case StartPageViewModel:
-                    case AlignmentToolViewModel:
-                    case TreeDownViewModel:
-                        _documents.Add((PaneViewModel)Items[i]);
-                        break;
-
-                    case BiblicalTermsViewModel:
-                    case WordMeaningsViewModel:
-                    case SourceContextViewModel:
-                    case TargetContextViewModel:
-                    case NotesViewModel:
-                    case PinsViewModel:
-                    case TextCollectionViewModel:
-                        _tools.Add((ToolViewModel)Items[i]);
-                        break;
-                }
-            }
-
-            NotifyOfPropertyChange(() => Documents);
-            NotifyOfPropertyChange(() => BookNames);
         }
-
-        public Task ActivateOrCreate<T>(string displayName)
-            where T : PaneViewModel
-        {
-            var item = Items.OfType<T>().FirstOrDefault(x => x.DisplayName == displayName);
-            if (item == null)
-            {
-                item = (T)Activator.CreateInstance(typeof(T));
-                item.Parent = this;
-                item.ConductWith(this);
-                item.DisplayName = displayName;
-            }
-            ActivateItemAsync(item, CancellationToken.None);
-
-            return Task.CompletedTask;
-        }
-
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -572,49 +560,68 @@ namespace ClearDashboard.Wpf.ViewModels
             Init();
         }
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_lastLayout == "")
+            {
+                SelectedLayoutText = "Last Saved";
+                OkSave();
+            }
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
 
 
         #endregion //Constructor
 
         #region Methods
 
+        /// <summary>
+        /// Save the layout
+        /// </summary>
         public void OkSave()
         {
-            // todo
+            string filePath = "";
             if (SelectedLayout is not null)
             {
-                Debug.WriteLine(SelectedLayout.LayoutPath);
+                // overwrite the current layout
+                filePath = SelectedLayout.LayoutPath;
             }
             else
             {
-                Debug.WriteLine(SelectedLayoutText);
-
-                SelectedLayoutText = SanitizeFileName(SelectedLayoutText);
-
-                var path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
-                var filePath = Path.Combine(path, SelectedLayoutText + ".Layout.config");
-
-                try
+                if (SelectedLayoutText != string.Empty)
                 {
-                    var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
-                    layoutSerializer.Serialize(filePath);
+                    // use the 
+                    SelectedLayoutText = Helpers.Helpers.SanitizeFileName(SelectedLayoutText);
+
+                    if (SelectedLayoutText == "")
+                    {
+                        // no characters were returned that were valid
+                        return;
+                    }
+
+                    var path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                    filePath = Path.Combine(path, SelectedLayoutText + ".Layout.config");
                 }
-                catch (Exception e)
-                {
-                    this.Logger.LogError(e.Message);
-                }
+
             }
+
+            try
+            {
+                // save the layout
+                var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
+                layoutSerializer.Serialize(filePath);
+            }
+            catch (Exception e)
+            {
+                this.Logger.LogError(e.Message);
+            }
+
             GridIsVisible = Visibility.Collapsed;
+
+            ReBuildMenu();
         }
 
-        private static readonly Regex InvalidFileRegex = new Regex(
-            string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
 
-        public static string SanitizeFileName(string fileName)
-        {
-            Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
-            return InvalidFileRegex.Replace(fileName, string.Empty);
-        }
 
         public void CancelSave()
         {
@@ -712,18 +719,58 @@ namespace ClearDashboard.Wpf.ViewModels
             catch (Exception e)
             {
                 Logger.LogError(e.Message);
-            }
-            finally
-            {
                 filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
-                if (!File.Exists(filePath))
+                if (File.Exists(filePath))
                 {
+                    // load in the default layout
                     layoutSerializer.Deserialize(filePath);
+                }
+                else
+                {
+                    // build a layout
+                    _tools.Clear();
+                    _documents.Clear();
+
+                    for (int i = 0; i < Items.Count; i++)
+                    {
+                        var type = Items[i];
+                        switch (type)
+                        {
+                            case DashboardViewModel:
+                            case ConcordanceViewModel:
+                            case StartPageViewModel:
+                            case AlignmentToolViewModel:
+                            case TreeDownViewModel:
+                                _documents.Add((PaneViewModel)Items[i]);
+                                break;
+
+                            case BiblicalTermsViewModel:
+                            case WordMeaningsViewModel:
+                            case SourceContextViewModel:
+                            case TargetContextViewModel:
+                            case NotesViewModel:
+                            case PinsViewModel:
+                            case TextCollectionViewModel:
+                                _tools.Add((ToolViewModel)Items[i]);
+                                break;
+                        }
+                    }
+
+                    NotifyOfPropertyChange(() => Documents);
+                    NotifyOfPropertyChange(() => BookNames);
                 }
             }
 
+            // save to settings
+            Settings.Default.LastLayout = filePath;
+            _lastLayout = filePath;
         }
 
+        /// <summary>
+        /// return the correct existing vm from Items list - DOCUMENTS
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         public PaneViewModel GetPaneViewModelFromItems(string vm)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -746,6 +793,11 @@ namespace ClearDashboard.Wpf.ViewModels
             return (PaneViewModel)Items[0];
         }
 
+        /// <summary>
+        /// return the correct existing vm from Items list - TOOLS
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         public ToolViewModel GetToolViewModelFromItems(string vm)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -776,40 +828,40 @@ namespace ClearDashboard.Wpf.ViewModels
             switch (windowTag)
             {
                 case WorkspaceLayoutNames.BiblicalTerms:
-                    var vm = IoC.Get<BiblicalTermsViewModel>();
+                    var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
                 case WorkspaceLayoutNames.Dashboard:
-                    var vm1 = new DashboardViewModel();
+                    var vm1 = GetToolViewModelFromItems("DashboardViewModel");
                     return (vm1, vm1.Title, vm1.DockSide);
                 case WorkspaceLayoutNames.ConcordanceTool:
-                    var vm2 = new ConcordanceViewModel();
+                    var vm2 = GetToolViewModelFromItems("ConcordanceViewModel");
                     return (vm2, vm2.Title, vm2.DockSide);
                 case WorkspaceLayoutNames.WordMeanings:
-                    var vm3 = new WordMeaningsViewModel();
+                    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
                     return (vm3, vm3.Title, vm3.DockSide);
                 case WorkspaceLayoutNames.SourceContext:
-                    var vm4 = new SourceContextViewModel();
+                    var vm4 = GetToolViewModelFromItems("SourceContextViewModel");
                     return (vm4, vm4.Title, vm4.DockSide);
                 case WorkspaceLayoutNames.TargetContext:
-                    var vm5 = new TargetContextViewModel();
+                    var vm5 = GetToolViewModelFromItems("TargetContextViewModel");
                     return (vm5, vm5.Title, vm5.DockSide);
                 case WorkspaceLayoutNames.Notes:
-                    var vm6 = new NotesViewModel();
+                    var vm6 = GetToolViewModelFromItems("NotesViewModel");
                     return (vm6, vm6.Title, vm6.DockSide);
                 case WorkspaceLayoutNames.Pins:
-                    var vm7 = new PinsViewModel();
+                    var vm7 = GetToolViewModelFromItems("PinsViewModel");
                     return (vm7, vm7.Title, vm7.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
-                    var vm8 = new TextCollectionViewModel();
+                    var vm8 = GetToolViewModelFromItems("TextCollectionViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
                 case WorkspaceLayoutNames.StartPage:
-                    var vm9 = new StartPageViewModel();
+                    var vm9 = GetToolViewModelFromItems("StartPageViewModel");
                     return (vm9, vm9.Title, vm9.DockSide);
                 case WorkspaceLayoutNames.AlignmentTool:
-                    var vm10 = new AlignmentToolViewModel();
+                    var vm10 = GetToolViewModelFromItems("AlignmentToolViewModel");
                     return (vm10, vm10.Title, vm10.DockSide);
                 case WorkspaceLayoutNames.TreeDown:
-                    var vm11 = new TreeDownViewModel();
+                    var vm11 = GetToolViewModelFromItems("TreeDownViewModel");
                     return (vm11, vm11.Title, vm11.DockSide);
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
@@ -991,14 +1043,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-
-
-
-        public void SetLayoutSaveName(string cboNamesText)
-        {
-            // todo
-            Console.WriteLine();
-        }
 
         #endregion // Methods
     }
