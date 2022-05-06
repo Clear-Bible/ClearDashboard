@@ -107,6 +107,10 @@ namespace ClearDashboard.Wpf.Views
             if (_vm is not null)
             {
                 string html = _vm.FormattedHTML;
+                if (html == null)
+                {
+                    return;
+                }
                 if (_lastHtml.Length != html.Length)
                 {
                     //Browser.NavigateToString(html);
