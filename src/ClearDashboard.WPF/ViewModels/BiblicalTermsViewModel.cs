@@ -927,7 +927,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 try
                 {
                     // TODO:  
-                    var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
+                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
                         .ConfigureAwait(false);
                     if (result.Success)
                     {
