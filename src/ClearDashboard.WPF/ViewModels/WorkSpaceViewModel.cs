@@ -94,6 +94,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
+        
+        private Visibility _deleteGridIsVisible = Visibility.Collapsed;
+        public Visibility DeleteGridIsVisible
+        {
+            get => _deleteGridIsVisible;
+            set => Set(ref _deleteGridIsVisible, value);
+
+        }
 
 
         private string _selectedLayoutText;
@@ -173,6 +181,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 else if (value == "SaveID")
                 {
                     GridIsVisible = Visibility.Visible;
+                }
+                else if (value == "DeleteID")
+                {
+                    DeleteGridIsVisible = Visibility.Visible;
                 }
                 else
                 {
@@ -299,6 +311,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private ObservableCollection<LayoutFile> _fileLayouts = new();
+        public ObservableCollection<LayoutFile> FileLayouts
+        {
+            get => _fileLayouts;
+            set
+            {
+                _fileLayouts = value;
+                NotifyOfPropertyChange(() => FileLayouts);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -323,16 +345,7 @@ namespace ClearDashboard.Wpf.ViewModels
             set => Set(ref _flowDirection, value, nameof(FlowDirection));
         }
 
-        private ObservableCollection<LayoutFile> _fileLayouts = new();
-        public ObservableCollection<LayoutFile> FileLayouts
-        {
-            get => _fileLayouts;
-            set
-            {
-                _fileLayouts = value;
-                NotifyOfPropertyChange(() => FileLayouts);
-            }
-        }
+
 
         public WorkSpaceViewModel(INavigationService navigationService,
             ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager)
@@ -621,11 +634,32 @@ namespace ClearDashboard.Wpf.ViewModels
             ReBuildMenu();
         }
 
+        public void DeleteLayout(LayoutFile layoutFile)
+        {
+            var path = layoutFile.LayoutPath;
 
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+                return;
+            }
+
+            FileLayouts.Remove(layoutFile);
+            ReBuildMenu();
+        }
 
         public void CancelSave()
         {
             GridIsVisible = Visibility.Collapsed;
+        }
+
+        public void CancelDelete()
+        {
+            DeleteGridIsVisible = Visibility.Collapsed;
         }
 
         private void WorkSpaceViewModel_ThemeChanged()
