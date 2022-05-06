@@ -8,9 +8,9 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Tests;
 
-public class GetBiblicalTermsByTypeHandlerTests : TestBase
+public class GetBiblicalTermsByTypeQueryHandlerTests : TestBase
 {
-    public GetBiblicalTermsByTypeHandlerTests(ITestOutputHelper output) : base(output)
+    public GetBiblicalTermsByTypeQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
         //no-op
     }

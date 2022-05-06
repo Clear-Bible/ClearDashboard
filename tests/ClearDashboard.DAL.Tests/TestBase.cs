@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -60,16 +61,14 @@ namespace ClearDashboard.DAL.Tests
             Assert.True(result.Success);
 
             var type = result.Data.GetType();
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(ObservableCollection<>)))
             {
-
                 Assert.NotEmpty((IEnumerable)result.Data);
-
                 Output.WriteLine($"Returned {((IEnumerable<object>)(result.Data)).Count()} records in {stopwatch.ElapsedMilliseconds} milliseconds.");
             }
             else
             {
-                Output.WriteLine($"Returned {result.Data.GetType().Name} in {stopwatch.ElapsedMilliseconds} milliseconds.");
+                Output.WriteLine($"Returned {type.Name} in {stopwatch.ElapsedMilliseconds} milliseconds.");
             }
 
             return result;

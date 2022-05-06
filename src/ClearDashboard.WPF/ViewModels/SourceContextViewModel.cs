@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private async Task ProcessSourceVerseData(BookChapterVerseViewModel bcv)
         {
-            var verseDataResult = await ExecuteCommand(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
+            var verseDataResult = await ExecuteRequest(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
             if (verseDataResult.Success == false)
             {
                 Logger.LogError(verseDataResult.Message);

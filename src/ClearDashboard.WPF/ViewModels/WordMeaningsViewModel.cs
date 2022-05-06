@@ -325,7 +325,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     break;
             }
 
-            var queryResult = await ExecuteCommand(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);

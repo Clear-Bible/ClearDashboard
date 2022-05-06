@@ -73,7 +73,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        public Task<TResponse> ExecuteCommand<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
+        public Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
             IsBusy = true;
             try

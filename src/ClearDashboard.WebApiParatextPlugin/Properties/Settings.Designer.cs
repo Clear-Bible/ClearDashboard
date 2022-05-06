@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClearDashboard.ParatextPlugin.Properties {
+namespace ClearDashboard.WebApiParatextPlugin.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
