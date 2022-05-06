@@ -6,7 +6,7 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels.Panes
 {
 
-	public class FileViewModel : PaneViewModel
+	public class DocumentViewModel : PaneViewModel
 	{
 		#region fields
 		private static ImageSourceConverter ISC = new ImageSourceConverter();
@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 		/// Class constructor from file path.
 		/// </summary>
 		/// <param name="filePath"></param>
-		public FileViewModel(string filePath)
+		public DocumentViewModel(string filePath)
 		{
 			FilePath = filePath;
 			Title = FileName;
@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 		/// <summary>
 		/// Default class constructor
 		/// </summary>
-		public FileViewModel()
+		public DocumentViewModel()
 		{
 			IsDirty = true;
 			Title = FileName;

@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) :base(navigationService, logger, projectManager, eventAggregator)
         {
             this.Title = "⌂ START PAGE";
-            this.ContentId = "{StartPage_ContentId}";
+            this.ContentId = "STARTPAGE";
         }
 
         #endregion //Constructor

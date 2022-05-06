@@ -106,5 +106,17 @@ namespace ClearDashboard.Wpf.Properties {
                 this["language_code"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastLayout {
+            get {
+                return ((string)(this["LastLayout"]));
+            }
+            set {
+                this["LastLayout"] = value;
+            }
+        }
     }
 }
