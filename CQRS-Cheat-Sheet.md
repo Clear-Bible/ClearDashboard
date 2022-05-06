@@ -173,7 +173,7 @@ query handler, which forwards the result to the calling process.
  ----------------------
  ## Get or persisting data to Paratext
 
- 1.  Add a command or query to the `ClearDashboard.ParatextPlugin.CQRS` project in the proper subfolder the `Features` folder, for eaxmaple `BiblicalTerms`
+ 1.  Add a command or query to the `ClearDashboard.ParatextPlugin.CQRS` project in the proper subfolder the `Features` folder, for exmaple `BiblicalTerms`
 
  ![Biblical Terms Query Location](documentation-images/BiblicalTermsQueryLocation.png)
 
