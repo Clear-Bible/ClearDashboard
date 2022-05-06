@@ -103,7 +103,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private string _unformattedHtml;
+        private string _unformattedHtml = "";
         public string UnformattedHTML
         {
             get => _unformattedHtml;

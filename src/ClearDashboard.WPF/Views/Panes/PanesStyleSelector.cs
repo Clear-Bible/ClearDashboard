@@ -19,9 +19,7 @@ namespace ClearDashboard.Wpf.Views.Panes
 
         #endregion
 
-
-
-
+        
         #region Tools
         // ====================
         //        TOOLS

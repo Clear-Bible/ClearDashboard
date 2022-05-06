@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -81,6 +82,17 @@ namespace ClearDashboard.Wpf.Helpers
             }
 
             return sTmp;
+        }
+
+        /// <summary>
+        /// return a string that has valid filename characters
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string SanitizeFileName(string fileName)
+        {
+            Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
+            return InvalidFileRegex.Replace(fileName, string.Empty);
         }
 
         public static Dictionary<string, string> GetBookIdDictionary()
