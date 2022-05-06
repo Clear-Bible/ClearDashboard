@@ -53,7 +53,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected  override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-           var results = await ExecuteCommand(new GetDashboardProjectsCommand(), CancellationToken.None);
+           var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
            if (results.Success)
            {
                DashboardProjects = results.Data;
