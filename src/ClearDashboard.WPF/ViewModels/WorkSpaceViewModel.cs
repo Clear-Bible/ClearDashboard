@@ -29,14 +29,14 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
     {
         #region Member Variables
+        private DashboardProjectManager ProjectManager { get; set; }
+        private ILogger<WorkSpaceViewModel> Logger { get; set; }
+        private INavigationService NavigationService { get; set; }
+        private DashboardProject DashboardProject { get; }
 
-        private static WorkSpaceViewModel _this;
-        public static WorkSpaceViewModel This => _this;
-
-        public DashboardProject DashboardProject { get; set; }
-        private DashboardViewModel _dashboardViewModel;
-
-        private DockingManager _dockingManager = new DockingManager();
+#pragma warning disable CA1416 // Validate platform compatibility
+        private DockingManager _dockingManager = new();
+#pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
 
@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         public event EventHandler ActiveDocumentChanged;
-        private DocumentViewModel _activeDocument = null;
+        private DocumentViewModel _activeDocument;
         public DocumentViewModel ActiveDocument
         {
             get => _activeDocument;
@@ -75,7 +75,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public bool IsRtl { get; set; } = false;
 
-        public bool OutGoingChangesStarted { get; set; } = false;
+        private bool OutGoingChangesStarted { get; set; } = false;
 
         #endregion //Public Properties
 
@@ -172,7 +172,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 if (value.StartsWith("ProjectLayout:") || value.StartsWith("StandardLayout"))
                 {
-                    LoadLayoutByID(value);
+                    LoadLayoutById(value);
                 }
                 else if (value == "SeparatorID")
                 {
@@ -181,10 +181,12 @@ namespace ClearDashboard.Wpf.ViewModels
                 else if (value == "SaveID")
                 {
                     GridIsVisible = Visibility.Visible;
+                    DeleteGridIsVisible = Visibility.Collapsed;
                 }
                 else if (value == "DeleteID")
                 {
                     DeleteGridIsVisible = Visibility.Visible;
+                    GridIsVisible = Visibility.Collapsed;
                 }
                 else
                 {
@@ -322,6 +324,13 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+        public FlowDirection FlowDirection
+        {
+            get => _flowDirection;
+            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -334,16 +343,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        private DashboardProjectManager ProjectManager { get; set; }
-        private ILogger<WorkSpaceViewModel> Logger { get; set; }
-        private INavigationService NavigationService { get; set; }
-
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
-        {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
-        }
 
 
 
@@ -356,8 +355,7 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService = navigationService;
             FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
-            _this = this;
-
+#pragma warning disable CA1416 // Validate platform compatibility
             Themes = new List<Tuple<string, Theme>>
             {
                 new Tuple<string, Theme>(nameof(Vs2013DarkTheme),new Vs2013DarkTheme()),
@@ -370,8 +368,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 new Tuple<string, Theme>(nameof(MetroTheme),new MetroTheme()),
                 new Tuple<string, Theme>(nameof(VS2010Theme),new VS2010Theme()),
             };
+#pragma warning restore CA1416 // Validate platform compatibility
 
-            if (Properties.Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
                 // toggle the Dark theme for AvalonDock
                 this.SelectedTheme = Themes[0];
@@ -400,57 +399,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private ObservableCollection<LayoutFile> GetFileLayouts()
-        {
-            int id = 0;
-            ObservableCollection<LayoutFile> fileLayouts = new();
-            // add in the default layouts
-            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
-            if (Directory.Exists(path))
-            {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                    fileLayouts.Add(new LayoutFile
-                    {
-                        LayoutName = name,
-                        LayoutID = "StandardLayout:" + id.ToString(),
-                        LayoutPath = file,
-                    });
-                    id++;
-                }
-            }
-
-            // get the project layouts
-            if (ProjectManager is not null)
-            {
-                path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
-                if (Directory.Exists(path))
-                {
-                    var files = Directory.GetFiles(path, "*.Layout.config");
-
-                    foreach (var file in files)
-                    {
-                        FileInfo fileInfo = new FileInfo(file);
-                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                        fileLayouts.Add(new LayoutFile
-                        {
-                            LayoutName = name,
-                            LayoutID = "ProjectLayout:" + id.ToString(),
-                            LayoutPath = file,
-                        });
-                        id++;
-                    }
-                }
-            }
-
-            return fileLayouts;
-        }
         public async void Init()
         {
 
@@ -495,6 +443,88 @@ namespace ClearDashboard.Wpf.ViewModels
                     LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
                 }
             }
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+
+            // hook up a reference to the windows dock manager
+            if (view is WorkSpaceView currentView)
+            {
+                _dockingManager = (DockingManager)currentView.FindName("dockManager");
+            }
+
+            Init();
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_lastLayout == "")
+            {
+                SelectedLayoutText = "Last Saved";
+                OkSave();
+            }
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private ObservableCollection<LayoutFile> GetFileLayouts()
+        {
+            int id = 0;
+            ObservableCollection<LayoutFile> fileLayouts = new();
+            // add in the default layouts
+            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
+            if (Directory.Exists(path))
+            {
+                var files = Directory.GetFiles(path, "*.Layout.config");
+
+                foreach (var file in files)
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                    fileLayouts.Add(new LayoutFile
+                    {
+                        LayoutName = name,
+                        LayoutID = "StandardLayout:" + id.ToString(),
+                        LayoutPath = file,
+                        LayoutType = LayoutFile.eLayoutType.Standard
+                    });
+                    id++;
+                }
+            }
+
+            // get the project layouts
+            if (ProjectManager is not null)
+            {
+                path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*.Layout.config");
+
+                    foreach (var file in files)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                        fileLayouts.Add(new LayoutFile
+                        {
+                            LayoutName = name,
+                            LayoutID = "ProjectLayout:" + id.ToString(),
+                            LayoutPath = file,
+                            LayoutType = LayoutFile.eLayoutType.Project
+                        });
+                        id++;
+                    }
+                }
+            }
+
+            return fileLayouts;
         }
 
         private void ReBuildMenu()
@@ -560,34 +590,6 @@ namespace ClearDashboard.Wpf.ViewModels
             };
         }
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-
-            // hook up a reference to the windows dock manager
-            if (view is WorkSpaceView currentView)
-            {
-                _dockingManager = (DockingManager)currentView.FindName("dockManager");
-            }
-
-            Init();
-        }
-
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            if (_lastLayout == "")
-            {
-                SelectedLayoutText = "Last Saved";
-                OkSave();
-            }
-            return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-
-        #endregion //Constructor
-
-        #region Methods
-
         /// <summary>
         /// Save the layout
         /// </summary>
@@ -636,11 +638,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void DeleteLayout(LayoutFile layoutFile)
         {
-            var path = layoutFile.LayoutPath;
+            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+            {
+                return;
+            }
 
             try
             {
-                File.Delete(path);
+                File.Delete(layoutFile.LayoutPath);
             }
             catch (Exception e)
             {
@@ -667,7 +672,7 @@ namespace ClearDashboard.Wpf.ViewModels
             GridIsVisible = Visibility.Collapsed;
         }
 
-        private void LoadLayoutByID(string layoutId)
+        private void LoadLayoutById(string layoutId)
         {
             var layoutFile = FileLayouts.SingleOrDefault(f => f.LayoutID == layoutId);
 
@@ -695,6 +700,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // from current layout using the content ids
             // LayoutSerializationCallback should anyway be handled to attach contents
             // not currently loaded
+#pragma warning disable CA1416 // Validate platform compatibility
             layoutSerializer.LayoutSerializationCallback += (s, e) =>
             {
                 if (e.Model.ContentId is not null)
@@ -746,8 +752,10 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                 }
             };
+#pragma warning restore CA1416 // Validate platform compatibility
             try
             {
+                //throw new Exception();
                 layoutSerializer.Deserialize(filePath);
             }
             catch (Exception e)
@@ -861,15 +869,30 @@ namespace ClearDashboard.Wpf.ViewModels
             // window has been closed so we need to reopen it
             switch (windowTag)
             {
+                // Documents
+                case WorkspaceLayoutNames.Dashboard:
+                    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
+                    return (vm1, vm1.Title, vm1.DockSide);
+                case WorkspaceLayoutNames.ConcordanceTool:
+                    var vm2 = GetPaneViewModelFromItems("ConcordanceViewModel");
+                    return (vm2, vm2.Title, vm2.DockSide);
+                case WorkspaceLayoutNames.Pins:
+                    var vm7 = GetPaneViewModelFromItems("PinsViewModel");
+                    return (vm7, vm7.Title, vm7.DockSide);
+                case WorkspaceLayoutNames.StartPage:
+                    var vm9 = GetPaneViewModelFromItems("StartPageViewModel");
+                    return (vm9, vm9.Title, vm9.DockSide);
+                case WorkspaceLayoutNames.AlignmentTool:
+                    var vm10 = GetPaneViewModelFromItems("AlignmentToolViewModel");
+                    return (vm10, vm10.Title, vm10.DockSide);
+                case WorkspaceLayoutNames.TreeDown:
+                    var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
+                    return (vm11, vm11.Title, vm11.DockSide);
+
+                // Tools
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
-                case WorkspaceLayoutNames.Dashboard:
-                    var vm1 = GetToolViewModelFromItems("DashboardViewModel");
-                    return (vm1, vm1.Title, vm1.DockSide);
-                case WorkspaceLayoutNames.ConcordanceTool:
-                    var vm2 = GetToolViewModelFromItems("ConcordanceViewModel");
-                    return (vm2, vm2.Title, vm2.DockSide);
                 case WorkspaceLayoutNames.WordMeanings:
                     var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
                     return (vm3, vm3.Title, vm3.DockSide);
@@ -882,21 +905,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 case WorkspaceLayoutNames.Notes:
                     var vm6 = GetToolViewModelFromItems("NotesViewModel");
                     return (vm6, vm6.Title, vm6.DockSide);
-                case WorkspaceLayoutNames.Pins:
-                    var vm7 = GetToolViewModelFromItems("PinsViewModel");
-                    return (vm7, vm7.Title, vm7.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
-                case WorkspaceLayoutNames.StartPage:
-                    var vm9 = GetToolViewModelFromItems("StartPageViewModel");
-                    return (vm9, vm9.Title, vm9.DockSide);
-                case WorkspaceLayoutNames.AlignmentTool:
-                    var vm10 = GetToolViewModelFromItems("AlignmentToolViewModel");
-                    return (vm10, vm10.Title, vm10.DockSide);
-                case WorkspaceLayoutNames.TreeDown:
-                    var vm11 = GetToolViewModelFromItems("TreeDownViewModel");
-                    return (vm11, vm11.Title, vm11.DockSide);
+
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
@@ -979,12 +991,11 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        private async void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        private void BcvChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (ParatextSync && OutGoingChangesStarted == false)
             {
                 var newVerse = CurrentBcv.GetVerseId();
-                Console.WriteLine("");
             }
         }
 
@@ -1021,20 +1032,16 @@ namespace ClearDashboard.Wpf.ViewModels
         private void UnHideWindow(string windowTag)
         {
             // find the pane in the dockmanager with this contentID
+#pragma warning disable CA1416 // Validate platform compatibility
             var windowPane = _dockingManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
                 .SingleOrDefault(a =>
                 {
-                    Debug.WriteLine(a.Title);
                     if (a.ContentId is not null)
                     {
                         return a.ContentId.ToUpper() == windowTag.ToUpper();
                     }
-                    else
-                    {
-                        return false;
-                    }
-
+                    return false;
                 });
 
             if (windowPane != null)
@@ -1065,6 +1072,8 @@ namespace ClearDashboard.Wpf.ViewModels
                 windowPane.Content = obj.vm;
                 windowPane.Title = obj.title;
                 windowPane.IsActive = true;
+
+
                 // set where it will doc on layout
                 if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                 {
@@ -1075,6 +1084,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
                 }
             }
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
 

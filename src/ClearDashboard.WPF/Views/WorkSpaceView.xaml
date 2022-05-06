@@ -97,8 +97,9 @@
 
             <Menu Grid.Column="2" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
-                    <Style TargetType="{x:Type MenuItem}">
+                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MaterialDesignMenuItem}">
                         <Setter Property="Icon" Value="{Binding Icon}" />
+                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}"/>
                         <!--<Setter Property="Icon" Value="{Binding IconSource}" />-->
                         <Setter Property="Command" Value="{Binding Command}" />
                     </Style>
@@ -265,6 +266,7 @@
             <Label Grid.Row="0" Content="Save Current Layout:" />
             <ComboBox
                 x:Name="cboNames"
+                Padding="15"
                 Grid.Row="1"
                 DisplayMemberPath="LayoutName"
                 IsEditable="True"
@@ -308,7 +310,7 @@
             Background="{StaticResource SecondaryHueMidBrush}"
             Visibility="{Binding DeleteGridIsVisible, Mode=TwoWay}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20" />
+                <RowDefinition Height="25" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
@@ -316,11 +318,11 @@
             <ListBox
                 x:Name="FileLayouts"
                 Grid.Row="1"
-                BorderBrush="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource MaterialDesignCardBackground}"
                 BorderThickness="2">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Padding" Value="0" />
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
@@ -328,19 +330,29 @@
                         <Grid
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Background="{DynamicResource MaterialDesignDarkBackground}">
+                            Background="{DynamicResource MaterialDesignCardBackground}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Button
-                                Padding="-10"
-                                cm:Message.Attach="[Event Click] = [Action DeleteLayout($this)]">
+                            <Button Padding="-10" cm:Message.Attach="[Event Click] = [Action DeleteLayout($this)]">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                        <!--  Default value  -->
+                                        <Setter Property="IsEnabled" Value="True" />
+                                        <!--  Triggered values  -->
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
                                 <materialDesign:PackIcon
                                     Width="20"
                                     Height="20"
                                     Cursor="Hand"
-                                    Foreground="White"
+                                    Foreground="Red"
                                     IsHitTestVisible="False"
                                     Kind="DeleteForever" />
                             </Button>
@@ -350,7 +362,20 @@
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
-                                Text="{Binding LayoutName}" />
+                                Text="{Binding LayoutName}" >
+                                <TextBlock.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="{x:Type TextBlock}">
+                                        <!--  Default value  -->
+                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                        <!--  Triggered values  -->
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
+                                                <Setter Property="Foreground" Value="Gray" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                         </Grid>
                     </DataTemplate>

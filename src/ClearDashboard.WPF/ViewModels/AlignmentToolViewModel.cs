@@ -28,14 +28,14 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Constructor
         public AlignmentToolViewModel()
         {
-            this.Title = "⳼ ALIGNMENT TOOL";
-            this.ContentId = "ALIGNMENTTOOL";
+
         }
 
         public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) :
             base(navigationService, logger, projectManager, eventAggregator)
         {
- 
+            this.Title = "⳼ ALIGNMENT TOOL";
+            this.ContentId = "ALIGNMENTTOOL";
         }
 
         #endregion //Constructor
