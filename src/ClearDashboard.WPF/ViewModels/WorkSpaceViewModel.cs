@@ -15,6 +15,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
@@ -52,8 +54,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         public event EventHandler ActiveDocumentChanged;
-        private FileViewModel _activeDocument = null;
-        public FileViewModel ActiveDocument
+        private DocumentViewModel _activeDocument = null;
+        public DocumentViewModel ActiveDocument
         {
             get => _activeDocument;
             set
@@ -81,8 +83,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private bool _gridIsVisible;
-        public bool GridIsVisible
+        private Visibility _gridIsVisible = Visibility.Collapsed;
+        public Visibility GridIsVisible
         {
             get => _gridIsVisible;
             set => Set(ref _gridIsVisible, value);
@@ -201,7 +203,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             _windowIdToLoad = "TEXTCOLLECTION";
                             break;
                         case "SaveID":
-                            GridIsVisible = true;
+                            GridIsVisible = Visibility.Visible;
                             break;
                         case "LoadID":
 
@@ -241,14 +243,14 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        ObservableCollection<PaneViewModel> _files = new ();
-        public ObservableCollection<PaneViewModel> Files
+        ObservableCollection<PaneViewModel> _documents = new ();
+        public ObservableCollection<PaneViewModel> Documents
         {
-            get => _files;
+            get => _documents;
             set
             {
-                _files = value;
-                NotifyOfPropertyChange(() => Files);
+                _documents = value;
+                NotifyOfPropertyChange(() => Documents);
             }
         }
         public List<Tuple<string, Theme>> Themes { get; set; }
@@ -480,16 +482,12 @@ namespace ClearDashboard.Wpf.ViewModels
             };
 
 
-            // add in the document panes
-            _files.Clear();
-            _files.Add(IoC.Get<DashboardViewModel>());
-            _files.Add(IoC.Get<ConcordanceViewModel>());
-            _files.Add(IoC.Get<StartPageViewModel>());
-            _files.Add(IoC.Get<AlignmentToolViewModel>());
-            _files.Add(IoC.Get<TreeDownViewModel>());
-            NotifyOfPropertyChange(() => Files);
-
             Items.Clear();
+            await ActivateItemAsync(IoC.Get<DashboardViewModel>());
+            await ActivateItemAsync(IoC.Get<ConcordanceViewModel>());
+            await ActivateItemAsync(IoC.Get<StartPageViewModel>());
+            await ActivateItemAsync(IoC.Get<AlignmentToolViewModel>());
+            await ActivateItemAsync(IoC.Get<TreeDownViewModel>());
 
             await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
             await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
@@ -500,12 +498,54 @@ namespace ClearDashboard.Wpf.ViewModels
             await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
 
 
+            _tools.Clear();
+            _documents.Clear();
 
+            for (int i = 0; i < Items.Count; i++)
+            {
+                var type = Items[i];
+                switch (type)
+                {
+                    case DashboardViewModel:
+                    case ConcordanceViewModel:
+                    case StartPageViewModel:
+                    case AlignmentToolViewModel:
+                    case TreeDownViewModel:
+                        _documents.Add((PaneViewModel)Items[i]);
+                        break;
+
+                    case BiblicalTermsViewModel:
+                    case WordMeaningsViewModel:
+                    case SourceContextViewModel:
+                    case TargetContextViewModel:
+                    case NotesViewModel:
+                    case PinsViewModel:
+                    case TextCollectionViewModel:
+                        _tools.Add((ToolViewModel)Items[i]);
+                        break;
+                }
+            }
+
+            NotifyOfPropertyChange(() => Documents);
             NotifyOfPropertyChange(() => BookNames);
-
-            //await ProjectManager.SendPipeMessage(PipeAction.GetCurrentVerse).ConfigureAwait(false);
-
         }
+
+        public Task ActivateOrCreate<T>(string displayName)
+            where T : PaneViewModel
+        {
+            var item = Items.OfType<T>().FirstOrDefault(x => x.DisplayName == displayName);
+            if (item == null)
+            {
+                item = (T)Activator.CreateInstance(typeof(T));
+                item.Parent = this;
+                item.ConductWith(this);
+                item.DisplayName = displayName;
+            }
+            ActivateItemAsync(item, CancellationToken.None);
+
+            return Task.CompletedTask;
+        }
+
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -537,17 +577,17 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 Debug.WriteLine(SelectedLayoutText);
             }
-            GridIsVisible = false;
+            GridIsVisible = Visibility.Collapsed;
         }
 
         public void CancelSave()
         {
-            GridIsVisible = false;
+            GridIsVisible = Visibility.Collapsed;
         }
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
-            GridIsVisible = false;
+            GridIsVisible = Visibility.Collapsed;
         }
 
         private void LoadLayoutByID(string layoutId)

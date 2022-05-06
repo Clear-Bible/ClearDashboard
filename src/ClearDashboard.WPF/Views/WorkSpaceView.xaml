@@ -61,7 +61,6 @@
             </Button>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Label Content="{Binding GridIsVisible}" Foreground="Pink" />
                 <WrapPanel>
                     <Menu VerticalAlignment="Center">
                         <MenuItem Header="Layout">
@@ -130,8 +129,8 @@
             Grid.Row="1"
             ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
             AllowMixedOrientation="True"
-            AnchorablesSource="{Binding Items}"
-            DocumentsSource="{Binding Files}"
+            AnchorablesSource="{Binding Tools}"
+            DocumentsSource="{Binding Documents}"
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
                 <panes:PanesTemplateSelector>
@@ -252,11 +251,11 @@
 
         <Grid
             x:Name="GridIsVisible"
-            Visibility="{Binding GridIsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
             Grid.Row="0"
             Grid.Column="0"
             Width="250"
-            Background="{StaticResource SecondaryHueMidBrush}">
+            Background="{StaticResource SecondaryHueMidBrush}"
+            Visibility="{Binding GridIsVisible, Mode=TwoWay}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20" />
                 <RowDefinition Height="*" />

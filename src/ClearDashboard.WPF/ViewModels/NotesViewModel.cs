@@ -1,9 +1,12 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Wpf;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -38,6 +41,18 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "🖉 NOTES";
             this.ContentId = "NOTES";
 
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            Console.WriteLine();
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            Console.WriteLine();
+            base.OnViewLoaded(view);
         }
 
         #endregion //Constructor
