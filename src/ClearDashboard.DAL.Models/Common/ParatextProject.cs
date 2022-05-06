@@ -1,6 +1,4 @@
 ﻿using SIL.Scripture;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
