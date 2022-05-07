@@ -115,7 +115,7 @@
                     <!--  DOCUMENTS  -->
                     <panes:PanesTemplateSelector.ConcordanceViewTemplate>
                         <DataTemplate>
-                            <local:Concordance />
+                            <local:ConcordanceView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.ConcordanceViewTemplate>
 
@@ -146,7 +146,7 @@
                     <!--  TOOLS  -->
                     <panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
                         <DataTemplate>
-                            <local:BiblicalTerms />
+                            <local:BiblicalTermsView />
                         </DataTemplate>
                     </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
