@@ -460,23 +460,28 @@ namespace ClearDashboard.Wpf.ViewModels
           
         }
 
-        //protected override void OnViewAttached(object view, object context)
-        //{
-        //    Logger.LogInformation("OnViewAttached");
-        //    base.OnViewAttached(view, context);
-        //}
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            return base.OnInitializeAsync(cancellationToken);
+        }
 
-        //protected override void OnViewLoaded(object view)
-        //{
-        //    Logger.LogInformation("OnViewLoaded");
-        //    base.OnViewLoaded(view);
-        //}
+        protected override void OnViewAttached(object view, object context)
+        {
+            Logger.LogInformation("OnViewAttached");
+            base.OnViewAttached(view, context);
+        }
 
-        //protected override void OnViewReady(object view)
-        //{
-        //    Logger.LogInformation("OnViewReady");
-        //    base.OnViewReady(view);
-        //}
+        protected override void OnViewLoaded(object view)
+        {
+            Logger.LogInformation("OnViewLoaded");
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            Logger.LogInformation("OnViewReady");
+            base.OnViewReady(view);
+        }
 
         protected override void Dispose(bool disposing)
         {

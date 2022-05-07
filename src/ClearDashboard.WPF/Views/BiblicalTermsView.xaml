@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Views.BiblicalTerms"
+    x:Class="ClearDashboard.Wpf.Views.BiblicalTermsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"

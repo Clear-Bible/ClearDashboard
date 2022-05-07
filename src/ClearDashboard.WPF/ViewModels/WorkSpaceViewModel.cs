@@ -22,10 +22,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-
+using ClearDashboard.Wpf.Extensions;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
+
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
     {
         #region Member Variables
@@ -398,28 +399,42 @@ namespace ClearDashboard.Wpf.ViewModels
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
+        /// <summary>
+        /// Binds the viewmodel to it's view prior to activating so that the OnViewAttached method of the
+        /// child viewmodel are called.
+        /// </summary>
+        /// <typeparam name="TViewModel"></typeparam>
+        /// <returns></returns>
+        protected async Task ActivateItemAsync<TViewModel>() where TViewModel : class, IScreen
+        {
+            var viewModel = IoC.Get<TViewModel>();
+            var view = ViewLocator.LocateForModel(viewModel, null, null);
+            ViewModelBinder.Bind(viewModel, view, null);
+            await ActivateItemAsync(viewModel);
+        }
 
         public async void Init()
         {
 
             ReBuildMenu();
 
-            // load up the viewmodels from the IoC and activate them all
+           
             Items.Clear();
             // documents
-            await ActivateItemAsync(IoC.Get<DashboardViewModel>());
-            await ActivateItemAsync(IoC.Get<ConcordanceViewModel>());
-            await ActivateItemAsync(IoC.Get<StartPageViewModel>());
-            await ActivateItemAsync(IoC.Get<AlignmentToolViewModel>());
-            await ActivateItemAsync(IoC.Get<TreeDownViewModel>());
+            await ActivateItemAsync<DashboardViewModel>();
+            await ActivateItemAsync<ConcordanceViewModel>();
+            await ActivateItemAsync<StartPageViewModel>();
+            await ActivateItemAsync<AlignmentToolViewModel>();
+            await ActivateItemAsync<TreeDownViewModel>();
             // tools
-            await ActivateItemAsync(IoC.Get<BiblicalTermsViewModel>());
-            await ActivateItemAsync(IoC.Get<WordMeaningsViewModel>());
-            await ActivateItemAsync(IoC.Get<SourceContextViewModel>());
-            await ActivateItemAsync(IoC.Get<TargetContextViewModel>());
-            await ActivateItemAsync(IoC.Get<NotesViewModel>());
-            await ActivateItemAsync(IoC.Get<PinsViewModel>());
-            await ActivateItemAsync(IoC.Get<TextCollectionViewModel>());
+          
+            await ActivateItemAsync<BiblicalTermsViewModel>();
+            await ActivateItemAsync<WordMeaningsViewModel>();
+            await ActivateItemAsync<SourceContextViewModel>();
+            await ActivateItemAsync<TargetContextViewModel>();
+            await ActivateItemAsync<NotesViewModel>();
+            await ActivateItemAsync<PinsViewModel>();
+            await ActivateItemAsync<TextCollectionViewModel>();
 
 
             // remove all existing windows

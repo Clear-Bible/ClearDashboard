@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.UserControls
@@ -40,12 +41,12 @@ namespace ClearDashboard.Wpf.UserControls
 
 
         public static readonly DependencyProperty _currentBcv =
-            DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerse), typeof(BcvUserControl),
-                new PropertyMetadata(new BookChapterVerse()));
+            DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerseViewModel), typeof(BcvUserControl),
+                new PropertyMetadata(new BookChapterVerseViewModel()));
 
-        public BookChapterVerse CurrentBcv
+        public BookChapterVerseViewModel CurrentBcv
         {
-            get => (BookChapterVerse)GetValue(_currentBcv);
+            get => (BookChapterVerseViewModel)GetValue(_currentBcv);
             set
             {
                 SetValue(_currentBcv, value);

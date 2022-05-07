@@ -18,9 +18,9 @@ namespace ClearDashboard.Wpf.Views
     /// <summary>
     /// Interaction logic for Concordance.xaml
     /// </summary>
-    public partial class Concordance : UserControl
+    public partial class ConcordanceView : UserControl
     {
-        public Concordance()
+        public ConcordanceView()
         {
             InitializeComponent();
         }

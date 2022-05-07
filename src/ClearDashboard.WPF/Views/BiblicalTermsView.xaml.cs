@@ -20,11 +20,11 @@ namespace ClearDashboard.Wpf.Views
     /// <summary>
     /// Interaction logic for BiblicalTerms.xaml
     /// </summary>
-    public partial class BiblicalTerms : UserControl
+    public partial class BiblicalTermsView : UserControl
     {
         private BiblicalTermsViewModel _vm;
 
-        public BiblicalTerms()
+        public BiblicalTermsView()
         {
             InitializeComponent();
         }
