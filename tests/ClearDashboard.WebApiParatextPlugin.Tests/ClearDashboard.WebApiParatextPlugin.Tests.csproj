@@ -8,6 +8,100 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm" />
+    <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\19PSA03.sfm" />
+    <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\20PRO09.sfm" />
+    <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\22SNG03.sfm" />
+    <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\41MAT01.sfm" />
+    <None Remove="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\01GEN01.sfm" />
+    <None Remove="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\19PSA03.sfm" />
+    <None Remove="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\20PRO09.sfm" />
+    <None Remove="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\22SNG03.sfm" />
+    <None Remove="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\41MAT01.sfm" />
+    <None Remove="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\01GEN01.sfm" />
+    <None Remove="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\19PSA03.sfm" />
+    <None Remove="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\20PRO09.sfm" />
+    <None Remove="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\22SNG03.sfm" />
+    <None Remove="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\41MAT01.sfm" />
+    <None Remove="MockData\USFM\80bbd0dbab94dbc97d5dc64d8c09fb687e066b26\41MAT.sfm" />
+    <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm" />
+    <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\19PSA03.sfm" />
+    <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\20PRO09.sfm" />
+    <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\22SNG03.sfm" />
+    <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\41MAT01.sfm" />
+    <None Remove="MockData\VerseText\80bbd0dbab94dbc97d5dc64d8c09fb687e066b26\41MAT.sfm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\64f96631883240818dc01c345e58a1bff75e18e1\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\USFM\80bbd0dbab94dbc97d5dc64d8c09fb687e066b26\41MAT.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\VerseText\80bbd0dbab94dbc97d5dc64d8c09fb687e066b26\41MAT.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
@@ -27,6 +121,39 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\64f96631883240818dc01c345e58a1bff75e18e1\01GEN01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\64f96631883240818dc01c345e58a1bff75e18e1\19PSA03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\64f96631883240818dc01c345e58a1bff75e18e1\20PRO09.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\64f96631883240818dc01c345e58a1bff75e18e1\22SNG03.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MockData\VerseText\64f96631883240818dc01c345e58a1bff75e18e1\41MAT01.sfm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
