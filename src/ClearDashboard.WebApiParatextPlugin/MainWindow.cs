@@ -11,6 +11,7 @@ using Serilog;
 using System;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -52,7 +53,29 @@ namespace ClearDashboard.WebApiParatextPlugin
             ConfigureLogging();
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
+
+            // NB:  Use the following for debugging plug-in start up crashes.
+            //Application.ThreadException += ThreadExceptionEventHandler;
+            //AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionEventHandler;
+            //AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
+
         }
+
+        #region Please leave these for debugging plug-in start up crashes
+        private static void ThreadExceptionEventHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            MessageBox.Show($"ThreadExceptionEventHandler - Exception={e.Exception}");
+        }
+        private static void UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show($"UnhandledExceptionEventHandler - Exception={e.ExceptionObject}");
+        }
+
+        private static void FirstChanceExceptionEventHandler(object sender, FirstChanceExceptionEventArgs e)
+        {
+            MessageBox.Show($"FirstChanceExceptionEventHandler - Exception={e.Exception.ToString()}");
+        }
+        #endregion Please leave these for debugging plug-in start up crashes
 
         private void DisplayPluginVersion()
         {
@@ -113,10 +136,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             return null;
         }
 
+       
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
-            ConfigureSignalRHubContext().Forget();
+           
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -136,45 +160,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
 
-        private async Task ConfigureSignalRHubContext()
-        {
-           _hubContext = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
-            if (_hubContext == null)
-            {
-                AppendText(Color.Red, "HubContext is null");
-                return;
-            }
-
-            _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
-
-            if (_mediator == null)
-            {
-                throw new NullReferenceException(
-                    "The 'IMediator' instance is null. Please ensure Mediator has been properly configured with the DI container.");
-            }
-
-            {
-                var result = await _mediator.Send(new GetCurrentVerseQuery());
-                if (result.Success)
-                {
-                    AppendText(Color.Orange, $"Sending verse: {result.Data}");
-                    _hubContext.Clients.All.SendVerse(result.Data);
-                }
-            }
-
-            {
-                var result = await _mediator.Send(new GetCurrentProjectQuery());
-                if (result.Success)
-                {
-                    AppendText(Color.Orange, $"Sending project: {result.Data?.ShortName}");
-                    _hubContext.Clients.All.SendProject(result.Data);
-                }
-            }
-        }
-       
         private void StartWebHost()
         {
-
             AppendText(Color.Green, $"StartWebApplication called");
 
             var currentDomain = AppDomain.CurrentDomain;
