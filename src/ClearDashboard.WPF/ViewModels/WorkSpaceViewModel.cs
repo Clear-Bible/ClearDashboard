@@ -405,12 +405,12 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         /// <typeparam name="TViewModel"></typeparam>
         /// <returns></returns>
-        protected async Task ActivateItemAsync<TViewModel>() where TViewModel : class, IScreen
+        protected async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default) where TViewModel : class, IScreen
         {
             var viewModel = IoC.Get<TViewModel>();
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
-            await ActivateItemAsync(viewModel);
+            await ActivateItemAsync(viewModel, cancellationToken);
         }
 
         public async void Init()
