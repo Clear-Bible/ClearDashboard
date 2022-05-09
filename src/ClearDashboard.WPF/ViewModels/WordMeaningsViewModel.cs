@@ -15,12 +15,12 @@ using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
-
+using ClearDashboard.Wpf.Interfaces;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class WordMeaningsViewModel : ToolViewModel
+    public class WordMeaningsViewModel : ToolViewModel, IWorkspace, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
@@ -373,6 +373,42 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => WordData);
 
             ButtonVisibility = Visibility.Hidden;
+        }
+
+        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            //_currentVerse = pipeMessage.Text;
+            //CurrentBcv.SetVerseFromId(_currentVerse);
+            //if (_currentVerse.EndsWith("000"))
+            //{
+            //    // a zero based verse
+            //    TargetInlinesText.Clear();
+            //    NotifyOfPropertyChange(() => TargetInlinesText);
+            //    TargetHTML = "";
+            //    WordData.Clear();
+            //    NotifyOfPropertyChange(() => WordData);
+            //}
+            //else
+            //{
+            //    // a normal verse
+            //    var verse = new Verse
+            //    {
+            //        VerseBBCCCVVV = _currentVerse
+            //    };
+
+            //    if (verse.BookNum < 40)
+            //    {
+            //        _isOT = true;
+            //    }
+            //    else
+            //    {
+            //        _isOT = false;
+            //    }
+
+            //    _ = ReloadWordMeanings();
+            //}
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods
