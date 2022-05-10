@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.Tests
 
         protected override void SetupDependencyInjection()
         {
-            Services.AddMediatR(typeof(GetLanguageResourcesCommand));
+            Services.AddMediatR(typeof(GetLanguageResourcesQuery));
             Services.AddLogging();
         }
 
@@ -30,7 +30,7 @@ namespace ClearDashboard.DAL.Tests
             {
                 throw new NullReferenceException("IMediator has not been set up in DI wire up!");
             }
-            var result = await mediator.Send(new GetLanguageResourcesCommand());
+            var result = await mediator.Send(new GetLanguageResourcesQuery());
 
             Assert.NotNull(result);
             Assert.NotNull(result.Data);
