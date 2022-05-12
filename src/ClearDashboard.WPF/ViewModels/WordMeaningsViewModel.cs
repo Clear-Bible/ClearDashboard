@@ -15,12 +15,12 @@ using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
-
+using ClearDashboard.Wpf.Interfaces;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class WordMeaningsViewModel : ToolViewModel
+    public class WordMeaningsViewModel : ToolViewModel, IWorkspace, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
@@ -173,6 +173,17 @@ namespace ClearDashboard.Wpf.ViewModels
             LaunchLogosCommand = new RelayCommand(ShowLogos);
             LaunchSensesCommand = new RelayCommand(ShowSenses);
             GoBackCommand = new RelayCommand(RefreshWords);
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            if (ProjectManager.CurrentVerse != String.Empty)
+            {
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                await ReloadWordMeanings().ConfigureAwait(false);
+            }
+
+            base.OnViewReady(view);
         }
 
         #endregion //Constructor
@@ -373,6 +384,54 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => WordData);
 
             ButtonVisibility = Visibility.Hidden;
+        }
+
+        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            _currentVerse = message.Verse;
+            CurrentBcv.SetVerseFromId(_currentVerse);
+            if (_currentVerse.EndsWith("000"))
+            {
+                // a zero based verse
+                TargetInlinesText.Clear();
+                NotifyOfPropertyChange(() => TargetInlinesText);
+                TargetHTML = "";
+                WordData.Clear();
+                NotifyOfPropertyChange(() => WordData);
+            }
+            else
+            {
+                // a normal verse
+                var verse = new Verse
+                {
+                    VerseBBCCCVVV = _currentVerse
+                };
+
+                int BookNum;
+                try
+                {
+                    BookNum = Convert.ToInt32(message.Verse.Substring(0, 2));
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
+                    BookNum = 01;
+                }
+                
+
+                if (BookNum < 40)
+                {
+                    _isOT = true;
+                }
+                else
+                {
+                    _isOT = false;
+                }
+
+                _ = ReloadWordMeanings();
+            }
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods

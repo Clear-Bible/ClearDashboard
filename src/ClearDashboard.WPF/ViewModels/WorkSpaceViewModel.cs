@@ -517,7 +517,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // get the project layouts
             if (ProjectManager is not null)
             {
-                path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                path = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
                 if (Directory.Exists(path))
                 {
                     var files = Directory.GetFiles(path, "*.Layout.config");
@@ -629,7 +629,24 @@ namespace ClearDashboard.Wpf.ViewModels
                         return;
                     }
 
-                    var path = ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath;
+                    var path = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+
+                    // check for the presence of a "shared" directory under the project.  NOTE: IS CASE SENSITIVE
+                    // AND MUST BE LOWERCASE FOR MERCURIAL
+                    if (! Directory.Exists(path))
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e.Message);
+                            return;
+                        }
+                    }
+
+
                     filePath = Path.Combine(path, SelectedLayoutText + ".Layout.config");
                 }
 
