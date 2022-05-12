@@ -23,14 +23,14 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IProject _project;
         private static IVerseRef _verseRef;
         private static MainWindow _mainWindow;
-        private static IWindowPluginHost _pluginHost;
+        private static IPluginHost _pluginHost;
         private static IPluginLogger _pluginLogger;
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
         //public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
 
-        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IWindowPluginHost pluginHost, IPluginLogger pluginLogger)
+        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IPluginHost pluginHost, IPluginLogger pluginLogger)
         {
             _project = project;
             _verseRef = verseRef;
@@ -111,7 +111,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             
             services.AddSingleton<IProject>(sp => _project);
             services.AddSingleton<IVerseRef>(sp => _verseRef);
-            services.AddSingleton<IWindowPluginHost>(sp =>_pluginHost);
+            services.AddSingleton<IPluginHost>(sp =>_pluginHost);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
            
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
