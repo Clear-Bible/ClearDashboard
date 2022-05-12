@@ -11,9 +11,9 @@ namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
 {
     public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<RequestResult<List<CoupleOfStrings>>>;
 
-    public class GetManuscriptVerseByIdHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
+    public class GetManuscriptVerseByIdQueryHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
-        public GetManuscriptVerseByIdHandler(ILogger<GetManuscriptVerseByIdHandler> logger) : base(logger)
+        public GetManuscriptVerseByIdQueryHandler(ILogger<GetManuscriptVerseByIdQueryHandler> logger) : base(logger)
         {
             //no-op
         }

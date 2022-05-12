@@ -33,7 +33,7 @@ query handler, which forwards the result to the calling process.
  #### The call form the Dashboard app
 
  ``` csharp
-      var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
+      var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
       if (result.Success)
       {
           biblicalTermsList = result.Data;

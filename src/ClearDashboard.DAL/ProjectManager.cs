@@ -13,6 +13,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -181,12 +182,14 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task GetParatextUserName()
         {
-            // TODO this is a hack that reads the first user in the Paratext project's pm directory
-            // from the localUsers.txt file.  This needs to be changed to the user we get from 
-            // the Paratext API
-            var user = ParatextProxy.GetCurrentParatextUser();
 
-            ParatextUserName = user;
+            var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
+            if (!result.Success)
+            {
+                Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            }
+
+            ParatextUserName = result.Data.Name;
 
             await PublishParatextUser(ParatextUserName);
           

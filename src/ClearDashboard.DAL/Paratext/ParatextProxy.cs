@@ -215,31 +215,31 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return projects;
         }
 
-        public string GetCurrentParatextUser()
-        {
-            if (_paratextResourcesPath == "")
-            {
-                GetParatextProjectsPath();
-            }
+        //public string GetCurrentParatextUser()
+        //{
+        //    if (_paratextResourcesPath == "")
+        //    {
+        //        GetParatextProjectsPath();
+        //    }
 
-            var user = "USER NOT DETERMINED";
-            var userfile = Path.Combine(this._paratextProjectPath, "localUsers.txt");
-            if (File.Exists(userfile))
-            {
-                var tmp = File.ReadAllText(userfile);
-                var users = tmp.Split("\r\n");
-                if (users.Length > 0)
-                {
-                    return users[0];
-                }
-            }
-            else
-            {
-                return "USER UNKNOWN";
-            }
+        //    var user = "USER NOT DETERMINED";
+        //    var userfile = Path.Combine(this._paratextProjectPath, "localUsers.txt");
+        //    if (File.Exists(userfile))
+        //    {
+        //        var tmp = File.ReadAllText(userfile);
+        //        var users = tmp.Split("\r\n");
+        //        if (users.Length > 0)
+        //        {
+        //            return users[0];
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return "USER UNKNOWN";
+        //    }
 
-            return user;
-        }
+        //    return user;
+        //}
 
         public List<ParatextProject> GetParatextResources()
         {

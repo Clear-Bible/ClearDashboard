@@ -14,7 +14,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
     public class GetCurrentProjectQueryHandlerTests : TestBase
     {
 
-       
 
         public GetCurrentProjectQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
