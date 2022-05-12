@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
@@ -21,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
         {
             serviceCollection.AddLogging();
 
-            serviceCollection.AddMediatR(typeof(GetManuscriptVerseByIdQuery));
+            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker));
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddScoped<ParatextProxy>();
