@@ -9,6 +9,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     x:Name="PinsViewWindow"
     d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel,
@@ -17,6 +18,20 @@
     d:DesignWidth="800"
     FlowDirection="{Binding FlowDirection}"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush
+                x:Key="GridBrush"
+                Opacity="0.25"
+                Color="Gray" />
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -75,6 +90,9 @@
             AlternationCount="2"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
+            GridLinesVisibility="All"
+            HorizontalGridLinesBrush="{StaticResource GridBrush}"
+            VerticalGridLinesBrush="{StaticResource GridBrush}"
             CanUserResizeColumns="True"
             ItemsSource="{Binding GridCollectionView}"
             RowBackground="{DynamicResource MaterialDesignDarkBackground}"
@@ -89,19 +107,20 @@
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
-            <!--<DataGrid.RowStyle>
-                            <Style TargetType="{x:Type DataGridRow}">
-                                <Setter Property="Height" Value="{x:Static sys:Double.NaN}" />
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <!--<Setter Property="Height" Value="{x:Static sys:Double.NaN}" />-->
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Style.Triggers>
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="{StaticResource GridBrush}" />
+                        </Trigger>
 
-                                <Style.Triggers>
-
-                                    <Trigger Property="AlternationIndex" Value="1">
-                                        <Setter Property="Background" Value="{StaticResource GreenDarkBrush}" />
-                                    </Trigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>-->
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
 
 
             <DataGrid.Columns>
@@ -149,12 +168,25 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
+                                Padding="0"
+                                HorizontalAlignment="Center"
                                 Width="auto"
+                                Height="20"
                                 MinWidth="125"
                                 Margin="0,0,0,5"
                                 Command="{Binding DataContext.VerseButtonCommand, ElementName=DataGrid}"
                                 CommandParameter="{Binding}"
-                                Content="{Binding Path='SimpRefs'}" />
+                                Content="{Binding Path='SimpRefs'}" >
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource  MaterialDesignFlatAccentBgButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SimpRefs}" Value="0">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
