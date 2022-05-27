@@ -1,17 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Helpers;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Helpers;
 using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -21,11 +31,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
-        private TermRenderingsList _termRenderingsList = new ();
-        private BiblicalTermsList _biblicalTermsList = new ();
-        private BiblicalTermsList _allBiblicalTermsList = new ();
-        private SpellingStatus _spellingStatus = new ();
-        private ObservableList<PinsDataTable> _thedata = new ();
+        private TermRenderingsList _termRenderingsList = new();
+        private BiblicalTermsList _biblicalTermsList = new();
+        private BiblicalTermsList _allBiblicalTermsList = new();
+        private SpellingStatus _spellingStatus = new();
 
         #endregion //Member Variables
 
@@ -36,7 +45,60 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private ObservableList<PinsDataTable> _thedata = new();
+
+        public ObservableList<PinsDataTable> TheData
+        {
+            get => _thedata;
+            set
+            {
+                _thedata = value;
+                NotifyOfPropertyChange(() => TheData);
+            }
+        }
+
+        private Visibility _progressBarVisibility = Visibility.Visible;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+        private bool _IsSample4DialogOpen;
+        public bool IsSample4DialogOpen
+        {
+            get { return _IsSample4DialogOpen; }
+            set
+            {
+                _IsSample4DialogOpen = value;
+                NotifyOfPropertyChange(() => IsSample4DialogOpen);
+            }
+        }
+
+        private ObservableCollection<PinsVerseList> _selectedItemVerses = new();
+        public ObservableCollection<PinsVerseList> SelectedItemVerses
+        {
+            get => _selectedItemVerses;
+            set
+            {
+                _selectedItemVerses = value;
+                NotifyOfPropertyChange(() => SelectedItemVerses);
+            }
+        }
+
         #endregion //Observable Properties
+
+        #region Commands
+
+        public RelayCommand ClearFilterCommand { get; set; }
+        public RelayCommand VerseButtonCommand { get; set; }
+
+        #endregion //Commands
+
 
         #region Constructor
 
@@ -44,10 +106,14 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator): base(navigationService,logger, projectManager, eventAggregator)
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) : base(navigationService, logger, projectManager, eventAggregator)
         {
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
+
+            // wire up the commands
+            ClearFilterCommand = new RelayCommand(ClearFilter);
+            VerseButtonCommand = new RelayCommand(VerseButtonClick);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -188,7 +254,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
             {
-                if (_biblicalTermsList.Term[i].Id == "")
+                if (_biblicalTermsList.Term[i].Id != "")
                 {
                     _biblicalTermsList.Term[i].Id =
                         CorrectUnicode(_biblicalTermsList.Term[i].Id);
@@ -197,7 +263,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
             {
-                if (_allBiblicalTermsList.Term[i].Id == "")
+                if (_allBiblicalTermsList.Term[i].Id != "")
                 {
                     _allBiblicalTermsList.Term[i].Id =
                         CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
@@ -243,7 +309,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 string target = terms.Renderings;
                 target = target.Replace("||", "; ");
 
-                if (target == "Ijip")
+                if (target == "Naan Ɗiihai")
                 {
                     Console.WriteLine();
                 }
@@ -279,7 +345,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         // misspelled
                         pbtspell = " [misspelled]";
-                    } 
+                    }
                     else if (spellingRecords[0].SpecificCase != pbtspell)
                     {
                         //   has wrong case
@@ -292,7 +358,18 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 }
 
+                // peel off the notes
                 var notes = terms.Notes;
+                string noteList = "";
+                if (notes.GetType() == typeof(XmlNode[]))
+                {
+                    var listNotes = ((IEnumerable)notes).Cast<XmlNode>().ToList();
+                    foreach (var note in listNotes)
+                    {
+                        noteList += note.Value.Replace("\n", "").Replace("\r", "") + "; ";
+                    }
+                }
+
                 var denials = terms.Denials;
                 var gloss = "";
                 List<string> verselist = new List<string>();
@@ -308,22 +385,27 @@ namespace ClearDashboard.Wpf.ViewModels
                         verselist.Add(verse);
                     }
 
+                    string simpleRefs = string.Join(", ", verselist);
+
                     _thedata.Add(new PinsDataTable
                     {
+                        Id = Guid.NewGuid(),
+                        XmlSource = "BT",
                         Code = "KeyTerm",
                         Gloss = gloss,
                         Lang = "",
                         Lform = "",
-                        Match = "KeyTerm" + source,
-                        Notes = "",
+                        Match = "KeyTerm" + target,
+                        Notes = noteList,
                         Phrase = "",
                         Prefix = "",
                         Refs = "",
-                        SimpRefs = "",
+                        SimpRefs = verselist.Count.ToString(),
                         Source = target + pbtspell,
                         Stem = "",
                         Suffix = "",
                         Word = "",
+                        VerseList = verselist
                     });
                 }
                 else
@@ -332,22 +414,61 @@ namespace ClearDashboard.Wpf.ViewModels
                     var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == source);
                     if (abt.Count > 0)
                     {
-                        Console.WriteLine();
-                    }
-                    else
-                    {
+                        gloss = abt[0].Gloss;
+
+                        foreach (var verse in abt[0].References.Verse)
+                        {
+                            verselist.Add(verse);
+                        }
+
+                        string simpleRefs = string.Join(", ", verselist);
+
                         _thedata.Add(new PinsDataTable
                         {
+                            Id = Guid.NewGuid(),
+                            XmlSource = "ABT",
                             Code = "KeyTerm",
                             Gloss = gloss,
                             Lang = "",
                             Lform = "",
-                            Match = "KeyTerm" + source,
-                            Notes = "",
+                            Match = "KeyTerm" + target,
+                            Notes = noteList,
                             Phrase = "",
                             Prefix = "",
                             Refs = "",
-                            SimpRefs = "",
+                            SimpRefs = verselist.Count.ToString(),
+                            Source = target + pbtspell,
+                            Stem = "",
+                            Suffix = "",
+                            Word = "",
+                            VerseList = verselist
+                        });
+                    }
+                    else
+                    {
+                        if (pbtsense == "")
+                        {
+                            gloss = source;
+                        }
+                        else
+                        {
+                            gloss = pbtsense;
+                        }
+
+                        _thedata.Add(new PinsDataTable
+                        {
+                            Id = Guid.NewGuid(),
+                            XmlSource = "TR",
+                            Code = "KeyTerm",
+                            Gloss = gloss,
+                            Lang = "",
+                            Lform = "",
+                            Match = "KeyTerm" + target,
+                            Notes = noteList,
+                            Phrase = "",
+                            Prefix = "",
+                            Refs = "",
+                            SimpRefs = "0",
                             Source = target + pbtspell,
                             Stem = "",
                             Suffix = "",
@@ -359,6 +480,14 @@ namespace ClearDashboard.Wpf.ViewModels
                 Console.WriteLine();
             }
 
+
+
+            GridCollectionView = CollectionViewSource.GetDefaultView(TheData);
+            GridCollectionView.Filter = new Predicate<object>(FiterTerms);
+            NotifyOfPropertyChange(() => GridCollectionView);
+
+            // turn off the progress bar
+            ProgressBarVisibility = Visibility.Collapsed;
 
             base.OnViewReady(view);
         }
@@ -373,7 +502,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Methods
 
         private string CorrectUnicode(string instr)
-        {                                       
+        {
             // There is a problem in Gk Unicode Vowels exhibiting in Paratext. See https://wiki.digitalclassicist.org/Greek_Unicode_duplicated_vowels
             // The basic code is preferred by the Unicode Consortium
             // AllBiblicalTerms.xml and Biblical Terms.xml tend to use the Extended codes while TermRenderings.xml tends to use the Basic codes
@@ -395,6 +524,71 @@ namespace ClearDashboard.Wpf.ViewModels
                 .Replace('ΐ', 'ΐ')     //  ΐ 	    0390 	1FD3
                 .Replace('ΰ', 'ΰ');    //  ΰ 	    03B0 	1FE3
             return instr;
+        }
+
+        public ICollectionView GridCollectionView { get; set; }
+
+        private string _filterString = "";
+        public string FilterString
+        {
+            get
+            {
+                return _filterString;
+            }
+            set
+            {
+                _filterString = value;
+                NotifyOfPropertyChange(() => FilterString);
+
+                if (TheData != null && GridCollectionView is not null)
+                {
+                    GridCollectionView.Refresh();
+                }
+            }
+        }
+
+        private void ClearFilter(object obj)
+        {
+            FilterString = "";
+        }
+
+        private bool FiterTerms(object item)
+        {
+            PinsDataTable? itemDT = item as PinsDataTable;
+
+            return (itemDT.Source.Contains(_filterString) || itemDT.Gloss.Contains(_filterString) ||
+                    itemDT.Notes.Contains(_filterString));
+        }
+
+        private void VerseButtonClick(object obj)
+        {
+            if (obj is PinsDataTable)
+            {
+                var dataRow = (PinsDataTable)obj;
+
+                if (dataRow.VerseList.Count == 0)
+                {
+                    return;
+                }
+
+                SelectedItemVerses.Clear();
+
+                dataRow.VerseList.Sort();
+
+                foreach (var verse in dataRow.VerseList)
+                {
+                    string verseIdShort = BibleRefUtils.GetVerseStrShortFromBBBCCCVVV(verse.Substring(0, 9));
+
+                    _selectedItemVerses.Add(new PinsVerseList
+                    {
+                        BBBCCCVVV = verse.Substring(0, 9),
+                        VerseIdShort = verseIdShort,
+                        VerseText = "SOME VERSE TEXT TO LOOKUP ONCE THE DB IS COMPLETE"
+                    });
+                }
+                NotifyOfPropertyChange(() => SelectedItemVerses);
+                IsSample4DialogOpen = true;
+            }
         }
 
         #endregion // Methods
@@ -593,6 +787,8 @@ namespace ClearDashboard.Wpf.ViewModels
         [XmlElement(ElementName = "Status")]
         public List<Status> Status { get; set; }
     }
+
+
 
 
 

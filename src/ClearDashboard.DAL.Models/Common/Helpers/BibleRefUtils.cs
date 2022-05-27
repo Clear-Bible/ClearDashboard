@@ -1,7 +1,59 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models.Helpers
+﻿
+
+namespace ClearDashboard.DataAccessLayer.Models.Helpers
 {
     public static class BibleRefUtils
     {
+        public static string GetVerseStrShortFromBBBCCCVVV(string BBBCCCVVV)
+        {
+            string verseStr = "";
+
+            // ensure that we are dealing with a full 9 character string
+            if (BBBCCCVVV.Length < 9)
+            {
+                BBBCCCVVV = BBBCCCVVV.PadLeft(9, '0');
+            }
+
+            // get the book lookup values
+            var lookup = GetBookIdDictionary();
+
+            // get the short book name
+            if (lookup.ContainsKey(BBBCCCVVV.Substring(0,3)))
+            {
+                verseStr = lookup[BBBCCCVVV.Substring(0, 3)];
+            }
+            else
+            {
+                verseStr = "UNK";
+            }
+
+            // parse out the verse number
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(3, 3));
+                verseStr += $" {numVal}:";
+            }
+            catch (FormatException e)
+            {
+                verseStr += " 00:";
+            }
+
+            // parse out the chapter
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(6, 3));
+                verseStr += $"{numVal}";
+            }
+            catch (FormatException e)
+            {
+                verseStr += "00";
+            }
+
+            return verseStr;
+
+        }
+
+
         public static string GetBookNumFromBookName(string value)
         {
             Dictionary<string, string> lookup = new Dictionary<string, string>
@@ -369,6 +421,109 @@
                 { "97", "XXE" },
                 { "98", "XXF" },
                 { "99", "XXG" },
+
+
+                { "001", "GEN" },
+                { "002", "EXO" },
+                { "003", "LEV" },
+                { "004", "NUM" },
+                { "005", "DEU" },
+                { "006", "JOS" },
+                { "007", "JDG" },
+                { "008", "RUT" },
+                { "009", "1SA" },
+                { "010", "2SA" },
+                { "011", "1KI" },
+                { "012", "2KI" },
+                { "013", "1CH" },
+                { "014", "2CH" },
+                { "015", "EZR" },
+                { "016", "NEH" },
+                { "017", "EST" },
+                { "018", "JOB" },
+                { "019", "PSA" },
+                { "020", "PRO" },
+                { "021", "ECC" },
+                { "022", "SNG" },
+                { "023", "ISA" },
+                { "024", "JER" },
+                { "025", "LAM" },
+                { "026", "EZK" },
+                { "027", "DAN" },
+                { "028", "HOS" },
+                { "029", "JOL" },
+                { "030", "AMO" },
+                { "031", "OBA" },
+                { "032", "JON" },
+                { "033", "MIC" },
+                { "034", "NAM" },
+                { "035", "HAB" },
+                { "036", "ZEP" },
+                { "037", "HAG" },
+                { "038", "ZEC" },
+                { "039", "MAL" },
+                { "040", "MAT" },
+                { "041", "MRK" },
+                { "042", "LUK" },
+                { "043", "JHN" },
+                { "044", "ACT" },
+                { "045", "ROM" },
+                { "046", "1CO" },
+                { "047", "2CO" },
+                { "048", "GAL" },
+                { "049", "EPH" },
+                { "050", "PHP" },
+                { "051", "COL" },
+                { "052", "1TH" },
+                { "053", "2TH" },
+                { "054", "1TI" },
+                { "055", "2TI" },
+                { "056", "TIT" },
+                { "057", "PHM" },
+                { "058", "HEB" },
+                { "059", "JAS" },
+                { "060", "1PE" },
+                { "061", "2PE" },
+                { "062", "1JN" },
+                { "063", "2JN" },
+                { "064", "3JN" },
+                { "065", "JUD" },
+                { "066", "REV" },
+                { "067", "TOB" },
+                { "068", "JDT" },
+                { "069", "ESG" },
+                { "070", "WIS" },
+                { "071", "SIR" },
+                { "072", "BAR" },
+                { "073", "LJE" },
+                { "074", "S3Y" },
+                { "075", "SUS" },
+                { "076", "BEL" },
+                { "077", "1MA" },
+                { "078", "2MA" },
+                { "079", "3MA" },
+                { "080", "4MA" },
+                { "081", "1ES" },
+                { "082", "2ES" },
+                { "083", "MAN" },
+                { "084", "PS2" },
+                { "085", "ODA" },
+                { "086", "PSS" },
+                { "087", "JSA" },
+                { "088", "JDB" },
+                { "089", "TBS" },
+                { "090", "SST" },
+                { "091", "DNT" },
+                { "092", "BLT" },
+                { "093", "XXA" },
+                { "094", "XXB" },
+                { "095", "XXC" },
+                { "096", "XXD" },
+                { "097", "XXE" },
+                { "098", "XXF" },
+                { "099", "XXG" },
+
+
                 { "100", "FRT" },
                 { "101", "BAK" },
                 { "102", "OTH" },
