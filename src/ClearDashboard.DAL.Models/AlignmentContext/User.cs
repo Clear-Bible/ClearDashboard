@@ -8,10 +8,10 @@
         }
 
         public int Id { get; set; }
-        public string ParatextUsername { get; set; }
+        public string? ParatextUsername { get; set; }
         public int? LastAlignmentLevelId { get; set; }
 
-        public virtual InterlinearNote UserNavigation { get; set; }
+        public virtual InterlinearNote? UserNavigation { get; set; }
         public virtual ICollection<AlignmentVersion> AlignmentVersions { get; set; }
     }
 }

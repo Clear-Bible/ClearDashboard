@@ -33,6 +33,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Corpus> Corpa { get; set; }
         //public virtual DbSet<CorpusType> CorpusTypes { get; set; }
         public virtual DbSet<InterlinearNote> InterlinearNotes { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<ParallelCorpus> ParallelCorpus { get; set; }
         public virtual DbSet<ParallelVersesLink> ParallelVersesLinks { get; set; }
         public virtual DbSet<ProjectInfo> ProjectInfos { get; set; }
@@ -226,6 +227,21 @@ namespace ClearDashboard.DataAccessLayer.Data
                     .WithMany(p => p.InterlinearNotes)
                     .HasPrincipalKey(p => p.Id)
                     .HasForeignKey(d => d.TokenId);
+            });
+
+            modelBuilder.Entity<Note>(entity =>
+            {
+                entity.ToTable("Note");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Created).HasColumnType("datetime");
+                entity.Property(e => e.Modified).HasColumnType("datetime");
+                entity.Property(e => e.Anchors);
+                entity.Property(e => e.RecipientNoteUsers);
+                entity.Property(e => e.ContentCollection);
+
+             
             });
 
             modelBuilder.Entity<ParallelCorpus>(entity =>

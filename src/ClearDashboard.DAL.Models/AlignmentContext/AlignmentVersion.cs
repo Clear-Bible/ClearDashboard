@@ -13,7 +13,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? UserId { get; set; }
         public bool IsDirty { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<Alignment> Alignments { get; set; }
     }
 }
