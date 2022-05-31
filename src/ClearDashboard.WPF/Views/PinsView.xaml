@@ -74,7 +74,8 @@
                 Height="25"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                Style="{StaticResource BlueMidButton}">
+                Style="{StaticResource BlueMidButton}"
+                Visibility="Collapsed">
                 Load References
             </Button>
         </StackPanel>
@@ -90,17 +91,17 @@
             AlternationCount="2"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
+            CanUserResizeColumns="True"
             GridLinesVisibility="All"
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
-            VerticalGridLinesBrush="{StaticResource GridBrush}"
-            CanUserResizeColumns="True"
             ItemsSource="{Binding GridCollectionView}"
             RowBackground="{DynamicResource MaterialDesignDarkBackground}"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectionMode="Extended"
-            SelectionUnit="FullRow">
+            SelectionUnit="FullRow"
+            VerticalGridLinesBrush="{StaticResource GridBrush}">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
@@ -168,20 +169,20 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
-                                Padding="0"
-                                HorizontalAlignment="Center"
                                 Width="auto"
                                 Height="20"
                                 MinWidth="125"
                                 Margin="0,0,0,5"
+                                Padding="0"
+                                HorizontalAlignment="Center"
                                 Command="{Binding DataContext.VerseButtonCommand, ElementName=DataGrid}"
                                 CommandParameter="{Binding}"
-                                Content="{Binding Path='SimpRefs'}" >
+                                Content="{Binding Path='SimpRefs'}">
                                 <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource  MaterialDesignFlatAccentBgButton}">
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Setter Property="IsEnabled" Value="False" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -331,7 +332,7 @@
             VerticalAlignment="Center"
             CloseOnClickAway="True"
             DialogTheme="Inherit"
-            IsOpen="{Binding IsSample4DialogOpen}"
+            IsOpen="{Binding VerseRefDialogOpen}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
@@ -342,14 +343,14 @@
                         <Button
                             Margin="0,8,8,0"
                             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                            Content="CLOSE"
                             IsCancel="True"
-                            Style="{StaticResource MaterialDesignFlatButton}">
+                            Style="{StaticResource MaterialDesignOutlinedSecondaryDarkButton}">
                             <Button.CommandParameter>
                                 <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
                                     False
                                 </system:Boolean>
                             </Button.CommandParameter>
+                            <materialDesign:PackIcon Kind="Close" />
                         </Button>
 
 

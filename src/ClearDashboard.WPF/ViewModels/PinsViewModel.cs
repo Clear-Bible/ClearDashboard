@@ -35,6 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private BiblicalTermsList _biblicalTermsList = new();
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
+        private Lexicon _lexicon = new();
 
         #endregion //Member Variables
 
@@ -68,14 +69,14 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private bool _IsSample4DialogOpen;
-        public bool IsSample4DialogOpen
+        private bool _verseRefDialogOpen;
+        public bool VerseRefDialogOpen
         {
-            get { return _IsSample4DialogOpen; }
+            get { return _verseRefDialogOpen; }
             set
             {
-                _IsSample4DialogOpen = value;
-                NotifyOfPropertyChange(() => IsSample4DialogOpen);
+                _verseRefDialogOpen = value;
+                NotifyOfPropertyChange(() => VerseRefDialogOpen);
             }
         }
 
@@ -480,8 +481,80 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                 }
 
-                Console.WriteLine();
             }
+
+
+
+            // load in the lexicon.xml
+            await Task.Run(() =>
+            {
+                string xmlPath = Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
+                    "Lexicon.xml");
+
+                if (File.Exists(xmlPath))
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(xmlPath);
+                    XmlNodeReader reader = new XmlNodeReader(doc);
+
+                    using (reader)
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
+                        try
+                        {
+                            _lexicon = (Lexicon)serializer.Deserialize(reader);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError("Error in PINS deserialization of Lexicon.xml: " + e.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
+                }
+            }).ConfigureAwait(false);
+
+            for (int i = 0; i < _lexicon.Entries.Item.Count; i++)
+            {
+                var entry = _lexicon.Entries.Item[i];
+                foreach (var senseEntry in entry.Entry.Sense)
+                {
+                    _thedata.Add(new PinsDataTable
+                    {
+                        Id = Guid.NewGuid(),
+                        XmlSource = "LX",
+                        Code = senseEntry.Id,
+                        Gloss = senseEntry.Gloss.Text,
+                        Lang = senseEntry.Gloss.Language,
+                        Lform = entry.Lexeme.Type,
+                        Match = senseEntry.Id + entry.Lexeme.Form,
+                        Notes = "",
+                        Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                        Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                        Refs = "",
+                        SimpRefs = "0",
+                        Source = entry.Lexeme.Form,
+                        Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                        Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                        Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                    });
+                }
+
+            }
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
+            //using (StringReader reader = new StringReader(xml))
+            //{
+            //    var test = (Lexicon)serializer.Deserialize(reader);
+            //}
+
+
+
+
+
+
 
 
 
@@ -590,7 +663,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     });
                 }
                 NotifyOfPropertyChange(() => SelectedItemVerses);
-                IsSample4DialogOpen = true;
+                VerseRefDialogOpen = true;
             }
         }
 
@@ -816,6 +889,102 @@ namespace ClearDashboard.Wpf.ViewModels
     }
 
 
+
+
+
+
+    // using System.Xml.Serialization;
+    // XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
+    // using (StringReader reader = new StringReader(xml))
+    // {
+    //    var test = (Lexicon)serializer.Deserialize(reader);
+    // }
+
+    [XmlRoot(ElementName = "Lexeme")]
+    public class Lexeme
+    {
+
+        [XmlAttribute(AttributeName = "Type")]
+        public string Type { get; set; }
+
+        [XmlAttribute(AttributeName = "Form")]
+        public string Form { get; set; }
+
+        [XmlAttribute(AttributeName = "Homograph")]
+        public int Homograph { get; set; }
+    }
+
+    [XmlRoot(ElementName = "Gloss")]
+    public class Gloss
+    {
+
+        [XmlAttribute(AttributeName = "Language")]
+        public string Language { get; set; }
+
+        [XmlText]
+        public string Text { get; set; }
+    }
+
+    [XmlRoot(ElementName = "Sense")]
+    public class Sense
+    {
+
+        [XmlElement(ElementName = "Gloss")]
+        public Gloss Gloss { get; set; }
+
+        [XmlAttribute(AttributeName = "Id")]
+        public string Id { get; set; }
+
+        [XmlText]
+        public string Text { get; set; }
+    }
+
+    [XmlRoot(ElementName = "Entry")]
+    public class Entry
+    {
+
+        [XmlElement(ElementName = "Sense")]
+        public List<Sense> Sense { get; set; }
+    }
+
+    [XmlRoot(ElementName = "item")]
+    public class Item
+    {
+
+        [XmlElement(ElementName = "Lexeme")]
+        public Lexeme Lexeme { get; set; }
+
+        [XmlElement(ElementName = "Entry")]
+        public Entry Entry { get; set; }
+    }
+
+    [XmlRoot(ElementName = "Entries")]
+    public class Entries
+    {
+
+        [XmlElement(ElementName = "item")]
+        public List<Item> Item { get; set; }
+    }
+
+    [XmlRoot(ElementName = "Lexicon")]
+    public class Lexicon
+    {
+
+        [XmlElement(ElementName = "Language")]
+        public string Language { get; set; }
+
+        [XmlElement(ElementName = "FontName")]
+        public string FontName { get; set; }
+
+        [XmlElement(ElementName = "FontSize")]
+        public int FontSize { get; set; }
+
+        [XmlElement(ElementName = "Analyses")]
+        public object Analyses { get; set; }
+
+        [XmlElement(ElementName = "Entries")]
+        public Entries Entries { get; set; }
+    }
 
 
 

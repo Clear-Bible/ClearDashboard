@@ -21,14 +21,6 @@
                 Background="Brown"
                 FontSize="64"
                 Text="DASHBOARD" />
-
-            <TextBlock
-                Margin="20"
-                VerticalAlignment="Top"
-                Background="Brown"
-                FontSize="64"
-                Text="{Binding DashboardProject.Name}" />
-            <Button Click="Button_Click">Click Me</Button>
         </StackPanel>
     </Grid>
 </UserControl>
