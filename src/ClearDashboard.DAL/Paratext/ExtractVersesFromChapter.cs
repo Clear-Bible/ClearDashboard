@@ -60,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                                 //lines.Add($"{token.Marker} {token.Text}");
                                 break;
                             case UsfmTokenType.Chapter:
-                                //lines.Add($@"\c {token.Text}");
+                                lines.Add($@"\c {token.Text}");
                                 break;
                             case UsfmTokenType.Character:
                                 //lines.Add($"Marker Character: {token.Marker} {token.Text}");

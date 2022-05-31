@@ -50,6 +50,7 @@ namespace ClearDashboard.DataAccessLayer.Models
                 var book = VerseBBCCCVVV.Substring(0, 2);
                 return book;
             }
+            set => BookStr = value;
         }
 
         public string ChapterStr
@@ -59,6 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Models
                 var chap = VerseBBCCCVVV.Substring(2, 3);
                 return chap;
             }
+            set => ChapterStr = value;
         }
 
         public string VerseStr
@@ -68,10 +70,20 @@ namespace ClearDashboard.DataAccessLayer.Models
                 var verse = VerseBBCCCVVV.Substring(5, 3);
                 return verse;
             }
+            set => VerseStr = value;
         }
 
         public string VerseId { get; set; } = string.Empty;
 
         public bool Found { get; set; }
+
+        public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
+        {
+            bbbcccvvv = bbbcccvvv.PadLeft(9,'0');
+            VerseBBCCCVVV = bbbcccvvv;
+            SilBookNumber = bbbcccvvv.Substring(0, 3);
+            ChapterNumber = bbbcccvvv.Substring(3, 3);
+            VerseNumber = bbbcccvvv.Substring(6, 3);
+        }
     }
 }

@@ -97,6 +97,8 @@ namespace ClearDashboard.Wpf.ViewModels
         public RelayCommand ClearFilterCommand { get; set; }
         public RelayCommand VerseButtonCommand { get; set; }
 
+        public ICommand VerseClickCommand { get; set; }
+
         #endregion //Commands
 
 
@@ -114,6 +116,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
             VerseButtonCommand = new RelayCommand(VerseButtonClick);
+            VerseClickCommand = new RelayCommand(VerseClick);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -588,6 +591,30 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 NotifyOfPropertyChange(() => SelectedItemVerses);
                 IsSample4DialogOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// User has clicked on a verse link.  The VersePopUp window comes up with
+        /// all the various verse renderings
+        /// </summary>
+        /// <param name="obj"></param>
+        private void VerseClick(object obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            var verseBBCCCVVV = (string)obj;
+            var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
+
+            if (verses.Count > 0)
+            {
+                IWindowManager manager = new WindowManager();
+                manager.ShowWindowAsync(
+                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator,
+                        verses[0]), null, null);
             }
         }
 
