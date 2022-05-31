@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var verseNum = verse.Substring(0, verse.IndexOf(' '));
                 if (verseNum == @"\v")
                 {
-                    verseNum = verse.Substring(3, verse.IndexOf(' '));
+                    verseNum = verse.Substring(3, verse.IndexOf(' ')).Trim();
                     var verseText = verse.Substring(verseNum.Length + 3);
 
                     var row = _dt.NewRow();

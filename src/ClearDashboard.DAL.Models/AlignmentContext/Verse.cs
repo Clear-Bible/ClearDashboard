@@ -36,7 +36,7 @@ namespace ClearDashboard.DataAccessLayer.Models
                 _verseBbcccvvv = value;
                 if (_verseBbcccvvv is { Length: < 8 })
                 {
-                    _verseBbcccvvv = _verseBbcccvvv.PadLeft(8, '0');
+                    _verseBbcccvvv = _verseBbcccvvv.PadLeft(9, '0');
                 }
             }
         }
@@ -47,30 +47,30 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             get
             {
-                var book = VerseBBCCCVVV.Substring(0, 2);
+                var book = VerseBBCCCVVV.Substring(0, 3);
                 return book;
             }
-            set => BookStr = value;
+            //set => BookStr = value;
         }
 
         public string ChapterStr
         {
             get
             {
-                var chap = VerseBBCCCVVV.Substring(2, 3);
+                var chap = VerseBBCCCVVV.Substring(3, 3);
                 return chap;
             }
-            set => ChapterStr = value;
+            //set => ChapterStr = value;
         }
 
         public string VerseStr
         {
             get
             {
-                var verse = VerseBBCCCVVV.Substring(5, 3);
+                var verse = VerseBBCCCVVV.Substring(6, 3);
                 return verse;
             }
-            set => VerseStr = value;
+            //set => VerseStr = value;
         }
 
         public string VerseId { get; set; } = string.Empty;
