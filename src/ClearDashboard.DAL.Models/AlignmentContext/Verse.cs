@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
-        public DateTime? LastChanged { get; set; }
+        public DateTimeOffset? Modified { get; set; }
         public int? CorpusId { get; set; }
 
         public virtual Corpus? Corpus { get; set; }

@@ -32,7 +32,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
 
 
-        public DateTime LastChanged { get; set; }
+        public DateTimeOffset Modified { get; set; }
        
         public string FullFilePath { get; set; }
 
@@ -69,7 +69,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// Date that this project was created
         /// </summary>
         
-        public DateTime CreationDate { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name

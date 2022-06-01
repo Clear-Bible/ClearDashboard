@@ -9,7 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
         public int Id { get; set; }
-        public DateTime Created { get; set; }
+        public DateTimeOffset Created { get; set; }
         public int? UserId { get; set; }
         public bool IsDirty { get; set; }
 

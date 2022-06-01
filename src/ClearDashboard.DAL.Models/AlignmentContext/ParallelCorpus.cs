@@ -4,15 +4,17 @@
     {
         public ParallelCorpus()
         {
+            // ReSharper disable VirtualMemberCallInConstructor
             ParallelVersesLinks = new HashSet<ParallelVersesLink>();
+            // ReSharper restore VirtualMemberCallInConstructor
         }
 
         public int SourceCorpusId { get; set; }
         public int TargetCorpusId { get; set; }
 
         public AlignmentType AlignmentType { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastGenerated { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset LastGenerated { get; set; }
         public int Id { get; set; }
 
         public virtual Corpus SourceCorpus { get; set; }
