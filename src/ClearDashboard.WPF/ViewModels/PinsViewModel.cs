@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Helpers;
 using ClearDashboard.DataAccessLayer.Paratext;
@@ -36,6 +37,11 @@ namespace ClearDashboard.Wpf.ViewModels
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
+
+        private DashboardProjectManager _projectManager;
+        private ILogger<PinsViewModel> _logger;
+        private INavigationService _navigationService;
+        private IEventAggregator _eventAggregator;
 
         #endregion //Member Variables
 
@@ -91,6 +97,58 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        private string _fontFamily = "Segoe UI";
+        public string FontFamily
+        {
+            get => _fontFamily;
+            set
+            {
+                _fontFamily = value;
+                NotifyOfPropertyChange(() => FontFamily);
+            }
+        }
+
+        private float _fontSize;
+        public float FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                _fontSize = value;
+                NotifyOfPropertyChange(() => FontSize);
+            }
+        }
+
+        private bool _isRtl;
+        public bool IsRtl
+        {
+            get => _isRtl;
+            set
+            {
+                _isRtl = value;
+                NotifyOfPropertyChange(() => IsRtl);
+            }
+        }
+
+        private string _filterString = "";
+        public string FilterString
+        {
+            get
+            {
+                return _filterString;
+            }
+            set
+            {
+                _filterString = value;
+                NotifyOfPropertyChange(() => FilterString);
+
+                if (TheData != null && GridCollectionView is not null)
+                {
+                    GridCollectionView.Refresh();
+                }
+            }
+        }
+
         #endregion //Observable Properties
 
         #region Commands
@@ -109,15 +167,29 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) : base(navigationService, logger, projectManager, eventAggregator)
+        public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+            : base(navigationService, logger, projectManager, eventAggregator)
         {
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
+
+            _eventAggregator = eventAggregator;
+            _navigationService = navigationService;
+            _logger = logger;
+            _projectManager = projectManager;
 
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
             VerseButtonCommand = new RelayCommand(VerseButtonClick);
             VerseClickCommand = new RelayCommand(VerseClick);
+
+            if (ProjectManager.ParatextProject is not null)
+            {
+                // pull out the project font family
+                _fontFamily = ProjectManager.ParatextProject.Language.FontFamily;
+                _fontSize = ProjectManager.ParatextProject.Language.Size;
+                IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+            }
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -389,13 +461,12 @@ namespace ClearDashboard.Wpf.ViewModels
                         verselist.Add(verse);
                     }
 
-                    string simpleRefs = string.Join(", ", verselist);
-
                     _thedata.Add(new PinsDataTable
                     {
                         Id = Guid.NewGuid(),
                         XmlSource = "BT",
                         Code = "KeyTerm",
+                        OriginID = terms.Id,
                         Gloss = gloss,
                         Lang = "",
                         Lform = "",
@@ -432,6 +503,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             Id = Guid.NewGuid(),
                             XmlSource = "ABT",
                             Code = "KeyTerm",
+                            OriginID = terms.Id,
                             Gloss = gloss,
                             Lang = "",
                             Lform = "",
@@ -464,6 +536,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             Id = Guid.NewGuid(),
                             XmlSource = "TR",
                             Code = "KeyTerm",
+                            OriginID = terms.Id,
                             Gloss = gloss,
                             Lang = "",
                             Lform = "",
@@ -544,15 +617,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
             }
 
-            //XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
-            //using (StringReader reader = new StringReader(xml))
-            //{
-            //    var test = (Lexicon)serializer.Deserialize(reader);
-            //}
-
-
-
-
 
 
 
@@ -604,24 +668,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public ICollectionView GridCollectionView { get; set; }
 
-        private string _filterString = "";
-        public string FilterString
-        {
-            get
-            {
-                return _filterString;
-            }
-            set
-            {
-                _filterString = value;
-                NotifyOfPropertyChange(() => FilterString);
 
-                if (TheData != null && GridCollectionView is not null)
-                {
-                    GridCollectionView.Refresh();
-                }
-            }
-        }
 
         private void ClearFilter(object obj)
         {
@@ -651,13 +698,28 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 dataRow.VerseList.Sort();
 
+
+                List<VersificationList> verseList = new List<VersificationList>();
                 foreach (var verse in dataRow.VerseList)
                 {
-                    string verseIdShort = BibleRefUtils.GetVerseStrShortFromBBBCCCVVV(verse.Substring(0, 9));
+                    verseList.Add(new VersificationList
+                    {
+                        SourceBBBCCCVV = verse.Substring(0, 9),
+                        TargetBBBCCCVV = "",
+                    });
+                }
+
+                // this data has versification from the org.vrs
+                // convert it over to the current project versification format.
+                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.ParatextProject);
+
+                foreach (var verse in verseList)
+                {
+                    string verseIdShort = BibleRefUtils.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
 
                     _selectedItemVerses.Add(new PinsVerseList
                     {
-                        BBBCCCVVV = verse.Substring(0, 9),
+                        BBBCCCVVV = verse.TargetBBBCCCVV,
                         VerseIdShort = verseIdShort,
                         VerseText = "SOME VERSE TEXT TO LOOKUP ONCE THE DB IS COMPLETE"
                     });

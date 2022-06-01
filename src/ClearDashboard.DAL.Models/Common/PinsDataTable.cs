@@ -9,6 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         // 0. Source, 1. Lform, 2. Gloss, 3. Lang, 4. Refs, 5. Code, 6. Match, 7. Notes, 8. SimpRefs, 
         // 9. Phrase, 10. Word, 11. Prefix, 12. Stem, 13. Suffix
         public Guid Id { get; set; }
+        public string OriginID { get; set; } = string.Empty;
         public string XmlSource { get; set; } = string.Empty;
         public string Source { get; set; } = string.Empty;
         public string Lform { get; set; } = string.Empty;
@@ -25,5 +26,6 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         public string Stem { get; set; } = string.Empty;
         public string Suffix { get; set; } = string.Empty;
         public List<string> VerseList { get; set; } = new ();
+
     }
 }

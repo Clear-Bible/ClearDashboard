@@ -147,13 +147,22 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
-            
+
             //if (truncatedName == "ParatextData.XmlSerializers")
             //{
             //    return null;
             //}
             // Load the most up to date version
-            var assembly = Assembly.Load(truncatedName);
+            Assembly assembly;
+            try
+            {
+                assembly = Assembly.Load(truncatedName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             AppendText(Color.Red, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
 
             return assembly;
@@ -550,6 +559,19 @@ namespace ClearDashboard.WebApiParatextPlugin
             //    });
 
             //_ = GetNoteList("", dataPayload);
+        }
+
+        private void btnVersificationTest_Click(object sender, EventArgs e)
+        {
+            var v = _project.Versification;
+
+            IVersification versification;
+            IVerseRef verseRef;
+
+
+            var newVerse = v.CreateReference(19, 20, 1);
+
+            newVerse = v.ChangeVersification(newVerse);
         }
 
 

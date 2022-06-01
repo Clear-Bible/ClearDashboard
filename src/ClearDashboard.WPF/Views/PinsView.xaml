@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     x:Name="PinsViewWindow"
     d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -102,6 +103,16 @@
             SelectionMode="Extended"
             SelectionUnit="FullRow"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding ClearFilterCommand}"
+                        CommandParameter="{Binding}"
+                        Header="Clear Filter" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
@@ -125,41 +136,74 @@
 
 
             <DataGrid.Columns>
-                <!--  source  -->
-                <DataGridTemplateColumn Width="125" Header="Lexeme">
+                <!--  Lexeme  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="Lexeme">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
                                 MinWidth="125"
+                                MaxWidth="250"
                                 Margin="0,0,0,5"
+                                FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
+                                FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
                                 Text="{Binding Path='Source'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!--  gloss  -->
-                <DataGridTemplateColumn Width="125" Header="Gloss">
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="Gloss">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
                                 MinWidth="125"
+                                MaxWidth="250"
                                 Margin="0,0,0,5"
+                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                 Text="{Binding Path='Gloss'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <!--  Notes  -->
-                <DataGridTemplateColumn Width="125" Header="Notes">
+                <!--  origin id  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="Origin">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
                                 MinWidth="125"
                                 Margin="0,0,0,5"
-                                Text="{Binding Path='Notes'}" />
+                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                Text="{Binding Path='OriginID'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Notes  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="1000"
+                    Header="Notes">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                MaxWidth="1000"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Notes'}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -193,7 +237,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lform  -->
-                <DataGridTemplateColumn Width="125" Header="Forms">
+                <!--<DataGridTemplateColumn Width="125" Header="Forms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -203,7 +247,7 @@
                                 Text="{Binding Path='Lform'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  language  -->
                 <DataGridTemplateColumn Width="125" Header="Language">
@@ -219,7 +263,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Code  -->
-                <DataGridTemplateColumn Width="125" Header="Code">
+                <!--<DataGridTemplateColumn Width="125" Header="Code">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -229,10 +273,10 @@
                                 Text="{Binding Path='Code'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Match  -->
-                <DataGridTemplateColumn Width="125" Header="Match">
+                <!--<DataGridTemplateColumn Width="125" Header="Match">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -242,15 +286,15 @@
                                 Text="{Binding Path='Match'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="125" Header="Phrase">
+                <DataGridTemplateColumn Width="80" Header="Phrase">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
-                                MinWidth="125"
+                                MinWidth="80"
                                 Margin="0,0,0,5"
                                 Text="{Binding Path='Phrase'}" />
                         </DataTemplate>
@@ -258,12 +302,12 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="125" Header="Word">
+                <DataGridTemplateColumn Width="80" Header="Word">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
-                                MinWidth="125"
+                                MinWidth="80"
                                 Margin="0,0,0,5"
                                 Text="{Binding Path='Word'}" />
                         </DataTemplate>
@@ -271,12 +315,12 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="125" Header="Prefix">
+                <DataGridTemplateColumn Width="80" Header="Prefix">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
-                                MinWidth="125"
+                                MinWidth="80"
                                 Margin="0,0,0,5"
                                 Text="{Binding Path='Prefix'}" />
                         </DataTemplate>
@@ -284,12 +328,12 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="125" Header="Stem">
+                <DataGridTemplateColumn Width="80" Header="Stem">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
-                                MinWidth="125"
+                                MinWidth="80"
                                 Margin="0,0,0,5"
                                 Text="{Binding Path='Stem'}" />
                         </DataTemplate>
@@ -297,12 +341,12 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="125" Header="Suffix">
+                <DataGridTemplateColumn Width="80" Header="Suffix">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
-                                MinWidth="125"
+                                MinWidth="80"
                                 Margin="0,0,0,5"
                                 Text="{Binding Path='Suffix'}" />
                         </DataTemplate>
