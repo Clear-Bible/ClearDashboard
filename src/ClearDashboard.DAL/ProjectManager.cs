@@ -203,7 +203,7 @@ namespace ClearDashboard.DataAccessLayer
             CurrentDashboardProject = new DashboardProject
             {
                 ParatextUser = ParatextUserName,
-                CreationDate = DateTime.Now
+                Created = DateTime.Now
             };
 
             return CurrentDashboardProject;
