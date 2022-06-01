@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class QuestionGroup
+    public partial class QuestionGroup : ClearEntity
     {
         public string? Note { get; set; }
         public string? Title { get; set; }

@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
 
-public class RawContentConfiguration : IEntityTypeConfiguration<RawContent>
+public class DataAssociationConfiguration : IEntityTypeConfiguration<DataAssociation>
 {
-    public void Configure(EntityTypeBuilder<RawContent> entityBuilder)
+    public void Configure(EntityTypeBuilder<DataAssociation> entityBuilder)
     {
-        entityBuilder.HasDiscriminator<string>( "ContentType");
+        entityBuilder.HasKey(entity => entity.Id);
     }
 }
