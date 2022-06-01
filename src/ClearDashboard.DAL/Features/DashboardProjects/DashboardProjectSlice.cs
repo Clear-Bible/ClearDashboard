@@ -64,7 +64,7 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                         // add as ListItem
                         var dashboardProject = new DashboardProject
                         {
-                            LastChanged = fi.LastWriteTime,
+                            Modified = fi.LastWriteTime,
                             ProjectName = di.Name,
                             ShortFilePath = fi.Name,
                             FullFilePath = fi.FullName
