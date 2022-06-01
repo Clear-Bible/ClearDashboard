@@ -82,16 +82,16 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTime? LastChanged
+        public DateTimeOffset? Modified
         {
-            get => Entity?.LastChanged;
+            get => Entity?.Modified;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.LastChanged = value;
+                    Entity.Modified = value;
                 }
-                NotifyOfPropertyChange(nameof(LastChanged));
+                NotifyOfPropertyChange(nameof(Modified));
             }
         }
 
