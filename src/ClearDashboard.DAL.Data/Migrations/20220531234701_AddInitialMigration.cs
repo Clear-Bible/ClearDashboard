@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class AddInitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,8 +31,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ProjectName = table.Column<string>(type: "TEXT", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ProjectName = table.Column<string>(type: "TEXT", nullable: true),
+                    Created = table.Column<long>(type: "datetime", nullable: false),
                     IsRTL = table.Column<bool>(type: "bit", nullable: false),
                     LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -46,10 +45,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "QuestionGroup",
                 columns: table => new
                 {
-                    Note = table.Column<string>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    English = table.Column<string>(type: "TEXT", nullable: false),
-                    AltText = table.Column<string>(type: "TEXT", nullable: false),
+                    Note = table.Column<string>(type: "TEXT", nullable: true),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    English = table.Column<string>(type: "TEXT", nullable: true),
+                    AltText = table.Column<string>(type: "TEXT", nullable: true),
                     LastChanged = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
@@ -65,8 +64,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SourceCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
                     TargetCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
-                    LastGenerated = table.Column<DateTime>(type: "datetime", nullable: false)
+                    Created = table.Column<long>(type: "datetime", nullable: false),
+                    LastGenerated = table.Column<long>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,12 +90,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    VerseNumber = table.Column<string>(type: "TEXT", nullable: false),
-                    SilBookNumber = table.Column<string>(type: "varchar(2)", nullable: false),
-                    ChapterNumber = table.Column<string>(type: "TEXT", nullable: false),
-                    VerseText = table.Column<string>(type: "text", nullable: false),
-                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false),
-                    CorpusId = table.Column<int>(type: "INTEGER", nullable: false)
+                    VerseNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    SilBookNumber = table.Column<string>(type: "varchar(2)", nullable: true),
+                    ChapterNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    VerseText = table.Column<string>(type: "text", nullable: true),
+                    Modified = table.Column<long>(type: "datetime", nullable: true),
+                    CorpusId = table.Column<int>(type: "INTEGER", nullable: true),
+                    VerseBBCCCVVV = table.Column<string>(type: "TEXT", nullable: true),
+                    VerseId = table.Column<string>(type: "TEXT", nullable: false),
+                    Found = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,30 +107,28 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Verse_Corpus_CorpusId",
                         column: x => x.CorpusId,
                         principalTable: "Corpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ParallelVerseLink",
+                name: "ParallelVersesLink",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ParallelCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ParallelCorpusId = table.Column<int>(type: "INTEGER", nullable: true),
                     VerseId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParallelVerseLink", x => x.Id);
+                    table.PrimaryKey("PK_ParallelVersesLink", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ParallelVerseLink_ParallelCorpus_ParallelCorpusId",
+                        name: "FK_ParallelVersesLink_ParallelCorpus_ParallelCorpusId",
                         column: x => x.ParallelCorpusId,
                         principalTable: "ParallelCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ParallelVerseLink_Verse_VerseId",
+                        name: "FK_ParallelVersesLink_Verse_VerseId",
                         column: x => x.VerseId,
                         principalTable: "Verse",
                         principalColumn: "Id");
@@ -143,8 +143,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     VerseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Text = table.Column<string>(type: "varchar(250)", nullable: false),
-                    FirstLetter = table.Column<string>(type: "varchar(2)", nullable: false)
+                    Text = table.Column<string>(type: "varchar(250)", nullable: true),
+                    FirstLetter = table.Column<string>(type: "varchar(2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -171,9 +171,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     table.PrimaryKey("PK_VerseLink", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VerseLink_ParallelVerseLink_ParallelVersesLinkId",
+                        name: "FK_VerseLink_ParallelVersesLink_ParallelVersesLinkId",
                         column: x => x.ParallelVersesLinkId,
-                        principalTable: "ParallelVerseLink",
+                        principalTable: "ParallelVersesLink",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -190,10 +190,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TokenId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Lemma = table.Column<string>(type: "varchar(50)", nullable: false),
+                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Lemma = table.Column<string>(type: "varchar(50)", nullable: true),
                     PartsOfSpeech = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    Strong = table.Column<string>(type: "varchar(15)", nullable: false)
+                    Strong = table.Column<string>(type: "varchar(15)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,31 +202,29 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Adornment_Token_TokenId",
                         column: x => x.TokenId,
                         principalTable: "Token",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "InterlinearNotes",
+                name: "InterlinearNote",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TokenId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Note = table.Column<string>(type: "varchar(600)", nullable: false),
+                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Note = table.Column<string>(type: "varchar(600)", nullable: true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false)
+                    Created = table.Column<long>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InterlinearNotes", x => x.Id);
-                    table.UniqueConstraint("AK_InterlinearNotes_UserId", x => x.UserId);
+                    table.PrimaryKey("PK_InterlinearNote", x => x.Id);
+                    table.UniqueConstraint("AK_InterlinearNote_UserId", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_InterlinearNotes_Token_TokenId",
+                        name: "FK_InterlinearNote_Token_TokenId",
                         column: x => x.TokenId,
                         principalTable: "Token",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -234,16 +232,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    ParatextUsername = table.Column<string>(type: "varchar(100)", nullable: false),
+                    ParatextUsername = table.Column<string>(type: "varchar(100)", nullable: true),
                     LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_InterlinearNotes_Id",
+                        name: "FK_User_InterlinearNote_Id",
                         column: x => x.Id,
-                        principalTable: "InterlinearNotes",
+                        principalTable: "InterlinearNote",
                         principalColumn: "UserId");
                 });
 
@@ -253,8 +251,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
                     IsDirty = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -263,6 +261,26 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AlignmentVersion_User_UserId",
                         column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Note",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Created = table.Column<long>(type: "datetime", nullable: false),
+                    Modified = table.Column<long>(type: "datetime", nullable: false),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Note", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Note_User_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -277,7 +295,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SourceTokenId = table.Column<int>(type: "INTEGER", nullable: false),
                     TargetTokenId = table.Column<int>(type: "INTEGER", nullable: false),
                     Score = table.Column<decimal>(type: "decimal(3)", nullable: false),
-                    AlignmentVersionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AlignmentVersionId = table.Column<int>(type: "INTEGER", nullable: true),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -287,8 +305,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Alignment_AlignmentVersion_AlignmentVersionId",
                         column: x => x.AlignmentVersionId,
                         principalTable: "AlignmentVersion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Alignment_Token_SourceTokenId",
                         column: x => x.SourceTokenId,
@@ -301,6 +318,32 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "Token",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipientNoteUser",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
+                    UserType = table.Column<int>(type: "INTEGER", nullable: false),
+                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipientNoteUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipientNoteUser_Note_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "Note",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecipientNoteUser_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -332,15 +375,20 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InterlinearNotes_TokenId",
-                table: "InterlinearNotes",
+                name: "IX_InterlinearNote_TokenId",
+                table: "InterlinearNote",
                 column: "TokenId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InterlinearNotes_UserId",
-                table: "InterlinearNotes",
+                name: "IX_InterlinearNote_UserId",
+                table: "InterlinearNote",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Note_AuthorId",
+                table: "Note",
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParallelCorpus_SourceCorpusId",
@@ -355,14 +403,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerseLink_ParallelCorpusId",
-                table: "ParallelVerseLink",
+                name: "IX_ParallelVersesLink_ParallelCorpusId",
+                table: "ParallelVersesLink",
                 column: "ParallelCorpusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParallelVerseLink_VerseId",
-                table: "ParallelVerseLink",
+                name: "IX_ParallelVersesLink_VerseId",
+                table: "ParallelVersesLink",
                 column: "VerseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipientNoteUser_NoteId",
+                table: "RecipientNoteUser",
+                column: "NoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipientNoteUser_UserId",
+                table: "RecipientNoteUser",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Token_VerseId",
@@ -401,13 +459,19 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "QuestionGroup");
 
             migrationBuilder.DropTable(
+                name: "RecipientNoteUser");
+
+            migrationBuilder.DropTable(
                 name: "VerseLink");
 
             migrationBuilder.DropTable(
                 name: "AlignmentVersion");
 
             migrationBuilder.DropTable(
-                name: "ParallelVerseLink");
+                name: "Note");
+
+            migrationBuilder.DropTable(
+                name: "ParallelVersesLink");
 
             migrationBuilder.DropTable(
                 name: "User");
@@ -416,7 +480,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ParallelCorpus");
 
             migrationBuilder.DropTable(
-                name: "InterlinearNotes");
+                name: "InterlinearNote");
 
             migrationBuilder.DropTable(
                 name: "Token");

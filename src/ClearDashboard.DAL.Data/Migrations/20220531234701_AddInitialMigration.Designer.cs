@@ -3,6 +3,7 @@ using System;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    partial class AlignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20220531234701_AddInitialMigration")]
+    partial class AddInitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
@@ -278,34 +280,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("QuestionGroup");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("Bytes")
-                        .HasColumnType("BLOB");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Discriminator")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("NoteId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NoteId");
-
-                    b.ToTable("RawContent");
-
-                    b.HasDiscriminator<string>("ContentType").HasValue("RawContent");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RecipientNoteUser", b =>
                 {
                     b.Property<int>("Id")
@@ -443,17 +417,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("VerseLink");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.StringContent", b =>
-                {
-                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.RawContent");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("StringContent");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
@@ -549,13 +512,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("ParallelCorpus");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
-                        .WithMany("ContentCollection")
-                        .HasForeignKey("NoteId");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RecipientNoteUser", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
@@ -636,8 +592,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
-                    b.Navigation("ContentCollection");
-
                     b.Navigation("RecipientNoteUsers");
                 });
 
