@@ -1,0 +1,3959 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TermRenderingsList>
+  <TermRendering Id="(בֵּית) בּוֹר" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="(בֵּית) כֶּלֶא, (בֵּית) כְּלוּא" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Abba" Guess="false">
+    <Renderings>puun</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Alexander.1" Guess="false">
+    <Renderings>Alekzanda</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Alexander.2" Guess="false">
+    <Renderings>Alekzanda</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Alexander.3" Guess="false">
+    <Renderings>Alekzanda</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Beelzebul" Guess="false">
+    <Renderings>Beelzebul||Shetan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Christ.1" Guess="false">
+    <Renderings>Kristi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Christ.2.1" Guess="false">
+    <Renderings>Kristi||nKristi||Daa Jesu||Jesu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Christ.2.2" Guess="false">
+    <Renderings>Jesu Kristi||Jesu||Kristi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Christ.2.3" Guess="false">
+    <Renderings>Jesu Kristi||Kristi Jesu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Christ.2.4" Guess="false">
+    <Renderings>Daa Jesu Kristi||Daa funu Jesu Kristi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Emmanuel.1" Guess="false">
+    <Renderings>Immanuwel</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Sabbath.1" Guess="false">
+    <Renderings>parpuus Nookɗi||puus Nookɗi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Sabbath.2" Guess="false">
+    <Renderings>puus nookɗi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Sabbath.3" Guess="false">
+    <Renderings>nookɗi mu puus ɗiipovul</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Sadducee" Guess="false">
+    <Renderings>Saddusi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Samaritan.1" Guess="false">
+    <Renderings>nyem Sameriya mo||ngu Sameriya||Nyem Sameriya||nSameriya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Samaritan.2" Guess="false">
+    <Renderings>mat Sameriya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Samaritan.3" Guess="false">
+    <Renderings>Sameriya||nSameriya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="adultery.1" Guess="false">
+    <Renderings>ngaa</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="advocate.1" Guess="false">
+    <Renderings>Ngukatpo</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="altar.1" Guess="false">
+    <Renderings>peewus mbiizughum</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="altar.2" Guess="false">
+    <Renderings>peewus mbiizughum ɗiiɗu shang-shang</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="angel.1" Guess="false">
+    <Renderings>ngulop||Ngulop||nyemlop||Nyemlop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="anoint.1" Guess="false">
+    <Renderings>pwos||ɗoo||ɗoo mwoor</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="antichrist.1" Guess="false">
+    <Renderings>shaarlek kɨ̀ Jesu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="apostle.1" Guess="false">
+    <Renderings>nyemlop||Ngulop||ngulop||lop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="apostle.2" Guess="false">
+    <Renderings>jeplop||Jeplop||njeplop||laalop||ngulop||ngusatpo</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials>
+      <Denial>44014014</Denial>
+    </Denials>
+  </TermRendering>
+  <TermRendering Id="apostle.3" Guess="false">
+    <Renderings>jeplop||laalop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="authority.1.1" Guess="false">
+    <Renderings>nguɗak||ngulu||kɨrom</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="authority.1.2" Guess="false">
+    <Renderings>ngo ɗiiɗes||mishkagham||nyem ɗiinan-nan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.1" Guess="false">
+    <Renderings>vwang sut||vwang shin||vwang mbii||vwang</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.2" Guess="false">
+    <Renderings>baptisma||Baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.3" Guess="false">
+    <Renderings>baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.4" Guess="false">
+    <Renderings>baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.5" Guess="false">
+    <Renderings>baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.6.1" Guess="false">
+    <Renderings>baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.6.2" Guess="false">
+    <Renderings>baptisma</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="baptize.7" Guess="false">
+    <Renderings>lop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="believe.1.1" Guess="false">
+    <Renderings>cínzeen||ncínzeen||gangkáa</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="believe.1.2.1" Guess="false">
+    <Renderings>cínzeen nni||cínzeen nee||cínzeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="believe.3.1" Guess="false">
+    <Renderings>cínzeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="believe.4.1" Guess="false">
+    <Renderings>kwar cínzeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blaspheme.2" Guess="false">
+    <Renderings>po ɗiibish||fuluppee||po ɗiibuu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blaspheme.3" Guess="false">
+    <Renderings>satpo ɗiibuu||nwangpo||satpo ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blaspheme.5" Guess="false">
+    <Renderings>satpo ɗiibuu||satpo ɗiibish||katpo ɗiibuu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.1" Guess="false">
+    <Renderings>le ɗiiret||ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.2.1" Guess="false">
+    <Renderings>le ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.2.2" Guess="false">
+    <Renderings>le ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.3" Guess="false">
+    <Renderings>pɨlang||le ɗiiret||kwoop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.4.1" Guess="false">
+    <Renderings>le ɗiiret||ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.4.2" Guess="false">
+    <Renderings>kwoop||pɨlang||ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.4.3" Guess="false">
+    <Renderings>ɗiiret||retnyit||kat ɗiiret||Ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.5.1" Guess="false">
+    <Renderings>le ɗiiret</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.5.2" Guess="false">
+    <Renderings>kwoop</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.5.3" Guess="false">
+    <Renderings>ɗiiret||retnyit</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="bless.6" Guess="false">
+    <Renderings>pɨlang</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blood.1" Guess="false">
+    <Renderings>toghom</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blood.2" Guess="false">
+    <Renderings>twa||tu||Ɓongtoghom</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="blood.3" Guess="false">
+    <Renderings>toghom</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.1.1" Guess="false">
+    <Renderings>suk||san||sat||shin||nan||ɓeep||sak</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.1.2" Guess="false">
+    <Renderings>sun||shin</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.1.3" Guess="false">
+    <Renderings>sak||suk||san||shin||sut||sun</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.2" Guess="false">
+    <Renderings>suk||nan||mɨse mu gurum||mɨse</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.3" Guess="false">
+    <Renderings>shin</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.4" Guess="false">
+    <Renderings>kúm||Kúm</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.5" Guess="false">
+    <Renderings>sun||sut</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="body.7" Guess="false">
+    <Renderings>nan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="brother.1.1" Guess="false">
+    <Renderings>Ɗyemnɨghɨnshak||ɗyemnɨghɨn||nɗyemnɨghɨn||ɗyemnɨghɨnshak</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="brother.1.2" Guess="false">
+    <Renderings>ɗyemnɨghɨn||ɗyemnɨghɨnshak||Ɗyemnɨghɨnshak||nɗyemnɨghɨn||Ɗyemnɨghɨn||Jan ɗiimish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="chief_priests.1" Guess="false">
+    <Renderings>pris ɗiinan-nan||pris ɗiinan||Pris ɗiinan-nan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="chief_priests.2" Guess="false">
+    <Renderings>pris ɗiiɗes met jir</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="disciple.1" Guess="false">
+    <Renderings>nyemso||jeplop||njeplop||làa makaranta||Jeplop||nyemlop||Nyemso||Nyemlop||nguso||nyemcínzeen||mat so</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="disciple.2" Guess="false">
+    <Renderings>ngulop||nyemso</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="dragon" Guess="false">
+    <Renderings>kus nwòo ɗiiɗes||Nwòo||nwòo</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="elder.1" Guess="false">
+    <Renderings>nyem ɗiinan||nyemkám Waar||nyemtɨleng</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="elder.2" Guess="false">
+    <Renderings>ɗiinan-nan mu nyemcínzeen||nyemnan mu Ekɨlisya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.1.1" Guess="false">
+    <Renderings>riin ɗiibish||mee riin mo||mee riin</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.1.2" Guess="false">
+    <Renderings>Riin ɗiibish||riin ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.1.3" Guess="false">
+    <Renderings>riin ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.1.4" Guess="false">
+    <Renderings>riin ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.2.1" Guess="false">
+    <Renderings>riin ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="evil_spirit.2.2" Guess="false">
+    <Renderings>riin ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="fast.1" Guess="false">
+    <Renderings>nɗin nse mbiise||nook sese||nook a sese||wet aa neen||wet kɨ neen||nwet kɨ neen||ntong kɨ neen||tong kɨ neen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="fast.2" Guess="false">
+    <Renderings>se mee mbiise kas||neen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="fast.3" Guess="false">
+    <Renderings>tartong kɨ neen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.1.1" Guess="false">
+    <Renderings>putughup</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.1.2.1" Guess="false">
+    <Renderings>putughup||mputughup||Putughup||pan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.1.2.2" Guess="false">
+    <Renderings>putughup||mɨse||pan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.1.3" Guess="false">
+    <Renderings>putughup||ɗyen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.1.4" Guess="false">
+    <Renderings>putughup||mputughup||pan||Riin||ɗyen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.2.1" Guess="false">
+    <Renderings>putughup</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.2.2" Guess="false">
+    <Renderings>putughup</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heart.2.3" Guess="false">
+    <Renderings>putughup</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.1" Guess="false">
+    <Renderings>ɗeng||aɗeng||ɗengnaan||Ɗeng</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.2" Guess="false">
+    <Renderings>ɗengnaan||aɗeng||mparadayis||ɗeng</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.3" Guess="false">
+    <Renderings>ɗengnaan||aɗeng||ɗeng||Ɗengnaan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.4.1" Guess="false">
+    <Renderings>ɗengnaan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.4.2" Guess="false">
+    <Renderings>ɗengnaan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="heaven.4.3" Guess="false">
+    <Renderings>ɗengnaan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="hell.1" Guess="false">
+    <Renderings>aawus ɗiinaat||wus ɗiinaat||aawus||tughun aawus||aawus ɗiiso ngaa-ngaa||haɗes||peeɗi nyemmuut mo ɗi||luwus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="hell.2" Guess="false">
+    <Renderings>tughun aawus||kɨcir||peemúut||pee nyemmuut</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="hell.3" Guess="false">
+    <Renderings>tughun ɗiiɗes ɗiijurung ɗi ba nii peeɗar kas||tughun ɗiijurung||ɗi ba ni kɨ peeɗar kas||Abaddon||Apoliyon||tughun ɗi ba nii peeɗar kas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="hell.4" Guess="false">
+    <Renderings>tughun ɗi ni a mu aawus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="pray.1" Guess="false">
+    <Renderings>cìn aduwa||aduwa||ɗang||ɗang pu Naan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="pray.2" Guess="false">
+    <Renderings>ɗang pu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="priest.1" Guess="false">
+    <Renderings>mpris||pris||Pris</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="priest.3" Guess="false">
+    <Renderings>Pris||pris</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="priest.4" Guess="false">
+    <Renderings>pris</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="priest.5" Guess="false">
+    <Renderings>mishkagham kùm</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.1" Guess="false">
+    <Renderings>ang||cín shin fɨri a koppee funu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.2.1" Guess="false">
+    <Renderings>ang</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.2.2" Guess="false">
+    <Renderings>ɓam||nfwoon mun ɗi nsar kɨ̀ mbii ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.2.3" Guess="false">
+    <Renderings>ang||seet</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.2.4" Guess="false">
+    <Renderings>lappee mukáa furu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="redeem.3" Guess="false">
+    <Renderings>nguɓam</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.1.1" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.1.2" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.1.3" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.1.4" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.1.5" Guess="false">
+    <Renderings>tuwap||ntuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.2.1" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.2.2" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.2.3" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="repent.1.2.4" Guess="false">
+    <Renderings>tuwap</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="sin.1.1" Guess="false">
+    <Renderings>hikbish||shikbish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="sin.1.2" Guess="false">
+    <Renderings>shikbish||nyemɓutbish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="tabernacle.1" Guess="false">
+    <Renderings>bìt||mbìt</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="temple.1" Guess="false">
+    <Renderings>Lu kɨ̀ Naan ɗiiɗes</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="temple.5" Guess="false">
+    <Renderings>Lu kɨ̀ Naan ɗiiɗes</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="truth.1.1" Guess="false">
+    <Renderings>sat zeen||sat azeen||po ɗi mo azeen-nzeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="truth.3.1" Guess="false">
+    <Renderings>Azeen-nzeen||Azeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="truth.3.2" Guess="false">
+    <Renderings>azeen-nzeen||Azeen-nzeen</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="unclean.1.2" Guess="false">
+    <Renderings>ɗiiɗang</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="unclean.1.3" Guess="false">
+    <Renderings>mbii ɗiibish</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="world.1.1" Guess="false">
+    <Renderings>yil ni</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="worship.1" Guess="false">
+    <Renderings>seyil</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="worship.2" Guess="false">
+    <Renderings>nseyil nDaa||seyil nNaan||nguseyil Naan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="zealot.1" Guess="false">
+    <Renderings>Zeelot||fes le putughup</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="zealot.2" Guess="false">
+    <Renderings>fes le putughup||zughur||kyaghar</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ααρων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβαδιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβαταζα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβελ (DC)" Guess="false">
+    <Renderings>Abel</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβεσσαλωμ (DC)" Guess="false">
+    <Renderings>Absalom</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβιρων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβισουε (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβρααμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβραμιαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αβρωνα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αγαβα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αγαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αγγαβα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αγγαιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αγια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδαμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδασα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδδαιον (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδδαιον, Αδδαιω, Εδδι, Ηδαις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδδαιω (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδδι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδδους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδιδα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδινος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδουηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδωνικαμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αδωρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αερμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζαηλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζαρια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζαριας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζαριας, Ἀζαρίας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζητας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αζουρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αθουρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αθουριας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αιγγαδοις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αισωρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακαταν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακκαρων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακκως (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακουβ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακουδ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακουφ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ακραβαττήνη (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αλεμα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αλεμοι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμάνιτος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμαδαθος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμβακουμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμιναδαβ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμμανίτης (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμμανῖτις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμμαους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμμιδαιοι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αμως (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αναηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αναν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανανιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανανιηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανανιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανασιβ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αννα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανναν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αννιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αννιουθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αννουνος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ανως (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Απολλώνιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Απφους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αραρατ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρβαττοις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρβηλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρεε (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αριφος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αριωχ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρκεσαιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρομ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρουφαιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρσαιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αρφαξαδ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαβιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαδιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαηλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασανα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασαφ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασβασαρεθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασγαδ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασγαθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασεβηβιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασεβιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασηρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασιβιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασιδαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασιηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασιφα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασμοδαιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασμοδαυς (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασμοδαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασομ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασουρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασσαλιμωθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασσαφιωθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασσηρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασσουρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αστιν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασυηρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασφαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασφαρασος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ασωρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αταρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατεργάτιον (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατηρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατητα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατθαριας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατιφα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ατταρατης (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αττους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αυαραν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αυγιαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αυρανος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αυταιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αφαιρεμα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αφερρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχίκαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχίκαρος, Αχικαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχιαχαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχιβα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχικαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχικαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχιτωβ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχιχαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχιωρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αχραθαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αψαλωμος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰγύπτιος" Guess="false">
+    <Renderings>Ijip</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰγύπτιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰθίοψ" Guess="false">
+    <Renderings>Ifiyopiya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰθιοπία (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰνέας" Guess="false">
+    <Renderings>Aniyas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἰνών" Guess="false">
+    <Renderings>Anon</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἴγυπτος" Guess="false">
+    <Renderings>Ijip</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αἴγυπτος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Αὐγοῦστος" Guess="false">
+    <Renderings>Agustus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βάαλ" Guess="false">
+    <Renderings>Baal</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βάαλ" Date="2015-10-19T16:02:03.4132105-04:00">
+        <Before>mBaal</Before>
+        <After>Baal</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βάννας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βάρτακος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βέροια" Guess="false">
+    <Renderings>Beriya</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βέροια" Date="2015-10-19T15:59:31.7313843-04:00">
+        <Before>mBeriya</Before>
+        <After>Beriya</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βέροια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βααλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βααλσαμος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαανα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαανι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβυλωνία (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβυλωνίος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβυλών" Guess="false">
+    <Renderings>Babilon</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβυλών (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαβυλώνιος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαγο (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαγοι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαγώας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαζαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθβασι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθζαχαρια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθλωμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθσαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθσουρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιθωρων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιλμαιν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτασμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτηρους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτολιω (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτομασθαιμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτομεσθαιμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαιτυλουα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βακήνωρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βακχίδης (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βακχουρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαλάκ" Guess="false">
+    <Renderings>Balak</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βαλάκ" Date="2015-10-19T16:01:49.8396371-04:00">
+        <Before>mBalak</Before>
+        <After>Balak</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαλαάμ" Guess="false">
+    <Renderings>Balaam</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαλαμων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαλνουος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαλτασαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαναιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βανι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βανναιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαννους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαράκ" Guess="false">
+    <Renderings>Barak</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαραββᾶς" Guess="false">
+    <Renderings>Barabbas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαραχίας" Guess="false">
+    <Renderings>Barakiya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρεα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρθολομαῖος" Guess="false">
+    <Renderings>Bartolomi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαριησοῦς" Guess="false">
+    <Renderings>Barjesu</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαριωνᾶ" Guess="true">
+    <Renderings>mPita</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρναβᾶς" Guess="false">
+    <Renderings>Barnabas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρνη (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρουχ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρσαββᾶς" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρσαββᾶς-1" Guess="false">
+    <Renderings>Barsabbas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρσαββᾶς-2" Guess="false">
+    <Renderings>Barsabbas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρτιμαῖος" Guess="false">
+    <Renderings>Bartimawus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρχους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βαρωδις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βασαλωθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βασθαι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βασκαμα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βασσαι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βατανή (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεέλτεθμος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεελζεβούλ" Guess="false">
+    <Renderings>Beelzebul</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεελσαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεελτέεμος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεκτιλεθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βελβαιμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βελιάρ" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βελιαρ" Guess="false">
+    <Renderings>Shetan</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βενιαμίν" Guess="false">
+    <Renderings>Benjami</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βενιαμιν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βερεα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βερνίκη" Guess="false">
+    <Renderings>Barnis</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεροιαῖος" Guess="false">
+    <Renderings>Beriya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεσκασπασμυς (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βεσλεμος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηβαι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηβαι-1 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηβαι-2 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθανία" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθανία-1" Guess="false">
+    <Renderings>Betani</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βηθανία-1" Date="2015-10-19T15:59:22.3289960-04:00">
+        <Before>mBetani</Before>
+        <After>Betani</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθανία-2" Guess="false">
+    <Renderings>Betani</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βηθανία-2" Date="2015-10-19T15:59:13.7431808-04:00">
+        <Before>mBetani</Before>
+        <After>Betani</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθδαγων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθζαθά" Guess="false">
+    <Renderings>Betseda</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθζαιθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθλέεμ" Guess="false">
+    <Renderings>Betlehem</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθσαϊδά" Guess="false">
+    <Renderings>Betseda</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηθφαγή" Guess="true">
+    <Renderings>mBetfaji</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βην-ιωναθου (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βηροτ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βιθυνία" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βλάστος" Guess="false">
+    <Renderings>Blastus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βοανηργές" Guess="true">
+    <Renderings>Jemis</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βοκκα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βορολείας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βοσορ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βοσορρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βοσόρ" Guess="false">
+    <Renderings>Beyor</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Βοσόρ" Date="2015-10-19T15:53:16.0835678-04:00">
+        <Before>Balaam</Before>
+        <After>Beyor</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βουγαθαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βουγαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βωραζη (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βόες" Guess="false">
+    <Renderings>Bowas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Βῆλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάδ" Guess="false">
+    <Renderings>Gad</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάζα" Guess="false">
+    <Renderings>Gaza</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γάζα" Date="2015-10-19T15:54:17.9884056-04:00">
+        <Before>nGaza</Before>
+        <After>Gaza</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάζα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάλγαλα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάϊος" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάϊος-1" Guess="false">
+    <Renderings>Gayus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάϊος-2" Guess="false">
+    <Renderings>Gayus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάϊος-3" Guess="false">
+    <Renderings>Gayus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γάϊος-4" Guess="false">
+    <Renderings>Gayus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβάηλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβάηλος, Γαβαήλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβαήλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβαήλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβαηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβαθα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαββαθά" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαββαθα" Guess="true">
+    <Renderings>Gabbafa</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαββης (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβριήλ" Guess="false">
+    <Renderings>Gebɨrel</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαβρια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαδαρηνός" Guess="false">
+    <Renderings>Gadarin</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαδδι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζαρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζαρα, Γαζηρων, Γαζηρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζηρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζηρα-1 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζηρα-2 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαζηρων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαιβαι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλάται (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλάτης" Guess="false">
+    <Renderings>Galati</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλααδ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλααδῖτις (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλατία" Guess="false">
+    <Renderings>Galati</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γαλατία" Date="2015-10-19T15:54:07.7700392-04:00">
+        <Before>nGalati</Before>
+        <After>Galati</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλατικός" Guess="false">
+    <Renderings>Galati</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γαλατικός" Date="2015-10-19T15:54:13.2934234-04:00">
+        <Before>nGalati</Before>
+        <After>Galati</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλιλαία" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλιλαία (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλιλαία-1" Guess="false">
+    <Renderings>Galili</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γαλιλαία-1" Date="2015-07-22T18:39:35.1748621-04:00">
+        <Before>nGalili</Before>
+        <After>Galili</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλιλαία-2" Guess="false">
+    <Renderings>Galili</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γαλιλαία-2" Date="2015-07-22T18:40:26.1286939-04:00">
+        <Before>nGalili</Before>
+        <After>Galili</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλιλαῖος" Guess="false">
+    <Renderings>Galili</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαλλίων" Guess="false">
+    <Renderings>Galiyo</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαμαλιήλ" Guess="false">
+    <Renderings>Gamaniyel</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαμηλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαριζιν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γαρσομος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεδδουρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεδεων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεδεών" Guess="false">
+    <Renderings>Gidiyon</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεθσημανί" Guess="false">
+    <Renderings>Getsamani</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γενναίος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεννησαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεννησαρέτ" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεννησαρέτ-1" Guess="false">
+    <Renderings>Genesaret</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γεννησαρέτ-1" Date="2015-10-19T15:55:23.2350460-04:00">
+        <Before>nGenesaret</Before>
+        <After>Genesaret</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεννησαρέτ-2" Guess="false">
+    <Renderings>Genesaret</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Γεννησαρέτ-2" Date="2015-10-19T15:55:18.2403966-04:00">
+        <Before>nGenesaret</Before>
+        <After>Genesaret</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γερασηνός" Guess="false">
+    <Renderings>nGarasin</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεργεσαῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γερρηνοί (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γεσεμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γηων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γοθολίας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γοθονιηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γολγοθᾶ" Guess="false">
+    <Renderings>Golgofa</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γολιαθ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γοργίας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γόμορρα" Guess="false">
+    <Renderings>Gomora</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γόρτυνα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Γώγ" Guess="false">
+    <Renderings>Gog</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δάμαρις" Guess="true">
+    <Renderings>Namaris</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δάφνη (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δέρβη" Guess="false">
+    <Renderings>Deebi</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δέρβη" Date="2015-10-19T15:57:00.0275469-04:00">
+        <Before>nDeebi</Before>
+        <After>Deebi</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δίδυμος" Guess="false">
+    <Renderings>Tomas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαγων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαθαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαθεμα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαισαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαλαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαλμανουθά" Guess="true">
+    <Renderings>nDalmanufa</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαλματία" Guess="false">
+    <Renderings>nDalmatiya</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαμασκηνή (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαμασκηνός" Guess="false">
+    <Renderings>Damaskus</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δαμασκηνός" Date="2015-10-19T15:56:29.3168736-04:00">
+        <Before>nDamaskus</Before>
+        <After>Damaskus</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαμασκός" Guess="false">
+    <Renderings>Damaskus</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δαμασκός" Date="2015-10-19T15:56:34.9938440-04:00">
+        <Before>nDamaskus</Before>
+        <After>Damaskus</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαμασκός (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαν (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δανιήλ" Guess="false">
+    <Renderings>Daniyel</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δανιηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαρεῖον (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαρεῖος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαυίδ" Guess="false">
+    <Renderings>Devid</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δαυιδ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δεββωρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δεκάπολις" Guess="false">
+    <Renderings>Dikapolis</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δεκάπολις" Date="2015-10-19T15:56:48.0729786-04:00">
+        <Before>nDikapolis</Before>
+        <After>Dikapolis</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δελφων (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δερβαῖος" Guess="false">
+    <Renderings>Deebi</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δεσσαος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημήτριος" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημήτριος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημήτριος-1" Guess="false">
+    <Renderings>Demetriyus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημήτριος-2" Guess="false">
+    <Renderings>Dimetriyus</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δημήτριος-2" Date="2015-10-19T15:57:25.0136799-04:00">
+        <Before>Demetriyus</Before>
+        <After>Dimetriyus</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημοφών (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δημᾶς" Guess="false">
+    <Renderings>Dimas</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Διονύσια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Διονύσιος" Guess="false">
+    <Renderings>Diyonisiyus</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Διοτρέφης" Guess="false">
+    <Renderings>Diyoturifis</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Διόνυσος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Διόσκουροι" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Διόσκουροι" Date="2015-10-19T15:58:01.0639920-04:00">
+        <Before>Alekzandriya</Before>
+        <After />
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δορκάς" Guess="false">
+    <Renderings>Dokas||Tapita</Renderings>
+    <Glossary />
+    <Changes>
+      <Change UserName="Milt Jones" TermId="Δορκάς" Date="2015-10-19T16:06:27.2611949-04:00">
+        <Before>Tapita</Before>
+        <After>Dokas</After>
+      </Change>
+      <Change UserName="Milt Jones" TermId="Δορκάς" Date="2015-10-19T16:06:45.6973442-04:00">
+        <Before>Dokas</Before>
+        <After>Tapita, Dokas</After>
+      </Change>
+    </Changes>
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δορυμένης (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δοσίθεος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δρίμυλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δρούσιλλα" Guess="false">
+    <Renderings>Drusila</Renderings>
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δωθαϊμ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δωθαϊμ, Δωταια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δωκ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δωρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δωταια (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δύστρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Δῆλος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εβραΐς (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εγρεβηλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εδδι (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εδδινους (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εδνα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζεκίας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζεκιας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζεκιας-1 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζεκιας-2 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζριλ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Εζωρα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελασα (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεάζαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ-1 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ-2 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ-3 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ-4 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρ-5 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος-1 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος-2 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος-3 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος-4 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεαζαρος-5 (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελεισαιε (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελιαβ (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+  <TermRendering Id="Ελιαδας (DC)" Guess="false">
+    <Renderings />
+    <Glossary />
+    <Changes />
+    <Notes />
+    <Denials />
+  </TermRendering>
+</TermRenderingsList>

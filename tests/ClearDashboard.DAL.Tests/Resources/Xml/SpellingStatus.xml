@@ -1,0 +1,850 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SpellingStatus>
+  <Status Word="a" State="R" />
+  <Status Word="aabimelek" State="W" />
+  <Status Word="act" State="R">
+    <SpecificCase>ACT</SpecificCase>
+  </Status>
+  <Status Word="acanɗel" State="W" />
+  <Status Word="acin" State="W" />
+  <Status Word="amo" State="R">
+    <SpecificCase>AMO</SpecificCase>
+  </Status>
+  <Status Word="anaan" State="W" />
+  <Status Word="aa" State="R" />
+  <Status Word="aapo" State="R" />
+  <Status Word="aabib" State="W" />
+  <Status Word="aabram" State="W" />
+  <Status Word="aak" State="R" />
+  <Status Word="aanas" State="R">
+    <SpecificCase>Aanas</SpecificCase>
+  </Status>
+  <Status Word="aas" State="R" />
+  <Status Word="aasi" State="R" />
+  <Status Word="aawus" State="R" />
+  <Status Word="abaddon" State="R">
+    <SpecificCase>Abaddon</SpecificCase>
+  </Status>
+  <Status Word="abafaras" State="R">
+    <SpecificCase>Abafaras</SpecificCase>
+  </Status>
+  <Status Word="abakfa" State="R">
+    <SpecificCase>Abakfa</SpecificCase>
+  </Status>
+  <Status Word="abana" State="R">
+    <SpecificCase>Abana</SpecificCase>
+  </Status>
+  <Status Word="abarim" State="R">
+    <SpecificCase>Abarim</SpecificCase>
+  </Status>
+  <Status Word="abda" State="R">
+    <SpecificCase>Abda</SpecificCase>
+  </Status>
+  <Status Word="abdan" State="R">
+    <SpecificCase>Abdan</SpecificCase>
+  </Status>
+  <Status Word="abdi" State="R">
+    <SpecificCase>Abdi</SpecificCase>
+  </Status>
+  <Status Word="abdiyel" State="R">
+    <SpecificCase>Abdiyel</SpecificCase>
+  </Status>
+  <Status Word="abdon" State="R" />
+  <Status Word="abel" State="R">
+    <SpecificCase>Abel</SpecificCase>
+  </Status>
+  <Status Word="abet" State="R" />
+  <Status Word="abetnego" State="R">
+    <SpecificCase>Abetnego</SpecificCase>
+  </Status>
+  <Status Word="abi" State="R">
+    <SpecificCase>Abi</SpecificCase>
+  </Status>
+  <Status Word="abiasaf" State="R">
+    <SpecificCase>Abiasaf</SpecificCase>
+  </Status>
+  <Status Word="abib" State="R">
+    <SpecificCase>Abib</SpecificCase>
+  </Status>
+  <Status Word="abida" State="R">
+    <SpecificCase>Abida</SpecificCase>
+  </Status>
+  <Status Word="abidan" State="R">
+    <SpecificCase>Abidan</SpecificCase>
+  </Status>
+  <Status Word="abiel" State="R">
+    <SpecificCase>Abiel</SpecificCase>
+  </Status>
+  <Status Word="abieza" State="R">
+    <SpecificCase>Abieza</SpecificCase>
+  </Status>
+  <Status Word="abigiel" State="W" />
+  <Status Word="abigyel" State="R">
+    <SpecificCase>Abigyel</SpecificCase>
+  </Status>
+  <Status Word="abihail" State="W" />
+  <Status Word="abihayil" State="R">
+    <SpecificCase>Abihayil</SpecificCase>
+  </Status>
+  <Status Word="abihu" State="R">
+    <SpecificCase>Abihu</SpecificCase>
+  </Status>
+  <Status Word="abihud" State="R">
+    <SpecificCase>Abihud</SpecificCase>
+  </Status>
+  <Status Word="abija" State="R">
+    <SpecificCase>Abija</SpecificCase>
+  </Status>
+  <Status Word="abijah" State="R">
+    <SpecificCase>Abijah</SpecificCase>
+  </Status>
+  <Status Word="abilene" State="R">
+    <SpecificCase>Abilene</SpecificCase>
+  </Status>
+  <Status Word="abimayel" State="R">
+    <SpecificCase>Abimayel</SpecificCase>
+  </Status>
+  <Status Word="abimelek" State="R">
+    <SpecificCase>Abimelek</SpecificCase>
+  </Status>
+  <Status Word="abimelk" State="W" />
+  <Status Word="abinada" State="W" />
+  <Status Word="abinadab" State="R">
+    <SpecificCase>Abinadab</SpecificCase>
+  </Status>
+  <Status Word="abinowam" State="R">
+    <SpecificCase>Abinowam</SpecificCase>
+  </Status>
+  <Status Word="abiram" State="R">
+    <SpecificCase>Abiram</SpecificCase>
+  </Status>
+  <Status Word="abishag" State="R">
+    <SpecificCase>Abishag</SpecificCase>
+  </Status>
+  <Status Word="abishai" State="R">
+    <SpecificCase>Abishai</SpecificCase>
+  </Status>
+  <Status Word="abishur" State="R">
+    <SpecificCase>Abishur</SpecificCase>
+  </Status>
+  <Status Word="abishuwa" State="R">
+    <SpecificCase>Abishuwa</SpecificCase>
+  </Status>
+  <Status Word="abital" State="R">
+    <SpecificCase>Abital</SpecificCase>
+  </Status>
+  <Status Word="abitub" State="R">
+    <SpecificCase>Abitub</SpecificCase>
+  </Status>
+  <Status Word="abiyafar" State="R">
+    <SpecificCase>Abiyafar</SpecificCase>
+  </Status>
+  <Status Word="abiyala" State="R">
+    <SpecificCase>Abiyala</SpecificCase>
+  </Status>
+  <Status Word="abiyata" State="R">
+    <SpecificCase>Abiyata</SpecificCase>
+  </Status>
+  <Status Word="abiyatar" State="R">
+    <SpecificCase>Abiyatar</SpecificCase>
+  </Status>
+  <Status Word="abiyel" State="R">
+    <SpecificCase>Abiyel</SpecificCase>
+  </Status>
+  <Status Word="abiyezer" State="R">
+    <SpecificCase>Abiyezer</SpecificCase>
+  </Status>
+  <Status Word="abizer" State="R">
+    <SpecificCase>Abizer</SpecificCase>
+  </Status>
+  <Status Word="abizɨrayit" State="R">
+    <SpecificCase>Abizɨrayit</SpecificCase>
+  </Status>
+  <Status Word="abiɗan" State="W" />
+  <Status Word="abna" State="R">
+    <SpecificCase>Abna</SpecificCase>
+  </Status>
+  <Status Word="abraham" State="R">
+    <SpecificCase>Abraham</SpecificCase>
+  </Status>
+  <Status Word="abram" State="R">
+    <SpecificCase>Abram</SpecificCase>
+  </Status>
+  <Status Word="absalom" State="R">
+    <SpecificCase>Absalom</SpecificCase>
+  </Status>
+  <Status Word="absalon" State="R">
+    <SpecificCase>Absalon</SpecificCase>
+  </Status>
+  <Status Word="absolom" State="R">
+    <SpecificCase>Absolom</SpecificCase>
+  </Status>
+  <Status Word="abwon" State="W">
+    <Correction>aɓwoon</Correction>
+  </Status>
+  <Status Word="abwoon" State="W" />
+  <Status Word="achzib" State="R">
+    <SpecificCase>Achzib</SpecificCase>
+  </Status>
+  <Status Word="ad" State="W" />
+  <Status Word="adada" State="W" />
+  <Status Word="adah" State="R">
+    <SpecificCase>Adah</SpecificCase>
+  </Status>
+  <Status Word="adaiya" State="R">
+    <SpecificCase>Adaiya</SpecificCase>
+  </Status>
+  <Status Word="adaliya" State="R">
+    <SpecificCase>Adaliya</SpecificCase>
+  </Status>
+  <Status Word="adam" State="R">
+    <SpecificCase>Adam</SpecificCase>
+  </Status>
+  <Status Word="adama" State="R">
+    <SpecificCase>Adama</SpecificCase>
+  </Status>
+  <Status Word="adamu" State="W" />
+  <Status Word="adan" State="R">
+    <SpecificCase>Adan</SpecificCase>
+  </Status>
+  <Status Word="adar" State="R" />
+  <Status Word="adaya" State="R">
+    <SpecificCase>Adaya</SpecificCase>
+  </Status>
+  <Status Word="adbeel" State="R">
+    <SpecificCase>Adbeel</SpecificCase>
+  </Status>
+  <Status Word="addon" State="R">
+    <SpecificCase>Addon</SpecificCase>
+  </Status>
+  <Status Word="addulam" State="W" />
+  <Status Word="adeng" State="R" />
+  <Status Word="adibauha" State="W" />
+  <Status Word="adin" State="R">
+    <SpecificCase>Adin</SpecificCase>
+  </Status>
+  <Status Word="adina" State="R">
+    <SpecificCase>Adina</SpecificCase>
+  </Status>
+  <Status Word="adithaim" State="W" />
+  <Status Word="adiyel" State="R">
+    <SpecificCase>Adiyel</SpecificCase>
+  </Status>
+  <Status Word="adlai" State="R">
+    <SpecificCase>Adlai</SpecificCase>
+  </Status>
+  <Status Word="adma" State="R">
+    <SpecificCase>Adma</SpecificCase>
+  </Status>
+  <Status Word="admma" State="W" />
+  <Status Word="adna" State="R">
+    <SpecificCase>Adna</SpecificCase>
+  </Status>
+  <Status Word="adomniram" State="W" />
+  <Status Word="adonaija" State="R" />
+  <Status Word="adoni" State="R">
+    <SpecificCase>Adoni</SpecificCase>
+  </Status>
+  <Status Word="adonibezek" State="R">
+    <SpecificCase>Adonibezek</SpecificCase>
+  </Status>
+  <Status Word="adonija" State="R">
+    <SpecificCase>Adonija</SpecificCase>
+  </Status>
+  <Status Word="adonikam" State="R">
+    <SpecificCase>Adonikam</SpecificCase>
+  </Status>
+  <Status Word="adoniram" State="R">
+    <SpecificCase>Adoniram</SpecificCase>
+  </Status>
+  <Status Word="adonizedek" State="R">
+    <SpecificCase>Adonizedek</SpecificCase>
+  </Status>
+  <Status Word="adramitiyum" State="R">
+    <SpecificCase>Adramitiyum</SpecificCase>
+  </Status>
+  <Status Word="adriel" State="W" />
+  <Status Word="adriya" State="R">
+    <SpecificCase>Adriya</SpecificCase>
+  </Status>
+  <Status Word="adriyel" State="R">
+    <SpecificCase>Adriyel</SpecificCase>
+  </Status>
+  <Status Word="adulam" State="R">
+    <SpecificCase>Adulam</SpecificCase>
+  </Status>
+  <Status Word="adullam" State="R">
+    <SpecificCase>Adullam</SpecificCase>
+  </Status>
+  <Status Word="aduwa" State="R" />
+  <Status Word="adwa" State="W" />
+  <Status Word="afek" State="R">
+    <SpecificCase>Afek</SpecificCase>
+  </Status>
+  <Status Word="afens" State="R">
+    <SpecificCase>Afens</SpecificCase>
+  </Status>
+  <Status Word="afiah" State="R">
+    <SpecificCase>Afiah</SpecificCase>
+  </Status>
+  <Status Word="afika" State="R">
+    <SpecificCase>Afika</SpecificCase>
+  </Status>
+  <Status Word="afisus" State="R">
+    <SpecificCase>Afisus</SpecificCase>
+  </Status>
+  <Status Word="agabus" State="R">
+    <SpecificCase>Agabus</SpecificCase>
+  </Status>
+  <Status Word="agag" State="R">
+    <SpecificCase>Agag</SpecificCase>
+  </Status>
+  <Status Word="agak" State="R">
+    <SpecificCase>Agak</SpecificCase>
+  </Status>
+  <Status Word="aghas" State="R" />
+  <Status Word="agrippa" State="R">
+    <SpecificCase>Agrippa</SpecificCase>
+  </Status>
+  <Status Word="agu" State="W" />
+  <Status Word="agur" State="R">
+    <SpecificCase>Agur</SpecificCase>
+  </Status>
+  <Status Word="agustus" State="R">
+    <SpecificCase>Agustus</SpecificCase>
+  </Status>
+  <Status Word="ahab" State="R">
+    <SpecificCase>Ahab</SpecificCase>
+  </Status>
+  <Status Word="ahara" State="R">
+    <SpecificCase>Ahara</SpecificCase>
+  </Status>
+  <Status Word="ahas" State="R">
+    <SpecificCase>Ahas</SpecificCase>
+  </Status>
+  <Status Word="ahasahe" State="W" />
+  <Status Word="ahasoru" State="W" />
+  <Status Word="ahasorus" State="R">
+    <SpecificCase>Ahasorus</SpecificCase>
+  </Status>
+  <Status Word="ahava" State="R">
+    <SpecificCase>Ahava</SpecificCase>
+  </Status>
+  <Status Word="ahaz" State="R">
+    <SpecificCase>Ahaz</SpecificCase>
+  </Status>
+  <Status Word="ahaziya" State="R">
+    <SpecificCase>Ahaziya</SpecificCase>
+  </Status>
+  <Status Word="ahi" State="R">
+    <SpecificCase>Ahi</SpecificCase>
+  </Status>
+  <Status Word="ahija" State="R">
+    <SpecificCase>Ahija</SpecificCase>
+  </Status>
+  <Status Word="ahikam" State="R">
+    <SpecificCase>Ahikam</SpecificCase>
+  </Status>
+  <Status Word="ahilud" State="R">
+    <SpecificCase>Ahilud</SpecificCase>
+  </Status>
+  <Status Word="ahimaas" State="R">
+    <SpecificCase>Ahimaas</SpecificCase>
+  </Status>
+  <Status Word="ahiman" State="R">
+    <SpecificCase>Ahiman</SpecificCase>
+  </Status>
+  <Status Word="ahimelek" State="R">
+    <SpecificCase>Ahimelek</SpecificCase>
+  </Status>
+  <Status Word="ahimoam" State="W" />
+  <Status Word="ahimot" State="R">
+    <SpecificCase>Ahimot</SpecificCase>
+  </Status>
+  <Status Word="ahinadab" State="R">
+    <SpecificCase>Ahinadab</SpecificCase>
+  </Status>
+  <Status Word="ahinoam" State="R">
+    <SpecificCase>Ahinoam</SpecificCase>
+  </Status>
+  <Status Word="ahinowam" State="R">
+    <SpecificCase>Ahinowam</SpecificCase>
+  </Status>
+  <Status Word="ahira" State="R">
+    <SpecificCase>Ahira</SpecificCase>
+  </Status>
+  <Status Word="ahisamach" State="W" />
+  <Status Word="ahisamak" State="R">
+    <SpecificCase>Ahisamak</SpecificCase>
+  </Status>
+  <Status Word="ahitofel" State="R">
+    <SpecificCase>Ahitofel</SpecificCase>
+  </Status>
+  <Status Word="ahitop" State="R">
+    <SpecificCase>Ahitop</SpecificCase>
+  </Status>
+  <Status Word="ahitophel" State="W" />
+  <Status Word="ahitub" State="R">
+    <SpecificCase>Ahitub</SpecificCase>
+  </Status>
+  <Status Word="ahiyo" State="R">
+    <SpecificCase>Ahiyo</SpecificCase>
+  </Status>
+  <Status Word="ahlai" State="R">
+    <SpecificCase>Ahlai</SpecificCase>
+  </Status>
+  <Status Word="aho" State="R">
+    <SpecificCase>Aho</SpecificCase>
+  </Status>
+  <Status Word="ahoh" State="R">
+    <SpecificCase>Ahoh</SpecificCase>
+  </Status>
+  <Status Word="ai" State="R">
+    <SpecificCase>Ai</SpecificCase>
+  </Status>
+  <Status Word="aijalon" State="R">
+    <SpecificCase>Aijalon</SpecificCase>
+  </Status>
+  <Status Word="aizaka" State="R">
+    <SpecificCase>Aizaka</SpecificCase>
+  </Status>
+  <Status Word="aizaya" State="R">
+    <SpecificCase>Aizaya</SpecificCase>
+  </Status>
+  <Status Word="aizik" State="R">
+    <SpecificCase>Aizik</SpecificCase>
+  </Status>
+  <Status Word="akaikus" State="R">
+    <SpecificCase>Akaikus</SpecificCase>
+  </Status>
+  <Status Word="akan" State="R">
+    <SpecificCase>Akan</SpecificCase>
+  </Status>
+  <Status Word="akaya" State="R">
+    <SpecificCase>Akaya</SpecificCase>
+  </Status>
+  <Status Word="akbor" State="R">
+    <SpecificCase>Akbor</SpecificCase>
+  </Status>
+  <Status Word="akeldama" State="R">
+    <SpecificCase>Akeldama</SpecificCase>
+  </Status>
+  <Status Word="akikyeen" State="W" />
+  <Status Word="akim" State="R">
+    <SpecificCase>Akim</SpecificCase>
+  </Status>
+  <Status Word="akish" State="R">
+    <SpecificCase>Akish</SpecificCase>
+  </Status>
+  <Status Word="akiyeen" State="R" />
+  <Status Word="akkub" State="R">
+    <SpecificCase>Akkub</SpecificCase>
+  </Status>
+  <Status Word="akkup" State="R">
+    <SpecificCase>Akkup</SpecificCase>
+  </Status>
+  <Status Word="akmalek" State="W" />
+  <Status Word="akmmihud" State="W" />
+  <Status Word="ako" State="R">
+    <SpecificCase>Ako</SpecificCase>
+  </Status>
+  <Status Word="akop" State="R">
+    <SpecificCase>Akop</SpecificCase>
+  </Status>
+  <Status Word="akor" State="R">
+    <SpecificCase>Akor</SpecificCase>
+  </Status>
+  <Status Word="akrabbim" State="R" />
+  <Status Word="akrabin" State="R">
+    <SpecificCase>Akrabin</SpecificCase>
+  </Status>
+  <Status Word="aksa" State="R">
+    <SpecificCase>Aksa</SpecificCase>
+  </Status>
+  <Status Word="akshaf" State="R">
+    <SpecificCase>Akshaf</SpecificCase>
+  </Status>
+  <Status Word="aku" State="R" />
+  <Status Word="akudang" State="W" />
+  <Status Word="akup" State="R">
+    <SpecificCase>Akup</SpecificCase>
+  </Status>
+  <Status Word="akuɗang" State="R" />
+  <Status Word="akwila" State="R">
+    <SpecificCase>Akwila</SpecificCase>
+  </Status>
+  <Status Word="akzip" State="R">
+    <SpecificCase>Akzip</SpecificCase>
+  </Status>
+  <Status Word="alama" State="R">
+    <SpecificCase>Alama</SpecificCase>
+  </Status>
+  <Status Word="alamo" State="W" />
+  <Status Word="alap" State="R">
+    <SpecificCase>Alap</SpecificCase>
+  </Status>
+  <Status Word="alekzanda" State="R">
+    <SpecificCase>Alekzanda</SpecificCase>
+  </Status>
+  <Status Word="alekzandriya" State="R">
+    <SpecificCase>Alekzandriya</SpecificCase>
+  </Status>
+  <Status Word="alemet" State="R">
+    <SpecificCase>Alemet</SpecificCase>
+  </Status>
+  <Status Word="alfa" State="R">
+    <SpecificCase>Alfa</SpecificCase>
+  </Status>
+  <Status Word="alfiyas" State="R">
+    <SpecificCase>Alfiyas</SpecificCase>
+  </Status>
+  <Status Word="allam" State="W" />
+  <Status Word="almoda" State="R">
+    <SpecificCase>Almoda</SpecificCase>
+  </Status>
+  <Status Word="almon" State="R" />
+  <Status Word="alva" State="R">
+    <SpecificCase>Alva</SpecificCase>
+  </Status>
+  <Status Word="alvan" State="R">
+    <SpecificCase>Alvan</SpecificCase>
+  </Status>
+  <Status Word="am" State="R" />
+  <Status Word="ama" State="W" />
+  <Status Word="amad" State="R">
+    <SpecificCase>Amad</SpecificCase>
+  </Status>
+  <Status Word="amalek" State="R">
+    <SpecificCase>Amalek</SpecificCase>
+  </Status>
+  <Status Word="amariya" State="R">
+    <SpecificCase>Amariya</SpecificCase>
+  </Status>
+  <Status Word="amasa" State="R">
+    <SpecificCase>Amasa</SpecificCase>
+  </Status>
+  <Status Word="amasai" State="R">
+    <SpecificCase>Amasai</SpecificCase>
+  </Status>
+  <Status Word="amaziya" State="R">
+    <SpecificCase>Amaziya</SpecificCase>
+  </Status>
+  <Status Word="amazziya" State="R">
+    <SpecificCase>Amazziya</SpecificCase>
+  </Status>
+  <Status Word="amfiliyatus" State="W" />
+  <Status Word="amfipolis" State="R">
+    <SpecificCase>Amfipolis</SpecificCase>
+  </Status>
+  <Status Word="amihud" State="R">
+    <SpecificCase>Amihud</SpecificCase>
+  </Status>
+  <Status Word="amin" State="R" />
+  <Status Word="aminadab" State="R">
+    <SpecificCase>Aminadab</SpecificCase>
+  </Status>
+  <Status Word="amishadai" State="R">
+    <SpecificCase>Amishadai</SpecificCase>
+  </Status>
+  <Status Word="amitai" State="R">
+    <SpecificCase>Amitai</SpecificCase>
+  </Status>
+  <Status Word="amittai" State="W" />
+  <Status Word="amma" State="R" />
+  <Status Word="ammah" State="R">
+    <SpecificCase>Ammah</SpecificCase>
+  </Status>
+  <Status Word="ammak" State="W" />
+  <Status Word="amman" State="W" />
+  <Status Word="ammihud" State="R">
+    <SpecificCase>Ammihud</SpecificCase>
+  </Status>
+  <Status Word="amminadab" State="R">
+    <SpecificCase>Amminadab</SpecificCase>
+  </Status>
+  <Status Word="amminaɗab" State="W" />
+  <Status Word="ammishadai" State="R">
+    <SpecificCase>Ammishadai</SpecificCase>
+  </Status>
+  <Status Word="ammishaddai" State="W" />
+  <Status Word="ammiyel" State="R">
+    <SpecificCase>Ammiyel</SpecificCase>
+  </Status>
+  <Status Word="ammnon" State="W" />
+  <Status Word="ammo" State="W" />
+  <Status Word="ammon" State="R">
+    <SpecificCase>Ammon</SpecificCase>
+  </Status>
+  <Status Word="ammorit" State="W" />
+  <Status Word="amnon" State="R">
+    <SpecificCase>Amnon</SpecificCase>
+  </Status>
+  <Status Word="amon" State="R">
+    <SpecificCase>Amon</SpecificCase>
+  </Status>
+  <Status Word="amoo" State="W" />
+  <Status Word="amor" State="R">
+    <SpecificCase>Amor</SpecificCase>
+  </Status>
+  <Status Word="amorait" State="R">
+    <SpecificCase>Amorait</SpecificCase>
+  </Status>
+  <Status Word="amoria" State="W" />
+  <Status Word="amorit" State="W" />
+  <Status Word="amoriya" State="W" />
+  <Status Word="amos" State="R">
+    <SpecificCase>Amos</SpecificCase>
+  </Status>
+  <Status Word="amoz" State="R">
+    <SpecificCase>Amoz</SpecificCase>
+  </Status>
+  <Status Word="amram" State="R">
+    <SpecificCase>Amram</SpecificCase>
+  </Status>
+  <Status Word="amumoo" State="W" />
+  <Status Word="an" State="R" />
+  <Status Word="ana" State="R">
+    <SpecificCase>Ana</SpecificCase>
+  </Status>
+  <Status Word="anab" State="R" />
+  <Status Word="anah" State="R">
+    <SpecificCase>Anah</SpecificCase>
+  </Status>
+  <Status Word="anak" State="R">
+    <SpecificCase>Anak</SpecificCase>
+  </Status>
+  <Status Word="anakim" State="R">
+    <SpecificCase>Anakim</SpecificCase>
+  </Status>
+  <Status Word="ananiyas" State="R">
+    <SpecificCase>Ananiyas</SpecificCase>
+  </Status>
+  <Status Word="anap" State="R" />
+  <Status Word="anat" State="R">
+    <SpecificCase>Anat</SpecificCase>
+  </Status>
+  <Status Word="anatat" State="W" />
+  <Status Word="anatot" State="R">
+    <SpecificCase>Anatot</SpecificCase>
+  </Status>
+  <Status Word="anatoto" State="W" />
+  <Status Word="andronikus" State="R">
+    <SpecificCase>Andronikus</SpecificCase>
+  </Status>
+  <Status Word="andru" State="R">
+    <SpecificCase>Andru</SpecificCase>
+  </Status>
+  <Status Word="ang" State="R" />
+  <Status Word="ani" State="W" />
+  <Status Word="anim" State="R">
+    <SpecificCase>Anim</SpecificCase>
+  </Status>
+  <Status Word="annas" State="R">
+    <SpecificCase>Annas</SpecificCase>
+  </Status>
+  <Status Word="antiyok" State="R">
+    <SpecificCase>Antiyok</SpecificCase>
+  </Status>
+  <Status Word="apdon" State="R">
+    <SpecificCase>Apdon</SpecificCase>
+  </Status>
+  <Status Word="apolos" State="R">
+    <SpecificCase>Apolos</SpecificCase>
+  </Status>
+  <Status Word="ar" State="R" />
+  <Status Word="ara" State="R">
+    <SpecificCase>Ara</SpecificCase>
+  </Status>
+  <Status Word="arab" State="R">
+    <SpecificCase>Arab</SpecificCase>
+  </Status>
+  <Status Word="araba" State="R" />
+  <Status Word="arad" State="R">
+    <SpecificCase>Arad</SpecificCase>
+  </Status>
+  <Status Word="arah" State="R">
+    <SpecificCase>Arah</SpecificCase>
+  </Status>
+  <Status Word="aram" State="R">
+    <SpecificCase>Aram</SpecificCase>
+  </Status>
+  <Status Word="aramen" State="R">
+    <SpecificCase>Aramen</SpecificCase>
+  </Status>
+  <Status Word="aran" State="R" />
+  <Status Word="arang" State="R" />
+  <Status Word="arauna" State="R">
+    <SpecificCase>Arauna</SpecificCase>
+  </Status>
+  <Status Word="arauuna" State="W" />
+  <Status Word="arba" State="R" />
+  <Status Word="arfakshat" State="R">
+    <SpecificCase>Arfakshat</SpecificCase>
+  </Status>
+  <Status Word="arfazad" State="R">
+    <SpecificCase>Arfazad</SpecificCase>
+  </Status>
+  <Status Word="aristaakus" State="R">
+    <SpecificCase>Aristaakus</SpecificCase>
+  </Status>
+  <Status Word="ariyok" State="R">
+    <SpecificCase>Ariyok</SpecificCase>
+  </Status>
+  <Status Word="ariyopagus" State="R">
+    <SpecificCase>Ariyopagus</SpecificCase>
+  </Status>
+  <Status Word="arkait" State="R">
+    <SpecificCase>Arkait</SpecificCase>
+  </Status>
+  <Status Word="arnon" State="R">
+    <SpecificCase>Arnon</SpecificCase>
+  </Status>
+  <Status Word="arower" State="W" />
+  <Status Word="aroyer" State="R">
+    <SpecificCase>Aroyer</SpecificCase>
+  </Status>
+  <Status Word="artemis" State="R">
+    <SpecificCase>Artemis</SpecificCase>
+  </Status>
+  <Status Word="asa" State="R">
+    <SpecificCase>Asa</SpecificCase>
+  </Status>
+  <Status Word="asaf" State="R">
+    <SpecificCase>Asaf</SpecificCase>
+  </Status>
+  <Status Word="asahel" State="R">
+    <SpecificCase>Asahel</SpecificCase>
+  </Status>
+  <Status Word="asaiya" State="R">
+    <SpecificCase>Asaiya</SpecificCase>
+  </Status>
+  <Status Word="ashak" State="R" />
+  <Status Word="ashan" State="R">
+    <SpecificCase>Ashan</SpecificCase>
+  </Status>
+  <Status Word="ashdod" State="R">
+    <SpecificCase>Ashdod</SpecificCase>
+  </Status>
+  <Status Word="ashee" State="R" />
+  <Status Word="asher" State="R">
+    <SpecificCase>Asher</SpecificCase>
+  </Status>
+  <Status Word="ashera" State="R">
+    <SpecificCase>Ashera</SpecificCase>
+  </Status>
+  <Status Word="ashkelon" State="R">
+    <SpecificCase>Ashkelon</SpecificCase>
+  </Status>
+  <Status Word="ashpenas" State="R">
+    <SpecificCase>Ashpenas</SpecificCase>
+  </Status>
+  <Status Word="ashtarot" State="R">
+    <SpecificCase>Ashtarot</SpecificCase>
+  </Status>
+  <Status Word="ashur" State="R">
+    <SpecificCase>Ashur</SpecificCase>
+  </Status>
+  <Status Word="asir" State="R">
+    <SpecificCase>Asir</SpecificCase>
+  </Status>
+  <Status Word="asiriya" State="R">
+    <SpecificCase>Asiriya</SpecificCase>
+  </Status>
+  <Status Word="asos" State="R">
+    <SpecificCase>Asos</SpecificCase>
+  </Status>
+  <Status Word="assiriya" State="R">
+    <SpecificCase>Assiriya</SpecificCase>
+  </Status>
+  <Status Word="ataliya" State="R">
+    <SpecificCase>Ataliya</SpecificCase>
+  </Status>
+  <Status Word="atarot" State="R">
+    <SpecificCase>Atarot</SpecificCase>
+  </Status>
+  <Status Word="atazakses" State="R">
+    <SpecificCase>Atazakses</SpecificCase>
+  </Status>
+  <Status Word="ater" State="R">
+    <SpecificCase>Ater</SpecificCase>
+  </Status>
+  <Status Word="azarel" State="R">
+    <SpecificCase>Azarel</SpecificCase>
+  </Status>
+  <Status Word="azariya" State="R">
+    <SpecificCase>Azariya</SpecificCase>
+  </Status>
+  <Status Word="azazel" State="R">
+    <SpecificCase>Azazel</SpecificCase>
+  </Status>
+  <Status Word="azeen" State="R" />
+  <Status Word="azeka" State="R">
+    <SpecificCase>Azeka</SpecificCase>
+  </Status>
+  <Status Word="azel" State="R">
+    <SpecificCase>Azel</SpecificCase>
+  </Status>
+  <Status Word="azmavet" State="R">
+    <SpecificCase>Azmavet</SpecificCase>
+  </Status>
+  <Status Word="azrikam" State="R">
+    <SpecificCase>Azrikam</SpecificCase>
+  </Status>
+  <Status Word="azuba" State="R">
+    <SpecificCase>Azuba</SpecificCase>
+  </Status>
+  <Status Word="azurfa" State="R" />
+  <Status Word="aâa" State="W" />
+  <Status Word="aàs" State="W" />
+  <Status Word="aɓam" State="W" />
+  <Status Word="aɓewoon" State="W" />
+  <Status Word="aɓwoon" State="R" />
+  <Status Word="aɓwoonɗi" State="R">
+    <SpecificCase>Aɓwoonɗi</SpecificCase>
+  </Status>
+  <Status Word="aɓwóon" State="R" />
+  <Status Word="aɗeng" State="R" />
+  <Status Word="aɗéng" State="R" />
+  <Status Word="brwàar" State="R">
+    <SpecificCase>BRWàar</SpecificCase>
+  </Status>
+  <Status Word="ba" State="R" />
+  <Status Word="baa" State="R" />
+  <Status Word="baabilon" State="R">
+    <SpecificCase>Baabilon</SpecificCase>
+  </Status>
+  <Status Word="baaji" State="R" />
+  <Status Word="baajì" State="W">
+    <Correction>baaji</Correction>
+  </Status>
+  <Status Word="baal" State="R" />
+  <Status Word="baala" State="R">
+    <SpecificCase>Baala</SpecificCase>
+  </Status>
+  <Status Word="baana" State="R">
+    <SpecificCase>Baana</SpecificCase>
+  </Status>
+  <Status Word="baasha" State="R">
+    <SpecificCase>Baasha</SpecificCase>
+  </Status>
+  <Status Word="baaso" State="R" />
+  <Status Word="babilon" State="R">
+    <SpecificCase>Babilon</SpecificCase>
+  </Status>
+  <Status Word="backup" State="W" />
+  <Status Word="bahar" State="R" />
+  <Status Word="bakbukiya" State="R">
+    <SpecificCase>Bakbukiya</SpecificCase>
+  </Status>
+  <Status Word="bal" State="W" />
+  <Status Word="balaam" State="R">
+    <SpecificCase>Balaam</SpecificCase>
+  </Status>
+  <Status Word="balak" State="R">
+    <SpecificCase>Balak</SpecificCase>
+  </Status>
+  <Status Word="balsheza" State="R">
+    <SpecificCase>Balsheza</SpecificCase>
+  </Status>
+  <Status Word="bang" State="R" />
+</SpellingStatus>

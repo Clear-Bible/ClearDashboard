@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Features.PINS;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Helpers;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
+using SIL.ObjectModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Panes;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,16 +23,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using System.Xml.Serialization;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
-using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Models.Helpers;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.Wpf.Helpers;
-using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -40,10 +37,10 @@ namespace ClearDashboard.Wpf.ViewModels
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
 
-        private DashboardProjectManager _projectManager;
-        private ILogger<PinsViewModel> _logger;
-        private INavigationService _navigationService;
-        private IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly ILogger<PinsViewModel> _logger;
+        private readonly INavigationService _navigationService;
+        private readonly IEventAggregator _eventAggregator;
 
         #endregion //Member Variables
 
@@ -209,7 +206,9 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override async void OnViewReady(object view)
         {
             // load in the TermRenderings.xml file
-            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(ProjectManager.CurrentDashboardProject.DirectoryPath), CancellationToken.None).ConfigureAwait(false);
+            var queryResult =
+                await ExecuteRequest(new GetTermRenderingsQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "TermRenderings.xml")),
+                    CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);

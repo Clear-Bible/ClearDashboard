@@ -22,7 +22,6 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetTermRenderingsSlice : XmlReaderRequestHandler<GetTermRenderingsQuery,
         RequestResult<TermRenderingsList>, TermRenderingsList>
     {
-        private string _projectPath = "";
         private TermRenderingsList _termRenderingsList = new();
 
         public GetTermRenderingsSlice(ILogger<PINS.GetTermRenderingsSlice> logger) : base(logger)
@@ -36,9 +35,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<TermRenderingsList>> Handle(GetTermRenderingsQuery request,
             CancellationToken cancellationToken)
         {
-            _projectPath = request.projectPath;
-
-            ResourceName = Path.Combine(_projectPath, "TermRenderings.xml");
+            ResourceName = request.projectPath;
 
             var queryResult = ValidateResourcePath(new TermRenderingsList());
             if (queryResult.Success == false)

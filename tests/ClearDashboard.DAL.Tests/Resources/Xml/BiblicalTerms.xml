@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BiblicalTermsList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Term Id="אֲבַגְתָא">
+  <Strong>H0005</Strong>
+  <Transliteration>ʾăbagtāʾ</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>eunuch; servant of king Ahasuerus (Xerxes)</Definition>
+  <Gloss>Abagtha</Gloss>
+  <References>
+    <Verse>01700101000042</Verse>
+  </References>
+</Term>
+<Term Id="אֵבֶה">
+  <Strong>H0016</Strong>
+  <Transliteration>ʾēbeh</Transliteration>
+  <Category>FL</Category>
+  <Domain>grasses</Domain>
+  <Language>hebrew</Language>
+  <Definition>tall straight plant, growing in rivers and marshes (Arundo donax or Cyperus papyrus); used for making light boats</Definition>
+  <Gloss>papyrus, reeds</Gloss>
+  <Link>flora:5.1.3</Link>
+  <References>
+    <Verse>01800902600008</Verse>
+  </References>
+</Term>
+<Term Id="אֵבוּס">
+  <Strong>H0018</Strong>
+  <Transliteration>ʾēbûs</Transliteration>
+  <Category>RE</Category>
+  <Domain>containers; animal husbandry</Domain>
+  <Language>hebrew</Language>
+  <Definition>long open container; made of wood or stone; for feeding domestic animals</Definition>
+  <Gloss>manger, crib, feed trough</Gloss>
+  <Link>realia:1.2.3</Link>
+  <References>
+    <Verse>01803900900016</Verse>
+    <Verse>02001400400008</Verse>
+    <Verse>02300100300012</Verse>
+  </References>
+</Term>
+<Term Id="אֲבַטִּיחַ">
+  <Strong>H0020</Strong>
+  <Transliteration>ʾăbaṭṭiyaḥ</Transliteration>
+  <Category>FL</Category>
+  <Domain>fruits</Domain>
+  <Language>hebrew</Language>
+  <Definition>sweet, juicy fruit, produced by a trailing plant (Citrullus vulgaris) cultivated in Egypt along the river Nile; much appreciated, used for food, drink, and medicine, including the seeds</Definition>
+  <Gloss>melon</Gloss>
+  <Link>flora:3.4.2</Link>
+  <References>
+    <Verse>00401100500032</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִי">
+  <Strong>H0021</Strong>
+  <Transliteration>ʾăbiy</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>daughter of Zechariah; wife of Ahaz; mother of Hezekiah; also known as Abijah</Definition>
+  <Gloss>Abi</Gloss>
+  <References>
+    <Verse>01201800200040</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִי הָעֶזְרִי">
+  <Strong>H0033</Strong>
+  <Transliteration>ʾăbiy hāʿezriy</Transliteration>
+  <Category>PN</Category>
+  <Domain>group</Domain>
+  <Language>hebrew</Language>
+  <Definition>member of clan of Abiezer</Definition>
+  <Gloss>Abiezrite</Gloss>
+  <References>
+    <Verse>00700601100032</Verse>
+    <Verse>00700602400042</Verse>
+    <Verse>00700803200034</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִי־עַלְבוֹן">
+  <Strong>H0045</Strong>
+  <Transliteration>ʾăbiy-ʿalbôn</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>warrior in time of king David; also known as Abiel</Definition>
+  <Gloss>Abi-Albon</Gloss>
+  <References>
+    <Verse>01002303100002</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיאֵל-1">
+  <Strong>H0022</Strong>
+  <Transliteration>ʾăbîʾēl-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>father of Kish and Ner, grandfather of king Saul and Abner; from the tribe of Benjamin</Definition>
+  <Gloss>Abiel</Gloss>
+  <References>
+    <Verse>00900900100022</Verse>
+    <Verse>00901405100020</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיאֵל-2">
+  <Strong>H0022</Strong>
+  <Transliteration>ʾăbîʾēl-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>warrior in the time of king David</Definition>
+  <Gloss>Abiel</Gloss>
+  <References>
+    <Verse>01301103200010</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיאָסָף">
+  <Strong>H0023</Strong>
+  <Transliteration>ʾăbîʾāsāp</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Korah, from the tribe of Levi</Definition>
+  <Gloss>Abiasaph</Gloss>
+  <References>
+    <Verse>00200602400016</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיגַיִל-1">
+  <Strong>H0026</Strong>
+  <Transliteration>ʾăbîgayil-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>wife of Nabal and later David; spelled Abigal on three occasions</Definition>
+  <Gloss>Abigail</Gloss>
+  <References>
+    <Verse>00902500300018</Verse>
+    <Verse>00902501400006</Verse>
+    <Verse>00902501800006</Verse>
+    <Verse>00902501800008</Verse>
+    <Verse>00902502300006</Verse>
+    <Verse>00902503200010</Verse>
+    <Verse>00902503600006</Verse>
+    <Verse>00902503900078</Verse>
+    <Verse>00902504000012</Verse>
+    <Verse>00902504200010</Verse>
+    <Verse>00902700300044</Verse>
+    <Verse>00903000500020</Verse>
+    <Verse>01000200200026</Verse>
+    <Verse>01000300300010</Verse>
+    <Verse>01000300300012</Verse>
+    <Verse>01300300100042</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיגַיִל-2">
+  <Strong>H0026</Strong>
+  <Transliteration>ʾăbîgayil-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>daughter of Nahash, sister of David, wife of Jether the Ishmaelite, mother of Amasa</Definition>
+  <Gloss>Abigail</Gloss>
+  <References>
+    <Verse>01001702500046</Verse>
+    <Verse>01300201600012</Verse>
+    <Verse>01300201700004</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִידָן">
+  <Strong>H0027</Strong>
+  <Transliteration>ʾăbîdān</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Gideoni; chief from the tribe of Benjamin at the time of Moses</Definition>
+  <Gloss>Abidan</Gloss>
+  <References>
+    <Verse>00400101100006</Verse>
+    <Verse>00400202200018</Verse>
+    <Verse>00400706000020</Verse>
+    <Verse>00400706500036</Verse>
+    <Verse>00401002400014</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִידָע">
+  <Strong>H0028</Strong>
+  <Transliteration>ʾăbîdāʿ</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Midian, son of Keturah, wife of Abraham</Definition>
+  <Gloss>Abida</Gloss>
+  <References>
+    <Verse>00102500400020</Verse>
+    <Verse>01300103300020</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-1">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Becher from the tribe of Benjamin</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01300700800032</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-2">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>wife of Hezron</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01300202400022</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-3">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-3</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Samuel</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>00900800200022</Verse>
+    <Verse>01300601300016</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-4">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-4</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>priest, in charge of a division of priests in the time of David, from the tribe of Levi</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01302401000014</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-5">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-5</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Rehoboam; king of Judah (913-911/10); also known as Abijam</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01300301000010</Verse>
+    <Verse>01401102000024</Verse>
+    <Verse>01401102200016</Verse>
+    <Verse>01401201600026</Verse>
+    <Verse>01401300100022</Verse>
+    <Verse>01401300200036</Verse>
+    <Verse>01401300300006</Verse>
+    <Verse>01401300400006</Verse>
+    <Verse>01401301500044</Verse>
+    <Verse>01401301700008</Verse>
+    <Verse>01401301900006</Verse>
+    <Verse>01401302200008</Verse>
+    <Verse>01401302300006</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-6">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-6</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Jeroboam</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01101400100014</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-7">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-7</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>daughter of Zechariah, wife of Ahaz, mother of Hezekiah</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01402900100038</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּה-8">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāh-8</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>priest in the time after exile from the tribe of Levi</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01601000800004</Verse>
+    <Verse>01601200400006</Verse>
+    <Verse>01601201700004</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּהוּ">
+  <Strong>H0029</Strong>
+  <Transliteration>ʾăbiyyāhû</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Rehoboam; king of Judah (913-911/10); name also spelled Abijah and also known as Abijam</Definition>
+  <Gloss>Abijah</Gloss>
+  <References>
+    <Verse>01401302000018</Verse>
+    <Verse>01401302100006</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיהוּא">
+  <Strong>H0030</Strong>
+  <Transliteration>ʾăbîhûʾ</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Aaron, priest from the tribe of Levi</Definition>
+  <Gloss>Abihu</Gloss>
+  <References>
+    <Verse>00200602300040</Verse>
+    <Verse>00202400100026</Verse>
+    <Verse>00202400900016</Verse>
+    <Verse>00202800100044</Verse>
+    <Verse>00301000100014</Verse>
+    <Verse>00400300200020</Verse>
+    <Verse>00400300400010</Verse>
+    <Verse>00402606000018</Verse>
+    <Verse>00402606100010</Verse>
+    <Verse>01300502900028</Verse>
+    <Verse>01302400100020</Verse>
+    <Verse>01302400200010</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיהוּד">
+  <Strong>H0031</Strong>
+  <Transliteration>ʾăbîhûd</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Bela from tribe of Benjamin</Definition>
+  <Gloss>Abihud</Gloss>
+  <References>
+    <Verse>01300800300020</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיהַיִל-1">
+  <Strong>H0032</Strong>
+  <Transliteration>ʾăbîhayil-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>wife of Abishur, descendant of Jerahmeel, tribe of Judah</Definition>
+  <Gloss>Abihail</Gloss>
+  <References>
+    <Verse>01300202900010</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיהַיִל-2">
+  <Strong>H0032</Strong>
+  <Transliteration>ʾăbîhayil-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>daughter of Eliab, son of Jesse</Definition>
+  <Gloss>Abihail</Gloss>
+  <References>
+    <Verse>01401101800028</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיחַיִל-1">
+  <Strong>H0032</Strong>
+  <Transliteration>ʾăbîḥayil-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>father of Zuriel from tribe of Levi</Definition>
+  <Gloss>Abihail</Gloss>
+  <References>
+    <Verse>00400303500020</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיחַיִל-2">
+  <Strong>H0032</Strong>
+  <Transliteration>ʾăbîḥayil-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Huri from tribe of Gad</Definition>
+  <Gloss>Abihail</Gloss>
+  <References>
+    <Verse>01300501400006</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיחַיִל-3">
+  <Strong>H0032</Strong>
+  <Transliteration>ʾăbîḥayil-3</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>father of Esther from tribe of Benjamin</Definition>
+  <Gloss>Abihail</Gloss>
+  <References>
+    <Verse>01700201500014</Verse>
+    <Verse>01700902900014</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיטוּב">
+  <Strong>H0036</Strong>
+  <Transliteration>ʾăbîṭûb</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Shaharaim from tribe of Benjamin</Definition>
+  <Gloss>Abitub</Gloss>
+  <References>
+    <Verse>01300801100012</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיטַל">
+  <Strong>H0037</Strong>
+  <Transliteration>ʾăbîṭal</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>wife of David, mother of Shephatiah</Definition>
+  <Gloss>Abital</Gloss>
+  <References>
+    <Verse>01000300400024</Verse>
+    <Verse>01300300300010</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִיָּם">
+  <Strong>H0038</Strong>
+  <Transliteration>ʾăbiyyām</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Rehoboam; king of Judah (913-911/10); also known as Abijah</Definition>
+  <Gloss>Abijam</Gloss>
+  <References>
+    <Verse>01101403100042</Verse>
+    <Verse>01101500100026</Verse>
+    <Verse>01101500700008</Verse>
+    <Verse>01101500700050</Verse>
+    <Verse>01101500800006</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִימָאֵל">
+  <Strong>H0039</Strong>
+  <Transliteration>ʾăbîmāʾēl</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Joktan, descendant of Shem</Definition>
+  <Gloss>Abimael</Gloss>
+  <References>
+    <Verse>00101002800012</Verse>
+    <Verse>01300102200012</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִימֶלֶךְ-1">
+  <Strong>H0040</Strong>
+  <Transliteration>ʾăbîmelek-1</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>king of Gerar</Definition>
+  <Gloss>Abimelech</Gloss>
+  <References>
+    <Verse>00102000200022</Verse>
+    <Verse>00102000300010</Verse>
+    <Verse>00102000400004</Verse>
+    <Verse>00102000800006</Verse>
+    <Verse>00102000900006</Verse>
+    <Verse>00102001000006</Verse>
+    <Verse>00102001400006</Verse>
+    <Verse>00102001500006</Verse>
+    <Verse>00102001700022</Verse>
+    <Verse>00102001800020</Verse>
+    <Verse>00102102200020</Verse>
+    <Verse>00102102500010</Verse>
+    <Verse>00102102500028</Verse>
+    <Verse>00102102600006</Verse>
+    <Verse>00102102700020</Verse>
+    <Verse>00102102900006</Verse>
+    <Verse>00102103200018</Verse>
+    <Verse>00102600100046</Verse>
+    <Verse>00102600800022</Verse>
+    <Verse>00102600900006</Verse>
+    <Verse>00102601000006</Verse>
+    <Verse>00102601100006</Verse>
+    <Verse>00102601600006</Verse>
+    <Verse>00102602600004</Verse>
+  </References>
+</Term>
+<Term Id="אֲבִימֶלֶךְ-2">
+  <Strong>H0040</Strong>
+  <Transliteration>ʾăbîmelek-2</Transliteration>
+  <Category>PN</Category>
+  <Domain>person</Domain>
+  <Language>hebrew</Language>
+  <Definition>son of Gideon; king of Shechem (1129-1126)</Definition>
+  <Gloss>Abimelech</Gloss>
+  <References>
+    <Verse>00700803100030</Verse>
+    <Verse>00700900100006</Verse>
+    <Verse>00700900300042</Verse>
+    <Verse>00700900400024</Verse>
+    <Verse>00700900600030</Verse>
+    <Verse>00700901600026</Verse>
+    <Verse>00700901800042</Verse>
+    <Verse>00700901900040</Verse>
+    <Verse>00700902000014</Verse>
+    <Verse>00700902000060</Verse>
+    <Verse>00700902100028</Verse>
+    <Verse>00700902200006</Verse>
+    <Verse>00700902300014</Verse>
+    <Verse>00700902300034</Verse>
+    <Verse>00700902400024</Verse>
+    <Verse>00700902500048</Verse>
+    <Verse>00700902700050</Verse>
+    <Verse>00700902800014</Verse>
+    <Verse>00700902900028</Verse>
+    <Verse>00700902900036</Verse>
+    <Verse>00700903100010</Verse>
+    <Verse>00700903400006</Verse>
+    <Verse>00700903500028</Verse>
+    <Verse>00700903800022</Verse>
+    <Verse>00700903900022</Verse>
+    <Verse>00700904000006</Verse>
+    <Verse>00700904100006</Verse>
+    <Verse>00700904200028</Verse>
+    <Verse>00700904400004</Verse>
+    <Verse>00700904500004</Verse>
+    <Verse>00700904700008</Verse>
+    <Verse>00700904800006</Verse>
+    <Verse>00700904800030</Verse>
+    <Verse>00700904900024</Verse>
+    <Verse>00700905000006</Verse>
+    <Verse>00700905200006</Verse>
+    <Verse>00700905300018</Verse>
+    <Verse>00700905500014</Verse>
+    <Verse>00700905600012</Verse>
+    <Verse>00701000100008</Verse>
+    <Verse>01001102100008</Verse>
+  </References>
+</Term>
+</BiblicalTermsList>
