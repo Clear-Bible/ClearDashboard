@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Verse
+    public class Verse : ClearEntity
     {
 
         public Verse()
@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public int? Id { get; set; }
+        
 
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
         public string? VerseNumber { get; set; }
@@ -19,7 +19,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
-        public DateTimeOffset? Modified { get; set; }
         public int? CorpusId { get; set; }
 
         public virtual Corpus? Corpus { get; set; }

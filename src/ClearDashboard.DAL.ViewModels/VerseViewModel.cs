@@ -17,9 +17,9 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public int? Id
+        public int Id
         {
-            get => Entity?.Id;
+            get => Entity.Id;
             set
             {
                 if (Entity != null)
@@ -82,9 +82,9 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTimeOffset? Modified
+        public DateTimeOffset Modified
         {
-            get => Entity?.Modified;
+            get => Entity.Modified;
             set
             {
                 if (Entity != null)

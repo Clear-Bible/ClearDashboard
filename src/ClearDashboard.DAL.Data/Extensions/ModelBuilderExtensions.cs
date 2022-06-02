@@ -79,5 +79,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             modelBuilder.Entity<StringContent>();
             modelBuilder.Entity<BinaryContent>();
         }
+
+        public static void ConfigureDataAssociationEntities(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DataAssociation>()
+                .HasDiscriminator(entity => entity.AssociationType);
+
+            modelBuilder.Entity<TokenAssociation>();
+            modelBuilder.Entity<AlignmentAssociation>();
+        }
     }
 }

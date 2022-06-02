@@ -33,9 +33,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true)
+                    LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,7 +53,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     English = table.Column<string>(type: "TEXT", nullable: true),
                     AltText = table.Column<string>(type: "TEXT", nullable: true),
-                    LastChanged = table.Column<double>(type: "REAL", nullable: false)
+                    LastChanged = table.Column<double>(type: "REAL", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,8 +85,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SourceCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
                     TargetCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
+                    LastGenerated = table.Column<long>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    LastGenerated = table.Column<long>(type: "INTEGER", nullable: false)
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,11 +116,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SilBookNumber = table.Column<string>(type: "TEXT", nullable: true),
                     ChapterNumber = table.Column<string>(type: "TEXT", nullable: true),
                     VerseText = table.Column<string>(type: "TEXT", nullable: true),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: true),
                     CorpusId = table.Column<int>(type: "INTEGER", nullable: true),
                     VerseBBCCCVVV = table.Column<string>(type: "TEXT", nullable: true),
                     VerseId = table.Column<string>(type: "TEXT", nullable: false),
-                    Found = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Found = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -134,9 +139,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    IsDirty = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsDirty = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,9 +160,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: false),
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -224,7 +230,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     AssociationId = table.Column<string>(type: "TEXT", nullable: true),
                     AssociationType = table.Column<string>(type: "TEXT", nullable: true),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true)
+                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,6 +245,34 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NoteRecipient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserType = table.Column<int>(type: "INTEGER", nullable: false),
+                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NoteRecipient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NoteRecipient_Note_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "Note",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NoteRecipient_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RawContent",
                 columns: table => new
                 {
@@ -244,7 +280,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Bytes = table.Column<byte[]>(type: "BLOB", nullable: true),
                     ContentType = table.Column<string>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true)
+                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -257,31 +295,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipientNoteUser",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserType = table.Column<int>(type: "INTEGER", nullable: false),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipientNoteUser", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RecipientNoteUser_Note_NoteId",
-                        column: x => x.NoteId,
-                        principalTable: "Note",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_RecipientNoteUser_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "VerseLink",
                 columns: table => new
                 {
@@ -289,7 +302,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     VerseId = table.Column<int>(type: "INTEGER", nullable: false),
                     ParallelVersesLinkId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsSource = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsSource = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -372,7 +387,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TokenId = table.Column<int>(type: "INTEGER", nullable: true),
                     Note = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -438,6 +454,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NoteRecipient_NoteId",
+                table: "NoteRecipient",
+                column: "NoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NoteRecipient_UserId",
+                table: "NoteRecipient",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParallelCorpus_SourceCorpusId",
                 table: "ParallelCorpus",
                 column: "SourceCorpusId");
@@ -461,16 +487,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_RawContent_NoteId",
                 table: "RawContent",
                 column: "NoteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RecipientNoteUser_NoteId",
-                table: "RecipientNoteUser",
-                column: "NoteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RecipientNoteUser_UserId",
-                table: "RecipientNoteUser",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Token_VerseId",
@@ -509,6 +525,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "InterlinearNote");
 
             migrationBuilder.DropTable(
+                name: "NoteRecipient");
+
+            migrationBuilder.DropTable(
                 name: "ProjectInfo");
 
             migrationBuilder.DropTable(
@@ -516,9 +535,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RawContent");
-
-            migrationBuilder.DropTable(
-                name: "RecipientNoteUser");
 
             migrationBuilder.DropTable(
                 name: "VerseLink");

@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class Note : ClearEntity
@@ -9,20 +11,25 @@ namespace ClearDashboard.DataAccessLayer.Models
 
             Associations = new HashSet<DataAssociation>();
             ContentCollection = new HashSet<RawContent>();
-            RecipientNoteUsers = new HashSet<RecipientNoteUser>();
+            NoteRecipients = new HashSet<NoteRecipient>();
 
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public DateTimeOffset Created { get; set; }
-        public DateTimeOffset Modified { get; set; }
-      
         public virtual User? Author { get; set; }
         public int AuthorId { get; set; }
 
         public virtual ICollection<DataAssociation> Associations { get; set; }
         public virtual ICollection<RawContent> ContentCollection { get; set; }
-        public virtual ICollection<RecipientNoteUser> RecipientNoteUsers { get; set; }
+        public virtual ICollection<NoteRecipient> NoteRecipients { get; set; }
+
+        [NotMapped]
+        public IEnumerable<StringContent> StringContentCollection => ContentCollection.Where(content => content.ContentType == nameof(StringContent)).Cast<StringContent>();
+
+        [NotMapped]
+        public IEnumerable<BinaryContent> BinaryContentCollection => ContentCollection.Where(content => content.ContentType == nameof(BinaryContent)).Cast<BinaryContent>();
+
+
 
 
     }

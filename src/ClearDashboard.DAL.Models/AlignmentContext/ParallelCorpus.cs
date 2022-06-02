@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class ParallelCorpus
+    public partial class ParallelCorpus : ClearEntity
     {
         public ParallelCorpus()
         {
@@ -13,12 +13,12 @@
         public int TargetCorpusId { get; set; }
 
         public AlignmentType AlignmentType { get; set; }
-        public DateTimeOffset Created { get; set; }
+  
         public DateTimeOffset LastGenerated { get; set; }
-        public int Id { get; set; }
 
-        public virtual Corpus SourceCorpus { get; set; }
-        public virtual Corpus TargetCorpus { get; set; }
+
+        public virtual Corpus? SourceCorpus { get; set; }
+        public virtual Corpus? TargetCorpus { get; set; }
         public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-
+﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public class DashboardProject 
@@ -42,22 +37,17 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// </summary>
         
         public ParatextProject TargetProject { get; set; }
-       
 
-        
         public ParatextProject InterlinearizerProject { get; set; }
-
 
         /// <summary>
         /// list of LWC projects
         /// </summary>
-
         public List<ParatextProject> LanguageOfWiderCommunicationProjects { get; set; } = new List<ParatextProject>();
 
         /// <summary>
         /// List of Back Translation projects
         /// </summary>
-      
         public List<ParatextProject> BackTranslationProjects { get; set; }
 
         /// <summary>
@@ -68,42 +58,31 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// <summary>
         /// Date that this project was created
         /// </summary>
-        
         public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-      
         public string Name { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-       
         public string BaseTargetName { get; set; }
 
         /// <summary>
         /// The Dashboard Project FullName
         /// </summary>
-       
         public string BaseTargetFullName { get; set; }
-
         
         public string ShortFilePath { get; set; }
-   
 
-        
         public string JsonProjectName { get; set; }
 
-      
         public int UserValidationLevel { get; set; }
-
 
         public int LastContentWordLevel { get; set; }
 
-
-      
         public bool ValidateProjectData()
         {
             if (ProjectName is "" or null)

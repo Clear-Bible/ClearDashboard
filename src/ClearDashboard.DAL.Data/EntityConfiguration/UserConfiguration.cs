@@ -14,7 +14,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         entityBuilder.Property(e => e.ParatextUsername)
             .HasColumnType("varchar(100)");
 
-        entityBuilder.HasOne(d => d.UserNavigation)
+        entityBuilder.HasOne(d => d.InterlinearNote)
             .WithOne(p => p.User)
             .HasPrincipalKey<InterlinearNote>(p => p.UserId)
             .HasForeignKey<User>(d => d.Id)
