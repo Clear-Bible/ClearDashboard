@@ -11,13 +11,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         entityBuilder.HasKey(e => e.Id);
 
         entityBuilder.Property(e => e.LastAlignmentLevelId);
-        entityBuilder.Property(e => e.ParatextUsername)
+        entityBuilder.Property(e => e.FirstName)
+            .HasColumnType("varchar(100)");
+        entityBuilder.Property(e => e.LastName)
             .HasColumnType("varchar(100)");
 
-        entityBuilder.HasOne(d => d.InterlinearNote)
-            .WithOne(p => p.User)
-            .HasPrincipalKey<InterlinearNote>(p => p.UserId)
-            .HasForeignKey<User>(d => d.Id)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        //entityBuilder.HasOne(d => d.InterlinearNote)
+        //    .WithOne(p => p.User)
+        //    .HasPrincipalKey<InterlinearNote>(p => p.UserId)
+        //    .HasForeignKey<User>(d => d.Id)
+        //    .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

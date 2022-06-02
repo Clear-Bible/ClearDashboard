@@ -1,3 +1,3 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class TokenAssociation : DataAssociation {}
+public class TokenAssociation : NoteAssociation {}

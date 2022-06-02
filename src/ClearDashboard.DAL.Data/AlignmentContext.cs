@@ -39,8 +39,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
-        public virtual DbSet<DataAssociation> DataAssociations => Set<DataAssociation>();
-        public virtual DbSet<InterlinearNote> InterlinearNotes => Set<InterlinearNote>();
+        public virtual DbSet<NoteAssociation> DataAssociations => Set<NoteAssociation>();
+        //public virtual DbSet<InterlinearNote> InterlinearNotes => Set<InterlinearNote>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelVersesLink> ParallelVersesLinks => Set<ParallelVersesLink>();
@@ -102,7 +102,11 @@ namespace ClearDashboard.DataAccessLayer.Data
             //      to the ConfigureRawContentEntities extension method
             modelBuilder.ConfigureRawContentEntities();
 
-            // now handle any entities which have DatetimeOffset properties.
+            // NB:  Add any new entities which inherit from NoteAssociation
+            //      to the ConfigureNoteAssociationEntities extension method
+            modelBuilder.ConfigureNoteAssociationEntities();
+
+            // now handle any entities which have DatetimeOffset properties.                                                  
             modelBuilder.AddDateTimeOffsetToBinaryConverter(Database.ProviderName);
 
         }

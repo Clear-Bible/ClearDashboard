@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using SIL.Reporting;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Tests
 {
     public class PopulateNotesTablesTest : TestBase
-        {
+    {
         public PopulateNotesTablesTest(ITestOutputHelper output) : base(output)
         {
 
@@ -33,9 +30,9 @@ namespace ClearDashboard.DAL.Tests
 
             try
             {
-                var author = new User() { ParatextUsername = "Note Author" };
-                var recipient1 = new User() { ParatextUsername = "Recipient One" };
-                var recipient2 = new User() { ParatextUsername = "Recipient Two" };
+                var author = new User { FirstName = "Note", LastName = "Author" };
+                var recipient1 = new User { FirstName = "Recipient",  LastName= "One" };
+                var recipient2 = new User { FirstName = "Recipient", LastName="Two" };
 
                 context.Users.AddRange(author, recipient1, recipient2);
                 await context.SaveChangesAsync();
@@ -87,20 +84,20 @@ namespace ClearDashboard.DAL.Tests
 
             try
             {
-                var user = new User() { ParatextUsername = "Joe User" };
+                var user = new User { FirstName = "Joe", LastName="User" };
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
 
-                var note = new Note();
+                var note = new Note
+                {
+                    Author = user
+                };
 
                 var stringContent = new StringContent
                 {
                     Content = "Some string content"
                 };
-                note.ContentCollection.Add(new StringContent
-                {
-                    Content = "Some string content"
-                });
+                note.ContentCollection.Add(stringContent);
 
                 var binaryContent = new BinaryContent
                 {
@@ -108,7 +105,7 @@ namespace ClearDashboard.DAL.Tests
                 };
                 note.ContentCollection.Add(binaryContent);
 
-                note.Author = user;
+                
 
                 context.Notes.Add(note);
                 await context.SaveChangesAsync();

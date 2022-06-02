@@ -68,7 +68,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ParatextUsername = table.Column<string>(type: "TEXT", nullable: true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
                     LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -223,22 +224,22 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DataAssociation",
+                name: "NoteAssociation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AssociationId = table.Column<string>(type: "TEXT", nullable: true),
-                    AssociationType = table.Column<string>(type: "TEXT", nullable: true),
+                    AssociationType = table.Column<string>(type: "TEXT", nullable: false),
                     NoteId = table.Column<int>(type: "INTEGER", nullable: true),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DataAssociation", x => x.Id);
+                    table.PrimaryKey("PK_NoteAssociation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DataAssociation_Note_NoteId",
+                        name: "FK_NoteAssociation_Note_NoteId",
                         column: x => x.NoteId,
                         principalTable: "Note",
                         principalColumn: "Id");
@@ -378,34 +379,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "InterlinearNote",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Note = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InterlinearNote", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InterlinearNote_Token_TokenId",
-                        column: x => x.TokenId,
-                        principalTable: "Token",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_InterlinearNote_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Adornment_TokenId",
                 table: "Adornment",
@@ -433,25 +406,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DataAssociation_NoteId",
-                table: "DataAssociation",
-                column: "NoteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InterlinearNote_TokenId",
-                table: "InterlinearNote",
-                column: "TokenId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InterlinearNote_UserId",
-                table: "InterlinearNote",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Note_AuthorId",
                 table: "Note",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NoteAssociation_NoteId",
+                table: "NoteAssociation",
+                column: "NoteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NoteRecipient_NoteId",
@@ -519,10 +481,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Alignment");
 
             migrationBuilder.DropTable(
-                name: "DataAssociation");
-
-            migrationBuilder.DropTable(
-                name: "InterlinearNote");
+                name: "NoteAssociation");
 
             migrationBuilder.DropTable(
                 name: "NoteRecipient");

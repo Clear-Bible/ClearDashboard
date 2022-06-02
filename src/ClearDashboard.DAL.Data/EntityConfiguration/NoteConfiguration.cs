@@ -16,9 +16,9 @@ public class NoteConfiguration : IEntityTypeConfiguration<Note>
         entityBuilder.Property(e => e.Modified).HasColumnType("datetime");
 
         // TODO: unremark
-        entityBuilder.Property(e => e.Associations);
+        entityBuilder.Property(e => e.NoteAssociations);
         entityBuilder.Property(e => e.ContentCollection);
-        //entityBuilder.Property(e => e.RecipientNoteUsers);
+        entityBuilder.Property(e => e.NoteRecipients);
 
     }
 }

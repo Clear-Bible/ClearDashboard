@@ -9,7 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             // ReSharper disable VirtualMemberCallInConstructor
 
-            Associations = new HashSet<DataAssociation>();
+            NoteAssociations = new HashSet<NoteAssociation>();
             ContentCollection = new HashSet<RawContent>();
             NoteRecipients = new HashSet<NoteRecipient>();
 
@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual User? Author { get; set; }
         public int AuthorId { get; set; }
 
-        public virtual ICollection<DataAssociation> Associations { get; set; }
+        public virtual ICollection<NoteAssociation> NoteAssociations { get; set; }
         public virtual ICollection<RawContent> ContentCollection { get; set; }
         public virtual ICollection<NoteRecipient> NoteRecipients { get; set; }
 

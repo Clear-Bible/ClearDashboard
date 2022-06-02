@@ -58,7 +58,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             new AlignmentVersionConfiguration().Configure(modelBuilder.Entity<AlignmentVersion>());
             new CorpusConfiguration().Configure(modelBuilder.Entity<Corpus>());
             //new DataAssociationConfiguration().Configure(modelBuilder.Entity<DataAssociation>());
-            new InterlinearNoteConfiguration().Configure(modelBuilder.Entity<InterlinearNote>());
+            //new InterlinearNoteConfiguration().Configure(modelBuilder.Entity<InterlinearNote>());
             //new NoteConfiguration().Configure(modelBuilder.Entity<Note>());
             new ParallelCorpusConfiguration().Configure(modelBuilder.Entity<ParallelCorpus>());
             new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
@@ -80,13 +80,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             modelBuilder.Entity<BinaryContent>();
         }
 
-        public static void ConfigureDataAssociationEntities(this ModelBuilder modelBuilder)
+        public static void ConfigureNoteAssociationEntities(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DataAssociation>()
+            modelBuilder.Entity<NoteAssociation>()
                 .HasDiscriminator(entity => entity.AssociationType);
 
-            modelBuilder.Entity<TokenAssociation>();
             modelBuilder.Entity<AlignmentAssociation>();
+            modelBuilder.Entity<BookAssociation>();
+            modelBuilder.Entity<ChapterAssociation>();
+            modelBuilder.Entity<TokenAssociation>();
+            modelBuilder.Entity<VerseAssociation>();
+
         }
     }
 }

@@ -4,8 +4,7 @@
     {
         public Token()
         {
-            InterlinearNotes = new HashSet<InterlinearNote>();
-        }
+            }
 
         public int Id { get; set; }
 
@@ -21,6 +20,6 @@
         //public virtual Alignment TokenNavigation { get; set; }
         public Adornment? Adornment { get; set; }
         public Verse? Verse { get; set; }
-        public virtual ICollection<InterlinearNote> InterlinearNotes { get; set; }
+        //public virtual ICollection<InterlinearNote> InterlinearNotes { get; set; }
     }
 }
