@@ -11,6 +11,6 @@
         public string longname { get; set; } = "";
 
         public string fileID { get; set; } = "";
-        public string BB { get; set; } = "";
+        public string BBB { get; set; } = "";
     }
 }

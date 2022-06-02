@@ -2,15 +2,488 @@
     x:Class="ClearDashboard.Wpf.Views.PinsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    x:Name="PinsViewWindow"
     d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding FlowDirection}"
+
     mc:Ignorable="d">
-    <Grid />
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush
+                x:Key="GridBrush"
+                Opacity="0.25"
+                Color="Gray" />
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{helpers:Loc PinsFilter}"
+                Style="{StaticResource MaterialDesignLabel}" />
+            <TextBox
+                Width="200"
+                Height="25"
+                Margin="15,0,0,0"
+                Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Height="25"
+                Margin="10,0,0,0"
+                Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
+                CommandParameter="{Binding}"
+                Content="{helpers:Loc PinsClearFilter}"
+                Style="{StaticResource BlueMidButton}" />
+            <!--  x:Name="ClearFilter"  -->
+            <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
+
+            <Button
+                Height="25"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Content="{helpers:Loc PinsLoadReferences}"
+                Style="{StaticResource BlueMidButton}"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <DataGrid
+            x:Name="DataGrid"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            MinHeight="200"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            AlternationCount="2"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserResizeColumns="True"
+            GridLinesVisibility="All"
+            HorizontalGridLinesBrush="{StaticResource GridBrush}"
+            ItemsSource="{Binding GridCollectionView}"
+            RowBackground="{DynamicResource MaterialDesignDarkBackground}"
+            ScrollViewer.CanContentScroll="True"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            SelectionMode="Extended"
+            SelectionUnit="FullRow"
+            VerticalGridLinesBrush="{StaticResource GridBrush}">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding ClearFilterCommand}"
+                        CommandParameter="{Binding}"
+                        Header="{helpers:Loc PinsClearFilter}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <!--<Setter Property="Height" Value="{x:Static sys:Double.NaN}" />-->
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Style.Triggers>
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="{StaticResource GridBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+
+            <DataGrid.Columns>
+                <!--  Lexeme  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="{helpers:Loc PinsLexeme}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                MaxWidth="250"
+                                Margin="0,0,0,5"
+                                FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
+                                FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                Text="{Binding Path='Source'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  gloss  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="{helpers:Loc PinsGloss}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                MaxWidth="250"
+                                Margin="0,0,0,5"
+                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                Text="{Binding Path='Gloss'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  origin id  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="250"
+                    Header="{helpers:Loc PinsOrigin}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                Text="{Binding Path='OriginID'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Notes  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="1000"
+                    Header="{helpers:Loc PinsNotes}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                MaxWidth="1000"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Notes'}"
+                                TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  SimpRefs  -->
+                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsVerseReferences}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Width="auto"
+                                Height="20"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding DataContext.VerseButtonCommand, ElementName=DataGrid}"
+                                CommandParameter="{Binding}"
+                                Content="{Binding Path='SimpRefs'}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SimpRefs}" Value="0">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Lform  -->
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsForms}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Lform'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                <!--  language  -->
+                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsLanguage}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Lang'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Code  -->
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsCode}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Code'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                <!--  Match  -->
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsMatch}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Match'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                <!--  Phrase  -->
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPhrase}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Phrase'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Word  -->
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsWord}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Word'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Prefix  -->
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPrefix}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Prefix'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Stem  -->
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsStem}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Stem'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--  Suffix  -->
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsSuffix}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Suffix'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ProgressBar
+            x:Name="ProgressBarVisibility"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Width="100"
+            Height="100"
+            Margin="15,0,5,0"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+
+        <materialDesign:DialogHost
+            x:Name="DialogHost"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center"
+            CloseOnClickAway="True"
+            DialogTheme="Inherit"
+            IsOpen="{Binding VerseRefDialogOpen}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}">
+            <materialDesign:DialogHost.DialogContent>
+                <Border
+                    BorderBrush="{DynamicResource SecondaryHueMidBrush}"
+                    BorderThickness="2"
+                    CornerRadius="3">
+                    <StackPanel Margin="16">
+                        <Button
+                            Margin="0,8,8,0"
+                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                            IsCancel="True"
+                            Style="{StaticResource MaterialDesignOutlinedSecondaryDarkButton}">
+                            <Button.CommandParameter>
+                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                    False
+                                </system:Boolean>
+                            </Button.CommandParameter>
+                            <materialDesign:PackIcon Kind="Close" />
+                        </Button>
+
+
+                        <ListView
+                            x:Name="SelectedItemVerses"
+                            Width="{Binding Path=ActualWidth, ElementName=PinsViewWindow}"
+                            Height="{Binding Path=ActualHeight, ElementName=DialogHost}"
+                            MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
+                            Margin="5"
+                            VerticalAlignment="Top"
+                            ItemsSource="{Binding SelectedItemVerses}"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Height" Value="30" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.ColumnHeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Style>
+                                    </GridView.ColumnHeaderContainerStyle>
+
+                                    <!--<GridViewColumn Width="30">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PackIcon Width="20" Height="20">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Found}" Value="False">
+                                                                <Setter Property="Kind" Value="CloseBox" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>-->
+                                    <GridViewColumn Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Cursor="Hand"
+                                                    FontStyle="Italic"
+                                                    Foreground="{StaticResource BlueMidBrush}">
+                                                    <TextBlock.InputBindings>
+                                                        <MouseBinding
+                                                            Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                            CommandParameter="{Binding BBBCCCVVV}"
+                                                            MouseAction="LeftClick" />
+                                                    </TextBlock.InputBindings>
+                                                    <Underline>
+                                                        <Run Text="{Binding VerseIdShort}" />
+                                                    </Underline>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
+                                                    FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                                    Text="{Binding VerseText}"
+                                                    TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+            <Border
+                MinWidth="256"
+                MinHeight="256"
+                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                BorderThickness="0"
+                ClipToBounds="True" />
+        </materialDesign:DialogHost>
+
+    </Grid>
 </UserControl>

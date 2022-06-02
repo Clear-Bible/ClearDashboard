@@ -44,5 +44,10 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public Dictionary<string, string> BcvDictionary { get; set; } = new Dictionary<string, string>();
 
+        public bool IsCustomVersification { get; set; } = false;
+
+        public SIL.Scripture.ScrVersType ScrVersType { get; set; } = SIL.Scripture.ScrVersType.English;
+
     }
+
 }
