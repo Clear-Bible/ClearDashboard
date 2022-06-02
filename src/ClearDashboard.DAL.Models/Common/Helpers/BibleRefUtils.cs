@@ -1,7 +1,59 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models.Helpers
+﻿
+
+namespace ClearDashboard.DataAccessLayer.Models.Helpers
 {
     public static class BibleRefUtils
     {
+        public static string GetVerseStrShortFromBBBCCCVVV(string BBBCCCVVV)
+        {
+            string verseStr = "";
+
+            // ensure that we are dealing with a full 9 character string
+            if (BBBCCCVVV.Length < 9)
+            {
+                BBBCCCVVV = BBBCCCVVV.PadLeft(9, '0');
+            }
+
+            // get the book lookup values
+            var lookup = GetBookIdDictionary();
+
+            // get the short book name
+            if (lookup.ContainsKey(BBBCCCVVV.Substring(0,3)))
+            {
+                verseStr = lookup[BBBCCCVVV.Substring(0, 3)];
+            }
+            else
+            {
+                verseStr = "UNK";
+            }
+
+            // parse out the verse number
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(3, 3));
+                verseStr += $" {numVal}:";
+            }
+            catch (FormatException e)
+            {
+                verseStr += " 00:";
+            }
+
+            // parse out the chapter
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(6, 3));
+                verseStr += $"{numVal}";
+            }
+            catch (FormatException e)
+            {
+                verseStr += "00";
+            }
+
+            return verseStr;
+
+        }
+
+
         public static string GetBookNumFromBookName(string value)
         {
             Dictionary<string, string> lookup = new Dictionary<string, string>
@@ -140,6 +192,127 @@
             { "Jude", "065" },
             { "Revelation", "066" },
 
+                { "Genesis", "01" },
+                { "Exodus", "02" },
+                { "Leviticus", "03" },
+                { "Numbers", "04" },
+                { "Deuteronomy", "05" },
+                { "Joshua", "06" },
+                { "Judges", "07" },
+                { "Ruth", "08" },
+                { "1 Samuel", "09" },
+                { "2 Samuel", "10" },
+                { "1 Kings", "11" },
+                { "2 Kings", "12" },
+                { "1 Chronicles", "13" },
+                { "2 Chronicles", "14" },
+                { "Ezra", "15" },
+                { "Nehemiah", "16" },
+                { "Esther", "17" },
+                { "Job", "18" },
+                { "Psalms", "19" },
+                { "Proverbs", "20" },
+                { "Ecclesiastes", "21" },
+                { "The Song of Songs", "22" },
+                { "Isaiah", "23" },
+                { "Jeremiah", "24" },
+                { "Lamentations", "25" },
+                { "Ezekiel", "26" },
+                { "Daniel", "27" },
+                { "Hosea", "28" },
+                { "Joel", "29" },
+                { "Amos", "30" },
+                { "Obadiah", "31" },
+                { "Jonah", "32" },
+                { "Micah", "33" },
+                { "Nahum", "34" },
+                { "Habakkuk", "35" },
+                { "Zephaniah", "36" },
+                { "Haggai", "37" },
+                { "Zechariah", "38" },
+                { "Malachi", "39" },
+                { "Matthew", "40" },
+                { "Mark", "41" },
+                { "Luke", "42" },
+                { "John", "43" },
+                { "Acts", "44" },
+                { "Romans", "45" },
+                { "1 Corinthians", "46" },
+                { "2 Corinthians", "47" },
+                { "Galatians", "48" },
+                { "Ephesians", "49" },
+                { "Philippians", "50" },
+                { "Colossians", "51" },
+                { "1 Thessalonians", "52" },
+                { "2 Thessalonians", "53" },
+                { "1 Timothy", "54" },
+                { "2 Timothy", "55" },
+                { "Titus", "56" },
+                { "Philemon", "57" },
+                { "Hebrews", "58" },
+                { "James", "59" },
+                { "1 Peter", "60" },
+                { "2 Peter", "61" },
+                { "1 John", "62" },
+                { "2 John", "63" },
+                { "3 John", "64" },
+                { "Jude", "65" },
+                { "Revelation", "66" },
+                { "Tobit", "67" },
+                { "Judith", "68" },
+                { "Esther Greek", "69" },
+                { "Wisdom of Solomon", "70" },
+                { "Sirach (Ecclesiasticus)", "71" },
+                { "Baruch", "72" },
+                { "Letter of Jeremiah", "73" },
+                { "Song of 3 Young Men", "74" },
+                { "Susanna", "75" },
+                { "Bel and the Dragon", "76" },
+                { "1 Maccabees", "77" },
+                { "2 Maccabees", "78" },
+                { "3 Maccabees", "79" },
+                { "4 Maccabees", "80" },
+                { "1 Esdras (Greek)", "81" },
+                { "2 Esdras (Latin)", "82" },
+                { "Prayer of Manasseh", "83" },
+                { "Psalm 151", "84" },
+                { "Odes", "85" },
+                { "Psalms of Solomon", "86" },
+                { "Joshua A. *obsolete*", "87" },
+                { "Judges B. *obsolete*", "88" },
+                { "Tobit S. *obsolete*", "89" },
+                { "Susanna Th. *obsolete*", "90" },
+                { "Daniel Th. *obsolete*", "91" },
+                { "Bel Th. *obsolete*", "92" },
+                { "Extra A", "93" },
+                { "Extra B", "94" },
+                { "Extra C", "95" },
+                { "Extra D", "96" },
+                { "Extra E", "97" },
+                { "Extra F", "98" },
+                { "Extra G", "99" },
+                { "Front Matter", "100" },
+                { "Back Matter", "101" },
+                { "Other Matter", "102" },
+                { "3 Ezra *obsolete*", "103" },
+                { "Apocalypse of Ezra", "104" },
+                { "5 Ezra (Latin Prologue)", "105" },
+                { "6 Ezra (Latin Epilogue)", "106" },
+                { "Introduction", "107" },
+                { "Concordance", "108" },
+                { "Glossary", "109" },
+                { "Topical Index", "110" },
+                { "Names Index", "111" },
+                { "Daniel Greek", "112" },
+                { "Psalms 152-155", "113" },
+                { "2 Baruch (Apocalypse)", "114" },
+                { "Letter of Baruch", "115" },
+                { "Jubilees", "116" },
+                { "Enoch", "117" },
+                { "1 Meqabyan", "118" },
+                { "2 Meqabyan", "119" },
+                { "3 Meqabyan", "120" },
+                { "Reproof (Proverbs 25-31)", "121" }
             };
 
             string sTmp;

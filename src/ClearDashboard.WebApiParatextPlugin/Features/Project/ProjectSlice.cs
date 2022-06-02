@@ -76,6 +76,36 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
                     break;
             }
 
+            // versification
+            switch (_project.Versification.Type)
+            {
+                case StandardScrVersType.Unknown:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.Unknown;
+                    break;
+                case StandardScrVersType.Original:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.Original;
+                    break;
+                case StandardScrVersType.English:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.English;
+                    break;
+                case StandardScrVersType.RussianOrthodox:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.RussianOrthodox;
+                    break;
+                case StandardScrVersType.RussianProtestant:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.RussianProtestant;
+                    break;
+                case StandardScrVersType.Septuagint:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.Septuagint;
+                    break;
+                case StandardScrVersType.Vulgate:
+                    project.ScrVersType = SIL.Scripture.ScrVersType.Vulgate;
+                    break;
+
+            }
+
+            project.IsCustomVersification = _project.Versification.IsCustomized;
+
+
             project.BcvDictionary = GetBCV_Dictionary();
 
             return project;
