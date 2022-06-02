@@ -28,7 +28,7 @@ namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
             {
                 try
                 {
-                    queryResult.Data = ExecuteSqliteCommandAndProcessData($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..5]}%' ORDER BY verseID");
+                    queryResult.Data = ExecuteSqliteCommandAndProcessData($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..6]}%' ORDER BY verseID");
                 }
                 catch (Exception ex)
                 {
