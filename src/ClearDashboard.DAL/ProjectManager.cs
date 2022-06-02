@@ -48,13 +48,13 @@ namespace ClearDashboard.DataAccessLayer
             get { return _currentVerse; }
             set
             {
-                // ensure that we are getting a fully delimited BB as things like
+                // ensure that we are getting a fully delimited BBB as things like
                 // 01 through 09 often get truncated to "1" through "9" without the 
                 // leading zero
                 var s = value;
-                if (s.Length < "BBCCCVVV".Length)
+                if (s.Length < "BBBCCCVVV".Length)
                 {
-                    s = value.PadLeft("BBCCCVVV".Length, '0');
+                    s = value.PadLeft("BBBCCCVVV".Length, '0');
                 }
                 _currentVerse = s;
             }

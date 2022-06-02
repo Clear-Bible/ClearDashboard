@@ -73,9 +73,9 @@
 
             <Menu Grid.Column="1" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
-                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                    <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
                         <Setter Property="Icon" Value="{Binding Icon}" />
-                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
                         <!--<Setter Property="Icon" Value="{Binding IconSource}" />-->
                         <Setter Property="Command" Value="{Binding Command}" />
                     </Style>
@@ -242,8 +242,8 @@
             <Label Grid.Row="0" Content="Save Current Layout:" />
             <ComboBox
                 x:Name="cboNames"
-                Padding="15"
                 Grid.Row="1"
+                Padding="15"
                 DisplayMemberPath="LayoutName"
                 IsEditable="True"
                 ItemsSource="{Binding Path=FileLayouts}"
@@ -338,7 +338,7 @@
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
-                                Text="{Binding LayoutName}" >
+                                Text="{Binding LayoutName}">
                                 <TextBlock.Style>
                                     <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="{x:Type TextBlock}">
                                         <!--  Default value  -->

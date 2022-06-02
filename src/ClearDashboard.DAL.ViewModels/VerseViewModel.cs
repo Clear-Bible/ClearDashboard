@@ -162,6 +162,18 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
+        //public string? BookStr
+        //{
+        //    get => Entity?.BookStr;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.BookStr = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(BookStr));
+        //    }
+        //}
 
 
         public string? BookStr => Entity?.BookStr;
@@ -175,5 +187,11 @@ namespace ClearDashboard.DAL.ViewModels
         public bool Found { get; set; }
 
         public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+
+        public VerseViewModel SetVerseFromBBBCCCVVV(string bbbcccvvv)
+        {
+            Entity.SetVerseFromBBBCCCVVV(bbbcccvvv);
+            return this;
+        }
     }
 }

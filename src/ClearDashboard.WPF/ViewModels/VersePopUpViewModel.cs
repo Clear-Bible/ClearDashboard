@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -79,6 +80,14 @@ namespace ClearDashboard.Wpf.ViewModels
             
         }
 
+        /// <summary>
+        /// Entry Point for BiblicalTerms verse click
+        /// </summary>
+        /// <param name="navigationService"></param>
+        /// <param name="logger"></param>
+        /// <param name="projectManager"></param>
+        /// <param name="eventAggregator"></param>
+        /// <param name="verse"></param>
         public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, VerseViewModel verse)
             : base(navigationService, logger, projectManager, eventAggregator)
@@ -86,6 +95,26 @@ namespace ClearDashboard.Wpf.ViewModels
             _verse = verse;
 
             BookChapter = verse.VerseId.Substring(0, verse.VerseId.IndexOf(':'));
+
+            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
+        }
+
+        /// <summary>
+        /// Entry Point for PINS verse click
+        /// </summary>
+        /// <param name="navigationService"></param>
+        /// <param name="logger"></param>
+        /// <param name="projectManager"></param>
+        /// <param name="eventAggregator"></param>
+        /// <param name="verse"></param>
+        public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, PinsVerseList verse)
+            : base(navigationService, logger, projectManager, eventAggregator)
+        {
+            VerseViewModel verseViewModel = new VerseViewModel();
+            _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.BBBCCCVVV);
+
+            BookChapter = verse.VerseIdShort.Substring(0, verse.VerseIdShort.IndexOf(':'));
 
             flowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
@@ -108,7 +137,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var verseNum = verse.Substring(0, verse.IndexOf(' '));
                 if (verseNum == @"\v")
                 {
-                    verseNum = verse.Substring(3, verse.IndexOf(' '));
+                    verseNum = verse.Substring(3, verse.IndexOf(' ')).Trim();
                     var verseText = verse.Substring(verseNum.Length + 3);
 
                     var row = _dt.NewRow();

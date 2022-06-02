@@ -15,4 +15,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public List<string> stringA { get; set; }
         public List<string> stringB { get; set; }
     }
+
+    public class VersificationList
+    {
+        public string TargetBBBCCCVV { get; set; }
+        public string SourceBBBCCCVV { get; set; }
+    }
 }
