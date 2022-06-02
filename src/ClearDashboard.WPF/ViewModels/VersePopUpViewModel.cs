@@ -111,7 +111,6 @@ namespace ClearDashboard.Wpf.ViewModels
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, PinsVerseList verse)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            // TODO Convert PinsVerseList to VerseViewModel
             VerseViewModel verseViewModel = new VerseViewModel();
             _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.BBBCCCVVV);
 

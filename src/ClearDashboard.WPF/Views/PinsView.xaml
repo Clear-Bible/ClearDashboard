@@ -9,6 +9,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -17,7 +18,9 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding FlowDirection}"
+
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -49,12 +52,11 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Orientation="Horizontal">
-            <TextBlock
+            <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Style="{StaticResource MaterialDesignTextBlock}"
-                Text="Filter:"
-                TextAlignment="Left" />
+                Content="{helpers:Loc PinsFilter}"
+                Style="{StaticResource MaterialDesignLabel}" />
             <TextBox
                 Width="200"
                 Height="25"
@@ -65,9 +67,8 @@
                 Margin="10,0,0,0"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
-                Style="{StaticResource BlueMidButton}">
-                Clear Filter
-            </Button>
+                Content="{helpers:Loc PinsClearFilter}"
+                Style="{StaticResource BlueMidButton}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
@@ -75,10 +76,9 @@
                 Height="25"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
+                Content="{helpers:Loc PinsLoadReferences}"
                 Style="{StaticResource BlueMidButton}"
-                Visibility="Collapsed">
-                Load References
-            </Button>
+                Visibility="Collapsed" />
         </StackPanel>
 
         <DataGrid
@@ -109,7 +109,7 @@
                     <MenuItem
                         Command="{Binding ClearFilterCommand}"
                         CommandParameter="{Binding}"
-                        Header="Clear Filter" />
+                        Header="{helpers:Loc PinsClearFilter}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
@@ -129,7 +129,6 @@
                         <Trigger Property="AlternationIndex" Value="1">
                             <Setter Property="Background" Value="{StaticResource GridBrush}" />
                         </Trigger>
-
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
@@ -140,7 +139,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="Lexeme">
+                    Header="{helpers:Loc PinsLexeme}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -159,7 +158,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="Gloss">
+                    Header="{helpers:Loc PinsGloss}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -177,7 +176,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="Origin">
+                    Header="{helpers:Loc PinsOrigin}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -194,7 +193,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="1000"
-                    Header="Notes">
+                    Header="{helpers:Loc PinsNotes}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -209,7 +208,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="Verse References">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsVerseReferences}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -237,7 +236,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lform  -->
-                <!--<DataGridTemplateColumn Width="125" Header="Forms">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsForms}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -250,7 +249,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="125" Header="Language">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsLanguage}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -263,7 +262,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Code  -->
-                <!--<DataGridTemplateColumn Width="125" Header="Code">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsCode}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -276,7 +275,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Match  -->
-                <!--<DataGridTemplateColumn Width="125" Header="Match">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsMatch}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -289,7 +288,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="80" Header="Phrase">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPhrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -302,7 +301,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="80" Header="Word">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsWord}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -315,7 +314,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="80" Header="Prefix">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPrefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -328,7 +327,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="80" Header="Stem">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsStem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -341,7 +340,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="80" Header="Suffix">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsSuffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -464,14 +463,11 @@
                                     <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding VerseText}" TextWrapping="Wrap" />
-
-                                                <!--<helpers:BindableTextBlock
-                                                Width="Auto"
-                                                FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
-                                                FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
-                                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                                TextWrapping="Wrap" />-->
+                                                <TextBlock
+                                                    FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
+                                                    FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                                    Text="{Binding VerseText}"
+                                                    TextWrapping="Wrap" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -486,13 +482,7 @@
                 MinHeight="256"
                 BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                 BorderThickness="0"
-                ClipToBounds="True">
-                <!--<Button
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Command="{Binding OpenSample4DialogCommand}"
-                    Content="RUN" />-->
-            </Border>
+                ClipToBounds="True" />
         </materialDesign:DialogHost>
 
     </Grid>

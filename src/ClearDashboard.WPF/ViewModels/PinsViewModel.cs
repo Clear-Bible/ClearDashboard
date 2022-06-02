@@ -51,6 +51,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        public Point WindowLocation { get; set; }
+
         private ObservableList<PinsDataTable> _thedata = new();
 
         public ObservableList<PinsDataTable> TheData
@@ -191,10 +193,18 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            Debug.WriteLine("");
-            return base.OnActivateAsync(cancellationToken);
+#pragma warning disable CS4014
+            // Do not await this....let it run in the background otherwise
+            // it freezes the UI
+            Task.Run(() =>
+            {
+                GenerateData().ConfigureAwait(false);
+            }).ConfigureAwait(true);
+#pragma warning restore CS4014
+
+            base.OnActivateAsync(cancellationToken);
         }
 
         protected override async void OnViewAttached(object view, object context)
@@ -205,19 +215,40 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override async void OnViewReady(object view)
         {
+            base.OnViewReady(view);
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            return base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        /// <summary>
+        /// Main logic for building the data
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> GenerateData()
+        {
             // load in the TermRenderings.xml file
             var queryResult =
-                await ExecuteRequest(new GetTermRenderingsQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "TermRenderings.xml")),
+                await ExecuteRequest(
+                    new GetTermRenderingsQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
+                        "TermRenderings.xml")),
                     CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);
-                return;
+                return true;
             }
 
             if (queryResult.Data == null)
             {
-                return;
+                return true;
             }
 
             _termRenderingsList = queryResult.Data;
@@ -230,32 +261,38 @@ namespace ClearDashboard.Wpf.ViewModels
                 paratextInstallPath = paratextUtils.ParatextInstallPath;
 
                 // load in the BiblicalTerms.xml file
-                var queryBTResult = await ExecuteRequest(new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml")), CancellationToken.None).ConfigureAwait(false);
+                var queryBTResult =
+                    await ExecuteRequest(
+                        new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml")),
+                        CancellationToken.None).ConfigureAwait(false);
                 if (queryBTResult.Success == false)
                 {
                     Logger.LogError(queryBTResult.Message);
-                    return;
+                    return true;
                 }
 
                 if (queryBTResult.Data == null)
                 {
-                    return;
+                    return true;
                 }
 
                 _biblicalTermsList = queryBTResult.Data;
 
 
                 // load in the AllBiblicalTerms.xml file
-                var queryABTResult = await ExecuteRequest(new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml")), CancellationToken.None).ConfigureAwait(false);
+                var queryABTResult =
+                    await ExecuteRequest(
+                        new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml")),
+                        CancellationToken.None).ConfigureAwait(false);
                 if (queryABTResult.Success == false)
                 {
                     Logger.LogError(queryABTResult.Message);
-                    return;
+                    return true;
                 }
 
                 if (queryABTResult.Data == null)
                 {
-                    return;
+                    return true;
                 }
 
                 _allBiblicalTermsList = queryABTResult.Data;
@@ -301,16 +338,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // load in the spellingstatus.xml
-            var querySSResult = await ExecuteRequest(new GetSpellingStatusQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "SpellingStatus.xml")), CancellationToken.None).ConfigureAwait(false);
+            var querySSResult =
+                await ExecuteRequest(
+                    new GetSpellingStatusQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
+                        "SpellingStatus.xml")), CancellationToken.None).ConfigureAwait(false);
             if (querySSResult.Success == false)
             {
                 Logger.LogError(querySSResult.Message);
-                return;
+                return true;
             }
 
             if (querySSResult.Data == null)
             {
-                return;
+                return true;
             }
 
             _spellingStatus = querySSResult.Data;
@@ -333,14 +373,19 @@ namespace ClearDashboard.Wpf.ViewModels
                 string pbtsense;
                 string pbtspell;
                 if (source.Contains("."))
-                {                                                                                                               // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
-                    pbtsense = source[..source.IndexOf(".")] + " {" + source[(source.IndexOf(".") + 1)..] + "}";    // place Sense in braces  
-                    pbtspell = source = source[..source.IndexOf(".")];                                                 // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
-                }
-                else if (source.Contains("-"))                                                                               // Sense number uses "-" in Gk & Heb, this will match bbt
                 {
-                    pbtsense = source.Trim().Replace("-", " {") + "}";                                                       // place Sense in braces
-                    pbtspell = source[..source.IndexOf("-")];                                                             // remove the Sense number from word/phrase for correct matching with Spelling
+                    // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
+                    pbtsense = source[..source.IndexOf(".")] + " {" + source[(source.IndexOf(".") + 1)..] +
+                               "}"; // place Sense in braces  
+                    pbtspell = source =
+                        source
+                            [..source.IndexOf(".")]; // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
+                }
+                else if (source.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
+                {
+                    pbtsense = source.Trim().Replace("-", " {") + "}"; // place Sense in braces
+                    pbtspell = source[
+                        ..source.IndexOf("-")]; // remove the Sense number from word/phrase for correct matching with Spelling
                 }
                 else
                     pbtspell = pbtsense = source;
@@ -368,7 +413,6 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         pbtspell = "";
                     }
-
                 }
 
                 // peel off the notes
@@ -490,25 +534,26 @@ namespace ClearDashboard.Wpf.ViewModels
                         });
                     }
                 }
-
             }
 
 
             // load in the lexicon.xml
-            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml")), CancellationToken.None).ConfigureAwait(false);
+            var queryLexiconResult =
+                await ExecuteRequest(
+                    new GetLexiconQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml")),
+                    CancellationToken.None).ConfigureAwait(false);
             if (queryLexiconResult.Success == false)
             {
                 Logger.LogError(queryLexiconResult.Message);
-                return;
+                return true;
             }
 
             if (queryLexiconResult.Data == null)
             {
-                return;
+                return true;
             }
 
             _lexicon = queryLexiconResult.Data;
-
 
 
             for (int i = 0; i < _lexicon.Entries.Item.Count; i++)
@@ -536,7 +581,6 @@ namespace ClearDashboard.Wpf.ViewModels
                         Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
                     });
                 }
-
             }
 
 
@@ -546,8 +590,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // turn off the progress bar
             ProgressBarVisibility = Visibility.Collapsed;
-
-            base.OnViewReady(view);
+            return false;
         }
 
         protected override async void OnViewLoaded(object view)

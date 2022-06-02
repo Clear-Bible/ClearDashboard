@@ -58,278 +58,329 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WmSense" xml:space="preserve">
-    <value>ន័យ:</value>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
   </data>
-  <data name="1_Samuel" xml:space="preserve">
-    <value>1 សាំយូអែល</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="BtFormGlossLower" xml:space="preserve">
-    <value>រលោង:</value>
-  </data>
-  <data name="3_John" xml:space="preserve">
-    <value>ចន 3</value>
-  </data>
-  <data name="add" xml:space="preserve">
-    <value>បុក / ករ</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>បរិទេវ</value>
-  </data>
-  <data name="BtDomainsAll" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="BtFormRenderings" xml:space="preserve">
-    <value>ការបង្ហាញ</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>ទំនុកតម្លាវ</value>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>SNG</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>រលោង:</value>
   </data>
-  <data name="create" xml:space="preserve">
-    <value>បង្កើត</value>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>គម្រោង</value>
   </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
   </data>
-  <data name="delete" xml:space="preserve">
-    <value>របៅបេលរសច</value>
+  <data name="PinsGloss" xml:space="preserve">
+    <value>រលោង</value>
   </data>
-  <data name="2_Thessalonians" xml:space="preserve">
-    <value>ថែស្សាឡូនីចទី 2</value>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>ដើមឈើ; ផ្លែឈើ</value>
   </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
+  <data name="TargetContextFormatted" xml:space="preserve">
+    <value>បានធ្វើទ្រង់ទ្រាយ</value>
   </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="1_John" xml:space="preserve">
+    <value>ចន 1</value>
   </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>អេសេគាល</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="BtFormSemanticDomain" xml:space="preserve">
-    <value>ដែនសំណើម:</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>ហាបាគុក</value>
-  </data>
-  <data name="BtDomainsAffection" xml:space="preserve">
-    <value>សេចកី្ដរសលាញ់</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>កយម្ផកា</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>លប់ចោល</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>បរិវេន</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>នេហេមា</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>យន្ដផ័យ</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>បិនិត្យ</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>គម្រោង​ថ្មី</value>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>សិប្បកម្ម; សមបត់</value>
   </data>
   <data name="TargetContextZoomIn" xml:space="preserve">
     <value>ពង្រីកក្នុង</value>
   </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>ឧបករណ៍</value>
   </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>ភីលីព</value>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
+  <data name="PinsVerseReferences" xml:space="preserve">
+    <value>ឯកសារយោងខ</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>កុសសមកាល់</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="WmSense" xml:space="preserve">
+    <value>ន័យ:</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>ធេវីអាេយយរមយរ</value>
+  </data>
+  <data name="PinsPhrase" xml:space="preserve">
+    <value>ឃ្លា</value>
+  </data>
+  <data name="TargetContextUnformatted" xml:space="preserve">
+    <value>ដេលមិនចត</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
   </data>
   <data name="2_Kings" xml:space="preserve">
     <value>ស្តេច 2 អង្គ</value>
   </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>ាំងលោអៀងខាងលិច</value>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
   </data>
-  <data name="BtBcvAll" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="Luke" xml:space="preserve">
+    <value>ផ្លេលកខេ</value>
   </data>
-  <data name="save" xml:space="preserve">
-    <value>សរេង្គាហ</value>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
   </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>កូល៉ុស</value>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>ឧបករណ៍; ទំងន់; ហនិច្ជកម្ផ</value>
   </data>
-  <data name="WmSubDomain" xml:space="preserve">
-    <value>ដែនរងនេះ:</value>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>សកម្មភាពសាសនា</value>
   </data>
-  <data name="BtFormTerm" xml:space="preserve">
-    <value>រយបេលមយយ</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>ការកំណត់</value>
-  </data>
-  <data name="1_Kings" xml:space="preserve">
-    <value>1 ស្តេច</value>
-  </data>
-  <data name="1_Peter" xml:space="preserve">
-    <value>1 ពេត្រុស</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>អេភេសូរ</value>
+  <data name="2_John" xml:space="preserve">
+    <value>ចន 2</value>
   </data>
   <data name="Deuteronomy" xml:space="preserve">
     <value>ចោទិយយថា</value>
   </data>
-  <data name="Amos" xml:space="preserve">
-    <value>អេម៉ុស</value>
+  <data name="Ezra" xml:space="preserve">
+    <value>ហេហេរ៉ា</value>
   </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtFormScope" xml:space="preserve">
-    <value>វិសាលភាព:</value>
-  </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>សំណង់; ការចិញ្ចឹមសត្វ</value>
-  </data>
-  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
-    <value>សំណង់; សកម្មភាពសាសនា</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Khmer [km]</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>កមរោង</value>
-  </data>
-  <data name="2_Chronicles" xml:space="preserve">
-    <value>របាក្សត្រទី 2</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>ចូអែល</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Job" xml:space="preserve">
-    <value>អាចីវកម្ផ</value>
-  </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="2_Samuel" xml:space="preserve">
-    <value>2 សាំយូអែល</value>
-  </data>
-  <data name="2_Peter" xml:space="preserve">
-    <value>2 ពេត្រុស</value>
-  </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>សេផានា</value>
+  <data name="Song of Songs" xml:space="preserve">
+    <value>ចម្រៀងចម្រៀង</value>
   </data>
   <data name="Proverbs" xml:space="preserve">
     <value>យកចារវិស័យ</value>
   </data>
-  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
   </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
   </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>ហាកាយ</value>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>កសិកម្ម</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>រយបេលមយយ</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>សមាកម</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="TargetContextZoomOut" xml:space="preserve">
+    <value>Zoom ចេញ</value>
+  </data>
+  <data name="PinsFilter" xml:space="preserve">
+    <value>ត្រង:</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>ចោសាហឆេស</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>មនុស្សអរូបីយ៍និងអំណាចអរូបី</value>
+  </data>
+  <data name="2_Samuel" xml:space="preserve">
+    <value>2 សាំយូអែល</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="1_Timothy" xml:space="preserve">
+    <value>ធីម៉ូថេ 1</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="Hebrews" xml:space="preserve">
+    <value>ហេព្រើរ</value>
+  </data>
+  <data name="Titus" xml:space="preserve">
+    <value>ទីតុស</value>
+  </data>
+  <data name="Ecclesiastes" xml:space="preserve">
+    <value>សាស្ដា</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>ប្រជាជន; អមនាច</value>
+  </data>
+  <data name="Leviticus" xml:space="preserve">
+    <value>លេវីវិន័យ</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="Ezekiel" xml:space="preserve">
+    <value>អេសេគាល</value>
+  </data>
+  <data name="1_Thessalonians" xml:space="preserve">
+    <value>ថែស្សាឡូនីចទី 1</value>
+  </data>
+  <data name="1_Samuel" xml:space="preserve">
+    <value>1 សាំយូអែល</value>
   </data>
   <data name="BtDomainsMonument" xml:space="preserve">
-    <value>Loading...</value>
+    <value>វិមាន</value>
   </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
   </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
+  <data name="3_John" xml:space="preserve">
+    <value>ចន 3</value>
   </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>ម៉ាថាយ</value>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="Revelation" xml:space="preserve">
+    <value>ការបហ្ចេញអាេយដឹង</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>សំណង់; ការចិញ្ចឹមសត្វ</value>
+  </data>
+  <data name="PinsWord" xml:space="preserve">
+    <value>ហក្យ</value>
+  </data>
+  <data name="1_Kings" xml:space="preserve">
+    <value>1 ស្តេច</value>
+  </data>
+  <data name="James" xml:space="preserve">
+    <value>យ៉ាកនាម</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>កមនាប្យ</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>ចមបុក</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="Habakkuk" xml:space="preserve">
+    <value>ហាបាគុក</value>
+  </data>
+  <data name="PinsNotes" xml:space="preserve">
+    <value>កំណត់ចំណាំ</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>សីលធម៌និងក្រមសីលធម៌</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>កមរោង</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>ផ្លែឈើ</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>សំណង់; សកម្មភាពសាសនា</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="2_Timothy" xml:space="preserve">
+    <value>ធីម៉ូថេទី 2</value>
+  </data>
+  <data name="Zechariah" xml:space="preserve">
+    <value>សាការី</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>របៅបេលរសច</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>សេចកី្ដរសលាញ់</value>
+  </data>
+  <data name="Philemon" xml:space="preserve">
+    <value>នាយ</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>ការបង្ហាញ</value>
+  </data>
+  <data name="Zephaniah" xml:space="preserve">
+    <value>សេផានា</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>រលោង</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>បិនិត្យ</value>
+  </data>
+  <data name="Judges" xml:space="preserve">
+    <value>ចយស</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>ក្រុម; បរិវេន</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>ពាក្យ:</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>បានរកឃើញ</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="2_Thessalonians" xml:space="preserve">
+    <value>ថែស្សាឡូនីចទី 2</value>
+  </data>
+  <data name="Joel" xml:space="preserve">
+    <value>ចូអែល</value>
+  </data>
+  <data name="2_Peter" xml:space="preserve">
+    <value>2 ពេត្រុស</value>
   </data>
   <data name="NEH" xml:space="preserve">
     <value>NEH</value>
@@ -337,364 +388,364 @@
   <data name="Jeremiah" xml:space="preserve">
     <value>យេរេមា</value>
   </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="WmDomain" xml:space="preserve">
+    <value>ដែន:</value>
   </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
+  <data name="Colossians" xml:space="preserve">
+    <value>កូល៉ុស</value>
   </data>
-  <data name="Luke" xml:space="preserve">
-    <value>ផ្លេលកខេ</value>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>គម្រោង​ថ្មី</value>
   </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>កាឡាទី</value>
-  </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtBcvVerse" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>រូស្លីវិញ</value>
-  </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtFormCounts" xml:space="preserve">
-    <value>រាប់</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>ធេវីអាេយយរមយរ</value>
-  </data>
-  <data name="Obadiah" xml:space="preserve">
-    <value>ដេសាដយ</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="1_John" xml:space="preserve">
-    <value>ចន 1</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="BtDomainsAreaNature" xml:space="preserve">
-    <value>តំបន់; ធម្ផចាតិ</value>
-  </data>
-  <data name="BtFormProject" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>យ៉ូណាស</value>
-  </data>
-  <data name="1_Timothy" xml:space="preserve">
-    <value>ធីម៉ូថេ 1</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>ម៉ាឡាគី</value>
+  <data name="Nehemiah" xml:space="preserve">
+    <value>នេហេមា</value>
   </data>
   <data name="ShellView_user" xml:space="preserve">
     <value>អ្នក​ប្រើ</value>
   </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
+  <data name="Hosea" xml:space="preserve">
+    <value>ហូសេ</value>
   </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>គម្រោង</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>សាយ</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="BtDomainsNature" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="BtFormRenderingsLower" xml:space="preserve">
-    <value>ការបង្ហាញ</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="BtFormGloss" xml:space="preserve">
-    <value>រលោង</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>យ៉ូស្វេ</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>ការបហ្ចេញអាេយដឹង</value>
+  <data name="Haggai" xml:space="preserve">
+    <value>ហាកាយ</value>
   </data>
   <data name="1SA" xml:space="preserve">
     <value>1SA</value>
   </data>
-  <data name="2_Timothy" xml:space="preserve">
-    <value>ធីម៉ូថេទី 2</value>
+  <data name="Obadiah" xml:space="preserve">
+    <value>ដេសាដយ</value>
   </data>
-  <data name="James" xml:space="preserve">
-    <value>យ៉ាកនាម</value>
-  </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>ទីតុស</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>សកម្មភាព</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>សាស្ដា</value>
-  </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="TargetContextFormatted" xml:space="preserve">
-    <value>បានធ្វើទ្រង់ទ្រាយ</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>ដានីយ៉ែល</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="2_John" xml:space="preserve">
-    <value>ចន 2</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="1_Thessalonians" xml:space="preserve">
-    <value>ថែស្សាឡូនីចទី 1</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>សមាកម</value>
-  </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="1_Chronicles" xml:space="preserve">
-    <value>របាក្សត្រ 1</value>
-  </data>
-  <data name="BtFormCategory" xml:space="preserve">
-    <value>បយក</value>
-  </data>
-  <data name="BtDomainsMourning" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="2_Corinthians" xml:space="preserve">
-    <value>2 កូរិនថូស 2 នាក់</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>ចម្រៀងចម្រៀង</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>រ៉ូម</value>
-  </data>
-  <data name="TargetContextUnformatted" xml:space="preserve">
-    <value>ដេលមិនចត</value>
-  </data>
-  <data name="WmDomain" xml:space="preserve">
-    <value>ដែន:</value>
-  </data>
-  <data name="BtFormWord" xml:space="preserve">
-    <value>ពាក្យ:</value>
-  </data>
-  <data name="Judges" xml:space="preserve">
-    <value>ចយស</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>នាយ</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>កសិកម្ម</value>
-  </data>
-  <data name="BtFormAll" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>ហូសេ</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Esther" xml:space="preserve">
-    <value>ដេលលក់បាន</value>
-  </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="BtFormFound" xml:space="preserve">
-    <value>បានរកឃើញ</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>ណាហ៊ុមនោម</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>កុសសមកាល់</value>
-  </data>
-  <data name="1_Corinthians" xml:space="preserve">
-    <value>1 កូរិនថូស</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>សាការី</value>
+  <data name="WmSubDomain" xml:space="preserve">
+    <value>ដែនរងនេះ:</value>
   </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
+  <data name="PinsCode" xml:space="preserve">
+    <value>ច្បាប់រដ្ឋប្បវេនី</value>
   </data>
-  <data name="John" xml:space="preserve">
-    <value>ចន</value>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
   </data>
-  <data name="BtDomainsPeople" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
   </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>ចម្edeតោហ</value>
+  <data name="PinsLexeme" xml:space="preserve">
+    <value>lexme</value>
   </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
   </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>បយក</value>
   </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
   </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>ហេហេរ៉ា</value>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
   </data>
-  <data name="TargetContextZoomOut" xml:space="preserve">
-    <value>Zoom ចេញ</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="Leviticus" xml:space="preserve">
-    <value>លេវីវិន័យ</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>លេខ</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>ការក្លាយជាមនុស្សអរូបីយ៍និងអំណាច; កមប៉ាក់</value>
   </data>
   <data name="Isaiah" xml:space="preserve">
     <value>អេសាយ</value>
   </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>ហេព្រើរ</value>
+  <data name="PinsStem" xml:space="preserve">
+    <value>ផ្កា</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>ការបង្ហាញ</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>កោលបមនង</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>រាប់</value>
+  </data>
+  <data name="Exodus" xml:space="preserve">
+    <value>ចម្edeតោហ</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>ឧបករណ៍; កមនើតកុន</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>បរិវេន</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="PinsForms" xml:space="preserve">
+    <value>ទម្រង់បែបបទ</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
+  <data name="Daniel" xml:space="preserve">
+    <value>ដានីយ៉ែល</value>
+  </data>
+  <data name="1_Peter" xml:space="preserve">
+    <value>1 ពេត្រុស</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>កិត្តិយស, ការគោរព, ស្ថានភាព</value>
+  </data>
+  <data name="2_Corinthians" xml:space="preserve">
+    <value>2 កូរិនថូស 2 នាក់</value>
+  </data>
+  <data name="Jude" xml:space="preserve">
+    <value>យន្ដផ័យ</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>បុក / ករ</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>កយម្ផកា</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Khmer [km]</value>
+  </data>
+  <data name="John" xml:space="preserve">
+    <value>ចន</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>ដើមឈើ; ទឹកអប់និងគ្រឿងទេស</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>បង្កើត</value>
+  </data>
+  <data name="PinsSuffix" xml:space="preserve">
+    <value>បច្ច័យ</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>តំបន់; ធម្ផចាតិ</value>
+  </data>
+  <data name="Amos" xml:space="preserve">
+    <value>អេម៉ុស</value>
+  </data>
+  <data name="1_Chronicles" xml:space="preserve">
+    <value>របាក្សត្រ 1</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>ស្យេវផោ</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>ថនិកសត្វ; សត្វព្រៃ</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>សកម្មភាព</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>មនុសស</value>
+  </data>
+  <data name="Malachi" xml:space="preserve">
+    <value>ម៉ាឡាគី</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>មេរូច</value>
+  </data>
+  <data name="Jonah" xml:space="preserve">
+    <value>យ៉ូណាស</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>ត្បូង</value>
+  </data>
+  <data name="PinsLoadReferences" xml:space="preserve">
+    <value>ផ្ទុកឯកសារយោង</value>
+  </data>
+  <data name="Joshua" xml:space="preserve">
+    <value>យ៉ូស្វេ</value>
+  </data>
+  <data name="Lamentations" xml:space="preserve">
+    <value>បរិទេវ</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="Micah" xml:space="preserve">
+    <value>សាយ</value>
+  </data>
+  <data name="Romans" xml:space="preserve">
+    <value>រ៉ូម</value>
+  </data>
+  <data name="2_Chronicles" xml:space="preserve">
+    <value>របាក្សត្រទី 2</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
+  <data name="PinsOrigin" xml:space="preserve">
+    <value>របផប</value>
+  </data>
+  <data name="Ruth" xml:space="preserve">
+    <value>រូស្លីវិញ</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>ដែនសំណើម:</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>សញ្ញានិងអច្ឆរិយៈ</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>កមរោង</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>ប្រាជ្ញាការយល់ដឹង</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="Nahum" xml:space="preserve">
+    <value>ណាហ៊ុមនោម</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="PinsMatch" xml:space="preserve">
+    <value>ផាបស្ផើក្នា</value>
+  </data>
+  <data name="Psalms" xml:space="preserve">
+    <value>ទំនុកតម្លាវ</value>
+  </data>
+  <data name="PinsPrefix" xml:space="preserve">
+    <value>កមនត់តុកចាមុន</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>វិសាលភាព:</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Ephesians" xml:space="preserve">
+    <value>អេភេសូរ</value>
+  </data>
+  <data name="Galatians" xml:space="preserve">
+    <value>កាឡាទី</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>កុងតឺន័រ; ការចិញ្ចឹមសត្វ</value>
+  </data>
+  <data name="PinsLanguage" xml:space="preserve">
+    <value>ផាសា</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>ការលះបង់និងការថ្វាយយញ្ញបូជា</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>មរនសហ្ញា</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>សរេង្គាហ</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>ផ្នេក្កក់</value>
+  </data>
+  <data name="1_Corinthians" xml:space="preserve">
+    <value>1 កូរិនថូស</value>
+  </data>
+  <data name="Philippians" xml:space="preserve">
+    <value>ភីលីព</value>
+  </data>
+  <data name="PinsClearFilter" xml:space="preserve">
+    <value>តម្រងច្បាស់</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>បាត់ការបង្ហាញ</value>
+  </data>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>ថនិកសត្វ; សត្វ​ក្នុង​ស្រុក</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>រកុម</value>
+  </data>
+  <data name="Genesis" xml:space="preserve">
+    <value>ាំងលោអៀងខាងលិច</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>ប្រជាជន; កិត្តិយស, ការគោរព, ស្ថានភាព</value>
+  </data>
+  <data name="Numbers" xml:space="preserve">
+    <value>លេខ</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>របចារាស្រ្ដ</value>
+  </data>
+  <data name="Esther" xml:space="preserve">
+    <value>ដេលលក់បាន</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>អាចីវកម្ផ</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>ធម្ផចាតិ</value>
+  </data>
+  <data name="Matthew" xml:space="preserve">
+    <value>ម៉ាថាយ</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>ការផសហផសា</value>
   </data>
 </root>
