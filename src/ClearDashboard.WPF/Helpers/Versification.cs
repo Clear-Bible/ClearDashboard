@@ -14,14 +14,13 @@ namespace ClearDashboard.Wpf.Helpers
     public static class Versification
     {
         public static List<VersificationList> GetVersificationFromOriginal(List<VersificationList> list,
-            Project projectManagerParatextProject)
+            Project paratextProject)
         {
 
-            ScrVers projVersification = new ScrVers(projectManagerParatextProject.ScrVersType);
+            ScrVers projVersification = new ScrVers(paratextProject.ScrVersType);
 
             foreach (var verse in list)
             {
-
                 try
                 {
                     // we are converting from an original versification type to whatever

@@ -18,6 +18,8 @@ using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Helpers;
@@ -207,36 +209,19 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override async void OnViewReady(object view)
         {
             // load in the TermRenderings.xml file
-            await Task.Run(() =>
+            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(ProjectManager.CurrentDashboardProject.DirectoryPath), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
             {
-                string xmlPath = Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
-                    "TermRenderings.xml");
+                Logger.LogError(queryResult.Message);
+                return;
+            }
 
-                if (File.Exists(xmlPath))
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(xmlPath);
-                    XmlNodeReader reader = new XmlNodeReader(doc);
+            if (queryResult.Data == null)
+            {
+                return;
+            }
 
-                    using (reader)
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(TermRenderingsList));
-                        try
-                        {
-                            _termRenderingsList = (TermRenderingsList)serializer.Deserialize(reader);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogError("Error in PINS deserialization of TermRenderings.xml: " + e.Message);
-                        }
-                    }
-                }
-                else
-                {
-                    Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
-                }
-            }).ConfigureAwait(false);
-
+            _termRenderingsList = queryResult.Data;
 
 
             ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
@@ -246,66 +231,35 @@ namespace ClearDashboard.Wpf.ViewModels
                 paratextInstallPath = paratextUtils.ParatextInstallPath;
 
                 // load in the BiblicalTerms.xml file
-                await Task.Run(() =>
+                var queryBTResult = await ExecuteRequest(new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml")), CancellationToken.None).ConfigureAwait(false);
+                if (queryBTResult.Success == false)
                 {
-                    string xmlPath = Path.Combine(paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml");
+                    Logger.LogError(queryBTResult.Message);
+                    return;
+                }
 
-                    if (File.Exists(xmlPath))
-                    {
-                        XmlDocument doc = new XmlDocument();
-                        doc.Load(xmlPath);
-                        XmlNodeReader reader = new XmlNodeReader(doc);
+                if (queryBTResult.Data == null)
+                {
+                    return;
+                }
 
-                        using (reader)
-                        {
-                            XmlSerializer serializer = new XmlSerializer(typeof(BiblicalTermsList));
-                            try
-                            {
-                                _biblicalTermsList = (BiblicalTermsList)serializer.Deserialize(reader);
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.LogError("Error in PINS deserialization of BibilicalTerms.xml: " + e.Message);
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
-                    }
-                }).ConfigureAwait(false);
+                _biblicalTermsList = queryBTResult.Data;
 
 
                 // load in the AllBiblicalTerms.xml file
-                await Task.Run(() =>
+                var queryABTResult = await ExecuteRequest(new GetBiblicalTermsQuery(Path.Combine(paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml")), CancellationToken.None).ConfigureAwait(false);
+                if (queryABTResult.Success == false)
                 {
-                    string xmlPath = Path.Combine(paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml");
+                    Logger.LogError(queryABTResult.Message);
+                    return;
+                }
 
-                    if (File.Exists(xmlPath))
-                    {
-                        XmlDocument doc = new XmlDocument();
-                        doc.Load(xmlPath);
-                        XmlNodeReader reader = new XmlNodeReader(doc);
+                if (queryABTResult.Data == null)
+                {
+                    return;
+                }
 
-                        using (reader)
-                        {
-                            XmlSerializer serializer = new XmlSerializer(typeof(BiblicalTermsList));
-                            try
-                            {
-                                _allBiblicalTermsList = (BiblicalTermsList)serializer.Deserialize(reader);
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.LogError("Error in PINS deserialization of AllBibilicalTerms.xml: " + e.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
-                    }
-                }).ConfigureAwait(false);
+                _allBiblicalTermsList = queryABTResult.Data;
             }
             else
             {
@@ -348,38 +302,22 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // load in the spellingstatus.xml
-            await Task.Run(() =>
+            var querySSResult = await ExecuteRequest(new GetSpellingStatusQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "SpellingStatus.xml")), CancellationToken.None).ConfigureAwait(false);
+            if (querySSResult.Success == false)
             {
-                string xmlPath = Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
-                    "SpellingStatus.xml");
+                Logger.LogError(querySSResult.Message);
+                return;
+            }
 
-                if (File.Exists(xmlPath))
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(xmlPath);
-                    XmlNodeReader reader = new XmlNodeReader(doc);
+            if (querySSResult.Data == null)
+            {
+                return;
+            }
 
-                    using (reader)
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(SpellingStatus));
-                        try
-                        {
-                            _spellingStatus = (SpellingStatus)serializer.Deserialize(reader);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogError("Error in PINS deserialization of AllBibilicalTerms.xml: " + e.Message);
-                        }
-                    }
-                }
-                else
-                {
-                    Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
-                }
-            }).ConfigureAwait(false);
+            _spellingStatus = querySSResult.Data;
 
-            Console.WriteLine();
 
+            // build the data for display
             foreach (var terms in _termRenderingsList.TermRendering)
             {
                 string target = terms.Renderings;
@@ -557,37 +495,22 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
 
-
             // load in the lexicon.xml
-            await Task.Run(() =>
+            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml")), CancellationToken.None).ConfigureAwait(false);
+            if (queryLexiconResult.Success == false)
             {
-                string xmlPath = Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
-                    "Lexicon.xml");
+                Logger.LogError(queryLexiconResult.Message);
+                return;
+            }
 
-                if (File.Exists(xmlPath))
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(xmlPath);
-                    XmlNodeReader reader = new XmlNodeReader(doc);
+            if (queryLexiconResult.Data == null)
+            {
+                return;
+            }
 
-                    using (reader)
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
-                        try
-                        {
-                            _lexicon = (Lexicon)serializer.Deserialize(reader);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogError("Error in PINS deserialization of Lexicon.xml: " + e.Message);
-                        }
-                    }
-                }
-                else
-                {
-                    Logger.LogError("Missing file in PINS viewmodel: " + xmlPath);
-                }
-            }).ConfigureAwait(false);
+            _lexicon = queryLexiconResult.Data;
+
+
 
             for (int i = 0; i < _lexicon.Entries.Item.Count; i++)
             {
@@ -616,10 +539,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
 
             }
-
-
-
-
 
 
             GridCollectionView = CollectionViewSource.GetDefaultView(TheData);
