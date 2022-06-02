@@ -348,8 +348,18 @@
                     </TextBox.Text>
                 </TextBox>
 
-                <Button
+                <!-- TODO:  reinstate -->
+                <!--<Button
                     x:Name="MoveForwards"
+                    Margin="5,5,0,0"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    Generate New Project
+                </Button>-->
+
+                <Button
+                    x:Name="CreateNewProject"
                     Margin="5,5,0,0"
                     Padding="3"
                     HorizontalAlignment="Center"
