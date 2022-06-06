@@ -8,6 +8,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -15,10 +17,14 @@ using ClearDashboard.DAL.ViewModels;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class TargetContextViewModel : ToolViewModel
+    public class TargetContextViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
+        private readonly INavigationService _navigationService;
+        private readonly ILogger<TargetContextViewModel> _logger;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator _eventAggregator;
 
         private string _currentVerse = "";
         private string _currentBook = "";
@@ -166,6 +172,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
+
+
         public ObservableCollection<MarbleResource> WordData
         {
             get => _wordData;
@@ -196,9 +204,31 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";
 
+            _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
+            _logger = logger;
+            _navigationService = navigationService;
+
+
+
             // wire up the commands
             ZoomInCommand = new RelayCommand(ZoomIn);
             ZoomOutCommand = new RelayCommand(ZoomOut);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            _currentVerse = _projectManager.CurrentVerse;
+
+            CurrentBcv.SetVerseFromId(_currentVerse);
+
+            // do not await this otherwise it freezes the UI
+            //Task.Run(() =>
+            //{
+            //    ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+            //}).ConfigureAwait(false);
+
+            base.OnViewAttached(view, context);
         }
 
         #endregion //Constructor
@@ -221,75 +251,6 @@ namespace ClearDashboard.Wpf.ViewModels
             base.Dispose(disposing);
         }
 
-
-        /// <summary>
-        /// Listen for changes in the DAL regarding any messages coming in
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, EventArgs args)
-        {
-            //TODO:  Refactor to use EventAggregator
-
-            //if (args == null) return;
-
-            //var pipeMessage = args.PipeMessage;
-
-            //switch (pipeMessage.Action)
-            //{
-            //    case ActionType.CurrentVerse:
-            //        if (_currentVerse != pipeMessage.Text)
-            //        {
-            //            // check for book change
-            //            string newBook = pipeMessage.Text.Substring(0, 2);
-            //            if (_currentBook != newBook)
-            //            {
-            //                _currentBook = newBook;
-
-            //                // send a message to get this book
-            //                //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
-
-            //                _currentVerse = pipeMessage.Text;
-            //                CurrentBcv.SetVerseFromId(_currentVerse);
-            //                if (_currentVerse.EndsWith("000"))
-            //                {
-            //                    // a zero based verse
-            //                    TargetInlinesText.Clear();
-            //                    NotifyOfPropertyChange(() => TargetInlinesText);
-            //                    FormattedHTML = "";
-            //                    UnformattedHTML = "";
-            //                }
-            //                else
-            //                {
-            //                    // a normal verse
-            //                    var verse = new Verse
-            //                    {
-            //                        VerseBBCCCVVV = _currentVerse
-            //                    };
-
-            //                    if (verse.BookNum < 40)
-            //                    {
-            //                        _isOT = true;
-            //                    }
-            //                    else
-            //                    {
-            //                        _isOT = false;
-            //                    }
-            //                }
-            //            } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
-            //            {
-            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
-            //                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
-            //                UnformattedAnchorRef = CurrentBcv.GetVerseId();
-            //            }
-            //        }
-            //        break;
-
-            //    case ActionType.SetUSX:
-            //        ProcessTargetVerseData(pipeMessage);
-            //        break;
-            //}
-        }
 
         private void ProcessTargetVerseData(/*PipeMessage message*/)
         {
@@ -363,6 +324,131 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
+        /// <summary>
+        /// Listen for changes in the DAL regarding any messages coming in
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        public async void HandleEventAsync(object sender, EventArgs args)
+        {
+            //TODO:  Refactor to use EventAggregator
+
+            //if (args == null) return;
+
+            //var pipeMessage = args.PipeMessage;
+
+            //switch (pipeMessage.Action)
+            //{
+            //    case ActionType.CurrentVerse:
+            //        if (_currentVerse != pipeMessage.Text)
+            //        {
+            //            // check for book change
+            //            string newBook = pipeMessage.Text.Substring(0, 2);
+            //            if (_currentBook != newBook)
+            //            {
+            //                _currentBook = newBook;
+
+            //                // send a message to get this book
+            //                //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
+
+            //                _currentVerse = pipeMessage.Text;
+            //                CurrentBcv.SetVerseFromId(_currentVerse);
+            //                if (_currentVerse.EndsWith("000"))
+            //                {
+            //                    // a zero based verse
+            //                    TargetInlinesText.Clear();
+            //                    NotifyOfPropertyChange(() => TargetInlinesText);
+            //                    FormattedHTML = "";
+            //                    UnformattedHTML = "";
+            //                }
+            //                else
+            //                {
+            //                    // a normal verse
+            //                    var verse = new Verse
+            //                    {
+            //                        VerseBBCCCVVV = _currentVerse
+            //                    };
+
+            //                    if (verse.BookNum < 40)
+            //                    {
+            //                        _isOT = true;
+            //                    }
+            //                    else
+            //                    {
+            //                        _isOT = false;
+            //                    }
+            //                }
+            //            } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
+            //            {
+            //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
+            //                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+            //                UnformattedAnchorRef = CurrentBcv.GetVerseId();
+            //            }
+            //        }
+            //        break;
+
+            //    case ActionType.SetUSX:
+            //        ProcessTargetVerseData(pipeMessage);
+            //        break;
+            //}
+        }
+
+        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            string newVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse != newVerse)
+            {
+                // check for book change
+                string newBook = newVerse.Substring(0, 3);
+                if (_currentBook != newBook)
+                {
+                    _currentBook = newBook;
+
+                    //TODO make this work on the Paratext Project Side
+
+                    // send a message to get this book
+                    //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
+
+                    _currentVerse = newVerse;
+                    CurrentBcv.SetVerseFromId(_currentVerse);
+                    if (_currentVerse.EndsWith("000"))
+                    {
+                        // a zero based verse
+                        TargetInlinesText.Clear();
+                        NotifyOfPropertyChange(() => TargetInlinesText);
+                        FormattedHTML = "";
+                        UnformattedHTML = "";
+                    }
+                    else
+                    {
+                        // a normal verse
+                        var verse = new Verse
+                        {
+                            VerseBBCCCVVV = _currentVerse
+                        };
+
+                        if (verse.BookNumber < 40)
+                        {
+                            _isOT = true;
+                        }
+                        else
+                        {
+                            _isOT = false;
+                        }
+                    }
+                }
+                else if (CurrentBcv.VerseLocationId != newVerse)
+                {
+                    CurrentBcv.SetVerseFromId(newVerse);
+                    FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+                    UnformattedAnchorRef = CurrentBcv.GetVerseId();
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
         //private void ConvertListToHTML(List<ParsedXML> usxList)
         //{
 
@@ -388,7 +474,5 @@ namespace ClearDashboard.Wpf.ViewModels
         //}
 
         #endregion // Methods
-
-
     }
 }

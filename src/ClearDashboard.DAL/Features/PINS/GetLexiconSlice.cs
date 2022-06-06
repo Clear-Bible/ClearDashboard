@@ -15,13 +15,13 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
     public record GetLexiconQuery(string xmlPath) : IRequest<RequestResult<Lexicon>>;
 
-    public class GetLexiconSlice : XmlReaderRequestHandler<GetLexiconQuery,
+    public class GetLexiconQueryHandler : XmlReaderRequestHandler<GetLexiconQuery,
         RequestResult<Lexicon>, Lexicon>
     {
         private string _projectPath = "";
         private Lexicon _biblicalTermsList = new();
 
-        public GetLexiconSlice(ILogger<PINS.GetLexiconSlice> logger) : base(logger)
+        public GetLexiconQueryHandler(ILogger<PINS.GetLexiconQueryHandler> logger) : base(logger)
         {
             //no-op
         }

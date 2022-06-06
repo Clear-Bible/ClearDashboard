@@ -120,19 +120,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-       // public bool IsRtl { get; set; }
+        // public bool IsRtl { get; set; }
 
 
-        //private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        //public  FlowDirection FlowDirection
-        //{
-        //    get => _flowDirection;
-        //    set
-        //    {
-        //        _flowDirection = value; 
-        //        NotifyOfPropertyChange(() => FlowDirection);
-        //    }
-        //}
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
+        {
+            get => _windowFlowDirection;
+            set
+            {
+                _windowFlowDirection = value;
+                NotifyOfPropertyChange(() => WindowFlowDirection);
+            }
+        }
 
 
 
