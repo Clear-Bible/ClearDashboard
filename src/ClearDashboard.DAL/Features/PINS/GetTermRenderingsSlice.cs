@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
 
-    public record GetTermRenderingsQuery(string projectPath) : IRequest<RequestResult<TermRenderingsList>>;
+    public record GetTermRenderingsQuery(ProjectManager ProjectManager) : IRequest<RequestResult<TermRenderingsList>>;
 
     public class GetTermRenderingsSlice : XmlReaderRequestHandler<GetTermRenderingsQuery,
         RequestResult<TermRenderingsList>, TermRenderingsList>
@@ -35,8 +35,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<TermRenderingsList>> Handle(GetTermRenderingsQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = request.projectPath;
-
+            ResourceName = Path.Combine(request.ProjectManager.CurrentDashboardProject.DirectoryPath, "TermRenderings.xml");
             var queryResult = ValidateResourcePath(new TermRenderingsList());
             if (queryResult.Success == false)
             {

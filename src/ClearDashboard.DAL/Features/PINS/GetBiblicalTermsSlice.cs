@@ -14,8 +14,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
+    public enum BTtype
+    {
+        allBT,
+        BT
+    }
 
-    public record GetBiblicalTermsQuery(string xmlPath) : IRequest<RequestResult<BiblicalTermsList>>;
+    public record GetBiblicalTermsQuery(string ParatextInstallPath, BTtype BTtype) : IRequest<RequestResult<BiblicalTermsList>>;
 
     public class GetBiblicalTermsSlice : XmlReaderRequestHandler<GetBiblicalTermsQuery,
         RequestResult<BiblicalTermsList>, BiblicalTermsList>
@@ -34,7 +39,14 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<BiblicalTermsList>> Handle(GetBiblicalTermsQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = request.xmlPath;
+            if (request.BTtype == BTtype.BT)
+            {
+                ResourceName = Path.Combine(request.ParatextInstallPath, @"Terms\Lists\BiblicalTerms.xml");
+            }
+            else
+            {
+                ResourceName = Path.Combine(request.ParatextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml");
+            }
 
             var queryResult = ValidateResourcePath(new BiblicalTermsList());
             if (queryResult.Success == false)

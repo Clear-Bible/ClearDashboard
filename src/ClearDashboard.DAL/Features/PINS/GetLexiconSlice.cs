@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
-    public record GetLexiconQuery(string xmlPath) : IRequest<RequestResult<Lexicon>>;
+    public record GetLexiconQuery(ProjectManager ProjectManager) : IRequest<RequestResult<Lexicon>>;
 
     public class GetLexiconSlice : XmlReaderRequestHandler<GetLexiconQuery,
         RequestResult<Lexicon>, Lexicon>
@@ -32,7 +33,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<Lexicon>> Handle(GetLexiconQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = request.xmlPath;
+            ResourceName = Path.Combine(request.ProjectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml");
 
             var queryResult = ValidateResourcePath(new Lexicon());
             if (queryResult.Success == false)

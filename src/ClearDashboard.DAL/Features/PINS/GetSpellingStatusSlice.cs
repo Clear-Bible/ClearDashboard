@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.Logging;
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
 
-    public record GetSpellingStatusQuery(string xmlPath) : IRequest<RequestResult<SpellingStatus>>;
+    public record GetSpellingStatusQuery(ProjectManager ProjectManager) : IRequest<RequestResult<SpellingStatus>>;
 
     public class GetSpellingStatusSlice : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
@@ -33,7 +34,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = request.xmlPath;
+            ResourceName = Path.Combine(request.ProjectManager.CurrentDashboardProject.DirectoryPath,
+                "SpellingStatus.xml");
 
             var queryResult = ValidateResourcePath(new SpellingStatus());
             if (queryResult.Success == false)
