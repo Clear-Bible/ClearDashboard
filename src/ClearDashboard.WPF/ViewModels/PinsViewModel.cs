@@ -21,6 +21,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Features;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -165,24 +167,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        //        protected override Task OnActivate(CancellationToken cancellationToken)
-        //        {
-        //#pragma warning disable CS4014
-        //            // Do not await this....let it run in the background otherwise
-        //            // it freezes the UI
-
-        //            // ReSharper disable once MethodSupportsCancellation
-        //            Task.Run(() =>
-        //            {
-        //                GenerateData().ConfigureAwait(false);
-        //            }).ConfigureAwait(true);
-        //#pragma warning restore CS4014
-
-        //            _ = base.OnActivate(cancellationToken);
-
-        //            return Task.CompletedTask;
-        //        }
-
         /// <summary>
         /// Main logic for building the data
         /// </summary>
@@ -190,8 +174,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private async Task<bool> GenerateData()
         {
             // load in the TermRenderings.xml file
-            var queryResult =
-                await ExecuteRequest(new GetTermRenderingsQuery(ProjectManager), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None).ConfigureAwait(false);
+
             if (queryResult.Success == false)
             {
                 Logger.LogError(queryResult.Message);
@@ -291,7 +275,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // load in the 'spellingstatus.xml'
             var querySsResult =
-                await ExecuteRequest(new GetSpellingStatusQuery(ProjectManager), CancellationToken.None).ConfigureAwait(false);
+                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
             if (querySsResult.Success == false)
             {
                 Logger.LogError(querySsResult.Message);
@@ -312,53 +296,53 @@ namespace ClearDashboard.Wpf.ViewModels
                 string targetRendering = terms.Renderings;
                 targetRendering = targetRendering.Replace("||", "; ");
 
-                string source = terms.Id;
+                string sourceWord = terms.Id;
 
-                string btSense;
-                string btSpelling;
-                if (source.Contains("."))
+                string biblicalTermsSense;
+                string biblicalTermsSpelling;
+                if (sourceWord.Contains("."))
                 {
                     // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
                     // place Sense in braces  
-                    btSense = source[..source.IndexOf(".", StringComparison.Ordinal)] + " {" + source[(source.IndexOf(".", StringComparison.Ordinal) + 1)..] + "}";
+                    biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" + sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] + "}";
 
                     // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
-                    btSpelling = source = source[..source.IndexOf(".", StringComparison.Ordinal)];
+                    biblicalTermsSpelling = sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
                 }
-                else if (source.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
+                else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
                 {
                     // place Sense in braces
-                    btSense = source.Trim().Replace("-", " {") + "}";
+                    biblicalTermsSense = sourceWord.Trim().Replace("-", " {") + "}";
 
                     // remove the Sense number from word/phrase for correct matching with Spelling
-                    btSpelling = source[..source.IndexOf("-", StringComparison.Ordinal)];
+                    biblicalTermsSpelling = sourceWord[..sourceWord.IndexOf("-", StringComparison.Ordinal)];
                 }
                 else
                 {
-                    btSpelling = btSense = source;
+                    biblicalTermsSpelling = biblicalTermsSense = sourceWord;
                 }
 
                 // CHECK AGAINST SPELLING
-                var spellingRecords = _spellingStatus.Status.FindAll(s => s.Word.ToLower() == btSpelling.ToLower());
+                var spellingRecords = _spellingStatus.Status.FindAll(s => s.Word.ToLower() == biblicalTermsSpelling.ToLower());
                 if (spellingRecords.Count == 0)
                 {
-                    btSpelling = "";
+                    biblicalTermsSpelling = "";
                 }
                 else
                 {
                     if (spellingRecords[0].State == "W") // apparently a "W" means misspelled
                     {
                         // misspelled
-                        btSpelling = " [misspelled]";
+                        biblicalTermsSpelling = " [misspelled]";
                     }
-                    else if (spellingRecords[0].SpecificCase != btSpelling)
+                    else if (spellingRecords[0].SpecificCase != biblicalTermsSpelling)
                     {
                         // has wrong upper/lower case
-                        btSpelling = " [" + spellingRecords[0].SpecificCase + "] wrong case";
+                        biblicalTermsSpelling = " [" + spellingRecords[0].SpecificCase + "] wrong case";
                     }
                     else
                     {
-                        btSpelling = "";
+                        biblicalTermsSpelling = "";
                     }
                 }
 
@@ -379,7 +363,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 List<string> verseList = new List<string>();
 
                 // check against the BiblicalTermsList
-                var bt = _biblicalTermsList.Term.FindAll(t => t.Id == source);
+                var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
                 var gloss = "";
                 if (bt.Count > 0)
                 {
@@ -406,7 +390,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         Prefix = "",
                         Refs = "",
                         SimpRefs = verseList.Count.ToString(),
-                        Source = targetRendering + btSpelling,
+                        Source = targetRendering + biblicalTermsSpelling,
                         Stem = "",
                         Suffix = "",
                         Word = "",
@@ -416,7 +400,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 else
                 {
                     // if not found in the Biblical Terms list, now check AllBiblicalTerms second
-                    var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == source);
+                    var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
                     if (abt.Count > 0)
                     {
                         gloss = abt[0].Gloss;
@@ -442,7 +426,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             Prefix = "",
                             Refs = "",
                             SimpRefs = verseList.Count.ToString(),
-                            Source = targetRendering + btSpelling,
+                            Source = targetRendering + biblicalTermsSpelling,
                             Stem = "",
                             Suffix = "",
                             Word = "",
@@ -452,7 +436,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     else
                     {
                         // not found in either the BiblicalTerms or AllBiblicalTerms.xml lists
-                        gloss = btSense == "" ? source : btSense;
+                        gloss = biblicalTermsSense == "" ? sourceWord : biblicalTermsSense;
 
                         GridData.Add(new PinsDataTable
                         {
@@ -469,7 +453,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             Prefix = "",
                             Refs = "",
                             SimpRefs = "0",
-                            Source = targetRendering + btSpelling,
+                            Source = targetRendering + biblicalTermsSpelling,
                             Stem = "",
                             Suffix = "",
                             Word = "",
@@ -480,7 +464,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // load in the lexicon.xml for the project
-            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(ProjectManager), CancellationToken.None).ConfigureAwait(false);
+            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
             if (queryLexiconResult.Success == false)
             {
                 Logger.LogError(queryLexiconResult.Message);

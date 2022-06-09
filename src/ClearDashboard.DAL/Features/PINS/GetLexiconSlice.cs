@@ -14,17 +14,17 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
-    public record GetLexiconQuery(ProjectManager ProjectManager) : IRequest<RequestResult<Lexicon>>;
+    public record GetLexiconQuery() : IRequest<RequestResult<Lexicon>>;
 
-    public class GetLexiconSlice : XmlReaderRequestHandler<GetLexiconQuery,
+    public class GetLexiconQueryHandler : XmlReaderRequestHandler<GetLexiconQuery,
         RequestResult<Lexicon>, Lexicon>
     {
-        private string _projectPath = "";
         private Lexicon _biblicalTermsList = new();
+        private readonly ProjectManager _projectManager;
 
-        public GetLexiconSlice(ILogger<PINS.GetLexiconSlice> logger) : base(logger)
+        public GetLexiconQueryHandler(ILogger<GetLexiconQueryHandler> logger, ProjectManager ProjectManager) : base(logger)
         {
-            //no-op
+            _projectManager = ProjectManager;
         }
 
 
@@ -33,7 +33,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<Lexicon>> Handle(GetLexiconQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(request.ProjectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml");
+            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml");
 
             var queryResult = ValidateResourcePath(new Lexicon());
             if (queryResult.Success == false)

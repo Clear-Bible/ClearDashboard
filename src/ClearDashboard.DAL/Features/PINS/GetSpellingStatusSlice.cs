@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Paratext;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
 
-    public record GetSpellingStatusQuery(ProjectManager ProjectManager) : IRequest<RequestResult<SpellingStatus>>;
+    public record GetSpellingStatusQuery() : IRequest<RequestResult<SpellingStatus>>;
 
-    public class GetSpellingStatusSlice : XmlReaderRequestHandler<GetSpellingStatusQuery,
+    public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
-        private string _projectPath = "";
         private SpellingStatus _biblicalTermsList = new();
+        private readonly ProjectManager _projectManager;
 
-        public GetSpellingStatusSlice(ILogger<PINS.GetSpellingStatusSlice> logger) : base(logger)
+        public GetSpellingStatusQueryHandler(ILogger<PINS.GetSpellingStatusQueryHandler> logger, ProjectManager projectManager) : base(logger)
         {
-            //no-op
+            _projectManager = projectManager;
         }
 
 
@@ -34,7 +32,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(request.ProjectManager.CurrentDashboardProject.DirectoryPath,
+            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath,
                 "SpellingStatus.xml");
 
             var queryResult = ValidateResourcePath(new SpellingStatus());

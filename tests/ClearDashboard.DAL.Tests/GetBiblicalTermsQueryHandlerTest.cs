@@ -25,7 +25,7 @@ namespace ClearDashboard.DAL.Tests
         {
             string path = Path.Combine(Environment.CurrentDirectory, @"Resources\XML\BiblicalTerms.xml");
 
-            var result = await ExecuteAndTestRequest<GetBiblicalTermsQuery, RequestResult<BiblicalTermsList>, BiblicalTermsList>(new GetBiblicalTermsQuery(path));
+            //var result = await ExecuteAndTestRequest<GetBiblicalTermsQuery, RequestResult<BiblicalTermsList>, BiblicalTermsList>(new GetBiblicalTermsQuery(path));
         }
     }
 }

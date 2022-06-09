@@ -13,9 +13,9 @@ namespace ClearDashboard.DataAccessLayer.Data
     public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ProjectNameDbContextFactory> _logger;
+        private readonly ILogger<ProjectNameDbContextFactory>? _logger;
 
-        public ProjectNameDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectNameDbContextFactory> logger)
+        public ProjectNameDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectNameDbContextFactory>? logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
@@ -45,7 +45,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                     context.DatabasePath = fullPath;
                     await context.Migrate();
                 }
-                catch (Exception ex)
+                catch (Exception? ex)
                 {
                     _logger.LogError(ex, "An error occurred while creating an instance the AlignmentContext.");
                     throw;

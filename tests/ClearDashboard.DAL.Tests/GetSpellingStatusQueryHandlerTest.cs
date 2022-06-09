@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Tests
         {
             string path = Path.Combine(Environment.CurrentDirectory, @"Resources\XML\SpellingStatus.xml");
 
-            var result = await ExecuteAndTestRequest<GetSpellingStatusQuery, RequestResult<SpellingStatus>, SpellingStatus>(new GetSpellingStatusQuery(path));
+            //var result = await ExecuteAndTestRequest<GetSpellingStatusQuery, RequestResult<SpellingStatus>, SpellingStatus>(new GetSpellingStatusQuery(path));
         }
     }
 }
