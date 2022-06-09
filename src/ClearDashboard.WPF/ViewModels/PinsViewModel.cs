@@ -173,69 +173,26 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <returns></returns>
         private async Task<bool> GenerateData()
         {
-            // load in the TermRenderings.xml file
-            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None).ConfigureAwait(false);
-
-            if (queryResult.Success == false)
-            {
-                Logger.LogError(queryResult.Message);
-                return true;
-            }
-
-            if (queryResult.Data == null)
-            {
-                return true;
-            }
-
-            _termRenderingsList = queryResult.Data;
-
-
-            // ReSharper disable once AssignNullToNotNullAttribute
             ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
             if (paratextUtils.IsParatextInstalled())
             {
                 var paratextInstallPath = paratextUtils.ParatextInstallPath;
 
-                // load in the BiblicalTerms.xml file
-                var queryBtResult =
-                    await ExecuteRequest(
-                        new GetBiblicalTermsQuery(paratextInstallPath, BTtype.BT),
-                        CancellationToken.None).ConfigureAwait(false);
-                if (queryBtResult.Success == false)
-                {
-                    Logger.LogError(queryBtResult.Message);
-                    return true;
-                }
-
-                if (queryBtResult.Data == null)
-                {
-                    return true;
-                }
-
-                _biblicalTermsList = queryBtResult.Data;
-
-
-                // load in the AllBiblicalTerms.xml file
-                var queryAbtResult =
-                    await ExecuteRequest(
-                        new GetBiblicalTermsQuery(paratextInstallPath, BTtype.allBT),
-                        CancellationToken.None).ConfigureAwait(false);
-                if (queryAbtResult.Success == false)
-                {
-                    Logger.LogError(queryAbtResult.Message);
-                    return true;
-                }
-
-                if (queryAbtResult.Data == null)
-                {
-                    return true;
-                }
-
-                _allBiblicalTermsList = queryAbtResult.Data;
+                // run getting and deserializing all of these resources in parallel
+                await Task.WhenAll(
+                    GetTermRenderings(), 
+                    GetBiblicalTerms(paratextInstallPath),
+                    GetAllBiblicalTerms(paratextInstallPath), 
+                    GetSpellingStatus(), 
+                    GetLexicon());
             }
             else
             {
                 Logger.LogError("Paratext Not Installed in PINS viewmodel");
+
+                // turn off the progress bar
+                ProgressBarVisibility = Visibility.Collapsed;
+                return false;
             }
 
 
@@ -271,23 +228,6 @@ namespace ClearDashboard.Wpf.ViewModels
                         CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                 }
             }
-
-
-            // load in the 'spellingstatus.xml'
-            var querySsResult =
-                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
-            if (querySsResult.Success == false)
-            {
-                Logger.LogError(querySsResult.Message);
-                return true;
-            }
-
-            if (querySsResult.Data == null)
-            {
-                return true;
-            }
-
-            _spellingStatus = querySsResult.Data;
 
 
             // build the data for display
@@ -463,21 +403,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
 
-            // load in the lexicon.xml for the project
-            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
-            if (queryLexiconResult.Success == false)
-            {
-                Logger.LogError(queryLexiconResult.Message);
-                return true;
-            }
-
-            if (queryLexiconResult.Data == null)
-            {
-                return true;
-            }
-
-            _lexicon = queryLexiconResult.Data;
-
             // populate the data grid
             foreach (var entry in _lexicon.Entries.Item)
             {
@@ -513,6 +438,109 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // turn off the progress bar
             ProgressBarVisibility = Visibility.Collapsed;
+            return false;
+        }
+
+        private async Task<bool> GetLexicon()
+        {
+            // load in the lexicon.xml for the project
+            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
+            if (queryLexiconResult.Success == false)
+            {
+                Logger.LogError(queryLexiconResult.Message);
+                return true;
+            }
+
+            if (queryLexiconResult.Data == null)
+            {
+                return true;
+            }
+
+            _lexicon = queryLexiconResult.Data;
+            return false;
+        }
+
+        private async Task<bool> GetSpellingStatus()
+        {
+            // load in the 'spellingstatus.xml'
+            var querySsResult =
+                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
+            if (querySsResult.Success == false)
+            {
+                Logger.LogError(querySsResult.Message);
+                return true;
+            }
+
+            if (querySsResult.Data == null)
+            {
+                return true;
+            }
+
+            _spellingStatus = querySsResult.Data;
+            return false;
+        }
+
+        private async Task<bool> GetAllBiblicalTerms(string paratextInstallPath)
+        {
+            // load in the AllBiblicalTerms.xml file
+            var queryAbtResult =
+                await ExecuteRequest(
+                    new GetBiblicalTermsQuery(paratextInstallPath, BTtype.allBT),
+                    CancellationToken.None).ConfigureAwait(false);
+            if (queryAbtResult.Success == false)
+            {
+                Logger.LogError(queryAbtResult.Message);
+                return true;
+            }
+
+            if (queryAbtResult.Data == null)
+            {
+                return true;
+            }
+
+            _allBiblicalTermsList = queryAbtResult.Data;
+            return false;
+        }
+
+        private async Task<bool> GetBiblicalTerms(string paratextInstallPath)
+        {
+            // load in the BiblicalTerms.xml file
+            var queryBtResult =
+                await ExecuteRequest(
+                    new GetBiblicalTermsQuery(paratextInstallPath, BTtype.BT),
+                    CancellationToken.None).ConfigureAwait(false);
+            if (queryBtResult.Success == false)
+            {
+                Logger.LogError(queryBtResult.Message);
+                return true;
+            }
+
+            if (queryBtResult.Data == null)
+            {
+                return true;
+            }
+
+            _biblicalTermsList = queryBtResult.Data;
+            return false;
+        }
+
+        private async Task<bool> GetTermRenderings()
+        {
+            // load in the TermRenderings.xml file
+            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None).ConfigureAwait(false);
+
+            if (queryResult.Success == false)
+            {
+                Logger.LogError(queryResult.Message);
+                return true;
+            }
+
+            if (queryResult.Data == null)
+            {
+                return true;
+            }
+
+            _termRenderingsList = queryResult.Data;
             return false;
         }
 
