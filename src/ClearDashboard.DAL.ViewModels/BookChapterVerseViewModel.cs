@@ -342,10 +342,10 @@ namespace ClearDashboard.DAL.ViewModels
         public static string BookId2BookName(int bookNum, bool isParatext = false)
         {
             var books = BibleRefUtils.GetBookIdDictionary();
-            var bookBB = bookNum.ToString().PadLeft(3, '0');
-            if (books.ContainsKey(bookBB))
+            var bookBBB = bookNum.ToString().PadLeft(3, '0');
+            if (books.ContainsKey(bookBBB))
             {
-                return books[bookBB];
+                return books[bookBBB];
             }
 
             return string.Empty;
@@ -679,7 +679,7 @@ namespace ClearDashboard.DAL.ViewModels
             { "Galatians", "048" },
             { "Ephesians", "049" },
             { "Philippians", "050" },
-            { "Colossians", "51" },
+            { "Colossians", "051" },
             { "1 Thessalonians", "052" },
             { "2 Thessalonians", "053" },
             { "1 Timothy", "054" },

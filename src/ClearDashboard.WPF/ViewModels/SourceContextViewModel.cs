@@ -13,12 +13,16 @@ using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class SourceContextViewModel : ToolViewModel
+    public class SourceContextViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
 
-        
+        private readonly ILogger<SourceContextViewModel> _logger;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly INavigationService _navigationService;
+
         private string _currentVerse = "";
 
         #endregion //Member Variables
@@ -36,8 +40,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private BookChapterVerse _currentBcv = new();
-        public BookChapterVerse CurrentBcv
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
         {
             get => _currentBcv;
             set
@@ -62,6 +66,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
        
         private ObservableCollection<SourceVerses> _sourceInlinesText = new ObservableCollection<SourceVerses>();
+
         public ObservableCollection<SourceVerses> SourceInlinesText
         { 
             get => _sourceInlinesText;
@@ -85,8 +90,29 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<SourceContextViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
+            _navigationService = navigationService;
+            _projectManager = projectManager;
+            _eventAggregator = eventAggregator;
+            _logger = logger;
             this.Title = "⬒ SOURCE CONTEXT";
             this.ContentId = "SOURCECONTEXT";
+        }
+
+
+        protected override void OnViewAttached(object view, object context)
+        {
+
+            _currentVerse = _projectManager.CurrentVerse;
+
+            CurrentBcv.SetVerseFromId(_currentVerse);
+
+            // do not await this otherwise it freezes the UI
+            Task.Run(() =>
+            {
+                ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+            }).ConfigureAwait(false);
+            
+            base.OnViewAttached(view, context);
         }
 
 
@@ -117,7 +143,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 new SourceVerses
                                 {
                                     IsSelected = true,
-                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
+                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(6, 3)),
                                     VerseText = verse.stringB,
                                 });
                         }
@@ -127,7 +153,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 new SourceVerses
                                 {
                                     IsSelected = false,
-                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(5, 3)),
+                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(6, 3)),
                                     VerseText = verse.stringB,
                                 });
                         }
@@ -143,42 +169,35 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        /// <summary>
-        /// Listen for changes in the DAL regarding any messages coming in
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        public async void HandleEventAsync(object sender, EventArgs args)
-        {
-            //TODO:  Refactor to use EventAggregator
-
-            //if (args == null) return;
-
-            //var pipeMessage = args.PipeMessage;
-
-            //switch (pipeMessage.Action)
-            //{
-            //    case ActionType.CurrentVerse:
-            //        if (_currentVerse != pipeMessage.Text)
-            //        {
-            //            _currentVerse = pipeMessage.Text;
-            //            CurrentBcv.SetVerseFromId(_currentVerse);
-
-            //            await ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
-            //        }
-
-            //        break;
-            //}
-        }
-
         protected override void Dispose(bool disposing)
         {
             
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Listen for changes in the DAL regarding any verse change messages coming in
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (_currentVerse == "")
+            {
+                _currentVerse = message.Verse;
+
+                CurrentBcv.SetVerseFromId(_currentVerse);
+
+                await ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+            }
+            else
+            {
+                _currentVerse = message.Verse;
+            }
+
+            await Task.CompletedTask;
+        }
+
         #endregion // Methods
-
-
     }
 }
