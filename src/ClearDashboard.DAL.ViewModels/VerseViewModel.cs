@@ -151,12 +151,12 @@ namespace ClearDashboard.DAL.ViewModels
         
         public string? VerseBBCCCVVV
         {
-            get => Entity?.VerseBBCCCVVV;
+            get => Entity?.VerseBBBCCCVVV;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.VerseBBCCCVVV = value;
+                    Entity.VerseBBBCCCVVV = value;
                 }
                 NotifyOfPropertyChange(nameof(VerseBBCCCVVV));
             }
