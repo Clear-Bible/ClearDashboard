@@ -139,7 +139,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
                             // a verse token
                             if (marker.Type == MarkerType.Verse)
                             {
-                                string verseID = marker.VerseRef.BBBCCCVVV.ToString().PadLeft(8, '0');
+                                string verseID = marker.VerseRef.BBBCCCVVV.ToString().PadLeft(9, '0');
                                 if (!bcvDict.ContainsKey(verseID))
                                 {
                                     bcvDict.Add(verseID, verseID);

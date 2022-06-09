@@ -38,14 +38,14 @@ namespace ClearDashboard.DAL.Tests
                 project.BooksList.Add(new ParatextBook
                 {
                     Available = true,
-                    BookId = fileInfo.Name.Substring(0,2),
+                    BookId = fileInfo.Name.Substring(0,3),
                     FilePath = file,
                 });
 
 
                 Verse verse = new Verse
                 {
-                     VerseBBCCCVVV = fileInfo.Name.Substring(0, 2) + "0" + fileInfo.Name.Substring(2, 2) + "002",
+                     VerseBBCCCVVV = fileInfo.Name.Substring(0, 3) + fileInfo.Name.Substring(3, 3) + "002",
                 };
 
                 var verseList = ExtractVersesFromChapter.ParseUSFM(logger, project, verse);

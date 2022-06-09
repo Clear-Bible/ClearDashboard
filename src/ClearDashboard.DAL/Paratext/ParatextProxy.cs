@@ -549,11 +549,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
                         if (project.FileNameBookNameForm == "41MAT")
                         {
-                            fileName += books[i].USFM_Num.ToString().PadLeft(2, '0') + books[i].BookNameShort;
+                            fileName += books[i].USFM_Num.ToString().PadLeft(3, '0') + books[i].BookNameShort;
                         }
                         else if (project.FileNameBookNameForm == "41")
                         {
-                            fileName += books[i].USFM_Num.ToString().PadLeft(2, '0');
+                            fileName += books[i].USFM_Num.ToString().PadLeft(3, '0');
                         }
                         else if (project.FileNameBookNameForm == "MAT")
                         {
