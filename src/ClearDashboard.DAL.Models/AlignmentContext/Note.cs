@@ -29,6 +29,15 @@ namespace ClearDashboard.DataAccessLayer.Models
         [NotMapped]
         public IEnumerable<BinaryContent> BinaryContentCollection => ContentCollection.Where(content => content.ContentType == nameof(BinaryContent)).Cast<BinaryContent>();
 
+        [NotMapped]
+        public IEnumerable<AlignmentAssociation> AlignmentAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(AlignmentAssociation)).Cast<AlignmentAssociation>();
+
+        [NotMapped]
+        public IEnumerable<TokenAssociation> TokenAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(TokenAssociation)).Cast<TokenAssociation>();
+
+        [NotMapped]
+        public IEnumerable<VerseAssociation> VerseAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(VerseAssociation)).Cast<VerseAssociation>();
+
 
 
 
