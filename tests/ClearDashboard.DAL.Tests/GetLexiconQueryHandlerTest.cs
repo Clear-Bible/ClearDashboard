@@ -8,6 +8,8 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -25,8 +27,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         private async Task GetLexiconQueryTest()
         {
-            // TODO currently broken while we need a mocked up ProjectManager
-            //var result = await ExecuteAndTestRequest<GetLexiconQuery, RequestResult<Lexicon>, Lexicon>(new GetLexiconQuery());
+            string path = Path.Combine(Environment.CurrentDirectory, @"Resources\XML\");
+            var dashboardProjectManager = ServiceProvider.GetService<DashboardProjectManager>();
+            dashboardProjectManager.CreateDashboardProject();
+            dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
+
+            var result = await ExecuteAndTestRequest<GetLexiconQuery, RequestResult<Lexicon>, Lexicon>(new GetLexiconQuery());
+
+            Output.WriteLine($"Returned {result.Data.Entries.Item.Count} records.");
         }
     }
 }

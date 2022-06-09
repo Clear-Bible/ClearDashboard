@@ -8,8 +8,11 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 using Serilog;
@@ -30,11 +33,16 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         private async Task GetTermRenderingTest()
         {
-            // TODO currently broken while we need a mocked up ProjectManager
+            string path = Path.Combine(Environment.CurrentDirectory, @"Resources\XML\");
+            var dashboardProjectManager = ServiceProvider.GetService<DashboardProjectManager>();
+            dashboardProjectManager.CreateDashboardProject();
+            dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
 
-            //var result =
-            //    await ExecuteAndTestRequest<GetTermRenderingsQuery, RequestResult<TermRenderingsList>,
-            //        TermRenderingsList>(new GetTermRenderingsQuery());
+            var result =
+            await ExecuteAndTestRequest<GetTermRenderingsQuery, RequestResult<TermRenderingsList>,
+                TermRenderingsList>(new GetTermRenderingsQuery());
+
+            Output.WriteLine($"Returned {result.Data.TermRendering.Count} records.");
         }
 
     }

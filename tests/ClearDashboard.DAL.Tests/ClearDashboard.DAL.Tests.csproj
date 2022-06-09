@@ -41,7 +41,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\Xml\BiblicalTerms.xml">
+    <Reference Include="Caliburn.Micro.Core">
+      <HintPath>..\..\src\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Xml\Terms\Lists\AllBiblicalTerms.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Xml\Terms\Lists\BiblicalTerms.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Xml\languages.xml">
