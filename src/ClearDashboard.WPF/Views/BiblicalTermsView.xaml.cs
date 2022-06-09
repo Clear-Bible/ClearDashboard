@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Views
                     return;
                     // execute code here.
                 }
-                if (args.PropertyName.Equals("flowDirection"))
+                if (args.PropertyName.Equals("WindowFlowDirection"))
                 {
                     this.FlowDirection = _vm.WindowFlowDirection;
                 }

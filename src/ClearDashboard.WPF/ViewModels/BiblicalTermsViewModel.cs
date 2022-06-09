@@ -403,6 +403,12 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Constructor
+
+        public BiblicalTermsViewModel()
+        {
+            // used by Caliburn Micro for design time    
+        }
+
         public BiblicalTermsViewModel(INavigationService navigationService, 
                                         ILogger<WorkSpaceViewModel> logger, 
                                         DashboardProjectManager projectManager, IEventAggregator eventAggregator) 

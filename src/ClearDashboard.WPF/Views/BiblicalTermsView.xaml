@@ -17,6 +17,7 @@
     d:DesignHeight="450"
     d:DesignWidth="1000"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 

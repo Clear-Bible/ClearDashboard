@@ -58,14 +58,14 @@ namespace ClearDashboard.Wpf.ViewModels
         }
         
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection flowDirection
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
         {
-            get => _flowDirection;
+            get => _windowFlowDirection;
             set
             {
-                _flowDirection = value;
-                NotifyOfPropertyChange(() => flowDirection);
+                _windowFlowDirection = value;
+                NotifyOfPropertyChange(() => WindowFlowDirection);
             }
         }
 
@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             BookChapter = verse.VerseId.Substring(0, verse.VerseId.IndexOf(':'));
 
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             BookChapter = verse.VerseIdShort.Substring(0, verse.VerseIdShort.IndexOf(':'));
 
-            flowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         /// <summary>

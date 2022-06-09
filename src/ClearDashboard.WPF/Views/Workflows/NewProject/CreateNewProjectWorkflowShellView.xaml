@@ -17,7 +17,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"
-    FlowDirection="{Binding FlowDirection}"
+    FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
 
     <!--

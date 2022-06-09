@@ -21,11 +21,11 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
         protected DashboardProjectManager ProjectManager { get; set; }
 
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
         {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+            get => _windowFlowDirection;
+            set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
         private bool isLastWorkflowStep_;
@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             EventAggregator = eventAggregator;
             Steps = new List<WorkflowStepViewModel>();
 
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
         }
 
