@@ -14,6 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Features
     public abstract class ParatextRequestHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
         where TResponse: RequestResult<TData>
+        where TData : new()
     {
         protected ILogger Logger { get; }
 

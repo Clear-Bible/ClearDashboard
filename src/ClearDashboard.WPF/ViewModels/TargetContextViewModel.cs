@@ -407,7 +407,22 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     _currentBook = newBook;
 
-                    //TODO make this work on the Paratext Project Side
+                    try
+                    {
+                        // TODO:  
+                        var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
+                            .ConfigureAwait(false);
+                        if (result.Success)
+                        {
+                            biblicalTermsList = result.Data;
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
+                    }
+
 
                     // send a message to get this book
                     //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);

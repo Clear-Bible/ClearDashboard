@@ -465,35 +465,29 @@ namespace ClearDashboard.Wpf.ViewModels
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
           
         }
+        //protected override void OnViewAttached(object view, object context)
+        //{
+        //    Logger.LogInformation("OnViewAttached");
+        //    base.OnViewAttached(view, context);
+        //}
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            return base.OnInitializeAsync(cancellationToken);
-        }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    Logger.LogInformation("OnViewLoaded");
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            Logger.LogInformation("OnViewAttached");
-            base.OnViewAttached(view, context);
-        }
+        //protected override void OnViewReady(object view)
+        //{
+        //    Logger.LogInformation("OnViewReady");
+        //    base.OnViewReady(view);
+        //}
 
-        protected override void OnViewLoaded(object view)
-        {
-            Logger.LogInformation("OnViewLoaded");
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            Logger.LogInformation("OnViewReady");
-            base.OnViewReady(view);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Logger.LogInformation("Dispose");
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    Logger.LogInformation("Dispose");
+        //    base.Dispose(disposing);
+        //}
 
         #endregion //Constructor
 
@@ -918,9 +912,6 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => Domains);
         }
 
-        #endregion // Methods
-
-
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
             try
@@ -977,6 +968,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             
         }
+
         public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
         {
             if (_currentVerse == "")
@@ -992,5 +984,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             await Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 }

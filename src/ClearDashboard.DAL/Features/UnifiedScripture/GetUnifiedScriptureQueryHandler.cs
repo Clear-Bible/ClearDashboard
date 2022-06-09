@@ -13,18 +13,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.UnifiedScripture
 {
-    public class GetUnifiedScriptureQueryHandler : ParatextRequestHandler<GetUsxQuery, RequestResult<string>, String>
-    {
+    //public class GetUnifiedScriptureQueryHandler : ParatextRequestHandler<GetUsxQuery, RequestResult<string>, string>
+    //{
 
-        public GetUnifiedScriptureQueryHandler([NotNull] ILogger<GetUnifiedScriptureQueryHandler> logger) : base(logger)
-        {
-            //no-op
-        }
+    //    public GetUnifiedScriptureQueryHandler([NotNull] ILogger<GetUnifiedScriptureQueryHandler> logger) : base(logger)
+    //    {
+    //        //no-op
+    //    }
 
-        public override async Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
-        {
-            return await ExecuteRequest("unifiedscripture", request, cancellationToken);
-        }
+    //    public override async Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
+    //    {
+    //        return await ExecuteRequest("unifiedscripture", request, cancellationToken);
+    //    }
 
-    }
+    //}
 }
