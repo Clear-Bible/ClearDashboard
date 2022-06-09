@@ -218,9 +218,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewAttached(object view, object context)
         {
-            _currentVerse = _projectManager.CurrentVerse;
-
             CurrentBcv.SetVerseFromId(_currentVerse);
+
+            var message = new VerseChangedMessage(_currentVerse);
+
+            HandleAsync(message, new CancellationToken());
 
             // do not await this otherwise it freezes the UI
             //Task.Run(() =>
