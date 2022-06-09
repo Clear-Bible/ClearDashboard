@@ -1,40 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
+    public record GetSpellingStatusQuery : IRequest<RequestResult<SpellingStatus>>;
 
-    public record GetSpellingStatusQuery(string xmlPath) : IRequest<RequestResult<SpellingStatus>>;
-
-    public class GetSpellingStatusSlice : XmlReaderRequestHandler<GetSpellingStatusQuery,
+    public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
-        private string _projectPath = "";
         private SpellingStatus _biblicalTermsList = new();
-
-        public GetSpellingStatusSlice(ILogger<PINS.GetSpellingStatusSlice> logger) : base(logger)
+        private readonly ProjectManager _projectManager;
+        public GetSpellingStatusQueryHandler(ILogger<GetSpellingStatusQueryHandler> logger, ProjectManager projectManager) : base(logger)
         {
-            //no-op
+            _projectManager = projectManager;
         }
-
-
         protected override string ResourceName { get; set; } = "";
-
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = request.xmlPath;
-
+            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath,
+                "SpellingStatus.xml");
             var queryResult = ValidateResourcePath(new SpellingStatus());
             if (queryResult.Success == false)
             {
@@ -42,10 +35,9 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     $"An unexpected error occurred while querying the TermRenderings.xml file : '{ResourceName}'");
                 return Task.FromResult(queryResult);
             }
-
             try
             {
-                queryResult.Data = LoadXmlAndProcessData(null);
+                queryResult.Data = LoadXmlAndProcessData();
             }
             catch (Exception ex)
             {
@@ -53,16 +45,13 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     $"An unexpected error occurred while querying the '{ResourceName}' database ",
                     ex);
             }
-
             return Task.FromResult(queryResult);
         }
-
         protected override SpellingStatus ProcessData()
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(ResourceName);
             XmlNodeReader reader = new XmlNodeReader(doc);
-
             using (reader)
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(SpellingStatus));
@@ -75,8 +64,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     Logger.LogError("Error in PINS deserialization of TermRenderings.xml: " + e.Message);
                 }
             }
-
             return _biblicalTermsList;
         }
     }
 }
+

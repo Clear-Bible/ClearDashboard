@@ -338,22 +338,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // load in the spellingstatus.xml
-            var querySSResult =
-                await ExecuteRequest(
-                    new GetSpellingStatusQuery(Path.Combine(ProjectManager.CurrentDashboardProject.DirectoryPath,
-                        "SpellingStatus.xml")), CancellationToken.None).ConfigureAwait(false);
-            if (querySSResult.Success == false)
+    var querySsResult =
+                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
+            if (querySsResult.Success == false)
             {
-                Logger.LogError(querySSResult.Message);
+                Logger.LogError(querySsResult.Message);
                 return true;
             }
 
-            if (querySSResult.Data == null)
+            if (querySsResult.Data == null)
             {
                 return true;
             }
 
-            _spellingStatus = querySSResult.Data;
+            _spellingStatus = querySsResult.Data;
 
 
             // build the data for display

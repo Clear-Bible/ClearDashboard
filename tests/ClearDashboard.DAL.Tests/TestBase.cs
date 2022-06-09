@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
@@ -33,9 +34,10 @@ namespace ClearDashboard.DAL.Tests
 
         protected virtual void SetupDependencyInjection()
         {
-           Services.AddClearDashboardDataAccessLayer();
+            Services.AddSingleton<IEventAggregator, EventAggregator>();
+            Services.AddClearDashboardDataAccessLayer();
            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
-            Services.AddLogging();
+           Services.AddLogging();
         }
 
         protected async Task<RequestResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
