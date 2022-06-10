@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ClearDashboard.DataAccessLayer.Models.Paratext
 {
-    public class UsxObject
+    public class StringObject
     {
-        public string USX { get; set; } = "";
+        public string StringData { get; set; } = "";
     }
 }

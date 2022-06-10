@@ -17,9 +17,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
         }
 
         [HttpPost]
-        public async Task<RequestResult<UsxObject>> GetAsync([FromBody] GetUsxQuery query)
+        public async Task<RequestResult<StringObject>> GetAsync([FromBody] GetUsxQuery query)
         {
-            return await ExecuteRequestAsync<RequestResult<UsxObject>, UsxObject>(query, CancellationToken.None);
+            return await ExecuteRequestAsync<RequestResult<StringObject>, StringObject>(query, CancellationToken.None);
         }
     }
 }

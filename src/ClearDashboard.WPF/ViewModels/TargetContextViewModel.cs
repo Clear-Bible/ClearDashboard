@@ -255,23 +255,21 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private void ProcessTargetVerseData(/*PipeMessage message*/)
+        private void ProcessTargetVerseData(string xmlData)
         {
             // invoke to get it to run in STA mode
             Application.Current.Dispatcher.Invoke((System.Action)delegate
             {
-                // deserialize the payload
-                string payload = string.Empty;// message.Payload.ToString();
-                string xmlData = JsonSerializer.Deserialize<string>(payload);
+                //// deserialize the payload
+                //string payload = string.Empty;// message.Payload.ToString();
+                //string xmlData = JsonSerializer.Deserialize<string>(payload);
 
                 string fontFamily = "Doulos SIL";
                 double fontSize = 16;
-                if (ProjectManager.ParatextProject is not null)
-                {
-                    // pull out the project font family
-                    fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
-                    fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
-                }
+
+                // pull out the project font family
+                fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
+                fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
 
 
                 // Make the Unformatted version
@@ -408,24 +406,15 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     _currentBook = newBook;
 
-                    try
+                    // call Paratext to get the USX for this book
+                    var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
+                    if (result.Success)
                     {
-                        // TODO:  
-                        var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
-                        if (result.Success)
+                        if (result.Data.StringData is not null || result.Data.StringData != "")
                         {
-                            var data = result.Data;
+                            ProcessTargetVerseData(result.Data.StringData);
                         }
-
                     }
-                    catch (Exception e)
-                    {
-                        Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-                    }
-
-
-                    // send a message to get this book
-                    //await ProjectManager.SendPipeMessage(PipeAction.GetUSX, newBook);
 
                     _currentVerse = newVerse;
                     CurrentBcv.SetVerseFromId(_currentVerse);

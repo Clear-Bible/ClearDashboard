@@ -22,13 +22,12 @@ public class GetUsxQueryHandlerTests : TestBase
         var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(1));
 
         Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<RequestResult<UsxObject>>();
+        var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
 
-        Output.WriteLine(result.Data.USX);
-
+        Output.WriteLine(result.Data.StringData);
     }
 }

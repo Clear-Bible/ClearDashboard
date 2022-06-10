@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.UnifiedScripture
 {
-    public class GetUsxQueryHandler : ParatextRequestHandler<GetUsxQuery, RequestResult<UsxObject>, UsxObject>
+    public class GetUsxQueryHandler : ParatextRequestHandler<GetUsxQuery, RequestResult<StringObject>, StringObject>
     {
 
         public GetUsxQueryHandler([NotNull] ILogger<GetUsxQueryHandler> logger) : base(logger)
@@ -23,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Features.UnifiedScripture
             //no-op
         }
 
-        public override async Task<RequestResult<UsxObject>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<StringObject>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("usx", request, cancellationToken);
         }
