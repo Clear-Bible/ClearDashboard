@@ -38,7 +38,7 @@ namespace ClearDashboard.DAL.Tests
                 project.BooksList.Add(new ParatextBook
                 {
                     Available = true,
-                    BookId = fileInfo.Name.Substring(0,2),
+                    BookId = fileInfo.Name.Substring(0,3),
                     FilePath = file,
                 });
 

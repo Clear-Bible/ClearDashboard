@@ -132,7 +132,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         // normal OT book
                         bookFileNum = m_project.AvailableBooks[bookNum].Number;
                     }
-                    var fileName = bookFileNum.ToString().PadLeft(2, '0')
+                    var fileName = bookFileNum.ToString().PadLeft(3, '0')
                                    + m_project.AvailableBooks[bookNum].Code + ".sfm";
 
                     IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();

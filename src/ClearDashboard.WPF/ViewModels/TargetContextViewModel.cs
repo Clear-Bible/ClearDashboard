@@ -241,7 +241,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //        if (_currentVerse != pipeMessage.Text)
             //        {
             //            // check for book change
-            //            string newBook = pipeMessage.Text.Substring(0, 2);
+            //            string newBook = pipeMessage.Text.Substring(0, 3);
             //            if (_currentBook != newBook)
             //            {
             //                _currentBook = newBook;

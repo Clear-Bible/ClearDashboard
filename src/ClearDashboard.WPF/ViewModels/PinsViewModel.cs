@@ -1,8 +1,8 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Models.Helpers;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
@@ -676,7 +676,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 foreach (var verse in verseList)
                 {
-                    string verseIdShort = BibleRefUtils.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
+                    string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
 
                     _selectedItemVerses.Add(new PinsVerseList
                     {
