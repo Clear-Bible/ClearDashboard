@@ -16,13 +16,13 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
     public record GetSpellingStatusQuery(string xmlPath) : IRequest<RequestResult<SpellingStatus>>;
 
-    public class GetSpellingStatusSlice : XmlReaderRequestHandler<GetSpellingStatusQuery,
+    public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
         private string _projectPath = "";
         private SpellingStatus _biblicalTermsList = new();
 
-        public GetSpellingStatusSlice(ILogger<PINS.GetSpellingStatusSlice> logger) : base(logger)
+        public GetSpellingStatusQueryHandler(ILogger<PINS.GetSpellingStatusQueryHandler> logger) : base(logger)
         {
             //no-op
         }

@@ -30,7 +30,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public string? VerseNumber
+        public int? VerseNumber
         {
             get => Entity?.VerseNumber;
             set
@@ -43,7 +43,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public string? SilBookNumber
+        public int? SilBookNumber
         {
             get => Entity?.SilBookNumber;
             set
@@ -56,7 +56,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public string? ChapterNumber
+        public int? ChapterNumber
         {
             get => Entity?.ChapterNumber;
             set

@@ -121,19 +121,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-       // public bool IsRtl { get; set; }
+        // public bool IsRtl { get; set; }
 
 
-        //private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        //public  FlowDirection FlowDirection
-        //{
-        //    get => _flowDirection;
-        //    set
-        //    {
-        //        _flowDirection = value; 
-        //        NotifyOfPropertyChange(() => FlowDirection);
-        //    }
-        //}
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
+        {
+            get => _windowFlowDirection;
+            set
+            {
+                _windowFlowDirection = value;
+                NotifyOfPropertyChange(() => WindowFlowDirection);
+            }
+        }
 
 
 
@@ -417,6 +417,12 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Constructor
+
+        public BiblicalTermsViewModel()
+        {
+            // used by Caliburn Micro for design time    
+        }
+
         public BiblicalTermsViewModel(INavigationService navigationService, 
                                         ILogger<WorkSpaceViewModel> logger, 
                                         DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
@@ -473,35 +479,29 @@ namespace ClearDashboard.Wpf.ViewModels
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
           
         }
+        //protected override void OnViewAttached(object view, object context)
+        //{
+        //    Logger.LogInformation("OnViewAttached");
+        //    base.OnViewAttached(view, context);
+        //}
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            return base.OnInitializeAsync(cancellationToken);
-        }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    Logger.LogInformation("OnViewLoaded");
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            Logger.LogInformation("OnViewAttached");
-            base.OnViewAttached(view, context);
-        }
+        //protected override void OnViewReady(object view)
+        //{
+        //    Logger.LogInformation("OnViewReady");
+        //    base.OnViewReady(view);
+        //}
 
-        protected override void OnViewLoaded(object view)
-        {
-            Logger.LogInformation("OnViewLoaded");
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            Logger.LogInformation("OnViewReady");
-            base.OnViewReady(view);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Logger.LogInformation("Dispose");
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    Logger.LogInformation("Dispose");
+        //    base.Dispose(disposing);
+        //}
 
         #endregion //Constructor
 
@@ -929,9 +929,6 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => Domains);
         }
 
-        #endregion // Methods
-
-
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
             try
@@ -988,6 +985,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             
         }
+
         public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
         {
             if (_currentVerse == "")
@@ -1003,5 +1001,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             await Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 }

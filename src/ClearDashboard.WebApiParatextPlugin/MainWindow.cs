@@ -319,7 +319,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             ////{
             ////    var dataPayload = JsonSerializer.Serialize(usfm);
 
-           
+
         }
 
         ///// <summary>

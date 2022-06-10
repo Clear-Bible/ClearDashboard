@@ -325,11 +325,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
         {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+            get => _windowFlowDirection;
+            set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
         #endregion //Observable Properties
@@ -354,7 +354,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
 #pragma warning disable CA1416 // Validate platform compatibility
             Themes = new List<Tuple<string, Theme>>

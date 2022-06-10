@@ -19,12 +19,12 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
     public record GetTermRenderingsQuery(string projectPath) : IRequest<RequestResult<TermRenderingsList>>;
 
-    public class GetTermRenderingsSlice : XmlReaderRequestHandler<GetTermRenderingsQuery,
+    public class GetTermRenderingsQueryHandler : XmlReaderRequestHandler<GetTermRenderingsQuery,
         RequestResult<TermRenderingsList>, TermRenderingsList>
     {
         private TermRenderingsList _termRenderingsList = new();
 
-        public GetTermRenderingsSlice(ILogger<PINS.GetTermRenderingsSlice> logger) : base(logger)
+        public GetTermRenderingsQueryHandler(ILogger<PINS.GetTermRenderingsQueryHandler> logger) : base(logger)
         {
             //no-op
         }
