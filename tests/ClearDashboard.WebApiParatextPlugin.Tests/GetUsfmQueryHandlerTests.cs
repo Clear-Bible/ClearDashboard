@@ -18,7 +18,7 @@ public class GetUsfmQueryHandlerTests : TestBase
     {
         var client = CreateHttpClient();
 
-        var response = await client.PostAsJsonAsync<GetUsfmQuery>("usfm", new GetUsfmQuery());
+        var response = await client.PostAsJsonAsync<GetUsfmQuery>("usfm", new GetUsfmQuery(1));
 
         Assert.True(response.IsSuccessStatusCode);
         var result = await response.Content.ReadAsAsync<RequestResult<string>>();

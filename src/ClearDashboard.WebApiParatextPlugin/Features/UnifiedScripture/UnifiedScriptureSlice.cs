@@ -5,11 +5,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 {
-    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, RequestResult<string>>
+    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, RequestResult<UsxObject>>
     {
         private readonly IVerseRef _verseRef;
         private readonly IProject _project;
@@ -22,12 +23,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             _project = project;
         }
 
-        public Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<UsxObject>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<string>(string.Empty);
+            var queryResult = new RequestResult<UsxObject>();
             try
             {
-                queryResult.Data = _project.GetUSX(_verseRef.BookNum);
+                UsxObject usxObject = new();
+                usxObject.USX = _project.GetUSX(request.BookNumber ?? _verseRef.BookNum);
+                queryResult.Data = usxObject;
             }
             catch (Exception ex)
             {

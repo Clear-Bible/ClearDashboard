@@ -1,9 +1,10 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
-public record GetUsxQuery() : IRequest<RequestResult<string>>
+public record GetUsxQuery(int? BookNumber) : IRequest<RequestResult<UsxObject>>
 {
-
+    public int? BookNumber { get; } = BookNumber;
 }

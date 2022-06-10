@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -218,9 +219,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override void OnViewAttached(object view, object context)
         {
-            CurrentBcv.SetVerseFromId(_currentVerse);
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
 
-            var message = new VerseChangedMessage(_currentVerse);
+            var message = new VerseChangedMessage(_projectManager.CurrentVerse);
 
             HandleAsync(message, new CancellationToken());
 
@@ -395,7 +396,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //}
         }
 
-        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
             string newVerse = message.Verse.PadLeft(9, '0');
 
@@ -410,11 +411,10 @@ namespace ClearDashboard.Wpf.ViewModels
                     try
                     {
                         // TODO:  
-                        var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
-                            .ConfigureAwait(false);
+                        var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
                         if (result.Success)
                         {
-                            biblicalTermsList = result.Data;
+                            var data = result.Data;
                         }
 
                     }
@@ -462,8 +462,6 @@ namespace ClearDashboard.Wpf.ViewModels
                     UnformattedAnchorRef = CurrentBcv.GetVerseId();
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         //private void ConvertListToHTML(List<ParsedXML> usxList)

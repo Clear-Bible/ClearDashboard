@@ -3,8 +3,8 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture
 {
-    public record GetUsfmQuery() : IRequest<RequestResult<string>>
+    public record GetUsfmQuery(int? BookNumber) : IRequest<RequestResult<string>>
     {
-
+        public int? BookNumber { get; } = BookNumber;
     }
 }
