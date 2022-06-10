@@ -19,7 +19,7 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task GetManuscriptVerseByIdHandlerTest()
         {
-            var results = await ExecuteAndTestRequest<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>(new GetManuscriptVerseByIdQuery("40005015"));
+            var results = await ExecuteAndTestRequest<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>(new GetManuscriptVerseByIdQuery("040005015"));
             Assert.True(results.Data.Count == 48);
         }
     }
