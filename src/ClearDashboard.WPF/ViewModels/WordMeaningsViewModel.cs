@@ -411,7 +411,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 try
                 {
                     _currentBcv.SetVerseFromId(message.Verse);
-                    BookNum = Convert.ToInt32(_currentBcv.BookNum);
+                    BookNum = _currentBcv.BookNum;
                 }
                 catch (Exception e)
                 {

@@ -45,7 +45,7 @@ namespace ClearDashboard.DAL.Tests
 
                 Verse verse = new Verse
                 {
-                     VerseBBCCCVVV = fileInfo.Name.Substring(0, 3) + fileInfo.Name.Substring(3, 3) + "002",
+                     VerseBBCCCVVV = fileInfo.Name.Substring(0, 2) + "0" + fileInfo.Name.Substring(2, 2) + "002",
                 };
 
                 var verseList = ExtractVersesFromChapter.ParseUSFM(logger, project, verse);
