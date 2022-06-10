@@ -16,19 +16,27 @@ public class GetCurrentVerseQueryHandlerTests : TestBase
     [Fact]
     public async Task GetCurrentVerseTest()
     {
-        var client = CreateHttpClient();
+        try
+        {
+            await StartParatext();
 
-        var response = await client.PostAsJsonAsync<GetCurrentVerseQuery>("verse",
-            new GetCurrentVerseQuery());
+            var client = CreateHttpClient();
 
-        Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<RequestResult<string>>();
+            var response = await client.PostAsJsonAsync<GetCurrentVerseQuery>("verse",
+                new GetCurrentVerseQuery());
 
-        Assert.NotNull(result);
-        Assert.True(result.Success);
-        Assert.NotNull(result.Data);
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<string>>();
 
-        Output.WriteLine(result.Data);
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
 
+            Output.WriteLine(result.Data);
+        }
+        finally
+        {
+            await StopParatext();
+        }
     }
 }

@@ -18,18 +18,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         [Fact]
         public async Task GetCurrentParatextUserTest()
         {
-            var client = CreateHttpClient();
+            try
+            {
+                await StartParatext();
+                var client = CreateHttpClient();
 
-            var response = await client.PostAsJsonAsync<GetCurrentParatextUserQuery>("user", new GetCurrentParatextUserQuery());
+                var response = await client.PostAsJsonAsync<GetCurrentParatextUserQuery>("user", new GetCurrentParatextUserQuery());
 
-            Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<RequestResult<AssignedUser>>();
+                Assert.True(response.IsSuccessStatusCode);
+                var result = await response.Content.ReadAsAsync<RequestResult<AssignedUser>>();
 
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.NotNull(result.Data);
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.NotNull(result.Data);
 
-            Output.WriteLine(result.Data.Name);
+                Output.WriteLine(result.Data.Name);
+            }
+            finally
+            {
+                await StopParatext();
+            }
 
         }
     }

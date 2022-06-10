@@ -27,7 +27,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             var queryResult = new RequestResult<string>(string.Empty);
             try
             {
-                queryResult.Data = _project.GetUSX(_verseRef.BookNum);
+                queryResult.Data = _project.GetUSX(request.BookNumber ?? _verseRef.BookNum);
             }
             catch (Exception ex)
             {

@@ -17,7 +17,7 @@ public class GetCurrentParatextUserQueryHandlerTests : TestBase
     [Fact]
     public async Task GetCurrentParatextUserTest()
     {
-        var result = await ExecuteAndTestRequest<GetCurrentParatextUserQuery, RequestResult<AssignedUser>, AssignedUser>(new GetCurrentParatextUserQuery());
+        var result = await ExecuteParatextAndTestRequest<GetCurrentParatextUserQuery, RequestResult<AssignedUser>, AssignedUser>(new GetCurrentParatextUserQuery());
 
         Assert.NotNull(result.Data.Name);
         Output.WriteLine($"User name: {result.Data.Name}");
