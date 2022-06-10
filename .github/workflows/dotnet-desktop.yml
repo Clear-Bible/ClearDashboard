@@ -83,6 +83,9 @@ jobs:
     - name: Setup NuGet
       uses: Nuget/setup-nuget@v1.0.5
       
+    - name: Configure NuGet package sources
+      run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
+      
     - name: Restore NuGet packages
       run: nuget restore $env:Solution_Path
       

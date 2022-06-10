@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -393,6 +394,19 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
+        {
+            get => _currentBcv;
+            set
+            {
+                _currentBcv = value;
+                NotifyOfPropertyChange(() => CurrentBcv);
+            }
+        }
+
+
+
         #endregion //Observable Properties
 
         #region Commands
@@ -749,8 +763,9 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvBook":
                                 foreach (var term in terms.References)
                                 {
-                                    var book = term.Substring(0, 2);
-                                    if (book == ProjectManager.CurrentVerse.Substring(0, 2))
+                                    _currentBcv.SetVerseFromId(term);
+                                    var book = _currentBcv.BookNum.ToString();
+                                    if (book == ProjectManager.CurrentVerse.Substring(0, 3))
                                     {
                                         // found the book
                                         isBcvFound = true;
@@ -762,8 +777,10 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvChapter":
                                 foreach (var term in terms.References)
                                 {
-                                    var chapter = term.Substring(0, 5);
-                                    if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
+                                    _currentBcv.SetVerseFromId(term);
+                                    var book = _currentBcv.BookNum.ToString();
+                                    var chapter = _currentBcv.ChapterNum.ToString();
+                                    if (book+chapter == ProjectManager.CurrentVerse.Substring(0, 6))
                                     {
                                         // found the chapter
                                         isBcvFound = true;
