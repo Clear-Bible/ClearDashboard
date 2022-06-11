@@ -80,7 +80,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
             bbbcccvvv = bbbcccvvv.PadLeft(9,'0');
-            VerseBBCCCVVV = bbbcccvvv;
+            VerseBBBCCCVVV = bbbcccvvv;
             SilBookNumber = Convert.ToInt32(bbbcccvvv.Substring(0, 3));
             BookNumber = SilBookNumber;
             ChapterNumber = Convert.ToInt32(bbbcccvvv.Substring(3, 3));
