@@ -8,17 +8,24 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class TargetContextViewModel : ToolViewModel
+    public class TargetContextViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
+        private readonly INavigationService _navigationService;
+        private readonly ILogger<TargetContextViewModel> _logger;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator _eventAggregator;
 
         private string _currentVerse = "";
         private string _currentBook = "";
@@ -166,6 +173,8 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
+
+
         public ObservableCollection<MarbleResource> WordData
         {
             get => _wordData;
@@ -196,9 +205,33 @@ namespace ClearDashboard.Wpf.ViewModels
             this.Title = "⬓ TARGET CONTEXT";
             this.ContentId = "TARGETCONTEXT";
 
+            _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
+            _logger = logger;
+            _navigationService = navigationService;
+
+
+
             // wire up the commands
             ZoomInCommand = new RelayCommand(ZoomIn);
             ZoomOutCommand = new RelayCommand(ZoomOut);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+
+            var message = new VerseChangedMessage(_projectManager.CurrentVerse);
+
+            HandleAsync(message, new CancellationToken());
+
+            // do not await this otherwise it freezes the UI
+            //Task.Run(() =>
+            //{
+            //    ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+            //}).ConfigureAwait(false);
+
+            base.OnViewAttached(view, context);
         }
 
         #endregion //Constructor
@@ -221,6 +254,76 @@ namespace ClearDashboard.Wpf.ViewModels
             base.Dispose(disposing);
         }
 
+
+        private void ProcessTargetVerseData(string xmlData)
+        {
+            // invoke to get it to run in STA mode
+            Application.Current.Dispatcher.Invoke((System.Action)delegate
+            {
+                //// deserialize the payload
+                //string payload = string.Empty;// message.Payload.ToString();
+                //string xmlData = JsonSerializer.Deserialize<string>(payload);
+
+                string fontFamily = "Doulos SIL";
+                double fontSize = 16;
+
+                // pull out the project font family
+                fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
+                fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
+
+
+                // Make the Unformatted version
+                _targetInlinesText.Clear();
+                var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, fontFamily, fontSize);
+                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "unformatted.html");
+
+                UnformattedHTML = usfmHtml;
+                UnformattedAnchorRef = CurrentBcv.GetVerseId();
+
+                try
+                {
+                    File.WriteAllText(UnformattedPath, usfmHtml);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, "An unexpected error occurred.");
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+                // Make the Formatted version
+                string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                if (File.Exists(xsltPath))
+                {
+                    var usxHtml = Helpers.UsxParser.TransformXMLToHTML(xmlData, xsltPath);
+                    FormattedHTML = usxHtml;
+                }
+
+                // inject into the FormattedHTML the proper font family
+                var spot = FormattedHTML.IndexOf("body {") + "body {".Length;
+                if (spot > -1)
+                {
+                    FormattedHTML = FormattedHTML.Insert(spot, "font-family: '" + fontFamily + "';font-size=" + fontSize + "rem;");
+                }
+
+                FormattedHTML = FormattedHTML.Replace("font-size: 17px;", $"font-size: {fontSize}rem;");
+
+                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+
+                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "formatted.html");
+
+                try
+                {
+                    File.WriteAllText(HtmlPath, FormattedHTML);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+            });
+        }
 
         /// <summary>
         /// Listen for changes in the DAL regarding any messages coming in
@@ -291,76 +394,63 @@ namespace ClearDashboard.Wpf.ViewModels
             //}
         }
 
-        private void ProcessTargetVerseData(/*PipeMessage message*/)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            // invoke to get it to run in STA mode
-            Application.Current.Dispatcher.Invoke((System.Action)delegate
+            string newVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse != newVerse)
             {
-                // deserialize the payload
-                string payload = string.Empty;// message.Payload.ToString();
-                string xmlData = JsonSerializer.Deserialize<string>(payload);
-
-                string fontFamily = "Doulos SIL";
-                double fontSize = 16;
-                if (ProjectManager.ParatextProject is not null)
+                // check for book change
+                string newBook = newVerse.Substring(0, 3);
+                if (_currentBook != newBook)
                 {
-                    // pull out the project font family
-                    fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
-                    fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
+                    _currentBook = newBook;
+
+                    // call Paratext to get the USX for this book
+                    var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
+                    if (result.Success)
+                    {
+                        if (result.Data.StringData is not null || result.Data.StringData != "")
+                        {
+                            ProcessTargetVerseData(result.Data.StringData);
+                        }
+                    }
+
+                    _currentVerse = newVerse;
+                    CurrentBcv.SetVerseFromId(_currentVerse);
+                    if (_currentVerse.EndsWith("000"))
+                    {
+                        // a zero based verse
+                        TargetInlinesText.Clear();
+                        NotifyOfPropertyChange(() => TargetInlinesText);
+                        FormattedHTML = "";
+                        UnformattedHTML = "";
+                    }
+                    else
+                    {
+                        // a normal verse
+                        var verse = new Verse
+                        {
+                            VerseBBCCCVVV = _currentVerse
+                        };
+
+                        if (verse.BookNumber < 40)
+                        {
+                            _isOT = true;
+                        }
+                        else
+                        {
+                            _isOT = false;
+                        }
+                    }
                 }
-
-
-                // Make the Unformatted version
-                _targetInlinesText.Clear();
-                var usfmHtml = UsxParser.ConvertXMLToHTML(xmlData, _currentBook, fontFamily, fontSize);
-                UnformattedPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "unformatted.html");
-
-                UnformattedHTML = usfmHtml;
-                UnformattedAnchorRef = CurrentBcv.GetVerseId();
-
-                try
+                else if (CurrentBcv.VerseLocationId != newVerse)
                 {
-                    File.WriteAllText(UnformattedPath, usfmHtml);
+                    CurrentBcv.SetVerseFromId(newVerse);
+                    FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
+                    UnformattedAnchorRef = CurrentBcv.GetVerseId();
                 }
-                catch (Exception e)
-                {
-                    Logger.LogError(e, "An unexpected error occurred.");
-                    Console.WriteLine(e);
-                    throw;
-                }
-
-                // Make the Formatted version
-                string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
-                if (File.Exists(xsltPath))
-                {
-                    var usxHtml = Helpers.UsxParser.TransformXMLToHTML(xmlData, xsltPath);
-                    FormattedHTML = usxHtml;
-                }
-
-                // inject into the FormattedHTML the proper font family
-                var spot = FormattedHTML.IndexOf("body {") + "body {".Length;
-                if (spot > -1)
-                {
-                    FormattedHTML = FormattedHTML.Insert(spot, "font-family: '" + fontFamily + "';font-size=" + fontSize + "rem;");
-                }
-
-                FormattedHTML = FormattedHTML.Replace("font-size: 17px;", $"font-size: {fontSize}rem;");
-
-                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
-
-                HtmlPath = Path.Combine(ProjectPath.GetProjectPath(ProjectManager), "formatted.html");
-
-                try
-                {
-                    File.WriteAllText(HtmlPath, FormattedHTML);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-
-            });
+            }
         }
 
         //private void ConvertListToHTML(List<ParsedXML> usxList)
@@ -388,7 +478,5 @@ namespace ClearDashboard.Wpf.ViewModels
         //}
 
         #endregion // Methods
-
-
     }
 }

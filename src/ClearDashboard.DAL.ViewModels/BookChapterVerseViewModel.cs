@@ -1,6 +1,5 @@
 ﻿using System.Reflection.Metadata;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Helpers;
 using static System.String;
 
 namespace ClearDashboard.DAL.ViewModels
@@ -341,7 +340,7 @@ namespace ClearDashboard.DAL.ViewModels
         /// <returns>An English Bible book name.</returns>
         public static string BookId2BookName(int bookNum, bool isParatext = false)
         {
-            var books = BibleRefUtils.GetBookIdDictionary();
+            var books = GetBookIdDictionary();
             var bookBBB = bookNum.ToString().PadLeft(3, '0');
             if (books.ContainsKey(bookBBB))
             {
@@ -470,7 +469,6 @@ namespace ClearDashboard.DAL.ViewModels
             return bibleBooks;
         }
 
-
         public static string GetFullBookNameFromBookNum(string value)
         {
             var lookup = new Dictionary<string, string>
@@ -558,6 +556,135 @@ namespace ClearDashboard.DAL.ViewModels
             return bookName;
         }
 
+        public static Dictionary<string, string> GetBookIdDictionary()
+        {
+            Dictionary<string, string> lookup = new Dictionary<string, string>
+            {
+                { "001", "GEN" },
+                { "002", "EXO" },
+                { "003", "LEV" },
+                { "004", "NUM" },
+                { "005", "DEU" },
+                { "006", "JOS" },
+                { "007", "JDG" },
+                { "008", "RUT" },
+                { "009", "1SA" },
+                { "010", "2SA" },
+                { "011", "1KI" },
+                { "012", "2KI" },
+                { "013", "1CH" },
+                { "014", "2CH" },
+                { "015", "EZR" },
+                { "016", "NEH" },
+                { "017", "EST" },
+                { "018", "JOB" },
+                { "019", "PSA" },
+                { "020", "PRO" },
+                { "021", "ECC" },
+                { "022", "SNG" },
+                { "023", "ISA" },
+                { "024", "JER" },
+                { "025", "LAM" },
+                { "026", "EZK" },
+                { "027", "DAN" },
+                { "028", "HOS" },
+                { "029", "JOL" },
+                { "030", "AMO" },
+                { "031", "OBA" },
+                { "032", "JON" },
+                { "033", "MIC" },
+                { "034", "NAM" },
+                { "035", "HAB" },
+                { "036", "ZEP" },
+                { "037", "HAG" },
+                { "038", "ZEC" },
+                { "039", "MAL" },
+                { "040", "MAT" },
+                { "041", "MRK" },
+                { "042", "LUK" },
+                { "043", "JHN" },
+                { "044", "ACT" },
+                { "045", "ROM" },
+                { "046", "1CO" },
+                { "047", "2CO" },
+                { "048", "GAL" },
+                { "049", "EPH" },
+                { "050", "PHP" },
+                { "051", "COL" },
+                { "052", "1TH" },
+                { "053", "2TH" },
+                { "054", "1TI" },
+                { "055", "2TI" },
+                { "056", "TIT" },
+                { "057", "PHM" },
+                { "058", "HEB" },
+                { "059", "JAS" },
+                { "060", "1PE" },
+                { "061", "2PE" },
+                { "062", "1JN" },
+                { "063", "2JN" },
+                { "064", "3JN" },
+                { "065", "JUD" },
+                { "066", "REV" },
+                { "067", "TOB" },
+                { "068", "JDT" },
+                { "069", "ESG" },
+                { "070", "WIS" },
+                { "071", "SIR" },
+                { "072", "BAR" },
+                { "073", "LJE" },
+                { "074", "S3Y" },
+                { "075", "SUS" },
+                { "076", "BEL" },
+                { "077", "1MA" },
+                { "078", "2MA" },
+                { "079", "3MA" },
+                { "080", "4MA" },
+                { "081", "1ES" },
+                { "082", "2ES" },
+                { "083", "MAN" },
+                { "084", "PS2" },
+                { "085", "ODA" },
+                { "086", "PSS" },
+                { "087", "JDA" },
+                { "088", "JDB" },
+                { "089", "TBS" },
+                { "090", "SST" },
+                { "091", "DNT" },
+                { "092", "BLT" },
+                { "093", "XXA" },
+                { "094", "XXB" },
+                { "095", "XXC" },
+                { "096", "XXD" },
+                { "097", "XXE" },
+                { "098", "XXF" },
+                { "099", "XXG" },
+                { "100", "FRT" },
+                { "101", "BAK" },
+                { "102", "OTH" },
+                { "103", "3ES" },
+                { "104", "EZA" },
+                { "105", "5EZ" },
+                { "106", "6EZ" },
+                { "107", "INT" },
+                { "108", "CNC" },
+                { "109", "GLO" },
+                { "110", "TDX" },
+                { "111", "NDX" },
+                { "112", "DAG" },
+                { "113", "PS3" },
+                { "114", "2BA" },
+                { "115", "LBA" },
+                { "116", "JUB" },
+                { "117", "ENO" },
+                { "118", "1MQ" },
+                { "119", "2MQ" },
+                { "120", "3MQ" },
+                { "121", "REP" },
+            };
+            return lookup;
+        }
+
         public static string GetBookNumFromBookName(string? value)
         {
             var lookup = new Dictionary<string?, string>
@@ -628,6 +755,61 @@ namespace ClearDashboard.DAL.ViewModels
             { "3JN", "064" },
             { "JUD", "065" },
             { "REV", "066" },
+            { "TOB", "067" },
+            { "JDT", "068" },
+            { "ESG", "069" },
+            { "WIS", "070" },
+            { "SIR", "071" },
+            { "BAR", "072" },
+            { "LJE", "073" },
+            { "S3Y", "074" },
+            { "SUS", "075" },
+            { "BEL", "076" },
+            { "1MA", "077" },
+            { "2MA", "078" },
+            { "3MA", "079" },
+            { "4MA", "080" },
+            { "1ES", "081" },
+            { "2ES", "082" },
+            { "MAN", "083" },
+            { "PS2", "084" },
+            { "ODA", "085" },
+            { "PSS", "086" },
+            { "JDA", "087" },
+            { "JDB", "088" },
+            { "TBS", "089" },
+            { "SST", "090" },
+            { "DNT", "091" },
+            { "BLT", "092" },
+            { "XXA", "093" },
+            { "XXB", "094" },
+            { "XXC", "095" },
+            { "XXD", "096" },
+            { "XXE", "097" },
+            { "XXF", "098" },
+            { "XXG", "099" },
+            { "FRT", "100" },
+            { "BAK", "101" },
+            { "OTH", "102" },
+            { "3ES", "103" },
+            { "EZA", "104" },
+            { "5EZ", "105" },
+            { "6EZ", "106" },
+            { "INT", "107" },
+            { "CNC", "108" },
+            { "GLO", "109" },
+            { "TDX", "110" },
+            { "NDX", "111" },
+            { "DAG", "112" },
+            { "PS3", "113" },
+            { "2BA", "114" },
+            { "LBA", "115" },
+            { "JUB", "116" },
+            { "ENO", "117" },
+            { "1MQ", "118" },
+            { "2MQ", "119" },
+            { "3MQ", "120" },
+            { "REP", "121" },
 
             { "Genesis", "001" },
             { "Exodus", "002" },
@@ -695,7 +877,61 @@ namespace ClearDashboard.DAL.ViewModels
             { "3 John", "064" },
             { "Jude", "065" },
             { "Revelation", "066" },
-
+            { "Tobit", "067" },
+            { "Judith", "068" },
+            { "Esther Greek", "069" },
+            { "Wisdom of Solomon", "070" },
+            { "Sirach (Ecclesiasticus)", "071" },
+            { "Baruch", "072" },
+            { "Letter of Jeremiah", "073" },
+            { "Song of 3 Young Men", "074" },
+            { "Susanna", "075" },
+            { "Bel and the Dragon", "076" },
+            { "1 Maccabees", "077" },
+            { "2 Maccabees", "078" },
+            { "3 Maccabees", "079" },
+            { "4 Maccabees", "080" },
+            { "1 Esdras (Greek)", "081" },
+            { "2 Esdras (Latin)", "082" },
+            { "Prayer of Manasseh", "083" },
+            { "Psalm 151", "084" },
+            { "Odes", "085" },
+            { "Psalms of Solomon", "086" },
+            { "Joshua A. *obsolete*", "087" },
+            { "Judges B. *obsolete*", "088" },
+            { "Tobit S. *obsolete*", "089" },
+            { "Susanna Th. *obsolete*", "090" },
+            { "Daniel Th. *obsolete*", "091" },
+            { "Bel Th. *obsolete*", "092" },
+            { "Extra A", "093" },
+            { "Extra B", "094" },
+            { "Extra C", "095" },
+            { "Extra D", "096" },
+            { "Extra E", "097" },
+            { "Extra F", "098" },
+            { "Extra G", "099" },
+            { "Front Matter", "100" },
+            { "Back Matter", "101" },
+            { "Other Matter", "102" },
+            { "3 Ezra *obsolete*", "103" },
+            { "Apocalypse of Ezra", "104" },
+            { "5 Ezra (Latin Prologue)", "105" },
+            { "6 Ezra (Latin Epilogue)", "106" },
+            { "Introduction", "107" },
+            { "Concordance", "108" },
+            { "Glossary", "109" },
+            { "Topical Index", "110" },
+            { "Names Index", "111" },
+            { "Daniel Greek", "112" },
+            { "Psalms 152-155", "113" },
+            { "2 Baruch (Apocalypse)", "114" },
+            { "Letter of Baruch", "115" },
+            { "Jubilees", "116" },
+            { "Enoch", "117" },
+            { "1 Meqabyan", "118" },
+            { "2 Meqabyan", "119" },
+            { "3 Meqabyan", "120" },
+            { "Reproof (Proverbs 25-31)", "121" }
             };
 
             var bookNum = string.Empty;
@@ -706,10 +942,61 @@ namespace ClearDashboard.DAL.ViewModels
             catch (Exception ex)
             {
               // TODO: how to report
-               
+              Console.WriteLine(ex.Message);
+              bookNum = "";
+
             }
 
             return bookNum;
+        }
+
+        public static string GetVerseStrShortFromBBBCCCVVV(string BBBCCCVVV)
+        {
+            string verseStr = "";
+
+            // ensure that we are dealing with a full 9 character string
+            if (BBBCCCVVV.Length < 9)
+            {
+                BBBCCCVVV = BBBCCCVVV.PadLeft(9, '0');
+            }
+
+            // get the book lookup values
+            var lookup = GetBookIdDictionary();
+
+            // get the short book name
+            if (lookup.ContainsKey(BBBCCCVVV.Substring(0, 3)))
+            {
+                verseStr = lookup[BBBCCCVVV.Substring(0, 3)];
+            }
+            else
+            {
+                verseStr = "UNK";
+            }
+
+            // parse out the verse number
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(3, 3));
+                verseStr += $" {numVal}:";
+            }
+            catch (FormatException e)
+            {
+                verseStr += " 00:";
+            }
+
+            // parse out the chapter
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(6, 3));
+                verseStr += $"{numVal}";
+            }
+            catch (FormatException e)
+            {
+                verseStr += "00";
+            }
+
+            return verseStr;
+
         }
     }
 }

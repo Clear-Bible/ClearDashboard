@@ -23,11 +23,11 @@ namespace ClearDashboard.Wpf.ViewModels
             set => Set(ref isBusy_, value, nameof(IsBusy));
         }
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
         {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+            get => _windowFlowDirection;
+            set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
         public ApplicationScreen()
@@ -41,7 +41,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger = logger;
             ProjectManager = projectManager;
             EventAggregator = eventAggregator;
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

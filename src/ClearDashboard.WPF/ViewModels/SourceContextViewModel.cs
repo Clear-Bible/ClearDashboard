@@ -139,21 +139,23 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         if (verse.stringA.EndsWith(bcv.VerseIdText))
                         {
+                            _currentBcv.SetVerseFromId(verse.stringA);
                             _sourceInlinesText.Add(
                                 new SourceVerses
                                 {
                                     IsSelected = true,
-                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(6, 3)),
+                                    VerseNum = Convert.ToInt16(_currentBcv.VerseNum),
                                     VerseText = verse.stringB,
                                 });
                         }
                         else
                         {
+                            _currentBcv.SetVerseFromId(verse.stringA);
                             _sourceInlinesText.Add(
                                 new SourceVerses
                                 {
                                     IsSelected = false,
-                                    VerseNum = Convert.ToInt16(verse.stringA.Substring(6, 3)),
+                                    VerseNum = Convert.ToInt16(_currentBcv.VerseNum),
                                     VerseText = verse.stringB,
                                 });
                         }

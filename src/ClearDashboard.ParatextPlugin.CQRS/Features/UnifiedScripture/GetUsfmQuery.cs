@@ -1,10 +1,11 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture
 {
-    public record GetUsfmQuery() : IRequest<RequestResult<string>>
+    public record GetUsfmQuery(int? BookNumber) : IRequest<RequestResult<StringObject>>
     {
-
+        public int? BookNumber { get; } = BookNumber;
     }
 }

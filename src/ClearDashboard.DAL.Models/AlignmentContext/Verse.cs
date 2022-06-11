@@ -14,9 +14,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         
 
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
-        public string? VerseNumber { get; set; }
-        public string? SilBookNumber { get; set; }
-        public string? ChapterNumber { get; set; }
+        public int? VerseNumber { get; set; }
+        public int? BookNumber { get; set; }
+        public int? SilBookNumber { get; set; }
+        public int? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
         public int? CorpusId { get; set; }
@@ -79,10 +80,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
             bbbcccvvv = bbbcccvvv.PadLeft(9,'0');
-            VerseBBBCCCVVV = bbbcccvvv;
-            SilBookNumber = bbbcccvvv.Substring(0, 3);
-            ChapterNumber = bbbcccvvv.Substring(3, 3);
-            VerseNumber = bbbcccvvv.Substring(6, 3);
+            VerseBBCCCVVV = bbbcccvvv;
+            SilBookNumber = Convert.ToInt32(bbbcccvvv.Substring(0, 3));
+            BookNumber = SilBookNumber;
+            ChapterNumber = Convert.ToInt32(bbbcccvvv.Substring(3, 3));
+            VerseNumber = Convert.ToInt32(bbbcccvvv.Substring(6, 3));
         }
     }
 }

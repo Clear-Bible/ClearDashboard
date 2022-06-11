@@ -10,7 +10,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var book = _VerseBBCCCVVV.Substring(0, 2);
+    //            var book = _VerseBBCCCVVV.Substring(0, 3);
     //            return book;
     //        }
     //    }
@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var book = _VerseBBCCCVVV.Substring(0, 2);
+    //            var book = _VerseBBCCCVVV.Substring(0, 3);
     //            return Convert.ToInt32(book);
     //        }
     //    }
@@ -28,7 +28,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var chap = _VerseBBCCCVVV.Substring(2, 3);
+    //            var chap = _VerseBBCCCVVV.Substring(3, 3);
     //            return chap;
     //        }
     //    }
@@ -37,7 +37,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var chap = _VerseBBCCCVVV.Substring(2, 3);
+    //            var chap = _VerseBBCCCVVV.Substring(3, 3);
     //            return Convert.ToInt32(chap);
     //        }
     //    }
@@ -46,7 +46,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var verse = _VerseBBCCCVVV.Substring(5, 3);
+    //            var verse = _VerseBBCCCVVV.Substring(6, 3);
     //            return verse;
     //        }
     //    }
@@ -55,7 +55,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //    {
     //        get
     //        {
-    //            var verse = _VerseBBCCCVVV.Substring(5, 3);
+    //            var verse = _VerseBBCCCVVV.Substring(6, 3);
     //            return Convert.ToInt32(verse);
     //        }
     //    }
@@ -74,7 +74,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     //            _VerseBBCCCVVV = value;
     //            if (_VerseBBCCCVVV.Length < 8)
     //            {
-    //                _VerseBBCCCVVV = _VerseBBCCCVVV.PadLeft(8, '0');
+    //                _VerseBBCCCVVV = _VerseBBCCCVVV.PadLeft(9, '0');
     //            }
     //        }
     //    }

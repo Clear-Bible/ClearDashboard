@@ -30,7 +30,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
                 var verseId = _verseRef.BBBCCCVVV.ToString();
                 if (verseId.Length < 8)
                 {
-                    verseId = verseId.PadLeft(8, '0');
+                    verseId = verseId.PadLeft(9, '0');
                 }
                 queryResult.Data = verseId;
                

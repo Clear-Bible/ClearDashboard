@@ -17,13 +17,12 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
     public record GetBiblicalTermsQuery(string xmlPath) : IRequest<RequestResult<BiblicalTermsList>>;
 
-    public class GetBiblicalTermsSlice : XmlReaderRequestHandler<GetBiblicalTermsQuery,
+    public class GetBiblicalTermsQueryHandler : XmlReaderRequestHandler<GetBiblicalTermsQuery,
         RequestResult<BiblicalTermsList>, BiblicalTermsList>
     {
-        private string _projectPath = "";
         private BiblicalTermsList _biblicalTermsList = new();
 
-        public GetBiblicalTermsSlice(ILogger<PINS.GetTermRenderingsSlice> logger) : base(logger)
+        public GetBiblicalTermsQueryHandler(ILogger<GetTermRenderingsQueryHandler> logger) : base(logger)
         {
             //no-op
         }
