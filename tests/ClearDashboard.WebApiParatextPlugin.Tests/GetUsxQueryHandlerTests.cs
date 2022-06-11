@@ -17,17 +17,54 @@ public class GetUsxQueryHandlerTests : TestBase
     [Fact]
     public async Task GetUsxTest()
     {
-        var client = CreateHttpClient();
+        try
+        {
+            await StartParatext();
+
+            var client = CreateHttpClient();
 
         var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(1));
 
-        Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
 
-        Assert.NotNull(result);
-        Assert.True(result.Success);
-        Assert.NotNull(result.Data);
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
 
-        Output.WriteLine(result.Data.StringData);
+            Output.WriteLine(result.Data.StringData);
+        }
+        finally
+        {
+            await StopParatext();
+        }
+
+    }
+
+    [Fact]
+    public async Task GetUsxBook43Test()
+    {
+        try
+        {
+            await StartParatext();
+            var client = CreateHttpClient();
+
+            var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(43));
+
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
+
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
+
+            Output.WriteLine(result.Data.StringData);
+
+        }
+        finally
+        {
+            await StopParatext();
+        }
+
     }
 }

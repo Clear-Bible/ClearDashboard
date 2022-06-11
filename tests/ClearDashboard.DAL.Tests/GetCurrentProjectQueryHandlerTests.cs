@@ -17,7 +17,7 @@ public class GetCurrentProjectQueryHandlerTests : TestBase
     [Fact]
     public async Task GetCurrentProjectTest()
     {
-        var result = await ExecuteAndTestRequest<GetCurrentProjectQuery, RequestResult<Project>, Project>(new GetCurrentProjectQuery());
+        var result = await ExecuteParatextAndTestRequest<GetCurrentProjectQuery, RequestResult<Project>, Project>(new GetCurrentProjectQuery());
 
         Assert.NotNull(result.Data.ShortName);
         Output.WriteLine($"Project name: {result.Data.ShortName}");

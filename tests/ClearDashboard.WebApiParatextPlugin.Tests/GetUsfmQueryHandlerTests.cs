@@ -17,18 +17,26 @@ public class GetUsfmQueryHandlerTests : TestBase
     [Fact]
     public async Task GetUsfmTest()
     {
-        var client = CreateHttpClient();
+        try
+        {
+            await StartParatext();
+            var client = CreateHttpClient();
 
-        var response = await client.PostAsJsonAsync<GetUsfmQuery>("usfm", new GetUsfmQuery(1));
+            var response = await client.PostAsJsonAsync<GetUsfmQuery>("usfm", new GetUsfmQuery(1));
 
-        Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
 
-        Assert.NotNull(result);
-        Assert.True(result.Success);
-        Assert.NotNull(result.Data);
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
 
-        Output.WriteLine(result.Data.StringData);
+            Output.WriteLine(result.Data.StringData);
+        }
+        finally
+        {
+            await StopParatext();
+        }
 
     }
 }

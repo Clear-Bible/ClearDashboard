@@ -431,7 +431,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         // a normal verse
                         var verse = new Verse
                         {
-                            VerseBBCCCVVV = _currentVerse
+                            VerseBBBCCCVVV = _currentVerse
                         };
 
                         if (verse.BookNumber < 40)

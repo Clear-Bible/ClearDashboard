@@ -11,13 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    [Migration("20220415161509_InitialMigration")]
+    [Migration("20220602231616_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -26,20 +26,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Lemma")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PartsOfSpeech")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Strong")
-                        .IsRequired()
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("TokenId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -47,7 +42,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("TokenId")
                         .IsUnique();
 
-                    b.ToTable("Adornment", (string)null);
+                    b.ToTable("Adornment");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
@@ -60,11 +55,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("AlignmentVersionId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Score")
-                        .HasColumnType("decimal(3)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SourceTokenId")
                         .HasColumnType("INTEGER");
@@ -76,13 +70,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("AlignmentVersionId");
 
-                    b.HasIndex("SourceTokenId")
-                        .IsUnique();
+                    b.HasIndex("SourceTokenId");
 
-                    b.HasIndex("TargetTokenId")
-                        .IsUnique();
+                    b.HasIndex("TargetTokenId");
 
-                    b.ToTable("Alignment", (string)null);
+                    b.ToTable("Alignment");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
@@ -91,21 +83,23 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDirty")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("UserId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AlignmentVersion", (string)null);
+                    b.ToTable("AlignmentVersion");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
@@ -118,54 +112,105 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsRtl")
-                        .HasColumnType("bit")
-                        .HasColumnName("IsRTL");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("Language")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ParatextGuid")
                         .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("ParatextGUID");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Corpus", (string)null);
+                    b.ToTable("Corpus");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.InterlinearNote", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("varchar(600)");
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("TokenId")
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Note");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AssociationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AssociationType")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NoteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("NoteAssociation");
+
+                    b.HasDiscriminator<string>("AssociationType").HasValue("NoteAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteRecipient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NoteId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("TokenId");
+                    b.HasIndex("NoteId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
-                    b.ToTable("InterlinearNotes");
+                    b.ToTable("NoteRecipient");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
@@ -177,11 +222,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("AlignmentType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastGenerated")
-                        .HasColumnType("datetime");
+                    b.Property<long>("LastGenerated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("SourceCorpusId")
                         .HasColumnType("INTEGER");
@@ -191,13 +239,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SourceCorpusId")
-                        .IsUnique();
+                    b.HasIndex("SourceCorpusId");
 
-                    b.HasIndex("TargetCorpusId")
-                        .IsUnique();
+                    b.HasIndex("TargetCorpusId");
 
-                    b.ToTable("ParallelCorpus", (string)null);
+                    b.ToTable("ParallelCorpus");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", b =>
@@ -207,7 +253,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ParallelCorpusId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("VerseId")
@@ -219,7 +264,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("VerseId");
 
-                    b.ToTable("ParallelVerseLink", (string)null);
+                    b.ToTable("ParallelVersesLink");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
@@ -228,47 +273,87 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsRtl")
-                        .HasColumnType("bit")
-                        .HasColumnName("IsRTL");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("LastContentWordLevel")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ProjectName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectInfo", (string)null);
+                    b.ToTable("ProjectInfo");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.QuestionGroup", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("AltText")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("English")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("LastChanged")
                         .HasColumnType("REAL");
 
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuestionGroup");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Bytes")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.ToTable("QuestionGroup", (string)null);
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NoteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("RawContent");
+
+                    b.HasDiscriminator<string>("ContentType").HasValue("RawContent");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
@@ -278,15 +363,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstLetter")
-                        .IsRequired()
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("VerseId")
                         .HasColumnType("INTEGER");
@@ -299,24 +382,27 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("VerseId")
                         .IsUnique();
 
-                    b.ToTable("Token", (string)null);
+                    b.ToTable("Token");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("LastAlignmentLevelId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ParatextUsername")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
@@ -326,33 +412,41 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ChapterNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("CorpusId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastChanged")
-                        .HasColumnType("datetime");
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Found")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SilBookNumber")
-                        .IsRequired()
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("VerseNumber")
+                    b.Property<string>("VerseBBCCCVVV")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerseId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("VerseNumber")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("VerseText")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CorpusId");
 
-                    b.ToTable("Verse", (string)null);
+                    b.ToTable("Verse");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseLink", b =>
@@ -361,7 +455,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsSource")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ParallelVersesLinkId")
@@ -376,16 +476,63 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("VerseId");
 
-                    b.ToTable("VerseLink", (string)null);
+                    b.ToTable("VerseLink");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("AlignmentAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.BinaryContent", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.RawContent");
+
+                    b.HasDiscriminator().HasValue("BinaryContent");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.BookAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("BookAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ChapterAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("ChapterAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.StringContent", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.RawContent");
+
+                    b.HasDiscriminator().HasValue("StringContent");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("TokenAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("VerseAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
                         .WithOne("Adornment")
-                        .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Adornment", "TokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Adornment", "TokenId");
 
                     b.Navigation("Token");
                 });
@@ -394,9 +541,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", "AlignmentVersion")
                         .WithMany("Alignments")
-                        .HasForeignKey("AlignmentVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AlignmentVersionId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "SourceToken")
                         .WithMany()
@@ -421,22 +566,42 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany("AlignmentVersions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteAssociation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
+                        .WithMany("NoteAssociations")
+                        .HasForeignKey("NoteId");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteRecipient", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
+                        .WithMany("NoteRecipients")
+                        .HasForeignKey("NoteId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.InterlinearNote", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
-                        .WithMany("InterlinearNotes")
-                        .HasForeignKey("TokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Token");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
@@ -462,15 +627,20 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("ParallelVersesLinks")
-                        .HasForeignKey("ParallelCorpusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParallelCorpusId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", null)
                         .WithMany("ParallelVersesLinks")
                         .HasForeignKey("VerseId");
 
                     b.Navigation("ParallelCorpus");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
+                        .WithMany("ContentCollection")
+                        .HasForeignKey("NoteId");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
@@ -484,24 +654,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Verse");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.InterlinearNote", "UserNavigation")
-                        .WithOne("User")
-                        .HasForeignKey("ClearDashboard.DataAccessLayer.Models.User", "Id")
-                        .HasPrincipalKey("ClearDashboard.DataAccessLayer.Models.InterlinearNote", "UserId")
-                        .IsRequired();
-
-                    b.Navigation("UserNavigation");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", "Corpus")
                         .WithMany("Verses")
-                        .HasForeignKey("CorpusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CorpusId");
 
                     b.Navigation("Corpus");
                 });
@@ -535,10 +692,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Verses");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.InterlinearNote", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("ContentCollection");
+
+                    b.Navigation("NoteAssociations");
+
+                    b.Navigation("NoteRecipients");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
@@ -553,10 +713,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
-                    b.Navigation("Adornment")
-                        .IsRequired();
-
-                    b.Navigation("InterlinearNotes");
+                    b.Navigation("Adornment");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
@@ -568,8 +725,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Navigation("ParallelVersesLinks");
 
-                    b.Navigation("Token")
-                        .IsRequired();
+                    b.Navigation("Token");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Verse
+    public class Verse : ClearEntity
     {
 
         public Verse()
@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public int? Id { get; set; }
+        
 
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
         public int? VerseNumber { get; set; }
@@ -20,7 +20,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
-        public DateTime? LastChanged { get; set; }
         public int? CorpusId { get; set; }
 
         public virtual Corpus? Corpus { get; set; }
@@ -28,16 +27,16 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
 
 
-        private string? _verseBbcccvvv = string.Empty;
-        public string? VerseBBCCCVVV
+        private string? _verseBbbcccvvv = string.Empty;
+        public string? VerseBBBCCCVVV
         {
-            get => _verseBbcccvvv;
+            get => _verseBbbcccvvv;
             set
             {
-                _verseBbcccvvv = value;
-                if (_verseBbcccvvv is { Length: < 8 })
+                _verseBbbcccvvv = value;
+                if (_verseBbbcccvvv is { Length: < 8 })
                 {
-                    _verseBbcccvvv = _verseBbcccvvv.PadLeft(9, '0').PadLeft(9, '0');
+                    _verseBbbcccvvv = _verseBbbcccvvv.PadLeft(9, '0').PadLeft(9, '0');
                 }
             }
         }
@@ -48,7 +47,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             get
             {
-                var book = VerseBBCCCVVV.PadLeft(9,'0').Substring(0, 3);
+                var book = VerseBBBCCCVVV.PadLeft(9,'0').Substring(0, 3);
                 return book;
             }
             //set => BookStr = value;
@@ -58,7 +57,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             get
             {
-                var chap = VerseBBCCCVVV.PadLeft(9, '0').Substring(3, 3);
+                var chap = VerseBBBCCCVVV.PadLeft(9, '0').Substring(3, 3);
                 return chap;
             }
             //set => ChapterStr = value;
@@ -68,7 +67,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             get
             {
-                var verse = VerseBBCCCVVV.PadLeft(9, '0').Substring(6, 3);
+                var verse = VerseBBBCCCVVV.PadLeft(9, '0').Substring(6, 3);
                 return verse;
             }
             //set => VerseStr = value;
@@ -81,7 +80,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
             bbbcccvvv = bbbcccvvv.PadLeft(9,'0');
-            VerseBBCCCVVV = bbbcccvvv;
+            VerseBBBCCCVVV = bbbcccvvv;
             SilBookNumber = Convert.ToInt32(bbbcccvvv.Substring(0, 3));
             BookNumber = SilBookNumber;
             ChapterNumber = Convert.ToInt32(bbbcccvvv.Substring(3, 3));

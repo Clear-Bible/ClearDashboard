@@ -17,9 +17,9 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public int? Id
+        public int Id
         {
-            get => Entity?.Id;
+            get => Entity.Id;
             set
             {
                 if (Entity != null)
@@ -82,16 +82,16 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTime? LastChanged
+        public DateTimeOffset Modified
         {
-            get => Entity?.LastChanged;
+            get => Entity.Modified;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.LastChanged = value;
+                    Entity.Modified = value;
                 }
-                NotifyOfPropertyChange(nameof(LastChanged));
+                NotifyOfPropertyChange(nameof(Modified));
             }
         }
 
@@ -151,12 +151,12 @@ namespace ClearDashboard.DAL.ViewModels
         
         public string? VerseBBCCCVVV
         {
-            get => Entity?.VerseBBCCCVVV;
+            get => Entity?.VerseBBBCCCVVV;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.VerseBBCCCVVV = value;
+                    Entity.VerseBBBCCCVVV = value;
                 }
                 NotifyOfPropertyChange(nameof(VerseBBCCCVVV));
             }

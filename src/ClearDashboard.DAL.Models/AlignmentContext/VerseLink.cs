@@ -1,13 +1,13 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class VerseLink
+    public class VerseLink : ClearEntity
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public int VerseId { get; set; }
         public int ParallelVersesLinkId { get; set; }
-        public virtual Verse Verse { get ;set; }
-        public virtual ParallelVersesLink  ParallelVersesLink { get ; set; }
+        public virtual Verse? Verse { get ;set; }
+        public virtual ParallelVersesLink?  ParallelVersesLink { get ; set; }
         public bool IsSource { get; set; } 
     }
 }

@@ -1,12 +1,10 @@
-﻿using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.BackgroundServices;
+﻿using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
-using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using System;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 {
@@ -25,6 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker));
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
+            serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp=> sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddScoped<ParatextProxy>();
             serviceCollection.AddProjectNameDatabaseContextFactory();
 

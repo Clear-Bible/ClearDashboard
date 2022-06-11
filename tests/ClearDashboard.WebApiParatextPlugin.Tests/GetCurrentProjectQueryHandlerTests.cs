@@ -21,25 +21,32 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
         protected override void SetupDependencyInjection()
         {
-           base.SetupDependencyInjection();
+            base.SetupDependencyInjection();
         }
 
         [Fact]
         public async Task TestQuery()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:9000/api/");
+            try
+            {
+                await StartParatext();
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-            var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
+                var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
 
-            Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<RequestResult<Project>>();
-                    
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.NotNull(result.Data);
-        
-            
+                Assert.True(response.IsSuccessStatusCode);
+                var result = await response.Content.ReadAsAsync<RequestResult<Project>>();
+
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.NotNull(result.Data);
+            }
+            finally
+            {
+                await StopParatext();
+            }
+
         }
     }
 }

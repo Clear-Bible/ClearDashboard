@@ -1,10 +1,8 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class ProjectInfo
+    public partial class ProjectInfo : ClearEntity
     {
-        public int Id { get; set; }
-        public string ProjectName { get; set; }
-        public DateTime Created { get; set; }
+        public string? ProjectName { get; set; }
         public bool IsRtl { get; set; }
         public int? LastContentWordLevel { get; set; }
     }

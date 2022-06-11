@@ -404,7 +404,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 // a normal verse
                 var verse = new Verse
                 {
-                    VerseBBCCCVVV = _currentVerse
+                    VerseBBBCCCVVV = _currentVerse
                 };
 
                 int BookNum;
