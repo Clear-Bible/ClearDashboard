@@ -39,6 +39,7 @@ namespace ClearDashboard.DAL.Tests
             Services.AddClearDashboardDataAccessLayer();
            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
            Services.AddLogging();
+           Services.AddSingleton<IEventAggregator, EventAggregator>();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(

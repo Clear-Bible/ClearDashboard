@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
+		Localization-How-To.md = Localization-How-To.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
 		Paratext_SendReceive_Documentation.md = Paratext_SendReceive_Documentation.md
 	EndProjectSection
@@ -55,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.ViewMode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin.CQRS", "ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj", "{9862DCCB-E85D-4A95-86E2-311FC987E4C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.WPF.Tests", "ClearDashboard.WPF.Tests\ClearDashboard.WPF.Tests.csproj", "{9C3D2FA6-92EB-4184-9429-DD5898E5B565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WPF.Tests", "ClearDashboard.WPF.Tests\ClearDashboard.WPF.Tests.csproj", "{9C3D2FA6-92EB-4184-9429-DD5898E5B565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

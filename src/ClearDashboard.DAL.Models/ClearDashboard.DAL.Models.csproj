@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SIL.Scripture" Version="8.0.0" />
+	  <PackageReference Include="SIL.Scripture" Version="9.0.0" />
 	  <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	</ItemGroup>
 

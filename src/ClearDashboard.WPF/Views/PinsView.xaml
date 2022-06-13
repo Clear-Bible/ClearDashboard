@@ -132,8 +132,35 @@
                 </Style>
             </DataGrid.RowStyle>
 
-
             <DataGrid.Columns>
+                <!--  SimpRefs  -->
+                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsVerseReferences}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Width="auto"
+                                Height="20"
+                                MinWidth="125"
+                                Margin="0,0,0,5"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding DataContext.VerseButtonCommand, ElementName=DataGrid}"
+                                CommandParameter="{Binding}"
+                                Content="{Binding Path='SimpRefs'}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SimpRefs}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <!--  Lexeme  -->
                 <DataGridTemplateColumn
                     MinWidth="125"
@@ -146,8 +173,8 @@
                                 MinWidth="125"
                                 MaxWidth="250"
                                 Margin="0,0,0,5"
-                                FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
-                                FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
+                                FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
                                 Text="{Binding Path='Source'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -184,52 +211,6 @@
                                 Margin="0,0,0,5"
                                 FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                 Text="{Binding Path='OriginID'}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <!--  Notes  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="1000"
-                    Header="{helpers:Loc PinsNotes}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Width="auto"
-                                MinWidth="125"
-                                MaxWidth="1000"
-                                Margin="0,0,0,5"
-                                Text="{Binding Path='Notes'}"
-                                TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsVerseReferences}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button
-                                Width="auto"
-                                Height="20"
-                                MinWidth="125"
-                                Margin="0,0,0,5"
-                                Padding="0"
-                                HorizontalAlignment="Center"
-                                Command="{Binding DataContext.VerseButtonCommand, ElementName=DataGrid}"
-                                CommandParameter="{Binding}"
-                                Content="{Binding Path='SimpRefs'}">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="IsEnabled" Value="False" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -350,6 +331,24 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
+                <!--  Notes  -->
+                <DataGridTemplateColumn
+                    MinWidth="125"
+                    MaxWidth="1000"
+                    Header="{helpers:Loc PinsNotes}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="125"
+                                MaxWidth="1000"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='Notes'}"
+                                TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -378,6 +377,7 @@
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
+                    x:Name="LowerBorder"
                     BorderBrush="{DynamicResource SecondaryHueMidBrush}"
                     BorderThickness="2"
                     CornerRadius="3">
@@ -400,7 +400,6 @@
                             x:Name="SelectedItemVerses"
                             Width="{Binding Path=ActualWidth, ElementName=PinsViewWindow}"
                             Height="{Binding Path=ActualHeight, ElementName=DialogHost}"
-                            MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                             Margin="5"
                             VerticalAlignment="Top"
                             ItemsSource="{Binding SelectedItemVerses}"
@@ -463,8 +462,8 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
-                                                    FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
-                                                    FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                                    FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
+                                                    FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
                                                     Text="{Binding VerseText}"
                                                     TextWrapping="Wrap" />
                                             </DataTemplate>
