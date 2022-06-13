@@ -1,24 +1,19 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class ParallelCorpus : ClearEntity
+    public class ParallelCorpus
     {
         public ParallelCorpus()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            ParallelVersesLinks = new HashSet<ParallelVersesLink>();
+            Versions = new HashSet<ParallelCorpusVersion>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public Guid SourceCorpusId { get; set; }
-        public Guid TargetCorpusId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
 
-        public AlignmentType AlignmentType { get; set; }
-  
-        public DateTimeOffset LastGenerated { get; set; }
-
-
-        public virtual Corpus? SourceCorpus { get; set; }
-        public virtual Corpus? TargetCorpus { get; set; }
-        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
+        public virtual ICollection<ParallelCorpusVersion> Versions { get; set; }
     }
 }

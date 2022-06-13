@@ -9,10 +9,10 @@ public class ParallelVersesLinkConfiguration : IEntityTypeConfiguration<Parallel
     public void Configure(EntityTypeBuilder<ParallelVersesLink> entityBuilder)
     {
 
-        entityBuilder.HasKey(e => e.Id);
+        //entityBuilder.HasKey(e => e.Id);
 
-        entityBuilder.HasOne(d => d.ParallelCorpus)
-            .WithMany(p => p.ParallelVersesLinks)
-            .HasForeignKey(d => d.ParallelCorpusId);
+        //entityBuilder.HasOne(d => d.ParallelCorpus)
+        //    .WithMany(p => p.ParallelVersesLinks)
+        //    .HasForeignKey(d => d.ParallelCorpusId);
     }
 }

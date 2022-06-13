@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public partial class NoteRecipient : ClearEntity
+public class NoteRecipient : IdentifiableEntity
 {
     public Guid UserId { get; set; }
     public User? User { get; set; }

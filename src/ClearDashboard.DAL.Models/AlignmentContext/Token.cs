@@ -2,27 +2,36 @@
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public  class Token
+    public  class Token : IdentifiableEntity
     {
         public Token()
         {
+            // ReSharper disable VirtualMemberCallInConstructor
+            SourceAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
+            TargetAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
+            // ReSharper restore VirtualMemberCallInConstructor
         }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
 
         // add unique constraint for WordNumber and SubwordNumber
         public int WordNumber { get; set; }
         public int SubwordNumber { get; set; }
 
         public Guid VerseId { get; set; }
+        public Verse? Verse { get; set; }
+
+        public Guid TokenizationId { get; set; }
+        public virtual Tokenization? Tokenization { get; set; }
+
         public string? Text { get; set; }
+
         public string? FirstLetter { get; set; }
 
-       // public Alignment Alignment { get; set; }
-        //public virtual Alignment TokenNavigation { get; set; }
-        public Adornment? Adornment { get; set; }
-        public Verse? Verse { get; set; }
-        //public virtual ICollection<InterlinearNote> InterlinearNotes { get; set; }
+        
+        public virtual Adornment? Adornment { get; set; }
+
+        public virtual ICollection<AlignmentTokenPair> SourceAlignmentTokenPairs { get; set; }
+        public virtual ICollection<AlignmentTokenPair> TargetAlignmentTokenPairs { get; set; }
+
+
     }
 }

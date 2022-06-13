@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class ProjectInfo : ClearEntity
+    public class ProjectInfo : TimestampedEntity
     {
         public string? ProjectName { get; set; }
         public bool IsRtl { get; set; }

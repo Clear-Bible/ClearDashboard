@@ -1,22 +1,24 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Verse : ClearEntity
+    public class Verse : TimestampedEntity
     {
-
         public Verse()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            ParallelVersesLinks = new HashSet<ParallelVersesLink>();
+            Tokens = new HashSet<Token>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
-
         
-
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
         public int? VerseNumber { get; set; }
+
+        // CODE REVIEW:  Why both BookNumber and SilBookNumber?
         public int? BookNumber { get; set; }
         public int? SilBookNumber { get; set; }
+
         public int? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
@@ -24,11 +26,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual Corpus? Corpus { get; set; }
 
        // public Guid? TokenId { get; set; }
-        public virtual Token? Token { get; set; }
-        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
-
+        public virtual ICollection<Token> Tokens { get; set; }
+      
 
         private string? _verseBbbcccvvv = string.Empty;
+        // ReSharper disable once InconsistentNaming
         public string? VerseBBBCCCVVV
         {
             get => _verseBbbcccvvv;
@@ -43,45 +45,45 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
 
-
-        public string BookStr
+        [NotMapped]
+        public string? BookStr
         {
             get
             {
-                var book = VerseBBBCCCVVV.PadLeft(9,'0').Substring(0, 3);
+                var book = VerseBBBCCCVVV?.PadLeft(9,'0').Substring(0, 3);
                 return book;
             }
-            //set => BookStr = value;
         }
 
-        public string ChapterStr
+        [NotMapped]
+        public string? ChapterStr
         {
             get
             {
-                var chap = VerseBBBCCCVVV.PadLeft(9, '0').Substring(3, 3);
+                var chap = VerseBBBCCCVVV?.PadLeft(9, '0').Substring(3, 3);
                 return chap;
             }
-            //set => ChapterStr = value;
         }
 
-        public string VerseStr
+        [NotMapped]
+        public string? VerseString
         {
             get
             {
-                var verse = VerseBBBCCCVVV.PadLeft(9, '0').Substring(6, 3);
+                var verse = VerseBBBCCCVVV?.PadLeft(9, '0').Substring(6, 3);
                 return verse;
             }
-            //set => VerseStr = value;
         }
 
-        public string VerseId { get; set; } = string.Empty;
+        // CODE REVIEW:  Is VerseId needed?  It's confusing WRT to EF Core naming conventions.
+       // public string VerseId { get; set; } = string.Empty;
 
         public bool Found { get; set; }
 
+        // ReSharper disable once InconsistentNaming
         public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
-            bbbcccvvv = bbbcccvvv.PadLeft(9,'0');
-            VerseBBBCCCVVV = bbbcccvvv;
+            VerseBBBCCCVVV = bbbcccvvv.PadLeft(9, '0');
             SilBookNumber = Convert.ToInt32(bbbcccvvv.Substring(0, 3));
             BookNumber = SilBookNumber;
             ChapterNumber = Convert.ToInt32(bbbcccvvv.Substring(3, 3));

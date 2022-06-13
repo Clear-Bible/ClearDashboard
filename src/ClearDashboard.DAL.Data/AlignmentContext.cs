@@ -37,20 +37,30 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
         public virtual DbSet<Alignment> Alignments => Set<Alignment>();
 
+        public virtual DbSet<AlignmentSet> AlignmentSets => Set<AlignmentSet>();
+        public virtual DbSet<AlignmentTokenPair> AlignmentTokenPairs => Set<AlignmentTokenPair>();
+
         public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
+        public virtual DbSet<CorpusVersion> CorpaVersions => Set<CorpusVersion>();
         public virtual DbSet<NoteAssociation> DataAssociations => Set<NoteAssociation>();
         //public virtual DbSet<InterlinearNote> InterlinearNotes => Set<InterlinearNote>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
-        public virtual DbSet<ParallelVersesLink> ParallelVersesLinks => Set<ParallelVersesLink>();
+        public virtual DbSet<ParallelCorpusVersion> ParallelCorpaVersions => Set<ParallelCorpusVersion>();
+        //public virtual DbSet<ParallelVersesLink> ParallelVersesLinks => Set<ParallelVersesLink>();
         public virtual DbSet<ProjectInfo> ProjectInfos => Set<ProjectInfo>();
         public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
+        public virtual DbSet<Tokenization> Tokenizations => Set<Tokenization>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
-        public virtual DbSet<VerseLink> VerseLinks => Set<VerseLink>();
+        public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
+        public virtual DbSet<VerseMappingVerseAssociation> VerseMappingVerseAssociations => Set<VerseMappingVerseAssociation>();
+        public virtual DbSet<VerseMappingTokenizationsAssociation> VerseMappingTokenizationsAssociations => Set<VerseMappingTokenizationsAssociation>();
+
+       // public virtual DbSet<VerseLink> VerseLinks => Set<VerseLink>();
 
 
         public string DatabasePath { get; set; }
@@ -97,6 +107,31 @@ namespace ClearDashboard.DataAccessLayer.Data
             // NB:  Add the configuration of any newly added 
             //      entities to the ConfigureEntities extension method
             //modelBuilder.ConfigureEntities();
+
+            modelBuilder.Entity<AlignmentTokenPair>()
+                .HasOne(e => e.SourceToken)
+                .WithMany(e=>e.SourceAlignmentTokenPairs);
+              
+
+            modelBuilder.Entity<AlignmentTokenPair>()
+                .HasOne(e => e.TargetToken)
+                .WithMany(e=>e.TargetAlignmentTokenPairs);
+
+
+            modelBuilder.Entity<ParallelCorpusVersion>()
+                .HasOne(e => e.SourceCorpus)
+                .WithMany(e => e.SourceParallelCorpusVersions);
+
+
+            modelBuilder.Entity<ParallelCorpusVersion>()
+                .HasOne(e => e.TargetCorpus)
+                .WithMany(e => e.TargetParallelCorpusVersions);
+
+          
+            modelBuilder.Entity<Tokenization>()
+                .HasMany(e => e.VerseMappingTokenizationsAssociations)
+                .WithOne();
+
            
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method

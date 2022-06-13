@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class AlignmentVersion : ClearEntity
+    public class AlignmentVersion : IdentifiableEntity
     {
         public AlignmentVersion()
         {

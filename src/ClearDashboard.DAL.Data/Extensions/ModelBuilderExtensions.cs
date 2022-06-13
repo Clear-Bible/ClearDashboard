@@ -61,14 +61,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             //new InterlinearNoteConfiguration().Configure(modelBuilder.Entity<InterlinearNote>());
             //new NoteConfiguration().Configure(modelBuilder.Entity<Note>());
             new ParallelCorpusConfiguration().Configure(modelBuilder.Entity<ParallelCorpus>());
-            new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
+            //new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
             new ProjectInfoConfiguration().Configure(modelBuilder.Entity<ProjectInfo>());
             new QuestionGroupConfiguration().Configure(modelBuilder.Entity<QuestionGroup>());
             //new RawContentConfiguration().Configure(modelBuilder.Entity<RawContent>());
             new TokenConfiguration().Configure(modelBuilder.Entity<Token>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new VerseConfiguration().Configure(modelBuilder.Entity<Verse>());
-            new VerseLinkConfiguration().Configure(modelBuilder.Entity<VerseLink>());
+            //new VerseLinkConfiguration().Configure(modelBuilder.Entity<VerseLink>());
         }
 
         public static void ConfigureRawContentEntities(this ModelBuilder modelBuilder)

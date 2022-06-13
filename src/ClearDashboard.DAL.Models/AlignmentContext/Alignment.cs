@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class Alignment
+    public class Alignment : IdentifiableEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         public Guid SourceTokenId { get; set; }
         public Guid TargetTokenId { get; set; }
         public decimal Score { get; set; }

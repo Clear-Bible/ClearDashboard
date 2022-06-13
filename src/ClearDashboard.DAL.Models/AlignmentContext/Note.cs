@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class Note : ClearEntity
+    public class Note : TimestampedEntity
     {
         public Note()
         {

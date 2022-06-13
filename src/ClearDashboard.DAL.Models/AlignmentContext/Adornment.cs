@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class Adornment
+    public class Adornment : IdentifiableEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+       
         public Guid? TokenId { get; set; }
         public string? Lemma { get; set; }
         public string? PartsOfSpeech { get; set; }
