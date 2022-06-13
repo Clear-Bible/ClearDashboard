@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MaterialDesignColors.Recommended;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
@@ -77,6 +78,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void StartStop_OnClick(object sender, RoutedEventArgs e)
         {
+            TimerLbl.Foreground = Brushes.White;
             if (_timerOn)
             {
                 //Set the symbol to play
@@ -102,6 +104,7 @@ namespace ClearDashboard.Wpf.UserControls
             if (_secondsLeft <= 0)
             {
                 aTimer.Stop();
+                TimerLbl.Background = Brushes.Red;
             }
             else
             {
@@ -109,6 +112,11 @@ namespace ClearDashboard.Wpf.UserControls
 
                 this.Dispatcher.Invoke(() =>
                 {
+                    if (_secondsLeft <= 300)
+                    {
+                        TimerLbl.Background = Brushes.DarkOrange;
+                    }
+
                     _time = TimeSpan.FromSeconds(_secondsLeft);
                     TimerLbl.Content = _time.Hours+"h "+ _time.Minutes+"m "+ _time.Seconds+"s";
                 });
@@ -120,7 +128,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void TimerTbx_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-
+            TimerLbl.Foreground = Brushes.LightGray;
             if ((TimerTbx.CaretIndex != TimerTbx.Text.Length) && (TimerTbx.CaretIndex != 0))
             {
                 // cut and paste to end of string
@@ -186,7 +194,9 @@ namespace ClearDashboard.Wpf.UserControls
             _timerOn = false;
             aTimer.Stop();
 
-            TimerTbx.Text = _time.Hours.ToString().PadLeft(2, '0') + _time.Minutes.ToString().PadLeft(2, '0') + _time.Seconds.ToString().PadLeft(2,'0');
+            TimerLbl.Foreground = Brushes.LightGray;
+            TimerTbx.Text = "000000";
+            //TimerTbx.Text = _time.Hours.ToString().PadLeft(2, '0') + _time.Minutes.ToString().PadLeft(2, '0') + _time.Seconds.ToString().PadLeft(2,'0');
         }
     }
 }
