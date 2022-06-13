@@ -12,8 +12,6 @@ using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
-    public record GetSpellingStatusQuery : IRequest<RequestResult<SpellingStatus>>;
-
     public record GetSpellingStatusQuery() : IRequest<RequestResult<SpellingStatus>>;
 
     public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,

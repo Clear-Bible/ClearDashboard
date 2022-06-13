@@ -16,7 +16,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-		<PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+		<PackageReference Include="System.Data.SQLite" Version="1.0.116" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
