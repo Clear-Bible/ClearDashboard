@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models
 {
     public partial class ParallelVersesLink
     {
@@ -8,9 +10,10 @@
             VerseLinks = new HashSet<VerseLink>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
        
-        public int? ParallelCorpusId { get; set; }
+        public Guid? ParallelCorpusId { get; set; }
 
         public virtual ParallelCorpus? ParallelCorpus { get; set; }
         public virtual ICollection<VerseLink> VerseLinks { get; set; }

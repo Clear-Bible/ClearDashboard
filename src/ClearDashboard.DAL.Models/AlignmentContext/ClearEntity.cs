@@ -1,14 +1,18 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models;
 
 public abstract class ClearEntity 
 {
     protected ClearEntity()
     {
-        var utcNow = DateTime.UtcNow;
+        var utcNow = DateTimeOffset.UtcNow;
         Created = utcNow;
         Modified = utcNow;
     }
-    public int Id { get; set; }
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
+
+    public DateTimeOffset Created { get; set; } 
     public DateTimeOffset Modified { get; set; }
 }

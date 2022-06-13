@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
         
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public bool IsDirty { get; set; }
 
         public virtual User? User { get; set; }

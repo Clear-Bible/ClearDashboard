@@ -9,7 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             Verses = new HashSet<Verse>();
         }
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public bool IsRtl { get; set; }
         public string Name { get; set; }
         public int? Language { get; set; }

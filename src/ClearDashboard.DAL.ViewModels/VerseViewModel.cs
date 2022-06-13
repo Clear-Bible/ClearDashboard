@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public int Id
+        public Guid Id
         {
             get => Entity.Id;
             set
@@ -95,7 +95,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public int? CorpusId
+        public Guid? CorpusId
         {
             get => Entity?.CorpusId;
             set

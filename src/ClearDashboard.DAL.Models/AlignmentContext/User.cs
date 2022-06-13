@@ -11,7 +11,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         [NotMapped] public string FullName => $"{FirstName} {LastName}";

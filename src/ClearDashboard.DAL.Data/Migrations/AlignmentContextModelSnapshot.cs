@@ -19,9 +19,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Lemma")
                         .HasColumnType("TEXT");
@@ -32,8 +32,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Strong")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TokenId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("TokenId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -45,24 +45,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AlignmentType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AlignmentVersionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("AlignmentVersionId")
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Score")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SourceTokenId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("SourceTokenId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TargetTokenId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TargetTokenId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -77,9 +77,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -90,8 +90,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -102,9 +102,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CorpusType")
                         .HasColumnType("INTEGER");
@@ -130,12 +130,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -152,9 +152,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteAssociation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AssociationId")
                         .HasColumnType("TEXT");
@@ -169,8 +169,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("NoteId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("NoteId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -183,9 +183,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteRecipient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -193,11 +193,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("NoteId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("NoteId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserType")
                         .HasColumnType("INTEGER");
@@ -213,9 +213,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AlignmentType")
                         .HasColumnType("INTEGER");
@@ -229,11 +229,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SourceCorpusId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("SourceCorpusId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TargetCorpusId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TargetCorpusId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -246,15 +246,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParallelCorpusId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("ParallelCorpusId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("VerseId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("VerseId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -267,9 +267,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -293,9 +293,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.QuestionGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AltText")
                         .HasColumnType("TEXT");
@@ -325,9 +325,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Bytes")
                         .HasColumnType("BLOB");
@@ -342,8 +342,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("NoteId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("NoteId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -356,9 +356,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstLetter")
                         .HasColumnType("TEXT");
@@ -369,8 +369,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VerseId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("VerseId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("WordNumber")
                         .HasColumnType("INTEGER");
@@ -385,9 +385,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
@@ -405,15 +405,18 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ChapterNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("CorpusId")
+                    b.Property<int?>("BookNumber")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ChapterNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("CorpusId")
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -424,18 +427,18 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("SilBookNumber")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("SilBookNumber")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("VerseBBCCCVVV")
+                    b.Property<string>("VerseBBBCCCVVV")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VerseId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("VerseNumber")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("VerseNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("VerseText")
                         .HasColumnType("TEXT");
@@ -449,9 +452,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseLink", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
@@ -465,14 +468,20 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("ParallelVersesLinkId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("ParallelVersesLinkId1")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("VerseId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("VerseId1")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ParallelVersesLinkId");
+                    b.HasIndex("ParallelVersesLinkId1");
 
-                    b.HasIndex("VerseId");
+                    b.HasIndex("VerseId1");
 
                     b.ToTable("VerseLink");
                 });
@@ -665,15 +674,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelVersesLink", "ParallelVersesLink")
                         .WithMany("VerseLinks")
-                        .HasForeignKey("ParallelVersesLinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParallelVersesLinkId1");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "Verse")
                         .WithMany()
-                        .HasForeignKey("VerseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VerseId1");
 
                     b.Navigation("ParallelVersesLink");
 

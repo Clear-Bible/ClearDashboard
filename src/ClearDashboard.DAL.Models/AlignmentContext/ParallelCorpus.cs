@@ -9,8 +9,8 @@
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public int SourceCorpusId { get; set; }
-        public int TargetCorpusId { get; set; }
+        public Guid SourceCorpusId { get; set; }
+        public Guid TargetCorpusId { get; set; }
 
         public AlignmentType AlignmentType { get; set; }
   

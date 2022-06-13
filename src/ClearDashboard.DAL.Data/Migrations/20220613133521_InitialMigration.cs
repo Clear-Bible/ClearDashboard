@@ -13,8 +13,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Corpus",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Language = table.Column<int>(type: "INTEGER", nullable: true),
@@ -30,8 +29,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ProjectInfo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
                     LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true),
@@ -47,8 +45,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "QuestionGroup",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Note = table.Column<string>(type: "TEXT", nullable: true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     English = table.Column<string>(type: "TEXT", nullable: true),
@@ -66,8 +63,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -81,10 +77,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ParallelCorpus",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SourceCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TargetCorpusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SourceCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TargetCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
                     LastGenerated = table.Column<long>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
@@ -111,14 +106,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Verse",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    VerseNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    SilBookNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    ChapterNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    BookNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    SilBookNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     VerseText = table.Column<string>(type: "TEXT", nullable: true),
-                    CorpusId = table.Column<int>(type: "INTEGER", nullable: true),
-                    VerseBBCCCVVV = table.Column<string>(type: "TEXT", nullable: true),
+                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    VerseBBBCCCVVV = table.Column<string>(type: "TEXT", nullable: true),
                     VerseId = table.Column<string>(type: "TEXT", nullable: false),
                     Found = table.Column<bool>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
@@ -138,9 +133,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "AlignmentVersion",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     IsDirty = table.Column<bool>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
@@ -159,9 +153,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Note",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -180,10 +173,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ParallelVersesLink",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ParallelCorpusId = table.Column<int>(type: "INTEGER", nullable: true),
-                    VerseId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    VerseId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -204,11 +196,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Token",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    VerseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VerseId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true),
                     FirstLetter = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -227,11 +218,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "NoteAssociation",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     AssociationId = table.Column<string>(type: "TEXT", nullable: true),
                     AssociationType = table.Column<string>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -249,11 +239,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "NoteRecipient",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserType = table.Column<int>(type: "INTEGER", nullable: false),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -277,11 +266,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "RawContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Bytes = table.Column<byte[]>(type: "BLOB", nullable: true),
                     ContentType = table.Column<string>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -299,10 +287,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "VerseLink",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     VerseId = table.Column<int>(type: "INTEGER", nullable: false),
                     ParallelVersesLinkId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VerseId1 = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParallelVersesLinkId1 = table.Column<Guid>(type: "TEXT", nullable: true),
                     IsSource = table.Column<bool>(type: "INTEGER", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
@@ -311,26 +300,23 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     table.PrimaryKey("PK_VerseLink", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VerseLink_ParallelVersesLink_ParallelVersesLinkId",
-                        column: x => x.ParallelVersesLinkId,
+                        name: "FK_VerseLink_ParallelVersesLink_ParallelVersesLinkId1",
+                        column: x => x.ParallelVersesLinkId1,
                         principalTable: "ParallelVersesLink",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_VerseLink_Verse_VerseId",
-                        column: x => x.VerseId,
+                        name: "FK_VerseLink_Verse_VerseId1",
+                        column: x => x.VerseId1,
                         principalTable: "Verse",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Adornment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TokenId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TokenId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Lemma = table.Column<string>(type: "TEXT", nullable: true),
                     PartsOfSpeech = table.Column<string>(type: "TEXT", nullable: true),
                     Strong = table.Column<string>(type: "TEXT", nullable: true)
@@ -349,12 +335,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Alignment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SourceTokenId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TargetTokenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Score = table.Column<decimal>(type: "TEXT", nullable: false),
-                    AlignmentVersionId = table.Column<int>(type: "INTEGER", nullable: true),
+                    AlignmentVersionId = table.Column<Guid>(type: "TEXT", nullable: true),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -462,14 +447,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "CorpusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VerseLink_ParallelVersesLinkId",
+                name: "IX_VerseLink_ParallelVersesLinkId1",
                 table: "VerseLink",
-                column: "ParallelVersesLinkId");
+                column: "ParallelVersesLinkId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VerseLink_VerseId",
+                name: "IX_VerseLink_VerseId1",
                 table: "VerseLink",
-                column: "VerseId");
+                column: "VerseId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

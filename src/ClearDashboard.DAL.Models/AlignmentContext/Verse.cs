@@ -20,9 +20,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
-        public int? CorpusId { get; set; }
-
+        public Guid? CorpusId { get; set; }
         public virtual Corpus? Corpus { get; set; }
+
+       // public Guid? TokenId { get; set; }
         public virtual Token? Token { get; set; }
         public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
 
