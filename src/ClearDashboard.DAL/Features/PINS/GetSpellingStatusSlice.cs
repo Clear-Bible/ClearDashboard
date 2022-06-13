@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
+    public record GetSpellingStatusQuery : IRequest<RequestResult<SpellingStatus>>;
 
     public record GetSpellingStatusQuery() : IRequest<RequestResult<SpellingStatus>>;
 
@@ -25,16 +26,12 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         {
             _projectManager = projectManager;
         }
-
-
         protected override string ResourceName { get; set; } = "";
-
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
             ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath,
                 "SpellingStatus.xml");
-
             var queryResult = ValidateResourcePath(new SpellingStatus());
             if (queryResult.Success == false)
             {
@@ -42,10 +39,9 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     $"An unexpected error occurred while querying the TermRenderings.xml file : '{ResourceName}'");
                 return Task.FromResult(queryResult);
             }
-
             try
             {
-                queryResult.Data = LoadXmlAndProcessData(null);
+                queryResult.Data = LoadXmlAndProcessData();
             }
             catch (Exception ex)
             {
@@ -53,16 +49,13 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     $"An unexpected error occurred while querying the '{ResourceName}' database ",
                     ex);
             }
-
             return Task.FromResult(queryResult);
         }
-
         protected override SpellingStatus ProcessData()
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(ResourceName);
             XmlNodeReader reader = new XmlNodeReader(doc);
-
             using (reader)
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(SpellingStatus));
@@ -75,8 +68,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                     Logger.LogError("Error in PINS deserialization of TermRenderings.xml: " + e.Message);
                 }
             }
-
             return _biblicalTermsList;
         }
     }
 }
+

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
@@ -19,34 +20,51 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         [Fact]
         public async Task GetAllBiblicalTermsTest()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:9000/api/");
+            try
+            {
+                await StartParatext();
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-            var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.All));
+                var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.All));
 
-            Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
+                Assert.True(response.IsSuccessStatusCode);
+                var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
 
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.NotNull(result.Data);
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.NotNull(result.Data);
+
+            }
+            finally
+            {
+                await StopParatext();
+            }
 
         }
 
         [Fact]
         public async Task GetProjectBiblicalTermsTest()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:9000/api/");
+            try
+            {
+                await StartParatext();
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-            var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project));
+                var response = await client.PostAsJsonAsync<GetBiblicalTermsByTypeQuery>("biblicalterms", new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project));
 
-            Assert.True(response.IsSuccessStatusCode);
-            var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
+                Assert.True(response.IsSuccessStatusCode);
+                var result = await response.Content.ReadAsAsync<RequestResult<List<BiblicalTermsData>>>();
 
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.NotNull(result.Data);
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.NotNull(result.Data);
+            }
+            finally
+            {
+                await StopParatext();
+            }
 
         }
     }

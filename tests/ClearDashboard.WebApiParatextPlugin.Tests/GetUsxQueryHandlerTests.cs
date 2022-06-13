@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,18 +17,54 @@ public class GetUsxQueryHandlerTests : TestBase
     [Fact]
     public async Task GetUsxTest()
     {
-        var client = CreateHttpClient();
+        try
+        {
+            await StartParatext();
 
-        var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery());
+            var client = CreateHttpClient();
 
-        Assert.True(response.IsSuccessStatusCode);
-        var result = await response.Content.ReadAsAsync<RequestResult<string>>();
+        var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(1));
 
-        Assert.NotNull(result);
-        Assert.True(result.Success);
-        Assert.NotNull(result.Data);
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
 
-        Output.WriteLine(result.Data);
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
+
+            Output.WriteLine(result.Data.StringData);
+        }
+        finally
+        {
+            await StopParatext();
+        }
+
+    }
+
+    [Fact]
+    public async Task GetUsxBook43Test()
+    {
+        try
+        {
+            await StartParatext();
+            var client = CreateHttpClient();
+
+            var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(43));
+
+            Assert.True(response.IsSuccessStatusCode);
+            var result = await response.Content.ReadAsAsync<RequestResult<StringObject>>();
+
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
+
+            Output.WriteLine(result.Data.StringData);
+
+        }
+        finally
+        {
+            await StopParatext();
+        }
 
     }
 }

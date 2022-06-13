@@ -20,7 +20,8 @@ namespace ClearDashboard.DAL.Tests
     public class TestBase
     {
         protected ITestOutputHelper Output { get; private set; }
-
+        protected Process Process { get; set; }
+        protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
         private IServiceProvider? _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
@@ -34,10 +35,28 @@ namespace ClearDashboard.DAL.Tests
 
         protected virtual void SetupDependencyInjection()
         {
-           Services.AddClearDashboardDataAccessLayer();
+            Services.AddSingleton<IEventAggregator, EventAggregator>();
+            Services.AddClearDashboardDataAccessLayer();
            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
            Services.AddLogging();
            Services.AddSingleton<IEventAggregator, EventAggregator>();
+        }
+
+        protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
+            TRequest query)
+            where TRequest : IRequest<RequestResult<TData>>
+            where TResult : RequestResult<TData>, new()
+            where TData : class, new()
+        {
+            try
+            {
+                await StartParatext();
+                return await ExecuteAndTestRequest<TRequest, TResult, TData>(query);
+            }
+            finally
+            {
+                await StopParatext();
+            }
         }
 
         protected async Task<RequestResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
@@ -75,6 +94,52 @@ namespace ClearDashboard.DAL.Tests
 
             return result;
 
+        }
+
+        protected async Task StartParatext()
+        {
+            var paratext = Process.GetProcessesByName("Paratext");
+
+            if (paratext.Length == 0)
+            {
+                Output.WriteLine("Starting Paratext.");
+                Process = await InternalStartParatext();
+                StopParatextOnTestConclusion = true;
+
+                var seconds = 2;
+                Output.WriteLine($"Waiting for {seconds} seconds for Paratext to complete initialization.");
+                await Task.Delay(TimeSpan.FromSeconds(seconds));
+            }
+            else
+            {
+                Process = paratext[0];
+                Output.WriteLine("Paratext is already running.");
+            }
+
+
+        }
+
+        protected async Task StopParatext()
+        {
+            if (StopParatextOnTestConclusion)
+            {
+                Output.WriteLine("Stopping Paratext.");
+                Process.Kill(true);
+
+                Process = null;
+
+                var seconds = 2;
+                Output.WriteLine($"Waiting for {seconds} seconds for Paratext to stop.");
+                await Task.Delay(TimeSpan.FromSeconds(seconds));
+            }
+        }
+
+        private async Task<Process> InternalStartParatext()
+        {
+            var paratextInstallDirectory = Environment.GetEnvironmentVariable("ParatextInstallDir");
+            var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");
+
+            return process;
         }
     }
 }

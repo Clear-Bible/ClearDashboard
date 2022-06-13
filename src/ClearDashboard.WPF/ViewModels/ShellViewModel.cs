@@ -236,7 +236,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
         #endregion

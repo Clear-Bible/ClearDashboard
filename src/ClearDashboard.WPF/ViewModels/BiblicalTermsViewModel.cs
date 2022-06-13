@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -120,19 +121,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Public Properties
 
-       // public bool IsRtl { get; set; }
+        // public bool IsRtl { get; set; }
 
 
-        //private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        //public  FlowDirection FlowDirection
-        //{
-        //    get => _flowDirection;
-        //    set
-        //    {
-        //        _flowDirection = value; 
-        //        NotifyOfPropertyChange(() => FlowDirection);
-        //    }
-        //}
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
+        {
+            get => _windowFlowDirection;
+            set
+            {
+                _windowFlowDirection = value;
+                NotifyOfPropertyChange(() => WindowFlowDirection);
+            }
+        }
 
 
 
@@ -393,6 +394,19 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
+        {
+            get => _currentBcv;
+            set
+            {
+                _currentBcv = value;
+                NotifyOfPropertyChange(() => CurrentBcv);
+            }
+        }
+
+
+
         #endregion //Observable Properties
 
         #region Commands
@@ -403,6 +417,12 @@ namespace ClearDashboard.Wpf.ViewModels
         #endregion
 
         #region Constructor
+
+        public BiblicalTermsViewModel()
+        {
+            // used by Caliburn Micro for design time    
+        }
+
         public BiblicalTermsViewModel(INavigationService navigationService, 
                                         ILogger<WorkSpaceViewModel> logger, 
                                         DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
@@ -459,35 +479,29 @@ namespace ClearDashboard.Wpf.ViewModels
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
           
         }
+        //protected override void OnViewAttached(object view, object context)
+        //{
+        //    Logger.LogInformation("OnViewAttached");
+        //    base.OnViewAttached(view, context);
+        //}
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            return base.OnInitializeAsync(cancellationToken);
-        }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    Logger.LogInformation("OnViewLoaded");
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            Logger.LogInformation("OnViewAttached");
-            base.OnViewAttached(view, context);
-        }
+        //protected override void OnViewReady(object view)
+        //{
+        //    Logger.LogInformation("OnViewReady");
+        //    base.OnViewReady(view);
+        //}
 
-        protected override void OnViewLoaded(object view)
-        {
-            Logger.LogInformation("OnViewLoaded");
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            Logger.LogInformation("OnViewReady");
-            base.OnViewReady(view);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Logger.LogInformation("Dispose");
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    Logger.LogInformation("Dispose");
+        //    base.Dispose(disposing);
+        //}
 
         #endregion //Constructor
 
@@ -749,8 +763,9 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvBook":
                                 foreach (var term in terms.References)
                                 {
-                                    var book = term.Substring(0, 2);
-                                    if (book == ProjectManager.CurrentVerse.Substring(0, 2))
+                                    _currentBcv.SetVerseFromId(term);
+                                    var book = _currentBcv.BookNum.ToString();
+                                    if (book == ProjectManager.CurrentVerse.Substring(0, 3))
                                     {
                                         // found the book
                                         isBcvFound = true;
@@ -762,8 +777,10 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BtBcvChapter":
                                 foreach (var term in terms.References)
                                 {
-                                    var chapter = term.Substring(0, 5);
-                                    if (chapter == ProjectManager.CurrentVerse.Substring(0, 5))
+                                    _currentBcv.SetVerseFromId(term);
+                                    var book = _currentBcv.BookNum.ToString();
+                                    var chapter = _currentBcv.ChapterNum.ToString();
+                                    if (book+chapter == ProjectManager.CurrentVerse.Substring(0, 6))
                                     {
                                         // found the chapter
                                         isBcvFound = true;
@@ -912,9 +929,6 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => Domains);
         }
 
-        #endregion // Methods
-
-
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
             try
@@ -971,6 +985,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             
         }
+
         public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
         {
             if (_currentVerse == "")
@@ -986,5 +1001,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             await Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 }

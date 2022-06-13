@@ -19,7 +19,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
-    FlowDirection="{Binding FlowDirection}"
+    FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Loaded="Window_Loaded"
     TextElement.FontSize="13"

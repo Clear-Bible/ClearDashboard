@@ -325,11 +325,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private FlowDirection _flowDirection = FlowDirection.LeftToRight;
-        public FlowDirection FlowDirection
+        private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
+        public FlowDirection WindowFlowDirection
         {
-            get => _flowDirection;
-            set => Set(ref _flowDirection, value, nameof(FlowDirection));
+            get => _windowFlowDirection;
+            set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
         #endregion //Observable Properties
@@ -354,7 +354,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
-            FlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
 #pragma warning disable CA1416 // Validate platform compatibility
             Themes = new List<Tuple<string, Theme>>
@@ -1023,7 +1023,7 @@ namespace ClearDashboard.Wpf.ViewModels
             var chapters = BCVDictionary.Values.Where(b => b.StartsWith(bookID)).ToList();
             for (int i = 0; i < chapters.Count; i++)
             {
-                chapters[i] = chapters[i].Substring(2, 3);
+                chapters[i] = chapters[i].Substring(3, 3);
             }
 
             chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
@@ -1049,7 +1049,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             for (int i = 0; i < verses.Count; i++)
             {
-                verses[i] = verses[i].Substring(5);
+                verses[i] = verses[i].Substring(6);
             }
 
             verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();

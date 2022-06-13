@@ -39,6 +39,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(verse);
         }
 
+        public void Ping(string message, int index)
+        {
+            _logger.AppendText(Color.CornflowerBlue, $"Received ping - {message}: {index}");
+            Clients.All.Send(message, index.ToString());
+        }
+
         public override async Task OnConnected()
         {
             {
