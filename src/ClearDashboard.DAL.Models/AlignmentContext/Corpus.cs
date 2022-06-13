@@ -15,6 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
         public virtual ICollection<Verse> Verses { get; set; }
+        public virtual ICollection<CorpusVersion> Versions { get; set; }
         //public virtual ICollection<CorpusVersion> Versions { get; set; }
         public virtual ICollection<Tokenization> Tokenizations { get; set; }
 

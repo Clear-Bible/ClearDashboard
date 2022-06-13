@@ -21,22 +21,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CorpusVersion",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Language = table.Column<int>(type: "INTEGER", nullable: true),
-                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
-                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CorpusVersion", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ParallelCorpus",
                 columns: table => new
                 {
@@ -102,6 +86,29 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VerseMapping", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CorpusVersion",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Language = table.Column<int>(type: "INTEGER", nullable: true),
+                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
+                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
+                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CorpusVersion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CorpusVersion_Corpus_CorpusId",
+                        column: x => x.CorpusId,
+                        principalTable: "Corpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -516,6 +523,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_AlignmentVersion_UserId",
                 table: "AlignmentVersion",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CorpusVersion_CorpusId",
+                table: "CorpusVersion",
+                column: "CorpusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Note_AuthorId",

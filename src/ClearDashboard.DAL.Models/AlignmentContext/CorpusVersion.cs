@@ -7,5 +7,9 @@ public class CorpusVersion : IdentifiableEntity
     public int? Language { get; set; }
     public string? ParatextGuid { get; set; }
     public virtual CorpusType CorpusType { get; set; }
+
+    public virtual Guid CorpusId { get; set; }
+    public virtual Corpus? Corpus { get; set; }
+
        
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    [Migration("20220613202151_InitialMigration")]
+    [Migration("20220613205127_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("CorpusId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CorpusType")
                         .HasColumnType("INTEGER");
 
@@ -174,6 +177,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorpusId");
 
                     b.ToTable("CorpusVersion");
                 });
@@ -671,6 +676,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.CorpusVersion", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", "Corpus")
+                        .WithMany("Versions")
+                        .HasForeignKey("CorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Corpus");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "Author")
@@ -828,6 +844,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Tokenizations");
 
                     b.Navigation("Verses");
+
+                    b.Navigation("Versions");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
