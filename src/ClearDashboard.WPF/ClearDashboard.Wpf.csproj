@@ -48,6 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro" Version="4.0.209" />
 		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.1" />
@@ -112,18 +113,6 @@
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
 		<ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="Caliburn.Micro.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>

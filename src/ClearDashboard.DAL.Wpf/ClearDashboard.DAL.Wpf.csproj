@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.209" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
   </ItemGroup>
@@ -15,18 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Caliburn.Micro.Core">
-      <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.Micro.Platform">
-      <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.Micro.Platform.Core">
-      <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
