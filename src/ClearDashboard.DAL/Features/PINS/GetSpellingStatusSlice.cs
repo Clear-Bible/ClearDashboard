@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,14 +12,15 @@ using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
-    public record GetSpellingStatusQuery : IRequest<RequestResult<SpellingStatus>>;
+    public record GetSpellingStatusQuery() : IRequest<RequestResult<SpellingStatus>>;
 
     public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
         private SpellingStatus _biblicalTermsList = new();
         private readonly ProjectManager _projectManager;
-        public GetSpellingStatusQueryHandler(ILogger<GetSpellingStatusQueryHandler> logger, ProjectManager projectManager) : base(logger)
+
+        public GetSpellingStatusQueryHandler(ILogger<PINS.GetSpellingStatusQueryHandler> logger, ProjectManager projectManager) : base(logger)
         {
             _projectManager = projectManager;
         }
