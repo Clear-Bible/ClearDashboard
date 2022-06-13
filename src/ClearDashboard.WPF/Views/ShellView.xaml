@@ -11,6 +11,7 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -149,6 +150,16 @@
                         Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
                         ColorStyles
                     </Button>
+
+                    <userControls:TimerUserControl
+                        x:Name="Timercontrol" 
+                        VerticalAlignment="Top"
+                        VerticalContentAlignment="Center"/>
+
+                    <!--<userControls:ClockUserControl
+                        x:Name="Clockcontrol" 
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"/>-->
                 </StackPanel>
             </Grid>
         </Border>
