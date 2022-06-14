@@ -104,7 +104,11 @@ namespace ClearDashboard.Wpf.UserControls
             if (_secondsLeft <= 0)
             {
                 aTimer.Stop();
-                TimerLbl.Background = Brushes.Red;
+                this.Dispatcher.Invoke(() =>
+                {
+                    TimerStackPanel.Background = Brushes.Red;
+                    btnStartStop.Background = Brushes.Salmon;
+                });
             }
             else
             {
@@ -114,7 +118,13 @@ namespace ClearDashboard.Wpf.UserControls
                 {
                     if (_secondsLeft <= 300)
                     {
-                        TimerLbl.Background = Brushes.DarkOrange;
+                        TimerStackPanel.Background = Brushes.OrangeRed;
+                        btnStartStop.Background = Brushes.DarkOrange;
+                    }
+                    else
+                    {
+                        TimerStackPanel.Background = Brushes.Transparent;
+                        btnStartStop.Background = Brushes.DodgerBlue;
                     }
 
                     _time = TimeSpan.FromSeconds(_secondsLeft);

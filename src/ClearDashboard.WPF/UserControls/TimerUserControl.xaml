@@ -10,7 +10,7 @@
     d:DesignWidth="500"
     mc:Ignorable="d">
     <Grid Width="135" Height="37">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" x:Name="TimerStackPanel">
             <Button
                 x:Name="btnStartStop"
                 Width="25"
