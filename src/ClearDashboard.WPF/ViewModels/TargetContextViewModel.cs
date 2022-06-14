@@ -395,6 +395,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            if (message.Verse == null)
+            {
+                return;
+            }
+            
             string newVerse = message.Verse.PadLeft(9, '0');
 
             if (_currentVerse != newVerse)
