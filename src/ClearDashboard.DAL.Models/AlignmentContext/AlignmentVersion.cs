@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public partial class AlignmentVersion : ClearEntity
+    public class AlignmentVersion : IdentifiableEntity
     {
         public AlignmentVersion()
         {
@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
         
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public bool IsDirty { get; set; }
 
         public virtual User? User { get; set; }

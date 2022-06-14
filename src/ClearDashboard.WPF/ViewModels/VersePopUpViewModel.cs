@@ -141,7 +141,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     var verseText = verse.Substring(verseNum.Length + 3);
 
                     var row = _dt.NewRow();
-                    if (_verse.VerseStr == verseNum.PadLeft(3, '0'))
+                    if (_verse.VerseString == verseNum.PadLeft(3, '0'))
                     {
                         row[0] = true;
                     }

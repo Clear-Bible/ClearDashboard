@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features
 {
     public abstract class ParatextRequestHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
         where TResponse: RequestResult<TData>
-        where TData : new()
     {
         protected ILogger Logger { get; }
 
@@ -54,7 +50,7 @@ namespace ClearDashboard.DataAccessLayer.Features
             }
             catch (Exception ex)
             {
-                return (TResponse)new RequestResult<TData>(new TData(), false, ex.Message);
+                return (TResponse)new RequestResult<TData>(default(TData), false, ex.Message);
             }
         }
 

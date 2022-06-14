@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public abstract class RawContent : ClearEntity
+public abstract class RawContent : IdentifiableEntity
 {
     protected RawContent()
     {
