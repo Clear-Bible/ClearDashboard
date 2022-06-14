@@ -22,7 +22,7 @@
             <Button
                 x:Name="StartStopButton"
                 Width="25"
-                Height="35"
+                Height="25"
                 Padding="-5"
                 VerticalContentAlignment="Center"
                 Click="StartStop_OnClick">
