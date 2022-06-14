@@ -1,20 +1,19 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -410,9 +409,9 @@ namespace ClearDashboard.Wpf.ViewModels
                     var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
                     if (result.Success)
                     {
-                        if (result.Data.StringData is not null || result.Data.StringData != "")
+                        if (!string.IsNullOrEmpty(result.Data))
                         {
-                            ProcessTargetVerseData(result.Data.StringData);
+                            ProcessTargetVerseData(result.Data);
                         }
                     }
 

@@ -5,12 +5,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 {
-    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, RequestResult<StringObject>>
+    public class GetUsxQueryHandler : IRequestHandler<GetUsxQuery, RequestResult<string>>
     {
         private readonly IVerseRef _verseRef;
         private readonly IProject _project;
@@ -23,14 +22,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             _project = project;
         }
 
-        public Task<RequestResult<StringObject>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<StringObject>();
+            var queryResult = new RequestResult<string>();
             try
             {
-                StringObject stringObject = new();
-                stringObject.StringData = _project.GetUSX(request.BookNumber ?? _verseRef.BookNum);
-                queryResult.Data = stringObject;
+                queryResult.Data = _project.GetUSX(request.BookNumber ?? _verseRef.BookNum); ;
                 queryResult.Success = true;
             }
             catch (Exception ex)
@@ -43,7 +40,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
     }
 
 
-    public class GetUsfmQueryHandler : IRequestHandler<GetUsfmQuery, RequestResult<StringObject>>
+    public class GetUsfmQueryHandler : IRequestHandler<GetUsfmQuery, RequestResult<string>>
     {
         private readonly IVerseRef _verseRef;
         private readonly IProject _project;
@@ -56,14 +53,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
             _project = project;
         }
 
-        public Task<RequestResult<StringObject>> Handle(GetUsfmQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<string>> Handle(GetUsfmQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<StringObject>();
+            var queryResult = new RequestResult<string>();
             try
             {
-                StringObject stringObject = new();
-                stringObject.StringData = _project.GetUSFM(request.BookNumber ?? _verseRef.BookNum);
-                queryResult.Data = stringObject;
+                queryResult.Data = _project.GetUSFM(request.BookNumber ?? _verseRef.BookNum);
                 queryResult.Success = true;
             }
             catch (Exception ex)

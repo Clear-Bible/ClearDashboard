@@ -10,7 +10,6 @@ namespace ClearDashboard.DataAccessLayer.Features;
 
 public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TData : new()
 {
     protected ILogger Logger { get; }
     protected string ResourceDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "Resources");

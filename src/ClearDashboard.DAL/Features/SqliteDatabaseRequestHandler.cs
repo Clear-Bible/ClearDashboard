@@ -14,7 +14,6 @@ namespace ClearDashboard.DataAccessLayer.Features;
 /// <typeparam name="TData"></typeparam>
 public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
     where TRequest : IRequest<TResponse>
-    where TData : new()
 {
     protected SQLiteDataReader? DataReader { get; private set; }
 

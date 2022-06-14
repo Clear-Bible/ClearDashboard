@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -17,9 +16,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
         }
 
         [HttpPost]
-        public async Task<RequestResult<StringObject>> GetAsync([FromBody] GetUsfmQuery query)
+        public async Task<RequestResult<string>> GetAsync([FromBody] GetUsfmQuery query)
         {
-            return await ExecuteRequestAsync<RequestResult<StringObject>, StringObject>(query, CancellationToken.None);
+            return await ExecuteRequestAsync<RequestResult<string>, string>(query, CancellationToken.None);
         }
 
     }
