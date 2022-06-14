@@ -28,23 +28,14 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class TimerUserControl : UserControl
     {
-        System.Timers.Timer aTimer = new System.Timers.Timer(1000);
+        System.Timers.Timer _timer = new System.Timers.Timer(1000);
         
         public TimerUserControl()
         {
             InitializeComponent();
             _timerOn = false;
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-        }
-
-        public static readonly DependencyProperty _timeLeft =
-            DependencyProperty.Register("TimeLeft", typeof(string), typeof(TimerUserControl),
-                new PropertyMetadata("99h 99m 99s"));
-        public string TimeLeft
-        {
-            get => (string)GetValue(_timeLeft);
-            set => SetValue(_timeLeft, value);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
         }
 
         private int _secondsLeft;
@@ -78,14 +69,14 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void StartStop_OnClick(object sender, RoutedEventArgs e)
         {
-            TimerLbl.Foreground = Brushes.White;
+            TimerLabel.Foreground = Brushes.White;
             if (_timerOn)
             {
                 //Set the symbol to play
                 PauseIcon.Visibility = Visibility.Collapsed;
                 PlayIcon.Visibility = Visibility.Visible;
                 _timerOn = false;
-                aTimer.Stop();
+                _timer.Stop();
             }
             else
             {
@@ -93,7 +84,7 @@ namespace ClearDashboard.Wpf.UserControls
                 PauseIcon.Visibility = Visibility.Visible;
                 PlayIcon.Visibility = Visibility.Collapsed;
                 _timerOn = true;
-                aTimer.Enabled = true;
+                _timer.Enabled = true;
             }
 
            
@@ -103,32 +94,36 @@ namespace ClearDashboard.Wpf.UserControls
         {
             if (_secondsLeft <= 0)
             {
-                aTimer.Stop();
+                _secondsLeft--;
+                //_timer.Stop();
                 this.Dispatcher.Invoke(() =>
                 {
-                    TimerStackPanel.Background = Brushes.Red;
-                    btnStartStop.Background = Brushes.Salmon;
+                    TimerBorder.Background = Brushes.Red;
+                    StartStopButton.Background = Brushes.Salmon;
+
+                    _time = TimeSpan.FromSeconds(_secondsLeft*-1);
+                    TimerLabel.Content = (int)_time.TotalHours + "h " + _time.Minutes + "m " + _time.Seconds + "s";
                 });
             }
             else
             {
-                _secondsLeft -= 1;
+                _secondsLeft--;
 
                 this.Dispatcher.Invoke(() =>
                 {
                     if (_secondsLeft <= 300)
                     {
-                        TimerStackPanel.Background = Brushes.OrangeRed;
-                        btnStartStop.Background = Brushes.DarkOrange;
+                        TimerBorder.Background = Brushes.OrangeRed;
+                        StartStopButton.Background = Brushes.DarkOrange;
                     }
                     else
                     {
-                        TimerStackPanel.Background = Brushes.Transparent;
-                        btnStartStop.Background = Brushes.DodgerBlue;
+                        TimerBorder.Background = Brushes.Transparent;
+                        StartStopButton.Background = Brushes.DodgerBlue;
                     }
 
                     _time = TimeSpan.FromSeconds(_secondsLeft);
-                    TimerLbl.Content = _time.Hours+"h "+ _time.Minutes+"m "+ _time.Seconds+"s";
+                    TimerLabel.Content = (int)_time.TotalHours+"h "+ _time.Minutes+"m "+ _time.Seconds+"s";
                 });
             }
 
@@ -138,49 +133,49 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void TimerTbx_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            TimerLbl.Foreground = Brushes.LightGray;
-            if ((TimerTbx.CaretIndex != TimerTbx.Text.Length) && (TimerTbx.CaretIndex != 0))
+            TimerLabel.Foreground = Brushes.LightGray;
+            if ((TimerBox.CaretIndex != TimerBox.Text.Length) && (TimerBox.CaretIndex != 0))
             {
                 // cut and paste to end of string
-                string temp = TimerTbx.Text.Substring(TimerTbx.CaretIndex - 1, 1);
-                TimerTbx.Text = TimerTbx.Text.Remove(TimerTbx.CaretIndex - 1, 1);
-                TimerTbx.Text += temp;
+                string temp = TimerBox.Text.Substring(TimerBox.CaretIndex - 1, 1);
+                TimerBox.Text = TimerBox.Text.Remove(TimerBox.CaretIndex - 1, 1);
+                TimerBox.Text += temp;
             }
 
-            TimerTbx.Select(TimerTbx.Text.Length, 0);
+            TimerBox.Select(TimerBox.Text.Length, 0);
 
             string hours = "00";
             string minutes = "00";
             string seconds = "00";
 
-            if (TimerTbx.Text.Length >= 2)
+            if (TimerBox.Text.Length >= 2)
             {
-                seconds = TimerTbx.Text.Substring(TimerTbx.Text.Length - 2, 2);
+                seconds = TimerBox.Text.Substring(TimerBox.Text.Length - 2, 2);
             }
-            else if (TimerTbx.Text.Length == 1)
+            else if (TimerBox.Text.Length == 1)
             {
-                seconds = "0" + TimerTbx.Text.Substring(TimerTbx.Text.Length - 1, 1);
-            }
-
-            if (TimerTbx.Text.Length >= 4)
-            {
-                minutes = TimerTbx.Text.Substring(TimerTbx.Text.Length - 4, 2);
-            }
-            else if (TimerTbx.Text.Length == 3)
-            {
-                minutes = "0" + TimerTbx.Text.Substring(TimerTbx.Text.Length - 3, 1);
+                seconds = "0" + TimerBox.Text.Substring(TimerBox.Text.Length - 1, 1);
             }
 
-            if (TimerTbx.Text.Length >= 6)
+            if (TimerBox.Text.Length >= 4)
             {
-                hours = TimerTbx.Text.Substring(TimerTbx.Text.Length - 6, 2);
+                minutes = TimerBox.Text.Substring(TimerBox.Text.Length - 4, 2);
             }
-            else if (TimerTbx.Text.Length == 5)
+            else if (TimerBox.Text.Length == 3)
             {
-                hours = "0" + TimerTbx.Text.Substring(TimerTbx.Text.Length - 5, 1);
+                minutes = "0" + TimerBox.Text.Substring(TimerBox.Text.Length - 3, 1);
             }
 
-            TimerLbl.Content = hours + "h " + minutes + "m " + seconds + "s";
+            if (TimerBox.Text.Length >= 6)
+            {
+                hours = TimerBox.Text.Substring(TimerBox.Text.Length - 6, 2);
+            }
+            else if (TimerBox.Text.Length == 5)
+            {
+                hours = "0" + TimerBox.Text.Substring(TimerBox.Text.Length - 5, 1);
+            }
+
+            TimerLabel.Content = hours + "h " + minutes + "m " + seconds + "s";
 
             //convert to seconds
             _secondsLeft = Convert.ToInt32(seconds);
@@ -202,10 +197,10 @@ namespace ClearDashboard.Wpf.UserControls
             PauseIcon.Visibility = Visibility.Collapsed;
             PlayIcon.Visibility = Visibility.Visible;
             _timerOn = false;
-            aTimer.Stop();
+            _timer.Stop();
 
-            TimerLbl.Foreground = Brushes.LightGray;
-            TimerTbx.Text = "000000";
+            TimerLabel.Foreground = Brushes.LightGray;
+            TimerBox.Text = "000000";
             //TimerTbx.Text = _time.Hours.ToString().PadLeft(2, '0') + _time.Minutes.ToString().PadLeft(2, '0') + _time.Seconds.ToString().PadLeft(2,'0');
         }
 
@@ -213,20 +208,20 @@ namespace ClearDashboard.Wpf.UserControls
         {
             if (_secondsLeft == 0)
             {
-                TimerStackPanel.Background = Brushes.Red;
-                btnStartStop.Background = Brushes.Salmon;
+                TimerBorder.Background = Brushes.Red;
+                StartStopButton.Background = Brushes.Salmon;
             }
 
             if (_secondsLeft <= 300)
             {
-                TimerStackPanel.Background = Brushes.OrangeRed;
-                btnStartStop.Background = Brushes.DarkOrange;
+                TimerBorder.Background = Brushes.OrangeRed;
+                StartStopButton.Background = Brushes.DarkOrange;
             }
 
             else
             {
-                TimerStackPanel.Background = Brushes.Transparent;
-                btnStartStop.Background = Brushes.DodgerBlue;
+                TimerBorder.Background = Brushes.Transparent;
+                StartStopButton.Background = Brushes.DodgerBlue;
             }
         }
     }

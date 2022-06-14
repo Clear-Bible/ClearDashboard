@@ -9,14 +9,21 @@
     d:DesignHeight="200"
     d:DesignWidth="500"
     mc:Ignorable="d">
-    <Grid Width="135" Height="37">
-        <StackPanel Orientation="Horizontal" x:Name="TimerStackPanel">
+    <Grid MinWidth="125" Height="37">
+        <Border
+            x:Name="TimerBorder"
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="10" />
+        <StackPanel
+            x:Name="TimerStackPanel"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <Button
-                x:Name="btnStartStop"
+                x:Name="StartStopButton"
                 Width="25"
+                Height="35"
                 Padding="-5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 Click="StartStop_OnClick">
                 <StackPanel Orientation="Horizontal">
@@ -37,8 +44,8 @@
                 </StackPanel>
             </Button>
             <Label
-                x:Name="TimerLbl"
-                Width="85"
+                x:Name="TimerLabel"
+                MinWidth="85"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 Content="00h 00m 00s" />
@@ -48,8 +55,8 @@
 
         </StackPanel>
         <TextBox
-            x:Name="TimerTbx"
-            Margin="28,0,1,0"
+            x:Name="TimerBox"
+            Margin="34,0,17,0"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
             Background="Transparent"
@@ -57,10 +64,12 @@
             FlowDirection="RightToLeft"
             Foreground="Transparent"
             GotFocus="TimerTbx_OnGotFocus"
+            LostFocus="TimerTbx_OnLostFocus"
             PreviewKeyDown="TimerTbx_OnPreviewKeyDown"
             PreviewTextInput="NumberValidationTextBox"
             TextChanged="TimerTbx_OnTextChanged"
-            LostFocus="TimerTbx_OnLostFocus"/>
+            Width="77"/>
+
 
     </Grid>
 </UserControl>
