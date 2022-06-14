@@ -69,6 +69,9 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void StartStop_OnClick(object sender, RoutedEventArgs e)
         {
+            _time = TimeSpan.FromSeconds(_secondsLeft);
+            TimerLabel.Content = (int)_time.TotalHours + "h " + _time.Minutes + "m " + _time.Seconds + "s";
+
             TimerLabel.Foreground = Brushes.White;
             if (_timerOn)
             {
@@ -193,6 +196,9 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void TimerTbx_OnGotFocus(object sender, RoutedEventArgs e)
         {
+            TimerBorder.Background = Brushes.Transparent;
+            StartStopButton.Background = Brushes.DodgerBlue;
+
             //Pause the Timer
             PauseIcon.Visibility = Visibility.Collapsed;
             PlayIcon.Visibility = Visibility.Visible;
