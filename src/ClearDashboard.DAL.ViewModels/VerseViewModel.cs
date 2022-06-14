@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public int Id
+        public Guid Id
         {
             get => Entity.Id;
             set
@@ -95,7 +95,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public int? CorpusId
+        public Guid? CorpusId
         {
             get => Entity?.CorpusId;
             set
@@ -121,31 +121,33 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public virtual Token? Token
-        {
-            get => Entity?.Token;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.Token = value;
-                }
-                NotifyOfPropertyChange(nameof(Token));
-            }
-        }
+        //TODO:  Update to reflect new schema changes
 
-        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks
-        {
-            get => Entity?.ParallelVersesLinks;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.ParallelVersesLinks = value;
-                }
-                NotifyOfPropertyChange(nameof(ParallelVersesLinks));
-            }
-        }
+        //public virtual Token? Token
+        //{
+        //    get => Entity?.Token;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.Token = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(Token));
+        //    }
+        //}
+
+        //public virtual ICollection<ParallelVersesLink> ParallelVersesLinks
+        //{
+        //    get => Entity?.ParallelVersesLinks;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.ParallelVersesLinks = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(ParallelVersesLinks));
+        //    }
+        //}
 
 
         
@@ -180,7 +182,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         public string? ChapterStr => Entity?.ChapterStr;
 
-        public string? VerseStr => Entity?.VerseStr;
+        public string? VerseString => Entity?.VerseString;
 
         public string VerseId { get; set; } = string.Empty;
 

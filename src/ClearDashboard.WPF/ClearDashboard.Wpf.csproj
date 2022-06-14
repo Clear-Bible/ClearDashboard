@@ -116,18 +116,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Caliburn.Micro.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Compile Update="Strings\Resources.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>

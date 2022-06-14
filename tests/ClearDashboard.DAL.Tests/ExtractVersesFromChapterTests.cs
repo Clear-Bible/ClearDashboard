@@ -12,7 +12,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class ExtractVersesFromChapterTests
     {
-        [Fact]
+        [Fact(Skip= "Defer until we decide on which parser to use.")]
         public void RealUsfmTests()
         {
             // defer until we decide on which parser to use

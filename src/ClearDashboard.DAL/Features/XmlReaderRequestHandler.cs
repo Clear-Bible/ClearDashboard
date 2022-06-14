@@ -7,7 +7,6 @@ namespace ClearDashboard.DataAccessLayer.Features;
 
 public abstract class XmlReaderRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
     where TRequest : IRequest<TResponse>
-    where TData : new()
 {
     protected XmlReader? XmlReader { get; private set; }
 
