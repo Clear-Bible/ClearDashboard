@@ -143,9 +143,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // pull out the project font family
-            FontFamily = ProjectManager.ParatextProject.Language.FontFamily;
-            FontSize = ProjectManager.ParatextProject.Language.Size;
-            IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+            if (ProjectManager.ParatextProject is not null)
+            {
+                FontFamily = ProjectManager.ParatextProject.Language.FontFamily;
+                FontSize = ProjectManager.ParatextProject.Language.Size;
+                IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+            }
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

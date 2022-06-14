@@ -189,10 +189,12 @@ namespace ClearDashboard.DataAccessLayer
                 Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
             }
 
-            ParatextUserName = result.Data.Name;
+            if (result.Data is not null)
+            {
+                ParatextUserName = result.Data.Name;
 
-            await PublishParatextUser(ParatextUserName);
-          
+                await PublishParatextUser(ParatextUserName);
+            }
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
