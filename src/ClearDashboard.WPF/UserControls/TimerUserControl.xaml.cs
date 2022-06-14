@@ -208,5 +208,26 @@ namespace ClearDashboard.Wpf.UserControls
             TimerTbx.Text = "000000";
             //TimerTbx.Text = _time.Hours.ToString().PadLeft(2, '0') + _time.Minutes.ToString().PadLeft(2, '0') + _time.Seconds.ToString().PadLeft(2,'0');
         }
+
+        private void TimerTbx_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (_secondsLeft == 0)
+            {
+                TimerStackPanel.Background = Brushes.Red;
+                btnStartStop.Background = Brushes.Salmon;
+            }
+
+            if (_secondsLeft <= 300)
+            {
+                TimerStackPanel.Background = Brushes.OrangeRed;
+                btnStartStop.Background = Brushes.DarkOrange;
+            }
+
+            else
+            {
+                TimerStackPanel.Background = Brushes.Transparent;
+                btnStartStop.Background = Brushes.DodgerBlue;
+            }
+        }
     }
 }

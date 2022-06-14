@@ -59,7 +59,8 @@
             GotFocus="TimerTbx_OnGotFocus"
             PreviewKeyDown="TimerTbx_OnPreviewKeyDown"
             PreviewTextInput="NumberValidationTextBox"
-            TextChanged="TimerTbx_OnTextChanged" />
+            TextChanged="TimerTbx_OnTextChanged"
+            LostFocus="TimerTbx_OnLostFocus"/>
 
     </Grid>
 </UserControl>
