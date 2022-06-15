@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class VerseMapping : IdentifiableEntity
+public class VerseMapping : SynchronizableTimestampedEntity
 {
     public VerseMapping()
     {
@@ -10,6 +10,9 @@ public class VerseMapping : IdentifiableEntity
 
         // ReSharper restore VirtualMemberCallInConstructor
     }
+
+    public virtual Guid ParallelCorpusVersionId { get; set; }
+    public virtual ParallelCorpusVersion ParallelCorpusVersion { get; set; }
 
     public virtual ICollection<VerseMappingTokenizationsAssociation> VerseMappingTokenizationsAssociations { get; set; }
 

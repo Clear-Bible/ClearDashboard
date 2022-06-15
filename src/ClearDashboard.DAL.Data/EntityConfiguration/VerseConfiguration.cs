@@ -11,14 +11,12 @@ public class VerseConfiguration : IEntityTypeConfiguration<Verse>
         entityBuilder.HasKey(e => e.Id);
 
         //CODE-REVIEW: is this correct length?
-        entityBuilder.Property(e => e.SilBookNumber)
-            .HasColumnType("varchar(2)");
+        entityBuilder.Property(e => e.BookNumber)
+            .HasColumnType("varchar(3)");
 
         entityBuilder.Property(e => e.CorpusId);
 
-        entityBuilder.Property(e => e.Modified)
-            .HasColumnType("datetime");
-
+       
         //CODE-REVIEW:  Is there any size limit?
         entityBuilder.Property(e => e.VerseText)
             .HasColumnType("text");

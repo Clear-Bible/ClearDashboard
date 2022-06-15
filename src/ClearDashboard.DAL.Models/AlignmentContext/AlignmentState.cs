@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public enum AlignState
+public enum AlignmentState
 {
     NotSet = -1,
     NotChecked = 0,

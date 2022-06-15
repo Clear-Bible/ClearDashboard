@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -40,6 +43,8 @@ namespace ClearDashboard.DAL.Tests
            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
            Services.AddLogging();
            Services.AddSingleton<IEventAggregator, EventAggregator>();
+
+           Services.AddSingleton<IUserProvider, UserProvider>();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(

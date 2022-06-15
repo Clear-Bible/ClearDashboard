@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,6 +22,9 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task NoteRecipientTest()
         {
+
+            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            Assert.NotNull(userProvider);
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             const string projectName = "NoteTest";
             Assert.NotNull(factory);
@@ -31,6 +35,7 @@ namespace ClearDashboard.DAL.Tests
             try
             {
                 var author = new User { FirstName = "Note", LastName = "Author" };
+                userProvider.CurrentUser = author;
                 var recipient1 = new User { FirstName = "Recipient",  LastName= "One" };
                 var recipient2 = new User { FirstName = "Recipient", LastName="Two" };
 

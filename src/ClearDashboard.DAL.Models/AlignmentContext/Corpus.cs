@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Corpus : IdentifiableEntity
+    public class Corpus : SynchronizableTimestampedEntity
     {
         public Corpus()
         {

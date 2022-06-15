@@ -13,12 +13,13 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 
 namespace ClearDashboard.DataAccessLayer
 {
 
-    public abstract class ProjectManager : IDisposable
+    public abstract class ProjectManager : IUserProvider, IDisposable
     {
         #region Properties
 
@@ -26,8 +27,11 @@ namespace ClearDashboard.DataAccessLayer
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
-     
-   
+
+    
+
+        public User CurrentUser { get; set; }
+    
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
@@ -37,7 +41,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public bool ParatextVisible = false;
         #endregion
-
+        
         #region Events
 
         public string ParatextUserName { get; set; } = "";

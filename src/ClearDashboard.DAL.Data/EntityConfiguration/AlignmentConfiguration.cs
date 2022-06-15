@@ -13,7 +13,7 @@ public class AlignmentConfiguration : IEntityTypeConfiguration<Alignment>
         entityBuilder.HasIndex(e => e.SourceTokenId).IsUnique();
         entityBuilder.HasIndex(e => e.TargetTokenId).IsUnique();
 
-        entityBuilder.Property(e => e.AlignmentType);
+        
         entityBuilder.Property(e => e.AlignmentVersionId);
         entityBuilder.Property(e => e.Score)
             .HasColumnType("decimal(3)");

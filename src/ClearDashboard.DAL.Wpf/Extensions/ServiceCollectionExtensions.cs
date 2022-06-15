@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
@@ -26,6 +25,9 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+
+
             serviceCollection.AddScoped<ParatextProxy>();
             serviceCollection.AddProjectNameDatabaseContextFactory();
 

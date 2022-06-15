@@ -23,7 +23,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Lemma")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PartsOfSpeech")
@@ -33,6 +39,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("TokenId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -49,10 +58,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AlignmentType")
+                    b.Property<Guid?>("AlignmentVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("AlignmentVersionId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Score")
@@ -62,6 +74,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TargetTokenId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -80,6 +95,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("TEXT");
@@ -100,13 +118,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("AlignmentSetId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("AlignmentState")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("AlignmentType")
                         .HasColumnType("INTEGER");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("SourceTokenId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TargetTokenId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -126,10 +156,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsDirty")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -143,6 +179,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -162,16 +207,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("CorpusType")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Language")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Language")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ParatextGuid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -258,6 +312,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("ParallelCorpus");
@@ -272,16 +335,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("AlignmentType")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<long>("LastGenerated")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("SourceCorpusId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TargetCorpusId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -310,10 +382,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int?>("LastContentWordLevel")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Modified")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProjectName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -330,6 +405,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("AltText")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("English")
                         .HasColumnType("TEXT");
 
@@ -339,7 +417,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -378,7 +462,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("FirstLetter")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SubwordNumber")
@@ -388,6 +478,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TokenizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("VerseId")
@@ -414,7 +507,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("CorpusId")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("TokenizationFunction")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -465,11 +567,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<bool>("Found")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Modified")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("SilBookNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("VerseBBBCCCVVV")
                         .HasColumnType("TEXT");
@@ -493,7 +595,21 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ParallelCorpusVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ParallelCorpusVersionId");
 
                     b.ToTable("VerseMapping");
                 });
@@ -504,13 +620,19 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("SourceTokenizationId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("TargetTokenizationId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("TokenizationId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("VerseMappingId")
@@ -522,8 +644,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TargetTokenizationId");
 
-                    b.HasIndex("TokenizationId");
-
                     b.HasIndex("VerseMappingId");
 
                     b.ToTable("VerseMappingTokenizationsAssociation");
@@ -533,6 +653,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("VerseId")
@@ -669,7 +798,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany("AlignmentVersions")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -783,19 +914,26 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Corpus");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", "ParallelCorpusVersion")
+                        .WithMany("VerseMappings")
+                        .HasForeignKey("ParallelCorpusVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParallelCorpusVersion");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingTokenizationsAssociation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "SourceTokenization")
-                        .WithMany()
+                        .WithMany("SourceVerseMappingTokenizationsAssociations")
                         .HasForeignKey("SourceTokenizationId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "TargetTokenization")
-                        .WithMany()
+                        .WithMany("TargetVerseMappingTokenizationsAssociations")
                         .HasForeignKey("TargetTokenizationId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", null)
-                        .WithMany("VerseMappingTokenizationsAssociations")
-                        .HasForeignKey("TokenizationId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
                         .WithMany("VerseMappingTokenizationsAssociations")
@@ -860,6 +998,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Versions");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", b =>
+                {
+                    b.Navigation("VerseMappings");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
                     b.Navigation("Adornment");
@@ -871,9 +1014,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Tokenization", b =>
                 {
-                    b.Navigation("Tokens");
+                    b.Navigation("SourceVerseMappingTokenizationsAssociations");
 
-                    b.Navigation("VerseMappingTokenizationsAssociations");
+                    b.Navigation("TargetVerseMappingTokenizationsAssociations");
+
+                    b.Navigation("Tokens");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>

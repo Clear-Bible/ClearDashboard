@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class ParallelCorpus
+    public class ParallelCorpus : SynchronizableTimestampedEntity
     {
         public ParallelCorpus()
         {
@@ -11,9 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
+       
         public virtual ICollection<ParallelCorpusVersion> Versions { get; set; }
     }
 }
