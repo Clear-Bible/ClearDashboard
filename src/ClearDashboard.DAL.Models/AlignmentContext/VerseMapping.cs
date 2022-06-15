@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class VerseMapping : IdentifiableEntity
+public class VerseMapping : SynchronizableEntity
 {
     public VerseMapping()
     {

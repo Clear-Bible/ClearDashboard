@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Alignment : IdentifiableEntity
+    public class Alignment : SynchronizableTimestampedEntity
     {
         public Guid SourceTokenId { get; set; }
         public Guid TargetTokenId { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Verse : TimestampedEntity
+    public class Verse : SynchronizableTimestampedEntity
     {
         public Verse()
         {

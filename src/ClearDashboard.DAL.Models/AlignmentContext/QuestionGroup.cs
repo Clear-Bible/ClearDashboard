@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class QuestionGroup : IdentifiableEntity
+    public class QuestionGroup : SynchronizableTimestampedEntity
     {
         public string? Note { get; set; }
         public string? Title { get; set; }

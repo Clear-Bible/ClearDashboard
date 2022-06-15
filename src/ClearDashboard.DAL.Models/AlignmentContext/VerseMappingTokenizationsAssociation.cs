@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class VerseMappingTokenizationsAssociation : IdentifiableEntity
+public class VerseMappingTokenizationsAssociation : SynchronizableEntity
 {
     public Guid? SourceTokenizationId { get; set; }
     public Tokenization? SourceTokenization { get; set; }

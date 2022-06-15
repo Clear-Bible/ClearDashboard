@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class ParallelCorpusVersion : IdentifiableEntity
+public class ParallelCorpusVersion : SynchronizableTimestampedEntity
 {
     public ParallelCorpusVersion()
     {

@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class VerseMappingVerseAssociation : IdentifiableEntity
+public class VerseMappingVerseAssociation : SynchronizableEntity
 {
        
     public Guid? VerseMappingId { get; set; }

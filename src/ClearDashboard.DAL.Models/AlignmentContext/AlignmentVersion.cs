@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class AlignmentVersion : IdentifiableEntity
+    public class AlignmentVersion : SynchronizableTimestampedEntity
     {
         public AlignmentVersion()
         {
@@ -11,7 +11,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
 
         
-        public Guid? UserId { get; set; }
         public bool IsDirty { get; set; }
 
         public virtual User? User { get; set; }

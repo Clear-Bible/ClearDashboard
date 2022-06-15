@@ -2,13 +2,13 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class AlignmentTokenPair : IdentifiableEntity
+public class AlignmentTokenPair : SynchronizableTimestampedEntity
 {
     public Guid SourceTokenId { get; set; }
     public Guid TargetTokenId { get; set; }
       
     public virtual AlignmentType AlignmentType { get; set; }
-
+    public virtual AlignmentState AlignmentState { get; set; }
 
     [ForeignKey("SourceTokenId")]
     public virtual Token? SourceToken { get; set; }

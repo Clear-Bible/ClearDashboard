@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class Tokenization : IdentifiableEntity
+public class Tokenization : SynchronizableEntity
 {
     public Tokenization()
     {

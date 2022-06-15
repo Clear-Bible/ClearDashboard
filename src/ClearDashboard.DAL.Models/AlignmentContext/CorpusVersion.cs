@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class CorpusVersion : IdentifiableEntity
+public class CorpusVersion : SynchronizableTimestampedEntity
 {
     public bool IsRtl { get; set; }
     public string? Name { get; set; }
