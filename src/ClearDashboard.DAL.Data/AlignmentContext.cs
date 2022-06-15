@@ -1,26 +1,29 @@
-﻿using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
+﻿using System.Reflection;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
 using ClearDashboard.DataAccessLayer.Data.Extensions;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using StringContent = ClearDashboard.DataAccessLayer.Models.StringContent;
+
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
     public class AlignmentContext : DbContext
     {
         private readonly ILogger<AlignmentContext>? _logger;
+        public readonly IUserProvider UserProvider;
 
         public AlignmentContext() : this(string.Empty)
         {
            
         }
 
-        public AlignmentContext(ILogger<AlignmentContext> logger) :  this(string.Empty)
+        public AlignmentContext(ILogger<AlignmentContext> logger, IUserProvider userProvider) :  this(string.Empty)
         {
             _logger = logger;
-           
+            UserProvider = userProvider;
         }
 
         public AlignmentContext(DbContextOptions<AlignmentContext> options)
@@ -92,7 +95,80 @@ namespace ClearDashboard.DataAccessLayer.Data
                 Console.WriteLine($"Could not apply database migrations: {ex.Message}");
             }
         }
-      
+
+        public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            Entry(entity).State = EntityState.Detached;
+            var newEntity = CreateEntityCopy(entity);
+            return Add(newEntity);
+        }
+
+        public async Task<EntityEntry<TEntity>> AddCopyAsync<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            Entry(entity).State = EntityState.Detached;
+            var newEntity = CreateEntityCopy(entity);
+            return await AddAsync(newEntity);
+        }
+
+        private static TEntity CreateEntityCopy<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            var newEntity = new TEntity();
+            var propertyNamesToIgnore = new List<string> { "Id", "ParentId", "Created", "Modified" };
+            var currentIdProperty = entity.GetType().GetProperty("Id");
+            if (currentIdProperty != null)
+            {
+                var properties = entity.GetType().GetProperties()
+                    .Where(property => !propertyNamesToIgnore.Contains(property.Name));
+                foreach (var propertyInfo in properties)
+                {
+                    var property = propertyInfo.GetValue(entity, null);
+                    propertyInfo.SetValue(newEntity, property);
+                }
+
+                var parentId = currentIdProperty.GetValue(entity, null);
+                var parentIdProperty = entity.GetType().GetProperty("ParentId");
+                parentIdProperty.SetValue(newEntity, parentId);
+            }
+
+            return newEntity;
+        }
+
+        public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)
+        {
+           
+
+
+            return base.Update(entity);
+        }
+
+        public override EntityEntry Update(object entity)
+        {
+            return base.Update(entity);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override int SaveChanges()
+        {
+            foreach (var entityEntry in ChangeTracker.Entries()) // Iterate all made changes
+            {
+                var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
+                //if (entityEntry.State == EntityState.Modified) // If you want to update TenantId when Order is modified
+                //{
+                //    var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
+                //}
+            }
+            return base.SaveChanges();
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -143,6 +219,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             // now handle any entities which have DatetimeOffset properties.                                                  
             modelBuilder.AddDateTimeOffsetToBinaryConverter(Database.ProviderName);
+            modelBuilder.AddUserIdValueGenerator();
 
         }
     }

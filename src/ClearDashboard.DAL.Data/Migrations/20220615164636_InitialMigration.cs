@@ -13,7 +13,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Corpus",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,7 +27,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ParallelCorpus",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,8 +45,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
                     LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +63,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     English = table.Column<string>(type: "TEXT", nullable: true),
                     AltText = table.Column<string>(type: "TEXT", nullable: true),
-                    LastChanged = table.Column<double>(type: "REAL", nullable: false)
+                    LastChanged = table.Column<double>(type: "REAL", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +91,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "VerseMapping",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,7 +110,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Language = table.Column<int>(type: "INTEGER", nullable: true),
                     ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
                     CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
-                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,7 +132,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenizationFunction = table.Column<string>(type: "TEXT", nullable: true),
-                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,8 +159,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     CorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
                     VerseBBBCCCVVV = table.Column<string>(type: "TEXT", nullable: true),
                     Found = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -164,7 +182,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TargetCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
                     LastGenerated = table.Column<long>(type: "INTEGER", nullable: false),
-                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,7 +214,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,8 +232,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    IsDirty = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsDirty = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -220,7 +244,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_AlignmentVersion_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -251,7 +276,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SourceTokenizationId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TargetTokenizationId = table.Column<Guid>(type: "TEXT", nullable: true),
                     VerseMappingId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,7 +315,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     VerseId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true),
-                    FirstLetter = table.Column<string>(type: "TEXT", nullable: true)
+                    FirstLetter = table.Column<string>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,7 +342,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     VerseMappingId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    VerseId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    VerseId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -401,7 +432,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TokenId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Lemma = table.Column<string>(type: "TEXT", nullable: true),
                     PartsOfSpeech = table.Column<string>(type: "TEXT", nullable: true),
-                    Strong = table.Column<string>(type: "TEXT", nullable: true)
+                    Strong = table.Column<string>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -422,7 +456,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Score = table.Column<decimal>(type: "TEXT", nullable: false),
                     AlignmentVersionId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AlignmentType = table.Column<int>(type: "INTEGER", nullable: false)
+                    AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -454,7 +491,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AlignmentType = table.Column<int>(type: "INTEGER", nullable: false),
-                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    AlignmentState = table.Column<int>(type: "INTEGER", nullable: false),
+                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
