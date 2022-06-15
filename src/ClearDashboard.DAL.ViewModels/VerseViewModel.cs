@@ -82,19 +82,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        //public DateTimeOffset Modified
-        //{
-        //    get => Entity.Modified;
-        //    set
-        //    {
-        //        if (Entity != null)
-        //        {
-        //            Entity.Modified = value;
-        //        }
-        //        NotifyOfPropertyChange(nameof(Modified));
-        //    }
-        //}
-
+     
         public Guid? CorpusId
         {
             get => Entity?.CorpusId;
