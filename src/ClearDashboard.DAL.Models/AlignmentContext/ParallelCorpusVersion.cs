@@ -7,7 +7,7 @@ public class ParallelCorpusVersion : SynchronizableTimestampedEntity
     public ParallelCorpusVersion()
     {
         // ReSharper disable VirtualMemberCallInConstructor
-        //ParallelVersesLinks = new HashSet<ParallelVersesLink>();
+        VerseMappings = new HashSet<VerseMapping>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
@@ -22,5 +22,5 @@ public class ParallelCorpusVersion : SynchronizableTimestampedEntity
     public virtual Corpus? SourceCorpus { get; set; }
     [ForeignKey("TargetCorpusId")]
     public virtual Corpus? TargetCorpus { get; set; }
-    // public virtual ICollection<ParallelVersesLink> ParallelVersesLinks { get; set; }
+     public virtual ICollection<VerseMapping> VerseMappings { get; set; }
 }

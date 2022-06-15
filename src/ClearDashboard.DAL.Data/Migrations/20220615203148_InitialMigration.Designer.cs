@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(AlignmentContext))]
-    [Migration("20220615164636_InitialMigration")]
+    [Migration("20220615203148_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,9 +59,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("AlignmentType")
-                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("AlignmentVersionId")
                         .HasColumnType("TEXT");
@@ -218,8 +215,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Language")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Language")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -467,6 +464,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("FirstLetter")
                         .HasColumnType("TEXT");
 
@@ -508,6 +508,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<Guid?>("CorpusId")
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
@@ -569,9 +572,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SilBookNumber")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -597,6 +597,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ParallelCorpusVersionId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
@@ -604,6 +610,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParallelCorpusVersionId");
 
                     b.ToTable("VerseMapping");
                 });
@@ -614,6 +622,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
@@ -621,9 +632,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("TargetTokenizationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TokenizationId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -638,8 +646,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TargetTokenizationId");
 
-                    b.HasIndex("TokenizationId");
-
                     b.HasIndex("VerseMappingId");
 
                     b.ToTable("VerseMappingTokenizationsAssociation");
@@ -650,6 +656,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
@@ -907,19 +916,26 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Corpus");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", "ParallelCorpusVersion")
+                        .WithMany("VerseMappings")
+                        .HasForeignKey("ParallelCorpusVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParallelCorpusVersion");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingTokenizationsAssociation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "SourceTokenization")
-                        .WithMany()
+                        .WithMany("SourceVerseMappingTokenizationsAssociations")
                         .HasForeignKey("SourceTokenizationId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "TargetTokenization")
-                        .WithMany()
+                        .WithMany("TargetVerseMappingTokenizationsAssociations")
                         .HasForeignKey("TargetTokenizationId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", null)
-                        .WithMany("VerseMappingTokenizationsAssociations")
-                        .HasForeignKey("TokenizationId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
                         .WithMany("VerseMappingTokenizationsAssociations")
@@ -984,6 +1000,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Versions");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", b =>
+                {
+                    b.Navigation("VerseMappings");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
                     b.Navigation("Adornment");
@@ -995,9 +1016,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Tokenization", b =>
                 {
-                    b.Navigation("Tokens");
+                    b.Navigation("SourceVerseMappingTokenizationsAssociations");
 
-                    b.Navigation("VerseMappingTokenizationsAssociations");
+                    b.Navigation("TargetVerseMappingTokenizationsAssociations");
+
+                    b.Navigation("Tokens");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>

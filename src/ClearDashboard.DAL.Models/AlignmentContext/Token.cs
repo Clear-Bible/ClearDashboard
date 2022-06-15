@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public  class Token : SynchronizableEntity
+    public  class Token : SynchronizableTimestampedEntity
     {
         public Token()
         {

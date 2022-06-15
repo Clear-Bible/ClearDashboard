@@ -106,6 +106,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         public async Task<EntityEntry<TEntity>> AddCopyAsync<TEntity>(TEntity entity) where TEntity : class, new()
         {
             Entry(entity).State = EntityState.Detached;
+
+            var e  = (TEntity)Entry(entity).CurrentValues.ToObject();
             var newEntity = CreateEntityCopy(entity);
             return await AddAsync(newEntity);
         }
@@ -121,8 +123,16 @@ namespace ClearDashboard.DataAccessLayer.Data
                     .Where(property => !propertyNamesToIgnore.Contains(property.Name));
                 foreach (var propertyInfo in properties)
                 {
-                    var property = propertyInfo.GetValue(entity, null);
-                    propertyInfo.SetValue(newEntity, property);
+                    if (propertyInfo.PropertyType == typeof(ICollection<>))
+                    {
+                        var collection = propertyInfo.GetValue(entity, null);
+                    }
+                    else
+                    {
+                        var property = propertyInfo.GetValue(entity, null);
+                        propertyInfo.SetValue(newEntity, property);
+                    }
+                   
                 }
 
                 var parentId = currentIdProperty.GetValue(entity, null);
@@ -203,12 +213,26 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.TargetCorpus)
                 .WithMany(e => e.TargetParallelCorpusVersions);
 
-          
-            modelBuilder.Entity<Tokenization>()
-                .HasMany(e => e.VerseMappingTokenizationsAssociations)
-                .WithOne();
 
-           
+            //modelBuilder.Entity<Tokenization>()
+            //    .HasMany(e => e.VerseMappingTokenizationsAssociations)
+            //    .WithOne(e=>e.SourceTokenization);
+
+
+            //modelBuilder.Entity<Tokenization>()
+            //    .HasMany(e => e.VerseMappingTokenizationsAssociations)
+            //    .WithOne(e => e.TargetTokenization);
+
+
+            modelBuilder.Entity<VerseMappingTokenizationsAssociation>()
+                .HasOne(e => e.SourceTokenization)
+                .WithMany(e => e.SourceVerseMappingTokenizationsAssociations);
+
+
+            modelBuilder.Entity<VerseMappingTokenizationsAssociation>()
+                .HasOne(e => e.TargetTokenization)
+                .WithMany(e => e.TargetVerseMappingTokenizationsAssociations);
+
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method
             modelBuilder.ConfigureRawContentEntities();

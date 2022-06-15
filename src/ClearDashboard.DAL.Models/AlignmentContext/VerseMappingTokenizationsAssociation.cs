@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models;
 
-public class VerseMappingTokenizationsAssociation : SynchronizableEntity
+public class VerseMappingTokenizationsAssociation : SynchronizableTimestampedEntity
 {
     public Guid? SourceTokenizationId { get; set; }
     public Tokenization? SourceTokenization { get; set; }
@@ -10,7 +10,4 @@ public class VerseMappingTokenizationsAssociation : SynchronizableEntity
 
     public Guid? VerseMappingId { get; set; }
     public virtual VerseMapping? VerseMapping { get; set; }
-
-    //public Guid? TokenizationId { get; set; }
-    //public Tokenization? Tokenization { get; set; }
 }
