@@ -16,9 +16,7 @@ public class VerseConfiguration : IEntityTypeConfiguration<Verse>
 
         entityBuilder.Property(e => e.CorpusId);
 
-        entityBuilder.Property(e => e.Modified)
-            .HasColumnType("datetime");
-
+       
         //CODE-REVIEW:  Is there any size limit?
         entityBuilder.Property(e => e.VerseText)
             .HasColumnType("text");
