@@ -1,0 +1,75 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.UserControls.TimerUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.UserControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="200"
+    d:DesignWidth="500"
+    mc:Ignorable="d">
+    <Grid MinWidth="125" Height="37">
+        <Border
+            x:Name="TimerBorder"
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="10" />
+        <StackPanel
+            x:Name="TimerStackPanel"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                x:Name="StartStopButton"
+                Width="25"
+                Height="25"
+                Padding="-5"
+                VerticalContentAlignment="Center"
+                Click="StartStop_OnClick">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        x:Name="PauseIcon"
+                        Width="20"
+                        Height="20"
+                        HorizontalAlignment="Right"
+                        Kind="Pause"
+                        Visibility="Collapsed" />
+                    <materialDesign:PackIcon
+                        x:Name="PlayIcon"
+                        Width="20"
+                        Height="20"
+                        HorizontalAlignment="Right"
+                        Kind="Play"
+                        Visibility="Visible" />
+                </StackPanel>
+            </Button>
+            <Label
+                x:Name="TimerLabel"
+                MinWidth="85"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="00h 00m 00s" />
+
+
+            <!--    -->
+
+        </StackPanel>
+        <TextBox
+            x:Name="TimerBox"
+            Margin="34,0,17,0"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Background="Transparent"
+            CaretBrush="Transparent"
+            FlowDirection="RightToLeft"
+            Foreground="Transparent"
+            GotFocus="TimerTbx_OnGotFocus"
+            LostFocus="TimerTbx_OnLostFocus"
+            PreviewKeyDown="TimerTbx_OnPreviewKeyDown"
+            PreviewTextInput="NumberValidationTextBox"
+            TextChanged="TimerTbx_OnTextChanged"
+            Width="77"/>
+
+
+    </Grid>
+</UserControl>
