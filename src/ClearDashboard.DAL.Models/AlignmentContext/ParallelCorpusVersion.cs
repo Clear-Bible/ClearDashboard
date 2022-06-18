@@ -8,19 +8,22 @@ public class ParallelCorpusVersion : SynchronizableTimestampedEntity
     {
         // ReSharper disable VirtualMemberCallInConstructor
         VerseMappings = new HashSet<VerseMapping>();
+        ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
-    public Guid SourceCorpusId { get; set; }
-    public Guid TargetCorpusId { get; set; }
 
     public AlignmentType AlignmentType { get; set; }
-  
+
     public DateTimeOffset LastGenerated { get; set; }
 
-    [ForeignKey("SourceCorpusId")]
+    public Guid SourceCorpusId { get; set; }
+    [ForeignKey(nameof(SourceCorpusId))]
     public virtual Corpus? SourceCorpus { get; set; }
-    [ForeignKey("TargetCorpusId")]
+
+    public Guid TargetCorpusId { get; set; }
+    [ForeignKey(nameof(TargetCorpusId))]
     public virtual Corpus? TargetCorpus { get; set; }
-     public virtual ICollection<VerseMapping> VerseMappings { get; set; }
+    public virtual ICollection<VerseMapping> VerseMappings { get; set; }
+    public virtual ICollection<ParallelTokenizedCorpus> ParallelTokenizedCopora { get; set; }
 }

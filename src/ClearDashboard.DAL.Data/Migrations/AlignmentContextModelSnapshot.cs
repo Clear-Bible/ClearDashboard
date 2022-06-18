@@ -41,6 +41,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("TokenId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TokenMorphology")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -129,6 +132,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("Probability")
+                        .HasColumnType("REAL");
 
                     b.Property<Guid>("SourceTokenId")
                         .HasColumnType("TEXT");
@@ -367,6 +373,41 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("ParallelCorpusVersion");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelTokenizedCorpus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParallelCorpusVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SourceTokenizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TargetTokenizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParallelCorpusVersionId");
+
+                    b.HasIndex("SourceTokenizationId");
+
+                    b.HasIndex("TargetTokenizationId");
+
+                    b.ToTable("ParallelTokenizedCorpus");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -498,7 +539,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("Token");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Tokenization", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -523,7 +564,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("CorpusId");
 
-                    b.ToTable("Tokenization");
+                    b.ToTable("TokenizedCorpus");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
@@ -612,41 +653,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("ParallelCorpusVersionId");
 
                     b.ToTable("VerseMapping");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingTokenizationsAssociation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("SourceTokenizationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TargetTokenizationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("VerseMappingId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceTokenizationId");
-
-                    b.HasIndex("TargetTokenizationId");
-
-                    b.HasIndex("VerseMappingId");
-
-                    b.ToTable("VerseMappingTokenizationsAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingVerseAssociation", b =>
@@ -872,6 +878,27 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("TargetCorpus");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelTokenizedCorpus", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", "ParallelCorpusVersion")
+                        .WithMany("ParallelTokenizedCopora")
+                        .HasForeignKey("ParallelCorpusVersionId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", "SourceTokenization")
+                        .WithMany("SourceParallelTokenizedCorpus")
+                        .HasForeignKey("SourceTokenizationId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", "TargetTokenization")
+                        .WithMany("TargetParallelTokenizedCorpus")
+                        .HasForeignKey("TargetTokenizationId");
+
+                    b.Navigation("ParallelCorpusVersion");
+
+                    b.Navigation("SourceTokenization");
+
+                    b.Navigation("TargetTokenization");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
@@ -881,7 +908,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "Tokenization")
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", "Tokenization")
                         .WithMany("Tokens")
                         .HasForeignKey("TokenizationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -898,10 +925,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Verse");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Tokenization", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", null)
-                        .WithMany("Tokenizations")
+                        .WithMany("TokenizedCorpora")
                         .HasForeignKey("CorpusId");
                 });
 
@@ -923,27 +950,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ParallelCorpusVersion");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingTokenizationsAssociation", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "SourceTokenization")
-                        .WithMany("SourceVerseMappingTokenizationsAssociations")
-                        .HasForeignKey("SourceTokenizationId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Tokenization", "TargetTokenization")
-                        .WithMany("TargetVerseMappingTokenizationsAssociations")
-                        .HasForeignKey("TargetTokenizationId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
-                        .WithMany("VerseMappingTokenizationsAssociations")
-                        .HasForeignKey("VerseMappingId");
-
-                    b.Navigation("SourceTokenization");
-
-                    b.Navigation("TargetTokenization");
-
-                    b.Navigation("VerseMapping");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingVerseAssociation", b =>
@@ -977,7 +983,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Navigation("TargetParallelCorpusVersions");
 
-                    b.Navigation("Tokenizations");
+                    b.Navigation("TokenizedCorpora");
 
                     b.Navigation("Verses");
 
@@ -1000,6 +1006,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpusVersion", b =>
                 {
+                    b.Navigation("ParallelTokenizedCopora");
+
                     b.Navigation("VerseMappings");
                 });
 
@@ -1012,11 +1020,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("TargetAlignmentTokenPairs");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Tokenization", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
                 {
-                    b.Navigation("SourceVerseMappingTokenizationsAssociations");
+                    b.Navigation("SourceParallelTokenizedCorpus");
 
-                    b.Navigation("TargetVerseMappingTokenizationsAssociations");
+                    b.Navigation("TargetParallelTokenizedCorpus");
 
                     b.Navigation("Tokens");
                 });
@@ -1035,8 +1043,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
                 {
-                    b.Navigation("VerseMappingTokenizationsAssociations");
-
                     b.Navigation("VerseMappingVerseAssociations");
                 });
 #pragma warning restore 612, 618

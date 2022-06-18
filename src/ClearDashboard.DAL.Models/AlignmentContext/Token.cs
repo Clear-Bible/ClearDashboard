@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Verse? Verse { get; set; }
 
         public Guid TokenizationId { get; set; }
-        public virtual Tokenization? Tokenization { get; set; }
+        public virtual TokenizedCorpus? Tokenization { get; set; }
 
         public string? Text { get; set; }
 
