@@ -41,9 +41,9 @@ namespace ClearDashboard.DAL.Tests
                 await context.SaveChangesAsync();
 
                 var projectInfo = new ProjectInfo
-            {
-                IsRtl = true,
-                ProjectName = projectName
+                {
+                    IsRtl = true,
+                    ProjectName = projectName
                 };
 
                 context.ProjectInfos.Add(projectInfo);
@@ -62,13 +62,18 @@ namespace ClearDashboard.DAL.Tests
 
                 Assert.Equal(2, context.ProjectInfos.Count());
 
-                roundTrippedProject = context.ProjectInfos.OrderByDescending(project => project.Created).FirstOrDefault();
+                roundTrippedProject =
+                    context.ProjectInfos.OrderByDescending(project => project.Created).FirstOrDefault();
 
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
                 Assert.NotEqual(roundTrippedProject.Id, projectInfo.Id);
 
 
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
             }
             finally
             {
