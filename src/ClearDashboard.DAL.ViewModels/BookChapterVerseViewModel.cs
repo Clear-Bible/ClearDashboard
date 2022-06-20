@@ -87,7 +87,7 @@ namespace ClearDashboard.DAL.ViewModels
                     BookNum = GetIntBookNumFromBookName(value);
                     NotifyOfPropertyChange(nameof(Book));
                     NotifyOfPropertyChange(nameof(BookName));
-                    NotifyOfPropertyChange(nameof(VerseLocationId));
+                    NotifyOfPropertyChange(nameof(BBBCCCVVV));
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace ClearDashboard.DAL.ViewModels
 
                     Entity.Chapter = value;
                     NotifyOfPropertyChange(nameof(Chapter));
-                    NotifyOfPropertyChange(nameof(VerseLocationId));
+                    NotifyOfPropertyChange(nameof(BBBCCCVVV));
                 }
             }
         }
@@ -144,7 +144,7 @@ namespace ClearDashboard.DAL.ViewModels
                 NotifyOfPropertyChange(nameof(Verse));
                 NotifyOfPropertyChange(nameof(VerseNum));
                 NotifyOfPropertyChange(nameof(VerseIdText));
-                NotifyOfPropertyChange(nameof(VerseLocationId));
+                NotifyOfPropertyChange(nameof(BBBCCCVVV));
             }
         }
 
@@ -159,9 +159,8 @@ namespace ClearDashboard.DAL.ViewModels
         /// <summary>
         /// A string with the Clear.Bible format of verse location ID. It is automatically calculated. 
         /// </summary>
-        public string VerseLocationId => Concat(Book, ChapterIdText, VerseIdText);
-
-
+        // ReSharper disable once InconsistentNaming
+        public string BBBCCCVVV => Concat(Book, ChapterIdText, VerseIdText);
 
         /// <summary>
         /// Based on the properties of this object, it returns the complete verse location ID. Modified function for compatibility.
@@ -169,7 +168,7 @@ namespace ClearDashboard.DAL.ViewModels
         /// <returns>A string with the Clear.Bible format of verse location ID.</returns>
         public string GetVerseId()
         {
-            return VerseLocationId;
+            return BBBCCCVVV;
         }
 
         /// <summary>

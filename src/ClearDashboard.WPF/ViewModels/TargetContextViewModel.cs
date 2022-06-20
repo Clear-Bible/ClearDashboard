@@ -378,7 +378,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //                        _isOT = false;
             //                    }
             //                }
-            //            } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
+            //            } else if (CurrentBcv.BBBCCCVVV != pipeMessage.Text)
             //            {
             //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
             //                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
@@ -448,7 +448,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     }
                 }
-                else if (CurrentBcv.VerseLocationId != newVerse)
+                else if (CurrentBcv.BBBCCCVVV != newVerse)
                 {
                     CurrentBcv.SetVerseFromId(newVerse);
                     FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();

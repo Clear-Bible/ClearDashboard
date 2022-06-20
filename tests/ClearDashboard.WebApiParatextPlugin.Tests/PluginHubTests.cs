@@ -19,7 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
            
         }
-        
+
         [Fact]
         public async Task ReceiveMessageTest()
         {
@@ -54,7 +54,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 await connection.Start();
 
-                for (var i = 1; i <= 10; i++)
+                for (var i = 1; i <= 500; i++)
                 {
                     _ = await hubProxy.Invoke<string>("ping", "Message", i);
                 }
@@ -69,7 +69,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 await StopParatext();
             }
         }
-
-      
+        
     }
 }

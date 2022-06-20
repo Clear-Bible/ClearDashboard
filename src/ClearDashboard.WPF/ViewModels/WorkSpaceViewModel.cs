@@ -11,6 +11,7 @@ using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Extensions;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
 
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>
     {
+        private readonly IEventAggregator _eventAggregator;
+
         #region Member Variables
         private DashboardProjectManager ProjectManager { get; set; }
         private ILogger<WorkSpaceViewModel> Logger { get; set; }
@@ -345,12 +347,11 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-
-
         public WorkSpaceViewModel(INavigationService navigationService,
-            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager)
+            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
+            _eventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
@@ -460,6 +461,14 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            // subscribe to the event aggregator so that we can listen to messages
+            _eventAggregator.SubscribeOnUIThread(this);
+            
+            return base.OnActivateAsync(cancellationToken);
+        }
+
         protected override void OnViewAttached(object view, object context)
         {
             base.OnViewAttached(view, context);
@@ -480,6 +489,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 SelectedLayoutText = "Last Saved";
                 OkSave();
             }
+
+            // unsubscribe to the event aggregator
+            _eventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -1067,6 +1079,16 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion // Methods
+
+        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Verse != "" || CurrentBcv.BBBCCCVVV != message.Verse)
+            {
+                CurrentBcv.SetVerseFromId(message.Verse);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 
     public class WorkspaceLayoutNames

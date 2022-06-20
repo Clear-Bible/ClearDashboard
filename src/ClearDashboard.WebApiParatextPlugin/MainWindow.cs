@@ -35,7 +35,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IPluginChildWindow _parent;
 
         private IMediator _mediator;
-        private IHubContext _hubContext;
+        //private IHubContext _hubContext;
+        private IHubContext HubContext => GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
 
         private WebHostStartup WebHostStartup { get; set; }
 
@@ -128,8 +129,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             AppendText(Color.Green, $"OnAddedToParent called");
         }
 
-     
-
         public override string GetState()
         {
             // override required by base class, return null string.
@@ -140,7 +139,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
-           
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -189,7 +187,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, this);
                         WebHostStartup.Configuration(appBuilder);
                     });
-
+                
+                //_hubContext = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
                 AppendText(Color.Green, "Owin Web Api host started");
             }
             finally
@@ -228,14 +227,22 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="sender"></param>
         /// <param name="oldReference"></param>
         /// <param name="newReference"></param>
-        private void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
             if (newReference != _verseRef)
             {
                 _verseRef = newReference;
-                //StartWebApplication();
-               
-                // TODO:  send SignalR message when VerseRef changes.
+
+                try
+                {
+                    await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
+
+                }
+                catch (Exception ex)
+                {
+                    AppendText(Color.Red, $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+                }
+
             }
         }
 
@@ -245,7 +252,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Methods
 
 
-      
+
 
         /// <summary>
         /// Send out the Biblical Terms for ALL BTs
