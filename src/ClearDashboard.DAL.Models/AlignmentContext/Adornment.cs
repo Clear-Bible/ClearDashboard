@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Adornment : IdentifiableEntity
+    public class Adornment : SynchronizableTimestampedEntity
     {
        
         public Guid? TokenId { get; set; }

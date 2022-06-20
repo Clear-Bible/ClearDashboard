@@ -43,16 +43,16 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public int? SilBookNumber
+        public int? BookNumber
         {
-            get => Entity?.SilBookNumber;
+            get => Entity?.BookNumber;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.SilBookNumber = value;
+                    Entity.BookNumber = value;
                 }
-                NotifyOfPropertyChange(nameof(SilBookNumber));
+                NotifyOfPropertyChange(nameof(BookNumber));
             }
         }
 
@@ -82,18 +82,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTimeOffset Modified
-        {
-            get => Entity.Modified;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.Modified = value;
-                }
-                NotifyOfPropertyChange(nameof(Modified));
-            }
-        }
+     
 
         public Guid? CorpusId
         {
