@@ -62,13 +62,12 @@ namespace ClearDashboard.DAL.Tests
         protected async Task<RequestResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
             where TRequest : IRequest<RequestResult<TData>>
             where TResult : RequestResult<TData>, new()
-            where TData : class, new()
         {
             var mediator = ServiceProvider.GetService<IMediator>();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var result = new RequestResult<TData>(new TData(), false);
+            var result = new RequestResult<TData>(default(TData), false);
             try
             {
                 result = await mediator.Send(query);
