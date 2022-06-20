@@ -9,34 +9,126 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid
-        Height="40"
-        MinWidth="140"
-        Background="Aquamarine">
-        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+    <Grid Background="Aquamarine">
+        <Menu
+            x:Name="Menu"
+            MinWidth="50"
+            Background="DarkRed"
+            ItemsSource="{Binding MenuItems}">
+            <Menu.ItemContainerStyle>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="Command" Value="{Binding Command}" />
+                    <Setter Property="Background" Value="Aqua" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <EventSetter Event="SubmenuOpened" Handler="EventSetter_OnHandler" />
+                    <EventSetter Event="MouseMove" Handler="OnMouseMove_Handler" />
+                    <EventSetter Event="Click" Handler="Click_OnHandler" />
+                </Style>
+            </Menu.ItemContainerStyle>
+            <Menu.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:ClockUserControl}" ItemsSource="{Binding Path=MenuItems}">
+                    <StackPanel Background="CadetBlue" Orientation="Horizontal">
+                        <Button
+                            x:Name="DeleteButton"
+                             
+                            Click="DeleteButton_OnClick"
+                            Content="-"
+                            Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}" />
+                        <CheckBox
+                            Background="DarkGoldenrod"
+                            Checked="ToggleButton_OnChecked"
+                            IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
+                            Unchecked="ToggleButton_OnChecked"
+                            Visibility="{Binding ClockCheckBoxVisibility}" />
+                        <TextBox
+                            MinWidth="20"
+                            Background="ForestGreen"
+                            LostFocus="UIElement_OnLostFocus"
+                            Text="{Binding TextBoxText}"
+                            Visibility="{Binding ClockTextBoxVisibility}" />
+                        <TextBlock
+                            MinWidth="20"
+                            Background="Crimson"
+                            Text="{Binding NameTime}"
+                            Visibility="{Binding NameTimeVisibility}" />
+                        <TextBlock
+                            MinWidth="20"
+                            Text="{Binding Header, Mode=TwoWay}"
+                            Visibility="{Binding ClockTextBlockVisibility}" />
+                        <Button
+                            x:Name="AddButton"
+                            Click="ButtonBase_OnClick"
+                            Content="+"
+                            Visibility="{Binding ClockAddTimeZoneVisibility}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </Menu.ItemTemplate>
+        </Menu>
+
+        <!--
 
 
-            <ComboBox
-                Width="10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                VerticalContentAlignment="Center"
-                Background="Brown">
-                <ComboBoxItem Content="Name1 11:20am" />
-                <ComboBoxItem Content="iOS" />
-                <ComboBoxItem Content="Linux" />
-                <ComboBoxItem Content="Windows" />
-            </ComboBox>
-
-            <ComboBox Background="BlueViolet">
-                <ComboBoxItem Content="Name1 11:20am" IsSelected="True" />
-                <ComboBoxItem Content="iOS" />
-                <ComboBoxItem Content="Linux" />
-                <ComboBoxItem Content="Windows" />
-            </ComboBox>
+<Menu.Resources>
+                    <GridView x:Key="two">
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ClockList}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </Menu.Resources>
 
 
 
-        </StackPanel>
+
+
+<Popup
+            x:Name="ClockPopup"
+            Width="200"
+            Height="200"
+            HorizontalAlignment="Center">
+            <ListView x:Name="UtcListView">
+
+                <ListViewItem Background="Orange" Selected="ListBoxItem_OnSelected">A ListView</ListViewItem>
+                <ListViewItem Background="Orange" IsSelected="True">with several</ListViewItem>
+                <ListViewItem Background="Orange">items</ListViewItem>
+
+            </ListView>
+        </Popup>
+        <Expander Background="AliceBlue" Header="Expander">
+            <ListView x:Name="ClockListView">
+
+                <ListViewItem Height="25" Background="LightBlue" Selected="ListBoxItem_OnSelected">A ListView</ListViewItem>
+                <ListViewItem Height="100"  Background="LightBlue" IsSelected="True">with several</ListViewItem>
+                <ListViewItem Height="25" Background="LightBlue">items</ListViewItem>
+
+            </ListView>
+        </Expander>
+        <ComboBox
+            Width="10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Background="Brown">
+            <ComboBoxItem Content="Name1 11:20am" />
+            <ComboBoxItem Content="iOS" />
+            <ComboBoxItem Content="Linux" />
+            <ComboBoxItem Content="Windows" />
+        </ComboBox>
+        <ComboBox x:Name="ClockComboBox" Background="BlueViolet">
+            <ComboBoxItem
+                Width="100"
+                Content="Name1 11:20am"
+                IsSelected="True" />
+            <ComboBoxItem Content="iOS" />
+            <ComboBoxItem Content="Linux" />
+            <ComboBoxItem Content="Windows" />
+        </ComboBox>-->
+
+        <!--
+        -->
+
     </Grid>
 </UserControl>

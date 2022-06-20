@@ -155,14 +155,13 @@
                         x:Name="Timercontrol" 
                         VerticalAlignment="Top"
                         VerticalContentAlignment="Center"/>
+                    <userControls:ClockUserControl
+                        x:Name="Clockcontrol" Height="34"/>
 
-                    <!--<userControls:ClockUserControl
-                        x:Name="Clockcontrol" 
-                        VerticalAlignment="Center"
-                        VerticalContentAlignment="Center"/>-->
                 </StackPanel>
             </Grid>
         </Border>
+        
 
         <!--
             NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be
