@@ -469,19 +469,6 @@ namespace ClearDashboard.Wpf.ViewModels
             return base.OnActivateAsync(cancellationToken);
         }
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-
-            // hook up a reference to the windows dock manager
-            if (view is WorkSpaceView currentView)
-            {
-                _dockingManager = (DockingManager)currentView.FindName("dockManager");
-            }
-
-            Init();
-        }
-
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             if (_lastLayout == "")
@@ -495,6 +482,18 @@ namespace ClearDashboard.Wpf.ViewModels
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+
+            // hook up a reference to the windows dock manager
+            if (view is WorkSpaceView currentView)
+            {
+                _dockingManager = (DockingManager)currentView.FindName("dockManager");
+            }
+
+            Init();
+        }
 
         #endregion //Constructor
 
