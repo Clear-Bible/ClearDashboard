@@ -98,10 +98,8 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "SOURCECONTEXT";
         }
 
-
-        protected override void OnViewAttached(object view, object context)
+        protected override void OnViewReady(object view)
         {
-
             _currentVerse = _projectManager.CurrentVerse;
 
             CurrentBcv.SetVerseFromId(_currentVerse);
@@ -111,8 +109,8 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 ProcessSourceVerseData(CurrentBcv.BBBCCCVVV).ConfigureAwait(false);
             }).ConfigureAwait(false);
-            
-            base.OnViewAttached(view, context);
+
+            base.OnViewReady(view);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

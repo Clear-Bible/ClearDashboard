@@ -1032,6 +1032,7 @@ namespace ClearDashboard.Wpf.ViewModels
             if (ParatextSync && InComingChangesStarted == false)
             {
                 string verseId;
+                bool somethingChanged = false;
                 if (e.PropertyName == "BookNum")
                 {
                     // book switch so find the first chapter and verse for that book
@@ -1044,6 +1045,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         CalculateChapters();
                         CalculateVerses();
                         InComingChangesStarted = false;
+                        somethingChanged = true;
                     }
                 } else if (e.PropertyName == "Chapter")
                 {
@@ -1058,6 +1060,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                         CalculateVerses();
                         InComingChangesStarted = false;
+                        somethingChanged = true;
                     }
                 }
                 else if (e.PropertyName == "Verse")
@@ -1065,7 +1068,15 @@ namespace ClearDashboard.Wpf.ViewModels
                     InComingChangesStarted = true;
                     CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
                     InComingChangesStarted = false;
+                    somethingChanged = true;
                 }
+
+                if (somethingChanged)
+                {
+                    // send to the event aggregator for everyone else to hear about a verse change
+                    _eventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+                }
+
             }
         }
 
