@@ -190,6 +190,7 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 // The book number for use in the array used in the pull down list.
                 BookNum = bookNum;
+                BookName = GetShortBookNameFromBookNum(bookNumStr);
             }
             else
             {
@@ -553,6 +554,17 @@ namespace ClearDashboard.DAL.ViewModels
             }
 
             return bookName;
+        }
+
+        public static string GetShortBookNameFromBookNum(string value)
+        {
+            var bookList = GetBookIdDictionary();
+            if (bookList.ContainsKey(value))
+            {
+                return bookList[value];
+            }
+
+            return "";
         }
 
         public static Dictionary<string, string> GetBookIdDictionary()

@@ -11,7 +11,6 @@ using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly IEventAggregator _eventAggregator;
 
         #region Member Variables
-        private DashboardProjectManager ProjectManager { get; set; }
+        private DashboardProjectManager _projectManager { get; set; }
         private ILogger<WorkSpaceViewModel> Logger { get; set; }
         private INavigationService NavigationService { get; set; }
         private DashboardProject DashboardProject { get; }
@@ -78,7 +77,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public bool IsRtl { get; set; } = false;
 
-        private bool OutGoingChangesStarted { get; set; } = false;
+        private bool InComingChangesStarted { get; set; } = false;
 
         #endregion //Public Properties
 
@@ -122,16 +121,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-        private ObservableCollection<int> _verseNumbers = new();
-        public ObservableCollection<int> VerseNumbers
-        {
-            get => _verseNumbers;
-            set
-            {
-                _verseNumbers = value;
-                NotifyOfPropertyChange(() => VerseNumbers);
-            }
-        }
+        //private ObservableCollection<int> _verseNumbers = new();
+        //public ObservableCollection<int> VerseNumbers
+        //{
+        //    get => _verseNumbers;
+        //    set
+        //    {
+        //        _verseNumbers = value;
+        //        NotifyOfPropertyChange(() => VerseNumbers);
+        //    }
+        //}
 
         private Dictionary<string, string> _bcvDictionary;
         public Dictionary<string, string> BCVDictionary
@@ -144,28 +143,28 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<string> _bookNames = new();
-        public ObservableCollection<string> BookNames
-        {
-            get => _bookNames;
-            set
-            {
-                _bookNames = value;
-                NotifyOfPropertyChange(() => BookNames);
-            }
-        }
+        //private ObservableCollection<string> _bookNames = new();
+        //public ObservableCollection<string> BookNames
+        //{
+        //    get => _bookNames;
+        //    set
+        //    {
+        //        _bookNames = value;
+        //        NotifyOfPropertyChange(() => BookNames);
+        //    }
+        //}
 
 
-        private string _verseRef;
-        public string VerseRef
-        {
-            get => _verseRef;
-            set
-            {
-                _verseRef = value;
-                NotifyOfPropertyChange(() => VerseRef);
-            }
-        }
+        //private string _verseRef;
+        //public string VerseRef
+        //{
+        //    get => _verseRef;
+        //    set
+        //    {
+        //        _verseRef = value;
+        //        NotifyOfPropertyChange(() => VerseRef);
+        //    }
+        //}
 
         private string _windowIdToLoad;
         public string WindowIdToLoad
@@ -352,10 +351,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         {
             _eventAggregator = eventAggregator;
-            ProjectManager = projectManager;
+            _projectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
-            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            WindowFlowDirection = _projectManager.CurrentLanguageFlowDirection;
 
 #pragma warning disable CA1416 // Validate platform compatibility
             Themes = new List<Tuple<string, Theme>>
@@ -394,10 +393,6 @@ namespace ClearDashboard.Wpf.ViewModels
                     DashboardProject = (Application.Current as App)?.SelectedDashboardProject;
                 }
             }
-
-
-            // Subscribe to changes of the Book Chapter Verse data object.
-            CurrentBcv.PropertyChanged += BcvChanged;
         }
 
         /// <summary>
@@ -412,53 +407,6 @@ namespace ClearDashboard.Wpf.ViewModels
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
-        }
-
-        public async void Init()
-        {
-
-            ReBuildMenu();
-
-           
-            Items.Clear();
-            // documents
-            await ActivateItemAsync<DashboardViewModel>();
-            await ActivateItemAsync<ConcordanceViewModel>();
-            await ActivateItemAsync<StartPageViewModel>();
-            await ActivateItemAsync<AlignmentToolViewModel>();
-            await ActivateItemAsync<TreeDownViewModel>();
-            // tools
-          
-            await ActivateItemAsync<BiblicalTermsViewModel>();
-            await ActivateItemAsync<WordMeaningsViewModel>();
-            await ActivateItemAsync<SourceContextViewModel>();
-            await ActivateItemAsync<TargetContextViewModel>();
-            await ActivateItemAsync<NotesViewModel>();
-            await ActivateItemAsync<PinsViewModel>();
-            await ActivateItemAsync<TextCollectionViewModel>();
-
-
-            // remove all existing windows
-            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
-
-            if (Settings.Default.LastLayout == "")
-            {
-                // bring up the default layout
-                LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
-            }
-            else
-            {
-                // check to see if the layout exists
-                string layoutPath = Settings.Default.LastLayout;
-                if (File.Exists(layoutPath))
-                {
-                    LoadLayout(layoutSerializer, layoutPath);
-                }
-                else
-                {
-                    LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
-                }
-            }
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -495,6 +443,67 @@ namespace ClearDashboard.Wpf.ViewModels
             Init();
         }
 
+        public async void Init()
+        {
+            ReBuildMenu();
+
+           
+            Items.Clear();
+            // documents
+            await ActivateItemAsync<DashboardViewModel>();
+            await ActivateItemAsync<ConcordanceViewModel>();
+            await ActivateItemAsync<StartPageViewModel>();
+            await ActivateItemAsync<AlignmentToolViewModel>();
+            await ActivateItemAsync<TreeDownViewModel>();
+            // tools
+            await ActivateItemAsync<BiblicalTermsViewModel>();
+            await ActivateItemAsync<WordMeaningsViewModel>();
+            await ActivateItemAsync<SourceContextViewModel>();
+            await ActivateItemAsync<TargetContextViewModel>();
+            await ActivateItemAsync<NotesViewModel>();
+            await ActivateItemAsync<PinsViewModel>();
+            await ActivateItemAsync<TextCollectionViewModel>();
+
+
+            // remove all existing windows
+            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+
+            if (Settings.Default.LastLayout == "")
+            {
+                // bring up the default layout
+                LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
+            }
+            else
+            {
+                // check to see if the layout exists
+                string layoutPath = Settings.Default.LastLayout;
+                if (File.Exists(layoutPath))
+                {
+                    LoadLayout(layoutSerializer, layoutPath);
+                }
+                else
+                {
+                    LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
+                }
+            }
+
+            // grab the dictionary of all the verse lookups
+            BCVDictionary = _projectManager.ParatextProject.BcvDictionary;
+
+            InComingChangesStarted = true;
+            
+            // set the CurrentBcv prior to listning to the event
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+
+            CalculateBooks();
+            CalculateChapters();
+            CalculateVerses();
+            InComingChangesStarted = false;
+
+            // Subscribe to changes of the Book Chapter Verse data object.
+            CurrentBcv.PropertyChanged += BcvChanged;
+        }
+
         #endregion //Constructor
 
         #region Methods
@@ -526,9 +535,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // get the project layouts
-            if (ProjectManager is not null)
+            if (_projectManager is not null)
             {
-                path = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+                path = Path.Combine(_projectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
                 if (Directory.Exists(path))
                 {
                     var files = Directory.GetFiles(path, "*.Layout.config");
@@ -640,7 +649,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         return;
                     }
 
-                    var path = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+                    var path = Path.Combine(_projectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
 
                     // check for the presence of a "shared" directory under the project.  NOTE: IS CASE SENSITIVE
                     // AND MUST BE LOWERCASE FOR MERCURIAL
@@ -842,7 +851,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
 
                     NotifyOfPropertyChange(() => Documents);
-                    NotifyOfPropertyChange(() => BookNames);
+                    //NotifyOfPropertyChange(() => BookNames);
                 }
             }
 
@@ -1020,12 +1029,64 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void BcvChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (ParatextSync && OutGoingChangesStarted == false)
+            if (ParatextSync && InComingChangesStarted == false)
             {
-                var newVerse = CurrentBcv.GetVerseId();
+                string verseId;
+                if (e.PropertyName == "BookNum")
+                {
+                    // book switch so find the first chapter and verse for that book
+                    verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
+                    if (verseId != "")
+                    {
+                        InComingChangesStarted = true;
+                        CurrentBcv.SetVerseFromId(verseId);
+
+                        CalculateChapters();
+                        CalculateVerses();
+                        InComingChangesStarted = false;
+                    }
+                } else if (e.PropertyName == "Chapter")
+                {
+                    var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
+
+                    // chapter switch so find the first verse for that book and chapter
+                    verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
+                    if (verseId != "")
+                    {
+                        InComingChangesStarted = true;
+                        CurrentBcv.SetVerseFromId(verseId);
+
+                        CalculateVerses();
+                        InComingChangesStarted = false;
+                    }
+                }
+                else if (e.PropertyName == "Verse")
+                {
+                    InComingChangesStarted = true;
+                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                    InComingChangesStarted = false;
+                }
             }
         }
 
+        private void CalculateBooks()
+        {
+            CurrentBcv.BibleBookList.Clear();
+
+            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0,3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var book in books)
+            {
+                var bookId = book.Substring(0, 3);
+
+                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                CurrentBcv.BibleBookList.Add(bookName);
+            }
+            
+        }
 
         private void CalculateChapters()
         {
@@ -1077,17 +1138,22 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        #endregion // Methods
-
         public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            if (message.Verse != "" || CurrentBcv.BBBCCCVVV != message.Verse)
+            if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
+                InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
+
+                CalculateChapters();
+                CalculateVerses();
+                InComingChangesStarted = false;
             }
 
             return Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 
     public class WorkspaceLayoutNames

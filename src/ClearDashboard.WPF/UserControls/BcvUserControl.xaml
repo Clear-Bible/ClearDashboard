@@ -1,12 +1,10 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.UserControls.BcvUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:ClearDashboard.Wpf.Models"
     d:DesignHeight="50"
     d:DesignWidth="450"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -19,7 +17,6 @@
     mc:Ignorable="d">
     <Grid
         Name="LayoutRoot"
-        Grid.Row="1"
         HorizontalAlignment="Stretch">
         <!--  DataContext="{Binding ElementName=parent}"  -->
         <Grid.RowDefinitions>
@@ -92,15 +89,15 @@
             Text="VERSE" />
 
         <ComboBox
-            x:Name="cboBook"
+            x:Name="CboBook"
             Grid.Row="1"
             Grid.Column="2"
             MinWidth="60"
             Margin="5,0,5,3"
-            ItemsSource="{Binding BookNames, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            ItemsSource="{Binding CurrentBcv.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectedValue="{Binding CurrentBcv.BookName, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
         <ComboBox
-            x:Name="cboChapter"
+            x:Name="CboChapter"
             Grid.Row="1"
             Grid.Column="5"
             MinWidth="30"
@@ -108,7 +105,7 @@
             ItemsSource="{Binding CurrentBcv.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
             SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
         <ComboBox
-            x:Name="cboVerse"
+            x:Name="CboVerse"
             Grid.Row="1"
             Grid.Column="8"
             MinWidth="30"
@@ -118,14 +115,15 @@
 
         <!--  SYNC BUTTON  -->
         <ToggleButton
-            x:Name="toogle"
+            x:Name="Toogle"
             Grid.Row="1"
+            Grid.Column="0"
             IsChecked="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource MaterialDesignSwitchToggleButton}" />
 
         <!--  BOOK LEFT ARROW  -->
         <Button
-            x:Name="btnBookLeft"
+            x:Name="BtnBookLeft"
             Grid.Row="1"
             Grid.Column="1"
             Width="15"
@@ -147,7 +145,7 @@
         </Button>
         <!--  BOOK RIGHT ARROW  -->
         <Button
-            x:Name="btnBookRight"
+            x:Name="BtnBookRight"
             Grid.Row="1"
             Grid.Column="3"
             Width="15"
@@ -174,7 +172,7 @@
 
         <!--  CHAPTER LEFT ARROW  -->
         <Button
-            x:Name="btnChapterLeft"
+            x:Name="BtnChapterLeft"
             Grid.Row="1"
             Grid.Column="4"
             Width="15"
@@ -200,7 +198,7 @@
         </Button>
         <!--  CHAPTER RIGHT ARROW  -->
         <Button
-            x:Name="btnChapterRight"
+            x:Name="BtnChapterRight"
             Grid.Row="1"
             Grid.Column="6"
             Width="15"
@@ -228,7 +226,7 @@
 
         <!--  VERSE LEFT ARROW  -->
         <Button
-            x:Name="btnVerseLeft"
+            x:Name="BtnVerseLeft"
             Grid.Row="1"
             Grid.Column="7"
             Width="15"
@@ -254,7 +252,7 @@
         </Button>
         <!--  VERSE RIGHT ARROW  -->
         <Button
-            x:Name="btnVerseRight"
+            x:Name="BtnVerseRight"
             Grid.Row="1"
             Grid.Column="9"
             Width="15"
@@ -277,6 +275,5 @@
                 FontWeight="ExtraBold"
                 Text="⏵" />
         </Button>
-
     </Grid>
 </UserControl>
