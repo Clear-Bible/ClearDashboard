@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Tests
         {
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
-            var projectName = $"Alignment{random.Next(1, 1000)}";//Guid.NewGuid().ToString();
+            var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             var assets = await factory?.Get(projectName)!;
