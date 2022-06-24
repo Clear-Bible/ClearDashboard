@@ -47,7 +47,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
-        public virtual DbSet<NoteAssociation> DataAssociations => Set<NoteAssociation>();
+        public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
