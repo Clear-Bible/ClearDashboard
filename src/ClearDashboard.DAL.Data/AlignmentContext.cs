@@ -46,11 +46,11 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
-        public virtual DbSet<CorpusVersion> CorpaVersions => Set<CorpusVersion>();
+        public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
         public virtual DbSet<NoteAssociation> DataAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
-        public virtual DbSet<ParallelCorpusVersion> ParallelCorpaVersions => Set<ParallelCorpusVersion>();
+        public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<ProjectInfo> ProjectInfos => Set<ProjectInfo>();
         public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
@@ -60,7 +60,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
         public virtual DbSet<VerseMappingVerseAssociation> VerseMappingVerseAssociations => Set<VerseMappingVerseAssociation>();
-        public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();
+                             
+        //public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();
  
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -212,25 +213,15 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(e=>e.TargetAlignmentTokenPairs);
 
 
-            modelBuilder.Entity<ParallelCorpusVersion>()
-                .HasOne(e => e.SourceCorpus)
-                .WithMany(e => e.SourceParallelCorpusVersions);
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasOne(e => e.SourceTokenizedCorpus)
+                .WithMany(e => e.SourceParallelCorpora);
 
 
-            modelBuilder.Entity<ParallelCorpusVersion>()
-                .HasOne(e => e.TargetCorpus)
-                .WithMany(e => e.TargetParallelCorpusVersions);
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasOne(e => e.TargetTokenizedCorpus)
+                .WithMany(e => e.TargetParallelCorpora);
 
-
-      
-            modelBuilder.Entity<ParallelTokenizedCorpus>()
-                .HasOne(e => e.SourceTokenization)
-                .WithMany(e => e.SourceParallelTokenizedCorpus);
-
-
-            modelBuilder.Entity<ParallelTokenizedCorpus>()
-                .HasOne(e => e.TargetTokenization)
-                .WithMany(e => e.TargetParallelTokenizedCorpus);
 
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method

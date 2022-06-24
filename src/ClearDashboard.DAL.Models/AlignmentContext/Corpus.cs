@@ -8,18 +8,17 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper disable VirtualMemberCallInConstructor
             TokenizedCorpora = new HashSet<TokenizedCorpus>();
             Verses = new HashSet<Verse>();
-            SourceParallelCorpusVersions = new HashSet<ParallelCorpusVersion>();
-            TargetParallelCorpusVersions = new HashSet<ParallelCorpusVersion>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
+        public bool IsRtl { get; set; }
+        public string? Name { get; set; }
+        public string? Language { get; set; }
+        public string? ParatextGuid { get; set; }
+        public virtual CorpusType CorpusType { get; set; }
+
         public virtual ICollection<Verse> Verses { get; set; }
-        public virtual ICollection<CorpusVersion> Versions { get; set; }
         public virtual ICollection<TokenizedCorpus> TokenizedCorpora { get; set; }
-
-        public virtual ICollection<ParallelCorpusVersion> SourceParallelCorpusVersions { get; set; }
-        public virtual ICollection<ParallelCorpusVersion> TargetParallelCorpusVersions { get; set; }
-
 
     }
 }

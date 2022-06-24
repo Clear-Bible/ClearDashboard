@@ -12,7 +12,7 @@ public class VerseMapping : SynchronizableTimestampedEntity
     }
 
     public virtual Guid ParallelCorpusVersionId { get; set; }
-    public virtual ParallelCorpusVersion ParallelCorpusVersion { get; set; }
+    public virtual ParallelCorpus ParallelCorpus { get; set; }
 
     public virtual ICollection<VerseMappingVerseAssociation> VerseMappingVerseAssociations { get; set; }
 }

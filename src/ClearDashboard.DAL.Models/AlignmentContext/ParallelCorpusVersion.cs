@@ -2,28 +2,30 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class ParallelCorpusVersion : SynchronizableTimestampedEntity
-{
-    public ParallelCorpusVersion()
-    {
-        // ReSharper disable VirtualMemberCallInConstructor
-        VerseMappings = new HashSet<VerseMapping>();
-        ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
-        // ReSharper restore VirtualMemberCallInConstructor
-    }
+//public class ParallelCorpusVersion : SynchronizableTimestampedEntity
+//{
+//    public ParallelCorpusVersion()
+//    {
+//        // ReSharper disable VirtualMemberCallInConstructor
+//        VerseMappings = new HashSet<VerseMapping>();
+//        //ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
+//        AlignmentSets = new HashSet<AlignmentSet>();
+//        // ReSharper restore VirtualMemberCallInConstructor
+//    }
 
 
-    public AlignmentType AlignmentType { get; set; }
+//    public AlignmentType AlignmentType { get; set; }
 
-    public DateTimeOffset LastGenerated { get; set; }
+//    public DateTimeOffset LastGenerated { get; set; }
 
-    public Guid SourceCorpusId { get; set; }
-    [ForeignKey(nameof(SourceCorpusId))]
-    public virtual Corpus? SourceCorpus { get; set; }
+//    public Guid SourceTokenizedCorpusId { get; set; }
+//    [ForeignKey(nameof(SourceTokenizedCorpusId))]
+//    public virtual TokenizedCorpus? SourceTokenizedCorpus { get; set; }
 
-    public Guid TargetCorpusId { get; set; }
-    [ForeignKey(nameof(TargetCorpusId))]
-    public virtual Corpus? TargetCorpus { get; set; }
-    public virtual ICollection<VerseMapping> VerseMappings { get; set; }
-    public virtual ICollection<ParallelTokenizedCorpus> ParallelTokenizedCopora { get; set; }
-}
+//    public Guid TargetTokenizedCorpusId { get; set; }
+//    [ForeignKey(nameof(TargetTokenizedCorpusId))]
+//    public virtual TokenizedCorpus? TargetTokenizedCorpus { get; set; }
+
+//    public virtual ICollection<VerseMapping> VerseMappings { get; set; }
+//    public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
+//}
