@@ -20,6 +20,18 @@ namespace ClearDashboard.DAL.Tests
         }
 
         [Fact]
+        public async Task CreateAlignmentDatabase()
+        {
+            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var random = new Random((int)DateTime.Now.Ticks);
+            var projectName = $"Alignment{random.Next(1, 1000)}";//Guid.NewGuid().ToString();
+            Assert.NotNull(factory);
+
+            var assets = await factory?.Get(projectName)!;
+            var context = assets.AlignmentContext;
+        }
+
+        [Fact]
         public async Task ProjectInfoAddTest()
         {
             var userProvider = ServiceProvider.GetService<IUserProvider>();
