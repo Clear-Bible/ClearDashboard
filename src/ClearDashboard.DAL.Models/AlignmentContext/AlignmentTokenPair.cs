@@ -10,6 +10,8 @@ public class AlignmentTokenPair : SynchronizableTimestampedEntity
     public virtual AlignmentType AlignmentType { get; set; }
     public virtual AlignmentState AlignmentState { get; set; }
 
+    public virtual double Probability { get; set; }
+
     [ForeignKey("SourceTokenId")]
     public virtual Token? SourceToken { get; set; }
     [ForeignKey("TargetTokenId")]

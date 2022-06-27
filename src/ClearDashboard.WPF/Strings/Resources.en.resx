@@ -490,6 +490,9 @@
   <data name="Landing_settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+	<data name="AlignmentSample" xml:space="preserve">
+    <value>Alignment Sample</value>
+  </data>
   <data name="Daniel" xml:space="preserve">
     <value>Daniel</value>
   </data>

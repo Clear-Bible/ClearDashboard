@@ -139,7 +139,7 @@ namespace ClearDashboard.DAL.ViewModels
         //}
 
 
-        
+        // TODO:  This needs to be removed and the code that refers to it refacotred.
         public string? VerseBBCCCVVV
         {
             get => Entity?.VerseBBBCCCVVV;
@@ -167,7 +167,7 @@ namespace ClearDashboard.DAL.ViewModels
         //}
 
 
-        public string? BookStr => Entity?.BookStr;
+        public string? BookStr => Entity?.SilBookAbbreviation;
 
         public string? ChapterStr => Entity?.ChapterStr;
 

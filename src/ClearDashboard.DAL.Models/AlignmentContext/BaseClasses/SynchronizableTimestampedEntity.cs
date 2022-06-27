@@ -6,7 +6,6 @@ public class SynchronizableTimestampedEntity : SynchronizableEntity
     {
         var utcNow = DateTimeOffset.UtcNow;
         Created = utcNow;
-        //Modified = utcNow;
     }
 
     /// <summary>
@@ -14,8 +13,4 @@ public class SynchronizableTimestampedEntity : SynchronizableEntity
     /// </summary>
     public DateTimeOffset Created { get; set; }
 
-    /// <summary>
-    /// Gets or sets the time and date that the entity was last modified (in UTC).
-    /// </summary>
-    //public DateTimeOffset Modified { get; set; }
 }

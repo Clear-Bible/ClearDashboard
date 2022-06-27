@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 
 namespace ClearDashboard.DataAccessLayer.Data
@@ -13,8 +14,8 @@ namespace ClearDashboard.DataAccessLayer.Data
     public class AlignmentContext : DbContext
     {
         private readonly ILogger<AlignmentContext>? _logger;
-        public readonly IUserProvider UserProvider;
-
+        public  IUserProvider? UserProvider { get; set; }
+        public string DatabasePath { get; set; }
         public AlignmentContext() : this(string.Empty)
         {
            
@@ -45,28 +46,23 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
-        public virtual DbSet<CorpusVersion> CorpaVersions => Set<CorpusVersion>();
-        public virtual DbSet<NoteAssociation> DataAssociations => Set<NoteAssociation>();
-        //public virtual DbSet<InterlinearNote> InterlinearNotes => Set<InterlinearNote>();
+        public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
+        public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
-        public virtual DbSet<ParallelCorpusVersion> ParallelCorpaVersions => Set<ParallelCorpusVersion>();
-        //public virtual DbSet<ParallelVersesLink> ParallelVersesLinks => Set<ParallelVersesLink>();
+        public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<ProjectInfo> ProjectInfos => Set<ProjectInfo>();
         public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
-        public virtual DbSet<Tokenization> Tokenizations => Set<Tokenization>();
+        public virtual DbSet<TokenizedCorpus> TokenizedCopora => Set<TokenizedCorpus>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
         public virtual DbSet<VerseMappingVerseAssociation> VerseMappingVerseAssociations => Set<VerseMappingVerseAssociation>();
-        public virtual DbSet<VerseMappingTokenizationsAssociation> VerseMappingTokenizationsAssociations => Set<VerseMappingTokenizationsAssociation>();
-
-       // public virtual DbSet<VerseLink> VerseLinks => Set<VerseLink>();
-
-
-        public string DatabasePath { get; set; }
+                             
+        //public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();
+ 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -112,6 +108,12 @@ namespace ClearDashboard.DataAccessLayer.Data
             return await AddAsync(newEntity);
         }
 
+        private TEntity CreateCopy<TEntity>(TEntity entity)
+        {
+            var json = JsonConvert.SerializeObject(entity);
+            return JsonConvert.DeserializeObject<TEntity>(json);
+        }
+
         private static TEntity CreateEntityCopy<TEntity>(TEntity entity) where TEntity : class, new()
         {
             var newEntity = new TEntity();
@@ -125,7 +127,14 @@ namespace ClearDashboard.DataAccessLayer.Data
                 {
                     if (propertyInfo.PropertyType == typeof(ICollection<>))
                     {
-                        var collection = propertyInfo.GetValue(entity, null);
+                       
+                        var collectionObject = propertyInfo.GetValue(entity, null);
+                        var collection = Convert.ChangeType(collectionObject, propertyInfo.PropertyType);
+                        //foreach (var o in collection)
+                        //{
+                        //    //var e = CreateEntityCopy<TEntity>(o);
+                        //}
+
                     }
                     else
                     {
@@ -204,34 +213,15 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(e=>e.TargetAlignmentTokenPairs);
 
 
-            modelBuilder.Entity<ParallelCorpusVersion>()
-                .HasOne(e => e.SourceCorpus)
-                .WithMany(e => e.SourceParallelCorpusVersions);
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasOne(e => e.SourceTokenizedCorpus)
+                .WithMany(e => e.SourceParallelCorpora);
 
 
-            modelBuilder.Entity<ParallelCorpusVersion>()
-                .HasOne(e => e.TargetCorpus)
-                .WithMany(e => e.TargetParallelCorpusVersions);
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasOne(e => e.TargetTokenizedCorpus)
+                .WithMany(e => e.TargetParallelCorpora);
 
-
-            //modelBuilder.Entity<Tokenization>()
-            //    .HasMany(e => e.VerseMappingTokenizationsAssociations)
-            //    .WithOne(e=>e.SourceTokenization);
-
-
-            //modelBuilder.Entity<Tokenization>()
-            //    .HasMany(e => e.VerseMappingTokenizationsAssociations)
-            //    .WithOne(e => e.TargetTokenization);
-
-
-            modelBuilder.Entity<VerseMappingTokenizationsAssociation>()
-                .HasOne(e => e.SourceTokenization)
-                .WithMany(e => e.SourceVerseMappingTokenizationsAssociations);
-
-
-            modelBuilder.Entity<VerseMappingTokenizationsAssociation>()
-                .HasOne(e => e.TargetTokenization)
-                .WithMany(e => e.TargetVerseMappingTokenizationsAssociations);
 
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method

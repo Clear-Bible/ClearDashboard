@@ -54,7 +54,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 await connection.Start();
 
-                for (var i = 1; i <= 500; i++)
+                var numberOfMessages = 10;
+
+                for (var i = 1; i <= numberOfMessages; i++)
                 {
                     _ = await hubProxy.Invoke<string>("ping", "Message", i);
                 }
@@ -62,7 +64,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 Output.WriteLine($"Received {_messages.Count} messages.");
 
                 Assert.NotEmpty(_messages);
-                Assert.Equal(500, _messages.Count);
+                Assert.Equal(numberOfMessages, _messages.Count);
             }
             finally
             {

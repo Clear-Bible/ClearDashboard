@@ -156,7 +156,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             foreach (var bookName in project.BookNames)
             {
                 var data = bookName.Value;
-                if (data.BBB.PadLeft(3, '0') == verse.BookStr)
+                if (data.BBB.PadLeft(3, '0') == verse.SilBookAbbreviation)
                 {
                     prefix = data.fileID;
                     break;

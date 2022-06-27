@@ -54,8 +54,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IPluginChildWindow _parent;
 
         private IMediator _mediator;
-        //private IHubContext _hubContext;
         private IHubContext HubContext => GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+
 
         private WebHostStartup WebHostStartup { get; set; }
 
@@ -84,7 +84,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         }
 
-
+     
         #region Please leave these for debugging plug-in start up crashes
         private static void ThreadExceptionEventHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
@@ -212,8 +212,9 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, this);
                         WebHostStartup.Configuration(appBuilder);
                     });
-                
-                //_hubContext = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+
+              
+
                 AppendText(Color.Green, "Owin Web Api host started");
             }
             finally
@@ -259,7 +260,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 //SetVerseRef(newReference, reloadWebHost: true);
 
                 _verseRef = newReference;
-
+             
                 try
                 {
                     await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
@@ -269,7 +270,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     AppendText(Color.Red, $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
                 }
-
+              
             }
         }
 
