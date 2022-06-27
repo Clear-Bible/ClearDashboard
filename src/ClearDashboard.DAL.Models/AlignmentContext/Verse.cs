@@ -8,10 +8,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Verse()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            Tokens = new HashSet<Token>();
+            TokenVerseAssociations = new HashSet<TokenVerseAssociation>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
-        
+
         // Add unique constraint for VerseNumber, SilBookNumber and ChapterNumber
         public int? VerseNumber { get; set; }
 
@@ -20,13 +20,16 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? ChapterNumber { get; set; }
 
         public string? VerseText { get; set; }
+
         public Guid? CorpusId { get; set; }
         public virtual Corpus? Corpus { get; set; }
 
-       // public Guid? TokenId { get; set; }
-        public virtual ICollection<Token> Tokens { get; set; }
-      
 
+        public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
+
+
+
+        // TODO:  These need to be removed which is going to cause refactoring in many view models.
         private string? _verseBbbcccvvv = string.Empty;
         // ReSharper disable once InconsistentNaming
         public string? VerseBBBCCCVVV
@@ -44,11 +47,11 @@ namespace ClearDashboard.DataAccessLayer.Models
 
 
         [NotMapped]
-        public string? BookStr
+        public string? SilBookAbbreviation
         {
             get
             {
-                var book = VerseBBBCCCVVV?.PadLeft(9,'0').Substring(0, 3);
+                var book = VerseBBBCCCVVV?.PadLeft(9, '0').Substring(0, 3);
                 return book;
             }
         }
@@ -73,12 +76,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             }
         }
 
-        // CODE REVIEW:  Is VerseId needed?  It's confusing WRT to EF Core naming conventions.
-       // public string VerseId { get; set; } = string.Empty;
-
-        public bool Found { get; set; }
-
-        // ReSharper disable once InconsistentNaming
+        //ReSharper disable once InconsistentNaming
         public void SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
             VerseBBBCCCVVV = bbbcccvvv.PadLeft(9, '0');

@@ -2,25 +2,30 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class ParallelCorpusVersion : SynchronizableTimestampedEntity
-{
-    public ParallelCorpusVersion()
-    {
-        // ReSharper disable VirtualMemberCallInConstructor
-        VerseMappings = new HashSet<VerseMapping>();
-        // ReSharper restore VirtualMemberCallInConstructor
-    }
+//public class ParallelCorpusVersion : SynchronizableTimestampedEntity
+//{
+//    public ParallelCorpusVersion()
+//    {
+//        // ReSharper disable VirtualMemberCallInConstructor
+//        VerseMappings = new HashSet<VerseMapping>();
+//        //ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
+//        AlignmentSets = new HashSet<AlignmentSet>();
+//        // ReSharper restore VirtualMemberCallInConstructor
+//    }
 
-    public Guid SourceCorpusId { get; set; }
-    public Guid TargetCorpusId { get; set; }
 
-    public AlignmentType AlignmentType { get; set; }
-  
-    public DateTimeOffset LastGenerated { get; set; }
+//    public AlignmentType AlignmentType { get; set; }
 
-    [ForeignKey("SourceCorpusId")]
-    public virtual Corpus? SourceCorpus { get; set; }
-    [ForeignKey("TargetCorpusId")]
-    public virtual Corpus? TargetCorpus { get; set; }
-     public virtual ICollection<VerseMapping> VerseMappings { get; set; }
-}
+//    public DateTimeOffset LastGenerated { get; set; }
+
+//    public Guid SourceTokenizedCorpusId { get; set; }
+//    [ForeignKey(nameof(SourceTokenizedCorpusId))]
+//    public virtual TokenizedCorpus? SourceTokenizedCorpus { get; set; }
+
+//    public Guid TargetTokenizedCorpusId { get; set; }
+//    [ForeignKey(nameof(TargetTokenizedCorpusId))]
+//    public virtual TokenizedCorpus? TargetTokenizedCorpus { get; set; }
+
+//    public virtual ICollection<VerseMapping> VerseMappings { get; set; }
+//    public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
+//}

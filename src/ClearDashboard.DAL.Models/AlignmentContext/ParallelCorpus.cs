@@ -7,11 +7,26 @@ namespace ClearDashboard.DataAccessLayer.Models
         public ParallelCorpus()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            Versions = new HashSet<ParallelCorpusVersion>();
+            VerseMappings = new HashSet<VerseMapping>();
+            //ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
+            AlignmentSets = new HashSet<AlignmentSet>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-       
-        public virtual ICollection<ParallelCorpusVersion> Versions { get; set; }
+
+        public AlignmentType AlignmentType { get; set; }
+
+        public DateTimeOffset LastGenerated { get; set; }
+
+        public Guid SourceTokenizedCorpusId { get; set; }
+        [ForeignKey(nameof(SourceTokenizedCorpusId))]
+        public virtual TokenizedCorpus? SourceTokenizedCorpus { get; set; }
+
+        public Guid TargetTokenizedCorpusId { get; set; }
+        [ForeignKey(nameof(TargetTokenizedCorpusId))]
+        public virtual TokenizedCorpus? TargetTokenizedCorpus { get; set; }
+
+        public virtual ICollection<VerseMapping> VerseMappings { get; set; }
+        public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
     }
 }

@@ -92,6 +92,16 @@
                 </Button.Tag>
             </Button>
 
+            <Button
+                x:Name="AlignmentSample"
+                Margin="10,0,10,0"
+                Content="{helpers:Loc AlignmentSample}"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/settings_logo_128.png</ImageSource>
+                </Button.Tag>
+            </Button>
+
             <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"

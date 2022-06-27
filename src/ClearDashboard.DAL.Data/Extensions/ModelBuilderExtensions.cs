@@ -16,12 +16,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             var entitiesToIgnore = new List<string> { "User", "NoteRecipient" };
             foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(entityType=>!entitiesToIgnore.Contains(entityType.Name)))
             {
-                var userId = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name=="UserId" && (p.PropertyType == typeof(Guid) || p.PropertyType == typeof(Guid?)));
-                if (userId != null)
+                var userIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name=="UserId" && (p.PropertyType == typeof(Guid) || p.PropertyType == typeof(Guid?)));
+                if (userIdProperty != null)
                 {
                     modelBuilder
                         .Entity(entityType.Name)
-                        .Property(userId.Name)
+                        .Property(userIdProperty.Name)
                         .HasValueGenerator<UserIdValueGenerator>();
                 }
 
