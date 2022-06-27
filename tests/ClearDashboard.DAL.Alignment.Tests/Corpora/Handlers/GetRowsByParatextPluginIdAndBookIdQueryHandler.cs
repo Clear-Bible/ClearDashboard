@@ -1,14 +1,11 @@
-﻿using MediatR;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
-
+using System.Threading.Tasks;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
-using ClearBible.Alignment.DataServices.Features.Corpora;
+using MediatR;
 
-using SIL.Machine.Corpora;
-
-namespace ClearBible.Alignment.DataServices.Tests.Corpora.Handlers
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetRowsByParatextPluginIdAndBookIdQueryHandler : IRequestHandler<
         GetRowsByParatextPluginIdAndBookIdQuery,

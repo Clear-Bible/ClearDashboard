@@ -1,9 +1,8 @@
-﻿using ClearBible.Alignment.DataServices.Corpora;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using MediatR;
 using SIL.Scripture;
 
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetVersificationAndBookIdByParatextPluginIdQuery : IRequest<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
     {

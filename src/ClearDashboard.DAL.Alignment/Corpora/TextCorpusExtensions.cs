@@ -1,10 +1,10 @@
-﻿using ClearBible.Alignment.DataServices.Features.Corpora;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
 
-namespace ClearBible.Alignment.DataServices.Corpora
+namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public static class TextCorpusExtensions
     {

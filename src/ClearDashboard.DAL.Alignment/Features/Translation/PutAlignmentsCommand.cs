@@ -1,10 +1,9 @@
-﻿using MediatR;
-
-using ClearBible.Alignment.DataServices.Corpora;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     /* IMPLEMENTER'S NOTES:
      * return value is ignored. Marked as object to accommodate compilation needs of RequestResult only.

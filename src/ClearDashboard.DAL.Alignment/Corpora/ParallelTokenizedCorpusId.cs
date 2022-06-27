@@ -1,6 +1,6 @@
 ﻿
 
-namespace ClearBible.Alignment.DataServices.Corpora
+namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public record ParallelTokenizedCorpusId : BaseId
     {

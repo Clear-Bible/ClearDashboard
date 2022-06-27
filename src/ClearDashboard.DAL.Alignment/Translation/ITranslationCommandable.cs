@@ -1,11 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearBible.Alignment.DataServices.Corpora;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
-
+using ClearDashboard.DAL.Alignment.Corpora;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 
-namespace ClearBible.Alignment.DataServices.Translation
+namespace ClearDashboard.DAL.Alignment.Translation
 {
     public interface ITranslationCommandable
     {

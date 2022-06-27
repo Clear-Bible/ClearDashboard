@@ -1,11 +1,9 @@
-﻿using MediatR;
-
-using ClearBible.Alignment.DataServices.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
-
+using MediatR;
 using SIL.Machine.Corpora;
 
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record CreateTokenizedCorpusFromTokenizedCorpusCommand(ITextCorpus textCorpus) : IRequest<RequestResult<TokenizedTextCorpus>>;
 }

@@ -1,9 +1,8 @@
-﻿using MediatR;
-
-using ClearBible.Alignment.DataServices.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetAllParallelCorpusVersionIdsQuery() 
         : IRequest<RequestResult<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>>;

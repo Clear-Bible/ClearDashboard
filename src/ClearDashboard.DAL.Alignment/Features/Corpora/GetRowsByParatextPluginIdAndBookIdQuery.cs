@@ -1,11 +1,7 @@
-﻿using ClearBible.Alignment.DataServices.Corpora;
-using ClearDashboard.DAL.CQRS;
-
+﻿using ClearDashboard.DAL.CQRS;
 using MediatR;
 
-using SIL.Machine.Corpora;
-
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetRowsByParatextPluginIdAndBookIdQuery : IRequest<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>>
     {

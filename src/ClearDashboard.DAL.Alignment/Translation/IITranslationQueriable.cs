@@ -1,7 +1,7 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearBible.Alignment.DataServices.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 
-namespace ClearBible.Alignment.DataServices.Translation
+namespace ClearDashboard.DAL.Alignment.Translation
 {
     public interface IITranslationQueriable
     {

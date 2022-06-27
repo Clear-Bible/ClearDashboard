@@ -1,10 +1,10 @@
 ﻿
 
-namespace ClearBible.Alignment.DataServices.Corpora
+namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public abstract record BaseId
     {
-        public BaseId(Guid id)
+        protected BaseId(Guid id)
         {
             Id = id;
         }

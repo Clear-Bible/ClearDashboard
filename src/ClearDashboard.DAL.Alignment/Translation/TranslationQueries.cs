@@ -1,11 +1,10 @@
-﻿using MediatR;
-
-using ClearBible.Alignment.DataServices.Corpora;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Alignment.DataServices.Features.Translation;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Translation
+namespace ClearDashboard.DAL.Alignment.Translation
 {
     public class TranslationQueries : IITranslationQueriable
     {

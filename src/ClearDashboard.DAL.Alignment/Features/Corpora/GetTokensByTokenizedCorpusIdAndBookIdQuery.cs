@@ -1,10 +1,9 @@
-﻿using ClearBible.Alignment.DataServices.Corpora;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
-
 using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Features.Corpora
+namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetTokensByTokenizedCorpusIdAndBookIdQuery : IRequest<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
     {

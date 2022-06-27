@@ -1,10 +1,10 @@
-﻿using ClearBible.Engine.Exceptions;
-using MediatR;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearBible.Engine.Exceptions;
+using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Tests.Corpora.Handlers
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     internal class MediatorMock : IMediator
     {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 
-
-namespace ClearBible.Alignment.DataServices.Tests.Corpora
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     internal static class TestDataHelpers
     {

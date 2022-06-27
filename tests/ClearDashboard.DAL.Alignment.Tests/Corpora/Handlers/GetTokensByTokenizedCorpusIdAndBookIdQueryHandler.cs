@@ -1,20 +1,18 @@
-﻿using MediatR;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text;
-using System.Linq;
-
-using ClearDashboard.DAL.CQRS;
 using ClearBible.Engine.Corpora;
-using ClearBible.Alignment.DataServices.Features.Corpora;
 using ClearBible.Engine.Tokenization;
-
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.CQRS;
+using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
-namespace ClearBible.Alignment.DataServices.Tests.Corpora.Handlers
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : IRequestHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,

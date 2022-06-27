@@ -1,10 +1,10 @@
-﻿using ClearBible.Alignment.DataServices.Features.Corpora;
-using ClearBible.Engine.Exceptions;
+﻿using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 
-namespace ClearBible.Alignment.DataServices.Corpora
+namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class TokenizedTextCorpus : ScriptureTextCorpus
     {

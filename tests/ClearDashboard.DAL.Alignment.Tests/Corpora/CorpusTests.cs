@@ -1,20 +1,19 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
-using SIL.Machine.Corpora;
-using SIL.Machine.Tokenization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
+using ClearDashboard.DAL.Alignment.Tests.Tokenization;
+using MediatR;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
 using Xunit;
 using Xunit.Abstractions;
-using ClearBible.Alignment.DataServices.Corpora;
-using MediatR;
-using ClearBible.Alignment.DataServices.Tests.Corpora.Handlers;
-using ClearBible.Alignment.DataServices.Tests.Tokenization;
 
-namespace ClearBible.Alignment.DataServices.Tests.Corpora
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     public class CorpusTests
     {

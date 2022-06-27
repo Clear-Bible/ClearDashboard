@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Xunit;
-
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
+using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using Xunit;
 using Xunit.Abstractions;
-using MediatR;
-using ClearBible.Alignment.DataServices.Tests.Corpora.Handlers;
-using ClearBible.Alignment.DataServices.Corpora;
-using ClearBible.Engine.Corpora;
 
-namespace ClearBible.Alignment.DataServices.Tests.Corpora
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
 	public class ParallelCorpusTests
     {

@@ -1,14 +1,13 @@
-﻿using MediatR;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using System;
 using System.Collections.Generic;
-
-using ClearBible.Alignment.DataServices.Corpora;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
-using ClearBible.Alignment.DataServices.Features.Corpora;
-using System;
+using MediatR;
 
-namespace ClearBible.Alignment.DataServices.Tests.Corpora.Handlers
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetAllParallelCorpusVersionIdsQueryHandler : IRequestHandler<
         GetAllParallelCorpusVersionIdsQuery,

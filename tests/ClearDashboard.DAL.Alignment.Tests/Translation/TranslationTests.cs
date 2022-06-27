@@ -1,27 +1,25 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
-
 using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.SyntaxTree.Corpora;
-using ClearBible.Alignment.DataServices.Translation;
-using static ClearBible.Alignment.DataServices.Translation.ITranslationCommandable;
 using ClearBible.Engine.SyntaxTree.Aligner.Persistence;
-
+using ClearBible.Engine.SyntaxTree.Corpora;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
+using ClearDashboard.DAL.Alignment.Translation;
+using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
-using SIL.Machine.Utils;
 using SIL.Machine.Translation;
-using MediatR;
-using ClearBible.Alignment.DataServices.Tests.Corpora.Handlers;
-using System.IO;
-using System;
+using SIL.Machine.Utils;
+using Xunit;
+using Xunit.Abstractions;
+using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 
-namespace ClearBible.Alignment.DataServices.Tests.Translation
+namespace ClearDashboard.DAL.Alignment.Tests.Translation
 {
     public class TranslationTests
     {

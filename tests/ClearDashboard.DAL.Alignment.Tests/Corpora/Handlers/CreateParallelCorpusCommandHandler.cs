@@ -1,14 +1,12 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-
-using ClearBible.Alignment.DataServices.Corpora;
-using ClearBible.Alignment.DataServices.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
+using MediatR;
 
-
-namespace ClearBible.Alignment.DataServices.Tests.Corpora.Handlers
+namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class CreateParallelCorpusCommandHandler : IRequestHandler<
         CreateParallelCorpusCommand,

@@ -1,8 +1,7 @@
 ﻿using ClearBible.Engine.Corpora;
-
 using SIL.Machine.Corpora;
 
-namespace ClearBible.Alignment.DataServices.Tests.Tokenization
+namespace ClearDashboard.DAL.Alignment.Tests.Tokenization
 {
     public class OnlyUpToCountTextRowProcessor : IRowFilter<TextRow>
     {

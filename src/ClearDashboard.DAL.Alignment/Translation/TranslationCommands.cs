@@ -1,19 +1,17 @@
-﻿using MediatR;
-
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.SyntaxTree.Aligner.Translation;
-using static ClearBible.Alignment.DataServices.Translation.ITranslationCommandable;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.SyntaxTree.Aligner.Translation;
 using ClearBible.Engine.SyntaxTree.Corpora;
-using ClearBible.Alignment.DataServices.Features.Corpora;
-
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Translation;
 using SIL.Machine.Translation.Thot;
 using SIL.Machine.Utils;
+using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 
 
-namespace ClearBible.Alignment.DataServices.Translation
+namespace ClearDashboard.DAL.Alignment.Translation
 {
     public class TranslationCommands : ITranslationCommandable
     {
