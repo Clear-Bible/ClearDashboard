@@ -27,6 +27,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features
         {
             try
             {
+                // in 2
                 return await Mediator.Send(request, cancellationToken);
             }
             catch (Exception ex)

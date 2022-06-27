@@ -62,7 +62,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 Output.WriteLine($"Received {_messages.Count} messages.");
 
                 Assert.NotEmpty(_messages);
-                Assert.Equal(10, _messages.Count);
+                Assert.Equal(500, _messages.Count);
             }
             finally
             {

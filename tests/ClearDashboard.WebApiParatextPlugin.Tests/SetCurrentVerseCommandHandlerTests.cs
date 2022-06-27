@@ -14,7 +14,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task GetCurrentVerseTest()
+        public async Task SetCurrentVerseTest()
         {
 
             string verse = "040001001";
@@ -23,11 +23,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 await StartParatext();
 
                 var client = CreateHttpClient();
-
-                //StringObject stringObject = new StringObject
-                //{
-                //    StringData = verse
-                //};
 
                 var response =
                     await client.PutAsJsonAsync<SetCurrentVerseCommand>("verse", new SetCurrentVerseCommand(verse));

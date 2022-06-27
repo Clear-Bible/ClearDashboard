@@ -52,7 +52,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(3, 28);
+            this.lblVersion.Location = new System.Drawing.Point(3, 9);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(35, 13);
             this.lblVersion.TabIndex = 21;
@@ -67,7 +67,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnRestart.TabIndex = 22;
             this.btnRestart.Text = "Restart Pipe";
             this.btnRestart.UseVisualStyleBackColor = true;
-            this.btnRestart.Visible = false;
             this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // btnTest

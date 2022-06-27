@@ -17,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Verse
 
         public override async Task<RequestResult<string>> Handle(SetCurrentVerseCommand request, CancellationToken cancellationToken)
         {
-            return await ExecuteRequest("verse", request, cancellationToken);
+            return await ExecuteRequest("verse", request, cancellationToken, HttpVerb.PUT);
         }
 
     }
