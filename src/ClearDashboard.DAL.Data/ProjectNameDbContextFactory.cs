@@ -7,7 +7,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 {
     public interface IProjectNameDbContextFactory<TDbContext> where TDbContext : DbContext
     {
-        Task<ProjectAssets> Get(string connectionString);
+        Task<ProjectAssets> Get(string projectName);
+        Task<TDbContext> GetDatabaseContext(string projectName);
     }
 
     public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
@@ -15,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ProjectNameDbContextFactory>? _logger;
 
-        public ProjectNameDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectNameDbContextFactory>? logger)
+        public ProjectNameDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectNameDbContextFactory> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
@@ -34,6 +35,11 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         }
 
+        public async Task<AlignmentContext> GetDatabaseContext(string projectName)
+        {
+           return await GetAlignmentContext(EnsureProjectDirectory(projectName));
+        }
+
         private async Task<AlignmentContext> GetAlignmentContext(string fullPath)
         {
             var context = _serviceProvider.GetService<AlignmentContext>();
@@ -41,13 +47,20 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 try
                 {
-                    _logger.LogInformation($"Attempting to create or migrate '{fullPath}'");
+                    if (_logger != null)
+                    {
+                        _logger.LogInformation($"Attempting to create or migrate '{fullPath}'");
+                    }
                     context.DatabasePath = fullPath;
                     await context.Migrate();
                 }
                 catch (Exception? ex)
                 {
-                    _logger.LogError(ex, "An error occurred while creating an instance the AlignmentContext.");
+                    if (_logger != null)
+                    {
+                        _logger.LogError(ex, "An error occurred while creating an instance the AlignmentContext.");
+                    }
+
                     throw;
                 }
                 return context;
@@ -60,7 +73,10 @@ namespace ClearDashboard.DataAccessLayer.Data
             var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); //$"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}");
             if (!Directory.Exists(directoryPath))
             {
-                _logger.LogInformation($"Creating project directory {directoryPath}.");
+                if (_logger != null)
+                {
+                    _logger.LogInformation($"Creating project directory {directoryPath}.");
+                }
                 Directory.CreateDirectory(directoryPath);
             }
 

@@ -10,6 +10,8 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
+using ClearDashboard.DAL.Tests.Slices.LanguageResources;
+using ClearDashboard.DAL.Tests.Slices.Users;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
@@ -23,7 +25,7 @@ namespace ClearDashboard.DAL.Tests
     public class TestBase
     {
         protected ITestOutputHelper Output { get; private set; }
-        protected Process Process { get; set; }
+        protected Process? Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
         private IServiceProvider? _serviceProvider = null;
@@ -40,11 +42,9 @@ namespace ClearDashboard.DAL.Tests
         {
             Services.AddSingleton<IEventAggregator, EventAggregator>();
             Services.AddClearDashboardDataAccessLayer();
-           Services.AddMediatR(typeof(IMediatorRegistrationMarker));
-           Services.AddLogging();
-           Services.AddSingleton<IEventAggregator, EventAggregator>();
-
-           Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
+            Services.AddLogging();
+            Services.AddSingleton<IUserProvider, UserProvider>();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
