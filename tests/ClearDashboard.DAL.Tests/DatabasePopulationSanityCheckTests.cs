@@ -175,14 +175,16 @@ namespace ClearDashboard.DAL.Tests
                     context.ProjectInfos.OrderByDescending(project => project.Created).FirstOrDefault();
 
                 Assert.NotNull(roundTrippedProject);
-                Assert.Equal(testUser.Id, roundTrippedProject.UserId);
-                Assert.NotEqual(roundTrippedProject.Id, projectInfo.Id);
-
-
+                if (roundTrippedProject != null)
+                {
+                    Assert.Equal(testUser.Id, roundTrippedProject.UserId);
+                    Assert.NotEqual(roundTrippedProject.Id, projectInfo.Id);
+                }
             }
             catch (Exception ex)
             {
                 var message = ex.Message;
+                Output.WriteLine(message);
             }
             finally
             {
