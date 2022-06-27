@@ -1,0 +1,938 @@
+﻿ὀρθρινός # early this morning # 0
+ὅς ἄν # whoever # 0
+ὅς ἄν # whatever # 0
+ὅς ἄν # what # 0
+ὅς ἄν # anyone who # 0
+ἀγωνίζομαι # make every effort # 0
+τελώνιον # tax booth # 0
+οὐ # there is nothing # 0
+ἔχω # there was # 0
+ἔχω # married to # 0
+ἑπτάκις # seven times # 0
+ἐπιστρέφω # bring back # 0
+ἐπιστρέφω # comes back # 0
+ἐπιστρέφω # go back # 0
+ἐπιστρέφω # turned back # 0
+κλάσμα # broken pieces # 0
+βλέπω # look at # 0
+βλέπω # consider carefully # 0
+βλέπω # watch out # 0
+ὁμοίως # the same # 0
+ὕψος # on high # 0
+ἐκεῖνος # the other # 0
+ἐκτενής # more earnestly # 0
+οὐ γινώσκω # unaware # 0
+ἄζυμος # unleavened bread # 0
+ὄνομα καλέω # name # 0
+κεφαλή γωνία # capstone # 0
+δικαιόω # proved right # 0
+διά τίς # why # 0
+τρέφω # brought up # 0
+παρά αὐτός # his # 0
+διακονέω # wait on # 0
+τετραπλοῦς # four times # 0
+περίλυπος # very sad # 0
+ψευδοπροφήτης # false prophets # 0
+εἰς πᾶς # throughout # 0
+ἡσυχάζω # remained silent # 0
+λαγχάνω # chosen by lot # 0
+φόβητρον # fearful events # 0
+εἰμί ἐν # subject # 0
+ἀφόβως # without fear # 0
+προσπίπτω # fell at # 0
+γῆρας # old age # 0
+ῥύσις αἷμα # bleeding # 0
+ὅπου ἐάν # wherever # 0
+αὔριον # next day # 0
+ψυχή ἐγώ # myself # 0
+βίος # live on # 0
+ἀντί ὅς ὅσος # what # 0
+ταπεινόω # made low # 0
+πίμπλημι ἄνοια # furious # 0
+ἔνθεν # from here # 0
+ἐγγίζω # comes near # 0
+ἐγγίζω # came near # 0
+ἐγγίζω # drawing near # 0
+ἐγγίζω # came up # 0
+ἕως ἄν # before # 0
+ἕως ἄν # until # 0
+ἐκεῖθεν # from there # 0
+ἐπιλαμβάνομαι # taking hold of # 0
+συμφύω # grew up with # 0
+συκάμινος # mulberry tree # 0
+κοπιάω # worked hard # 0
+κατακαίω # burn up # 0
+πολύς # plenty of # 0
+ἀποδεκατόω # give a tenth # 0
+λαξευτός # cut in the rock # 0
+εὐγενής # of noble birth # 0
+λοιπός # everybody else # 0
+μετά αἰσχύνη # humiliated # 0
+οἰκοδεσπότης # owner of the house # 0
+ἐξανίστημι σπέρμα # have children # 0
+ἐξουσιάζω # exercise authority over # 0
+ὀρθρίζω # came early in the morning # 0
+εἰσπορεύομαι # come in # 0
+παρακαλέω # pleaded with # 0
+διορύσσω # broken into # 0
+παρέρχομαι # come along # 0
+παρέρχομαι # passing by # 0
+παρέρχομαι # pass away # 0
+ὄχλος # crowds of people # 0
+ὄχλος # number of people # 0
+πληρόω # come true # 0
+πληρόω # filled with # 0
+πληρόω # finds fulfilment # 0
+θησαυρίζω # stores up # 0
+ἀπό ὅς ἄν # once # 0
+ἀφρός # foams at the mouth # 0
+κατέρχομαι # went down # 0
+κατέρχομαι # came down # 0
+καταλύω # thrown down # 0
+κατά συγκυρία # happened # 0
+κατάβασις # road goes down # 0
+ἀπό εἷς # alike # 0
+ἀπό # belonged to # 0
+ἀπό # out of # 0
+ἀπό # because of # 0
+σύνειμι_1 # were with # 0
+ἔχω χάρις # thank # 0
+χαρίζομαι # debt cancelled # 0
+συνθλάω # broken to pieces # 0
+παρατήρησις # careful observation # 0
+ἐπάνω γίνομαι # take charge of # 0
+κάρφος # speck of sawdust # 0
+καθοπλίζω # fully armed # 0
+σύ # your own # 0
+στιγμή # an instant # 0
+λαμβάνω πρόσωπον # show partiality # 0
+τότε # that time # 0
+ἀνακράζω # cried out # 0
+ἐπί ἀλήθεια # certainly # 0
+ἀγρυπνέω # always on the watch # 0
+καθαιρέω # brought down # 0
+καθαιρέω # tear down # 0
+πρωτοκλισία # places of honour # 0
+πρωτοκλισία # place of honour # 0
+οὐ ἰσχύω # unable # 0
+ἀμπελουργός # man who took care of the vineyard # 0
+ὑψηλός # highly valued # 0
+ποιέω λύτρωσις # redeemed # 0
+προβάλλω # sprout leaves # 0
+ἀνέχω # put up with # 0
+λαμπρῶς # in luxury # 0
+ἐν μέσος # among # 0
+ἐν μέσος # in # 0
+ὅς ἐάν # anyone # 0
+ὅς ἐάν # who # 0
+ὅς ἐάν # whoever # 0
+ἐν τάχος # quickly # 0
+ἐσθίω # have dinner # 0
+ἐσθίω # have a feast # 0
+βάλλω # put in # 0
+συντηρέω # treasured up # 0
+περισσός # more than # 0
+ὀλιγόπιστος # of little faith # 0
+ἐπιχέω # pouring on # 0
+μακρόθεν # a distance # 0
+κατά ὁ αὐτός # that is how # 0
+ἡλικία μικρός # short # 0
+κατά ἡμέρα # daily # 0
+κατά ἡμέρα # every day # 0
+ἐκκρεμάννυμι # hung on # 0
+κραταιόω # became strong # 0
+ἐκβάλλω # driving out # 0
+ἐκβάλλω # send out # 0
+ἐκβάλλω # took out # 0
+ἐκβάλλω # drive out # 0
+προσκαλέω # called in # 0
+ἀκούω # listening to # 0
+ἀκούω # heard of # 0
+ἀκούω # heard about # 0
+ἀκούω # hear ~ about # 0
+ἀκούω # listen to # 0
+ἀκούω # listens to # 0
+ἀκούω # hear about # 0
+ἀκούω # hear of # 0
+οὗτος # is why # 0
+οὗτος # the one # 0
+οὗτος # of this # 0
+οὗτος # such things # 0
+πρεσβύτης # old man # 0
+αὐλίζομαι # spend the night # 0
+λάχανον # garden herbs # 0
+δοξάζω # gave praise # 0
+πίμπλημι # filled with # 0
+πίμπλημι # came for # 0
+ἄξιος εἰμί # deserves # 0
+ἀφυπνόω # fell asleep # 0
+καλέω # to be called # 0
+ἀπιστέω # not believe # 0
+ἀνάδειξις # appeared publicly # 0
+ὀλίγος # a little # 0
+πείθω # confident of # 0
+δεξιός # right side # 0
+δεξιός # right hand # 0
+παιδίσκη # servant girl # 0
+ἀπό μακρόθεν # far away # 0
+ἀπό μακρόθεν # at a distance # 0
+ἀγαλλιάω # full of joy # 0
+ἀνακαθίζω # sat up # 0
+σῶμα # dead body # 0
+δραχμή # silver coins # 0
+ἕτερος # someone else # 0
+ἀγαθός # good things # 0
+μονογενής # only son # 0
+διατάσσω # told to do # 0
+κατέναντι # ahead of # 0
+ἐργάτης ἀδικία # evildoers # 0
+πᾶς # all things # 0
+πᾶς # all kinds of # 0
+νεανίσκος # young man # 0
+ὑπερεκχύννω # running over # 0
+ποικίλος # various kinds of # 0
+παραιτέομαι # make excuses # 0
+ἱλάσκομαι # have mercy # 0
+ἐμός # of me # 0
+φραγμός # country lanes # 0
+ὄξος # wine vinegar # 0
+ἀποδημέω # set off # 0
+ἀποδημέω # went away # 0
+ἐκχωρέω # get out # 0
+ὅτι # in this # 0
+συνευδοκέω # approve of # 0
+οὐδέ # not even # 0
+κοιλία μήτηρ # birth # 0
+ἐναντίον ὁ λαός # in public # 0
+εἰς ὁ ἔμπροσθεν # ahead # 0
+στρατηγός # officers of the temple guard # 0
+προσδοκάω # waiting for # 0
+προσδοκάω # waiting expectantly # 0
+ἱκανός χρόνος # a long time # 0
+ἀτιμάζω # treated shamefully # 0
+παρατηρέω # carefully watched # 0
+παρατηρέω # keeping a close watch # 0
+δύο # by two # 0
+ἀποκρίνομαι λέγω # replied # 0
+ἀλλότριος # someone else’s # 0
+οὐ ἔχω # cannot # 0
+ἑλκόω # covered with sores # 0
+ἀναφέρω # taken up # 0
+οὐδείς # not one # 0
+ἀνίστημι # got ready # 0
+ἀνίστημι # stood up # 0
+ἀνίστημι # got up # 0
+ἀνίστημι # come back to life # 0
+ἀνίστημι # get up # 0
+ἀνίστημι # stand up # 0
+ἀνίστημι # set out # 0
+ἀνίστημι # rise again # 0
+ἀνίστημι # raised again # 0
+εἰμί # there is # 0
+εἰμί # there was # 0
+εἰμί # there were # 0
+εἰμί # kept on # 0
+εἰμί # stands for # 0
+εἰμί # is here # 0
+εἰμί # there are # 0
+εἰμί # belongs to # 0
+φοβέω # afraid of # 0
+ἀναβαίνω # went up # 0
+ἀναβαίνω # going up # 0
+ἀποδίδωμι # pay back # 0
+γέμω # are full # 0
+γινώσκω # be sure of # 0
+γινώσκω # made known # 0
+γινώσκω # aware of # 0
+γινώσκω # find out # 0
+ἐπανάγω # put out # 0
+ὑπομονή # standing firm # 0
+σύ καί αὐτός # both of you # 0
+οὐκέτι # no longer # 0
+οὐκέτι # any more # 0
+βυθίζω # began to sink # 0
+χαριτόω # highly favoured # 0
+ἀντί ὅς # because # 0
+πατέω # trample on # 0
+πατέω # trampled on # 0
+ἔρχομαι # going to # 0
+ἔρχομαι # to come # 0
+ἔρχομαι # brought out # 0
+ἔρχομαι # passed by # 0
+ἔρχομαι # come back # 0
+ἔρχομαι # came back # 0
+ἔρχομαι # went back # 0
+ἐκβάλλω ἔξω # thrown out # 0
+ἔσχατος # final condition # 0
+ἔσχατος # least important # 0
+διαφέρω # worth more # 0
+διαφέρω # more valuable # 0
+τὶς # a few # 0
+προσδέχομαι # waiting for # 0
+προσδέχομαι # looking forward to # 0
+γαζοφυλάκιον # temple treasury # 0
+ἀπέρχομαι # went away # 0
+κἄν # even if # 0
+συνάγω # got together # 0
+συνάγω # met together # 0
+καταβαίνω # went down # 0
+καταβαίνω # came down # 0
+καταβαίνω # go down # 0
+καταβαίνω # going down # 0
+καταβαίνω # come down # 0
+ἀρχισυνάγωγος # synagogue ruler # 0
+ἐν τίς # how # 0
+χρεοφειλέτης # owed money # 0
+πόρρω # a long way off # 0
+Νινευίτης # of nineveh # 0
+κεραία # least stroke of a pen # 0
+στάχυς # ears of corn # 0
+τίκτω # give birth to # 0
+τίκτω # gave birth to # 0
+παρακύπτω # bending over # 0
+κατάλυμα # guest room # 0
+ἕως πότε # how long # 0
+Ἰάκωβος # son of james # 0
+φωνή μέγας # loud # 0
+ἔρχομαι ὀπίσω # follow # 0
+κακοποιέω # do evil # 0
+φωνέω # called out # 0
+φυλακή # watch of the night # 0
+ὁ μετά # companions # 0
+εἷς ἕκαστος # of # 0
+ἐνδύω # clothed with # 0
+ἀμφότεροι # both of # 0
+θηλάζω # nursing mothers # 0
+θαυμάζω # amazed at # 0
+θρηνέω # sang a dirge # 0
+εὐδοκία # good pleasure # 0
+τρίτος # third time # 0
+ἀρτύω # made salty # 0
+ἀναζητέω # looking for # 0
+ἀναζητέω # look for # 0
+ἐνδιδύσκω # dressed in # 0
+παλαιόω # wear out # 0
+πληγή ἐπιτίθημι # beat # 0
+πολύς μᾶλλον # all the more # 0
+μετεωρίζομαι # worry about # 0
+μόνος # by myself # 0
+μόνος # by themselves # 0
+δοκέω # seemed good # 0
+ἀνθομολογέομαι # gave thanks # 0
+γραμματεύς # teachers of the law # 0
+ἐμβαίνω # got into the boat # 0
+μαλακός # fine clothes # 0
+ἕκαστος # each one # 0
+ὑπομένω # stayed behind # 0
+ἰσχύω # strong enough # 0
+εἰσέρχομαι εἰς # entered # 0
+εἰσέρχομαι εἰς # enter # 0
+προσφωνέω # calling out # 0
+ὑψόω # lifted up # 0
+λίθος μυλικός # millstone # 0
+ἐξέρχομαι # came out # 0
+ἐξέρχομαι # come out # 0
+ἐξέρχομαι # go away # 0
+ἐξέρχομαι # went out # 0
+ἐξέρχομαι # go out # 0
+ἐξέρχομαι # gone out # 0
+ἐξέρχομαι # set out # 0
+ἐξέρχομαι # comes out # 0
+ἐξέρχομαι # get out # 0
+στρέφω # turned towards # 0
+τελώνης # tax collectors # 0
+τελώνης # tax collector # 0
+οὐαί # how dreadful # 0
+ἀρχιτελώνης # chief tax collector # 0
+παραδίδωμι # handed down # 0
+παραδίδωμι # committed to # 0
+παραδίδωμι # turned over # 0
+κλίνω # bowed down # 0
+ἀνάγαιον # upper room # 0
+ἕνεκα # because of # 0
+ἕνεκα # for the sake of # 0
+ἕνεκα # on account # 0
+ὁ ἴσος # in full # 0
+εἰς ὁ αἰών # ever # 0
+οἰκουμένη # roman world # 0
+νήπιος # little children # 0
+περιλάμπω # shone around # 0
+καιρός # proper time # 0
+καιρός # opportune time # 0
+καιρός # a while # 0
+καιρός # present time # 0
+πρόσωπον # face to the ground # 0
+διαπορεύομαι # going by # 0
+ἔρημος # lonely places # 0
+ἔρημος # solitary places # 0
+ἔρημος # open country # 0
+αἴρω φωνή # called out in a loud voice # 0
+πᾶς ὅσος # all # 0
+πᾶς ὅσος # everything # 0
+λέγω # called out # 0
+λέγω # asks for # 0
+λέγω # talking about # 0
+λέγω # cry out # 0
+ποσάκις # how often # 0
+ἔξω # out of # 0
+Ναζωραῖος # of nazareth # 0
+ἐπισκέπτομαι # come to # 0
+ἀναζάω # alive again # 0
+κόπτω # mourning for # 0
+συμπορεύομαι # travelling with # 0
+συλλαλέω # discussed with # 0
+ἡμέρα ἄρχω κλίνω # late in the afternoon # 0
+ἀναπίπτω # reclined at the table # 0
+ἀναπίπτω # sit down # 0
+ἐφίστημι # coming up # 0
+καταργέω # use up # 0
+μέλλω # about to # 0
+μέλλω # going to # 0
+βοάω # called out # 0
+βοάω # cry out # 0
+ἀνορθόω # straightened up # 0
+οὐ ἔξεστι # unlawful # 0
+σός # belongs to you # 0
+ἀκάθαρτος πνεῦμα # evil spirit # 0
+αὐλέω # played the flute # 0
+μή τὶς # nothing # 0
+ἐπιζητέω # looking for # 0
+πορεύομαι ὀπίσω # follow # 0
+ἐν # out of # 0
+ἐν # on account of # 0
+συνανάκειμαι # fellow guests # 0
+συνανάκειμαι # at the table with # 0
+ὅς τρόπος # as # 0
+ἵνα # so that # 0
+ἐκτείνω # reached out # 0
+ἐκτείνω # stretch out # 0
+οὖν # now then # 0
+ἀναβλέπω # receive sight # 0
+ἀναβλέπω # looking up # 0
+ἀναβλέπω # looked up # 0
+στολή # flowing robes # 0
+διΐστημι ἀπό # left # 0
+ποιέω # the law # 0
+ποιέω # put up # 0
+ποιέω # bring about # 0
+στηρίζω # resolutely set out # 0
+μοιχεύω # commits adultery # 0
+μοιχεύω # commit adultery # 0
+περιπίπτω # fell into # 0
+μνηστεύω # pledged to be married # 0
+πεινάω # go hungry # 0
+ἐμπτύω # spit on # 0
+εἰ # even if # 0
+λύω # set free # 0
+θέλω # want to # 0
+θέλω # would have # 0
+θέλω # wanted to # 0
+θέλω # longed to # 0
+δέ # and yet # 0
+μή # at all # 0
+σιωπάω # keep quiet # 0
+χαλάω # let down # 0
+γάρ # after all # 0
+ταμεῖον # inner rooms # 0
+εἰμί τέλος # end # 0
+ἀπέρχομαι ἀπό # left # 0
+περιπατέω # walk around # 0
+περιπατέω # walk along # 0
+πάλαι # long ago # 0
+πρωτοκαθεδρία # most important seats # 0
+ἀνακύπτω # straighten up # 0
+ἀνακύπτω # stand up # 0
+ὀρεινός # hill country # 0
+ἐνώπιον # in the sight of # 0
+ἐνώπιον # in the presence of # 0
+ἐνώπιον # in front of # 0
+ἐνώπιον # in the eyes # 0
+βουλευτής # member of the council # 0
+πλήν # in any case # 0
+ἀνάγω # set out # 0
+φόρος # payment of taxes # 0
+μή δύναμαι # cannot # 0
+εἰς # so that # 0
+εἰς # in dealing with # 0
+ἀνάθημα # gifts dedicated to god # 0
+πεντακισχίλιοι # five thousand # 0
+σαρόω # swept clean # 0
+δυσβάστακτος # hardly carry # 0
+κατά # according to # 0
+κατά # in keeping with # 0
+κατά # just like # 0
+ἐπί ὁ τράχηλος # around # 0
+ἐμβλέπω # looked directly # 0
+ἐμβλέπω # looked straight # 0
+γίνομαι εἰς # became # 0
+γίνομαι εἰς # become # 0
+ποιμαίνω # looking after the sheep # 0
+ἐλεέω # have pity on # 0
+ἐλεέω # have mercy on # 0
+εἰσέρχομαι # go in # 0
+εἰσέρχομαι # went in # 0
+εἰσέρχομαι # come in # 0
+εἰσέρχομαι # comes in # 0
+συγκαθίζω # sat down together # 0
+εὐδοκέω # well pleased # 0
+κοπρία # manure heap # 0
+προσαναβαίνω # move up to # 0
+ἀποκαθιστάνω # completely restored # 0
+λῃστής # hands of robbers # 0
+αὐτός # the one # 0
+αὐτός # the other # 0
+αὐτός # their own # 0
+αὐτός # his own # 0
+αὐτός # the others # 0
+αὐτός # in the same way # 0
+πίπτω # drop out # 0
+πόρρωθεν # at a distance # 0
+προέρχομαι # go on # 0
+ἴδιος # its own # 0
+ἴδιος # all we had # 0
+μακράν # long way off # 0
+ἀρκέω # content with # 0
+τοιοῦτος # such as these # 0
+φύω # came up # 0
+καταξιόω # considered worthy # 0
+χρεία ἔχω # need # 0
+χρεία ἔχω # needed # 0
+χρεία ἔχω # needs # 0
+ὕψιστος # most high # 0
+γέ καί σύν # what is more # 0
+ἀντιλέγω # spoken against # 0
+ἀνατάσσομαι # draw up # 0
+σκοτεινός # full of darkness # 0
+ἐξέρχομαι πορεύομαι # went out # 0
+ἀγαθοποιέω # do good # 0
+συνέρχομαι # come with # 0
+διό # that is why # 0
+κακῶς ἔχω # sick # 0
+διαγρηγορέω # fully awake # 0
+καταγελάω # laughed at # 0
+διά # because of # 0
+λεπτός # small copper coins # 0
+διαβλέπω # see clearly # 0
+χαρά # with joy # 0
+μέγας # great things # 0
+μέγας # at the top of # 0
+ἕως ὅστις # until # 0
+βλητέος # must be poured # 0
+σιτομέτριον # food allowance # 0
+ἀνήρ οὐ γινώσκω # am a virgin # 0
+κράτος # mighty deeds # 0
+τίθημι # put in # 0
+τίθημι # make up # 0
+σκανδαλίζω # fall away # 0
+ὀφείλω # sins against # 0
+πρό πρόσωπον # ahead of # 0
+πρό πρόσωπον # on ahead # 0
+προμελετάω # worry beforehand # 0
+ἀποκρίνομαι # spoke up # 0
+γέννημα # brood of # 0
+προάγω # led the way # 0
+ἐν αὐτός # there # 0
+κόπος παρέχω # bother # 0
+ὁ ἑαυτοῦ # their # 0
+πόσος # how much # 0
+πόσος # how many # 0
+ἄγω # led out # 0
+οὕτως # like this # 0
+οὕτως # this is how # 0
+οὕτως # that is how # 0
+οὕτως # in the same way # 0
+οὕτως # like that # 0
+οὕτως # this is what # 0
+ἐπαισχύνομαι # ashamed of # 0
+ἑκατόν # a hundred # 0
+ὁ εἷς # other # 0
+γαμέω # got married # 0
+ἀπολύω # set free # 0
+ἑαυτοῦ # his own # 0
+ἑαυτοῦ # their own # 0
+ἐννεύω # made signs # 0
+εἰσάγω # brought in # 0
+εἰσάγω # bring in # 0
+ἔτι # any more # 0
+ἔτι # any longer # 0
+μαρτυρέω # spoke well of # 0
+συγκύπτω # bent over # 0
+ὑποπόδιον ὁ πούς # footstool # 0
+καθίζω # sat down # 0
+καθίζω # sit down # 0
+κατακλίνω # reclined at the table # 0
+κατακλίνω # sat down # 0
+κατακλίνω # at the table # 0
+σπλάγχνον ἔλεος # tender mercy # 0
+νομικός # experts in the law # 0
+νομικός # expert in the law # 0
+ὅσος # all who # 0
+ὅσος # how much # 0
+ὅσος # as much as # 0
+κάθημαι # sat down # 0
+καθίστημι # in charge of # 0
+κράτιστος # most excellent # 0
+χρονίζω # stayed so long # 0
+χρονίζω # a long time in coming # 0
+φωτεινός # full of light # 0
+ἐκχέω # run out # 0
+ἐκχέω # poured out # 0
+ἐπιθυμία ἐπιθυμέω # have eagerly desired # 0
+ἐπιτιμάω # strictly warned # 0
+αἰών # long ago # 0
+παρά # more than # 0
+παρά # rather than # 0
+θερισμός # harvest field # 0
+χρόνος # long time # 0
+ἐπαίρω # lift up # 0
+ἐπαίρω # lifted up # 0
+ἀρχαῖος # long ago # 0
+Ναζαρηνός # of nazareth # 0
+συλλαμβάνω # going to # 0
+νότος # south wind # 0
+ἐάν μή # unless # 0
+ἱερατεύω # serving as priest # 0
+βιωτικός # of life # 0
+οὐ μή # never # 0
+οὐ μή # not # 0
+ὑδρωπικός # suffering from dropsy # 0
+σκιρτάω # leap for joy # 0
+μάρτυς εἰμί # testify # 0
+ὅτι ἐκεῖνος # that # 0
+ἐκπνέω # breathed his last # 0
+πτερύγιον # highest point # 0
+τίθημι ὁ γόνυ # knelt down # 0
+βαπτίζω ὁ βάπτισμα # baptised # 0
+πολλαπλασίων # many times as much # 0
+ἑτοιμάζω # make ready # 0
+ἑτοιμάζω # get ready # 0
+ἑτοιμάζω # make preparations # 0
+σπείρω # scattering the seed # 0
+ἔμπροσθεν # in front of # 0
+ὑμέτερος # your own # 0
+δεῖ # had to # 0
+δεῖ # have to # 0
+προσεύχομαι # pray for # 0
+δέκα καί ὀκτώ # eighteen # 0
+ζητέω # searching for # 0
+ζητέω # asking for # 0
+ζητέω # look for # 0
+ζητέω # looked for # 0
+ζητέω # looking for # 0
+ζητέω # watched for # 0
+ἐν γαστήρ ἔχω # pregnant # 0
+ἀθροίζω # assembled together # 0
+νομοδιδάσκαλος # teachers of the law # 0
+πτύσσω # rolled up # 0
+ἄνθρωπος φάγος # glutton # 0
+ἄχρι ὅς # until # 0
+ἄχρι ὅς # up to # 0
+ψευδομαρτυρέω # give false testimony # 0
+συνεσθίω # eats with # 0
+εὐαγγελίζω # preached the good news # 0
+εὐαγγελίζω # preach good news # 0
+εὐαγγελίζω # preach the good news # 0
+εὐαγγελίζω # proclaiming the good news # 0
+εὐαγγελίζω # preaching the gospel # 0
+ὑστερέω # be in need # 0
+οὕτως καί # even so # 0
+λαλέω # to speak # 0
+λαλέω # spoke about # 0
+λαλέω # talking about # 0
+διαλαλέω # talking about # 0
+ἀφίστημι ἀπό # left # 0
+πατρίς # home town # 0
+κοσμέω # put in order # 0
+εὐχαριστέω # gave thanks # 0
+κατοικέω # living in # 0
+διαπεράω # cross over # 0
+Ἁλφαῖος # son of alphaeus # 0
+ὑποστρέφω # went back # 0
+ὑποστρέφω # went away # 0
+ὑποστρέφω # came back # 0
+πραγματευομαι # put this money to work # 0
+ἐπί ὁ γῆ # ashore # 0
+ἐκζητέω # held responsible # 0
+συγχαίρω # rejoice with # 0
+μεθύσκω # get drunk # 0
+ἀνάβλεψις # recovery of sight # 0
+ἀγνοέω # not understand # 0
+ὁ οἰκία # from house to house # 0
+ἕως # up to # 0
+φυλάσσω # kept under guard # 0
+εὐθέως # right away # 0
+βραχύς # a little # 0
+συλλαμβάνω ἐν γαστήρ # be with child # 0
+ἐκκομίζω # carried out # 0
+τοσοῦτος # such great # 0
+τοσοῦτος # all these # 0
+ἄνωθεν # from the beginning # 0
+μέρος # a piece of # 0
+κεῖμαι # laid up # 0
+βάθος # deep water # 0
+φιλάργυρος # loved money # 0
+ἐν εἰρήνη # safe # 0
+ὀθόνιον # strips of linen # 0
+παρατίθημι # set before # 0
+παρατίθημι # entrusted with # 0
+ὅς # the one # 0
+ὅς # the other # 0
+ὅς # this is what # 0
+ὑπάρχω # there was # 0
+λαῖλαψ ἄνεμος # squall # 0
+εἰς ὁ μέσος # before # 0
+εἰς ὁ μέσος # in front of # 0
+ἐξαποστέλλω # sent away # 0
+ἐλάχιστος # very little # 0
+ἐλάχιστος # very small # 0
+ἀρχιερεύς # high priesthood # 0
+ἀρχιερεύς # chief priests # 0
+ἀρχιερεύς # high priest # 0
+παρίστημι # standing by # 0
+παραχρῆμα # at once # 0
+ὡς # as soon as # 0
+ὡς # just as # 0
+παρασκευή # preparation day # 0
+ἐλαιών # mount of olives # 0
+ἑξῆς # next day # 0
+σπαργανόω # wrapped in cloths # 0
+βύσσος # fine linen # 0
+σπλαγχνίζομαι # heart went out # 0
+σπλαγχνίζομαι # took pity on # 0
+σπλαγχνίζομαι # filled with compassion # 0
+διαδίδωμι # divides up # 0
+ἐπί ὁ αὐτός # together # 0
+ἐν ὁ ἑξῆς # soon afterwards # 0
+διαταράσσω # greatly troubled # 0
+ἐπιτάσσω # gives orders # 0
+πιέζω # pressed down # 0
+ἀποβαίνω # result in # 0
+ἀνασείω # stirs up # 0
+γίνομαι # there was # 0
+γίνομαι # took place # 0
+γίνομαι # there were # 0
+γίνομαι # going on # 0
+γίνομαι # there is # 0
+γίνομαι # charge of # 0
+γίνομαι # came up # 0
+γίνομαι # take place # 0
+διέρχομαι # go over # 0
+διέρχομαι # travelled along # 0
+διέρχομαι # passing through # 0
+ἄλλος # someone else # 0
+ἐκ # belonged to # 0
+ἐκ # one of # 0
+ἐκ # out of # 0
+ἐκ # some of # 0
+βαρέω # weighed down # 0
+πλῆθος # a great company # 0
+πλῆθος # large number # 0
+σινδών # linen cloth # 0
+ἀπομάσσω # wipe off # 0
+μίσθιος # hired men # 0
+καλός # good for # 0
+διοδεύω # travelled about # 0
+σκυθρωπός # faces downcast # 0
+συντυγχάνω # get near # 0
+διαπορεύομαι κατά # went through # 0
+πνεῦμα ἀκάθαρτος # evil spirits # 0
+ἄξιος # in keeping with # 0
+ὁ σύν # companions # 0
+λάμπω # lights up # 0
+ἀπόκειμαι # laid away # 0
+τίς ἄν # what # 0
+πορεύομαι # went on # 0
+πορεύομαι # go back # 0
+πορεύομαι # go on # 0
+πορεύομαι # on my way # 0
+πορεύομαι # on his way # 0
+πορεύομαι # went along # 0
+εἰς ὁ ὀπίσω # back # 0
+τρίς # three times # 0
+ἔλαιον # olive oil # 0
+ἄλλος ὅς # others # 0
+ἐκκόπτω # cut down # 0
+ἐπαίρω ὁ ὀφθαλμός # looked up # 0
+ἐφημερία # priestly division # 0
+ὅπως # so that # 0
+μέγας συνέχω # overcome # 0
+ἄρτος # loaves of bread # 0
+ὁ ὀφθαλμός # up # 0
+ἑκατονταπλασίων # a hundred times # 0
+ὅς ὀφείλω ποιέω # our duty # 0
+ἀλάβαστρος # alabaster jar # 0
+μαμωνᾶς # worldly wealth # 0
+εὖγε # well done # 0
+ἀναιρέω # get rid of # 0
+εἰ μή # but # 0
+εἰ μή # only # 0
+εἰ μή # except # 0
+πινακίδιον # writing tablet # 0
+ἀπολογέομαι # defend yourselves # 0
+διά πᾶς # continually # 0
+πάσχα # passover lamb # 0
+ἀλείφω # put oil on # 0
+γάμος # wedding banquet # 0
+γάμος # wedding feast # 0
+πεντακόσιοι # five hundred # 0
+ποταπός # what kind of # 0
+προστίθημι # went on # 0
+διά ὅς αἰτία # why # 0
+λεπρός # who have leprosy # 0
+προπορεύομαι # go on # 0
+οὐ θέλω # refused # 0
+διά οὗτος # so then # 0
+διά οὗτος # because # 0
+διά οὗτος # therefore # 0
+διά οὗτος # so # 0
+ἐκπορεύομαι # coming out # 0
+καρδία αὐτός # himself # 0
+συγκαλέω # called together # 0
+ἀπό ὁ νῦν # from now on # 0
+ἀφαιρέω # taken away # 0
+ἀφαιρέω # taking away # 0
+ἀφαιρέω # cutting off # 0
+ὁράω # look at # 0
+ὁράω # watch out # 0
+ὁράω # looked at # 0
+προσποιέω # acted as if # 0
+ἔχω ἀνάγκη # must # 0
+διαβάλλω # accused of # 0
+σιγάω # became silent # 0
+ὀδυνάω # in agony # 0
+κἀγώ # and i # 0
+κἀγώ # so i # 0
+σάββατον # sabbath day # 0
+ζάω # live on # 0
+ζάω # alive again # 0
+φεύγω # flee from # 0
+φεύγω # ran off # 0
+ἐν ὅλος # throughout # 0
+πονηρός # more wicked # 0
+ἵστημι # got up # 0
+ἵστημι # stood still # 0
+ἵστημι # stood up # 0
+σημεῖον # miraculous sign # 0
+καταπατέω # trampled on # 0
+καταπατέω # trampling on # 0
+περί # because of # 0
+πάντοθεν # on every side # 0
+ἐν ὅς # while # 0
+ἐν ὅς # when # 0
+ἐν ὅς # because # 0
+ἐν ὅς # until # 0
+ἐν ὅς # as # 0
+ἀνάκειμαι # at the table # 0
+κατά ἴδιος # by themselves # 0
+κατά ἴδιος # privately # 0
+φοβέω φόβος μέγας # terrified # 0
+τυγχάνω # taking part in # 0
+οὐ δύναμαι # unable # 0
+οὐ δύναμαι # can’t # 0
+οὐ δύναμαι # cannot # 0
+σπεύδω # hurried off # 0
+σπεύδω # at once # 0
+ὑγιαίνω # safe and sound # 0
+μεριμνάω # worry about # 0
+αἰτέω # asked for # 0
+αἰτέω # asks for # 0
+ἐπιμελέομαι # took care of # 0
+ἐπιμελέομαι # look after # 0
+ἀνάλημψις # taken up # 0
+διά μέσος # between # 0
+διώκω # running off # 0
+διανυκτερεύω # spent the night # 0
+κατάκειμαι # lying on # 0
+πτύον # winnowing fork # 0
+εἰ μήτι # unless # 0
+παραγίνομαι # came back # 0
+ἀλλά # if not # 0
+καί μήν_2 ἕξ # a half years # 0
+καρποφορέω # produce a crop # 0
+καί # and then # 0
+καί # so that # 0
+καί # in order to # 0
+καί # along with # 0
+καί # as well # 0
+καί # even though # 0
+καί # as for # 0
+καί # together with # 0
+καί # the same way # 0
+καί # in addition # 0
+ἐπί # because of # 0
+ἐπί # in the time of # 0
+ἐπί # in front of # 0
+ἐπί # in charge of # 0
+ἐπί # in accordance with # 0
+καταρτίζω # fully trained # 0
+μᾶλλον # the more # 0
+βρέχω # rained down # 0
+παιδίον # little child # 0
+παιδίον # little children # 0
+ἀποκυλίω # rolled away # 0
+διεγείρω # got up # 0
+ὁ # the one # 0
+ὁ # so that # 0
+ὁ # the ones # 0
+περίχωρος # country around # 0
+περίχωρος # surrounding country # 0
+ἔκστασις λαμβάνω # amazed # 0
+ἐγείρω # raised up # 0
+ἐγείρω # raise up # 0
+ἐγείρω # get up # 0
+ἐγείρω # raised to life # 0
+ἐγείρω # gets up # 0
+ἐκμυκτηρίζω # sneering at # 0
+ἐκμυκτηρίζω # sneered at # 0
+σαλεύω # shaken together # 0
+περικρύβω # remained in seclusion # 0
+ἐγώ εἰμί # it is i # 0
+ἀποτάσσω # give up # 0
+ἀπό ὅς # since # 0
+ἄτεκνος # no children # 0
+δεσμεύω ἅλυσις # chained hand # 0
+ἐντεῦθεν # from here # 0
+ἐντεῦθεν # somewhere else # 0
+κρημνός # steep bank # 0
+ἀτενίζω # fastened on # 0
+ἀτενίζω # looked closely # 0
+ἐναντίον # in the sight of # 0
+καθώς # just as # 0
+καθώς # even as # 0
+περιβλέπω # looked round at # 0
+αἴρω # takes away # 0
+αἴρω # picked up # 0
+αἴρω # take up # 0
+αἴρω # taken away # 0
+αἴρω # take out # 0
+αἴρω # taking out # 0
+βλασφημέω # hurled insults # 0
+βάλλω κόπριον # fertilise # 0
+ἐξουθενέω # looked down on # 0
+ὥρα # at once # 0
+προσέρχομαι # went up # 0
+προσέρχομαι # came up # 0
+προσέρχομαι # came to # 0
+διανεύω # making signs # 0
+ἱερόν # temple area # 0
+γαμίζω # given in marriage # 0
+περισσεύω # left over # 0
+ἔριφος # young goat # 0
+ἀγραυλέω # living out in the fields # 0
+ἀλήθω # grinding grain # 0
+δίδωμι αἶνος # praised # 0
+μετά σπουδή # hurried # 0
+συνέχω # suffering from # 0
+ἀλλήλων # one another # 0
+ἀλλήλων # each other # 0
+σουδάριον # piece of cloth # 0
+θυμιάω # burn incense # 0
+ὄρθρος βαθύς # very early in the morning # 0
+εὐλογέω # gave thanks # 0
+ἕως ὅς # until # 0
+διαμερίζω # divided against # 0
+διαμερίζω # divided up # 0
+ἀποθλίβω # pressing against # 0
+εἷς # the other # 0
+ἀφίστημι # fall away # 0
+ἐγκακέω # give up # 0
