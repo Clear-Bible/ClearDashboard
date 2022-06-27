@@ -57,7 +57,7 @@ jobs:
 
     env:
       Solution_Name: ClearDashboard
-      Solution_Path: src\ClearDashboardWithEngineAndMachine.sln
+      Solution_Path: src\ClearDashboard.sln
       Test_Project_Path: src\ClearDashboard.Tests\ClearDashboard.Tests.csproj
       Wpf_Project_Path: src\ClearDashboard.WPF\ClearDashboard.WPF.csproj
       Wap_Project_Directory: ClearDashboard.WPF.Package    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
