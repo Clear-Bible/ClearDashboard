@@ -20,6 +20,8 @@ public record ParatextConnectedMessage(bool Connected);
 
 public record ParatextUserMessage(string ParatextUserName);
 
+public record LogActivityMessage(string message);
+
 public class DashboardProjectManager : ProjectManager
 {
     private IEventAggregator EventAggregator { get; set; }

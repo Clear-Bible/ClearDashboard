@@ -25,6 +25,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -399,6 +401,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
         }
+
 
         /// <summary>
         /// Binds the viewmodel to it's view prior to activating so that the OnViewAttached method of the
@@ -1141,6 +1144,7 @@ namespace ClearDashboard.Wpf.ViewModels
             return Task.CompletedTask;
         }
 
+       
         #endregion // Methods
     }
 

@@ -201,6 +201,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 CurrentBcv.SetVerseFromId(_currentVerse);
 
                 await ProcessSourceVerseData(CurrentBcv.BBBCCCVVV).ConfigureAwait(false);
+                
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
             }
             else
             {
