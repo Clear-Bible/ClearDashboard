@@ -45,7 +45,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 if (queryResult.Success == false)
                 {
                     LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.VerseLocationId}'");
+                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.BBBCCCVVV}'");
                     return Task.FromResult(queryResult);
                 }
 
@@ -56,7 +56,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 catch (Exception ex)
                 {
                     LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.VerseLocationId}'",
+                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.BBBCCCVVV}'",
                         ex);
                 }
 
@@ -85,7 +85,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 XmlDocument doc = new XmlDocument();
                 doc.Load(filename);
                 //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
-                string bbbcccvvv = bcv.VerseLocationId.PadLeft(9, '0');
+                string bbbcccvvv = bcv.BBBCCCVVV.PadLeft(9, '0');
                 XmlNodeList prop =
                     doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
 

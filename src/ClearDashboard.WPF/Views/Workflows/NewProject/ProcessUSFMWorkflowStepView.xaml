@@ -7,8 +7,8 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:newProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.NewProject"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     d:DataContext="{d:DesignInstance Type=newProject:ProcessUSFMWorkflowStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -25,11 +25,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0"
+        <ListView
             x:Name="SelectedItemVerses"
+            Grid.Row="0"
             MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
             Margin="5"
             VerticalAlignment="Top"
@@ -130,7 +131,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <Button
                 x:Name="MoveBackwards"
                 Margin="5,5,0,0"

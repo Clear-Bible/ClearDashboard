@@ -988,16 +988,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
         {
-            if (_currentVerse == "")
-            {
-                _currentVerse = changedMessage.Verse;
+            //if (_currentVerse == "")
+            //{
+            //    _currentVerse = changedMessage.Verse;
 
-                await GetBiblicalTerms();
-            }
-            else
-            {
-                _currentVerse = changedMessage.Verse;
-            }
+            //    await GetBiblicalTerms();
+            //}
+            //else
+            //{
+            //    _currentVerse = changedMessage.Verse;
+            //}
 
             await Task.CompletedTask;
         }

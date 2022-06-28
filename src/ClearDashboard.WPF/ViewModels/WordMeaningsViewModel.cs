@@ -248,7 +248,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
                 LaunchWebPage.TryOpenUrl(greekPrefix + marbleResource.LogosRef);
             }
-
         }
 
 

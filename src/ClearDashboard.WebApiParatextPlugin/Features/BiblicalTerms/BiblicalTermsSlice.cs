@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
         }
         public Task<RequestResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
         {
-
+            // in 3
             var biblicalTermList = request.BiblicalTermsType == BiblicalTermsType.All
                 ? _host.GetBiblicalTermList(BiblicalTermListType.All)
                 : _project.BiblicalTermList;

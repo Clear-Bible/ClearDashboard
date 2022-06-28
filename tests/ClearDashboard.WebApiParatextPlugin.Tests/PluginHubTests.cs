@@ -19,7 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
            
         }
-        
+
         [Fact]
         public async Task ReceiveMessageTest()
         {
@@ -71,7 +71,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 await StopParatext();
             }
         }
-
-      
+        
     }
 }

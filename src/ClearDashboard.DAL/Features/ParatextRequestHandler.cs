@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features
 {
+    public enum HttpVerb { GET, POST, PUT, DELETE }
+
+
     public abstract class ParatextRequestHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
         where TResponse: RequestResult<TData>
@@ -28,11 +31,23 @@ namespace ClearDashboard.DataAccessLayer.Features
 
         public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
 
-        protected async  Task<TResponse> ExecuteRequest(string requestUri, TRequest request, CancellationToken cancellationToken)
+        protected async  Task<TResponse> ExecuteRequest(string requestUri, TRequest request, CancellationToken cancellationToken, HttpVerb httpVerb = HttpVerb.POST)
         {
             try
             {
-                var response = await HttpClient.PostAsJsonAsync<TRequest>(requestUri, request, cancellationToken).ConfigureAwait(false);
+                HttpResponseMessage response;
+
+                switch (httpVerb)
+                {
+                    case HttpVerb.POST:
+                        response = await HttpClient.PostAsJsonAsync<TRequest>(requestUri, request, cancellationToken).ConfigureAwait(false);
+                        break;
+                    case HttpVerb.PUT:
+                        response = await HttpClient.PutAsJsonAsync<TRequest>(requestUri, request, cancellationToken).ConfigureAwait(false);
+                        break;
+                    default:
+                        throw new Exception("Unsupported HTTP verb " + httpVerb);
+                }
 
                 var result = await response.Content.ReadAsAsync<TResponse>(cancellationToken);
 
