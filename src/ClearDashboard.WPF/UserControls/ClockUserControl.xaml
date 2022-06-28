@@ -59,6 +59,7 @@
                             x:Name="AddButton"
                             Click="ButtonBase_OnClick"
                             Content="+"
+                            Tag="{Binding MenuItems, Mode=TwoWay}"
                             Visibility="{Binding ClockAddTimeZoneVisibility}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

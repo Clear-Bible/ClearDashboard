@@ -40,7 +40,7 @@ namespace ClearDashboard.Wpf.UserControls
         private int _savedMinuteInt;
         private int _savedHourInt;
 
-        private int _timeDisplayIndex=0;
+        private int _timeDisplayIndex = 0;
 
         private TimeZoneInfo _tempTimeZoneInfo = null;
         private string _tempHeader = "";
@@ -59,6 +59,8 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
+        public ObservableCollection<MenuItemNest> CheckedList { get; set; }
+
 
         public string localTime { get; set; }
 
@@ -66,7 +68,21 @@ namespace ClearDashboard.Wpf.UserControls
         {
             InitializeComponent();
             DataContext = this;
-            
+
+            //string[] stringArr = new[]
+            //{
+            //    "True,IndividualName0,self,GroupName;" +
+            //    "True,IndividualName1,(UTC-12:00) International Date Line West,GroupName;" +
+            //    "False,IndividualName2,(UTC-12:00) International Date Line West,GroupName"
+            //};
+            //StringCollection settingsStringCollection = new();
+            //settingsStringCollection.AddRange(stringArr);
+            //settingsStringCollection.AddRange(stringArr);
+            //settingsStringCollection.AddRange(stringArr);
+
+            //Properties.Settings.Default.TimeZones = settingsStringCollection;
+            //Properties.Settings.Default.Save();
+
             //Construct MenuItemNest of TimeZones
             var timezones = TimeZoneInfo.GetSystemTimeZones();
             ObservableCollection<MenuItemNest> timeZoneMenuItemNest = new();
@@ -74,54 +90,100 @@ namespace ClearDashboard.Wpf.UserControls
             {
                 timeZoneMenuItemNest.Add(new MenuItemNest
                 {
-                    Header = timezone.DisplayName, 
-                    ClockCheckBoxVisibility = Visibility.Collapsed, 
-                    ClockTextBoxVisibility = Visibility.Collapsed, 
-                    ClockTextBlockVisibility = Visibility.Visible, 
+                    Header = timezone.DisplayName,
+                    ClockCheckBoxVisibility = Visibility.Collapsed,
+                    ClockTextBoxVisibility = Visibility.Collapsed,
+                    ClockTextBlockVisibility = Visibility.Visible,
                     ClockAddTimeZoneVisibility = Visibility.Collapsed,
                     NameTimeVisibility = Visibility.Collapsed,
-                    TimeZoneInfo = timezone, 
-                    MenuLevel = MenuItemNest.ClockMenuLevel.Utc, 
+                    TimeZoneInfo = timezone,
+                    MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
                     DeleteButtonVisibility = Visibility.Collapsed
                 });
             }
 
-            //Construct NameSettings MenuItemNests
+            //Construct Individual MenuItemNests
             ObservableCollection<MenuItemNest> SettingsMenuItemNest = new();
 
             StringCollection SettingsStringCollection = new StringCollection();
             SettingsStringCollection = Properties.Settings.Default.TimeZones;
 
-            foreach (var setting in SettingsStringCollection)
+            foreach (var group in SettingsStringCollection)
             {
-                var splitArr = setting.Split(';');
+                //menuItems = new ObservableCollection<MenuItemNest>
+                var groupArr = group.Split(";");
+                ObservableCollection<MenuItemNest> groupMenuItemNest = new();
 
-                //cycle through each time zone and check what matches
-                foreach(var timezone in timezones)
+                foreach (var individual in groupArr)
                 {
-                    if (timezone.DisplayName == splitArr[2])
+                    var individualArr = individual.Split(",");
+                    if (individualArr[2] != "self")
                     {
-                        SettingsMenuItemNest.Add(new MenuItemNest
+                        //cycle through each time zone and check what matches
+                        foreach (var timezone in timezones)
                         {
-                            //set the CheckMark/CheckBox
-                            CheckBoxIsChecked = splitArr[0],
-                            ClockCheckBoxVisibility = Visibility.Visible,
-                            //set the name/TextBox
-                            TextBoxText = splitArr[1],
-                            ClockTextBoxVisibility = Visibility.Visible,
-                            //set the UTC/TextBlock
-                            Header = splitArr[2],
-                            NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
-                            ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                            NameTimeVisibility = Visibility.Visible,
-                            //set MenuItems to TimeZoneMenuItemNest
-                            MenuItems = timeZoneMenuItemNest,
-                            MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
-                            DeleteButtonVisibility = Visibility.Visible,
-                            TimeZoneInfo = timezone
-                        });
+                            if (timezone.DisplayName == individualArr[2])
+                            {
+                                groupMenuItemNest.Add(new MenuItemNest
+                                {
+                                    //set the CheckMark/CheckBox
+                                    CheckBoxIsChecked = individualArr[0],
+                                    ClockCheckBoxVisibility = Visibility.Visible,
+                                    //set the name/TextBox
+                                    TextBoxText = individualArr[1],
+                                    ClockTextBoxVisibility = Visibility.Visible,
+                                    //set the UTC/TextBlock
+                                    Header = individualArr[2],
+                                    NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
+                                    ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                                    NameTimeVisibility = Visibility.Visible,
+                                    //set MenuItems to TimeZoneMenuItemNest
+                                    MenuItems = timeZoneMenuItemNest,
+                                    MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                                    DeleteButtonVisibility = Visibility.Visible,
+                                    TimeZoneInfo = timezone,
+                                    GroupName = individualArr[3]
+                                });
+                            }
+                        }
                     }
                 }
+
+                //groupMenuItemNest.Add(new MenuItemNest
+                //{
+                //    //set the CheckMark/CheckBox
+                //    ClockCheckBoxVisibility = Visibility.Collapsed,
+                //    ClockTextBoxVisibility = Visibility.Collapsed,
+                //    ClockAddTimeZoneVisibility = Visibility.Visible,
+                //    NameTimeVisibility = Visibility.Collapsed,
+                //    MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                //    DeleteButtonVisibility = Visibility.Collapsed,
+                //    ClockTextBlockVisibility = Visibility.Collapsed
+                //});
+
+                var selfArr = groupArr[0].Split(",");
+                MenuItemNest groupMenuItem = new MenuItemNest
+                {
+                    //set the CheckMark/CheckBox
+                    CheckBoxIsChecked = selfArr[0],
+                    ClockCheckBoxVisibility = Visibility.Visible,
+                    //set the name/TextBox
+                    TextBoxText = selfArr[1],
+                    ClockTextBoxVisibility = Visibility.Visible,
+                    //set the UTC/TextBlock
+                    Header = selfArr[2],
+                    ClockAddTimeZoneVisibility = Visibility.Visible,
+                    NameTimeVisibility = Visibility.Collapsed,
+                    //set MenuItems to TimeZoneMenuItemNest
+                    MenuLevel = MenuItemNest.ClockMenuLevel.Group,
+                    DeleteButtonVisibility = Visibility.Visible,
+                    GroupName = selfArr[3],
+                    MenuItems = groupMenuItemNest
+                };
+
+                SettingsMenuItemNest.Add(groupMenuItem);
+
+
 
                 //////calcualte or recall from database name Time in here somewhere
                 //////we have the utc string so we take the UTC
@@ -175,24 +237,36 @@ namespace ClearDashboard.Wpf.UserControls
 
                 ////}
 
-                
+
             }
 
-            //additional button
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockCheckBoxVisibility = Visibility.Collapsed;
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockTextBoxVisibility = Visibility.Collapsed;
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockTextBlockVisibility = Visibility.Collapsed;
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockAddTimeZoneVisibility = Visibility.Visible;
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].NameTimeVisibility = Visibility.Collapsed;
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].CheckBoxIsChecked = "True";
-            SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].DeleteButtonVisibility = Visibility.Collapsed;
+            SettingsMenuItemNest.Add(new MenuItemNest
+            {
+                //set the CheckMark/CheckBox
+                ClockCheckBoxVisibility = Visibility.Collapsed,
+                ClockTextBoxVisibility = Visibility.Collapsed,
+                ClockAddTimeZoneVisibility = Visibility.Visible,
+                NameTimeVisibility = Visibility.Collapsed,
+                MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                DeleteButtonVisibility = Visibility.Collapsed,
+                ClockTextBlockVisibility = Visibility.Collapsed
+            });
+
+            ////additional button
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockCheckBoxVisibility = Visibility.Collapsed;
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockTextBoxVisibility = Visibility.Collapsed;
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockTextBlockVisibility = Visibility.Collapsed;
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].ClockAddTimeZoneVisibility = Visibility.Visible;
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].NameTimeVisibility = Visibility.Collapsed;
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].CheckBoxIsChecked = "True";
+            //SettingsMenuItemNest[SettingsMenuItemNest.Count - 1].DeleteButtonVisibility = Visibility.Collapsed;
 
             MenuItems = new ObservableCollection<MenuItemNest>
             {
-                new MenuItemNest { 
+                new MenuItemNest {
                     Header = "Name 12:00am",
-                    ClockCheckBoxVisibility=Visibility.Collapsed, 
-                    ClockTextBoxVisibility = Visibility.Collapsed, 
+                    ClockCheckBoxVisibility=Visibility.Collapsed,
+                    ClockTextBoxVisibility = Visibility.Collapsed,
                     ClockAddTimeZoneVisibility = Visibility.Collapsed,
                     NameTimeVisibility = Visibility.Collapsed,
                     MenuItems = SettingsMenuItemNest,
@@ -222,22 +296,39 @@ namespace ClearDashboard.Wpf.UserControls
             _refreshTimer.Elapsed += ClockRefresh;
             _refreshTimer.AutoReset = true;
             _refreshTimer.Enabled = true;
-            
+
         }
 
         private void SaveMenuToSettings()
         {
             StringCollection settingsStringCollection = new();
 
-            foreach (var menuItem in MenuItems[0].MenuItems)
+            foreach (var group in MenuItems[0].MenuItems)
             {
-                string menuSettings = menuItem.CheckBoxIsChecked + ";" + menuItem.TextBoxText + ";" + menuItem.Header;
-                settingsStringCollection.Add(menuSettings);
+                string groupSettings = group.CheckBoxIsChecked + "," +
+                                       group.TextBoxText + "," +
+                                       group.Header + "," +
+                                       group.GroupName;
+                if (group.MenuItems != null)
+                {
+                    foreach (var individual in group.MenuItems)
+                    {
+                        string individualSettings =
+                            individual.CheckBoxIsChecked + "," +
+                            individual.TextBoxText + "," +
+                            individual.Header + "," +
+                            individual.GroupName;
+                        groupSettings = groupSettings + ";" + individualSettings;
+
+                    }
+                    settingsStringCollection.Add(groupSettings);
+                }
             }
+
 
             //if (optionalUtc == "None")
             //{
-                
+
             //}
             //else
             //{ //(But we need to update the timezone also?)
@@ -253,7 +344,7 @@ namespace ClearDashboard.Wpf.UserControls
             //        }
             //    }
 
-                
+
             //}
 
             Properties.Settings.Default.TimeZones = settingsStringCollection;
@@ -262,121 +353,174 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void ClockRefresh(object sender, ElapsedEventArgs e)
         {
-            //Progress to the next Checked Menu Item.  If end of list reached then display local time
-
-            _timeDisplayIndex++;
-
-            bool checkedFound = false;
-            while (!checkedFound)
+            //create list of checked menu items
+            CheckedList = new();
+            foreach (var group in MenuItems[0].MenuItems)
             {
-                if (_timeDisplayIndex <= MenuItems[0].MenuItems.Count - 1)
+                if (group.CheckBoxIsChecked=="True")
                 {
-                    if (MenuItems[0].MenuItems[_timeDisplayIndex - 1].CheckBoxIsChecked == "False")
+                    foreach (var individual in group.MenuItems)
                     {
-                        _timeDisplayIndex++;
-                    }
-                    else
-                    {
-                        checkedFound = true;
+                        individual.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo).ToShortTimeString();
+                        CheckedList.Add(individual);
                     }
                 }
                 else
                 {
-                    break;
+                    if (group.MenuItems != null)
+                    {
+                        foreach (var individual in group.MenuItems)
+                        {
+                            individual.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo).ToShortTimeString();
+                            if (individual.CheckBoxIsChecked == "True")
+                            {
+                                CheckedList.Add(individual);
+                            }
+                        }
+                    }
                 }
             }
 
-            //while (MenuItems[0].MenuItems[_timeDisplayIndex - 1].CheckBoxIsChecked == "False")
-            //{
-            //    _timeDisplayIndex++;
-            //}
-
-            //Display Local Time
-            if (_timeDisplayIndex > MenuItems[0].MenuItems.Count-1)
+            //update UI to a new menu Item 
+            _timeDisplayIndex++;
+            if (_timeDisplayIndex>=CheckedList.Count)
             {
-                _timeDisplayIndex = 0;
-
-                //_myMinute = DateTime.Now.Minute;
-                //_myHour = DateTime.Now.Hour;
+                _timeDisplayIndex = -1;
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    //if (_myHour > 12)
-                    //{
-                    //    _myHour -= 12;
-                    //    localTime = "Local " + _myHour + ":" + _myMinute.ToString().PadLeft(2, '0') + " PM";
-                    //}
-                    //else
-                    //{
-                    //    localTime = "Local " + _myHour + ":" + _myMinute.ToString().PadLeft(2, '0') + " AM";
-                    //}
-
-                    MenuItems[0].Header = "Local "+DateTime.Now.ToShortTimeString();
-
+                    MenuItems[0].Header = "Local " + DateTime.Now.ToShortTimeString();
+                });
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    MenuItems[0].Header = CheckedList[_timeDisplayIndex].TextBoxText + " " + CheckedList[_timeDisplayIndex].NameTime;
                 });
             }
 
-            //Display Times on MenuItems List
-            else
-            {
-                //Display Time
-                MenuItems[0].Header = MenuItems[0].MenuItems[_timeDisplayIndex - 1].TextBoxText + " " + MenuItems[0].MenuItems[_timeDisplayIndex - 1].NameTime;
-            }
+            
+            
 
-            //Update Times
-            foreach (MenuItemNest nest in MenuItems[0].MenuItems)
-            {
-                //string nameTime;
 
-                //_savedMinuteInt = 0;
-                //_savedHourInt = 0;
+            //-------------------------------------------------------------------------------------
+            //Progress to the next Checked Menu Item.  If end of list reached then display local time
 
-                //try
-                //{
-                //    _savedMinuteString = nest.Header.Split(':')[1].PadLeft(2, '0').Substring(0, 2);
-                //    Int32.TryParse(_savedMinuteString, out _savedMinuteInt);
-                //    _nameTimeMinute = DateTime.UtcNow.Minute + _savedMinuteInt;
-                //    if (_nameTimeMinute > 60)
-                //    {
-                //        _nameTimeMinute -= 60;
-                //    }
-                //}
-                //catch
-                //{
-                //    _nameTimeMinute = 0;
-                //}
 
-                //_savedHourString = nest.Header.Split(':')[0].PadLeft(7, '0').Substring(5, 2);
-                //Int32.TryParse(_savedHourString, out _savedHourInt);
-                //if ((nest.Header).PadLeft(5, '0').Substring(4, 1) == "+")
-                //{
-                //    _nameTimeHour = DateTime.UtcNow.Hour + _savedHourInt;
-                //}
-                //if ((nest.Header).PadLeft(5, '0').Substring(4, 1) == "-")
-                //{
-                //    _nameTimeHour = DateTime.UtcNow.Hour - _savedHourInt + 1;
-                //}
 
-                //if (_nameTimeHour > 24)
-                //{
-                //    _nameTimeHour -= 24;
-                //}
+            //bool checkedFound = false;
+            //while (!checkedFound)
+            //{
+            //    if (_timeDisplayIndex <= MenuItems[0].MenuItems.Count - 1)
+            //    {
+            //        if (MenuItems[0].MenuItems[_timeDisplayIndex - 1].CheckBoxIsChecked == "False")
+            //        {
+            //            _timeDisplayIndex++;
+            //        }
+            //        else
+            //        {
+            //            checkedFound = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        break;
+            //    }
+            //}
 
-                //if (_nameTimeHour > 12)
-                //{
-                //    _nameTimeHour -= 12;
-                //    nameTime = _nameTimeHour + ":" + _nameTimeMinute.ToString().PadLeft(2, '0') + " PM";
+            ////while (MenuItems[0].MenuItems[_timeDisplayIndex - 1].CheckBoxIsChecked == "False")
+            ////{
+            ////    _timeDisplayIndex++;
+            ////}
 
-                //}
-                //else
-                //{
-                //    nameTime = _nameTimeHour + ":" + _nameTimeMinute.ToString().PadLeft(2, '0') + " AM";
+            ////Display Local Time
+            //if (_timeDisplayIndex > MenuItems[0].MenuItems.Count - 1)
+            //{
+            //    _timeDisplayIndex = 0;
 
-                //}
-                nest.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, nest.TimeZoneInfo).ToShortTimeString();
-            }
+            //    //_myMinute = DateTime.Now.Minute;
+            //    //_myHour = DateTime.Now.Hour;
+
+            //    this.Dispatcher.Invoke(() =>
+            //    {
+            //        //if (_myHour > 12)
+            //        //{
+            //        //    _myHour -= 12;
+            //        //    localTime = "Local " + _myHour + ":" + _myMinute.ToString().PadLeft(2, '0') + " PM";
+            //        //}
+            //        //else
+            //        //{
+            //        //    localTime = "Local " + _myHour + ":" + _myMinute.ToString().PadLeft(2, '0') + " AM";
+            //        //}
+
+            //        MenuItems[0].Header = "Local " + DateTime.Now.ToShortTimeString();
+
+            //    });
+            //}
+
+            ////Display Times on MenuItems List
+            //else
+            //{
+            //    //Display Time
+            //    MenuItems[0].Header = MenuItems[0].MenuItems[_timeDisplayIndex - 1].TextBoxText + " " + MenuItems[0].MenuItems[_timeDisplayIndex - 1].NameTime;
+            //}
+
+            ////Update Times
+            //foreach (MenuItemNest nest in MenuItems[0].MenuItems)
+            //{
+            //    //string nameTime;
+
+            //    //_savedMinuteInt = 0;
+            //    //_savedHourInt = 0;
+
+            //    //try
+            //    //{
+            //    //    _savedMinuteString = nest.Header.Split(':')[1].PadLeft(2, '0').Substring(0, 2);
+            //    //    Int32.TryParse(_savedMinuteString, out _savedMinuteInt);
+            //    //    _nameTimeMinute = DateTime.UtcNow.Minute + _savedMinuteInt;
+            //    //    if (_nameTimeMinute > 60)
+            //    //    {
+            //    //        _nameTimeMinute -= 60;
+            //    //    }
+            //    //}
+            //    //catch
+            //    //{
+            //    //    _nameTimeMinute = 0;
+            //    //}
+
+            //    //_savedHourString = nest.Header.Split(':')[0].PadLeft(7, '0').Substring(5, 2);
+            //    //Int32.TryParse(_savedHourString, out _savedHourInt);
+            //    //if ((nest.Header).PadLeft(5, '0').Substring(4, 1) == "+")
+            //    //{
+            //    //    _nameTimeHour = DateTime.UtcNow.Hour + _savedHourInt;
+            //    //}
+            //    //if ((nest.Header).PadLeft(5, '0').Substring(4, 1) == "-")
+            //    //{
+            //    //    _nameTimeHour = DateTime.UtcNow.Hour - _savedHourInt + 1;
+            //    //}
+
+            //    //if (_nameTimeHour > 24)
+            //    //{
+            //    //    _nameTimeHour -= 24;
+            //    //}
+
+            //    //if (_nameTimeHour > 12)
+            //    //{
+            //    //    _nameTimeHour -= 12;
+            //    //    nameTime = _nameTimeHour + ":" + _nameTimeMinute.ToString().PadLeft(2, '0') + " PM";
+
+            //    //}
+            //    //else
+            //    //{
+            //    //    nameTime = _nameTimeHour + ":" + _nameTimeMinute.ToString().PadLeft(2, '0') + " AM";
+
+            //    //}
+                
+            //    ///////nest.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, nest.TimeZoneInfo).ToShortTimeString();TODO
+            //}
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propName = null)
         {
@@ -460,76 +604,170 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            //Construct MenuItemNest of TimeZones
-            var timezones = TimeZoneInfo.GetSystemTimeZones();
-            ObservableCollection<MenuItemNest> timeZoneMenuItemNest = new();
-            foreach (var timezone in timezones)
+            if (sender is Button button)//Add Individual
             {
-                timeZoneMenuItemNest.Add(new MenuItemNest
+                if (button.Tag != null)
                 {
-                    Header = timezone.DisplayName,
-                    ClockCheckBoxVisibility = Visibility.Collapsed,
-                    ClockTextBoxVisibility = Visibility.Collapsed,
-                    ClockTextBlockVisibility = Visibility.Visible,
-                    ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                    NameTimeVisibility = Visibility.Collapsed,
-                    TimeZoneInfo = timezone,
-                    MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
-                    DeleteButtonVisibility = Visibility.Collapsed
-                });
+                    //Construct MenuItemNest of TimeZones
+                    var timezones = TimeZoneInfo.GetSystemTimeZones();
+                    ObservableCollection<MenuItemNest> timeZoneMenuItemNest = new();
+                    foreach (var timezone in timezones)
+                    {
+                        timeZoneMenuItemNest.Add(new MenuItemNest
+                        {
+                            Header = timezone.DisplayName,
+                            ClockCheckBoxVisibility = Visibility.Collapsed,
+                            ClockTextBoxVisibility = Visibility.Collapsed,
+                            ClockTextBlockVisibility = Visibility.Visible,
+                            ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                            NameTimeVisibility = Visibility.Collapsed,
+                            TimeZoneInfo = timezone,
+                            MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
+                            DeleteButtonVisibility = Visibility.Collapsed
+                        });
+                    }
+
+                    if (button.Tag is ObservableCollection<MenuItemNest> nest)
+                    {
+                        nest.Insert(nest.Count, new MenuItemNest
+                        {
+                            //set the CheckMark/CheckBox
+                            CheckBoxIsChecked = "False",
+                            ClockCheckBoxVisibility = Visibility.Visible,
+                            //set the name/TextBox
+                            TextBoxText = TimeZoneInfo.Local.StandardName,
+                            ClockTextBoxVisibility = Visibility.Visible,
+                            //set the UTC/TextBlock
+                            Header = TimeZoneInfo.Local.DisplayName,
+                            NameTime = DateTime.Now.ToShortTimeString(),
+                            ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                            NameTimeVisibility = Visibility.Visible,
+                            //set MenuItems to TimeZoneMenuItemNest
+                            MenuItems = timeZoneMenuItemNest,
+                            MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                            DeleteButtonVisibility = Visibility.Visible,
+                            TimeZoneInfo = TimeZoneInfo.Local
+                        });
+
+                        SaveMenuToSettings();
+                    }
+                }
+                else//Add Group
+                {
+                    MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count - 1, new MenuItemNest
+                    {
+                        //set the CheckMark/CheckBox
+                        CheckBoxIsChecked = "False",
+                        ClockCheckBoxVisibility = Visibility.Visible,
+                        //set the name/TextBox
+                        TextBoxText = TimeZoneInfo.Local.StandardName,
+                        ClockTextBoxVisibility = Visibility.Visible,
+                        //set the UTC/TextBlock
+                        Header = "self",
+                        MenuItems = new(),
+                        ClockAddTimeZoneVisibility = Visibility.Visible,
+                        NameTimeVisibility = Visibility.Collapsed,
+                        //set MenuItems to TimeZoneMenuItemNest
+                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                        DeleteButtonVisibility = Visibility.Visible,
+                        TimeZoneInfo = TimeZoneInfo.Local
+                    });
+
+                    //add individual to group
+                    //Construct MenuItemNest of TimeZones
+                    var timezones = TimeZoneInfo.GetSystemTimeZones();
+                    ObservableCollection<MenuItemNest> timeZoneMenuItemNest = new();
+                    foreach (var timezone in timezones)
+                    {
+                        timeZoneMenuItemNest.Add(new MenuItemNest
+                        {
+                            Header = timezone.DisplayName,
+                            ClockCheckBoxVisibility = Visibility.Collapsed,
+                            ClockTextBoxVisibility = Visibility.Collapsed,
+                            ClockTextBlockVisibility = Visibility.Visible,
+                            ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                            NameTimeVisibility = Visibility.Collapsed,
+                            TimeZoneInfo = timezone,
+                            MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
+                            DeleteButtonVisibility = Visibility.Collapsed
+                        });
+                    }
+                    
+                    MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new MenuItemNest
+                    {
+                        //set the CheckMark/CheckBox
+                        CheckBoxIsChecked = "False",
+                        ClockCheckBoxVisibility = Visibility.Visible,
+                        //set the name/TextBox
+                        TextBoxText = TimeZoneInfo.Local.StandardName,
+                        ClockTextBoxVisibility = Visibility.Visible,
+                        //set the UTC/TextBlock
+                        Header = TimeZoneInfo.Local.DisplayName,
+                        NameTime = DateTime.Now.ToShortTimeString(),
+                        ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                        NameTimeVisibility = Visibility.Visible,
+                        //set MenuItems to TimeZoneMenuItemNest
+                        MenuItems = timeZoneMenuItemNest,
+                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                        DeleteButtonVisibility = Visibility.Visible,
+                        TimeZoneInfo = TimeZoneInfo.Local
+                    });
+                    
+
+                    SaveMenuToSettings();
+                }
             }
-
-            MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count-1,new MenuItemNest
-            {
-                //set the CheckMark/CheckBox
-                CheckBoxIsChecked = "False",
-                ClockCheckBoxVisibility = Visibility.Visible,
-                //set the name/TextBox
-                TextBoxText = TimeZoneInfo.Local.StandardName,
-                ClockTextBoxVisibility = Visibility.Visible,
-                //set the UTC/TextBlock
-                Header = TimeZoneInfo.Local.DisplayName,
-                NameTime = DateTime.Now.ToShortTimeString(),
-                ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                NameTimeVisibility = Visibility.Visible,
-                //set MenuItems to TimeZoneMenuItemNest
-                MenuItems = timeZoneMenuItemNest,
-                MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
-                DeleteButtonVisibility = Visibility.Visible,
-                TimeZoneInfo = TimeZoneInfo.Local
-            });
-
-            SaveMenuToSettings();
         }
 
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
             {
-                button.Visibility=Visibility.Collapsed;
-                List<MenuItemNest> removeItemList = new();
-                foreach (var item in MenuItems[0].MenuItems)
+                button.Visibility = Visibility.Collapsed;
+                List<MenuItemNest> removeIndividualList = new();
+                List<MenuItemNest> removeGroupList = new();
+                bool allClear = false;
+
+                foreach (var group in MenuItems[0].MenuItems)
                 {
-                    if (item.DeleteButtonVisibility == Visibility.Collapsed)
+                    if (group.DeleteButtonVisibility == Visibility.Collapsed)
                     {
-                       removeItemList.Add(item);
+                        removeGroupList.Add(group);
+                    }
+
+                    if(group.MenuItems!=null){
+                        foreach (var individual in group.MenuItems)
+                        {
+                            if (individual.DeleteButtonVisibility == Visibility.Collapsed)
+                            {
+                                removeIndividualList.Add(individual);
+                            }
+                        }
+
+                        foreach (var item in removeIndividualList)
+                        {
+                            if (item.ClockAddTimeZoneVisibility != Visibility.Visible)
+                            {
+                                group.MenuItems.Remove(item);
+                            }
+                        }
+                    }
+                    
+                }
+                foreach (var group in removeGroupList)
+                {
+                    if (group.ClockTextBoxVisibility == Visibility.Visible)
+                    {
+                        MenuItems[0].MenuItems.Remove(group);
                     }
                 }
 
-                foreach (var item in removeItemList)
-                {
-                    if (item.ClockAddTimeZoneVisibility != Visibility.Visible)
-                    {
-                        MenuItems[0].MenuItems.Remove(item);
-                    }
-                }
-                
                 SaveMenuToSettings();
             }
         }
     }
 
-    public class MenuItemNest: INotifyPropertyChanged
+    public class MenuItemNest : INotifyPropertyChanged
     {
         private readonly ICommand _command;
 
@@ -553,7 +791,7 @@ namespace ClearDashboard.Wpf.UserControls
         public Visibility ClockTextBoxVisibility { get; set; }
         private string _textBoxText { get; set; }
         public string TextBoxText
-    {
+        {
             get { return _textBoxText; }
             set
             {
@@ -597,6 +835,14 @@ namespace ClearDashboard.Wpf.UserControls
                 OnPropertyChanged();
             }
         }
+
+        private string _groupName;
+        public string GroupName
+        {
+            get { return _groupName; }
+            set { _groupName = value; }
+        }
+
 
 
         public ObservableCollection<MenuItemNest> MenuItems { get; set; }
