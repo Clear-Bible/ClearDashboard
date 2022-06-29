@@ -88,8 +88,8 @@ namespace ClearDashboard.DAL.Tests
                 projectInfo.IsRtl = false;
                 projectInfo.ProjectName = $"Updated {projectName}";
 
-                await context.AddCopyAsync(projectInfo);
-                await context.SaveChangesAsync();
+                //await context.AddCopyAsync(projectInfo);
+                //await context.SaveChangesAsync();
 
                 Assert.Equal(2, context.ProjectInfos.Count());
 
