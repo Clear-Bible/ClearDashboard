@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features;
 
-public abstract record ProjectRequestCommand<TData>(string Project) : IRequest<RequestResult<TData>>;
+public abstract record ProjectRequestCommand<TData>(string ProjectName) : IRequest<RequestResult<TData>>;
 
 public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
     where TRequest : ProjectRequestCommand<TData>, IRequest<TResponse>
@@ -31,7 +31,7 @@ public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TDat
     {
         try 
         {
-            AlignmentContext = await ProjectNameDbContextFactory!.GetDatabaseContext(request.Project).ConfigureAwait(false);
+            AlignmentContext = await ProjectNameDbContextFactory!.GetDatabaseContext(request.ProjectName).ConfigureAwait(false);
             return await SaveData(request, cancellationToken);
 
         }
