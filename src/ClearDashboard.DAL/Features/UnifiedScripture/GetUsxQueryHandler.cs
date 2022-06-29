@@ -4,6 +4,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS.Features.Features;
 
 namespace ClearDashboard.DataAccessLayer.Features.UnifiedScripture
 {

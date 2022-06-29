@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features.Features;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
