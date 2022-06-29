@@ -25,7 +25,7 @@ public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TDat
         Logger = logger;
     }
 
-    protected abstract Task<TResponse> SaveData(TRequest requestQuery, CancellationToken cancellationToken);
+    protected abstract Task<TResponse> SaveData(TRequest request, CancellationToken cancellationToken);
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
     {

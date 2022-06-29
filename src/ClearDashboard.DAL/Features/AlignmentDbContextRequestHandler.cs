@@ -26,14 +26,14 @@ namespace ClearDashboard.DataAccessLayer.Features
             Logger = logger;
         }
 
-        protected abstract Task<TResponse> GetData(ProjectRequestQuery<TData> requestQuery);
+        protected abstract Task<TResponse> GetData(TRequest request, CancellationToken cancellationToken);
        
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 AlignmentContext = await ProjectNameDbContextFactory!.GetDatabaseContext(request.Project).ConfigureAwait(false);
-                return await GetData(request);
+                return await GetData(request, cancellationToken);
             }
             catch (Exception ex)
             {
