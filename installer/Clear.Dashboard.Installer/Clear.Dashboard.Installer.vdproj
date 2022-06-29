@@ -19,6 +19,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_F5BED9AB4F944303B20AC9A647978B36"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -116,6 +122,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5BED9AB4F944303B20AC9A647978B36"
+            {
+            "SourcePath" = "8:..\\..\\src\\ClearDashboard.WPF\\Assets\\ClearDashboard_logo.ico"
+            "TargetName" = "8:ClearDashboard_logo.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_379565C832E544E9B268ADB0CA44CB13"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -126,7 +152,7 @@
             {
             "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:TARGETDIR"
@@ -137,7 +163,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_86F13E0F1A1B4C43A96A386157E5577C"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -148,7 +174,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_B776FFCB9483493B96DE8FB87A6076B9"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
@@ -293,6 +319,34 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7EA6D868812C4167A4CDFCE43D9D806B"
+            {
+            "Name" = "8:Clear Dashboard"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_B776FFCB9483493B96DE8FB87A6076B9"
+            "Folder" = "8:_B776FFCB9483493B96DE8FB87A6076B9"
+            "WorkingFolder" = "8:_B776FFCB9483493B96DE8FB87A6076B9"
+            "Icon" = "8:_F5BED9AB4F944303B20AC9A647978B36"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D5C90B1B1CCC42F48F42E578E5EED00E"
+            {
+            "Name" = "8:Clear Dashboard"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_B0B2573B1DDC4FADBFE39F8E502A0B0F"
+            "Folder" = "8:_86F13E0F1A1B4C43A96A386157E5577C"
+            "WorkingFolder" = "8:_379565C832E544E9B268ADB0CA44CB13"
+            "Icon" = "8:_F5BED9AB4F944303B20AC9A647978B36"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
