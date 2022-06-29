@@ -117,10 +117,9 @@ namespace ClearDashboard.DAL.Tests
 
 
         [Fact]
-        public async Task ProjectInfoViaQueryHandlerTest()
+        public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
-            Assert.NotNull(userProvider);
+           
 
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
@@ -133,11 +132,7 @@ namespace ClearDashboard.DAL.Tests
 
             try
             {
-                var testUser = new User { FirstName = "Test", LastName = "User" };
-                userProvider.CurrentUser = testUser;
-
-                context.Users.Add(testUser);
-                await context.SaveChangesAsync();
+                var testUser = await AddDashboardUser(context);
 
                 var projectInfo = new ProjectInfo
                 {
@@ -145,13 +140,27 @@ namespace ClearDashboard.DAL.Tests
                     ProjectName = projectName
                 };
 
-                context.ProjectInfos.Add(projectInfo);
-                await context.SaveChangesAsync();
+                // Create a copy of the project which is not attached
+                // to the database context so we can compare it to 
+                // an updated version.
+                var copiedProject = Copy(projectInfo);
 
                 var mediator = ServiceProvider.GetService<IMediator>();
 
-                var query = new GetProjectInfoQuery(projectName);
+                // Save a project
+                var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
+                var savedResult = await mediator.Send(saveCommand);
 
+                Assert.NotNull(savedResult);
+                Assert.True(savedResult.Success);
+                Assert.True(savedResult.HasData);
+
+                var savedProject = savedResult.Data.FirstOrDefault();
+                Assert.NotNull(savedProject);
+                Assert.Equal(testUser.Id, savedProject.UserId);
+
+                // Now get the project back
+                var query = new GetProjectInfoQuery(projectName);
                 var result = await mediator.Send(query);
 
                 Assert.NotNull(result);
@@ -160,31 +169,39 @@ namespace ClearDashboard.DAL.Tests
 
                 var roundTrippedProject = result.Data.FirstOrDefault();
 
+
+                // Do some sanity checking
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
 
+                Assert.Equal(savedProject, roundTrippedProject);
+
+
+                // Create a copy of the project which is not attached
+                // to the database context so we can compare it to 
+                // an updated version.
+                copiedProject = Copy(projectInfo);
+
+                // Now update the project
                 projectInfo.IsRtl = false;
                 projectInfo.ProjectName = $"Updated {projectName}";
 
-                await context.AddCopyAsync(projectInfo);
-                await context.SaveChangesAsync();
+                var updateCommand = new UpdateProjectInfoCommand(projectName, new[] { projectInfo });
+                var updateResult = await mediator.Send(updateCommand);
+                Assert.NotNull(updateResult);
+                Assert.True(updateResult.Success);
+                Assert.True(updateResult.HasData);
 
-                Assert.Equal(2, context.ProjectInfos.Count());
+                var updatedProject = updateResult.Data.FirstOrDefault();
 
-                roundTrippedProject =
-                    context.ProjectInfos.OrderByDescending(project => project.Created).FirstOrDefault();
+                Assert.NotEqual(savedProject, copiedProject);
 
-                Assert.NotNull(roundTrippedProject);
-                if (roundTrippedProject != null)
-                {
-                    Assert.Equal(testUser.Id, roundTrippedProject.UserId);
-                    Assert.NotEqual(roundTrippedProject.Id, projectInfo.Id);
-                }
             }
             catch (Exception ex)
             {
                 var message = ex.Message;
                 Output.WriteLine(message);
+                throw;
             }
             finally
             {

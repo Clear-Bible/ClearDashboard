@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
@@ -12,7 +14,9 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
 using ClearDashboard.DAL.Tests.Slices.Users;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -144,6 +148,24 @@ namespace ClearDashboard.DAL.Tests
             var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");
 
             return process;
+        }
+
+        protected T? Copy<T>(T entity)
+        {
+            var json = JsonSerializer.Serialize(entity);
+            return JsonSerializer.Deserialize<T>(json);
+        }
+
+        protected async Task<User> AddDashboardUser(AlignmentContext context)
+        {
+            var testUser = new User { FirstName = "Test", LastName = "User" };
+            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            Assert.NotNull(userProvider);
+            userProvider!.CurrentUser = testUser;
+
+            context.Users.Add(testUser);
+            await context.SaveChangesAsync();
+            return testUser;
         }
     }
 }
