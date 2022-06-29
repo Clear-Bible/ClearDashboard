@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 {
-    public record GetProjectInfoListQuery(string Project) : ProjectRequestQuery<List<DataAccessLayer.Models.ProjectInfo>>(Project);
+    public record GetProjectInfoListQuery(string ProjectName) : ProjectRequestQuery<List<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
 
     public class GetProjectInfoListQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoListQuery, RequestResult<List<DataAccessLayer.Models.ProjectInfo>>, List<DataAccessLayer.Models.ProjectInfo>>
     {
@@ -33,7 +33,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
         }
     }
 
-    public record GetProjectInfoQuery(string Project, Guid ProjectInfoId) : ProjectRequestQuery<DataAccessLayer.Models.ProjectInfo>(Project);
+    public record GetProjectInfoQuery(string ProjectName, Guid ProjectInfoId) : ProjectRequestQuery<DataAccessLayer.Models.ProjectInfo>(ProjectName);
 
     public class GetProjectInfoQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoQuery, RequestResult<DataAccessLayer.Models.ProjectInfo>, DataAccessLayer.Models.ProjectInfo>
     {
@@ -50,7 +50,8 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
             {
                 var result = new RequestResult<DataAccessLayer.Models.ProjectInfo>
                 {
-                    Message = $"Could not find a ProjectInfo with Id '{request.ProjectInfoId}"
+                    Message = $"Could not find a ProjectInfo with Id '{request.ProjectInfoId}",
+                    Success = false
                 };
                 return await Task.FromResult(result);
             }
@@ -70,7 +71,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
     
 
 
-    public record AddProjectInfoCommand(string Project, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(Project);
+    public record AddProjectInfoCommand(string ProjectName, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
 
     public class AddProjectInfoCommandHandler : AlignmentDbContextCommandHandler<AddProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {
@@ -88,7 +89,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
         }
     }
 
-    public record UpdateProjectInfoCommand(string Project, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(Project);
+    public record UpdateProjectInfoCommand(string ProjectName, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
 
     public class UpdateProjectInfoCommandHandler : AlignmentDbContextCommandHandler<UpdateProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {

@@ -92,102 +92,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
         }
 
-        public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()
-        {
-            Entry(entity).State = EntityState.Detached;
-            var newEntity = CreateEntityCopy(entity);
-            return Add(newEntity);
-        }
-
-        public async Task<EntityEntry<TEntity>> AddCopyAsync<TEntity>(TEntity entity) where TEntity : class, new()
-        {
-            Entry(entity).State = EntityState.Detached;
-
-            var e  = (TEntity)Entry(entity).CurrentValues.ToObject();
-            var newEntity = CreateEntityCopy(entity);
-            return await AddAsync(newEntity);
-        }
-
-        private TEntity CreateCopy<TEntity>(TEntity entity)
-        {
-            var json = JsonConvert.SerializeObject(entity);
-            return JsonConvert.DeserializeObject<TEntity>(json);
-        }
-
-        private static TEntity CreateEntityCopy<TEntity>(TEntity entity) where TEntity : class, new()
-        {
-            var newEntity = new TEntity();
-            var propertyNamesToIgnore = new List<string> { "Id", "ParentId", "Created", "Modified" };
-            var currentIdProperty = entity.GetType().GetProperty("Id");
-            if (currentIdProperty != null)
-            {
-                var properties = entity.GetType().GetProperties()
-                    .Where(property => !propertyNamesToIgnore.Contains(property.Name));
-                foreach (var propertyInfo in properties)
-                {
-                    if (propertyInfo.PropertyType == typeof(ICollection<>))
-                    {
-                       
-                        var collectionObject = propertyInfo.GetValue(entity, null);
-                        var collection = Convert.ChangeType(collectionObject, propertyInfo.PropertyType);
-                        //foreach (var o in collection)
-                        //{
-                        //    //var e = CreateEntityCopy<TEntity>(o);
-                        //}
-
-                    }
-                    else
-                    {
-                        var property = propertyInfo.GetValue(entity, null);
-                        propertyInfo.SetValue(newEntity, property);
-                    }
-                   
-                }
-
-                var parentId = currentIdProperty.GetValue(entity, null);
-                var parentIdProperty = entity.GetType().GetProperty("ParentId");
-                parentIdProperty.SetValue(newEntity, parentId);
-            }
-
-            return newEntity;
-        }
-
-        public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)
-        {
-           
-
-
-            return base.Update(entity);
-        }
-
-        public override EntityEntry Update(object entity)
-        {
-            return base.Update(entity);
-        }
-
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        {
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return base.SaveChangesAsync(cancellationToken);
-        }
-
-        public override int SaveChanges()
-        {
-            foreach (var entityEntry in ChangeTracker.Entries()) // Iterate all made changes
-            {
-                var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
-                //if (entityEntry.State == EntityState.Modified) // If you want to update TenantId when Order is modified
-                //{
-                //    var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
-                //}
-            }
-            return base.SaveChanges();
-        }
-
+    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -239,5 +144,104 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.AddUserIdValueGenerator();
 
         }
+
+
+
+        //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()
+        //{
+        //    Entry(entity).State = EntityState.Detached;
+        //    var newEntity = CreateEntityCopy(entity);
+        //    return Add(newEntity);
+        //}
+
+        //public async Task<EntityEntry<TEntity>> AddCopyAsync<TEntity>(TEntity entity) where TEntity : class, new()
+        //{
+        //    Entry(entity).State = EntityState.Detached;
+
+        //    var e = (TEntity)Entry(entity).CurrentValues.ToObject();
+        //    var newEntity = CreateEntityCopy(entity);
+        //    return await AddAsync(newEntity);
+        //}
+
+        //private TEntity CreateCopy<TEntity>(TEntity entity)
+        //{
+        //    var json = JsonConvert.SerializeObject(entity);
+        //    return JsonConvert.DeserializeObject<TEntity>(json);
+        //}
+
+        //private static TEntity CreateEntityCopy<TEntity>(TEntity entity) where TEntity : class, new()
+        //{
+        //    var newEntity = new TEntity();
+        //    var propertyNamesToIgnore = new List<string> { "Id", "ParentId", "Created", "Modified" };
+        //    var currentIdProperty = entity.GetType().GetProperty("Id");
+        //    if (currentIdProperty != null)
+        //    {
+        //        var properties = entity.GetType().GetProperties()
+        //            .Where(property => !propertyNamesToIgnore.Contains(property.Name));
+        //        foreach (var propertyInfo in properties)
+        //        {
+        //            if (propertyInfo.PropertyType == typeof(ICollection<>))
+        //            {
+
+        //                var collectionObject = propertyInfo.GetValue(entity, null);
+        //                var collection = Convert.ChangeType(collectionObject, propertyInfo.PropertyType);
+        //                //foreach (var o in collection)
+        //                //{
+        //                //    //var e = CreateEntityCopy<TEntity>(o);
+        //                //}
+
+        //            }
+        //            else
+        //            {
+        //                var property = propertyInfo.GetValue(entity, null);
+        //                propertyInfo.SetValue(newEntity, property);
+        //            }
+
+        //        }
+
+        //        var parentId = currentIdProperty.GetValue(entity, null);
+        //        var parentIdProperty = entity.GetType().GetProperty("ParentId");
+        //        parentIdProperty.SetValue(newEntity, parentId);
+        //    }
+
+        //    return newEntity;
+        //}
+
+        //public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)
+        //{
+
+
+
+        //    return base.Update(entity);
+        //}
+
+        //public override EntityEntry Update(object entity)
+        //{
+        //    return base.Update(entity);
+        //}
+
+        //public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        //{
+        //    return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        //}
+
+        //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        //{
+        //    return base.SaveChangesAsync(cancellationToken);
+        //}
+
+        //public override int SaveChanges()
+        //{
+        //    foreach (var entityEntry in ChangeTracker.Entries()) // Iterate all made changes
+        //    {
+        //        var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
+        //        //if (entityEntry.State == EntityState.Modified) // If you want to update TenantId when Order is modified
+        //        //{
+        //        //    var entityType = this.Model.FindEntityType(entityEntry.Entity.GetType());
+        //        //}
+        //    }
+        //    return base.SaveChanges();
+        //}
+
     }
 }
