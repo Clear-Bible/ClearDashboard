@@ -198,7 +198,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             // NB:  I'm relying on the default naming and relationship conventions from EF Core to set up the database...
 
-            //  **** leaving this here in the event we need to override the default conventions ****
+            // **** leaving this here in the event we need to override the default conventions ****
             // NB:  Add the configuration of any newly added 
             //      entities to the ConfigureEntities extension method
             //modelBuilder.ConfigureEntities();
@@ -233,6 +233,9 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             // now handle any entities which have DatetimeOffset properties.                                                  
             modelBuilder.AddDateTimeOffsetToBinaryConverter(Database.ProviderName);
+
+            // This ensures that the User Id for the current Dashboard user is always
+            // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
 
         }
