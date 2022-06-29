@@ -4,8 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Features;
-using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
+using ClearDashboard.DAL.CQRS.Features.Features;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

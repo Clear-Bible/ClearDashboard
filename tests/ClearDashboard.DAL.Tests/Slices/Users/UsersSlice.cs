@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS.Features.Features;
 
 namespace ClearDashboard.DAL.Tests.Slices.Users
 {

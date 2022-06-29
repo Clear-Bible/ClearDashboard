@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features.Features;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Features;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
