@@ -154,7 +154,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
 
-            //if (truncatedName == "ParatextData.XmlSerializers")
+            //if (truncatedName == "System.XmlSerializers")
             //{
             //    return null;
             //}

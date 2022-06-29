@@ -42,27 +42,27 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext; //await factory?.GetDatabaseContext(projectName)!;
+            var context = assets.AlignmentContext;
 
             try
             {
 
                 var user1 = new User { FirstName = "Bob", LastName = "Smith" };
-            var user2 = new User { FirstName = "Janie", LastName = "Jones" };
+                var user2 = new User { FirstName = "Janie", LastName = "Jones" };
 
-            await context.Users.AddRangeAsync(new[] { user1, user2 });
-            await context.SaveChangesAsync();
+                await context.Users.AddRangeAsync(new[] { user1, user2 });
+                await context.SaveChangesAsync();
 
-            var mediator = ServiceProvider.GetService<IMediator>();
+                var mediator = ServiceProvider.GetService<IMediator>();
 
-            var request = new GetUsersQuery(projectName, "Dummy");
+                var request = new GetUsersQuery(projectName, "Dummy");
 
-            var result = await mediator?.Send(request);
+                var result = await mediator?.Send(request);
 
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.True(result.HasData);
-            Assert.Equal(2, result.Data.Count);
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.True(result.HasData);
+                Assert.Equal(2, result.Data.Count);
 
             }
             catch (Exception ex)
@@ -78,6 +78,6 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
             }
         }
 
-        
+
     }
 }
