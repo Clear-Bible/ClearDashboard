@@ -119,8 +119,6 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-           
-
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
@@ -142,7 +140,7 @@ namespace ClearDashboard.DAL.Tests
 
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
-                // an updated version.
+                // an updated version later on.
                 var copiedProject = Copy(projectInfo);
 
                 var mediator = ServiceProvider.GetService<IMediator>();
@@ -160,7 +158,17 @@ namespace ClearDashboard.DAL.Tests
                 Assert.Equal(testUser.Id, savedProject.UserId);
 
                 // Now get the project back
-                var query = new GetProjectInfoQuery(projectName);
+                var singleQuery = new GetProjectInfoQuery(projectName, savedProject.Id);
+                var singleResult = await mediator.Send(singleQuery);
+                
+
+                Assert.NotNull(singleResult);
+                Assert.True(singleResult.Success);
+                Assert.True(singleResult.HasData);
+
+                Assert.Equal(savedProject, singleResult.Data);
+
+                var query = new GetProjectInfoListQuery(projectName);
                 var result = await mediator.Send(query);
 
                 Assert.NotNull(result);

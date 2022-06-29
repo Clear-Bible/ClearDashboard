@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ClearDashboard.DAL.Tests.Slices.Users
@@ -18,7 +19,7 @@ namespace ClearDashboard.DAL.Tests.Slices.Users
            //no-op
         }
 
-        protected override async Task<RequestResult<List<User>>> GetData(ProjectRequestQuery<List<User>> requestQuery)
+        protected override async Task<RequestResult<List<User>>> GetData(GetUsersQuery requestQuery, CancellationToken cancellationToken)
         {
             var users = AlignmentContext.Users.ToList();
 
