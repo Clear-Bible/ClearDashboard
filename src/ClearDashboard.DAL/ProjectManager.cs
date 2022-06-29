@@ -40,13 +40,9 @@ namespace ClearDashboard.DataAccessLayer
         public Project ParatextProject { get; protected set; }
 
         public bool ParatextVisible = false;
-        #endregion
-        
-        #region Events
-
         public string ParatextUserName { get; set; } = "";
-
         private string _currentVerse;
+
         public string CurrentVerse
         {
             get { return _currentVerse; }
@@ -63,6 +59,10 @@ namespace ClearDashboard.DataAccessLayer
                 _currentVerse = s;
             }
         }
+
+        #endregion
+        
+        #region Events
 
         #endregion
 

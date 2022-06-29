@@ -29,19 +29,23 @@ namespace ClearDashboard.Wpf.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class BiblicalTermsViewModel : ToolViewModel, IWorkspace, IHandle<VerseChangedMessage>
+    public class BiblicalTermsViewModel : ToolViewModel, IWorkspace
     {
         #region Member Variables
 
         public enum SelectedBtEnum
         {
+            // ReSharper disable once UnusedMember.Local
             OptionAll,
+            // ReSharper disable once UnusedMember.Local
             OptionProject
         }
 
         public enum FilterWordEnum
         {
+            // ReSharper disable once UnusedMember.Local
             Gloss,
+            // ReSharper disable once UnusedMember.Local
             Rendering
         }
 
@@ -50,8 +54,11 @@ namespace ClearDashboard.Wpf.ViewModels
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
             BtBcvAll,
+            // ReSharper disable once UnusedMember.Local
             BtBcvBook,
+            // ReSharper disable once UnusedMember.Local
             BtBcvChapter,
+            // ReSharper disable once UnusedMember.Local
             BtBcvVerse
         }
 
@@ -59,7 +66,9 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
+            // ReSharper disable once UnusedMember.Local            
             BtRenderingAllTerms,
+            // ReSharper disable once UnusedMember.Local
             BtRenderingMissingRenderings
         }
 
@@ -67,53 +76,93 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
+            // ReSharper disable once UnusedMember.Local
             BtDomainsAll = 0,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsAffection = 1,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsAgriculture = 2,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsAnimals = 3,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsArea = 4,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsAreaNature = 5,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsAssociation = 6,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsConstructionReligiousActivities = 7,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsConstructionsAnimalHusbandry = 8,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsContainersAnimalHusbandry = 9,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsCraftsCloth = 10,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsFruits = 11,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsGemstones = 12,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsGrasses = 13,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsGroup = 14,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsGroupArea = 15,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsHonorRespectStatus = 16,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsLocale = 17,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsMammalsDomesticAnimals = 18,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsMammalsWildAnimals = 19,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsMonument = 20,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsMoralsAndEthics = 21,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsMourning = 22,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsNature = 23,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPaganism = 24,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPeople = 25,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPeopleAuthority = 26,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPeopleHonorRespectStatus = 27,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPerson = 28,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsPurpose = 29,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsReligiousActivities = 30,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsSacrificesAndOfferings = 31,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsSettlement = 32,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsSignsAndWonders = 33,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsSupernaturalBeingsAndPowers = 34,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsSupernaturalBeingsAndPowersTitles = 35,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsTools = 36,
-            BtDomainsToolsChildbirth = 37,
+            // ReSharper disable once UnusedMember.Local            
+            BtDomainsToolsChildbirth = 37,            
+            // ReSharper disable once UnusedMember.Local
             BtDomainsToolsWeightCommerce = 38,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsTreesFruits = 39,
+            // ReSharper disable once UnusedMember.Local            
             BtDomainsTreesPerfumesAndSpices = 40,
+            // ReSharper disable once UnusedMember.Local
             BtDomainsWisdomUnderstanding = 41,
         }
 
         private string _currentVerse = "";
-
-
 
 
         //Dictionary<string, object> filters = new Dictionary<string, object>();
@@ -951,6 +1000,8 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
+
+                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
                     }
 
                 }
@@ -984,22 +1035,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             
-        }
-
-        public async Task HandleAsync(VerseChangedMessage changedMessage, CancellationToken cancellationToken)
-        {
-            if (_currentVerse == "")
-            {
-                _currentVerse = changedMessage.Verse;
-
-                await GetBiblicalTerms();
-            }
-            else
-            {
-                _currentVerse = changedMessage.Verse;
-            }
-
-            await Task.CompletedTask;
         }
 
         #endregion // Methods

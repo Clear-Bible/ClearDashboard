@@ -348,7 +348,7 @@
                     </TextBox.Text>
                 </TextBox>
 
-                <!-- TODO:  reinstate -->
+                <!--  TODO:  reinstate  -->
                 <!--<Button
                     x:Name="MoveForwards"
                     Margin="5,5,0,0"

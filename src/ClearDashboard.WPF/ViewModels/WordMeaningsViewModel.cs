@@ -248,7 +248,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
                 LaunchWebPage.TryOpenUrl(greekPrefix + marbleResource.LogosRef);
             }
-
         }
 
 
@@ -386,9 +385,16 @@ namespace ClearDashboard.Wpf.ViewModels
             ButtonVisibility = Visibility.Hidden;
         }
 
-        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            _currentVerse = message.Verse;
+            var incomingVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse == incomingVerse)
+            {
+                return;
+            }
+
+            _currentVerse = incomingVerse;
             CurrentBcv.SetVerseFromId(_currentVerse);
             if (_currentVerse.EndsWith("000"))
             {
@@ -429,10 +435,11 @@ namespace ClearDashboard.Wpf.ViewModels
                     _isOT = false;
                 }
 
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
+
                 _ = ReloadWordMeanings();
             }
-
-            return Task.CompletedTask;
         }
 
         #endregion // Methods

@@ -15,6 +15,7 @@ using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 
@@ -26,11 +27,17 @@ namespace ClearDashboard.WebApiParatextPlugin
     }
     public partial class MainWindow : EmbeddedPluginControl, IPluginLogger
     {
+        #region Events
+
+        #endregion
+
+
         #region props
 
         private IProject _project;
         
         private IVerseRef _verseRef;
+
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
 
@@ -130,8 +137,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             AppendText(Color.Green, $"OnAddedToParent called");
         }
 
-     
-
         public override string GetState()
         {
             // override required by base class, return null string.
@@ -142,7 +147,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
-           
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -236,6 +240,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             if (newReference != _verseRef)
             {
+                //SetVerseRef(newReference, reloadWebHost: true);
+
                 _verseRef = newReference;
              
                 try
@@ -257,7 +263,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Methods
 
 
-      
+
 
         /// <summary>
         /// Send out the Biblical Terms for ALL BTs
@@ -517,6 +523,29 @@ namespace ClearDashboard.WebApiParatextPlugin
             ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
+        
+        public void SwitchVerseReference(int book, int chapter, int verse)
+        {
+            if (this.InvokeRequired)
+            {
+                Action safeWrite = delegate { SwitchVerseReference(book, chapter, verse); };
+                this.Invoke(safeWrite);
+            }
+            else
+            {
+                try
+                {
+                    // set up a new Versification reference for this verse
+                    var newVerse = _project.Versification.CreateReference(book, chapter, verse);
+                    _host.SetReferenceForSyncGroup(newVerse, _host.ActiveWindowState.SyncReferenceGroup);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message);
+                    AppendText(Color.Red, ex.Message);
+                }
+            }
+        }
 
         /// <summary>
         /// Force a restart of the named pipes
@@ -525,6 +554,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         private void btnRestart_Click(object sender, EventArgs e)
         {
+
             //// disconnect the pipe
             //UnhookPipe();
 

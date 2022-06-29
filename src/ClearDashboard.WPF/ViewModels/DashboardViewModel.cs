@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
@@ -7,14 +8,18 @@ using System.Diagnostics;
 using ClearDashboard.DataAccessLayer.Models;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Input;
+using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class DashboardViewModel : PaneViewModel
+    public class DashboardViewModel : PaneViewModel, IHandle<LogActivityMessage>
     {
         #region Member Variables
       
         private bool _firstLoad;
+
+        private int _currentMessage = 0;
 
         #endregion //Member Variables
 
@@ -27,8 +32,25 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-       
+        private ObservableCollection<string> _messages = new();
+        public ObservableCollection<string> Messages
+        
+        {
+            get => _messages;
+            set
+            {
+                _messages = value;
+                NotifyOfPropertyChange(() => Messages);
+            }
+        }
+
+
         #endregion //Observable Properties
+
+        #region commands
+        public ICommand ClearLogCommand { get; set; }
+        
+        #endregion
 
 
 
@@ -44,7 +66,11 @@ namespace ClearDashboard.Wpf.ViewModels
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             Initialize();
+
+            ClearLogCommand = new RelayCommand(ClearLog);
         }
+
+
 
         private void Initialize()
         {
@@ -74,9 +100,19 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+        public Task HandleAsync(LogActivityMessage message, CancellationToken cancellationToken)
+        {
+            string shortMessage = message.message.Replace("ClearDashboard.Wpf.ViewModels.", "");
 
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) {shortMessage}");
+            _currentMessage++;
+            return Task.CompletedTask;
+        }
+
+        private void ClearLog(object obj)
+        {
+            Messages.Clear();
+        }
         #endregion // Methods
-
-
     }
 }

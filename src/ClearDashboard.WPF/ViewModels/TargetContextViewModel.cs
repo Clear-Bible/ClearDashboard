@@ -378,7 +378,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //                        _isOT = false;
             //                    }
             //                }
-            //            } else if (CurrentBcv.VerseLocationId != pipeMessage.Text)
+            //            } else if (CurrentBcv.BBBCCCVVV != pipeMessage.Text)
             //            {
             //                CurrentBcv.SetVerseFromId(pipeMessage.Text);
             //                FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
@@ -409,6 +409,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_currentBook != newBook)
                 {
                     _currentBook = newBook;
+
+                    // send to log
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change / Get USX"), cancellationToken);
+
 
                     // call Paratext to get the USX for this book
                     var result = await ExecuteRequest(new GetUsxQuery(Convert.ToInt32(newBook)), CancellationToken.None).ConfigureAwait(false);
@@ -448,8 +452,12 @@ namespace ClearDashboard.Wpf.ViewModels
                         }
                     }
                 }
-                else if (CurrentBcv.VerseLocationId != newVerse)
+                else if (CurrentBcv.BBBCCCVVV != newVerse)
                 {
+                    // send to log
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change / Same USX"), cancellationToken);
+
+
                     CurrentBcv.SetVerseFromId(newVerse);
                     FormattedAnchorRef = CurrentBcv.GetVerseRefAbbreviated();
                     UnformattedAnchorRef = CurrentBcv.GetVerseId();
