@@ -86,15 +86,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
                 {
                     _logger.LogError(e.Message);
                 }
-
-                
-
-
-                //// set up a new Versification reference for this verse
-                //var newVerseRef = _project.Versification.CreateReference(book, chapter, verse);
-
-                //// call the new verse for this sync group
-                //_host.SetReferenceForSyncGroup(newVerseRef, _host.ActiveWindowState.SyncReferenceGroup);
             }));
 
 

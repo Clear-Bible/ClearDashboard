@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin
     public partial class MainWindow : EmbeddedPluginControl, IPluginLogger
     {
         #region Events
-        public event EventHandler<IVerseRef> OnSetVerse = delegate { };
+
         #endregion
 
 
@@ -37,18 +37,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IProject _project;
         
         private IVerseRef _verseRef;
-
-        private IVerseRef _newVerseRef;
-        public IVerseRef NewVerseRef
-        {
-            get { return _newVerseRef; }
-            set
-            {
-                _newVerseRef = value;
-                OnSetVerse(null, _newVerseRef);
-            }
-        }
-
 
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -73,9 +61,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             ConfigureLogging();
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
-
-            OnSetVerse += HandleSetVerse;
-
 
             // NB:  Use the following for debugging plug-in start up crashes.
             Application.ThreadException += ThreadExceptionEventHandler;
@@ -124,8 +109,6 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void HandleWindowDisposed(object sender, EventArgs e)
         {
-            OnSetVerse -= HandleSetVerse;
-            
             WebAppProxy?.Dispose();
             WebAppProxy = null;
         }
@@ -543,31 +526,24 @@ namespace ClearDashboard.WebApiParatextPlugin
         
         public void SwitchVerseReference(int book, int chapter, int verse)
         {
-            // set up a new Versification reference for this verse
-            NewVerseRef = _project.Versification.CreateReference(book, chapter, verse);
-
-            //OnSetVerse(null, _newVerseRef);
-        }
-
-        private void HandleSetVerse(object sender, IVerseRef e)
-        {
-            // call the new verse for this sync group
-            try
+            if (this.InvokeRequired)
             {
-                if (this.InvokeRequired)
-                {
-                    Action safeWrite = delegate { HandleSetVerse(null, e); };
-                    this.Invoke(safeWrite);
-                }
-                else
-                {
-                    _host.SetReferenceForSyncGroup(_newVerseRef, _host.ActiveWindowState.SyncReferenceGroup);
-                }
+                Action safeWrite = delegate { SwitchVerseReference(book, chapter, verse); };
+                this.Invoke(safeWrite);
             }
-            catch (Exception ex)
+            else
             {
-                Log.Error(ex.Message);
-                AppendText(Color.Red, ex.Message);
+                try
+                {
+                    // set up a new Versification reference for this verse
+                    var newVerse = _project.Versification.CreateReference(book, chapter, verse);
+                    _host.SetReferenceForSyncGroup(newVerse, _host.ActiveWindowState.SyncReferenceGroup);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message);
+                    AppendText(Color.Red, ex.Message);
+                }
             }
         }
 
@@ -578,9 +554,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         private void btnRestart_Click(object sender, EventArgs e)
         {
-            _newVerseRef = _project.Versification.CreateReference(1, 5, 10);
-            _host.SetReferenceForSyncGroup(_newVerseRef, _host.ActiveWindowState.SyncReferenceGroup);
-
 
             //// disconnect the pipe
             //UnhookPipe();
