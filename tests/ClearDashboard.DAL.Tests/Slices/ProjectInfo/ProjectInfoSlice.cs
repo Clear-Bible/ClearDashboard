@@ -50,7 +50,8 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
             {
                 var result = new RequestResult<DataAccessLayer.Models.ProjectInfo>
                 {
-                    Message = $"Could not find a ProjectInfo with Id '{request.ProjectInfoId}"
+                    Message = $"Could not find a ProjectInfo with Id '{request.ProjectInfoId}",
+                    Success = false
                 };
                 return await Task.FromResult(result);
             }
