@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features.Features;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.LanguageResources
 {

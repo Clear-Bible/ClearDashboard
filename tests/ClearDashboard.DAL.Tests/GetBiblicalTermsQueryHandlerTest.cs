@@ -1,12 +1,10 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
