@@ -1,12 +1,11 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetBookIdsByTokenizedCorpusIdQuery : IRequest<RequestResult<(IEnumerable<string> bookIds, CorpusId corpusId)>>
+    public record GetBookIdsByTokenizedCorpusIdQuery(string ProjectName) : ProjectRequestQuery<(IEnumerable<string> bookIds, CorpusId corpusId)>(ProjectName)
     {
-        public GetBookIdsByTokenizedCorpusIdQuery(TokenizedCorpusId tokenizedCorpusId)
+        public GetBookIdsByTokenizedCorpusIdQuery(string ProjectName, TokenizedCorpusId tokenizedCorpusId): this(ProjectName)
         {
             TokenizedCorpusId = tokenizedCorpusId;
         }

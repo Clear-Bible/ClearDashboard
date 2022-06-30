@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException">If textCorpus is not of type TokenizedTextCorpus</exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> CreateNewTokenization(this ITextCorpus textCorpus, IMediator mediator)
+        public static async Task<TokenizedTextCorpus> CreateNewTokenization(this ITextCorpus textCorpus, string projectName, IMediator mediator)
         {
             if (textCorpus.GetType() != typeof(TokenizedTextCorpus))
             {
@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     message: "originated from DB and therefore already created");
             }
 
-            var command = new CreateTokenizedCorpusFromTokenizedCorpusCommand(textCorpus);
+            var command = new CreateTokenizedCorpusFromTokenizedCorpusCommand(projectName, textCorpus);
 
             var result = await mediator.Send(command);
             if (result.Success)
@@ -55,7 +55,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException">textCorpus enumerable is not castable to a TokensTextRow type, or textCorpus is of type TokenizedTextCorpus</exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, bool isRtl, string name, string language, string corpusType, string tokenizationQueryString)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, string projectName, IMediator mediator, bool isRtl, string name, string language, string corpusType, string tokenizationQueryString)
         {
             if (textCorpus.GetType() == typeof(TokenizedTextCorpus))//scriptureTextCorpus.GetType().GetGenericTypeDefinition() == typeof(TextCorpus<>))
             {
@@ -72,7 +72,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(message: $"Corpus must be tokenized and transformed into TokensTextRows, e.g. corpus.Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             }
 
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, isRtl, name, language, corpusType, tokenizationQueryString);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(projectName, textCorpus, isRtl, name, language, corpusType, tokenizationQueryString);
  
             var result = await mediator.Send(command);
             if (result.Success)

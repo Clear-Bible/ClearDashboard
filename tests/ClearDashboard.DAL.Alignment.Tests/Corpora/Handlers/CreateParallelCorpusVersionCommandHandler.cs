@@ -20,9 +20,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             //1. Create a new record in ParallelCorpusVersionId table with command.ParallelCorpusId as parent,
             //2. insert all the VerseMapping, referencing command.SourceCorpus and command.TargetCorpus Verses, based on command.EngineVerseMapping
 
-            Assert.IsType<TokenizedTextCorpus>(command.engineParallelTextCorpus.SourceCorpus); //Should be created ParallelCorpusVersionId's sourceCorpus FK
-            Assert.IsType<TokenizedTextCorpus>(command.engineParallelTextCorpus.TargetCorpus); //Should be created ParallelCorpusVersionId's targetCorpus FK
-            Assert.NotNull(command.engineParallelTextCorpus.EngineVerseMappingList);
+            Assert.IsType<TokenizedTextCorpus>(command.EngineParallelTextCorpus.SourceCorpus); //Should be created ParallelCorpusVersionId's sourceCorpus FK
+            Assert.IsType<TokenizedTextCorpus>(command.EngineParallelTextCorpus.TargetCorpus); //Should be created ParallelCorpusVersionId's targetCorpus FK
+            Assert.NotNull(command.EngineParallelTextCorpus.EngineVerseMappingList);
               
 
             return Task.FromResult(

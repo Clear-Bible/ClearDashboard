@@ -1,24 +1,33 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateParallelCorpusCommandHandler : IRequestHandler<
-        CreateParallelCorpusCommand,
-        RequestResult<ParallelCorpusId>>
+    public class CreateParallelCorpusCommandHandler : AlignmentDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpusId>, ParallelCorpusId>
     {
-        public Task<RequestResult<ParallelCorpusId>>
-            Handle(CreateParallelCorpusCommand command, CancellationToken cancellationToken)
+
+        public CreateParallelCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) : base(projectNameDbContextFactory, logger)
+        {
+        }
+
+        protected override async Task<RequestResult<ParallelCorpusId>> SaveData(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             //Create a new record in ParallelCorpus and return its id.
 
-            return Task.FromResult(
-                new RequestResult<ParallelCorpusId>
-                (result: new ParallelCorpusId(new Guid()),
-                success: true,
-                message: "successful result from test"));
+            var parallelCorpus = new ParallelCorpus();
+            await AlignmentContext.ParallelCorpa.AddAsync(parallelCorpus, cancellationToken);
+            await AlignmentContext.SaveChangesAsync(cancellationToken);
+
+            return new RequestResult<ParallelCorpusId>
+                    (result: new ParallelCorpusId(parallelCorpus.Id),
+                    success: true,
+                    message: "successful result from test");
         }
     }
 }

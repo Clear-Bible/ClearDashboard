@@ -11,16 +11,18 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         private readonly TokenizedCorpusId tokenizedCorpusId_;
         private readonly IMediator mediator_;
+        private readonly string projectName_;
 
-        public TokenizedText(TokenizedCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId )
+        public TokenizedText(TokenizedCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId, string projectName)
             : base(bookId, versification)
         {
             tokenizedCorpusId_ = tokenizedCorpusId;
             mediator_ = mediator;
+            projectName_ = projectName;
         }
         protected override IEnumerable<TextRow> GetVersesInDocOrder()
         {
-            var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedCorpusId_, Id); //Note that in ScriptureText Id is the book abbreviation bookId.
+            var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(projectName_, tokenizedCorpusId_, Id); //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
             if (result.Success)

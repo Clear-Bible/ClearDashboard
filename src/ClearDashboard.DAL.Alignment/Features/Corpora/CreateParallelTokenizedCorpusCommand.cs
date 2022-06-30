@@ -1,12 +1,11 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record CreateParallelTokenizedCorpusCommand(
+    public record CreateParallelTokenizedCorpusCommand(string ProjectName,
         ParallelCorpusVersionId ParallelCorpusVersionId,
         TokenizedCorpusId SourceTokenizedCorpusId,
         TokenizedCorpusId TargetTokenizedCorpusId) 
-        : IRequest<RequestResult<ParallelTokenizedCorpusId>>;
+        : ProjectRequestCommand<ParallelTokenizedCorpusId>(ProjectName);
 }

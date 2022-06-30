@@ -1,14 +1,15 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetTokensByTokenizedCorpusIdAndBookIdQuery : IRequest<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+    public record GetTokensByTokenizedCorpusIdAndBookIdQuery(string ProjectName) : ProjectRequestQuery<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>(ProjectName)
     {
 
-        public GetTokensByTokenizedCorpusIdAndBookIdQuery(TokenizedCorpusId tokenizedCorpusId, string bookId)
+        public GetTokensByTokenizedCorpusIdAndBookIdQuery(string projectName, TokenizedCorpusId tokenizedCorpusId, string bookId) : this(projectName)
         {
             TokenizedCorpusId = tokenizedCorpusId;
             BookId = bookId;

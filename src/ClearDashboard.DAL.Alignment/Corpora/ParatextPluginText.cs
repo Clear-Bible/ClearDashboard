@@ -10,6 +10,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         private readonly string paratextPluginId_;
         private readonly IMediator mediator_;
+        private readonly string projectName_;
 
         /// <summary>
         /// 
@@ -25,15 +26,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             //IMPLEMENTER'S NOTES:: needs to configure GetVersesInDocOrder() to ONLY return the text parallel related.
         //}
 
-        public ParatextPluginText(string paratextPluginId, IMediator mediator, ScrVers versification, string bookId )
+        public ParatextPluginText(string paratextPluginId, IMediator mediator, ScrVers versification, string bookId, string projectName)
             : base(bookId, versification)
         {
             paratextPluginId_ = paratextPluginId;
             mediator_ = mediator;
+            projectName_ = projectName;
         }
         protected override IEnumerable<TextRow> GetVersesInDocOrder()
         {
-            var command = new GetRowsByParatextPluginIdAndBookIdQuery(paratextPluginId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
+            var command = new GetRowsByParatextPluginIdAndBookIdQuery(projectName_, paratextPluginId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
             if (result.Success)
