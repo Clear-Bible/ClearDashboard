@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace ClearDashboard.DataAccessLayer.Models.Common
+namespace ClearDashboard.DataAccessLayer.Models
 {
     [XmlRoot(ElementName = "References")]
     public class References
