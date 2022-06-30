@@ -62,8 +62,7 @@ jobs:
       Wpf_Project_Path: src\ClearDashboard.WPF\ClearDashboard.WPF.csproj
       Wap_Project_Directory: ClearDashboard.WPF.Package    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-      RestoreUseSkipNonexistentTargets: false
-
+      
     steps:
     #- name: Always Fail # For testing the CI notifier.
     #  uses: cutenode/action-always-fail@v1.0.1
@@ -86,9 +85,9 @@ jobs:
       
     - name: Configure NuGet package sources
       run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
-      
-    - name: Restore NuGet packages
-      run: nuget restore $env:Solution_Path
+  
+    #- name: Restore NuGet packages
+    #  run: nuget restore $env:Solution_Path
       
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
