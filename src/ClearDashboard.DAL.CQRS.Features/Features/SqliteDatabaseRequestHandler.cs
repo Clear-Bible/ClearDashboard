@@ -1,9 +1,9 @@
 ﻿using System.Data.SQLite;
-using ClearDashboard.DataAccessLayer.Sqlite;
+using ClearDashboard.DataAccessLayer.Data.Sqlite;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DAL.CQRS.Features.Features;
+namespace ClearDashboard.DAL.CQRS.Features;
 
 /// <summary>
 /// A base class used to query data from Sqlite databases - typically found in the "Resources" folder found in the directory of the executable.

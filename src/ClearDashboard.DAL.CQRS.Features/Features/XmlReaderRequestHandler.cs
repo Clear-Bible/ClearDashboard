@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DAL.CQRS.Features.Features;
+namespace ClearDashboard.DAL.CQRS.Features;
 
 public abstract class XmlReaderRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
     where TRequest : IRequest<TResponse>

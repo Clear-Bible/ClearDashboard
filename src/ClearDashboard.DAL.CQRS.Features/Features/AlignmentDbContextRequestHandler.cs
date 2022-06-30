@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DAL.CQRS.Features.Features
+namespace ClearDashboard.DAL.CQRS.Features
 {
     public abstract record ProjectRequestQuery<TData>(string ProjectName) : IRequest<RequestResult<TData>>;
     

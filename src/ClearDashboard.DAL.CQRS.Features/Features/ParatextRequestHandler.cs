@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DAL.CQRS.Features.Features
+namespace ClearDashboard.DAL.CQRS.Features
 {
     public enum HttpVerb { GET, POST, PUT, DELETE }
 

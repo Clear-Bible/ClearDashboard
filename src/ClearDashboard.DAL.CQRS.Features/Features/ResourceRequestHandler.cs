@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DAL.CQRS.Features.Features;
+namespace ClearDashboard.DAL.CQRS.Features;
 
 public abstract class ResourceRequestHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
