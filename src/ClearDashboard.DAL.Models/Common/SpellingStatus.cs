@@ -7,7 +7,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Word")]
-        public string Word { get; set; }
+        public string? Word { get; set; }
 
         [XmlAttribute(AttributeName = "State")]
         public string State { get; set; }

@@ -8,7 +8,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Changes")]
-        public Changes Changes { get; set; }
+        public Changes? Changes { get; set; }
 
         [XmlElement(ElementName = "Notes")]
         public object Notes { get; set; }

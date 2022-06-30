@@ -3,7 +3,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 {
     public class Anchor 
     {
-        public VerseRefStart VerseRefStart { get; set; }
+        public VerseRefStart? VerseRefStart { get; set; }
 
         public VerseRefEnd VerseRefEnd { get; set; }
 

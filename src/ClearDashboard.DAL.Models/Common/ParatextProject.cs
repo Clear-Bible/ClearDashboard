@@ -146,7 +146,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public DirectoryType DirectoryType { get; set; } = DirectoryType.Project;
 
 
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public CorpusType CorpusType { get; set; }
 

@@ -7,10 +7,10 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [XmlAttribute(AttributeName = "Form")]
-        public string Form { get; set; }
+        public string? Form { get; set; }
 
         [XmlAttribute(AttributeName = "Homograph")]
         public int Homograph { get; set; }
@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [XmlText]
         public string Text { get; set; }
@@ -73,18 +73,18 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [XmlElement(ElementName = "FontName")]
-        public string FontName { get; set; }
+        public string? FontName { get; set; }
 
         [XmlElement(ElementName = "FontSize")]
         public int FontSize { get; set; }
 
         [XmlElement(ElementName = "Analyses")]
-        public object Analyses { get; set; }
+        public object? Analyses { get; set; }
 
         [XmlElement(ElementName = "Entries")]
-        public Entries Entries { get; set; }
+        public Entries? Entries { get; set; }
     }
 }

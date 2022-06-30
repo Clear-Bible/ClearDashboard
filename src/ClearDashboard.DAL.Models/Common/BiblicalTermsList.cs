@@ -7,41 +7,41 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Verse")]
-        public List<string> Verse { get; set; }
+        public List<string>? Verse { get; set; }
     }
 
     [XmlRoot(ElementName = "Term")]
     public class Term
     {
         [XmlElement(ElementName = "Strong")]
-        public string Strong { get; set; }
+        public string? Strong { get; set; }
 
         [XmlElement(ElementName = "Transliteration")]
-        public string Transliteration { get; set; }
+        public string? Transliteration { get; set; }
 
         [XmlElement(ElementName = "Category")]
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
         [XmlElement(ElementName = "Domain")]
-        public string Domain { get; set; }
+        public string? Domain { get; set; }
 
         [XmlElement(ElementName = "Language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [XmlElement(ElementName = "Definition")]
-        public string Definition { get; set; }
+        public string? Definition { get; set; }
 
         [XmlElement(ElementName = "Gloss")]
-        public string Gloss { get; set; }
+        public string? Gloss { get; set; }
 
         [XmlElement(ElementName = "References")]
-        public References References { get; set; }
+        public References? References { get; set; }
 
         [XmlAttribute(AttributeName = "Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         [XmlElement(ElementName = "Link")]
         public string Link { get; set; }
@@ -61,6 +61,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string Xsd { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 }

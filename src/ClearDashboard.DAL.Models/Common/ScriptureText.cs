@@ -7,7 +7,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "FullName")]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [XmlElement(ElementName = "Guid")]
         public string Guid { get; set; }
