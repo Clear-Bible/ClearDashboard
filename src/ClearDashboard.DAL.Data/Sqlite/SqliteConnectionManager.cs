@@ -1,9 +1,8 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SQLite;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Sqlite
+namespace ClearDashboard.DataAccessLayer.Data.Sqlite
 {
     public class SqliteConnectionManager
     {
