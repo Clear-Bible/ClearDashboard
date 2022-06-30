@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features.Features;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;

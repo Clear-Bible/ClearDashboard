@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using ClearDashboard.DAL.CQRS.Features.Features;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
