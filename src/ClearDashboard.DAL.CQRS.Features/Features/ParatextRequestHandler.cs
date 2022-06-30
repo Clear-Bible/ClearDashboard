@@ -1,12 +1,7 @@
-﻿using ClearDashboard.DAL.CQRS;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace ClearDashboard.DataAccessLayer.Features
+namespace ClearDashboard.DAL.CQRS.Features
 {
     public enum HttpVerb { GET, POST, PUT, DELETE }
 

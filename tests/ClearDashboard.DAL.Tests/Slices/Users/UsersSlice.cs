@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

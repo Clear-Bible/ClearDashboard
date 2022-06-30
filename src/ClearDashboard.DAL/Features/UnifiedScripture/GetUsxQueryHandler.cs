@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using Microsoft.Extensions.Logging;

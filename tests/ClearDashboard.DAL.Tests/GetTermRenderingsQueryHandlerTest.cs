@@ -1,23 +1,14 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Paratext;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Serilog;
-using Serilog.Events;
-using ILogger = Serilog.ILogger;
 
 namespace ClearDashboard.DAL.Tests
 {

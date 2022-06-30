@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
+using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
@@ -83,8 +84,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private static void SaveUserLanguage(string language)
         {
-            Properties.Settings.Default.language_code = language;
-            Properties.Settings.Default.Save();
+            Settings.Default.language_code = language;
+            Settings.Default.Save();
         }
 
         private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
@@ -222,7 +223,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void SetLanguage()
         {
-            var culture = Properties.Settings.Default.language_code;
+            var culture = Settings.Default.language_code;
             // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
 

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Data;
+﻿using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Features;
+namespace ClearDashboard.DAL.CQRS.Features;
 
 public abstract record ProjectRequestCommand<TData>(string ProjectName) : IRequest<RequestResult<TData>>;
 

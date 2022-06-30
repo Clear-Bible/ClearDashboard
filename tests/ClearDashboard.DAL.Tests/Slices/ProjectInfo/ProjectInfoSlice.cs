@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Features;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 {

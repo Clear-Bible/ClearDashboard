@@ -1,10 +1,7 @@
 ﻿using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Properties;
-using System.Net.Mime;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using ClearDashboard.Wpf.ViewModels;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -26,7 +23,7 @@ namespace ClearDashboard.Wpf.Views
             this.Left = userPrefs.WindowLeft;
             this.WindowState = userPrefs.WindowState;
 
-            if (Properties.Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
+            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
                 Toggle.IsChecked = true;
             }
@@ -52,8 +49,8 @@ namespace ClearDashboard.Wpf.Views
             var language = this.SelectedLanguage.SelectedItem.ToString();
             if (language != "")
             {
-                Properties.Settings.Default.language_code = language.ToString();
-                Properties.Settings.Default.Save();
+                Settings.Default.language_code = language.ToString();
+                Settings.Default.Save();
             }
 
         }
@@ -72,16 +69,16 @@ namespace ClearDashboard.Wpf.Views
         {
             if (Toggle.IsChecked == true)
             {
-                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
+                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;
             }
             else
             {
-                Properties.Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
+                Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Light;
             }
 
-            Properties.Settings.Default.Save();
-            ((App)Application.Current).SetTheme(Properties.Settings.Default.Theme);
-            (Application.Current as ClearDashboard.Wpf.App).Theme = Properties.Settings.Default.Theme;
+            Settings.Default.Save();
+            ((App)Application.Current).SetTheme(Settings.Default.Theme);
+            (Application.Current as ClearDashboard.Wpf.App).Theme = Settings.Default.Theme;
         }
         
     }
