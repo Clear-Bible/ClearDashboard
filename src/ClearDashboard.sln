@@ -63,10 +63,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Interfac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Features", "ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj", "{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ClearDashboard.Installer", "ClearDashboard.Installer\ClearDashboard.Installer.vdproj", "{688DF53B-D461-477F-BA98-DD62893EDE05}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{248878E9-F59E-476E-9CA5-D0652F8050EB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,10 +187,6 @@ Global
 		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|x64.ActiveCfg = Release|Any CPU
 		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|x64.Build.0 = Release|Any CPU
-		{688DF53B-D461-477F-BA98-DD62893EDE05}.Debug|Any CPU.ActiveCfg = Debug
-		{688DF53B-D461-477F-BA98-DD62893EDE05}.Debug|x64.ActiveCfg = Debug
-		{688DF53B-D461-477F-BA98-DD62893EDE05}.Release|Any CPU.ActiveCfg = Release
-		{688DF53B-D461-477F-BA98-DD62893EDE05}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,8 +209,6 @@ Global
 		{9C3D2FA6-92EB-4184-9429-DD5898E5B565} = {2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}
 		{E6CC1FEA-86BC-4434-B714-33A2A1976515} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
-		{688DF53B-D461-477F-BA98-DD62893EDE05} = {248878E9-F59E-476E-9CA5-D0652F8050EB}
-		{248878E9-F59E-476E-9CA5-D0652F8050EB} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}
