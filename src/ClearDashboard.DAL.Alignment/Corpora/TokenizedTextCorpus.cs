@@ -10,7 +10,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         public TokenizedCorpusId TokenizedCorpusId { get; set; }
         public CorpusId CorpusId { get; set; }
-        internal TokenizedTextCorpus(TokenizedCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations)
+        private string projectName_;
+        internal TokenizedTextCorpus(TokenizedCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, string projectName)
         {
             TokenizedCorpusId = tokenizedCorpusId;
             CorpusId = corpusId;
@@ -19,14 +20,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new TokenizedText(TokenizedCorpusId, mediator, Versification, bookAbbreviation));
+                AddText(new TokenizedText(TokenizedCorpusId, mediator, Versification, bookAbbreviation, projectName));
             }
+
+            projectName_ = projectName;
         }
         public override ScrVers Versification { get; }
 
-        public static async Task<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>> GetAllCorpusVersionIds(IMediator mediator)
+        public static async Task<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>> GetAllCorpusVersionIds(string projectName, IMediator mediator)
         {
-            var result = await mediator.Send(new GetAllCorpusVersionIdsQuery());
+            var result = await mediator.Send(new GetAllCorpusVersionIdsQuery(projectName));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -37,9 +40,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusVersionId corpusVersionId)
+        public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(string projectName, IMediator mediator, CorpusVersionId corpusVersionId)
         {
-            var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusVersionIdQuery(corpusVersionId));
+            var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusVersionIdQuery(projectName, corpusVersionId));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -49,16 +52,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new MediatorErrorEngineException(result.Message);
             }
         }
-        public static async Task<TokenizedTextCorpus> Get(
+        public static async Task<TokenizedTextCorpus> Get(string projectName,
             IMediator mediator,
             TokenizedCorpusId tokenizedCorpusId)
         {
-            var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedCorpusId);
+            var command = new GetBookIdsByTokenizedCorpusIdQuery(projectName, tokenizedCorpusId);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {                                                      
-                return new TokenizedTextCorpus(command.TokenizedCorpusId, result.Data.corpusId, mediator, result.Data.bookIds);
+                return new TokenizedTextCorpus(command.TokenizedCorpusId, result.Data.corpusId, mediator, result.Data.bookIds, command.ProjectName);
             }
             else
             {

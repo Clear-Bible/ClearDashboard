@@ -12,9 +12,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public ParallelCorpusId ParallelCorpusId { get; set; }
 
         public static async Task<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>> 
-            GetAllParallelCorpusVersionIds(IMediator mediator)
+            GetAllParallelCorpusVersionIds(string projectName, IMediator mediator)
         {
-            var result = await mediator.Send(new GetAllParallelCorpusVersionIdsQuery());
+            var result = await mediator.Send(new GetAllParallelCorpusVersionIdsQuery(projectName));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -25,9 +25,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public static async Task<IEnumerable<ParallelTokenizedCorpusId>> GetAllParallelTokenizedCorpusIds(IMediator mediator, ParallelCorpusVersionId parallelCorpusVersionId)
+        public static async Task<IEnumerable<ParallelTokenizedCorpusId>> GetAllParallelTokenizedCorpusIds(string projectName, IMediator mediator, ParallelCorpusVersionId parallelCorpusVersionId)
         {
-            var result = await mediator.Send(new GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery(parallelCorpusVersionId));
+            var result = await mediator.Send(new GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery(projectName, parallelCorpusVersionId));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -38,19 +38,19 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
         
-        public static async Task<ParallelTokenizedCorpus> Get(
+        public static async Task<ParallelTokenizedCorpus> Get(string projectName,
             IMediator mediator,
             ParallelTokenizedCorpusId parallelTokenizedCorpusId)
         {
-            var command = new GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery(parallelTokenizedCorpusId);
+            var command = new GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery(projectName, parallelTokenizedCorpusId);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
                 var data =  result.Data;
                 return new ParallelTokenizedCorpus(
-                    await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId), 
-                    await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
+                    await TokenizedTextCorpus.Get(projectName, mediator, data.sourceTokenizedCorpusId), 
+                    await TokenizedTextCorpus.Get(projectName, mediator, data.targetTokenizedCorpusId), 
                     data.engineVerseMappings, 
                     parallelTokenizedCorpusId,
                     data.parallelCorpusVersionId,

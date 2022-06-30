@@ -1,25 +1,32 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler : IRequestHandler<
+    public class GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler : AlignmentDbContextQueryHandler<
         GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery,
-        RequestResult<IEnumerable<ParallelTokenizedCorpusId>>>
+        RequestResult<IEnumerable<ParallelTokenizedCorpusId>>,
+        IEnumerable<ParallelTokenizedCorpusId>>
     {
-        public Task<RequestResult<IEnumerable<ParallelTokenizedCorpusId>>>
-            Handle(GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery command, CancellationToken cancellationToken)
+        public GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
+            : base(projectNameDbContextFactory, logger)
         {
+        }
 
+        protected override Task<RequestResult<IEnumerable<ParallelTokenizedCorpusId>>> GetData(GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery request,
+            CancellationToken cancellationToken)
+        {
             return Task.FromResult(
                 new RequestResult<IEnumerable<ParallelTokenizedCorpusId>>
                 (result: new List<ParallelTokenizedCorpusId>()
-                {
-                    new ParallelTokenizedCorpusId(new Guid())
-                },
-                success: true,
-                message: "successful result from test"));
+                    {
+                        new ParallelTokenizedCorpusId(new Guid())
+                    },
+                    success: true,
+                    message: "successful result from test"));
         }
     }
 }
