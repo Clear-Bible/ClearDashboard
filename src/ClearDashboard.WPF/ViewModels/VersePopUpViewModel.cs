@@ -1,12 +1,11 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

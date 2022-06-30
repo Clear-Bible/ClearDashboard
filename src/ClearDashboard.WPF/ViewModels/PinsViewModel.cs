@@ -2,7 +2,6 @@
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
@@ -21,8 +20,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Features;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
