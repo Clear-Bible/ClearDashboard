@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,8 +14,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>
     {
 
-        public GetAllCorpusVersionIdsQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public GetAllCorpusVersionIdsQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllCorpusVersionIdsQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 

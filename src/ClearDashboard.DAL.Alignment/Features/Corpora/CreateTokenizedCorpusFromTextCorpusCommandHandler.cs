@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,8 +15,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     {
         private readonly IMediator _mediator;
 
-        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator, ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator, ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
             _mediator = mediator;
         }

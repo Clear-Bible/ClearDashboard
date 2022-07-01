@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
@@ -11,7 +12,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     public class CreateParallelCorpusCommandHandler : AlignmentDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpusId>, ParallelCorpusId>
     {
 
-        public CreateParallelCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) : base(projectNameDbContextFactory, logger)
+        public CreateParallelCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
         }
 
