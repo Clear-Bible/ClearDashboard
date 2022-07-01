@@ -21,6 +21,7 @@ namespace ClearDashboard.DataAccessLayer
 
     public abstract class ProjectManager : IUserProvider, IDisposable
     {
+        #nullable disable
         #region Properties
 
         protected ILogger Logger { get; private set; }
@@ -30,20 +31,20 @@ namespace ClearDashboard.DataAccessLayer
 
     
 
-        public User? CurrentUser { get; set; }
+        public User CurrentUser { get; set; }
     
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-        public Project? ParatextProject { get; protected set; }
+        public Project ParatextProject { get; protected set; }
 
         public bool ParatextVisible = false;
         public string ParatextUserName { get; set; } = "";
-        private string? _currentVerse;
+        private string _currentVerse;
 
-        public string? CurrentVerse
+        public string CurrentVerse
         {
             get { return _currentVerse; }
             set
@@ -201,7 +202,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public DashboardProject? CurrentDashboardProject { get; set; }
+        public DashboardProject CurrentDashboardProject { get; set; }
 
 
         public DashboardProject CreateDashboardProject()

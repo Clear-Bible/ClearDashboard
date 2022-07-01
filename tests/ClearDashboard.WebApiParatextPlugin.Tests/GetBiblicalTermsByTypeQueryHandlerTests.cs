@@ -18,7 +18,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task GetAllBiblicalTermsTest()
+        public async Task GetAllBiblicalTermsTestAsync()
         {
             try
             {

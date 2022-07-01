@@ -16,8 +16,8 @@ namespace ClearDashboard.DAL.Tests.Data
 {
     public  class TestContext : DbContext
     {
-
-        private readonly ILogger<TestContext>? _logger;
+        #nullable disable
+        private readonly ILogger<TestContext> _logger;
         public string DatabasePath { get; set; }
 
         public TestContext() : this(string.Empty)

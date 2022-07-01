@@ -14,7 +14,7 @@ public class GetCurrentVerseQueryHandlerTests : TestBase
     }
 
     [Fact]
-    public async Task GetCurrentVerseTest()
+    public async Task GetCurrentVerseTestAsync()
     {
         try
         {

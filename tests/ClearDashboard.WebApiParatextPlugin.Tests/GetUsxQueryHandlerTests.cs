@@ -14,7 +14,7 @@ public class GetUsxQueryHandlerTests : TestBase
     }
 
     [Fact]
-    public async Task GetUsxTest()
+    public async Task GetUsxTestAsync()
     {
         try
         {

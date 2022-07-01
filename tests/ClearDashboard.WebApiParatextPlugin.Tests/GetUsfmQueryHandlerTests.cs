@@ -14,7 +14,7 @@ public class GetUsfmQueryHandlerTests : TestBase
     }
 
     [Fact]
-    public async Task GetUsfmTest()
+    public async Task GetUsfmTestAsync()
     {
         try
         {

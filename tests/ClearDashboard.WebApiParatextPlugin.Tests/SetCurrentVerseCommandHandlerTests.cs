@@ -14,7 +14,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task SetCurrentVerseTest()
+        public async Task SetCurrentVerseTestAsync()
         {
 
             string verse = "040001001";

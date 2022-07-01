@@ -21,6 +21,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class DatabasePopulationSanityCheckTests : TestBase
     {
+        #nullable disable
         public DatabasePopulationSanityCheckTests(ITestOutputHelper output) : base(output)
         {
         }

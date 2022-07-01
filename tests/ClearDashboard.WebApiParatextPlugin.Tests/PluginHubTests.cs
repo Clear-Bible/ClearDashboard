@@ -21,7 +21,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task ReceiveMessageTest()
+        public async Task ReceiveMessageTestAsync()
         {
             try
             {

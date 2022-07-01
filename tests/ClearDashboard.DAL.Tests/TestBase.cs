@@ -28,11 +28,13 @@ namespace ClearDashboard.DAL.Tests
 {
     public class TestBase
     {
+        #nullable disable
+
         protected ITestOutputHelper Output { get; private set; }
-        protected Process? Process { get; set; }
+        protected Process Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
-        private IServiceProvider? _serviceProvider = null;
+        private IServiceProvider _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
 
         protected TestBase(ITestOutputHelper output)
@@ -150,7 +152,7 @@ namespace ClearDashboard.DAL.Tests
             return process;
         }
 
-        protected T? Copy<T>(T entity)
+        protected T Copy<T>(T entity)
         {
             var json = JsonSerializer.Serialize(entity);
             return JsonSerializer.Deserialize<T>(json);

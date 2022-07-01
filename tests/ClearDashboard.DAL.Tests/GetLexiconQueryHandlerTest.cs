@@ -16,6 +16,7 @@ namespace ClearDashboard.DAL.Tests
 
     public class GetLexiconQueryHandlerTest : TestBase
     {
+        #nullable disable
         public GetLexiconQueryHandlerTest([NotNull] ITestOutputHelper output) : base(output)
         {
             // no-op

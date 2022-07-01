@@ -11,6 +11,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class ProjectNameDbContextFactoryTests : TestBase
     {
+        #nullable disable
         public ProjectNameDbContextFactoryTests(ITestOutputHelper output) : base(output)
         {
             

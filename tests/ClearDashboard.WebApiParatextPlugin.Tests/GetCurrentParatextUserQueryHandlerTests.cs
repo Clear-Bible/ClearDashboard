@@ -11,6 +11,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
     public class GetCurrentParatextUserQueryHandlerTests : TestBase
     {
+        #nullable disable
+
         public GetCurrentParatextUserQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
         }

@@ -12,6 +12,8 @@ namespace ClearDashboard.DAL.Tests
 {
     public class GetBiblicalTermsQueryHandlerTest : TestBase
     {
+        #nullable disable
+
         public GetBiblicalTermsQueryHandlerTest([NotNull] ITestOutputHelper output) : base(output)
         {
             // no-op

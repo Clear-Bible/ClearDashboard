@@ -14,6 +14,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class PopulateNotesTablesTest : TestBase
     {
+        #nullable disable
         public PopulateNotesTablesTest(ITestOutputHelper output) : base(output)
         {
 
