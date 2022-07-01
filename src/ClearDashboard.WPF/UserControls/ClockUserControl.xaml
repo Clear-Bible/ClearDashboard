@@ -9,21 +9,24 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid VerticalAlignment="Center" Background="Yellow">
+    <Grid VerticalAlignment="Center" Height="34">
+        <Border
+            Width="153"
+            x:Name="TimerBorder"
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="10" />
         <Menu
             x:Name="Menu"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
-            Background="DarkRed"
             ItemsSource="{Binding MenuItems}">
 
             <Menu.ItemContainerStyle>
                 <Style x:Name="ItemTemp" TargetType="{x:Type MenuItem}">
 
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="Background" Value="Aqua" />
-                    <Setter Property="Foreground" Value="Black" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Padding" Value="-30,0,-5,0" />
@@ -35,16 +38,20 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Display">
                             <Setter Property="Width" Value="153" />
+                            <Setter Property="Height" Value="43"/>
                             <Setter Property="Padding" Value="0,0,0,0" />
                         </DataTrigger>
-                        <!--<DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
-                            <Setter Property="Width" Value="1000" />
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
+                            <Setter  Property="Foreground" Value="Black"/>
+                            <Setter  Property="Background" Value="DarkGray"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
-                            <Setter Property="Width" Value="1000" />
-                        </DataTrigger>-->
+                            <Setter  Property="Foreground" Value="Black"/>
+                            <Setter  Property="Background" Value="DarkGray"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Utc">
                             <Setter Property="Width" Value="480" />
+                            <Setter  Property="Foreground" Value="Black"/>
                         </DataTrigger>
                     </Style.Triggers>
 
@@ -53,32 +60,12 @@
             </Menu.ItemContainerStyle>
             <Menu.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:ClockUserControl}" ItemsSource="{Binding Path=MenuItems}">
-                    <Grid HorizontalAlignment="Stretch" Background="Green">
-                        <!--  <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
 
-                    Orientation="Horizontal"-->
-                        <!-- <DockPanel
-                            LastChildFill="true"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Background="MediumPurple">
-                        </DockPanel>-->
-
-                        <!--<StackPanel
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Background="CadetBlue"
-                            Orientation="Horizontal">
-
-                        </StackPanel>-->
                         <StackPanel
-                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
                             Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
-                            Background="LightSeaGreen">
+                            Orientation="Horizontal">
                             <Button
                                 x:Name="DeleteButton"
                                 Width="40"
@@ -86,7 +73,6 @@
                                 Margin="2,0,0,0"
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="Transparent"
                                 Click="DeleteButton_OnClick"
                                 Content="-"
                                 Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}" />
@@ -96,7 +82,6 @@
                                 Height="22"
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="Transparent"
                                 Click="AddButton_OnClick"
                                 Content="+"
                                 Tag="{Binding MenuItems, Mode=TwoWay}"
@@ -113,8 +98,7 @@
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="Gray"
-                                CaretBrush="AliceBlue"
+                                Background="White"
                                 LostFocus="TextBox_OnLostFocus"
                                 Text="{Binding TextBoxText}"
                                 Visibility="{Binding ClockTextBoxVisibility}" />
@@ -127,7 +111,6 @@
                             <CheckBox
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="DarkGoldenrod"
                                 Checked="CheckBoxChanged"
                                 IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
                                 Unchecked="CheckBoxChanged"
@@ -136,13 +119,6 @@
                         </StackPanel>
 
                     </Grid>
-
-                    <!--<StackPanel
-                        VerticalAlignment="Center"
-                        Background="CadetBlue"
-                        Orientation="Horizontal">
-
-                    </StackPanel>-->
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
         </Menu>
