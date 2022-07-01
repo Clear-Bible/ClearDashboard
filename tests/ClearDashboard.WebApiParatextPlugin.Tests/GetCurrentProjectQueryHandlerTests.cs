@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task TestQuery()
+        public async Task TestQueryAsync()
         {
             try
             {

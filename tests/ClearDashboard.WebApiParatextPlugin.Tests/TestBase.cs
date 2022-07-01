@@ -14,7 +14,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
     public class TestBase
     {
         protected ITestOutputHelper Output { get; private set; }
-        protected Process Process { get; set; }
+        protected Process? Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
         private IServiceProvider? _serviceProvider = null;

@@ -33,6 +33,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>
     {
+        #nullable disable
         private readonly IEventAggregator _eventAggregator;
 
         #region Member Variables

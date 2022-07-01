@@ -11,8 +11,8 @@ public class VerseMapping : SynchronizableTimestampedEntity
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
-    public virtual Guid ParallelCorpusVersionId { get; set; }
-    public virtual ParallelCorpus ParallelCorpus { get; set; }
+    public virtual Guid? ParallelCorpusVersionId { get; set; }
+    public virtual ParallelCorpus? ParallelCorpus { get; set; }
 
-    public virtual ICollection<VerseMappingVerseAssociation> VerseMappingVerseAssociations { get; set; }
+    public virtual ICollection<VerseMappingVerseAssociation>? VerseMappingVerseAssociations { get; set; }
 }

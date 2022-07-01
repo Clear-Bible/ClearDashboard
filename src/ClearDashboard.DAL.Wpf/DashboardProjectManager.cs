@@ -26,8 +26,8 @@ public class DashboardProjectManager : ProjectManager
 {
     private IEventAggregator EventAggregator { get; set; }
 
-    protected HubConnection HubConnection { get; private set; }
-    protected IHubProxy HubProxy { get; private set; }
+    protected HubConnection? HubConnection { get; private set; }
+    protected IHubProxy? HubProxy { get; private set; }
 
     public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
     {

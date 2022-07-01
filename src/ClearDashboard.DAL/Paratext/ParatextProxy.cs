@@ -11,7 +11,7 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
-
+    #nullable disable
     public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;

@@ -19,14 +19,14 @@ namespace ClearDashboard.DataAccessLayer.Repositories
 
         }
 
-        internal string DatabaseFilePathName { get; set; }
+        internal string? DatabaseFilePathName { get; set; }
 
      //   internal DapperDataProvider Db { get; set; }
 
         /// <summary>
         /// Allows for easy change of the table abbr. We want developers to be able to save objects in different tables.
         /// </summary>
-        public string TableName { get; set; }
+        public string? TableName { get; set; }
 
         /// <summary>
         /// Get all the objects.
@@ -78,7 +78,7 @@ namespace ClearDashboard.DataAccessLayer.Repositories
         /// <summary>
         /// Triggers an update of the UI when the data changes.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)

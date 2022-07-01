@@ -80,7 +80,7 @@ namespace ClearDashboard.DataAccessLayer.Models
      
         public Color BookColor { get; set; }
 
-        public string BookNum { get; set; }
+        public string? BookNum { get; set; }
 
         public bool IsOt { get; set; }
      

@@ -44,7 +44,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? Text { get; set; }
 
         [XmlElement(ElementName = "Link")]
-        public string Link { get; set; }
+        public string? Link { get; set; }
     }
 
     [XmlRoot(ElementName = "BiblicalTermsList")]
@@ -52,13 +52,13 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Term")]
-        public List<Term> Term { get; set; }
+        public List<Term>? Term { get; set; }
 
         [XmlAttribute(AttributeName = "xsi")]
-        public string Xsi { get; set; }
+        public string? Xsi { get; set; }
 
         [XmlAttribute(AttributeName = "xsd")]
-        public string Xsd { get; set; }
+        public string? Xsd { get; set; }
 
         [XmlText]
         public string? Text { get; set; }

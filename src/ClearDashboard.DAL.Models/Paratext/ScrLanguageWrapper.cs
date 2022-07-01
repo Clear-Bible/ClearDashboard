@@ -9,7 +9,7 @@
 
         public bool IsRtol { get; set; }
 
-        public ScrLanguage Language { get; set; }
+        public ScrLanguage? Language { get; set; }
 
     }
 }

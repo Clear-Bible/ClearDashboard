@@ -2,9 +2,9 @@
 {
     public class ScrLanguage
     {
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
-        public string LanguageTag { get; set; }
+        public string? LanguageTag { get; set; }
 
     }
 }

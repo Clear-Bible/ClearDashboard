@@ -72,7 +72,7 @@ namespace ClearDashboard.DAL.Tests
             where TRequest : IRequest<RequestResult<TData>>
             where TResult : RequestResult<TData>, new()
         {
-            var mediator = ServiceProvider.GetService<IMediator>();
+            var mediator = ServiceProvider.GetService<IMediator>()!;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -132,7 +132,7 @@ namespace ClearDashboard.DAL.Tests
             if (StopParatextOnTestConclusion)
             {
                 Output.WriteLine("Stopping Paratext.");
-                Process.Kill(true);
+                Process?.Kill(true);
 
                 Process = null;
 

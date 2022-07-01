@@ -24,7 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? Language { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 
     [XmlRoot(ElementName = "Sense")]
@@ -32,13 +32,13 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Gloss")]
-        public Gloss Gloss { get; set; }
+        public Gloss? Gloss { get; set; }
 
         [XmlAttribute(AttributeName = "Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 
     [XmlRoot(ElementName = "Entry")]
@@ -46,7 +46,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Sense")]
-        public List<Sense> Sense { get; set; }
+        public List<Sense>? Sense { get; set; }
     }
 
     [XmlRoot(ElementName = "item")]
@@ -54,10 +54,10 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Lexeme")]
-        public Lexeme Lexeme { get; set; }
+        public Lexeme? Lexeme { get; set; }
 
         [XmlElement(ElementName = "Entry")]
-        public Entry Entry { get; set; }
+        public Entry? Entry { get; set; }
     }
 
     [XmlRoot(ElementName = "Entries")]
@@ -65,7 +65,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "item")]
-        public List<Item> Item { get; set; }
+        public List<Item>? Item { get; set; }
     }
 
     [XmlRoot(ElementName = "Lexicon")]

@@ -25,14 +25,14 @@ namespace ClearDashboard.DataAccessLayer.Models
             NotSelected
         }
 
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
-        public string ShortName { get; set; }
+        public string? ShortName { get; set; }
 
         
-        public string LongName { get; set; }
+        public string? LongName { get; set; }
 
-        public string LanguageName { get; set; }
+        public string? LanguageName { get; set; }
 
         public List<BookInfo> AvailableBooks { get; set; } = new List<BookInfo>();
 
@@ -40,7 +40,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public ProjectType Type { get; set; }
 
-        public ScrLanguageWrapper Language { get; set; } 
+        public ScrLanguageWrapper? Language { get; set; } 
 
         public Dictionary<string, string> BcvDictionary { get; set; } = new Dictionary<string, string>();
 

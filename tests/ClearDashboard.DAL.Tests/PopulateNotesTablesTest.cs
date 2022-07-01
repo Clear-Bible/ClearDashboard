@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Tests
         public async Task NoteRecipientTest()
         {
 
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            var userProvider = ServiceProvider.GetService<IUserProvider>()!;
             Assert.NotNull(userProvider);
             var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
             const string projectName = "NoteTest";

@@ -16,7 +16,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task GetCurrentParatextUserTest()
+        public async Task GetCurrentParatextUserTestAsync()
         {
             try
             {

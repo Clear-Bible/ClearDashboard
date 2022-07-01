@@ -151,44 +151,44 @@ namespace ClearDashboard.DataAccessLayer.Models
         public CorpusType CorpusType { get; set; }
 
       
-        public string Guid { get; set; }
+        public string? Guid { get; set; }
 
         
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
     
-        public string Encoding { get; set; }
+        public string? Encoding { get; set; }
 
       
-        public string LanguageIsoCode { get; set; }
+        public string? LanguageIsoCode { get; set; }
 
       
-        public TranslationInfo TranslationInfo { get; set; }
+        public TranslationInfo? TranslationInfo { get; set; }
 
-        public TranslationInfo BaseTranslation { get; set; }
+        public TranslationInfo? BaseTranslation { get; set; }
 
        
-        public string DefaultFont { get; set; }
+        public string? DefaultFont { get; set; }
 
        
-        public string NormalizationForm { get; set; }
+        public string? NormalizationForm { get; set; }
 
       
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
        
-        public string Copyright { get; set; }
+        public string? Copyright { get; set; }
 
       
-        public string ProjectPath { get; set; }
+        public string? ProjectPath { get; set; }
 
         public bool IsRTL { get; set; } = false;
-        public string DirectoryPath { get; set; }
-        public string ClearEngineDirectoryPath { get; set; }
-        public string FileNamePrePart { get; set; }
-        public string FileNamePostPart { get; set; }
-        public string FileNameBookNameForm { get; set; }
-        public string BooksPresent { get; set; }
+        public string? DirectoryPath { get; set; }
+        public string? ClearEngineDirectoryPath { get; set; }
+        public string? FileNamePrePart { get; set; }
+        public string? FileNamePostPart { get; set; }
+        public string? FileNameBookNameForm { get; set; }
+        public string? BooksPresent { get; set; }
 
         public bool HasCustomVRSfile { get; set; } = false;
         public string CustomVRSfilePath { get; set; } = "";
