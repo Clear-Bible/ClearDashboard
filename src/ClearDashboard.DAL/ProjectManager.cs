@@ -19,7 +19,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 namespace ClearDashboard.DataAccessLayer
 {
 
-    public abstract class ProjectManager : IUserProvider, IDisposable
+    public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
         #region Properties
 
@@ -31,6 +31,8 @@ namespace ClearDashboard.DataAccessLayer
     
 
         public User CurrentUser { get; set; }
+
+        public ProjectInfo CurrentProject { get; set; }
     
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
@@ -248,5 +250,6 @@ namespace ClearDashboard.DataAccessLayer
         }
         #endregion
 
+        
     }
 }
