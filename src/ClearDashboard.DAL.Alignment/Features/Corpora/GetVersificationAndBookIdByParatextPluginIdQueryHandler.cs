@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
@@ -12,8 +13,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
     {
 
-        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,  ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 

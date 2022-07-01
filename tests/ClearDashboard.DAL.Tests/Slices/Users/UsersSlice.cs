@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Tests.Slices.Users
 {
@@ -14,7 +15,7 @@ namespace ClearDashboard.DAL.Tests.Slices.Users
 
     public class GetUsersQueryHandler : AlignmentDbContextQueryHandler<GetUsersQuery, RequestResult<List<User>>, List<User> >
     {
-        public GetUsersQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, ILogger<GetUsersQueryHandler> logger) : base(projectNameDbContextFactory, logger)
+        public GetUsersQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetUsersQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
            //no-op
         }

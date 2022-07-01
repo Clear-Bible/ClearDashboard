@@ -2,6 +2,7 @@
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -15,8 +16,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         (IEnumerable<string> bookId, CorpusId corpusId)>
     {
 
-        public GetBookIdsByTokenizedCorpusIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public GetBookIdsByTokenizedCorpusIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetBookIdsByTokenizedCorpusIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 

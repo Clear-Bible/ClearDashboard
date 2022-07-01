@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 
@@ -12,8 +13,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         IEnumerable<TokenizedCorpusId>>
     {
 
-        public GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 

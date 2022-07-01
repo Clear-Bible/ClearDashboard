@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 
@@ -11,8 +12,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
 
-        public GetRowsByParatextPluginIdAndBookIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger) 
-            : base(projectNameDbContextFactory, logger)
+        public GetRowsByParatextPluginIdAndBookIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetRowsByParatextPluginIdAndBookIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
