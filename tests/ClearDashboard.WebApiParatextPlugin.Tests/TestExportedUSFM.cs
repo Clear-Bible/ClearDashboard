@@ -67,7 +67,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             List<string> lines = new List<string>();
             using (StreamReader r = new StreamReader(verseTextFile))
             {
-                string line;
+                string? line;
                 while ((line = r.ReadLine()) != null)
                 {
                     lines.Add(line);
