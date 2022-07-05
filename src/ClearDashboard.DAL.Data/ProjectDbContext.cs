@@ -11,29 +11,29 @@ using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
-    public class AlignmentContext : DbContext
+    public class ProjectDbContext : DbContext
     {
-        private readonly ILogger<AlignmentContext>? _logger;
+        private readonly ILogger<ProjectDbContext>? _logger;
         public  IUserProvider? UserProvider { get; set; }
         public string DatabasePath { get; set; }
-        public AlignmentContext() : this(string.Empty)
+        public ProjectDbContext() : this(string.Empty)
         {
            
         }
 
-        public AlignmentContext(ILogger<AlignmentContext> logger, IUserProvider userProvider) :  this(string.Empty)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider) :  this(string.Empty)
         {
             _logger = logger;
             UserProvider = userProvider;
         }
 
-        public AlignmentContext(DbContextOptions<AlignmentContext> options)
+        public ProjectDbContext(DbContextOptions<ProjectDbContext> options)
             : base(options)
         {
             DatabasePath = string.Empty;
         }
 
-        protected AlignmentContext(string databasePath)
+        protected ProjectDbContext(string databasePath)
         {
             DatabasePath = databasePath;
         }
@@ -52,10 +52,10 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<ProjectInfo> ProjectInfos => Set<ProjectInfo>();
-        public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
+        //public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
-        public virtual DbSet<TokenizedCorpus> TokenizedCopora => Set<TokenizedCorpus>();
+        public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();

@@ -9,21 +9,21 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateTokenizedCorpusFromTokenizedCorpusCommandHandler : AlignmentDbContextCommandHandler<
+    public class CreateTokenizedCorpusFromTokenizedCorpusCommandHandler : ProjectDbContextCommandHandler<
         CreateTokenizedCorpusFromTokenizedCorpusCommand,
         RequestResult<TokenizedTextCorpus>,
         TokenizedTextCorpus>
     {
         private readonly IMediator _mediator;
 
-        public CreateTokenizedCorpusFromTokenizedCorpusCommandHandler(IMediator mediator, ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTokenizedCorpusCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
+        public CreateTokenizedCorpusFromTokenizedCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTokenizedCorpusCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
             _mediator = mediator;
         }
 
        
 
-        protected override Task<RequestResult<TokenizedTextCorpus>> SaveData(CreateTokenizedCorpusFromTokenizedCorpusCommand request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(CreateTokenizedCorpusFromTokenizedCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             //create a new TokenizedCorpus under the same Corpus parent

@@ -38,14 +38,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task CreateAlignmentDatabase()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             Output.WriteLine($"Don't forget to delete the database: {projectName}.");
         }
@@ -56,13 +56,13 @@ namespace ClearDashboard.DAL.Tests
             var userProvider = ServiceProvider.GetService<IUserProvider>();
             Assert.NotNull(userProvider);
 
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
@@ -120,14 +120,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {

@@ -9,6 +9,6 @@ namespace ClearDashboard.DataAccessLayer.Data.ValueGenerators
     {
         public override bool GeneratesTemporaryValues => false;
         public override Guid Next(EntityEntry entry) => GetUserId(entry.Context);
-        Guid GetUserId(DbContext context) => ((AlignmentContext)context).UserProvider.CurrentUser.Id;
+        Guid GetUserId(DbContext context) => ((ProjectDbContext)context).UserProvider.CurrentUser.Id;
     }
 }

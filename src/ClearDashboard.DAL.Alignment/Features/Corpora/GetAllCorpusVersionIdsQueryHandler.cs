@@ -8,18 +8,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetAllCorpusVersionIdsQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetAllCorpusVersionIdsQueryHandler : ProjectDbContextQueryHandler<
         GetAllCorpusVersionIdsQuery,
         RequestResult<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>,
         IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>
     {
 
-        public GetAllCorpusVersionIdsQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllCorpusVersionIdsQueryHandler> logger) 
+        public GetAllCorpusVersionIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllCorpusVersionIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>> GetData(GetAllCorpusVersionIdsQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>> GetDataAsync(GetAllCorpusVersionIdsQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: query CorpusVersion table and return all ids
 

@@ -7,17 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler : ProjectDbContextQueryHandler<
         GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery,
         RequestResult<IEnumerable<ParallelTokenizedCorpusId>>,
         IEnumerable<ParallelTokenizedCorpusId>>
     {
-        public GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler> logger) 
+        public GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<ParallelTokenizedCorpusId>>> GetData(GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery request,
+        protected override Task<RequestResult<IEnumerable<ParallelTokenizedCorpusId>>> GetDataAsync(GetAllParallelTokenizedCorpusIdsByParallelCorpusVersionIdQuery request,
             CancellationToken cancellationToken)
         {
             return Task.FromResult(

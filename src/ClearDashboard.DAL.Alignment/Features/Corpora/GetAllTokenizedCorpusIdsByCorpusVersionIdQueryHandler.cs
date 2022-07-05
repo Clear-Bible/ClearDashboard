@@ -7,18 +7,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler : ProjectDbContextQueryHandler<
         GetAllTokenizedCorpusIdsByCorpusVersionIdQuery,
         RequestResult<IEnumerable<TokenizedCorpusId>>,
         IEnumerable<TokenizedCorpusId>>
     {
 
-        public GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler> logger) 
+        public GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<TokenizedCorpusId>>> GetData(GetAllTokenizedCorpusIdsByCorpusVersionIdQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<IEnumerable<TokenizedCorpusId>>> GetDataAsync(GetAllTokenizedCorpusIdsByCorpusVersionIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: query TokenizedCorpus table by CorpusVersion.Corpus and return enumerable.
             if (request.CorpusVersionId.Id.Equals(new System.Guid("ca761232ed4211cebacd00aa0057b223")))

@@ -11,12 +11,12 @@ namespace ClearDashboard.DataAccessLayer.Data
         Task<TDbContext> GetDatabaseContext(string projectName);
     }
 
-    public class ProjectNameDbContextFactory : IProjectNameDbContextFactory<AlignmentContext>
+    public class ProjectDbContextFactory : IProjectNameDbContextFactory<ProjectDbContext>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ProjectNameDbContextFactory>? _logger;
+        private readonly ILogger<ProjectDbContextFactory>? _logger;
 
-        public ProjectNameDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectNameDbContextFactory> logger)
+        public ProjectDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectDbContextFactory> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
@@ -30,19 +30,19 @@ namespace ClearDashboard.DataAccessLayer.Data
                 ProjectDirectory = EnsureProjectDirectory(projectName),
             };
 
-            projectAssets.AlignmentContext = await GetAlignmentContext(projectAssets.DataContextPath);
+            projectAssets.ProjectDbContext = await GetAlignmentContext(projectAssets.DataContextPath);
             return projectAssets;
 
         }
 
-        public async Task<AlignmentContext> GetDatabaseContext(string projectName)
+        public async Task<ProjectDbContext> GetDatabaseContext(string projectName)
         {
            return await GetAlignmentContext(EnsureProjectDirectory(projectName));
         }
 
-        private async Task<AlignmentContext> GetAlignmentContext(string fullPath)
+        private async Task<ProjectDbContext> GetAlignmentContext(string fullPath)
         {
-            var context = _serviceProvider.GetService<AlignmentContext>();
+            var context = _serviceProvider.GetService<ProjectDbContext>();
             if (context != null)
             {
                 try
@@ -70,13 +70,14 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         private string EnsureProjectDirectory(string projectName)
         {
-            var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); //$"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}");
+            if (string.IsNullOrEmpty(projectName))
+            {
+                throw new ArgumentNullException(nameof(projectName), "A project name must be provided in order for a 'Project' database context to returned.");
+            }
+            var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); 
             if (!Directory.Exists(directoryPath))
             {
-                if (_logger != null)
-                {
-                    _logger.LogInformation($"Creating project directory {directoryPath}.");
-                }
+                _logger?.LogInformation($"Creating project directory {directoryPath}.");
                 Directory.CreateDirectory(directoryPath);
             }
 

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHandler<
         GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
@@ -23,12 +23,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         ParallelCorpusId parallelCorpusId)>
     {
 
-        public GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler> logger) 
+        public GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>> GetData(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: use command.ParallelTokenizedCorpus to retrieve from ParallelTokenizedCorpus table and return
             //the TokenizedCorpusId for both and target and also
