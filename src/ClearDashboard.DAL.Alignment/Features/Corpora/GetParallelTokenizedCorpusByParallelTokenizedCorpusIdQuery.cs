@@ -6,6 +6,6 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery(string ProjectName, ParallelTokenizedCorpusId  ParallelTokenizedCorpus)
-        : ProjectRequestQuery<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>(ProjectName);
+    public record GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery(ParallelTokenizedCorpusId  ParallelTokenizedCorpus)
+        : ProjectRequestQuery<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>;
 }

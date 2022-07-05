@@ -5,10 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.CQRS.Features;
 
-public abstract record ProjectRequestCommand<TData>(string ProjectName) : IRequest<RequestResult<TData>>;
+public abstract record ProjectRequestCommand<TData> : IRequest<RequestResult<TData>>;
 
 public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
-    where TRequest : ProjectRequestCommand<TData>, IRequest<TResponse>
+    where TRequest : ProjectRequestCommand<TData>,IRequest<TResponse>
     where TResponse : RequestResult<TData>, new()
 {
     protected ProjectNameDbContextFactory? ProjectNameDbContextFactory { get; init; }

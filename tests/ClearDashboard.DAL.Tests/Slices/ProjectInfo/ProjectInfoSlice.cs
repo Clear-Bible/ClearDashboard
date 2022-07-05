@@ -11,7 +11,7 @@ using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 {
-    public record GetProjectInfoListQuery(string ProjectName) : ProjectRequestQuery<List<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
+    public record GetProjectInfoListQuery : ProjectRequestQuery<List<DataAccessLayer.Models.ProjectInfo>>;
 
     public class GetProjectInfoListQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoListQuery, RequestResult<List<DataAccessLayer.Models.ProjectInfo>>, List<DataAccessLayer.Models.ProjectInfo>>
     {
@@ -34,7 +34,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
         }
     }
 
-    public record GetProjectInfoQuery(string ProjectName, Guid ProjectInfoId) : ProjectRequestQuery<DataAccessLayer.Models.ProjectInfo>(ProjectName);
+    public record GetProjectInfoQuery(Guid ProjectInfoId) : ProjectRequestQuery<DataAccessLayer.Models.ProjectInfo>;
 
     public class GetProjectInfoQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoQuery, RequestResult<DataAccessLayer.Models.ProjectInfo>, DataAccessLayer.Models.ProjectInfo>
     {
@@ -72,7 +72,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
     
 
 
-    public record AddProjectInfoCommand(string ProjectName, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
+    public record AddProjectInfoCommand(IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>;
 
     public class AddProjectInfoCommandHandler : AlignmentDbContextCommandHandler<AddProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {
@@ -90,7 +90,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
         }
     }
 
-    public record UpdateProjectInfoCommand(string ProjectName, IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>(ProjectName);
+    public record UpdateProjectInfoCommand(IEnumerable<DataAccessLayer.Models.ProjectInfo> ProjectInfos) : ProjectRequestCommand<IEnumerable<DataAccessLayer.Models.ProjectInfo>>;
 
     public class UpdateProjectInfoCommandHandler : AlignmentDbContextCommandHandler<UpdateProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {

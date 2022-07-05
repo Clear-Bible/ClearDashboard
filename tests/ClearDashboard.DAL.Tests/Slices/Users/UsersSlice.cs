@@ -11,7 +11,7 @@ using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Tests.Slices.Users
 {
-    public record GetUsersQuery(string Project, string TestDummy) : ProjectRequestQuery<List<User>>(Project);
+    public record GetUsersQuery(string TestDummy) : ProjectRequestQuery<List<User>>;
 
     public class GetUsersQueryHandler : AlignmentDbContextQueryHandler<GetUsersQuery, RequestResult<List<User>>, List<User> >
     {

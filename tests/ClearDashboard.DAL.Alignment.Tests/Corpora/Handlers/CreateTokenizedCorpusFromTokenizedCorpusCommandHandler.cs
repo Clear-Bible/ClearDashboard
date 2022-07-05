@@ -25,7 +25,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 
             return Task.FromResult(
                 new RequestResult<TokenizedTextCorpus>
-                (result: Task.Run(() => TokenizedTextCorpus.Get(command.ProjectName, new MediatorMock(), new TokenizedCorpusId(new Guid()))).GetAwaiter().GetResult(),
+                (result: Task.Run(() => TokenizedTextCorpus.Get(new MediatorMock(), new TokenizedCorpusId(new Guid()))).GetAwaiter().GetResult(),
                 //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
                 success: true,
                 message: "successful result from test"));

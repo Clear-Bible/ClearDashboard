@@ -3,9 +3,9 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record CreateParallelTokenizedCorpusCommand(string ProjectName,
+    public record CreateParallelTokenizedCorpusCommand(
         ParallelCorpusVersionId ParallelCorpusVersionId,
         TokenizedCorpusId SourceTokenizedCorpusId,
         TokenizedCorpusId TargetTokenizedCorpusId) 
-        : ProjectRequestCommand<ParallelTokenizedCorpusId>(ProjectName);
+        : ProjectRequestCommand<ParallelTokenizedCorpusId>;
 }

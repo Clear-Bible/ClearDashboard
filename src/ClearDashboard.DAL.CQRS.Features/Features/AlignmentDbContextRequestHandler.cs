@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.CQRS.Features
 {
-    public abstract record ProjectRequestQuery<TData>(string ProjectName) : IRequest<RequestResult<TData>>;
+    public abstract record ProjectRequestQuery<TData> : IRequest<RequestResult<TData>>;
     
     public abstract class AlignmentDbContextQueryHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
         where TRequest : ProjectRequestQuery<TData>, IRequest<TResponse>

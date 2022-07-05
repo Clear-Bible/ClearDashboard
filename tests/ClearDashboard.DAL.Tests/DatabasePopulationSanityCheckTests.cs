@@ -155,7 +155,7 @@ namespace ClearDashboard.DAL.Tests
                 Assert.Equal(testUser.Id, projectInfo.UserId);
 
                 // Now get the project back
-                var singleQuery = new GetProjectInfoQuery(projectName, projectInfo.Id);
+                var singleQuery = new GetProjectInfoQuery(projectInfo.Id);
                 var singleResult = await mediator.Send(singleQuery);
                 
 
@@ -165,7 +165,7 @@ namespace ClearDashboard.DAL.Tests
 
                 Assert.Equal(projectInfo, singleResult.Data);
 
-                var query = new GetProjectInfoListQuery(projectName);
+                var query = new GetProjectInfoListQuery();
                 var result = await mediator.Send(query);
 
                 Assert.NotNull(result);
@@ -191,7 +191,7 @@ namespace ClearDashboard.DAL.Tests
                 projectInfo.IsRtl = false;
                 projectInfo.ProjectName = $"Updated {projectName}";
 
-                var updateCommand = new UpdateProjectInfoCommand(projectName, new[] { projectInfo });
+                var updateCommand = new UpdateProjectInfoCommand(new[] { projectInfo });
                 var updateResult = await mediator.Send(updateCommand);
                 Assert.NotNull(updateResult);
                 Assert.True(updateResult.Success);
