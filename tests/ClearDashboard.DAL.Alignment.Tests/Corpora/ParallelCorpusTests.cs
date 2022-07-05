@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus__GetAllParallelCorpusVersionIds()
         {
-			var parallelCorpusVersionIds = await ParallelTokenizedCorpus.GetAllParallelCorpusVersionIds(projectName_,mediator_);
+			var parallelCorpusVersionIds = await ParallelTokenizedCorpus.GetAllParallelCorpusVersionIds(mediator_);
 			Assert.True(parallelCorpusVersionIds.Count() > 0);
         }
 
@@ -36,11 +36,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus__GetAllParallelTokenizedCorpusIds()
 		{
-			var parallelCorpusVersionIds = await ParallelTokenizedCorpus.GetAllParallelCorpusVersionIds(projectName_, mediator_);
+			var parallelCorpusVersionIds = await ParallelTokenizedCorpus.GetAllParallelCorpusVersionIds(mediator_);
 			Assert.True(parallelCorpusVersionIds.Count() > 0);
 
 			var parallelTokenizedCorpusIds = 
-				await ParallelTokenizedCorpus.GetAllParallelTokenizedCorpusIds(projectName_, mediator_, parallelCorpusVersionIds.First().parallelCorpusVersionId);
+				await ParallelTokenizedCorpus.GetAllParallelTokenizedCorpusIds(mediator_, parallelCorpusVersionIds.First().parallelCorpusVersionId);
 			Assert.True(parallelTokenizedCorpusIds.Count() > 0);
 		}
 
@@ -89,13 +89,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
         {
             var projectName = "TestProject";
 
-			var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(projectName, mediator_, new TokenizedCorpusId(new Guid()));
+			var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get( mediator_, new TokenizedCorpusId(new Guid()));
 
-			var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(projectName, mediator_, new TokenizedCorpusId(new Guid()));
+			var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedCorpusId(new Guid()));
 
 			var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create(mediator_, projectName);
+			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create(mediator_);
 
 			Assert.Equal(16, parallelTokenizedCorpus.EngineVerseMappingList?.Count() ?? 0);
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 16);
@@ -107,7 +107,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get()
 		{
-			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get(projectName_, mediator_, new ParallelTokenizedCorpusId(new Guid()));
+			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get( mediator_, new ParallelTokenizedCorpusId(new Guid()));
 			Assert.NotNull(parallelTokenizedCorpus.EngineVerseMappingList);
 			Assert.Equal(1, parallelTokenizedCorpus.EngineVerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() > 0);
@@ -140,7 +140,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get_ChangeVerseMappings_SaveNewParallelVersion()
 		{
-			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get(projectName_, mediator_, new ParallelTokenizedCorpusId(new Guid()));
+			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get(mediator_, new ParallelTokenizedCorpusId(new Guid()));
 			Assert.NotNull(parallelTokenizedCorpus.EngineVerseMappingList);
 			Assert.Equal(1, parallelTokenizedCorpus.EngineVerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() > 0);
@@ -181,7 +181,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get_ChangeTokenizedCorpuses_SaveNewParallelTokenizedCorpus()
 		{
-			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get(projectName_, mediator_, new ParallelTokenizedCorpusId(new Guid()));
+			var parallelTokenizedCorpus = await ParallelTokenizedCorpus.Get(mediator_, new ParallelTokenizedCorpusId(new Guid()));
 			Assert.NotNull(parallelTokenizedCorpus.EngineVerseMappingList);
 			Assert.Equal(1, parallelTokenizedCorpus.EngineVerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() > 0);

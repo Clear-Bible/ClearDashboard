@@ -6,5 +6,5 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record CreateParallelCorpusVersionCommand(string ProjectName, ParallelCorpusId ParallelCorpusId, EngineParallelTextCorpus EngineParallelTextCorpus) : ProjectRequestCommand<ParallelCorpusVersionId>(ProjectName);
+    public record CreateParallelCorpusVersionCommand(ParallelCorpusId ParallelCorpusId, EngineParallelTextCorpus EngineParallelTextCorpus) : ProjectRequestCommand<ParallelCorpusVersionId>;
 }

@@ -55,7 +55,7 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
 
                 var mediator = ServiceProvider.GetService<IMediator>();
 
-                var request = new GetUsersQuery(projectName, "Dummy");
+                var request = new GetUsersQuery("Dummy");
 
                 var result = await mediator?.Send(request);
 

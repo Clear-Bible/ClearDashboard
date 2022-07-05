@@ -33,7 +33,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             return Task.FromResult(
                 new RequestResult<TokenizedTextCorpus>
-                (result: Task.Run(() => TokenizedTextCorpus.Get(request.ProjectName, _mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
+                (result: Task.Run(() => TokenizedTextCorpus.Get( _mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
                     //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
                     success: true,
                     message: "successful result from test"));

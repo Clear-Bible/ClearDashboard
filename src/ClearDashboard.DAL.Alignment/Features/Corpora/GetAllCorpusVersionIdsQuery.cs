@@ -5,5 +5,5 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetAllCorpusVersionIdsQuery(string ProjectName) : ProjectRequestQuery<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>(ProjectName);
+    public record GetAllCorpusVersionIdsQuery : ProjectRequestQuery<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>>;
 }
