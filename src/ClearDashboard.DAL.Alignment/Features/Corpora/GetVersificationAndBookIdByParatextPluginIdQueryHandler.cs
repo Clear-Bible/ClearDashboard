@@ -1,23 +1,32 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : IRequestHandler<
+    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : AlignmentDbContextQueryHandler<
         GetVersificationAndBookIdByParatextPluginIdQuery,
-        RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
+        RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
+        (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
     {
-        public Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
-            Handle(GetVersificationAndBookIdByParatextPluginIdQuery command, CancellationToken cancellationToken)
+
+        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,  ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
+        {
+        }
+
+        protected override Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>> GetData(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
 
             return Task.FromResult(
                 new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-                (result: (ScrVers.Original, new List<string>()), 
-                success: true,
-                message: "successful result from test"));
+                (result: (ScrVers.Original, new List<string>()),
+                    success: true,
+                    message: "successful result from test"));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Data;
+﻿using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -11,13 +12,15 @@ public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TDat
     where TResponse : RequestResult<TData>, new()
 {
     protected ProjectNameDbContextFactory? ProjectNameDbContextFactory { get; init; }
+    protected IProjectProvider? ProjectProvider { get; set; }
     protected ILogger Logger { get; init; }
 
     protected AlignmentContext AlignmentContext { get; set; } = null!;
 
-    protected AlignmentDbContextCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, ILogger logger)
+    protected AlignmentDbContextCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider? projectProvider, ILogger logger)
     {
         ProjectNameDbContextFactory = projectNameDbContextFactory ?? throw new ArgumentNullException(nameof(projectNameDbContextFactory));
+        ProjectProvider = projectProvider ?? throw new ArgumentNullException(nameof(projectProvider));
         Logger = logger;
     }
 
@@ -27,7 +30,7 @@ public abstract class AlignmentDbContextCommandHandler<TRequest, TResponse, TDat
     {
         try 
         {
-            AlignmentContext = await ProjectNameDbContextFactory!.GetDatabaseContext(request.ProjectName).ConfigureAwait(false);
+            AlignmentContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider.CurrentProject.ProjectName).ConfigureAwait(false);
             return await SaveData(request, cancellationToken);
 
         }

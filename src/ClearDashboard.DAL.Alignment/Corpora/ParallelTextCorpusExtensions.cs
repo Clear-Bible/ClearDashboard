@@ -53,6 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<ParallelTokenizedCorpus> Create(
             this EngineParallelTextCorpus engineParallelTextCorpus,
             IMediator mediator,
+            string projectName,
             ParallelCorpusVersionId? parallelCorpusVersionId = null,
             ParallelCorpusId? parallelCorpusId = null)
         {
@@ -77,7 +78,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 if (parallelCorpusId == null)
                 {
-                    var createParallelCorpusCommand = new CreateParallelCorpusCommand();
+                    var createParallelCorpusCommand = new CreateParallelCorpusCommand(projectName);
                     var createParallelCorpusCommandResult = await mediator.Send(createParallelCorpusCommand);
                     if (createParallelCorpusCommandResult.Success)
                     {
@@ -88,7 +89,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                         throw new MediatorErrorEngineException(createParallelCorpusCommandResult.Message);
                     }
                 }
-                var createParallelCorpusVersionCommand = new CreateParallelCorpusVersionCommand(
+                var createParallelCorpusVersionCommand = new CreateParallelCorpusVersionCommand(projectName,
                     parallelCorpusId ?? throw new InvalidStateEngineException(name: "parallelCorpusId", value: "null"),
                     engineParallelTextCorpus);
                 
@@ -103,7 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 }
             }
 
-            var command = new CreateParallelTokenizedCorpusCommand(
+            var command = new CreateParallelTokenizedCorpusCommand(projectName,
                 parallelCorpusVersionId ?? throw new InvalidStateEngineException(name: "parallelCorpusVersionId", value: "null"),
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedCorpusId);

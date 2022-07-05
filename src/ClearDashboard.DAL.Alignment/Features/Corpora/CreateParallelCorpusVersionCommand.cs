@@ -1,12 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record CreateParallelCorpusVersionCommand(
-        ParallelCorpusId parallelCorpusId,
-        EngineParallelTextCorpus engineParallelTextCorpus) 
-        : IRequest<RequestResult<ParallelCorpusVersionId>>;
+    public record CreateParallelCorpusVersionCommand(string ProjectName, ParallelCorpusId ParallelCorpusId, EngineParallelTextCorpus EngineParallelTextCorpus) : ProjectRequestCommand<ParallelCorpusVersionId>(ProjectName);
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 {
@@ -14,7 +15,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 
     public class GetProjectInfoListQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoListQuery, RequestResult<List<DataAccessLayer.Models.ProjectInfo>>, List<DataAccessLayer.Models.ProjectInfo>>
     {
-        public GetProjectInfoListQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, ILogger<GetProjectInfoListQueryHandler> logger) : base(projectNameDbContextFactory, logger)
+        public GetProjectInfoListQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetProjectInfoListQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
             //no-op
         }
@@ -37,7 +38,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 
     public class GetProjectInfoQueryHandler : AlignmentDbContextQueryHandler<GetProjectInfoQuery, RequestResult<DataAccessLayer.Models.ProjectInfo>, DataAccessLayer.Models.ProjectInfo>
     {
-        public GetProjectInfoQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, ILogger<GetProjectInfoQueryHandler> logger) : base(projectNameDbContextFactory, logger)
+        public GetProjectInfoQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetProjectInfoQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
             //no-op
         }
@@ -75,7 +76,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 
     public class AddProjectInfoCommandHandler : AlignmentDbContextCommandHandler<AddProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {
-        public AddProjectInfoCommandHandler(ProjectNameDbContextFactory projectNameDbContextFactory, ILogger<AddProjectInfoCommandHandler> logger) : base(projectNameDbContextFactory, logger)
+        public AddProjectInfoCommandHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<AddProjectInfoCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
             //no-op
         }
@@ -93,7 +94,7 @@ namespace ClearDashboard.DAL.Tests.Slices.ProjectInfo
 
     public class UpdateProjectInfoCommandHandler : AlignmentDbContextCommandHandler<UpdateProjectInfoCommand, RequestResult<IEnumerable<DataAccessLayer.Models.ProjectInfo>>, IEnumerable<DataAccessLayer.Models.ProjectInfo>>
     {
-        public UpdateProjectInfoCommandHandler(ProjectNameDbContextFactory projectNameDbContextFactory, ILogger<UpdateProjectInfoCommandHandler> logger) : base(projectNameDbContextFactory, logger)
+        public UpdateProjectInfoCommandHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<UpdateProjectInfoCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
             //no-op
         }

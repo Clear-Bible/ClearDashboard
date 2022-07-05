@@ -1,15 +1,24 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateParallelCorpusVersionCommandHandler : IRequestHandler<
+    public class CreateParallelCorpusVersionCommandHandler : AlignmentDbContextCommandHandler<
         CreateParallelCorpusVersionCommand,
-        RequestResult<ParallelCorpusVersionId>>
+        RequestResult<ParallelCorpusVersionId>, ParallelCorpusVersionId>
     {
-        public Task<RequestResult<ParallelCorpusVersionId>>
-            Handle(CreateParallelCorpusVersionCommand command, CancellationToken cancellationToken)
+
+        public CreateParallelCorpusVersionCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusVersionCommandHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
+        {
+        }
+
+        protected override Task<RequestResult<ParallelCorpusVersionId>> SaveData(CreateParallelCorpusVersionCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             //1. Create a new record in ParallelCorpusVersionId table with command.ParallelCorpusId as parent,
@@ -18,13 +27,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //Assert.IsType<TokenizedTextCorpus>(command.engineParallelTextCorpus.SourceCorpus); //Should be created ParallelCorpusVersionId's sourceCorpus FK
             //Assert.IsType<TokenizedTextCorpus>(command.engineParallelTextCorpus.TargetCorpus); //Should be created ParallelCorpusVersionId's targetCorpus FK
             //Assert.NotNull(command.engineParallelTextCorpus.EngineVerseMappingList);
-              
+
 
             return Task.FromResult(
                 new RequestResult<ParallelCorpusVersionId>
                 (result: new ParallelCorpusVersionId(new Guid(), DateTime.UtcNow),
-                success: true,
-                message: "successful result from test"));
+                    success: true,
+                    message: "successful result from test"));
         }
+
+       
+        
     }
 }

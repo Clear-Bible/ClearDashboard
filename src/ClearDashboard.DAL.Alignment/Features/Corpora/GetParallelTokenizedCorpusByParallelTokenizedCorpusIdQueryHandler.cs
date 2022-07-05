@@ -1,24 +1,34 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : IRequestHandler<
+    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : AlignmentDbContextQueryHandler<
         GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
             IEnumerable<EngineVerseMapping> engineVerseMappings,
             ParallelCorpusVersionId parallelCorpusVersionId,
-            ParallelCorpusId parallelCorpusId)>>
+            ParallelCorpusId parallelCorpusId)>,
+        (TokenizedCorpusId sourceTokenizedCorpusId,
+        TokenizedCorpusId targetTokenizedCorpusId,
+        IEnumerable<EngineVerseMapping> engineVerseMappings,
+        ParallelCorpusVersionId parallelCorpusVersionId,
+        ParallelCorpusId parallelCorpusId)>
     {
-        public Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-            TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<EngineVerseMapping> engineVerseMappings,
-            ParallelCorpusVersionId parallelCorpusVersionId,
-            ParallelCorpusId parallelCorpusId)>>
-            Handle(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery command, CancellationToken cancellationToken)
+
+        public GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
+        {
+        }
+
+        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>> GetData(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: use command.ParallelTokenizedCorpus to retrieve from ParallelTokenizedCorpus table and return
             //the TokenizedCorpusId for both and target and also
@@ -33,15 +43,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     ParallelCorpusVersionId parallelCorpusVersionId,
                     ParallelCorpusId parallelCorpusId)>
                 (result: (new TokenizedCorpusId(new Guid()),
-                    new TokenizedCorpusId(new Guid()), 
-                    new List<EngineVerseMapping>() { 
-                        new EngineVerseMapping(
-                            new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)}, 
-                            new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })},
-                    new ParallelCorpusVersionId(new Guid(), DateTime.UtcNow),
-                    new ParallelCorpusId(new Guid())),
-                success: true,
-                message: "successful result from test"));
+                        new TokenizedCorpusId(new Guid()),
+                        new List<EngineVerseMapping>() {
+                            new EngineVerseMapping(
+                                new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)},
+                                new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })},
+                        new ParallelCorpusVersionId(new Guid(), DateTime.UtcNow),
+                        new ParallelCorpusId(new Guid())),
+                    success: true,
+                    message: "successful result from test"));
         }
+
+        
+
+        
     }
 }

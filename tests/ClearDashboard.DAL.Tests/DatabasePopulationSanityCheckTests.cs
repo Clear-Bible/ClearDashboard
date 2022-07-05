@@ -33,6 +33,7 @@ namespace ClearDashboard.DAL.Tests
             Services.AddMediatR(typeof(GetUsersQueryHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddSingleton<IProjectProvider, ProjectProvider>();
         }
 
         [Fact]
@@ -132,13 +133,9 @@ namespace ClearDashboard.DAL.Tests
             try
             {
                 var testUser = await AddDashboardUser(context);
+                var projectInfo = await AddCurrentProject(context, projectName);
 
-                var projectInfo = new ProjectInfo
-                {
-                    IsRtl = true,
-                    ProjectName = projectName
-                };
-
+              
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
                 // an updated version later on.
@@ -147,19 +144,19 @@ namespace ClearDashboard.DAL.Tests
                 var mediator = ServiceProvider.GetService<IMediator>();
 
                 // Save a project
-                var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
-                var savedResult = await mediator.Send(saveCommand);
+                //var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
+                //var savedResult = await mediator.Send(saveCommand);
 
-                Assert.NotNull(savedResult);
-                Assert.True(savedResult.Success);
-                Assert.True(savedResult.HasData);
+                //Assert.NotNull(savedResult);
+                //Assert.True(savedResult.Success);
+                //Assert.True(savedResult.HasData);
 
-                var savedProject = savedResult.Data.FirstOrDefault();
-                Assert.NotNull(savedProject);
-                Assert.Equal(testUser.Id, savedProject.UserId);
+                //var savedProject = savedResult.Data.FirstOrDefault();
+                Assert.NotNull(projectInfo);
+                Assert.Equal(testUser.Id, projectInfo.UserId);
 
                 // Now get the project back
-                var singleQuery = new GetProjectInfoQuery(projectName, savedProject.Id);
+                var singleQuery = new GetProjectInfoQuery(projectName, projectInfo.Id);
                 var singleResult = await mediator.Send(singleQuery);
                 
 
@@ -167,7 +164,7 @@ namespace ClearDashboard.DAL.Tests
                 Assert.True(singleResult.Success);
                 Assert.True(singleResult.HasData);
 
-                Assert.Equal(savedProject, singleResult.Data);
+                Assert.Equal(projectInfo, singleResult.Data);
 
                 var query = new GetProjectInfoListQuery(projectName);
                 var result = await mediator.Send(query);
@@ -183,7 +180,7 @@ namespace ClearDashboard.DAL.Tests
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
 
-                Assert.Equal(savedProject, roundTrippedProject);
+                Assert.Equal(projectInfo, roundTrippedProject);
 
 
                 // Create a copy of the project which is not attached
@@ -203,7 +200,7 @@ namespace ClearDashboard.DAL.Tests
 
                 var updatedProject = updateResult.Data.FirstOrDefault();
 
-                Assert.NotEqual(savedProject, copiedProject);
+                Assert.NotEqual(projectInfo, copiedProject);
 
             }
             catch (Exception ex)
