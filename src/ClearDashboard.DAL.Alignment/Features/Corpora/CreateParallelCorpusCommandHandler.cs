@@ -9,21 +9,21 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateParallelCorpusCommandHandler : AlignmentDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpusId>, ParallelCorpusId>
+    public class CreateParallelCorpusCommandHandler : ProjectDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpusId>, ParallelCorpusId>
     {
 
-        public CreateParallelCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+        public CreateParallelCorpusCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
         }
 
-        protected override async Task<RequestResult<ParallelCorpusId>> SaveData(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<ParallelCorpusId>> SaveDataAsync(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             //Create a new record in ParallelCorpus and return its id.
 
             var parallelCorpus = new ParallelCorpus();
-            await AlignmentContext.ParallelCorpa.AddAsync(parallelCorpus, cancellationToken);
-            await AlignmentContext.SaveChangesAsync(cancellationToken);
+            await ProjectDbContext.ParallelCorpa.AddAsync(parallelCorpus, cancellationToken);
+            await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<ParallelCorpusId>
                     (result: new ParallelCorpusId(parallelCorpus.Id),

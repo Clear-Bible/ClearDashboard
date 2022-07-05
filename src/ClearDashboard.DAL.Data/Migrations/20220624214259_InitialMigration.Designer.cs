@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
-    [DbContext(typeof(AlignmentContext))]
+    [DbContext(typeof(ProjectDbContext))]
     [Migration("20220624214259_InitialMigration")]
     partial class InitialMigration
     {

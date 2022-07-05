@@ -8,20 +8,20 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateTokenizedCorpusFromTextCorpusCommandHandler : AlignmentDbContextCommandHandler<
+    public class CreateTokenizedCorpusFromTextCorpusCommandHandler : ProjectDbContextCommandHandler<
         CreateTokenizedCorpusFromTextCorpusCommand,
         RequestResult<TokenizedTextCorpus>,
         TokenizedTextCorpus>
     {
         private readonly IMediator _mediator;
 
-        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator, ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger) 
+        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
             _mediator = mediator;
         }
        
-        protected override Task<RequestResult<TokenizedTextCorpus>> SaveData(CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             // 1. creates a new Corpus,

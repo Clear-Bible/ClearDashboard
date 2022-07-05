@@ -13,16 +13,16 @@ namespace ClearDashboard.DAL.Tests.Slices.Users
 {
     public record GetUsersQuery(string TestDummy) : ProjectRequestQuery<List<User>>;
 
-    public class GetUsersQueryHandler : AlignmentDbContextQueryHandler<GetUsersQuery, RequestResult<List<User>>, List<User> >
+    public class GetUsersQueryHandler : ProjectDbContextQueryHandler<GetUsersQuery, RequestResult<List<User>>, List<User> >
     {
-        public GetUsersQueryHandler(ProjectNameDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetUsersQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
+        public GetUsersQueryHandler(ProjectDbContextFactory projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetUsersQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
            //no-op
         }
 
-        protected override async Task<RequestResult<List<User>>> GetData(GetUsersQuery requestQuery, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<List<User>>> GetDataAsync(GetUsersQuery requestQuery, CancellationToken cancellationToken)
         {
-            var users = AlignmentContext.Users.ToList();
+            var users = ProjectDbContext.Users.ToList();
 
             var result = new RequestResult<List<User>>
             {

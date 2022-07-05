@@ -8,18 +8,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateParallelTokenizedCorpusCommandHandler : AlignmentDbContextCommandHandler<
+    public class CreateParallelTokenizedCorpusCommandHandler : ProjectDbContextCommandHandler<
         CreateParallelTokenizedCorpusCommand,
         RequestResult<ParallelTokenizedCorpusId>,
         ParallelTokenizedCorpusId>
     {
 
-        public CreateParallelTokenizedCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelTokenizedCorpusCommandHandler> logger) 
+        public CreateParallelTokenizedCorpusCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelTokenizedCorpusCommandHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<ParallelTokenizedCorpusId>> SaveData(CreateParallelTokenizedCorpusCommand request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<ParallelTokenizedCorpusId>> SaveDataAsync(CreateParallelTokenizedCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             //Create a new record in ParallelTokenizedCorpus table with command.sourceCorpusIdVersionId and command.targetCorpusIdVersionId and parent command.ParallelCorpusVersionId

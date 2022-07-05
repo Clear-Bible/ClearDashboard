@@ -31,7 +31,7 @@ namespace ClearDashboard.DAL.Tests.Data
            
         }
 
-        public TestContext(DbContextOptions<AlignmentContext> options)
+        public TestContext(DbContextOptions<ProjectDbContext> options)
             : base(options)
         {
             DatabasePath = string.Empty;

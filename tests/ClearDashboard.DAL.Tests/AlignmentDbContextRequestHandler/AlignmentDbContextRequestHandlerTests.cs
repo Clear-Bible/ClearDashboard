@@ -35,14 +35,14 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
         [Fact]
         public async Task GetUsersViaHandlerTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {

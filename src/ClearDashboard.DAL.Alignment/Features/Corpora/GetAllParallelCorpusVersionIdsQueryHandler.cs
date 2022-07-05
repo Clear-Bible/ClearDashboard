@@ -8,17 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetAllParallelCorpusVersionIdsQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetAllParallelCorpusVersionIdsQueryHandler : ProjectDbContextQueryHandler<
         GetAllParallelCorpusVersionIdsQuery,
         RequestResult<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>,
         IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>
     {
 
-        public GetAllParallelCorpusVersionIdsQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllParallelCorpusVersionIdsQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
+        public GetAllParallelCorpusVersionIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllParallelCorpusVersionIdsQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>> GetData(GetAllParallelCorpusVersionIdsQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>> GetDataAsync(GetAllParallelCorpusVersionIdsQuery request, CancellationToken cancellationToken)
         {
             return Task.FromResult(
                 new RequestResult<IEnumerable<(ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>>
