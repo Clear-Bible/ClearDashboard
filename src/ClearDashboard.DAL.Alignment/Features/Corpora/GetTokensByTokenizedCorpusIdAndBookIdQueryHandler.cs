@@ -5,11 +5,14 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
+
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {

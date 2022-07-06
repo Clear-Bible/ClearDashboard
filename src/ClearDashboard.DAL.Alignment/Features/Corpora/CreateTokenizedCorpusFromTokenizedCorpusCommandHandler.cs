@@ -1,4 +1,4 @@
-﻿using ClearBible.Engine.Corpora;
+﻿
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -6,6 +6,9 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -29,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //create a new TokenizedCorpus under the same Corpus parent
             //enumerate the TokensTextRows and insert associated Tokens
             //return a new TokensTextRow constructed with the new TokenizedCorpus.Id.
-            // Assert.All(command.textCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+            //Assert.All(command.TokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
 
             return Task.FromResult(
                 new RequestResult<TokenizedTextCorpus>

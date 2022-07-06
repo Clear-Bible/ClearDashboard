@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		public async void Corpus__GetAllCorpusVersionIds()
         {
             
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(mediator_);
+			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
 			Assert.True(corpusVersionIds.Count() > 0);
 		}
 
@@ -78,10 +78,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetAllTokenizedCorpusIds()
 		{
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(mediator_);
-			Assert.True(corpusVersionIds.Count() > 0);
+			var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
+			Assert.True(corpusIds.Count() > 0);
 
-			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator_, corpusVersionIds.First().corpusVersionId);
+			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator_, corpusIds.First());
 			Assert.True(tokenizedCorpusIds.Count() > 0);
 		}
 

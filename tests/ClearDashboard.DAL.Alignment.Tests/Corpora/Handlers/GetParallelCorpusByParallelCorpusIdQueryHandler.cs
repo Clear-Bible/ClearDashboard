@@ -10,32 +10,27 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
-    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : IRequestHandler<
-        GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery,
+    public class GetParallelCorpusByParallelCorpusIdQueryHandler : IRequestHandler<
+        GetParallelCorpusByParallelCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
             IEnumerable<EngineVerseMapping> engineVerseMappings,
-            ParallelCorpusVersionId parallelCorpusVersionId,
             ParallelCorpusId parallelCorpusId)>>
     {
         public Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
             IEnumerable<EngineVerseMapping> engineVerseMappings,
-            ParallelCorpusVersionId parallelCorpusVersionId,
             ParallelCorpusId parallelCorpusId)>>
-            Handle(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery command, CancellationToken cancellationToken)
+            Handle(GetParallelCorpusByParallelCorpusIdQuery command, CancellationToken cancellationToken)
         {
-            //DB Impl notes: use command.ParallelTokenizedCorpus to retrieve from ParallelTokenizedCorpus table and return
-            //the TokenizedCorpusId for both and target and also
-            //1. the result of gathering all the VerseMappings under parent parallelTokenizedCorpus.ParallelCorpusVersion to build an EngineVerseMapping list.
-            //2. parent ParallelCorpusVersion's id
-            //3. parent ParallelCorpusVersion's parent ParallelCorpusId
+            //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
+            //1. the result of gathering all the VerseMappings to build an EngineVerseMapping list.
+            //2. associated source and target TokenizedCorpusId
 
             return Task.FromResult(
                 new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
                     IEnumerable<EngineVerseMapping> engineVerseMappings,
-                    ParallelCorpusVersionId parallelCorpusVersionId,
                     ParallelCorpusId parallelCorpusId)>
                 (result: (new TokenizedCorpusId(new Guid()),
                     new TokenizedCorpusId(new Guid()), 
@@ -43,7 +38,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
                         new EngineVerseMapping(
                             new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)}, 
                             new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })},
-                    new ParallelCorpusVersionId(new Guid(), DateTime.UtcNow),
                     new ParallelCorpusId(new Guid())),
                 success: true,
                 message: "successful result from test"));

@@ -4,6 +4,10 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetRowsByParatextPluginIdAndBookIdQueryHandler : ProjectDbContextQueryHandler<

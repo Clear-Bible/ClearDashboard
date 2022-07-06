@@ -1,6 +1,4 @@
-﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
-using MediatR;
+﻿using ClearDashboard.DAL.CQRS.Features;
 using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora

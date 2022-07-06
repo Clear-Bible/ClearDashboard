@@ -5,6 +5,10 @@ using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ProjectDbContextQueryHandler<

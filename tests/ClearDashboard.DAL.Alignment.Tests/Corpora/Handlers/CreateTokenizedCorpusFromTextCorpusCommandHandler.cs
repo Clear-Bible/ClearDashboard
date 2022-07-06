@@ -19,9 +19,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
         {
             //DB Impl notes:
             // 1. creates a new Corpus,
-            // 2. creates a new associated CorpusVersion,
-            // 3. creates a new associated TokenizedCorpus,
-            // 4. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
+            // 2. creates a new associated TokenizedCorpus,
+            // 3. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
             Assert.All(command.TextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
 
             return Task.FromResult(
