@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class AlignmentContextModelSnapshot : ModelSnapshot
+    partial class ProjectDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.6");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -406,38 +406,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("ProjectInfo");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.QuestionGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AltText")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("English")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("LastChanged")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QuestionGroup");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -509,7 +477,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("CorpusHistoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CorpusId")
+                    b.Property<Guid>("CorpusId")
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
@@ -905,9 +873,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TokenizedCorpora")
                         .HasForeignKey("CorpusHistoryId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", "Corpus")
                         .WithMany("TokenizedCorpora")
-                        .HasForeignKey("CorpusId");
+                        .HasForeignKey("CorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Corpus");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>

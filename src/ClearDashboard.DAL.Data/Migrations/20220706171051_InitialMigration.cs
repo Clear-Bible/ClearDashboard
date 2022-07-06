@@ -62,24 +62,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionGroup",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Note = table.Column<string>(type: "TEXT", nullable: true),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    English = table.Column<string>(type: "TEXT", nullable: true),
-                    AltText = table.Column<string>(type: "TEXT", nullable: true),
-                    LastChanged = table.Column<double>(type: "REAL", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuestionGroup", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -98,9 +80,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenizationFunction = table.Column<string>(type: "TEXT", nullable: true),
                     CorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -111,7 +93,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_TokenizedCorpus_Corpus_CorpusId",
                         column: x => x.CorpusId,
                         principalTable: "Corpus",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TokenizedCorpus_CorpusHistory_CorpusHistoryId",
                         column: x => x.CorpusHistoryId,
@@ -713,9 +696,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectInfo");
-
-            migrationBuilder.DropTable(
-                name: "QuestionGroup");
 
             migrationBuilder.DropTable(
                 name: "RawContent");
