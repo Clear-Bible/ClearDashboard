@@ -39,7 +39,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public ProjectInfo CurrentProject { get; set; }
 
-        public Project CurrentParatextProject { get; set; }
+        public ParatextProject CurrentParatextProject { get; set; }
 
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();

@@ -14,7 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 
 public record VerseChangedMessage(string Verse);
 
-public record ProjectChangedMessage(Project Project);
+public record ProjectChangedMessage(ParatextProject Project);
 
 public record ParatextConnectedMessage(bool Connected);
 
@@ -133,7 +133,7 @@ public class DashboardProjectManager : ProjectManager
             await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
         });
 
-        HubProxy.On<Project>("sendProject", async (project) =>
+        HubProxy.On<ParatextProject>("sendProject", async (project) =>
         {
             CurrentParatextProject = project;
             await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));

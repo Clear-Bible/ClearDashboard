@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(name, message);
         }
 
-        public void SendProject(Project project)
+        public void SendProject(ParatextProject project)
         {
             Clients.All.addMessage(project);
         }

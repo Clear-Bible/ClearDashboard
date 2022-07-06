@@ -45,7 +45,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 });
 
-                hubProxy.On<Project>("sendProject", (project) =>
+                hubProxy.On<ParatextProject>("sendProject", (project) =>
                 {
                     Assert.NotNull(project);
                     Output.WriteLine($"Returned project: {project.ShortName}");
