@@ -1,4 +1,7 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+
+namespace ClearDashboard.DataAccessLayer.Models;
 
 public class TokenizedCorpus : SynchronizableTimestampedEntity
 {
@@ -9,7 +12,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
         //SourceParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
         //TargetParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
 
-
+        Metadata = new Dictionary<string, object>();
         SourceParallelCorpora = new HashSet<ParallelCorpus>();
         TargetParallelCorpora = new HashSet<ParallelCorpus>();
         // ReSharper restore VirtualMemberCallInConstructor
@@ -26,4 +29,12 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public virtual Corpus Corpus { get; set; }
 
     public string? TokenizationFunction { get; set; }
+
+    public string RawMetadata { get; set; }
+    [NotMapped]
+    public Dictionary<string, object> Metadata
+    {
+        get => (string.IsNullOrEmpty(RawMetadata) ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(RawMetadata)) ?? new Dictionary<string, object>();
+        set => RawMetadata = JsonSerializer.Serialize(value);
+    }
 }
