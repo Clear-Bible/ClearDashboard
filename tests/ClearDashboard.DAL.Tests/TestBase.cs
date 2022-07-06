@@ -49,6 +49,7 @@ namespace ClearDashboard.DAL.Tests
             Services.AddMediatR(typeof(IMediatorRegistrationMarker));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddSingleton<IProjectProvider, ProjectProvider>();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
@@ -156,7 +157,7 @@ namespace ClearDashboard.DAL.Tests
             return JsonSerializer.Deserialize<T>(json);
         }
 
-        protected async Task<User> AddDashboardUser(AlignmentContext context)
+        protected async Task<User> AddDashboardUser(ProjectDbContext context)
         {
             var testUser = new User { FirstName = "Test", LastName = "User" };
             var userProvider = ServiceProvider.GetService<IUserProvider>();
@@ -166,6 +167,18 @@ namespace ClearDashboard.DAL.Tests
             context.Users.Add(testUser);
             await context.SaveChangesAsync();
             return testUser;
+        }
+
+        protected async Task<ProjectInfo> AddCurrentProject(ProjectDbContext context, string projectName)
+        {
+            var testProject = new ProjectInfo { ProjectName = projectName, IsRtl = true};
+            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
+            Assert.NotNull(projectProvider);
+            projectProvider!.CurrentProject = testProject;
+
+            context.ProjectInfos.Add(testProject);
+            await context.SaveChangesAsync();
+            return testProject;
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record CreateParallelCorpusCommand() 
-        : IRequest<RequestResult<ParallelCorpusId>>;
+    public record CreateParallelCorpusCommand(
+        TokenizedCorpusId SourceTokenizedCorpusId,
+        TokenizedCorpusId TargetTokenizedCorpusId,
+        IEnumerable<EngineVerseMapping> engineVerseMappingList) : ProjectRequestCommand<ParallelCorpus>;
 }

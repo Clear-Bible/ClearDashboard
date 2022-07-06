@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     message: "originated from DB and therefore already created");
             }
 
-            var command = new CreateTokenizedCorpusFromTokenizedCorpusCommand(textCorpus);
+            var command = new CreateTokenizedCorpusFromTokenizedCorpusCommand((TokenizedTextCorpus) textCorpus);
 
             var result = await mediator.Send(command);
             if (result.Success)

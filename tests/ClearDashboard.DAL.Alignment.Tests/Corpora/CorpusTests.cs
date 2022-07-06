@@ -19,6 +19,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
     {
 		protected readonly ITestOutputHelper output_;
 		protected readonly IMediator mediator_;
+        protected readonly string projectName_ = "Test Project";
 		public CorpusTests(ITestOutputHelper output)
 		{
 			output_ = output;
@@ -28,7 +29,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Fact]
 		[Trait("Category", "Example")]
 		public async void Corpus__ImportFromUsfm_SaveToDb()
-		{
+        {
+            var projectName = "Test Project";
 			//Import
 			var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath)
 				.Tokenize<LatinWordTokenizer>()
@@ -66,8 +68,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Fact]
 		[Trait("Category", "Example")]
 		public async void Corpus__GetAllCorpusVersionIds()
-		{
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(mediator_);
+        {
+            
+			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
 			Assert.True(corpusVersionIds.Count() > 0);
 		}
 
@@ -75,10 +78,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetAllTokenizedCorpusIds()
 		{
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(mediator_);
-			Assert.True(corpusVersionIds.Count() > 0);
+			var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
+			Assert.True(corpusIds.Count() > 0);
 
-			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator_, corpusVersionIds.First().corpusVersionId);
+			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator_, corpusIds.First());
 			Assert.True(tokenizedCorpusIds.Count() > 0);
 		}
 

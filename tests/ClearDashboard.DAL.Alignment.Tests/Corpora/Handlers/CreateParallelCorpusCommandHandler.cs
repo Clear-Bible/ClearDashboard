@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -10,19 +11,23 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class CreateParallelCorpusCommandHandler : IRequestHandler<
         CreateParallelCorpusCommand,
-        RequestResult<ParallelCorpusId>>
+        RequestResult<ParallelCorpus>>
     {
-        public Task<RequestResult<ParallelCorpusId>>
+        public async Task<RequestResult<ParallelCorpus>>
             Handle(CreateParallelCorpusCommand command, CancellationToken cancellationToken)
         {
             //DB Impl notes:
-            //Create a new record in ParallelCorpus and return its id.
+            //1. Create a new record in ParallelCorpus, save ParallelCorpusId
+            //2. Create VerseMappings with verses
+            //3. return created ParallelCorpus based on ParallelCorpusId
 
-            return Task.FromResult(
-                new RequestResult<ParallelCorpusId>
-                (result: new ParallelCorpusId(new Guid()),
-                success: true,
-                message: "successful result from test"));
+            var parallelCorpus = await ParallelCorpus.Get(new MediatorMock(), new ParallelCorpusId(new Guid()));
+            parallelCorpus.EngineVerseMappingList = command.engineVerseMappingList.ToList();
+
+            return new RequestResult<ParallelCorpus>
+                    (result: parallelCorpus,
+                    success: true,
+                    message: "successful result from test");
         }
     }
 }

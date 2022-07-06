@@ -21,12 +21,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 AddText(new TokenizedText(TokenizedCorpusId, mediator, Versification, bookAbbreviation));
             }
+
         }
         public override ScrVers Versification { get; }
 
-        public static async Task<IEnumerable<(CorpusVersionId corpusVersionId, CorpusId corpusId)>> GetAllCorpusVersionIds(IMediator mediator)
+        public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
         {
-            var result = await mediator.Send(new GetAllCorpusVersionIdsQuery());
+            var result = await mediator.Send(new GetAllCorpusIdsQuery());
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -37,9 +38,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusVersionId corpusVersionId)
+        public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
         {
-            var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusVersionIdQuery(corpusVersionId));
+            var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
             if (result.Success && result.Data != null)
             {
                 return result.Data;

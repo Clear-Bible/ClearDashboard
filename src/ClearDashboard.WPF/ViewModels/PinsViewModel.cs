@@ -140,11 +140,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // pull out the project font family
-            if (ProjectManager.ParatextProject is not null)
+            if (ProjectManager.CurrentParatextProject is not null)
             {
-                FontFamily = ProjectManager.ParatextProject.Language.FontFamily;
-                FontSize = ProjectManager.ParatextProject.Language.Size;
-                IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+                var paratextProject = ProjectManager.CurrentParatextProject;
+                FontFamily = paratextProject.Language.FontFamily;
+                FontSize = paratextProject.Language.Size;
+                IsRtl = paratextProject.Language.IsRtol;
             }
         }
 
@@ -617,7 +618,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 // this data from the BiblicalTerms & AllBiblicalTerms XML files has versification from the org.vrs
                 // convert it over to the current project versification format.
-                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.ParatextProject);
+                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.CurrentParatextProject);
 
                 // create the list to display
                 foreach (var verse in verseList)

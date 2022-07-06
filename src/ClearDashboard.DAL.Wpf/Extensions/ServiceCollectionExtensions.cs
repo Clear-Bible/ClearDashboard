@@ -13,8 +13,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
     {
         private static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<AlignmentContext>();
-            serviceCollection.AddScoped<ProjectNameDbContextFactory>();
+            serviceCollection.AddScoped<ProjectDbContext>();
+            serviceCollection.AddScoped<ProjectDbContextFactory>();
         }
 
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
@@ -26,6 +26,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
 
 
             serviceCollection.AddScoped<ParatextProxy>();

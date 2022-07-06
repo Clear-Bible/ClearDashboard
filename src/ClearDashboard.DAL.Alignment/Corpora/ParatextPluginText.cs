@@ -10,7 +10,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         private readonly string paratextPluginId_;
         private readonly IMediator mediator_;
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -25,7 +25,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             //IMPLEMENTER'S NOTES:: needs to configure GetVersesInDocOrder() to ONLY return the text parallel related.
         //}
 
-        public ParatextPluginText(string paratextPluginId, IMediator mediator, ScrVers versification, string bookId )
+        public ParatextPluginText(string paratextPluginId, IMediator mediator, ScrVers versification, string bookId)
             : base(bookId, versification)
         {
             paratextPluginId_ = paratextPluginId;

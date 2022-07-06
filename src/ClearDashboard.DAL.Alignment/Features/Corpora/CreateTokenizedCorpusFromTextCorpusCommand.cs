@@ -1,6 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
 using SIL.Machine.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -19,5 +18,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         string Name, 
         string Language, 
         string CorpusType,
-        string TokenizationQueryString) : IRequest<RequestResult<TokenizedTextCorpus>>;
+        string TokenizationQueryString) : ProjectRequestCommand<TokenizedTextCorpus>;
 }

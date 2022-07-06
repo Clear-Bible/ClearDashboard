@@ -9,13 +9,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     public class ParatextPluginTextCorpus : ScriptureTextCorpus
     {
         public string ParatextPluginId { get; set; }
-
         internal ParatextPluginTextCorpus(string paratextPluginId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
         {
             ParatextPluginId = paratextPluginId;
 
             Versification = versification;
-
+  
             foreach (var bookAbbreviation in bookAbbreviations)
             {
                 AddText(new ParatextPluginText(ParatextPluginId, mediator, Versification, bookAbbreviation));

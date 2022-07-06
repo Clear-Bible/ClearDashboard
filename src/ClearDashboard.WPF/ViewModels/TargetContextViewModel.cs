@@ -267,8 +267,8 @@ namespace ClearDashboard.Wpf.ViewModels
                 double fontSize = 16;
 
                 // pull out the project font family
-                fontFamily =ProjectManager.ParatextProject.Language.FontFamily;
-                fontSize = ProjectManager.ParatextProject.Language.Size / (double)12;
+                fontFamily =ProjectManager.CurrentParatextProject.Language.FontFamily;
+                fontSize = ProjectManager.CurrentParatextProject.Language.Size / (double)12;
 
 
                 // Make the Unformatted version

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
-    [DbContext(typeof(AlignmentContext))]
+    [DbContext(typeof(ProjectDbContext))]
     partial class AlignmentContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

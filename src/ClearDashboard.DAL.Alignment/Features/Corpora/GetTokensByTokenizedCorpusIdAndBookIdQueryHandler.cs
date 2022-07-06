@@ -2,19 +2,32 @@
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : IRequestHandler<
+    public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : ProjectDbContextQueryHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
-        RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+        RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>,
+        IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
     {
-        public Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
-            Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
+
+
+        public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider,logger)
+        {
+        }
+
+        protected override Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>> GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
             //Then iterate tokens and package them by verse then return enumerable.
@@ -28,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //    .Tokenize<LatinWordTokenizer>()
             //    .Transform<IntoTokensTextRowProcessor>();
 
-            var chapterVerseTokens = corpus.GetRows(new List<string>() { command.BookId })
+            var chapterVerseTokens = corpus.GetRows(new List<string>() { request.BookId })
                 .GroupBy(r => ((VerseRef)r.Ref).ChapterNum)
                 .OrderBy(g => g.Key)
                 .SelectMany(g => g
@@ -50,8 +63,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return Task.FromResult(
                 new RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
                 (result: chapterVerseTokens,
-                success: true,
-                message: "successful result from test"));
+                    success: true,
+                    message: "successful result from test"));
         }
+        
     }
 }

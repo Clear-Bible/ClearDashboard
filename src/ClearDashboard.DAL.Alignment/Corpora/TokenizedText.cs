@@ -12,7 +12,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         private readonly TokenizedCorpusId tokenizedCorpusId_;
         private readonly IMediator mediator_;
 
-        public TokenizedText(TokenizedCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId )
+        public TokenizedText(TokenizedCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId)
             : base(bookId, versification)
         {
             tokenizedCorpusId_ = tokenizedCorpusId;

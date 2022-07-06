@@ -32,19 +32,20 @@ namespace ClearDashboard.DAL.Tests
             Services.AddMediatR(typeof(GetUsersQueryHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddSingleton<IProjectProvider, ProjectProvider>();
         }
 
         [Fact]
         public async Task CreateAlignmentDatabase()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             Output.WriteLine($"Don't forget to delete the database: {projectName}.");
         }
@@ -55,13 +56,13 @@ namespace ClearDashboard.DAL.Tests
             var userProvider = ServiceProvider.GetService<IUserProvider>();
             Assert.NotNull(userProvider);
 
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
@@ -119,25 +120,21 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
                 var testUser = await AddDashboardUser(context);
+                var projectInfo = await AddCurrentProject(context, projectName);
 
-                var projectInfo = new ProjectInfo
-                {
-                    IsRtl = true,
-                    ProjectName = projectName
-                };
-
+              
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
                 // an updated version later on.
@@ -146,19 +143,19 @@ namespace ClearDashboard.DAL.Tests
                 var mediator = ServiceProvider.GetService<IMediator>();
 
                 // Save a project
-                var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
-                var savedResult = await mediator.Send(saveCommand);
+                //var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
+                //var savedResult = await mediator.Send(saveCommand);
 
-                Assert.NotNull(savedResult);
-                Assert.True(savedResult.Success);
-                Assert.True(savedResult.HasData);
+                //Assert.NotNull(savedResult);
+                //Assert.True(savedResult.Success);
+                //Assert.True(savedResult.HasData);
 
-                var savedProject = savedResult.Data.FirstOrDefault();
-                Assert.NotNull(savedProject);
-                Assert.Equal(testUser.Id, savedProject.UserId);
+                //var savedProject = savedResult.Data.FirstOrDefault();
+                Assert.NotNull(projectInfo);
+                Assert.Equal(testUser.Id, projectInfo.UserId);
 
                 // Now get the project back
-                var singleQuery = new GetProjectInfoQuery(projectName, savedProject.Id);
+                var singleQuery = new GetProjectInfoQuery(projectInfo.Id);
                 var singleResult = await mediator.Send(singleQuery);
                 
 
@@ -166,9 +163,9 @@ namespace ClearDashboard.DAL.Tests
                 Assert.True(singleResult.Success);
                 Assert.True(singleResult.HasData);
 
-                Assert.Equal(savedProject, singleResult.Data);
+                Assert.Equal(projectInfo, singleResult.Data);
 
-                var query = new GetProjectInfoListQuery(projectName);
+                var query = new GetProjectInfoListQuery();
                 var result = await mediator.Send(query);
 
                 Assert.NotNull(result);
@@ -182,7 +179,7 @@ namespace ClearDashboard.DAL.Tests
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
 
-                Assert.Equal(savedProject, roundTrippedProject);
+                Assert.Equal(projectInfo, roundTrippedProject);
 
 
                 // Create a copy of the project which is not attached
@@ -194,7 +191,7 @@ namespace ClearDashboard.DAL.Tests
                 projectInfo.IsRtl = false;
                 projectInfo.ProjectName = $"Updated {projectName}";
 
-                var updateCommand = new UpdateProjectInfoCommand(projectName, new[] { projectInfo });
+                var updateCommand = new UpdateProjectInfoCommand(new[] { projectInfo });
                 var updateResult = await mediator.Send(updateCommand);
                 Assert.NotNull(updateResult);
                 Assert.True(updateResult.Success);
@@ -202,7 +199,7 @@ namespace ClearDashboard.DAL.Tests
 
                 var updatedProject = updateResult.Data.FirstOrDefault();
 
-                Assert.NotEqual(savedProject, copiedProject);
+                Assert.NotEqual(projectInfo, copiedProject);
 
             }
             catch (Exception ex)

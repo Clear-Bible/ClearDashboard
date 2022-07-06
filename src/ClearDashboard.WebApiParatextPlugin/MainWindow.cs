@@ -154,10 +154,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
 
-            //if (truncatedName == "System.XmlSerializers")
-            //{
-            //    return null;
-            //}
+            if (truncatedName.Contains("XmlSerializers"))
+            {
+                return null;
+            }
             // Load the most up to date version
             Assembly assembly;
             try

@@ -524,12 +524,13 @@ namespace ClearDashboard.Wpf.ViewModels
             NotesCommand = new RelayCommand(ShowNotes);
             VerseClickCommand = new RelayCommand(VerseClick);
 
-            if (ProjectManager.ParatextProject is not null)
+            if (ProjectManager.CurrentParatextProject != null)
             {
+                var paratextProject = ProjectManager.CurrentParatextProject;
                 // pull out the project font family
-                _fontFamily = ProjectManager.ParatextProject.Language.FontFamily;
-                _fontSize = ProjectManager.ParatextProject.Language.Size;
-                IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+                _fontFamily = paratextProject.Language.FontFamily;
+                _fontSize = paratextProject.Language.Size;
+                IsRtl = paratextProject.Language.IsRtol;
             }
         }
 
