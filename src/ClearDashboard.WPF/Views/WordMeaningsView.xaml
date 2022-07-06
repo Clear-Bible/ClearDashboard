@@ -24,9 +24,33 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Button
+            Width="20"
+            Height="20"
+            Margin="5,0,0,0"
+            HorizontalAlignment="Left"
+            Click="Duplicate_Click">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <materialDesign:PackIcon
+                Background="Black"
+                Foreground="Yellow"
+                Kind="EyePlus" />
+        </Button>
+
         <helpers:ScrollingToTopListBox
             x:Name="LVSenses"
+            Grid.Row="1"
             DockPanel.Dock="Bottom"
             ItemsSource="{Binding WordData}"
             Style="{StaticResource MaterialDesignListBox}">

@@ -336,6 +336,18 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private Brush _randomBackColorBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+        public Brush RandomBackColorBrush
+        {
+            get { return _randomBackColorBrush; }
+            set
+            {
+                _randomBackColorBrush = value;
+                NotifyOfPropertyChange(() => RandomBackColorBrush);
+            }
+        }
+
+
         private string _fontFamily = "Segoe UI";
         public string FontFamily
         {
@@ -519,7 +531,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 _fontSize = ProjectManager.ParatextProject.Language.Size;
                 IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
             }
-
         }
 
         protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
