@@ -18,7 +18,7 @@ public class GetUsfmQueryHandlerTests : TestBase
     {
         try
         {
-            await StartParatext();
+            await StartParatextAsync();
             var client = CreateHttpClient();
 
             var response = await client.PostAsJsonAsync<GetUsfmQuery>("usfm", new GetUsfmQuery(1));
@@ -34,7 +34,7 @@ public class GetUsfmQueryHandlerTests : TestBase
         }
         finally
         {
-            await StopParatext();
+            await StopParatextAsync();
         }
 
     }

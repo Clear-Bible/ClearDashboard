@@ -18,7 +18,7 @@ public class GetCurrentVerseQueryHandlerTests : TestBase
     {
         try
         {
-            await StartParatext();
+            await StartParatextAsync();
 
             var client = CreateHttpClient();
 
@@ -36,7 +36,7 @@ public class GetCurrentVerseQueryHandlerTests : TestBase
         }
         finally
         {
-            await StopParatext();
+            await StopParatextAsync();
         }
     }
 }

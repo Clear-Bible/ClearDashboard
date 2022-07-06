@@ -22,7 +22,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
                 var client = CreateHttpClient();
 
                 var response = await client.PostAsJsonAsync<GetCurrentParatextUserQuery>("user", new GetCurrentParatextUserQuery());
@@ -38,7 +38,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
 
         }
