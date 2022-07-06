@@ -3,6 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
@@ -12,9 +13,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class CreateParallelCorpusCommandHandler : ProjectDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpus>, ParallelCorpus>
     {
+        private readonly IMediator _mediator;
 
-        public CreateParallelCorpusCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+        public CreateParallelCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
+            _mediator = mediator;
         }
 
         protected override async Task<RequestResult<ParallelCorpus>> SaveDataAsync(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
@@ -24,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //2. Create VerseMappings with verses
             //3. return created ParallelCorpus based on ParallelCorpusId
 
-            var parallelCorpus = await ParallelCorpus.Get(null, new ParallelCorpusId(new Guid()));
+            var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
 
 
             return new RequestResult<ParallelCorpus>
