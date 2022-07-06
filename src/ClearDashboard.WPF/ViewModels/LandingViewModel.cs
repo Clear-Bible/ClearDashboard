@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
 using Microsoft.Extensions.Logging;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -84,6 +85,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // TODO HACK TO READ IN PROJECT AS OBJECT
+            string sTempFile = @"c:\temp\project.json";
+            if (File.Exists(sTempFile) == false)
+            {
+                MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
+            }
+
             var jsonString =File.ReadAllText(@"c:\temp\project.json");
             project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
 

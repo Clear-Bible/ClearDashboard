@@ -8,10 +8,10 @@ namespace ClearDashboard.Wpf.Helpers
     public static class Versification
     {
         public static List<VersificationList> GetVersificationFromOriginal(List<VersificationList> list,
-            Project paratextProject)
+            ParatextProject paratextProject)
         {
 
-            ScrVers projVersification = new ScrVers(paratextProject.ScrVersType);
+            ScrVers projVersification = new ScrVers(paratextProject.ScrVerseType);
 
             foreach (var verse in list)
             {

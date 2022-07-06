@@ -10,7 +10,7 @@ namespace ClearDashboard.DAL.Interfaces
     public interface IProjectProvider
     {
         ProjectInfo? CurrentProject { get; set; }
-        Project? CurrentParatextProject { get; set; }
+        ParatextProject? CurrentParatextProject { get; set; }
     }
 
     public interface IProjectManager

@@ -33,9 +33,9 @@ namespace ClearDashboard.WPF.Tests
                 "019051000",
             };
 
-            var newList =Versification.GetVersificationFromOriginal(list, new Project
+            var newList =Versification.GetVersificationFromOriginal(list, new ParatextProject
             {
-                ScrVersType = ScrVersType.English,
+                ScrVerseType = ScrVersType.English,
                 IsCustomVersification = false,
             });
 
@@ -70,9 +70,9 @@ namespace ClearDashboard.WPF.Tests
                 "019051001",
             };
 
-            var newList = Versification.GetVersificationFromOriginal(list, new Project
+            var newList = Versification.GetVersificationFromOriginal(list, new ParatextProject
             {
-                ScrVersType = ScrVersType.Original,
+                ScrVerseType = ScrVersType.Original,
                 IsCustomVersification = false,
             });
 
@@ -112,9 +112,9 @@ namespace ClearDashboard.WPF.Tests
                 "066013001",
             };
 
-            var newList = Versification.GetVersificationFromOriginal(list, new Project
+            var newList = Versification.GetVersificationFromOriginal(list, new ParatextProject
             {
-                ScrVersType = ScrVersType.RussianProtestant,
+                ScrVerseType = ScrVersType.RussianProtestant,
                 IsCustomVersification = false,
             });
 
@@ -156,9 +156,9 @@ namespace ClearDashboard.WPF.Tests
                 "066013001",
             };
 
-            var newList = Versification.GetVersificationFromOriginal(list, new Project
+            var newList = Versification.GetVersificationFromOriginal(list, new ParatextProject
             {
-                ScrVersType = ScrVersType.RussianOrthodox,
+                ScrVerseType = ScrVersType.RussianOrthodox,
                 IsCustomVersification = false,
             });
 
@@ -200,9 +200,9 @@ namespace ClearDashboard.WPF.Tests
                 "044007055",
             };
 
-            var newList = Versification.GetVersificationFromOriginal(list, new Project
+            var newList = Versification.GetVersificationFromOriginal(list, new ParatextProject
             {
-                ScrVersType = ScrVersType.Vulgate,
+                ScrVerseType = ScrVersType.Vulgate,
                 IsCustomVersification = false,
             });
 
