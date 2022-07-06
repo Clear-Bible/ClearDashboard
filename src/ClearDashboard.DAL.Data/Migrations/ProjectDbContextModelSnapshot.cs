@@ -203,6 +203,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("ParatextGuid")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -233,6 +237,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ParatextGuid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -482,6 +490,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TokenizationFunction")
                         .HasColumnType("TEXT");

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220706171051_InitialMigration")]
+    [Migration("20220706221005_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -205,6 +205,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("ParatextGuid")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -235,6 +239,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ParatextGuid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -484,6 +492,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("RawMetadata")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TokenizationFunction")
                         .HasColumnType("TEXT");
