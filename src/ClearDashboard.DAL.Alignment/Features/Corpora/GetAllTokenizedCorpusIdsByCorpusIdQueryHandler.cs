@@ -23,24 +23,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override Task<RequestResult<IEnumerable<TokenizedCorpusId>>> GetDataAsync(GetAllTokenizedCorpusIdsByCorpusIdQuery request, CancellationToken cancellationToken)
         {
-            //DB Impl notes: query TokenizedCorpus table by command.CorpusId and return enumerable of all TokenizedCorpus.Id.
-            if (request.CorpusId.Id.Equals(new System.Guid("ca761232ed4211cebacd00aa0057b223")))
-            {
-                return Task.FromResult(
-                    new RequestResult<IEnumerable<TokenizedCorpusId>>
-                    (result: new List<TokenizedCorpusId>()
-                        {
-                            new TokenizedCorpusId(new Guid()),
-                            new TokenizedCorpusId(new Guid())
-                        },
-                        success: true,
-                        message: "successful result from test"));
-            }
+            
+            var tokenizedCorpusIds = ProjectDbContext.TokenizedCorpora
+                .Where(tc => tc.CorpusId == request.CorpusId.Id)
+                .Select(tc => new TokenizedCorpusId(tc.Id)).AsEnumerable();
+            
             return Task.FromResult(
                 new RequestResult<IEnumerable<TokenizedCorpusId>>
-                (result: new List<TokenizedCorpusId>(),
-                    success: true,
-                    message: "successful result from test"));
+                    (
+                        result: tokenizedCorpusIds,
+                        success: true
+                    )
+                );
         }
     }
 

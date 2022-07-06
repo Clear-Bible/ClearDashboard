@@ -21,7 +21,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>,
         IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
     {
-
+        // **********************************************
+        // TODO:  Remove the following two lines
+        public static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory,
+            "..", "..", "..", "Corpora", "data");
+        public static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
+        // **********************************************
 
         public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider,logger)
         {
@@ -33,7 +38,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //Then iterate tokens and package them by verse then return enumerable.
 
             // TODO:  How do we get the Usfm Path?
-            var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, "<FIX ME>")
+            var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, UsfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>();
 

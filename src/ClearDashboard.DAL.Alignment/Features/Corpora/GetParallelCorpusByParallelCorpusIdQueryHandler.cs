@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System.Data.Entity;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -29,7 +30,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
         }
 
-        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
+        protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
             TokenizedCorpusId targetTokenizedCorpusId, 
             IEnumerable<EngineVerseMapping> engineVerseMappings, 
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
@@ -38,7 +39,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //1. the result of gathering all the VerseMappings to build an EngineVerseMapping list.
             //2. associated source and target TokenizedCorpusId
 
-            return Task.FromResult(
+            var parallelCorpus =
+                await ProjectDbContext.ParallelCorpa
+                    .Include(pc=>pc.VerseMappings)
+                    .FirstOrDefaultAsync(pc => pc.Id == request.ParallelCorpusId.Id,
+                    cancellationToken);
+
+            //var engineVerseMappings = parallelCorpus.VerseMappings.Select(vm=>new EngineVerseId(vm.))
+
+            return await Task.FromResult(
                 new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
                     IEnumerable<EngineVerseMapping> engineVerseMappings,
