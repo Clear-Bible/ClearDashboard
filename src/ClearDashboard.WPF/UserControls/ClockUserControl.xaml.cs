@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.UserControls
 {
@@ -29,19 +30,10 @@ namespace ClearDashboard.Wpf.UserControls
     public partial class ClockUserControl : UserControl, INotifyPropertyChanged
     {
         System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
-        private int _myMinute;
-        private int _myHour;
-
-        private int _nameTimeMinute;
-        private int _nameTimeHour;
-
-        private string _savedMinuteString;
-        private string _savedHourString;
-        private int _savedMinuteInt;
-        private int _savedHourInt;
 
         private int _timeDisplayIndex = 0;
 
+        private TimeZoneInfo _localTimeZoneInfo = TimeZoneInfo.Local;
         private TimeZoneInfo _tempTimeZoneInfo = null;
         private string _tempHeader = "";
 
@@ -167,21 +159,21 @@ namespace ClearDashboard.Wpf.UserControls
                     ClockAddTimeZoneVisibility = Visibility.Collapsed,
                     ClockCheckBoxVisibility=Visibility.Collapsed,
                     ClockTextBoxVisibility = Visibility.Collapsed,
-                    NameTimeVisibility = Visibility.Collapsed,
-                    ClockTextBlockText = "Name 12:00am",
+                    NameTimeVisibility = Visibility.Visible,
+                    ClockTextBlockVisibility = Visibility.Visible,
                     DeleteButtonVisibility = Visibility.Collapsed,
                     MenuLevel = MenuItemNest.ClockMenuLevel.Display,
                     MenuItems = SettingsMenuItemNest,
                 }
             };
 
-            MenuItems[0].ClockTextBlockText = DateTime.Now.ToShortTimeString().PadLeft(8,' ') + " Local Time";
-
+            MenuItems[0].NameTime = DateTime.Now.ToShortTimeString().PadLeft(8,'0');
+            MenuItems[0].ClockTextBlockText = " Local Time";
+         
 
             _refreshTimer.Elapsed += ClockRefresh;
             _refreshTimer.AutoReset = true;
             _refreshTimer.Enabled = true;
-
         }
 
         private void SaveMenuToSettings()
@@ -224,7 +216,16 @@ namespace ClearDashboard.Wpf.UserControls
                 {
                     foreach (var individual in group.MenuItems)
                     {
-                        individual.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo).ToShortTimeString();
+                        var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
+                        individual.NameTime = tempTime.ToShortTimeString();
+                        if (tempTime.Hour >= 9 && tempTime.Hour < 17)
+                        {
+                            individual.Foreground = Brushes.Green;
+                        }
+                        else
+                        {
+                            individual.Foreground = Brushes.Red;
+                        }
                         CheckedList.Add(individual);
                     }
                 }
@@ -234,7 +235,16 @@ namespace ClearDashboard.Wpf.UserControls
                     {
                         foreach (var individual in group.MenuItems)
                         {
-                            individual.NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo).ToShortTimeString();
+                            var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
+                            individual.NameTime = tempTime.ToShortTimeString();
+                            if (tempTime.Hour >= 9 && tempTime.Hour < 17)
+                            {
+                                individual.Foreground = Brushes.Green;
+                            }
+                            else
+                            {
+                                individual.Foreground = Brushes.Red;
+                            }
                             if (individual.CheckBoxIsChecked == "True")
                             {
                                 CheckedList.Add(individual);
@@ -252,14 +262,25 @@ namespace ClearDashboard.Wpf.UserControls
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    MenuItems[0].ClockTextBlockText = DateTime.Now.ToShortTimeString().PadLeft(8, ' ') + " Local Time";
+                    MenuItems[0].NameTime = DateTime.Now.ToShortTimeString().PadLeft(8, '0');
+                    MenuItems[0].ClockTextBlockText = " Local Time";
+                    if (DateTime.Now.Hour > 9 && DateTime.Now.Hour < 17)
+                    {
+                        MenuItems[0].Foreground = Brushes.ForestGreen;
+                    }
+                    else
+                    {
+                        MenuItems[0].Foreground = Brushes.Red;
+                    }
                 });
             }
             else
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    MenuItems[0].ClockTextBlockText = CheckedList[_timeDisplayIndex].NameTime.PadLeft(8, ' ') + " " + CheckedList[_timeDisplayIndex].TextBoxText;
+                    MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime.PadLeft(8, '0');
+                    MenuItems[0].ClockTextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
+                    MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
                 });
             }
         }
@@ -274,36 +295,27 @@ namespace ClearDashboard.Wpf.UserControls
             SaveMenuToSettings();
         }
 
-        private void Utc_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem menuItem)
-            {
-                if (menuItem.DataContext is MenuItemNest nest)
-                {
-                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Utc)
-                    {
-                        _tempHeader = nest.ClockTextBlockText;
-                        _tempTimeZoneInfo = nest.TimeZoneInfo;
-                    }
-
-                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Individual)
-                    {
-                        nest.ClockTextBlockText = _tempHeader;
-                        nest.TimeZoneInfo = _tempTimeZoneInfo;
-                        SaveMenuToSettings();
-                    }
-                }
-            }
-        }
-
         private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button)//Add Individual
+            if (sender is Button button)
             {
-                if (button.Tag != null)
+                if (button.Tag != null)//Add Individual
                 {
                     if (button.Tag is ObservableCollection<MenuItemNest> nest)
                     {
+                        ////find where to put new item
+                        //int insertIndex=0;
+                        //foreach (MenuItemNest item in nest)
+                        //{
+                        //    if (_localTimeZoneInfo.BaseUtcOffset < item.TimeZoneInfo.BaseUtcOffset)
+                        //    {
+                        //        break;
+                        //    } 
+                            
+                        //    insertIndex++;
+                            
+                        //}
+
                         nest.Insert(nest.Count, new MenuItemNest
                         {
                             ClockAddTimeZoneVisibility = Visibility.Collapsed,
@@ -319,7 +331,7 @@ namespace ClearDashboard.Wpf.UserControls
                             TimeZoneInfo = TimeZoneInfo.Local,
                             MenuItems = _timeZoneMenuItemNest,
                         });
-
+                        
                         SaveMenuToSettings();
                     }
                 }
@@ -341,6 +353,7 @@ namespace ClearDashboard.Wpf.UserControls
                         MenuItems = new(),
                     });
 
+                    //add an item to the group
                     MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new MenuItemNest
                     {
                         ClockAddTimeZoneVisibility = Visibility.Collapsed,
@@ -406,6 +419,33 @@ namespace ClearDashboard.Wpf.UserControls
                 }
 
                 SaveMenuToSettings();
+            }
+        }
+
+        private void Utc_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                if (menuItem.DataContext is MenuItemNest nest)
+                {
+                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Utc)
+                    {
+                        _tempHeader = nest.ClockTextBlockText;
+                        _tempTimeZoneInfo = nest.TimeZoneInfo;
+                    }
+
+                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Individual)
+                    {
+                        nest.ClockTextBlockText = _tempHeader;
+                        nest.TimeZoneInfo = _tempTimeZoneInfo;
+                    }
+
+                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Group)
+                    {
+                       //nest.MenuItems.Move(0, nest.MenuItems.Count-1);
+                       SaveMenuToSettings();
+                    }
+                }
             }
         }
 
@@ -492,6 +532,17 @@ namespace ClearDashboard.Wpf.UserControls
         {
             get { return _groupName; }
             set { _groupName = value; }
+        }
+
+        private Brush _foreground { get; set; } = Brushes.Orange;
+        public Brush Foreground
+        {
+            get { return _foreground; }
+            set
+            {
+                _foreground = value;
+                OnPropertyChanged();
+            }
         }
 
         public ObservableCollection<MenuItemNest> MenuItems { get; set; }

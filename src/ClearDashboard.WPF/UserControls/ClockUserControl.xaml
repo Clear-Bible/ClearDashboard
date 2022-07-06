@@ -9,10 +9,12 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid VerticalAlignment="Center" Height="34">
+    <Grid Height="34" VerticalAlignment="Center">
+
         <Border
-            Width="153"
             x:Name="TimerBorder"
+            Width="157"
+            Height="34"
             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="10" />
@@ -31,27 +33,25 @@
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Padding" Value="-30,0,-5,0" />
 
-
                     <EventSetter Event="Click" Handler="Utc_OnClick" />
-
 
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Display">
-                            <Setter Property="Width" Value="153" />
-                            <Setter Property="Height" Value="43"/>
-                            <Setter Property="Padding" Value="0,0,0,0" />
+                            <Setter Property="Width" Value="157" />
+                            <Setter Property="Height" Value="44" />
+                            <Setter Property="Padding" Value="5,0,0,0" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
-                            <Setter  Property="Foreground" Value="Black"/>
-                            <Setter  Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Background" Value="DarkGray" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
-                            <Setter  Property="Foreground" Value="Black"/>
-                            <Setter  Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Background" Value="DarkGray" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Utc">
                             <Setter Property="Width" Value="480" />
-                            <Setter  Property="Foreground" Value="Black"/>
+                            <Setter Property="Foreground" Value="Black" />
                         </DataTrigger>
                     </Style.Triggers>
 
@@ -63,8 +63,8 @@
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
 
                         <StackPanel
-                            VerticalAlignment="Center"
                             Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                            VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <Button
                                 x:Name="DeleteButton"
@@ -89,7 +89,9 @@
                             <TextBlock
                                 x:Name="NameTime"
                                 Width="65"
+                                Padding="0,0,5,0"
                                 VerticalAlignment="Center"
+                                Foreground="{Binding Foreground}"
                                 Text="{Binding NameTime}"
                                 TextAlignment="Right"
                                 Visibility="{Binding NameTimeVisibility}" />
@@ -115,9 +117,7 @@
                                 IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding ClockCheckBoxVisibility}" />
-
                         </StackPanel>
-
                     </Grid>
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
