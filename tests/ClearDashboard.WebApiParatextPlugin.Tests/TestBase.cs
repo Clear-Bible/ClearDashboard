@@ -47,7 +47,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             if (paratext.Length == 0)
             {
                 Output.WriteLine("Starting Paratext.");
-                Process = await InternalStartParatext();
+                Process = await InternalStartParatextAsync();
                 StopParatextOnTestConclusion = true;
 
                 var seconds = 2;

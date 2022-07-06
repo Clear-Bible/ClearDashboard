@@ -22,7 +22,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
@@ -38,7 +38,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
 
         }
@@ -48,7 +48,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
@@ -63,7 +63,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
 
         }

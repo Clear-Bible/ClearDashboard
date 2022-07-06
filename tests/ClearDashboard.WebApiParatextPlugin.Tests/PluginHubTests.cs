@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
 
                 var connection = new HubConnection("http://localhost:9000/signalr");
 
@@ -68,7 +68,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
         }
         

@@ -29,7 +29,6 @@ namespace ClearDashboard.DAL.Tests
     public class TestBase
     {
         #nullable disable
-
         protected ITestOutputHelper Output { get; private set; }
         protected Process Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
