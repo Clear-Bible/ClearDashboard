@@ -3,30 +3,32 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using MediatR;
 using Microsoft.Extensions.Logging;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateParallelCorpusCommandHandler : AlignmentDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpusId>, ParallelCorpusId>
+    public class CreateParallelCorpusCommandHandler : ProjectDbContextCommandHandler<CreateParallelCorpusCommand, RequestResult<ParallelCorpus>, ParallelCorpus>
     {
 
-        public CreateParallelCorpusCommandHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+        public CreateParallelCorpusCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
         }
 
-        protected override async Task<RequestResult<ParallelCorpusId>> SaveData(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<ParallelCorpus>> SaveDataAsync(CreateParallelCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
-            //Create a new record in ParallelCorpus and return its id.
+            //1. Create a new record in ParallelCorpus, save ParallelCorpusId
+            //2. Create VerseMappings with verses
+            //3. return created ParallelCorpus based on ParallelCorpusId
 
-            var parallelCorpus = new ParallelCorpus();
-            await AlignmentContext.ParallelCorpa.AddAsync(parallelCorpus, cancellationToken);
-            await AlignmentContext.SaveChangesAsync(cancellationToken);
+            var parallelCorpus = await ParallelCorpus.Get(null, new ParallelCorpusId(new Guid()));
 
-            return new RequestResult<ParallelCorpusId>
-                    (result: new ParallelCorpusId(parallelCorpus.Id),
+
+            return new RequestResult<ParallelCorpus>
+                    (result: parallelCorpus,
                     success: true,
                     message: "successful result from test");
         }

@@ -159,7 +159,7 @@ namespace ClearDashboard.DAL.Tests
             return JsonSerializer.Deserialize<T>(json);
         }
 
-        protected async Task<User> AddDashboardUser(AlignmentContext context)
+        protected async Task<User> AddDashboardUser(ProjectDbContext context)
         {
             var testUser = new User { FirstName = "Test", LastName = "User" };
             var userProvider = ServiceProvider.GetService<IUserProvider>();
@@ -171,7 +171,7 @@ namespace ClearDashboard.DAL.Tests
             return testUser;
         }
 
-        protected async Task<ProjectInfo> AddCurrentProject(AlignmentContext context, string projectName)
+        protected async Task<ProjectInfo> AddCurrentProject(ProjectDbContext context, string projectName)
         {
             var testProject = new ProjectInfo { ProjectName = projectName, IsRtl = true};
             var projectProvider = ServiceProvider.GetService<IProjectProvider>();

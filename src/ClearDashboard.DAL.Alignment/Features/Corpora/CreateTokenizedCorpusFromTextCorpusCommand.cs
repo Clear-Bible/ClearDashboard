@@ -1,7 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
-using MediatR;
 using SIL.Machine.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -15,11 +13,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     /// <param name="Language"></param>
     /// <param name="CorpusType"></param>
     public record CreateTokenizedCorpusFromTextCorpusCommand(
-        string ProjectName,
         ITextCorpus TextCorpus, 
         bool IsRtl, 
         string Name, 
         string Language, 
         string CorpusType,
-        string TokenizationQueryString) : ProjectRequestCommand<TokenizedTextCorpus>(ProjectName);
+        string TokenizationQueryString) : ProjectRequestCommand<TokenizedTextCorpus>;
 }

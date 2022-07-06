@@ -76,7 +76,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "TermRendering")]
-        public List<TermRendering>? TermRendering { get; set; }
+        public List<TermRendering> TermRendering { get; set; } = new ();
     }
 
 

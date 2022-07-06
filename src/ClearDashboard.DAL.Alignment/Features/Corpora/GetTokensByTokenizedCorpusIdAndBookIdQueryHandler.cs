@@ -5,26 +5,29 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : AlignmentDbContextQueryHandler<
+    public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : ProjectDbContextQueryHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
         RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>,
         IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
     {
 
 
-        public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider,logger)
+        public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(projectNameDbContextFactory, projectProvider,logger)
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>> GetData(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>> GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
             //Then iterate tokens and package them by verse then return enumerable.

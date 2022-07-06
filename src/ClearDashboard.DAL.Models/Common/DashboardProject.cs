@@ -17,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             ProjectPath = (string.IsNullOrEmpty(FullFilePath) ? string.Empty : new FileInfo(FullFilePath).DirectoryName) ?? string.Empty;
 
             BaseTargetName = TargetProject?.Name;
-            BaseTargetFullName = TargetProject?.FullName;
+            BaseTargetFullName = TargetProject?.LongName;
         }
 
        

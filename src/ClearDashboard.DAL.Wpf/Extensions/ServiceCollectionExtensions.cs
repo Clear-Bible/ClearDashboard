@@ -13,8 +13,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
     {
         private static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<AlignmentContext>();
-            serviceCollection.AddScoped<ProjectNameDbContextFactory>();
+            serviceCollection.AddScoped<ProjectDbContext>();
+            serviceCollection.AddScoped<ProjectDbContextFactory>();
         }
 
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)

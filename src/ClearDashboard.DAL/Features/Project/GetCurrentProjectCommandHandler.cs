@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ClearDashboard.DataAccessLayer.Features.Project
 {
 
-    public class GetCurrentProjectQueryHandler : ParatextRequestHandler<GetCurrentProjectQuery, RequestResult<Models.Project>, Models.Project>
+    public class GetCurrentProjectQueryHandler : ParatextRequestHandler<GetCurrentProjectQuery, RequestResult<Models.ParatextProject>, Models.ParatextProject>
     {
 
         public GetCurrentProjectQueryHandler(ILogger<GetCurrentProjectQueryHandler> logger) : base(logger)
@@ -16,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Project
             //no-op
         }
 
-        public override async Task<RequestResult<Models.Project>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<Models.ParatextProject>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("project", request, cancellationToken);
         }

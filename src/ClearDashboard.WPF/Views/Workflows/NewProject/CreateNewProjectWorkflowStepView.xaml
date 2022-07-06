@@ -130,7 +130,7 @@
                                                         Width="250"
                                                         Margin="2"
                                                         HorizontalAlignment="Left"
-                                                        Text="{Binding FullName}"
+                                                        Text="{Binding LongName}"
                                                         TextWrapping="Wrap" />
                                                 </StackPanel>
                                             </Border>
@@ -148,7 +148,7 @@
                                                     HorizontalAlignment="Left"
                                                     FontSize="11"
                                                     Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
-                                                    Text="{Binding Language}"
+                                                    Text="{Binding LanguageName}"
                                                     TextWrapping="Wrap" />
                                             </StackPanel>
                                         </StackPanel>

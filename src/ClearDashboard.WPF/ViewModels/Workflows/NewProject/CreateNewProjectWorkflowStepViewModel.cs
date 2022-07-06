@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1255,9 +1256,11 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
                 return;
             }
 
+            DashboardProject.DirectoryPath = DashboardProject.TargetProject.DirectoryPath;
+            
             // TODO HACK TO SAVE CURRENT PROJECT AS OBJECT
-            //string jsonString = JsonSerializer.Serialize(DashboardProject);
-            //File.WriteAllText(@"c:\temp\project.json", jsonString);
+            string jsonString = JsonSerializer.Serialize(DashboardProject);
+            File.WriteAllText(@"c:\temp\project.json", jsonString);
 
             await ProjectManager.CreateNewProject(DashboardProject).ConfigureAwait(false);
         }

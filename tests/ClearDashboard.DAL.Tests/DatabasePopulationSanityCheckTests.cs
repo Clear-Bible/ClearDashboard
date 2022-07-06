@@ -39,14 +39,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task CreateAlignmentDatabase()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             Output.WriteLine($"Don't forget to delete the database: {projectName}.");
         }
@@ -57,13 +57,13 @@ namespace ClearDashboard.DAL.Tests
             var userProvider = ServiceProvider.GetService<IUserProvider>();
             Assert.NotNull(userProvider);
 
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
@@ -121,14 +121,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
@@ -156,7 +156,7 @@ namespace ClearDashboard.DAL.Tests
                 Assert.Equal(testUser.Id, projectInfo.UserId);
 
                 // Now get the project back
-                var singleQuery = new GetProjectInfoQuery(projectName, projectInfo.Id);
+                var singleQuery = new GetProjectInfoQuery(projectInfo.Id);
                 var singleResult = await mediator.Send(singleQuery);
                 
 
@@ -166,7 +166,7 @@ namespace ClearDashboard.DAL.Tests
 
                 Assert.Equal(projectInfo, singleResult.Data);
 
-                var query = new GetProjectInfoListQuery(projectName);
+                var query = new GetProjectInfoListQuery();
                 var result = await mediator.Send(query);
 
                 Assert.NotNull(result);
@@ -192,7 +192,7 @@ namespace ClearDashboard.DAL.Tests
                 projectInfo.IsRtl = false;
                 projectInfo.ProjectName = $"Updated {projectName}";
 
-                var updateCommand = new UpdateProjectInfoCommand(projectName, new[] { projectInfo });
+                var updateCommand = new UpdateProjectInfoCommand(new[] { projectInfo });
                 var updateResult = await mediator.Send(updateCommand);
                 Assert.NotNull(updateResult);
                 Assert.True(updateResult.Success);

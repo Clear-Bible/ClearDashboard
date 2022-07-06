@@ -491,7 +491,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // grab the dictionary of all the verse lookups
-            BCVDictionary = ProjectManager.ParatextProject.BcvDictionary;
+            BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
 
             InComingChangesStarted = true;
 

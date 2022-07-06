@@ -26,12 +26,12 @@ namespace ClearDashboard.DAL.Tests
 
             var userProvider = ServiceProvider.GetService<IUserProvider>()!;
             Assert.NotNull(userProvider);
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
             Assert.NotNull(factory);
 
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
@@ -81,12 +81,12 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task NoteRawContentTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
             Assert.NotNull(factory);
 
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {

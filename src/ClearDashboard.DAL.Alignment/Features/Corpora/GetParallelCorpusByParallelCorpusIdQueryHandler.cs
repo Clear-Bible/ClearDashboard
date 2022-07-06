@@ -4,43 +4,44 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using MediatR;
 using Microsoft.Extensions.Logging;
+
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler : AlignmentDbContextQueryHandler<
-        GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery,
+    public class GetParallelCorpusByParallelCorpusIdQueryHandler : ProjectDbContextQueryHandler<
+        GetParallelCorpusByParallelCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
             IEnumerable<EngineVerseMapping> engineVerseMappings,
-            ParallelCorpusVersionId parallelCorpusVersionId,
             ParallelCorpusId parallelCorpusId)>,
         (TokenizedCorpusId sourceTokenizedCorpusId,
         TokenizedCorpusId targetTokenizedCorpusId,
         IEnumerable<EngineVerseMapping> engineVerseMappings,
-        ParallelCorpusVersionId parallelCorpusVersionId,
         ParallelCorpusId parallelCorpusId)>
     {
 
-        public GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler(ProjectNameDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQueryHandler> logger) 
+        public GetParallelCorpusByParallelCorpusIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetParallelCorpusByParallelCorpusIdQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, TokenizedCorpusId targetTokenizedCorpusId, IEnumerable<EngineVerseMapping> engineVerseMappings, ParallelCorpusVersionId parallelCorpusVersionId, ParallelCorpusId parallelCorpusId)>> GetData(GetParallelTokenizedCorpusByParallelTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
+            TokenizedCorpusId targetTokenizedCorpusId, 
+            IEnumerable<EngineVerseMapping> engineVerseMappings, 
+            ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
         {
-            //DB Impl notes: use command.ParallelTokenizedCorpus to retrieve from ParallelTokenizedCorpus table and return
-            //the TokenizedCorpusId for both and target and also
-            //1. the result of gathering all the VerseMappings under parent parallelTokenizedCorpus.ParallelCorpusVersion to build an EngineVerseMapping list.
-            //2. parent ParallelCorpusVersion's id
-            //3. parent ParallelCorpusVersion's parent ParallelCorpusId
+            //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
+            //1. the result of gathering all the VerseMappings to build an EngineVerseMapping list.
+            //2. associated source and target TokenizedCorpusId
 
             return Task.FromResult(
                 new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
                     IEnumerable<EngineVerseMapping> engineVerseMappings,
-                    ParallelCorpusVersionId parallelCorpusVersionId,
                     ParallelCorpusId parallelCorpusId)>
                 (result: (new TokenizedCorpusId(new Guid()),
                         new TokenizedCorpusId(new Guid()),
@@ -48,7 +49,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             new EngineVerseMapping(
                                 new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)},
                                 new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })},
-                        new ParallelCorpusVersionId(new Guid(), DateTime.UtcNow),
                         new ParallelCorpusId(new Guid())),
                     success: true,
                     message: "successful result from test"));

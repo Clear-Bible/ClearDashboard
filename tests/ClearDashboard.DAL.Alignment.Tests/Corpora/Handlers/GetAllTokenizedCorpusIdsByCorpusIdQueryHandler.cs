@@ -9,15 +9,15 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
-    public class GetAllTokenizedCorpusIdsByCorpusVersionIdQueryHandler : IRequestHandler<
-        GetAllTokenizedCorpusIdsByCorpusVersionIdQuery,
+    public class GetAllTokenizedCorpusIdsByCorpusIdQueryHandler : IRequestHandler<
+        GetAllTokenizedCorpusIdsByCorpusIdQuery,
         RequestResult<IEnumerable<TokenizedCorpusId>>>
     {
         public Task<RequestResult<IEnumerable<TokenizedCorpusId>>>
-            Handle(GetAllTokenizedCorpusIdsByCorpusVersionIdQuery command, CancellationToken cancellationToken)
+            Handle(GetAllTokenizedCorpusIdsByCorpusIdQuery command, CancellationToken cancellationToken)
         {
-            //DB Impl notes: query TokenizedCorpus table by CorpusVersion.Corpus and return enumerable.
-            if (command.CorpusVersionId.Id.Equals(new System.Guid("ca761232ed4211cebacd00aa0057b223")))
+            //DB Impl notes: query TokenizedCorpus table by command.CorpusId and return enumerable of all TokenizedCorpus.Id.
+            if (command.CorpusId.Id.Equals(new System.Guid("ca761232ed4211cebacd00aa0057b223")))
             {
                 return Task.FromResult(
                     new RequestResult<IEnumerable<TokenizedCorpusId>>

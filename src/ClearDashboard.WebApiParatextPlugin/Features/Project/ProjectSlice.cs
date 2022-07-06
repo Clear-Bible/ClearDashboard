@@ -13,7 +13,7 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
-    public class GetCurrentProjectQueryHandler : IRequestHandler<GetCurrentProjectQuery, RequestResult<DataAccessLayer.Models.Project>>
+    public class GetCurrentProjectQueryHandler : IRequestHandler<GetCurrentProjectQuery, RequestResult<DataAccessLayer.Models.ParatextProject>>
     {
         private readonly IProject _project;
         private readonly ILogger<GetCurrentProjectQueryHandler> _logger;
@@ -23,10 +23,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             _project = project;
             _logger = logger;
         }
-        public Task<RequestResult<DataAccessLayer.Models.Project>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<DataAccessLayer.Models.ParatextProject>> Handle(GetCurrentProjectQuery request, CancellationToken cancellationToken)
         {
             var project = BuildProject();
-            var result = new RequestResult<DataAccessLayer.Models.Project>(project);
+            var result = new RequestResult<DataAccessLayer.Models.ParatextProject>(project);
             return Task.FromResult(result);
         }
 
@@ -35,11 +35,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         /// of what is available in the m_project object
         /// </summary>
         /// <returns></returns>
-        private DataAccessLayer.Models.Project BuildProject()
+        private DataAccessLayer.Models.ParatextProject BuildProject()
         {
-            var project = new DataAccessLayer.Models.Project
+            var project = new DataAccessLayer.Models.ParatextProject
             {
-                Id = _project.ID,
+                Guid = _project.ID,
                 LanguageName = _project.LanguageName,
                 ShortName = _project.ShortName,
                 LongName = _project.LongName
@@ -69,10 +69,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             switch (_project.Type)
             {
                 case Paratext.PluginInterfaces.ProjectType.Standard:
-                    project.Type = DataAccessLayer.Models.Project.ProjectType.Standard;
+                    project.Type = DataAccessLayer.Models.ParatextProject.ProjectType.Standard;
                     break;
                 default:
-                    project.Type = DataAccessLayer.Models.Project.ProjectType.NotSelected;
+                    project.Type = DataAccessLayer.Models.ParatextProject.ProjectType.NotSelected;
                     break;
             }
 
@@ -80,25 +80,25 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             switch (_project.Versification.Type)
             {
                 case StandardScrVersType.Unknown:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.Unknown;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.Unknown;
                     break;
                 case StandardScrVersType.Original:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.Original;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.Original;
                     break;
                 case StandardScrVersType.English:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.English;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.English;
                     break;
                 case StandardScrVersType.RussianOrthodox:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.RussianOrthodox;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.RussianOrthodox;
                     break;
                 case StandardScrVersType.RussianProtestant:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.RussianProtestant;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.RussianProtestant;
                     break;
                 case StandardScrVersType.Septuagint:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.Septuagint;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.Septuagint;
                     break;
                 case StandardScrVersType.Vulgate:
-                    project.ScrVersType = SIL.Scripture.ScrVersType.Vulgate;
+                    project.ScrVerseType = SIL.Scripture.ScrVersType.Vulgate;
                     break;
 
             }

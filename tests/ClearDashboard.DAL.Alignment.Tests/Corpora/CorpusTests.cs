@@ -38,7 +38,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
 			//ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
 			// into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
-			var tokenizedTextCorpus = await corpus.Create(projectName, mediator_, true, "NameX", "LanguageX", "LanguageType", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+			var tokenizedTextCorpus = await corpus.Create(mediator_, true, "NameX", "LanguageX", "LanguageType", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
 			foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
 			{
@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		public async void Corpus__GetAllCorpusVersionIds()
         {
             
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(projectName_, mediator_);
+			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
 			Assert.True(corpusVersionIds.Count() > 0);
 		}
 
@@ -78,10 +78,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetAllTokenizedCorpusIds()
 		{
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusVersionIds(projectName_, mediator_);
-			Assert.True(corpusVersionIds.Count() > 0);
+			var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(mediator_);
+			Assert.True(corpusIds.Count() > 0);
 
-			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(projectName_, mediator_, corpusVersionIds.First().corpusVersionId);
+			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator_, corpusIds.First());
 			Assert.True(tokenizedCorpusIds.Count() > 0);
 		}
 
@@ -89,7 +89,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetTokenizedTextCorpusFromDb()
 		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(projectName_, mediator_, new TokenizedCorpusId(new Guid()));
+			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedCorpusId(new Guid()));
 
 			foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
 			{
@@ -120,7 +120,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetTokenizedTextCorpusFromDB_Change_SaveToDb()
 		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(projectName_, mediator_, new TokenizedCorpusId(new Guid()));
+			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedCorpusId(new Guid()));
 
 			Assert.Equal(16, tokenizedTextCorpus.Count());
 
@@ -136,7 +136,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void Corpus__GetTokenizedCorpus_byBook()
 		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(projectName_, mediator_, new TokenizedCorpusId(new Guid()));
+			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedCorpusId(new Guid()));
 
 			Assert.Equal(16, tokenizedTextCorpus.Count());
 			Assert.Equal(4, tokenizedTextCorpus.GetRows(new List<string>() { "MRK" }).Count());

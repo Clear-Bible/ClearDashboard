@@ -1,12 +1,10 @@
-﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
-using MediatR;
+﻿using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetRowsByParatextPluginIdAndBookIdQuery(string ProjectName) : ProjectRequestQuery<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>(ProjectName)
+    public record GetRowsByParatextPluginIdAndBookIdQuery : ProjectRequestQuery<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
-        public GetRowsByParatextPluginIdAndBookIdQuery(string projectName, string paratextPluginId, string bookId): this(projectName)
+        public GetRowsByParatextPluginIdAndBookIdQuery(string paratextPluginId, string bookId)
         {
             ParatextPluginId = paratextPluginId;
             BookId = bookId;

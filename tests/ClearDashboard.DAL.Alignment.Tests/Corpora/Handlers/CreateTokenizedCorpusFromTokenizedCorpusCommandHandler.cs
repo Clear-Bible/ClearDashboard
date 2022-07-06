@@ -21,11 +21,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             //create a new TokenizedCorpus under the same Corpus parent
             //enumerate the TokensTextRows and insert associated Tokens
             //return a new TokensTextRow constructed with the new TokenizedCorpus.Id.
-            Assert.All(command.TextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+            Assert.All(command.TokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
 
             return Task.FromResult(
                 new RequestResult<TokenizedTextCorpus>
-                (result: Task.Run(() => TokenizedTextCorpus.Get(command.ProjectName, new MediatorMock(), new TokenizedCorpusId(new Guid()))).GetAwaiter().GetResult(),
+                (result: Task.Run(() => TokenizedTextCorpus.Get(new MediatorMock(), new TokenizedCorpusId(new Guid()))).GetAwaiter().GetResult(),
                 //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
                 success: true,
                 message: "successful result from test"));

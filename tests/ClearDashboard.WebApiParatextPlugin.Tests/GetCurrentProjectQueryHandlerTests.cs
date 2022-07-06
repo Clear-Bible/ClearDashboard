@@ -36,7 +36,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<Project>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<ParatextProject>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);

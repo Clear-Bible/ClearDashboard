@@ -9,24 +9,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     public class ParatextPluginTextCorpus : ScriptureTextCorpus
     {
         public string ParatextPluginId { get; set; }
-        private string projectName_;
-
-        internal ParatextPluginTextCorpus(string paratextPluginId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations, string projectName)
+        internal ParatextPluginTextCorpus(string paratextPluginId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
         {
             ParatextPluginId = paratextPluginId;
 
             Versification = versification;
-            projectName_ = projectName;
-
+  
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new ParatextPluginText(ParatextPluginId, mediator, Versification, bookAbbreviation, projectName));
+                AddText(new ParatextPluginText(ParatextPluginId, mediator, Versification, bookAbbreviation));
             }
         }
         public override ScrVers Versification { get; }
 
 
-        public static async Task<ParatextPluginTextCorpus> Get(string projectName, 
+        public static async Task<ParatextPluginTextCorpus> Get(
             IMediator mediator,
             string paratextPluginId)
         {
@@ -38,7 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 return new ParatextPluginTextCorpus(
                     command.ParatextPluginId, 
                     mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
-                    result.Data.bookAbbreviations, projectName);
+                    result.Data.bookAbbreviations);
             }
             else
             {

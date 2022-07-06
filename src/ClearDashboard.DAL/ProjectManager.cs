@@ -11,13 +11,18 @@ using Nelibur.ObjectMapper;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 
+//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Wpf")]
+//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Tests")]
+
 namespace ClearDashboard.DataAccessLayer
 {
+   
 
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
@@ -26,7 +31,7 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
 
     
@@ -34,13 +39,15 @@ namespace ClearDashboard.DataAccessLayer
         public User CurrentUser { get; set; }
 
         public ProjectInfo CurrentProject { get; set; }
-    
+
+        public ParatextProject CurrentParatextProject { get; set; }
+
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-        public Project ParatextProject { get; protected set; }
+       
 
         public bool ParatextVisible = false;
         public string ParatextUserName { get; set; } = "";
@@ -48,7 +55,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public string CurrentVerse
         {
-            get { return _currentVerse; }
+            get => _currentVerse;
             set
             {
                 // ensure that we are getting a fully delimited BBB as things like
@@ -71,7 +78,7 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory)
         {
             Logger = logger;
             ProjectNameDbContextFactory = projectNameDbContextFactory;

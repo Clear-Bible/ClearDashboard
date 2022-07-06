@@ -14,7 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 
 public record VerseChangedMessage(string Verse);
 
-public record ProjectChangedMessage(Project Project);
+public record ProjectChangedMessage(ParatextProject Project);
 
 public record ParatextConnectedMessage(bool Connected);
 
@@ -31,7 +31,7 @@ public class DashboardProjectManager : ProjectManager
     protected HubConnection HubConnection { get; private set; }
     protected IHubProxy HubProxy { get; private set; }
 
-    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
+    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
     {
         EventAggregator = eventAggregator;
     }
@@ -135,9 +135,9 @@ public class DashboardProjectManager : ProjectManager
             await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
         });
 
-        HubProxy.On<Project>("sendProject", async (project) =>
+        HubProxy.On<ParatextProject>("sendProject", async (project) =>
         {
-            ParatextProject = project;
+            CurrentParatextProject = project;
             await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
         });
 
