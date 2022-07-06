@@ -164,7 +164,7 @@
                                                     <TextBlock
                                                         Margin="25,0,0,0"
                                                         FontStyle="Italic"
-                                                        Text="{Binding LastChanged}" />
+                                                        Text="{Binding Modified}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
