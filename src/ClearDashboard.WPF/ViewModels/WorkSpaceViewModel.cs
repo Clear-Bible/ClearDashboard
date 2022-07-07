@@ -671,36 +671,36 @@ namespace ClearDashboard.Wpf.ViewModels
             ReBuildMenu();
         }
 
-        public void DeleteLayout(LayoutFile layoutFile)
-        {
-            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
-            {
-                return;
-            }
+        //public void DeleteLayout(LayoutFile layoutFile)
+        //{
+        //    if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+        //    {
+        //        return;
+        //    }
 
-            try
-            {
-                File.Delete(layoutFile.LayoutPath);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e.Message);
-                return;
-            }
+        //    try
+        //    {
+        //        File.Delete(layoutFile.LayoutPath);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.LogError(e.Message);
+        //        return;
+        //    }
 
-            FileLayouts.Remove(layoutFile);
-            ReBuildMenu();
-        }
+        //    FileLayouts.Remove(layoutFile);
+        //    ReBuildMenu();
+        //}
 
-        public void CancelSave()
-        {
-            GridIsVisible = Visibility.Collapsed;
-        }
+        //public void CancelSave()
+        //{
+        //    GridIsVisible = Visibility.Collapsed;
+        //}
 
-        public void CancelDelete()
-        {
-            DeleteGridIsVisible = Visibility.Collapsed;
-        }
+        //public void CancelDelete()
+        //{
+        //    DeleteGridIsVisible = Visibility.Collapsed;
+        //}
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
@@ -1161,6 +1161,7 @@ namespace ClearDashboard.Wpf.ViewModels
             return;
         }
 
+        // ReSharper disable once UnusedMember.Global
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             if (ProjectManager.CurrentParatextProject is not null)

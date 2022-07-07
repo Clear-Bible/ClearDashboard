@@ -55,7 +55,7 @@
             <Button
                 Width="20"
                 Height="20"
-                Margin="5 0 0 0"
+                Margin="5,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="Duplicate_Click">
