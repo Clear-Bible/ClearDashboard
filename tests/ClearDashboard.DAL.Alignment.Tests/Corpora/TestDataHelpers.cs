@@ -7,6 +7,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
     {
         public static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory,
             "..", "..", "..", "Corpora", "data");
+
         public static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
+
+        public static readonly string GreekNTUsfmTestProjectPath =
+            Path.Combine(TestDataPath, "usfm", "nestle1904");
     }
 }
