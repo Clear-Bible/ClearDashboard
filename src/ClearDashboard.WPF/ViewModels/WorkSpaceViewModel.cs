@@ -31,7 +31,8 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels
 {
 
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
+        IHandle<ProjectChangedMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -490,7 +491,15 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // grab the dictionary of all the verse lookups
-            BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            if (ProjectManager.CurrentParatextProject is not null)
+            {
+                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            }
+            else
+            {
+                BCVDictionary = new Dictionary<string, string>();
+            }
+            
 
             InComingChangesStarted = true;
 
@@ -1131,6 +1140,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            if (CurrentBcv.BibleBookList.Count == 0)
+            {
+                return Task.CompletedTask;
+            }
+
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 InComingChangesStarted = true;
@@ -1144,7 +1158,33 @@ namespace ClearDashboard.Wpf.ViewModels
             return Task.CompletedTask;
         }
 
-       
+        public Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (ProjectManager.CurrentParatextProject is not null)
+            {
+                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                InComingChangesStarted = true;
+                
+                // add in the books to the dropdown list
+                CalculateBooks();
+
+                // set the CurrentBcv prior to listening to the event
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                
+                CalculateChapters();
+                CalculateVerses();
+
+                NotifyOfPropertyChange(() => CurrentBcv);
+                InComingChangesStarted = false;
+            }
+            else
+            {
+                BCVDictionary = new Dictionary<string, string>();
+            }
+
+            return Task.CompletedTask;
+        }
+
         #endregion // Methods
     }
 
