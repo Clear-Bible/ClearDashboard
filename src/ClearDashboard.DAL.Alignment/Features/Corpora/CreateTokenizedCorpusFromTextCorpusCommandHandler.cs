@@ -21,13 +21,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     {
         private readonly IMediator _mediator;
 
-        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger) 
+        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator,
+            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
+            ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger)
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
             _mediator = mediator;
         }
-       
-        protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
+
+        protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(
+            CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             // 1. creates a new Corpus,
@@ -55,7 +58,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 corpus.CorpusType = corpusType;
             }
 
-            corpus.Metadata = new Dictionary<string, object> {
+            corpus.Metadata = new Dictionary<string, object>
+            {
                 { "TokenizationQueryString", request.TokenizationQueryString }
             };
 
@@ -65,10 +69,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 foreach (var engineToken in tokensTextRow.Tokens)
                 {
-                    Console.WriteLine(engineToken.TokenId);
-                    Console.WriteLine(engineToken.Text);
-//                    var token = new Token { };
-//                    tokenizedCorpus.Tokens.Add(token);
+                    var token = new Token
+                    {
+                        BookNumber = engineToken.TokenId.BookNumber,
+                        ChapterNumber = engineToken.TokenId.ChapterNumber,
+                        VerseNumber = engineToken.TokenId.VerseNumber,
+                        WordNumber = engineToken.TokenId.WordNumber,
+                        SubwordNumber = engineToken.TokenId.SubWordNumber,
+                        Text = engineToken.Text
+                    };
+                    tokenizedCorpus.Tokens.Add(token);
                 }
             }
 
@@ -80,11 +90,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
 
             return new RequestResult<TokenizedTextCorpus>
-                (result: Task.Run(() => TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
-                    //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
-                    success: true,
-                    message: "successful result from test");
+            (result: Task.Run(() => TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
+                //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
+                success: true,
+                message: "successful result from test");
         }
     }
-
 }
