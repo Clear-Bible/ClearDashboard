@@ -11,7 +11,6 @@ using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
-using Token = ClearDashboard.DataAccessLayer.Models.Token;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -66,9 +65,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var tokenizedCorpus = new TokenizedCorpus();
 
-            foreach (var tokensTextRow in request.TextCorpus.Cast<TokensTextRow>())
-            {
-                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
+            request.TextCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
+                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Models.Token
                 {
                     BookNumber = engineToken.TokenId.BookNumber,
                     ChapterNumber = engineToken.TokenId.ChapterNumber,
@@ -76,15 +74,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     WordNumber = engineToken.TokenId.WordNumber,
                     SubwordNumber = engineToken.TokenId.SubWordNumber,
                     Text = engineToken.Text
-                }));
-            }
+                }))
+            );
 
 
             ProjectDbContext.Corpa.Add(corpus);
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
 
             await ProjectDbContext.SaveChangesAsync();
-
 
             return new RequestResult<TokenizedTextCorpus>
             (result: Task.Run(() => TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
