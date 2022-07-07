@@ -34,7 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IEventAggregator EventAggregator;
 
         #region Member Variables
         private DashboardProjectManager ProjectManager { get; }
@@ -365,7 +365,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
-            _eventAggregator = eventAggregator;
+            EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
@@ -421,7 +421,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             // subscribe to the event aggregator so that we can listen to messages
-            _eventAggregator.SubscribeOnUIThread(this);
+            EventAggregator.SubscribeOnUIThread(this);
 
             return base.OnActivateAsync(cancellationToken);
         }
@@ -435,7 +435,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // unsubscribe to the event aggregator
-            _eventAggregator.Unsubscribe(this);
+            EventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -1057,7 +1057,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (somethingChanged)
                 {
                     // send to the event aggregator for everyone else to hear about a verse change
-                    _eventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+                    EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
 
                     // push to Paratext
                     if (ParatextSync)
@@ -1138,15 +1138,18 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
             if (CurrentBcv.BibleBookList.Count == 0)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
@@ -1155,13 +1158,17 @@ namespace ClearDashboard.Wpf.ViewModels
                 InComingChangesStarted = false;
             }
 
-            return Task.CompletedTask;
+            return;
         }
 
-        public Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             if (ProjectManager.CurrentParatextProject is not null)
             {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+
+
                 BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                 InComingChangesStarted = true;
                 
@@ -1182,7 +1189,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 BCVDictionary = new Dictionary<string, string>();
             }
 
-            return Task.CompletedTask;
+            return;
         }
 
         #endregion // Methods
