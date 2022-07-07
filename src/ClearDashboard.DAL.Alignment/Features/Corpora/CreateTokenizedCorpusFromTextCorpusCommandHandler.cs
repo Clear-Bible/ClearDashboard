@@ -1,13 +1,16 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using Token = ClearDashboard.DataAccessLayer.Models.Token;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -24,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _mediator = mediator;
         }
        
-        protected override Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             // 1. creates a new Corpus,
@@ -32,12 +35,55 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // 3. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
             //Assert.All(command.TextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
 
-            return Task.FromResult(
-                new RequestResult<TokenizedTextCorpus>
+            /*
+             *         ITextCorpus TextCorpus, 
+        bool IsRtl, 
+        string Name, 
+        string Language, 
+        string CorpusType,
+        string TokenizationQueryString
+             * */
+            var corpus = new Corpus
+            {
+                IsRtl = request.IsRtl,
+                Name = request.Name,
+                Language = request.Language,
+            };
+
+            if (Enum.TryParse<CorpusType>(request.CorpusType, out CorpusType corpusType))
+            {
+                corpus.CorpusType = corpusType;
+            }
+
+            corpus.Metadata = new Dictionary<string, object> {
+                { "TokenizationQueryString", request.TokenizationQueryString }
+            };
+
+            var tokenizedCorpus = new TokenizedCorpus();
+
+            foreach (var tokensTextRow in request.TextCorpus.Cast<TokensTextRow>())
+            {
+                foreach (var engineToken in tokensTextRow.Tokens)
+                {
+                    Console.WriteLine(engineToken.TokenId);
+                    Console.WriteLine(engineToken.Text);
+//                    var token = new Token { };
+//                    tokenizedCorpus.Tokens.Add(token);
+                }
+            }
+
+
+            ProjectDbContext.Corpa.Add(corpus);
+            corpus.TokenizedCorpora.Add(tokenizedCorpus);
+
+            await ProjectDbContext.SaveChangesAsync();
+
+
+            return new RequestResult<TokenizedTextCorpus>
                 (result: Task.Run(() => TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
                     //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
                     success: true,
-                    message: "successful result from test"));
+                    message: "successful result from test");
         }
     }
 

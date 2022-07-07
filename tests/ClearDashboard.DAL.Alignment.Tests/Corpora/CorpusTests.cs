@@ -64,7 +64,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 			}
             finally
             {
-                await DeleteDatabaseContext();
+//                await DeleteDatabaseContext();
             }
 			
 		}
