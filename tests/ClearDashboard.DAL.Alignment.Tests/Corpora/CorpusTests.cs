@@ -148,6 +148,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
         [Fact]
         [Trait("Category", "Example")]
+        // Mike notices that this test is broken.
         public async void Corpus__GetAllTokenizedCorpusIds()
         {
             var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
