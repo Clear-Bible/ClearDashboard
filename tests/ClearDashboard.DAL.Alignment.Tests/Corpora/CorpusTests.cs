@@ -83,9 +83,18 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
                 // Validate correctness of data
-                Assert.Equal(ProjectDbContext.Corpa.Count(), 1);
-                Assert.Equal(ProjectDbContext.Corpa.First().IsRtl, false);
-                Assert.Equal(ProjectDbContext.Corpa.First().Name, "New Testament");
+                Assert.Equal(1, ProjectDbContext.Corpa.Count());
+                Assert.False(ProjectDbContext.Corpa.First().IsRtl);
+                Assert.Equal("grc", ProjectDbContext.Corpa.First().Language);
+                Assert.Equal("New Testament", ProjectDbContext.Corpa.First().Name);
+                Assert.Equal(".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                    ProjectDbContext.Corpa.First().Metadata["TokenizationQueryString"].ToString());
+                Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.Count);
+                Assert.Equal(101, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.Count);
+                Assert.Equal(40, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().BookNumber);
+                Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().ChapterNumber);
+                Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().VerseNumber);
+                Assert.Equal("Chapter", ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().Text);
             }
             finally
             {
