@@ -18,14 +18,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     public class CorpusTests : TestBase
     {
-	    public CorpusTests(ITestOutputHelper output): base(output)
-		{
-			
-		}
+        public CorpusTests(ITestOutputHelper output) : base(output)
+        {
+        }
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__ImportFromUsfm_SaveToDb()
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__ImportFromUsfm_SaveToDb()
         {
             try
             {
@@ -36,7 +35,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
                 //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
                 // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
-                var tokenizedTextCorpus = await corpus.Create(Mediator, true, "NameX", "LanguageX", "LanguageType", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var tokenizedTextCorpus = await corpus.Create(Mediator, true, "NameX", "LanguageX", "LanguageType",
+                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
                 foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
                 {
@@ -58,116 +58,140 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
                     //display tokens detokenized
                     var detokenizer = new LatinWordDetokenizer();
-                    var tokensTextDetokenized = detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
+                    var tokensTextDetokenized =
+                        detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
                     Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
                 }
-			}
+            }
             finally
             {
-//                await DeleteDatabaseContext();
+                //await DeleteDatabaseContext();
             }
-			
-		}
+        }
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__GetAllCorpusVersionIds()
+        [Fact]
+        [Trait("Category", "Validate Persistence")]
+        public async void Corpus__ValidateTokenizedCorpus()
         {
-            
-			var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
-			Assert.True(corpusVersionIds.Count() > 0);
-		}
+            try
+            {
+                // Create data and persist
+                var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath)
+                    .Tokenize<LatinWordTokenizer>()
+                    .Transform<IntoTokensTextRowProcessor>();
+                var tokenizedTextCorpus = await corpus.Create(Mediator, false, "New Testament", "grc", "Resource",
+                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__GetAllTokenizedCorpusIds()
-		{
-			var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
-			Assert.True(corpusIds.Count() > 0);
+                // Validate correctness of data
+                Assert.Equal(ProjectDbContext.Corpa.Count(), 1);
+                Assert.Equal(ProjectDbContext.Corpa.First().IsRtl, false);
+                Assert.Equal(ProjectDbContext.Corpa.First().Name, "New Testament");
+            }
+            finally
+            {
+                await DeleteDatabaseContext();
+            }
+        }
 
-			var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator, corpusIds.First());
-			Assert.True(tokenizedCorpusIds.Count() > 0);
-		}
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__GetAllCorpusVersionIds()
+        {
+            var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
+            Assert.True(corpusVersionIds.Count() > 0);
+        }
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__GetTokenizedTextCorpusFromDb()
-		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__GetAllTokenizedCorpusIds()
+        {
+            var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
+            Assert.True(corpusIds.Count() > 0);
 
-			foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
-			{
-				//display verse info
-				var verseRefStr = tokensTextRow.Ref.ToString();
-				Output.WriteLine(verseRefStr);
+            var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator, corpusIds.First());
+            Assert.True(tokenizedCorpusIds.Count() > 0);
+        }
 
-				//display legacy segment
-				var segmentText = string.Join(" ", tokensTextRow.Segment);
-				Output.WriteLine($"segmentText: {segmentText}");
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__GetTokenizedTextCorpusFromDb()
+        {
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
 
-				//display tokenIds
-				var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
-				Output.WriteLine($"tokenIds: {tokenIds}");
+            foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
+            {
+                //display verse info
+                var verseRefStr = tokensTextRow.Ref.ToString();
+                Output.WriteLine(verseRefStr);
 
-				//display tokens tokenized
-				var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.Text));
-				Output.WriteLine($"tokensText: {tokensText}");
+                //display legacy segment
+                var segmentText = string.Join(" ", tokensTextRow.Segment);
+                Output.WriteLine($"segmentText: {segmentText}");
 
-				//display tokens detokenized
-				var detokenizer = new LatinWordDetokenizer();
-				var tokensTextDetokenized = detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
-				Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
-			}
-		}
+                //display tokenIds
+                var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
+                Output.WriteLine($"tokenIds: {tokenIds}");
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__GetTokenizedTextCorpusFromDB_Change_SaveToDb()
-		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
+                //display tokens tokenized
+                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.Text));
+                Output.WriteLine($"tokensText: {tokensText}");
 
-			Assert.Equal(16, tokenizedTextCorpus.Count());
+                //display tokens detokenized
+                var detokenizer = new LatinWordDetokenizer();
+                var tokensTextDetokenized = detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
+                Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
+            }
+        }
 
-			OnlyUpToCountTextRowProcessor.Train(2);
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__GetTokenizedTextCorpusFromDB_Change_SaveToDb()
+        {
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
 
-			var tokenizedTextCorpusWithOnlyTwoTokens = tokenizedTextCorpus
-				.Filter<OnlyUpToCountTextRowProcessor>();
+            Assert.Equal(16, tokenizedTextCorpus.Count());
 
-			Assert.Equal(2, tokenizedTextCorpusWithOnlyTwoTokens.Count());
-		}
+            OnlyUpToCountTextRowProcessor.Train(2);
 
-		[Fact]
-		[Trait("Category", "Example")]
-		public async void Corpus__GetTokenizedCorpus_byBook()
-		{
-			var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
+            var tokenizedTextCorpusWithOnlyTwoTokens = tokenizedTextCorpus
+                .Filter<OnlyUpToCountTextRowProcessor>();
 
-			Assert.Equal(16, tokenizedTextCorpus.Count());
-			Assert.Equal(4, tokenizedTextCorpus.GetRows(new List<string>() { "MRK" }).Count());
+            Assert.Equal(2, tokenizedTextCorpusWithOnlyTwoTokens.Count());
+        }
 
-			foreach (var tokensTextRow in tokenizedTextCorpus.GetRows(new List<string>() { "MRK" }).Cast<TokensTextRow>())
-			{
-				//display verse info
-				var verseRefStr = tokensTextRow.Ref.ToString();
-				Output.WriteLine(verseRefStr);
+        [Fact]
+        [Trait("Category", "Example")]
+        public async void Corpus__GetTokenizedCorpus_byBook()
+        {
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedCorpusId(new Guid()));
 
-				//display legacy segment
-				var segmentText = string.Join(" ", tokensTextRow.Segment);
-				Output.WriteLine($"segmentText: {segmentText}");
+            Assert.Equal(16, tokenizedTextCorpus.Count());
+            Assert.Equal(4, tokenizedTextCorpus.GetRows(new List<string>() { "MRK" }).Count());
 
-				//display tokenIds
-				var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
-				Output.WriteLine($"tokenIds: {tokenIds}");
+            foreach (var tokensTextRow in tokenizedTextCorpus.GetRows(new List<string>() { "MRK" })
+                         .Cast<TokensTextRow>())
+            {
+                //display verse info
+                var verseRefStr = tokensTextRow.Ref.ToString();
+                Output.WriteLine(verseRefStr);
 
-				//display tokens tokenized
-				var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.Text));
-				Output.WriteLine($"tokensText: {tokensText}");
+                //display legacy segment
+                var segmentText = string.Join(" ", tokensTextRow.Segment);
+                Output.WriteLine($"segmentText: {segmentText}");
 
-				//display tokens detokenized
-				var detokenizer = new LatinWordDetokenizer();
-				var tokensTextDetokenized = detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
-				Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
-			}
-		}
-	}
+                //display tokenIds
+                var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
+                Output.WriteLine($"tokenIds: {tokenIds}");
+
+                //display tokens tokenized
+                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.Text));
+                Output.WriteLine($"tokensText: {tokensText}");
+
+                //display tokens detokenized
+                var detokenizer = new LatinWordDetokenizer();
+                var tokensTextDetokenized = detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
+                Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
+            }
+        }
+    }
 }

@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -67,19 +68,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             foreach (var tokensTextRow in request.TextCorpus.Cast<TokensTextRow>())
             {
-                foreach (var engineToken in tokensTextRow.Tokens)
+                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
                 {
-                    var token = new Token
-                    {
-                        BookNumber = engineToken.TokenId.BookNumber,
-                        ChapterNumber = engineToken.TokenId.ChapterNumber,
-                        VerseNumber = engineToken.TokenId.VerseNumber,
-                        WordNumber = engineToken.TokenId.WordNumber,
-                        SubwordNumber = engineToken.TokenId.SubWordNumber,
-                        Text = engineToken.Text
-                    };
-                    tokenizedCorpus.Tokens.Add(token);
-                }
+                    BookNumber = engineToken.TokenId.BookNumber,
+                    ChapterNumber = engineToken.TokenId.ChapterNumber,
+                    VerseNumber = engineToken.TokenId.VerseNumber,
+                    WordNumber = engineToken.TokenId.WordNumber,
+                    SubwordNumber = engineToken.TokenId.SubWordNumber,
+                    Text = engineToken.Text
+                }));
             }
 
 
