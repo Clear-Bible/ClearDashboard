@@ -1,28 +1,21 @@
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using MediatR;
-using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.IO;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
-
-//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Wpf")]
-//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Tests")]
 
 namespace ClearDashboard.DataAccessLayer
 {
-   
+
 
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
@@ -211,6 +204,8 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
+
+        public bool HasDashboardProject => CurrentDashboardProject != null;
 
 
         public DashboardProject CreateDashboardProject()
