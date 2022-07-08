@@ -36,16 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // 1. creates a new Corpus,
             // 2. creates a new associated TokenizedCorpus,
             // 3. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
-            //Assert.All(command.TextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
 
-            /*
-             *         ITextCorpus TextCorpus, 
-        bool IsRtl, 
-        string Name, 
-        string Language, 
-        string CorpusType,
-        string TokenizationQueryString
-             * */
             var corpus = new Corpus
             {
                 IsRtl = request.IsRtl,
@@ -56,6 +47,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             if (Enum.TryParse<CorpusType>(request.CorpusType, out CorpusType corpusType))
             {
                 corpus.CorpusType = corpusType;
+            } 
+            else
+            {
+                corpus.CorpusType = CorpusType.Unknown;
             }
 
             corpus.Metadata = new Dictionary<string, object>
@@ -77,17 +72,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }))
             );
 
-
             ProjectDbContext.Corpa.Add(corpus);
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
 
             await ProjectDbContext.SaveChangesAsync();
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
 
-            return new RequestResult<TokenizedTextCorpus>
-            (result: Task.Run(() => TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(new Guid())), cancellationToken).GetAwaiter().GetResult(),
-                //run async from sync like constructor: good desc. https://stackoverflow.com/a/40344759/13880559
-                success: true,
-                message: "successful result from test");
+            return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
         }
     }
 }
