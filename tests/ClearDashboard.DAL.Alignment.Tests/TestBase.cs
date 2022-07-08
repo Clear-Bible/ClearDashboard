@@ -22,8 +22,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
         protected IMediator? Mediator => ServiceProvider.GetService<IMediator>();
 
-        protected ProjectDbContext ProjectDbContext { get; set; }
-        protected string ProjectName { get; set; }
+        protected ProjectDbContext? ProjectDbContext { get; set; }
+        protected string? ProjectName { get; set; }
 
         protected TestBase(ITestOutputHelper output)
         {
@@ -63,7 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         {
           
                 Output.WriteLine($"Deleting database: {ProjectName}");
-                await ProjectDbContext.Database.EnsureDeletedAsync();
+                await ProjectDbContext!.Database.EnsureDeletedAsync();
                 var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{ProjectName}";
                 Directory.Delete(projectDirectory, true);
       
