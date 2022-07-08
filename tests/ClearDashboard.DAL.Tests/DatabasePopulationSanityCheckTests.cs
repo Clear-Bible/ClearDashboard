@@ -111,7 +111,8 @@ namespace ClearDashboard.DAL.Tests
             {
                 Output.WriteLine($"Deleting database: {projectName}");
                 await context.Database.EnsureDeletedAsync();
-                var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
+                var projectDirectory =
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
                 Directory.Delete(projectDirectory, true);
             }
         }
@@ -134,7 +135,7 @@ namespace ClearDashboard.DAL.Tests
                 var testUser = await AddDashboardUser(context);
                 var projectInfo = await AddCurrentProject(context, projectName);
 
-              
+
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
                 // an updated version later on.
@@ -157,7 +158,7 @@ namespace ClearDashboard.DAL.Tests
                 // Now get the project back
                 var singleQuery = new GetProjectInfoQuery(projectInfo.Id);
                 var singleResult = await mediator.Send(singleQuery);
-                
+
 
                 Assert.NotNull(singleResult);
                 Assert.True(singleResult.Success);
@@ -212,7 +213,53 @@ namespace ClearDashboard.DAL.Tests
             {
                 Output.WriteLine($"Deleting database: {projectName}");
                 await context.Database.EnsureDeletedAsync();
-                var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
+                var projectDirectory =
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
+                Directory.Delete(projectDirectory, true);
+            }
+        }
+
+        [Fact]
+        public async Task CorpusMetadataTest()
+        {
+            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            Assert.NotNull(userProvider);
+
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            var random = new Random((int)DateTime.Now.Ticks);
+            var projectName = $"Alignment{random.Next(1, 1000)}";
+            Assert.NotNull(factory);
+            Output.WriteLine($"Creating database: {projectName}");
+            var assets = await factory?.Get(projectName)!;
+            var context = assets.ProjectDbContext;
+
+            try
+            {
+                var testUser = new User { FirstName = "Test", LastName = "User" };
+                userProvider.CurrentUser = testUser;
+
+                context.Users.Add(testUser);
+                await context.SaveChangesAsync();
+
+                var corpus = new Corpus();
+                corpus.Name = "Test Corpus";
+                corpus.Metadata.Add("number", 1);
+                corpus.Metadata.Add("string", "ha!");
+
+                context.Corpa.Add(corpus);
+                await context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Output.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Output.WriteLine($"Deleting database: {projectName}");
+                await context.Database.EnsureDeletedAsync();
+                var projectDirectory =
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
                 Directory.Delete(projectDirectory, true);
             }
         }
