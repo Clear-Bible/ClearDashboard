@@ -13,11 +13,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
     public class TestBase
     {
+        #nullable disable
         protected ITestOutputHelper Output { get; private set; }
         protected Process Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
-        private IServiceProvider? _serviceProvider = null;
+        private IServiceProvider _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
 
         protected TestBase(ITestOutputHelper output)
@@ -39,14 +40,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             Services.AddLogging();
         }
 
-        protected async Task StartParatext()
+        protected async Task StartParatextAsync()
         {
             var paratext = Process.GetProcessesByName("Paratext");
 
             if (paratext.Length == 0)
             {
                 Output.WriteLine("Starting Paratext.");
-                Process = await InternalStartParatext();
+                Process = await InternalStartParatextAsync();
                 StopParatextOnTestConclusion = true;
 
                 var seconds = 2;
@@ -62,7 +63,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
         }
 
-        protected async Task StopParatext()
+        protected async Task StopParatextAsync()
         {
             if (StopParatextOnTestConclusion)
             {
@@ -77,7 +78,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
         }
 
-        private async Task<Process> InternalStartParatext()
+        private async Task<Process> InternalStartParatextAsync()
         {
             var paratextInstallDirectory = Environment.GetEnvironmentVariable("ParatextInstallDir");
             var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");

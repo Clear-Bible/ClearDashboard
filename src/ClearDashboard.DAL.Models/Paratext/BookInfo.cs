@@ -2,7 +2,7 @@
 {
     public class BookInfo 
     {
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         public bool InProjectScope { get; set; }
 

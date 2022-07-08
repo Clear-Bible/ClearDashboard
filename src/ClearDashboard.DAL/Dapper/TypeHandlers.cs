@@ -10,6 +10,7 @@ namespace ClearDashboard.DataAccessLayer.Dapper
     /// </summary>
     public class EsDateTimeOffsetConverter : SqlMapper.TypeHandler<DateTimeOffset>
     {
+        #nullable disable
         public override void SetValue(IDbDataParameter parameter, DateTimeOffset value)
         {
             parameter.DbType = DbType.String;

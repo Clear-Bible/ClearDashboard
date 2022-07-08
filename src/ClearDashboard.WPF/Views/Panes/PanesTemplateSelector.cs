@@ -146,7 +146,7 @@ namespace ClearDashboard.Wpf.Views.Panes
                 return PinsViewTemplate;
             }
 
-            if (item is TextCollectionViewModel)
+            if (item is TextCollectionsViewModel)
             {
                 return TextCollectionViewTemplate;
             }

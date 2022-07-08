@@ -18,6 +18,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetTermRenderingsQueryHandler : XmlReaderRequestHandler<GetTermRenderingsQuery,
         RequestResult<TermRenderingsList>, TermRenderingsList>
     {
+        #nullable disable
+
         private TermRenderingsList _termRenderingsList = new();
         private readonly ProjectManager _projectManager;
 

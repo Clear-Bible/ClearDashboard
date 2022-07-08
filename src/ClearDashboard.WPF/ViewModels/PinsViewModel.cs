@@ -6,6 +6,8 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
+using Helpers;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;
 using System;
@@ -663,6 +665,11 @@ namespace ClearDashboard.Wpf.ViewModels
                 new VersePopUpViewModel(navigationService: NavigationService, logger: Logger,
                     projectManager: ProjectManager, eventAggregator: EventAggregator,
                     verse: verses[0]));
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods

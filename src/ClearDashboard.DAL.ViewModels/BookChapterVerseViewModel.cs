@@ -6,6 +6,7 @@ namespace ClearDashboard.DAL.ViewModels
 {
     public class BookChapterVerseViewModel : ViewModelBase<BookChapterVerse>
     {
+        #nullable disable
         public BookChapterVerseViewModel() : base()
         {
 
@@ -16,7 +17,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public List<string>? BibleBookList
+        public List<string> BibleBookList
         {
             get => Entity?.BibleBookList;
             set
@@ -29,7 +30,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public List<int>? ChapterNumbers
+        public List<int> ChapterNumbers
         {
             get => Entity?.ChapterNumbers;
             set
@@ -42,7 +43,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public List<int>? VerseNumbers
+        public List<int> VerseNumbers
         {
             get => Entity?.VerseNumbers;
             set
@@ -73,9 +74,9 @@ namespace ClearDashboard.DAL.ViewModels
         /// <summary>
         /// The Book ID number as a padded string. Automatically calculated from BookStr.
         /// </summary>
-        public string? Book => Entity?.BookNum.ToString().PadLeft(3, '0');
+        public string Book => Entity?.BookNum.ToString().PadLeft(3, '0');
 
-        public string? BookName
+        public string BookName
         {
             get => Entity?.BookName;
             set
@@ -365,7 +366,7 @@ namespace ClearDashboard.DAL.ViewModels
         /// </summary>
         /// <param name="bookName">The English name of the book you are looking for. A partial name or acronym works too.</param>
         /// <returns>Returns a Bible book number as an int.</returns>
-        public int GetIntBookNumFromBookName(string? bookName)
+        public int GetIntBookNumFromBookName(string bookName)
         {
             var number = GetBookNumFromBookName(bookName);
             if (IsNumeric(number))
@@ -546,7 +547,7 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 bookName = lookup[value];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // no-op
                 // TODO:  How to report?
@@ -695,9 +696,9 @@ namespace ClearDashboard.DAL.ViewModels
             return lookup;
         }
 
-        public static string GetBookNumFromBookName(string? value)
+        public static string GetBookNumFromBookName(string value)
         {
-            var lookup = new Dictionary<string?, string>
+            var lookup = new Dictionary<string, string>
             {
             { "GEN", "001" },
             { "EXO", "002" },
@@ -989,7 +990,7 @@ namespace ClearDashboard.DAL.ViewModels
                 int numVal = Int32.Parse(BBBCCCVVV.Substring(3, 3));
                 verseStr += $" {numVal}:";
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 verseStr += " 00:";
             }
@@ -1000,7 +1001,7 @@ namespace ClearDashboard.DAL.ViewModels
                 int numVal = Int32.Parse(BBBCCCVVV.Substring(6, 3));
                 verseStr += $"{numVal}";
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 verseStr += "00";
             }

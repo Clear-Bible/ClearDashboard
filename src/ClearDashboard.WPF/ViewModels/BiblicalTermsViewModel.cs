@@ -22,6 +22,8 @@ using System.Windows.Media;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
+using ClearDashboard.Wpf.Views;
+using Helpers;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -32,6 +34,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class BiblicalTermsViewModel : ToolViewModel, IWorkspace
     {
         #region Member Variables
+
+        BiblicalTermsView _view;
 
         public enum SelectedBtEnum
         {
@@ -174,7 +178,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
-        public FlowDirection WindowFlowDirection
+        public new FlowDirection WindowFlowDirection
         {
             get => _windowFlowDirection;
             set
@@ -540,11 +544,13 @@ namespace ClearDashboard.Wpf.ViewModels
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
           
         }
-        //protected override void OnViewAttached(object view, object context)
-        //{
-        //    Logger.LogInformation("OnViewAttached");
-        //    base.OnViewAttached(view, context);
-        //}
+        protected override void OnViewAttached(object view, object context)
+        {
+
+            _view = (BiblicalTermsView)view;
+            Logger.LogInformation("OnViewAttached");
+            base.OnViewAttached(view, context);
+        }
 
         //protected override void OnViewLoaded(object view)
         //{
@@ -558,11 +564,6 @@ namespace ClearDashboard.Wpf.ViewModels
         //    base.OnViewReady(view);
         //}
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    Logger.LogInformation("Dispose");
-        //    base.Dispose(disposing);
-        //}
 
         #endregion //Constructor
 
@@ -1047,6 +1048,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             
+        }
+        
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods

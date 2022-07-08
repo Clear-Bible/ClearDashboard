@@ -10,6 +10,8 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using Helpers;
+using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -211,6 +213,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             await Task.CompletedTask;
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<SourceContextView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods

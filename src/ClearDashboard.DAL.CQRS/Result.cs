@@ -3,6 +3,7 @@
 public abstract class Result<T>
 {
     protected Result() {}
+    #nullable enable
     protected Result(T? result = default(T), bool success = true, string message = "Success")
     {
         Success = success;

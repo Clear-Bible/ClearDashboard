@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ClearDashboard.Wpf.Converters
+namespace Converters
 {
     /// <summary>
     /// Value converter that translates true to <see cref="Visibility.Visible"/> and false to
@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Converters
     /// </summary>
     public sealed class VisibilityConverter : IValueConverter
     {
-        public new object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool)
             {
@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Converters
             return Visibility.Collapsed;
         }
 
-        public new object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return new object();
         }

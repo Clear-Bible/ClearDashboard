@@ -9,6 +9,7 @@ namespace ClearDashboard.DAL.Tests;
 
 public class GetCurrentProjectQueryHandlerTests : TestBase
 {
+    #nullable disable
     public GetCurrentProjectQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
         //no-op

@@ -17,6 +17,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
+        #nullable disable
+
         private SpellingStatus _biblicalTermsList = new();
         private readonly ProjectManager _projectManager;
 
