@@ -7,19 +7,19 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Word")]
-        public string Word { get; set; }
+        public string? Word { get; set; }
 
         [XmlAttribute(AttributeName = "State")]
-        public string State { get; set; }
+        public string? State { get; set; }
 
         [XmlElement(ElementName = "SpecificCase")]
-        public string SpecificCase { get; set; }
+        public string? SpecificCase { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         [XmlElement(ElementName = "Correction")]
-        public string Correction { get; set; }
+        public string? Correction { get; set; }
     }
 
     [XmlRoot(ElementName = "SpellingStatus")]
@@ -27,6 +27,6 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Status")]
-        public List<Status> Status { get; set; }
+        public List<Status>? Status { get; set; }
     }
 }

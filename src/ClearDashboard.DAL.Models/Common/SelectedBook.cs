@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         }
 
-        public string BookName { get; set; }
+        public string? BookName { get; set; }
 
         public bool IsSelected { get; set; }
 
@@ -80,7 +80,7 @@ namespace ClearDashboard.DataAccessLayer.Models
      
         public Color BookColor { get; set; }
 
-        public string BookNum { get; set; }
+        public string? BookNum { get; set; }
 
         public bool IsOt { get; set; }
      

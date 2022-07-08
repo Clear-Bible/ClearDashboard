@@ -14,11 +14,11 @@ public class GetUsxQueryHandlerTests : TestBase
     }
 
     [Fact]
-    public async Task GetUsxTest()
+    public async Task GetUsxTestAsync()
     {
         try
         {
-            await StartParatext();
+            await StartParatextAsync();
 
             var client = CreateHttpClient();
 
@@ -35,17 +35,17 @@ public class GetUsxQueryHandlerTests : TestBase
         }
         finally
         {
-            await StopParatext();
+            await StopParatextAsync();
         }
 
     }
 
     [Fact]
-    public async Task GetUsxBook43Test()
+    public async Task GetUsxBook43TestAsync()
     {
         try
         {
-            await StartParatext();
+            await StartParatextAsync();
             var client = CreateHttpClient();
 
             var response = await client.PostAsJsonAsync<GetUsxQuery>("usx", new GetUsxQuery(43));
@@ -62,7 +62,7 @@ public class GetUsxQueryHandlerTests : TestBase
         }
         finally
         {
-            await StopParatext();
+            await StopParatextAsync();
         }
 
     }

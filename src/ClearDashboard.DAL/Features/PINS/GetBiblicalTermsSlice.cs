@@ -23,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetBiblicalTermsQueryHandler : XmlReaderRequestHandler<GetBiblicalTermsQuery,
         RequestResult<BiblicalTermsList>, BiblicalTermsList>
     {
-        private BiblicalTermsList _biblicalTermsList = new();
+        private BiblicalTermsList? _biblicalTermsList = new();
 
         public GetBiblicalTermsQueryHandler(ILogger<PINS.GetTermRenderingsQueryHandler> logger) : base(logger)
         {
@@ -78,7 +78,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                 XmlSerializer serializer = new XmlSerializer(typeof(BiblicalTermsList));
                 try
                 {
-                    _biblicalTermsList = (BiblicalTermsList)serializer.Deserialize(reader);
+                    _biblicalTermsList = (BiblicalTermsList?)serializer.Deserialize(reader);
                 }
                 catch (Exception e)
                 {
@@ -86,7 +86,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                 }
             }
 
-            return _biblicalTermsList;
+            return _biblicalTermsList!;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.ViewModels
         
 
         private FlowDirection _windowFlowDirection = FlowDirection.LeftToRight;
-        public FlowDirection WindowFlowDirection
+        public new FlowDirection WindowFlowDirection
         {
             get => _windowFlowDirection;
             set

@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
             }
         }
 
-        public bool IsActive
+        public new bool IsActive
         {
             get => _isActive;
             set

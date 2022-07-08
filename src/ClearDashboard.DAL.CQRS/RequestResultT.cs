@@ -7,7 +7,7 @@ namespace ClearDashboard.DAL.CQRS
         {
 
         }
-
+        #nullable enable
         public RequestResult(T? result = default(T), bool success = true, string message = "Success") : base(result, success, message)
         {
         }

@@ -7,6 +7,7 @@ namespace ClearDashboard.DataAccessLayer.Data.ValueGenerators
     
     internal class UserIdValueGenerator : ValueGenerator<Guid>
     {
+        #nullable disable
         public override bool GeneratesTemporaryValues => false;
         public override Guid Next(EntityEntry entry) => GetUserId(entry.Context);
         Guid GetUserId(DbContext context) => ((ProjectDbContext)context).UserProvider.CurrentUser.Id;

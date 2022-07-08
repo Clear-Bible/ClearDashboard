@@ -14,6 +14,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class PopulateNotesTablesTest : TestBase
     {
+        #nullable disable
         public PopulateNotesTablesTest(ITestOutputHelper output) : base(output)
         {
 
@@ -23,7 +24,7 @@ namespace ClearDashboard.DAL.Tests
         public async Task NoteRecipientTest()
         {
 
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            var userProvider = ServiceProvider.GetService<IUserProvider>()!;
             Assert.NotNull(userProvider);
             var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";

@@ -43,9 +43,8 @@ namespace ClearDashboard.DAL.Tests.DataPersistenceTests
                     context.DatabasePath = fullPath;
                     await context.Migrate();
                 }
-                catch (Exception? ex)
+                catch (Exception?)
                 {
-                   
                     throw;
                 }
                 return context;

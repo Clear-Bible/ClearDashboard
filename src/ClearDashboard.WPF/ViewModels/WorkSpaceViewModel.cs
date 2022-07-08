@@ -34,6 +34,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
+
+        #nullable disable
         private readonly IEventAggregator EventAggregator;
 
         #region Member Variables
@@ -472,7 +474,7 @@ namespace ClearDashboard.Wpf.ViewModels
             await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
-            await ActivateItemAsync<TextCollectionViewModel>();
+            await ActivateItemAsync<TextCollectionsViewModel>();
 
 
             // remove all existing windows
@@ -779,7 +781,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
                             break;
                         case WorkspaceLayoutNames.TextCollection:
-                            e.Content = GetToolViewModelFromItems("TextCollectionViewModel");
+                            e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
                             break;
 
                     }
@@ -825,7 +827,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case TargetContextViewModel:
                             case NotesViewModel:
                             case PinsViewModel:
-                            case TextCollectionViewModel:
+                            case TextCollectionsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
                         }
@@ -888,7 +890,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         case TargetContextViewModel:
                         case NotesViewModel:
                         case PinsViewModel:
-                        case TextCollectionViewModel:
+                        case TextCollectionsViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -897,7 +899,7 @@ namespace ClearDashboard.Wpf.ViewModels
             return (ToolViewModel)Items[0];
         }
 
-        private (object? vm, string? title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
+        private (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
         {
             // window has been closed so we need to reopen it
             switch (windowTag)
@@ -939,7 +941,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     var vm6 = GetToolViewModelFromItems("NotesViewModel");
                     return (vm6, vm6.Title, vm6.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
-                    var vm8 = GetToolViewModelFromItems("TextCollectionViewModel");
+                    var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
 
             }
@@ -1008,7 +1010,7 @@ namespace ClearDashboard.Wpf.ViewModels
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
-        private void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        private void BcvChanged(object sender, PropertyChangedEventArgs e)
         {
             if (ParatextSync && InComingChangesStarted == false)
             {

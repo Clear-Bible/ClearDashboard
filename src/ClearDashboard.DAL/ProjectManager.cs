@@ -26,6 +26,7 @@ namespace ClearDashboard.DataAccessLayer
 
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
+        #nullable disable
         #region Properties
 
         protected ILogger Logger { get; private set; }

@@ -7,8 +7,8 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows;
 
 public abstract class WorkflowStepViewModel : ApplicationScreen
 {
-    protected IEventAggregator EventAggregator { get; set; }
-    protected ILogger Logger { get; set; }
+    protected new IEventAggregator EventAggregator { get; set; }
+    protected new ILogger Logger { get; set; }
 
     private Direction _direction;
     public Direction Direction

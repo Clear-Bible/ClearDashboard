@@ -19,14 +19,14 @@ namespace ClearDashboard.Wpf.Helpers
             }
         }
 
-        public string FontFamily = "Segoe UI";
-        public float FontSize = 13;
+        public new string FontFamily = "Segoe UI";
+        public new float FontSize = 13;
 
-        public static readonly DependencyProperty FontSizeProperty =
+        public static new readonly DependencyProperty FontSizeProperty =
             DependencyProperty.Register("FontSize", typeof(float), typeof(BindableTextBlock), new UIPropertyMetadata(13f, OnPropertyChanged));
 
 
-        public static readonly DependencyProperty FontFamilyProperty =
+        public static new readonly DependencyProperty FontFamilyProperty =
             DependencyProperty.Register("FontFamily", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata("Segoe UI", OnPropertyChanged));
 
 
