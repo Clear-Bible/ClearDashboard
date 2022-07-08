@@ -1,14 +1,12 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-
-
-namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject
 {
     public class CreateNewProjectWorkflowShellViewModel : WorkflowShellViewModel
     {
