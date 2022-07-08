@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Data;
 
-namespace ClearDashboard.Wpf.Converters
+namespace Converters
 {
-    using System;
-    using System.Windows.Data;
-
     public class ActiveDocumentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
