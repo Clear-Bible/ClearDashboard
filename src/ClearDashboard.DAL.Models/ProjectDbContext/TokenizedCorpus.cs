@@ -30,11 +30,12 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
     public string? TokenizationFunction { get; set; }
 
-    public string RawMetadata { get; set; }
-    [NotMapped]
-    public Dictionary<string, object> Metadata
-    {
-        get => (string.IsNullOrEmpty(RawMetadata) ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(RawMetadata)) ?? new Dictionary<string, object>();
-        set => RawMetadata = JsonSerializer.Serialize(value);
-    }
+    //public string RawMetadata { get; set; }
+    //[NotMapped]
+    [Column(TypeName = "jsonb")]
+    public Dictionary<string, object> Metadata { get; set; }
+    //{
+    //    get => (string.IsNullOrEmpty(RawMetadata) ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(RawMetadata)) ?? new Dictionary<string, object>();
+    //    set => RawMetadata = JsonSerializer.Serialize(value);
+    //}
 }

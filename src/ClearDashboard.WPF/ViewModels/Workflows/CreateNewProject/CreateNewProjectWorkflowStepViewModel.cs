@@ -16,13 +16,13 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Views.Workflows.NewProject;
+using ClearDashboard.Wpf.Views.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using Path = System.Windows.Shapes.Path;
 
 
 
-namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject
 {
     public class CreateNewProjectWorkflowStepViewModel : WorkflowStepViewModel
     {
