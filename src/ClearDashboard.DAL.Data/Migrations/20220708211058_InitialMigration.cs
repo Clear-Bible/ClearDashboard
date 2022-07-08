@@ -356,8 +356,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ParallelCorpusVersionId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParallelCorpusVersionId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ParallelCorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
@@ -369,8 +369,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_VerseMapping_ParallelCorpus_ParallelCorpusId",
                         column: x => x.ParallelCorpusId,
                         principalTable: "ParallelCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_VerseMapping_ParallelCorpusHistory_ParallelCorpusHistoryId",
                         column: x => x.ParallelCorpusHistoryId,

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220708005459_InitialMigration")]
+    [Migration("20220708211058_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -613,10 +613,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("ParallelCorpusHistoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ParallelCorpusId")
+                    b.Property<Guid?>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ParallelCorpusVersionId")
+                    b.Property<Guid?>("ParallelCorpusVersionId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -936,9 +936,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("VerseMappings")
-                        .HasForeignKey("ParallelCorpusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParallelCorpusId");
 
                     b.Navigation("ParallelCorpus");
                 });
