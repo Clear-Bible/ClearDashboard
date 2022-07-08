@@ -19,7 +19,9 @@ Before you begin, you may need to execute ```dotnet tool update --global dotnet-
 3. In the terminal window, copy and past the following command:
 		
     ```dotnet-ef migrations add InitialMigration```
-4. The project will rebuild and the the Migrations folder with your migration should be created.  Pay attention to any warnings and errors generated during the process.  Correct the warnings an errors and repeat steps 1-3 until you have a clean migration.
+4. The project will rebuild and the the Migrations folder with your migration should be created.  Pay attention to any warnings and errors generated during the process.  Correct the warnings an errors and repeat steps 1-3 until you have a clean migration. when you have successfully create a clean migration, the terminal will look like this:
+
+   ![Migration Folder](documentation-images/migrations-complete.png)
 
 ### To add addtional migration
 
