@@ -103,7 +103,9 @@
                                 Background="White"
                                 LostFocus="TextBox_OnLostFocus"
                                 Text="{Binding TextBoxText}"
-                                Visibility="{Binding ClockTextBoxVisibility}" />
+                                Visibility="{Binding ClockTextBoxVisibility}" 
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"/>
                             <TextBlock
                                 x:Name="Utc"
                                 Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"

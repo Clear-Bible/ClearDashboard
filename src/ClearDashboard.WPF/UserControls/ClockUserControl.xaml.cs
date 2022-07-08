@@ -36,6 +36,7 @@ namespace ClearDashboard.Wpf.UserControls
         private TimeZoneInfo _localTimeZoneInfo = TimeZoneInfo.Local;
         private TimeZoneInfo _tempTimeZoneInfo = null;
         private string _tempHeader = "";
+        private ReadOnlyCollection<TimeZoneInfo> _timezones = TimeZoneInfo.GetSystemTimeZones();
 
         private ObservableCollection<MenuItemNest> _timeZoneMenuItemNest;
 
@@ -58,9 +59,8 @@ namespace ClearDashboard.Wpf.UserControls
             DataContext = this;
 
             //Construct MenuItemNest of TimeZones
-            var timezones = TimeZoneInfo.GetSystemTimeZones();
             _timeZoneMenuItemNest = new();
-            foreach (var timezone in timezones)
+            foreach (var timezone in _timezones)
             {
                 _timeZoneMenuItemNest.Add(new MenuItemNest
                 {
@@ -95,7 +95,7 @@ namespace ClearDashboard.Wpf.UserControls
                     if (individualArr[2] != "self")
                     {
                         //cycle through each time zone and check what matches
-                        foreach (var timezone in timezones)
+                        foreach (var timezone in _timezones)
                         {
                             if (timezone.DisplayName == individualArr[2])
                             {
@@ -218,14 +218,20 @@ namespace ClearDashboard.Wpf.UserControls
                     {
                         var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
                         individual.NameTime = tempTime.ToShortTimeString();
+
                         if (tempTime.Hour >= 9 && tempTime.Hour < 17)
                         {
-                            individual.Foreground = Brushes.Green;
+                            individual.Foreground = Brushes.ForestGreen;
+                        }
+                        else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
+                        {
+                            individual.Foreground = Brushes.DarkOrange;
                         }
                         else
                         {
                             individual.Foreground = Brushes.Red;
                         }
+
                         CheckedList.Add(individual);
                     }
                 }
@@ -237,14 +243,20 @@ namespace ClearDashboard.Wpf.UserControls
                         {
                             var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
                             individual.NameTime = tempTime.ToShortTimeString();
+                            
                             if (tempTime.Hour >= 9 && tempTime.Hour < 17)
                             {
-                                individual.Foreground = Brushes.Green;
+                                individual.Foreground = Brushes.ForestGreen;
+                            }
+                            else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
+                            {
+                                individual.Foreground = Brushes.DarkOrange;
                             }
                             else
                             {
                                 individual.Foreground = Brushes.Red;
                             }
+
                             if (individual.CheckBoxIsChecked == "True")
                             {
                                 CheckedList.Add(individual);
@@ -264,14 +276,20 @@ namespace ClearDashboard.Wpf.UserControls
                 {
                     MenuItems[0].NameTime = DateTime.Now.ToShortTimeString().PadLeft(8, '0');
                     MenuItems[0].ClockTextBlockText = " Local Time";
-                    if (DateTime.Now.Hour > 9 && DateTime.Now.Hour < 17)
+                    
+                    if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
                     {
                         MenuItems[0].Foreground = Brushes.ForestGreen;
+                    }
+                    else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
+                    {
+                        MenuItems[0].Foreground = Brushes.DarkOrange;
                     }
                     else
                     {
                         MenuItems[0].Foreground = Brushes.Red;
                     }
+
                 });
             }
             else
@@ -287,6 +305,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
+            sortMenuItemsGroup();
             SaveMenuToSettings();
         }
 
@@ -303,25 +322,12 @@ namespace ClearDashboard.Wpf.UserControls
                 {
                     if (button.Tag is ObservableCollection<MenuItemNest> nest)
                     {
-                        ////find where to put new item
-                        //int insertIndex=0;
-                        //foreach (MenuItemNest item in nest)
-                        //{
-                        //    if (_localTimeZoneInfo.BaseUtcOffset < item.TimeZoneInfo.BaseUtcOffset)
-                        //    {
-                        //        break;
-                        //    } 
-                            
-                        //    insertIndex++;
-                            
-                        //}
-
                         nest.Insert(nest.Count, new MenuItemNest
                         {
                             ClockAddTimeZoneVisibility = Visibility.Collapsed,
                             CheckBoxIsChecked = "False",
                             ClockCheckBoxVisibility = Visibility.Visible,
-                            TextBoxText = "New Individual",
+                            TextBoxText = "newindividual",
                             ClockTextBoxVisibility = Visibility.Visible,
                             NameTime = DateTime.Now.ToShortTimeString(),
                             ClockTextBlockText = TimeZoneInfo.Local.DisplayName,
@@ -332,6 +338,7 @@ namespace ClearDashboard.Wpf.UserControls
                             MenuItems = _timeZoneMenuItemNest,
                         });
                         
+                        sortMenuItemsIndividual(nest);
                         SaveMenuToSettings();
                     }
                 }
@@ -342,7 +349,7 @@ namespace ClearDashboard.Wpf.UserControls
                         ClockAddTimeZoneVisibility = Visibility.Visible,
                         CheckBoxIsChecked = "False",
                         ClockCheckBoxVisibility = Visibility.Visible,
-                        TextBoxText = "New Group",
+                        TextBoxText = "newgroup",
                         ClockTextBoxVisibility = Visibility.Visible,
                         NameTimeVisibility = Visibility.Collapsed,
                         ClockTextBlockText = "self",
@@ -359,7 +366,7 @@ namespace ClearDashboard.Wpf.UserControls
                         ClockAddTimeZoneVisibility = Visibility.Collapsed,
                         CheckBoxIsChecked = "False",
                         ClockCheckBoxVisibility = Visibility.Visible,
-                        TextBoxText = "New Individual",
+                        TextBoxText = "newindividual",
                         ClockTextBoxVisibility = Visibility.Visible,
                         NameTime = DateTime.Now.ToShortTimeString(),
                         NameTimeVisibility = Visibility.Visible,
@@ -370,6 +377,7 @@ namespace ClearDashboard.Wpf.UserControls
                         TimeZoneInfo = TimeZoneInfo.Local
                     });
 
+                    sortMenuItemsGroup();
                     SaveMenuToSettings();
                 }
             }
@@ -442,7 +450,7 @@ namespace ClearDashboard.Wpf.UserControls
 
                     if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Group)
                     {
-                       //nest.MenuItems.Move(0, nest.MenuItems.Count-1);
+                       sortMenuItemsIndividual(nest.MenuItems);
                        SaveMenuToSettings();
                     }
                 }
@@ -456,6 +464,53 @@ namespace ClearDashboard.Wpf.UserControls
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propName));
+            }
+        }
+
+        private void sortMenuItemsIndividual(ObservableCollection<MenuItemNest> collection)
+        {
+            for (int i = 0; i < collection.Count; i++)
+            {
+                for (int j = 0; j < collection.Count - 1; j++)
+                {
+                    if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
+                            collection[j + 1].TimeZoneInfo.BaseUtcOffset) >0)
+                    {
+                        collection.Move(j,j+1);
+                    }
+                }
+            }
+        }
+
+        private void sortMenuItemsGroup()
+        {
+            for (int i = 0; i < MenuItems[0].MenuItems.Count - 1; i++)
+            {
+                for (int j = 0; j < MenuItems[0].MenuItems.Count - 2; j++)
+                {
+                    if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
+                    {
+                        MenuItems[0].MenuItems.Move(
+                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]), 
+                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j + 1]));
+                    }
+                }
+            }
+        }
+
+        private void TextBox_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is TextBox box)
+            {
+                box.Foreground = Brushes.Gray;
+            }
+        }
+
+        private void TextBox_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is TextBox box)
+            {
+                box.Foreground = Brushes.Black;
             }
         }
     }
