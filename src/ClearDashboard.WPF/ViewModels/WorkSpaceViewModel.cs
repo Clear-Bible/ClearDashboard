@@ -472,7 +472,7 @@ namespace ClearDashboard.Wpf.ViewModels
             await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
-            await ActivateItemAsync<TextCollectionViewModel>();
+            await ActivateItemAsync<TextCollectionsViewModel>();
 
 
             // remove all existing windows
@@ -779,7 +779,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
                             break;
                         case WorkspaceLayoutNames.TextCollection:
-                            e.Content = GetToolViewModelFromItems("TextCollectionViewModel");
+                            e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
                             break;
 
                     }
@@ -825,7 +825,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case TargetContextViewModel:
                             case NotesViewModel:
                             case PinsViewModel:
-                            case TextCollectionViewModel:
+                            case TextCollectionsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
                         }
@@ -888,7 +888,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         case TargetContextViewModel:
                         case NotesViewModel:
                         case PinsViewModel:
-                        case TextCollectionViewModel:
+                        case TextCollectionsViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -939,7 +939,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     var vm6 = GetToolViewModelFromItems("NotesViewModel");
                     return (vm6, vm6.Title, vm6.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
-                    var vm8 = GetToolViewModelFromItems("TextCollectionViewModel");
+                    var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
 
             }

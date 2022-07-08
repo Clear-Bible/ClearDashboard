@@ -5,6 +5,8 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
+using Helpers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
@@ -463,6 +465,11 @@ namespace ClearDashboard.Wpf.ViewModels
                     UnformattedAnchorRef = CurrentBcv.GetVerseId();
                 }
             }
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<TargetContextView>.Show(this, actualWidth, actualHeight);
         }
 
         //private void ConvertListToHTML(List<ParsedXML> usxList)

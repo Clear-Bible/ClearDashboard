@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewModels:TextCollectionViewModel,
+    d:DataContext="{d:DesignInstance Type=viewModels:TextCollectionsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
