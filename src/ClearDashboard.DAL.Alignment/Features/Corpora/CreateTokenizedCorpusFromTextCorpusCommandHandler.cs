@@ -53,10 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 corpus.CorpusType = CorpusType.Unknown;
             }
 
-            corpus.Metadata = new Dictionary<string, object>
-            {
-                { "TokenizationQueryString", request.TokenizationQueryString }
-            };
+            corpus.Metadata["TokenizationQueryString"] = request.TokenizationQueryString;
 
             var tokenizedCorpus = new TokenizedCorpus();
 
