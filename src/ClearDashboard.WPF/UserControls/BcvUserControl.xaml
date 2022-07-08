@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     d:DesignHeight="50"
     d:DesignWidth="450"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -15,6 +16,13 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BcvBookNumConvertor x:Key="BcvBookNumConvertor" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid Name="LayoutRoot" HorizontalAlignment="Stretch">
         <!--  DataContext="{Binding ElementName=parent}"  -->
         <Grid.RowDefinitions>
@@ -93,7 +101,9 @@
             MinWidth="60"
             Margin="5,0,5,3"
             ItemsSource="{Binding CurrentBcv.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBcv.BookName, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+            SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+
+        <!--  SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor} , UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"  -->
         <ComboBox
             x:Name="CboChapter"
             Grid.Row="1"

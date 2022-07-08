@@ -18,6 +18,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>,
         (IEnumerable<string> bookId, CorpusId corpusId)>
     {
+        // **********************************************
+        // TODO:  Remove the following two lines
+        public static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory,
+            "..", "..", "..", "Corpora", "data");
+        public static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
+        // **********************************************
 
         public GetBookIdsByTokenizedCorpusIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetBookIdsByTokenizedCorpusIdQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
@@ -32,7 +38,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
            
             // TODO: how to get the path here?
-            var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, "FIX ME!");
+            var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, UsfmTestProjectPath);
             
             //var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath);
 

@@ -31,10 +31,12 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels
 {
 
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
+        IHandle<ProjectChangedMessage>
     {
+
         #nullable disable
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IEventAggregator EventAggregator;
 
         #region Member Variables
         private DashboardProjectManager ProjectManager { get; }
@@ -365,7 +367,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
-            _eventAggregator = eventAggregator;
+            EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
             NavigationService = navigationService;
@@ -421,7 +423,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             // subscribe to the event aggregator so that we can listen to messages
-            _eventAggregator.SubscribeOnUIThread(this);
+            EventAggregator.SubscribeOnUIThread(this);
 
             return base.OnActivateAsync(cancellationToken);
         }
@@ -435,7 +437,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // unsubscribe to the event aggregator
-            _eventAggregator.Unsubscribe(this);
+            EventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -491,7 +493,15 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // grab the dictionary of all the verse lookups
-            BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            if (ProjectManager.CurrentParatextProject is not null)
+            {
+                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            }
+            else
+            {
+                BCVDictionary = new Dictionary<string, string>();
+            }
+            
 
             InComingChangesStarted = true;
 
@@ -663,36 +673,36 @@ namespace ClearDashboard.Wpf.ViewModels
             ReBuildMenu();
         }
 
-        public void DeleteLayout(LayoutFile layoutFile)
-        {
-            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
-            {
-                return;
-            }
+        //public void DeleteLayout(LayoutFile layoutFile)
+        //{
+        //    if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+        //    {
+        //        return;
+        //    }
 
-            try
-            {
-                File.Delete(layoutFile.LayoutPath);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e.Message);
-                return;
-            }
+        //    try
+        //    {
+        //        File.Delete(layoutFile.LayoutPath);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.LogError(e.Message);
+        //        return;
+        //    }
 
-            FileLayouts.Remove(layoutFile);
-            ReBuildMenu();
-        }
+        //    FileLayouts.Remove(layoutFile);
+        //    ReBuildMenu();
+        //}
 
-        public void CancelSave()
-        {
-            GridIsVisible = Visibility.Collapsed;
-        }
+        //public void CancelSave()
+        //{
+        //    GridIsVisible = Visibility.Collapsed;
+        //}
 
-        public void CancelDelete()
-        {
-            DeleteGridIsVisible = Visibility.Collapsed;
-        }
+        //public void CancelDelete()
+        //{
+        //    DeleteGridIsVisible = Visibility.Collapsed;
+        //}
 
         private void WorkSpaceViewModel_ThemeChanged()
         {
@@ -1049,7 +1059,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (somethingChanged)
                 {
                     // send to the event aggregator for everyone else to hear about a verse change
-                    _eventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+                    EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
 
                     // push to Paratext
                     if (ParatextSync)
@@ -1130,10 +1140,18 @@ namespace ClearDashboard.Wpf.ViewModels
             });
         }
 
-        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            if (CurrentBcv.BibleBookList.Count == 0)
+            {
+                return;
+            }
+
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
@@ -1142,10 +1160,41 @@ namespace ClearDashboard.Wpf.ViewModels
                 InComingChangesStarted = false;
             }
 
-            return Task.CompletedTask;
+            return;
         }
 
-       
+        // ReSharper disable once UnusedMember.Global
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (ProjectManager.CurrentParatextProject is not null)
+            {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+
+
+                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                InComingChangesStarted = true;
+                
+                // add in the books to the dropdown list
+                CalculateBooks();
+
+                // set the CurrentBcv prior to listening to the event
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                
+                CalculateChapters();
+                CalculateVerses();
+
+                NotifyOfPropertyChange(() => CurrentBcv);
+                InComingChangesStarted = false;
+            }
+            else
+            {
+                BCVDictionary = new Dictionary<string, string>();
+            }
+
+            return;
+        }
+
         #endregion // Methods
     }
 

@@ -103,6 +103,16 @@
             </Button>
 
             <!--<Button
+                x:Name="NewProject"
+                Margin="10,0,10,0"
+                Content="{helpers:Loc Landing_newproject}"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
+                </Button.Tag>
+            </Button>-->
+
+            <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"
                 Content="{helpers:Loc Landing_project}"
@@ -164,7 +174,7 @@
                                                     <TextBlock
                                                         Margin="25,0,0,0"
                                                         FontStyle="Italic"
-                                                        Text="{Binding LastChanged}" />
+                                                        Text="{Binding Modified}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
