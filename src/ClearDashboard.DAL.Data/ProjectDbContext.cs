@@ -6,8 +6,8 @@ using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
+//using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
@@ -117,6 +117,36 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.TargetToken)
                 .WithMany(e=>e.TargetAlignmentTokenPairs);
 
+            modelBuilder.Entity<Corpus>()
+                .Property(e=>e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
+
+            modelBuilder.Entity<CorpusHistory>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string,object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
+              
+
+            modelBuilder.Entity<TokenizedCorpus>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
 
             modelBuilder.Entity<ParallelCorpus>()
                 .HasOne(e => e.SourceTokenizedCorpus)

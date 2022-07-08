@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="ClearDashboard.Wpf.Views.Workflows.NewProject.CreateNewProjectWorkflowShellView"
+    x:Class="ClearDashboard.Wpf.Views.Workflows.CreateNewProject.CreateNewProjectWorkflowShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
@@ -8,11 +8,11 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
-    xmlns:newProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.NewProject"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:createNewProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject"
     Title="NewProjects"
     cm:Action.TargetWithoutContext=""
-    d:DataContext="{d:DesignInstance Type=newProject:CreateNewProjectWorkflowShellViewModel,
+    d:DataContext="{d:DesignInstance Type=createNewProject:CreateNewProjectWorkflowShellViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"

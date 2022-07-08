@@ -9,7 +9,7 @@ using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
+using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -69,6 +69,12 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Logger.LogInformation("CreateNewProject called.");
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
+        }
+
+        public void NewProject()
+        {
+            Logger.LogInformation("NewProject called.");
+            //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
         }
 
         public void AlignmentSample()

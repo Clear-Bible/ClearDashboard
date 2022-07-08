@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Language = table.Column<string>(type: "TEXT", nullable: true),
                     ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
                     CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
-                    RawMetadata = table.Column<string>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -38,7 +38,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Language = table.Column<string>(type: "TEXT", nullable: true),
                     ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
                     CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
-                    RawMetadata = table.Column<string>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -84,7 +84,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     CorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenizationFunction = table.Column<string>(type: "TEXT", nullable: true),
-                    RawMetadata = table.Column<string>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
                     CorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)

@@ -20,13 +20,16 @@ public class CorpusHistory : SynchronizableTimestampedEntity
     public string? ParatextGuid { get; set; }
     public virtual CorpusType CorpusType { get; set; }
 
-    public string RawMetadata { get; set; }
-    [NotMapped]
-    public Dictionary<string, object> Metadata
-    {
-        get => (string.IsNullOrEmpty(RawMetadata) ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(RawMetadata)) ?? new Dictionary<string, object>();
-        set => RawMetadata = JsonSerializer.Serialize(value);
-    }
+    //public string RawMetadata { get; set; }
+    //[NotMapped]
+    //public Dictionary<string, object> Metadata
+    //{
+    //    get => (string.IsNullOrEmpty(RawMetadata) ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(RawMetadata)) ?? new Dictionary<string, object>();
+    //    set => RawMetadata = JsonSerializer.Serialize(value);
+    //}
+    [Column(TypeName = "jsonb")]
+    public Dictionary<string, object> Metadata { get; set; }
+
     public virtual ICollection<Verse> Verses { get; set; }
     public virtual ICollection<TokenizedCorpus> TokenizedCorpora { get; set; }
 }

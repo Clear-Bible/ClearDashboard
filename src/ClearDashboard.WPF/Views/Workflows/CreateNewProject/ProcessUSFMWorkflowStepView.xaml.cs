@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ClearDashboard.Wpf.Views.Workflows.NewProject
+namespace ClearDashboard.Wpf.Views.Workflows.CreateNewProject
 {
     /// <summary>
     /// Interaction logic for ProcessUSFMView.xaml
