@@ -12,6 +12,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SIL.Providers;
 using Xunit;
@@ -241,13 +242,21 @@ namespace ClearDashboard.DAL.Tests
                 context.Users.Add(testUser);
                 await context.SaveChangesAsync();
 
-                var corpus = new Corpus();
-                corpus.Name = "Test Corpus";
+                var corpus = new Corpus
+                {
+                    Name = "Test Corpus"
+                };
                 corpus.Metadata.Add("number", 1);
                 corpus.Metadata.Add("string", "ha!");
 
                 context.Corpa.Add(corpus);
                 await context.SaveChangesAsync();
+
+                var roundTrippedCorpus = await context.Corpa.FirstOrDefaultAsync(c => c.Id == corpus.Id);
+
+                Assert.NotNull(roundTrippedCorpus);
+                Assert.True(roundTrippedCorpus.Metadata.Count == 2);
+
 
             }
             catch (Exception ex)
