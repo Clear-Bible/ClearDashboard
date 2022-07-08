@@ -17,7 +17,6 @@ using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Interfaces;
 using Action = System.Action;
-using Helpers;
 using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels

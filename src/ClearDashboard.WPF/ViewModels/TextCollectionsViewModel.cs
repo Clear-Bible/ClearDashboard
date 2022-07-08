@@ -1,8 +1,8 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
-using Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels
