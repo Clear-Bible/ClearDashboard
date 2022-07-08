@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ClearDashboard.Wpf.Views.Workflows.NewProject
+namespace ClearDashboard.Wpf.Views.Workflows.CreateNewProject
 {
     public partial class CreateNewProjectWorkflowStepView : UserControl
     {

@@ -7,7 +7,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject
 {
     public class ProcessUSFMWorkflowStepViewModel : WorkflowStepViewModel
     {
