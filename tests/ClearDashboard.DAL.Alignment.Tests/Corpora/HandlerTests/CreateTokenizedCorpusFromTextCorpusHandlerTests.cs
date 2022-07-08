@@ -28,7 +28,8 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             //Import
             var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, true, "NameX", "LanguageX", "Standard",
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, true, "NameX", "LanguageX",
+                "Standard",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var result = await Mediator.Send(command);
@@ -65,6 +66,40 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                     detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
                 Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
             }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Validate Persistence")]
+    public async void Corpus__ValidateTokenizedCorpus()
+    {
+        try
+        {
+            var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
+
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "New Testament", "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var result = await Mediator.Send(command);
+
+            // Validate correctness of data
+            Assert.Equal(1, ProjectDbContext.Corpa.Count());
+            Assert.False(ProjectDbContext.Corpa.First().IsRtl);
+            Assert.Equal("grc", ProjectDbContext.Corpa.First().Language);
+            Assert.Equal("New Testament", ProjectDbContext.Corpa.First().Name);
+            Assert.Equal(".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                ProjectDbContext.Corpa.First().Metadata["TokenizationQueryString"].ToString());
+            Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.Count);
+            Assert.Equal(20723, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(40, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().BookNumber);
+            Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().ChapterNumber);
+            Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().VerseNumber);
+            Assert.Equal("Βίβλος", ProjectDbContext.Corpa.First().TokenizedCorpora.First().Tokens.First().Text);
         }
         finally
         {
