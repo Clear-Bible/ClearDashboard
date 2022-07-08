@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public List<string>? BibleBookList
+        public List<string> BibleBookList
         {
             get => Entity?.BibleBookList;
             set

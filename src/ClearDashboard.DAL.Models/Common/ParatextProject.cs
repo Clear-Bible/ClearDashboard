@@ -167,20 +167,20 @@ namespace ClearDashboard.DataAccessLayer.Models
         public ProjectType Type { get; set; }
         public DirectoryType DirectoryType { get; set; } = DirectoryType.Project;
         public CorpusType CorpusType { get; set; }
-                public string Guid { get; set; }
-        public ScrLanguageWrapper Language { get; set; }
-        public string ShortName { get; set; }
-        public string LongName { get; set; }
-        public string LanguageName { get; set; }
-        public string Encoding { get; set; }
-        public string LanguageIsoCode { get; set; }
-        public TranslationInfo TranslationInfo { get; set; }
-        public TranslationInfo BaseTranslation { get; set; }
-        public string DefaultFont { get; set; }
-        public string NormalizationForm { get; set; }
-        public string Name { get; set; }
-        public string Copyright { get; set; }
-        public string ProjectPath { get; set; }
+        public string? Guid { get; set; }
+        public ScrLanguageWrapper? Language { get; set; }
+        public string? ShortName { get; set; }
+        public string? LongName { get; set; }
+        public string? LanguageName { get; set; }
+        public string? Encoding { get; set; }
+        public string? LanguageIsoCode { get; set; }
+        public TranslationInfo? TranslationInfo { get; set; }
+        public TranslationInfo? BaseTranslation { get; set; }
+        public string? DefaultFont { get; set; }
+        public string? NormalizationForm { get; set; }
+        public string? Name { get; set; }
+        public string? Copyright { get; set; }
+        public string? ProjectPath { get; set; }
         public bool IsRTL { get; set; } = false;
         public string? DirectoryPath { get; set; }
         public string? ClearEngineDirectoryPath { get; set; }
