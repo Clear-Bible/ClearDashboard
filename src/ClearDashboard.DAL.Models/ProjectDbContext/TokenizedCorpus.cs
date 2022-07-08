@@ -26,7 +26,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public virtual ICollection<ParallelCorpus> TargetParallelCorpora { get; set; }
 
     public virtual Guid CorpusId { get; set; }
-    public virtual Corpus Corpus { get; set; }
+    public virtual Corpus? Corpus { get; set; }
 
     public string? TokenizationFunction { get; set; }
 

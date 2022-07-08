@@ -39,8 +39,9 @@ namespace ClearDashboard.DataAccessLayer
         public User CurrentUser { get; set; }
 
         public ProjectInfo CurrentProject { get; set; }
-
         public ParatextProject CurrentParatextProject { get; set; }
+        public bool HasCurrentProject => CurrentProject != null;
+        public bool HasCurrentParatextProject => CurrentParatextProject != null;
 
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
@@ -90,8 +91,6 @@ namespace ClearDashboard.DataAccessLayer
 
 
         #endregion
-
-
 
         #region Methods
 

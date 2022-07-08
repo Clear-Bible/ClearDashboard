@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             //1. find parallelCorpus based on request.ParallelCorpusId
             //2. Update the verse mappings
 
-            var parallelCorpus = await ParallelCorpus.Get(null, new ParallelCorpusId(new Guid()));
+            var parallelCorpus = await ParallelCorpus.Get(new MediatorMock(), new ParallelCorpusId(new Guid()));
 
 
             return new RequestResult<ParallelCorpus>

@@ -21,34 +21,19 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
-    public interface IPluginLogger
-    {
-        void AppendText(Color color, string message);
-    }
     public partial class MainWindow : EmbeddedPluginControl, IPluginLogger
     {
-        #region Events
 
-        #endregion
-
-
-        #region props
+        #region Properties
 
         private IProject _project;
-        
         private IVerseRef _verseRef;
-
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
-
         private IMediator _mediator;
         private IHubContext HubContext => GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
-
-
         private WebHostStartup WebHostStartup { get; set; }
-
         private IDisposable WebAppProxy { get; set; }
-
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
         #endregion
@@ -115,7 +100,6 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void OnExceptionOccurred(Exception exception)
         {
-            // write to Serilog
             Log.Error($"OnLoad {exception.Message}");
             AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
@@ -238,264 +222,38 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="newReference"></param>
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
-            if (newReference != _verseRef)
+            try
             {
-                //SetVerseRef(newReference, reloadWebHost: true);
-
-                _verseRef = newReference;
-             
-                try
+                if (newReference != _verseRef)
                 {
-                    await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
+                    //SetVerseRef(newReference, reloadWebHost: true);
+
+                    _verseRef = newReference;
+
+                    try
+                    {
+                        await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
+
+                    }
+                    catch (Exception ex)
+                    {
+                        AppendText(Color.Red,
+                            $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+                    }
 
                 }
-                catch (Exception ex)
-                {
-                    AppendText(Color.Red, $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
-                }
-              
             }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
+            }
+          
         }
 
         #endregion Paratext overrides - standard functions
 
 
         #region Methods
-
-
-
-
-        /// <summary>
-        /// Send out the Biblical Terms for ALL BTs
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetBiblicalTermsAllBackgroundAsync()
-        {
-            //// ReSharper disable once InconsistentNaming
-            //string payloadBTAll = "";
-
-            //await Task.Run(() =>
-            //{
-            //    if (_termsList == null)
-            //    {
-            //        BibilicalTerms btAll = new BibilicalTerms(_allList, _project, _host);
-            //        _termsList = btAll.ProcessBiblicalTerms(_project);
-            //    }
-
-            //    payloadBTAll = JsonSerializer.Serialize(_termsList, _jsonOptions);
-
-            //});
-
-          
-        }
-
-        /// <summary>
-        /// Send out the Biblical Terms for only the Project BTs
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetBiblicalTermsProjectBackgroundAsync()
-        {
-            //// ReSharper disable once InconsistentNaming
-            //string payloadBT = "";
-
-            //BibilicalTerms bt = new BibilicalTerms(_projectList, _project, _host);
-
-            //await Task.Run(() =>
-            //{
-            //    var btList = bt.ProcessBiblicalTerms(_project);
-            //    payloadBT = JsonSerializer.Serialize(btList, _jsonOptions);
-            //});
-
-          
-        }
-
-        /// <summary>
-        /// Retrieves the USX & USFM for the project passing in the current book number
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetUSXScriptureAsync()
-        {
-            //await Task.Run(async () =>
-            //{
-            //    var usx = _project.GetUSX(_verseRef.BookNum);
-            //    if (usx != null)
-            //    {
-            //        var dataPayload = JsonSerializer.Serialize(usx);
-
-            //        await WriteMessageToPipeAsync(new PipeMessage
-            //        {
-            //            Action = ActionType.SetUSX,
-            //            Text = $"BOOK: {_verseRef.BookNum}",
-            //            Payload = dataPayload,
-            //        }).ConfigureAwait(false);
-            //    }
-            //});
-            //AppendText(MsgColor.Orange, "OUTBOUND -> SetUSX");
-
-            ////var usfm = m_project.GetUSFM(m_verseRef.BookNum);
-            ////if (usfm != null)
-            ////{
-            ////    var dataPayload = JsonSerializer.Serialize(usfm);
-
-
-        }
-
-        ///// <summary>
-        ///// Build up a project object to send over.  This is only a small portion
-        ///// of what is available in the m_project object
-        ///// </summary>
-        ///// <returns></returns>
-        //private Project BuildProjectObject()
-        //{
-        //    Project project = new Project();
-        //    project.ID = _project.ID;
-        //    project.LanguageName = _project.LanguageName;
-        //    project.ShortName = _project.ShortName;
-        //    project.LongName = _project.LongName;
-        //    foreach (var users in _project.NonObserverUsers)
-        //    {
-        //        project.NonObservers.Add(users.Name);
-        //    }
-
-        //    foreach (var book in _project.AvailableBooks)
-        //    {
-        //        project.AvailableBooks.Add(new BookInfo
-        //        {
-        //            Code = book.Code,
-        //            InProjectScope = book.InProjectScope,
-        //            Number = book.Number,
-        //        });
-        //    }
-
-        //    project.Language = new ScrLanguageWrapper
-        //    {
-        //        FontFamily = _project.Language.Font.FontFamily,
-        //        Size = _project.Language.Font.Size,
-        //        IsRtol = _project.Language.IsRtoL,
-        //    };
-
-        //    switch (_project.Type)
-        //    {
-        //        case Paratext.PluginInterfaces.ProjectType.Standard:
-        //            project.Type = Project.ProjectType.Standard;
-        //            break;
-        //        default:
-        //            project.Type = Project.ProjectType.NotSelected;
-        //            break;
-        //    }
-
-        //    project.BCVDictionary = GetBCV_Dictionary();
-
-        //    return project;
-        //}
-
-        //private Dictionary<string, string> GetBCV_Dictionary()
-        //{
-        //    Dictionary<string, string> bcvDict = new Dictionary<string, string>();
-
-        //    // loop through all the bible books capturing the BBCCCVVV for every verse
-        //    for (int bookNum = 0; bookNum < _project.AvailableBooks.Count; bookNum++)
-        //    {
-        //        if (BibleBookScope.IsBibleBook(_project.AvailableBooks[bookNum].Code))
-        //        {
-        //            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
-        //            try
-        //            {
-        //                // get tokens by book number (from object) and chapter
-        //                tokens = _project.GetUSFMTokens(_project.AvailableBooks[bookNum].Number);
-        //            }
-        //            catch (Exception)
-        //            {
-        //               AppendText(MainWindow.MsgColor.Orange, $"No Scripture for {bookNum}");
-        //            }
-
-        //            foreach (var token in tokens)
-        //            {
-        //                if (token is IUSFMMarkerToken marker)
-        //                {
-        //                    // a verse token
-        //                    if (marker.Type == MarkerType.Verse)
-        //                    {
-        //                        string verseID = marker.VerseRef.BBBCCCVVV.ToString().PadLeft(8,'0');
-        //                        if (! bcvDict.ContainsKey(verseID))
-        //                        {
-        //                            bcvDict.Add(verseID, verseID);
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return bcvDict;
-        //}
-
-        // /// <summary>
-        // /// Does a registry check to ensure that ClearSuite is reachable
-        // /// </summary>
-        // /// <returns></returns>
-        //public bool CheckIfClearSuiteInstalledAsync()
-        //{
-        //    //Here we peek into the registry to see if they even have clear engine controller installed
-        //    var clearEngineControllerPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Clear\ClearSuite", "Path", null);
-
-        //    if (Directory.Exists(clearEngineControllerPath))
-        //    {
-        //        // file doesn't exist so null this out
-        //        if (File.Exists(Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe")))
-        //        {
-        //            _clearSuitePath = Path.Combine(clearEngineControllerPath, "ClearSuite.Wpf.exe");
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
-        //private async Task GetNoteListAsync(PipeMessage message)
-        //{
-        //    var bookNum = 0;
-        //    var chapNum = 0;
-
-        //    var data = JsonSerializer.Deserialize<GetNotesData>((string)message.Text);
-        //    //var data = JsonConvert.DeserializeObject<GetNotesData>(jsonPayload);
-        //    AppendText(MsgColor.Blue, $"GetNotesListAsync received: Book: {data.BookID}, Chapter: {data.ChapterID}, IncludeResolved: {data.IncludeResolved}");
-
-        //    if (data.BookID >= 0 && data.BookID <= 66 && data.ChapterID > 0)
-        //    {
-        //        _bookNumber = _project.AvailableBooks[data.BookID].Number;
-        //        int chapter = data.ChapterID;
-        //        // include resolved notes
-        //        bool onlyUnresolved = !data.IncludeResolved;
-        //        _noteList = _project.GetNotes(_bookNumber, chapter, onlyUnresolved);
-        //        AppendText(MsgColor.Green, $"Book Num: {_bookNumber} / {chapter}: {_noteList.Count.ToString()}");
-
-
-        //        var dataPayload = JsonSerializer.Serialize(_noteList, new JsonSerializerOptions
-        //                                                                        {
-        //                                                                            WriteIndented = true,
-        //                                                                            MaxDepth = 1024 * 100000
-        //                                                                        });
-
-
-        //        try
-        //        {
-        //            var deserializedObj = JsonSerializer.Deserialize<IReadOnlyList<IProjectNote>>(dataPayload);
-
-        //            PipeMessage msgOut = new PipeMessage
-        //            {
-        //                Action = ActionType.SetNotesObject,
-        //                Text = "Notes Object",
-        //                Payload = dataPayload
-        //            };
-
-        //            await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            AppendText(MsgColor.Red, e.Message);
-        //        }
-        //    }
-        //}
 
 
         /// <summary>
@@ -555,16 +313,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private void btnRestart_Click(object sender, EventArgs e)
         {
 
-            //// disconnect the pipe
-            //UnhookPipe();
-
-            //await Task.Run(() => Task.Delay(500)).ConfigureAwait(false);
-
-            //// reconnect the pipe
-            //_serverPipe = new ServerPipe("ClearDashboardPlugin", p => p.StartStringReaderAsync());
-            //_serverPipe.DataReceived += ServerPipeOnDataReceived;
-
-            // clear out the existing data
+          // clear out the existing data
             if (rtb.InvokeRequired)
             {
                 rtb.Invoke((MethodInvoker)(() => rtb.Clear()));
@@ -581,7 +330,6 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            //var hubProxy = (IHubContext<PluginHub>)GlobalHost.DependencyResolver.GetService(typeof(IHubContext<PluginHub>)); //.GetService<IHubContext<PluginHub>>();
             var hubProxy = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
             if (hubProxy == null)
             {
@@ -590,108 +338,18 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             hubProxy.Clients.All.Send(Guid.NewGuid(), @"Can you hear me?");
-            //GetNotesData data = new GetNotesData();
-            //data.BookID = 5;
-            //data.ChapterID = 1;
-            //data.IncludeResolved = true;
-            //var dataPayload = JsonConvert.SerializeObject(data, Formatting.None,
-            //    new JsonSerializerSettings()
-            //    {
-            //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //    });
-
-            //_ = GetNoteList("", dataPayload);
+        
         }
 
         private void btnVersificationTest_Click(object sender, EventArgs e)
         {
             var v = _project.Versification;
 
-            IVersification versification;
-            IVerseRef verseRef;
-
-
             var newVerse = v.CreateReference(19, 20, 1);
 
             newVerse = v.ChangeVersification(newVerse);
         }
 
-
-        //private async Task SetUSFMScripture()
-        //{
-        //    IEnumerable<IUSFMToken> tokens = m_project.GetUSFMTokens(m_verseRef.BookNum, m_verseRef.ChapterNum);
-        //    List<string> lines = new List<string>();
-        //    foreach (var token in tokens)
-        //    {
-        //        if (token is IUSFMMarkerToken marker)
-        //        {
-        //            switch (marker.Type)
-        //            {
-        //                case MarkerType.Verse:
-        //                    lines.Add($"v {marker.Data}");
-        //                    break;
-        //                case MarkerType.Book:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Chapter:
-        //                    lines.Add($"{marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Character:
-        //                    lines.Add($"Marker Character: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Milestone:
-        //                    lines.Add($"Marker Milestone: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.MilestoneEnd:
-        //                    lines.Add($"Marker MilestoneEnd: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.End:
-        //                    lines.Add($"Marker End: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Note:
-        //                    lines.Add($"Marker Note: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Unknown:
-        //                    lines.Add($"Marker Unknown: {marker.Marker} {marker.Data}");
-        //                    break;
-        //                case MarkerType.Paragraph:
-        //                    lines.Add($" {marker.Marker} {marker.Data}");
-        //                    break;
-        //            }
-        //        }
-        //        else if (token is IUSFMTextToken textToken)
-        //        {
-        //            if (lines.Count > 0)
-        //            {
-        //                lines[lines.Count - 1] += (textToken.Text);
-        //            }
-        //            else
-        //            {
-        //                lines.Add(textToken.Text);
-        //            }
-        //        }
-        //        else if (token is IUSFMAttributeToken)
-        //        {
-        //            lines.Add("Attribute Token: " + token.ToString());
-        //        }
-        //        else
-        //        {
-        //            lines.Add("Unexpected token type: " + token.ToString());
-        //        }
-        //    }
-
-        //    var dataPayload = JsonSerializer.Serialize(lines);
-
-        //    PipeMessage msgOut = new PipeMessage
-        //    {
-        //        Action = ActionType.SetUSX,
-        //        Text = $"{m_verseRef.BookNum}",
-        //        Payload = dataPayload
-        //    };
-
-        //    await WriteMessageToPipeAsync(msgOut).ConfigureAwait(false);
-        //    AppendText(MsgColor.Orange, $"OUTBOUND -> SetUSX: {m_verseRef.BookNum}");
-        //}
 
         #endregion
     }
