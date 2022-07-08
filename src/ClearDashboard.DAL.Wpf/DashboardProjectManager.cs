@@ -24,6 +24,8 @@ public record LogActivityMessage(string message);
 
 public class DashboardProjectManager : ProjectManager
 {
+    #nullable disable
+
     private IEventAggregator EventAggregator { get; set; }
 
     protected HubConnection HubConnection { get; private set; }
@@ -64,7 +66,7 @@ public class DashboardProjectManager : ProjectManager
 
             }
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             Logger.LogError("Paratext is not running, cannot connect to SignalR.");
             await Task.Delay(10);

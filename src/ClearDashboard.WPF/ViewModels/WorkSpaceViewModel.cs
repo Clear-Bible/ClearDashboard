@@ -34,6 +34,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
+
+        #nullable disable
         private readonly IEventAggregator EventAggregator;
 
         #region Member Variables
@@ -897,7 +899,7 @@ namespace ClearDashboard.Wpf.ViewModels
             return (ToolViewModel)Items[0];
         }
 
-        private (object? vm, string? title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
+        private (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
         {
             // window has been closed so we need to reopen it
             switch (windowTag)
@@ -1008,7 +1010,7 @@ namespace ClearDashboard.Wpf.ViewModels
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
-        private void BcvChanged(object? sender, PropertyChangedEventArgs e)
+        private void BcvChanged(object sender, PropertyChangedEventArgs e)
         {
             if (ParatextSync && InComingChangesStarted == false)
             {

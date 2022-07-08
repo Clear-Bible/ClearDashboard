@@ -9,6 +9,7 @@ namespace ClearDashboard.DAL.Tests;
 
 public class GetCurrentParatextUserQueryHandlerTests : TestBase
 {
+    #nullable disable
     public GetCurrentParatextUserQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
         //no-op

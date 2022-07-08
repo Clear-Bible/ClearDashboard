@@ -18,6 +18,7 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
 {
     public class AlignmentDbContextRequestHandlerTests : TestBase
     {
+        #nullable disable
         public AlignmentDbContextRequestHandlerTests(ITestOutputHelper output) : base(output)
         {
         }

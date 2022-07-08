@@ -17,6 +17,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetLexiconQueryHandler : XmlReaderRequestHandler<GetLexiconQuery,
         RequestResult<Lexicon>, Lexicon>
     {
+        #nullable disable
+
         private Lexicon _biblicalTermsList = new();
         private readonly ProjectManager _projectManager;
 

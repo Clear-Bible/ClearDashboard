@@ -5,12 +5,12 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
         public List<Content> Contents { get; set; } = new List<Content>();
        
-        public Author Author { get; set; }
+        public Author? Author { get; set; }
 
         public DateTimeOffset Created { get; set; }
 
-        public SelectedLanguage SelectedLanguage { get; set; }
+        public SelectedLanguage? SelectedLanguage { get; set; }
 
-        public AssignedUser AssignedUser { get; set; }
+        public AssignedUser? AssignedUser { get; set; }
     }
 }

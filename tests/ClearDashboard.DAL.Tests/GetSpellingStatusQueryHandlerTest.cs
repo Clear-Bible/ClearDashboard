@@ -18,6 +18,7 @@ namespace ClearDashboard.DAL.Tests
 
     public class GetSpellingStatusQueryHandler : TestBase
     {
+        #nullable disable
         public GetSpellingStatusQueryHandler([NotNull] ITestOutputHelper output) : base(output)
         {
             // no-op

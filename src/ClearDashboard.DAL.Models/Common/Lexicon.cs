@@ -7,10 +7,10 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [XmlAttribute(AttributeName = "Form")]
-        public string Form { get; set; }
+        public string? Form { get; set; }
 
         [XmlAttribute(AttributeName = "Homograph")]
         public int Homograph { get; set; }
@@ -21,10 +21,10 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlAttribute(AttributeName = "Language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 
     [XmlRoot(ElementName = "Sense")]
@@ -32,13 +32,13 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Gloss")]
-        public Gloss Gloss { get; set; }
+        public Gloss? Gloss { get; set; }
 
         [XmlAttribute(AttributeName = "Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [XmlText]
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 
     [XmlRoot(ElementName = "Entry")]
@@ -46,7 +46,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Sense")]
-        public List<Sense> Sense { get; set; }
+        public List<Sense>? Sense { get; set; }
     }
 
     [XmlRoot(ElementName = "item")]
@@ -54,10 +54,10 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Lexeme")]
-        public Lexeme Lexeme { get; set; }
+        public Lexeme? Lexeme { get; set; }
 
         [XmlElement(ElementName = "Entry")]
-        public Entry Entry { get; set; }
+        public Entry? Entry { get; set; }
     }
 
     [XmlRoot(ElementName = "Entries")]
@@ -65,7 +65,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "item")]
-        public List<Item> Item { get; set; }
+        public List<Item>? Item { get; set; }
     }
 
     [XmlRoot(ElementName = "Lexicon")]
@@ -73,18 +73,18 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
 
         [XmlElement(ElementName = "Language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [XmlElement(ElementName = "FontName")]
-        public string FontName { get; set; }
+        public string? FontName { get; set; }
 
         [XmlElement(ElementName = "FontSize")]
         public int FontSize { get; set; }
 
         [XmlElement(ElementName = "Analyses")]
-        public object Analyses { get; set; }
+        public object? Analyses { get; set; }
 
         [XmlElement(ElementName = "Entries")]
-        public Entries Entries { get; set; }
+        public Entries? Entries { get; set; }
     }
 }

@@ -16,8 +16,8 @@ using Unidecode.NET;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
- 
-        public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<RequestResult<List<MarbleResource>>>;
+    #nullable disable
+    public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<RequestResult<List<MarbleResource>>>;
 
         public class GetWhatIsThisWordByBCVHandler : XmlReaderRequestHandler<GetWhatIsThisWordByBcvQuery,
             RequestResult<List<MarbleResource>>, List<MarbleResource>>
@@ -196,7 +196,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                                     //if (iSenseID - 1 == ilinkSenseID)
                                     //{
-                                    XmlNodeList nodeEntry = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]");
+                                    XmlNodeList nodeEntry = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"]?.Value}]")!;
                                     MarbleResource marbleResource = new MarbleResource();
 
                                     if (nodeEntry.Count > 0)

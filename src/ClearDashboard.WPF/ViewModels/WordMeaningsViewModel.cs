@@ -421,7 +421,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     _currentBcv.SetVerseFromId(message.Verse);
                     BookNum = _currentBcv.BookNum;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
                     BookNum = 01;

@@ -10,6 +10,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class GetManuscriptVerseByIdQueryHandlerTests : TestBase
     {
+        #nullable disable
         public GetManuscriptVerseByIdQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
             //no-op

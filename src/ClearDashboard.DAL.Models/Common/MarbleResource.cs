@@ -6,7 +6,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int Id { get; set; }
         public int TotalSenses { get; set; }
         public string Word { get; set; } = string.Empty;
-        public string WordTransliterated { get; set; }
+        public string? WordTransliterated { get; set; }
         public string SenseId { get; set; } = string.Empty;
         public string Domains { get; set; } = string.Empty;
         public string SubDomains { get; set; } = string.Empty;

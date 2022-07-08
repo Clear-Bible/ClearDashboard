@@ -114,7 +114,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
                 }
 
-                string targetChapterNum = verse.ChapterStr;
+                string? targetChapterNum = verse.ChapterStr;
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
                 if (chapters.Count > 0)
@@ -180,7 +180,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 return string.Empty;
             }
 
-            var path = Path.Combine(projectPath, project.Name, bookFile.FilePath);
+            var path = Path.Combine(projectPath, project.Name!, bookFile.FilePath!);
             return path;
         }
 

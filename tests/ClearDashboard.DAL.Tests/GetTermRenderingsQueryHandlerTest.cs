@@ -14,6 +14,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class GetTermRenderingsQueryHandlerTest : TestBase
     {
+        #nullable disable
 
 
         public GetTermRenderingsQueryHandlerTest([NotNull] ITestOutputHelper output) : base(output)

@@ -10,8 +10,8 @@ namespace ClearDashboard.DataAccessLayer.Models
     public struct Enum<T> : IComparable<Enum<T>> where T : class, IEnumType
     {
         public static readonly Enum<T> Null = new Enum<T>((string)null);
-        private static string defaultValue_;
-        private static HashSet<string> knownValues_;
+        private static string? defaultValue_;
+        private static HashSet<string>? knownValues_;
         private string _internalValue;
 
         public Enum(string value) => this._internalValue = value;

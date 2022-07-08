@@ -11,16 +11,18 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
     public class GetCurrentParatextUserQueryHandlerTests : TestBase
     {
+        #nullable disable
+
         public GetCurrentParatextUserQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public async Task GetCurrentParatextUserTest()
+        public async Task GetCurrentParatextUserTestAsync()
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
                 var client = CreateHttpClient();
 
                 var response = await client.PostAsJsonAsync<GetCurrentParatextUserQuery>("user", new GetCurrentParatextUserQuery());
@@ -36,7 +38,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
 
         }
