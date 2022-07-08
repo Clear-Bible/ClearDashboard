@@ -595,8 +595,4 @@
 	  </Page>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Views\Workflows\NewProject\" />
-	</ItemGroup>
-
 </Project>
