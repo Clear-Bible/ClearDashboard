@@ -86,6 +86,9 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var result = await Mediator.Send(command);
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.NotNull(result.Data);
 
             // Validate correctness of data
             Assert.Equal(1, ProjectDbContext.Corpa.Count());
