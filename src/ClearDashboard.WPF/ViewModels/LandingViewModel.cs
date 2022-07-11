@@ -93,7 +93,11 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService.NavigateToViewModel<SettingsViewModel>();
 
         }
-
+        public void AlignmentSample()
+        {
+            Logger.LogInformation("AlignmentSample called.");
+            NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
+        }
         #endregion // Methods
     }
 }
