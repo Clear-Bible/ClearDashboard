@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,9 +12,9 @@ namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
 {
     public record GetManuscriptVerseByIdQuery(string VerseId) : IRequest<RequestResult<List<CoupleOfStrings>>>;
 
-    public class GetManuscriptVerseByIdHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
+    public class GetManuscriptVerseByIdQueryHandler : SqliteDatabaseRequestHandler<GetManuscriptVerseByIdQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
-        public GetManuscriptVerseByIdHandler(ILogger<GetManuscriptVerseByIdHandler> logger) : base(logger)
+        public GetManuscriptVerseByIdQueryHandler(ILogger<GetManuscriptVerseByIdQueryHandler> logger) : base(logger)
         {
             //no-op
         }
@@ -28,7 +29,7 @@ namespace ClearDashboard.DataAccessLayer.Features.ManuscriptVerses
             {
                 try
                 {
-                    queryResult.Data = ExecuteSqliteCommandAndProcessData($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..5]}%' ORDER BY verseID");
+                    queryResult.Data = ExecuteSqliteCommandAndProcessData($"SELECT verseID, verseText FROM verses WHERE verseID LIKE '{request.VerseId[..6]}%' ORDER BY verseID");
                 }
                 catch (Exception ex)
                 {

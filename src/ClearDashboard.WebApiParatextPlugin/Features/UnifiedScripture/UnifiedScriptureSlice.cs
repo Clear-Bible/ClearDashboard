@@ -24,10 +24,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 
         public Task<RequestResult<string>> Handle(GetUsxQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<string>(string.Empty);
+            var queryResult = new RequestResult<string>();
             try
             {
-                queryResult.Data = _project.GetUSX(_verseRef.BookNum);
+                queryResult.Data = _project.GetUSX(request.BookNumber ?? _verseRef.BookNum); ;
+                queryResult.Success = true;
             }
             catch (Exception ex)
             {
@@ -54,10 +55,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UnifiedScripture
 
         public Task<RequestResult<string>> Handle(GetUsfmQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<string>(string.Empty);
+            var queryResult = new RequestResult<string>();
             try
             {
-                queryResult.Data = _project.GetUSFM(_verseRef.BookNum);
+                queryResult.Data = _project.GetUSFM(request.BookNumber ?? _verseRef.BookNum);
+                queryResult.Success = true;
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Panes
@@ -48,6 +49,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
         #endregion //Constructor
 
         #region Methods
+
 
         #endregion // Methods
 

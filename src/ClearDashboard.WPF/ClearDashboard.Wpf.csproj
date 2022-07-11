@@ -26,6 +26,13 @@
 		<None Remove="HelpFiles\NewProjectHelp_us.md" />
 		<None Remove="Resources\BiblicalTerms_logo_32.png" />
 		<None Remove="Resources\ClearDashboard_logo_128.png" />
+		<None Remove="Resources\GalSILB.ttf" />
+		<None Remove="Resources\GalSILR.ttf" />
+		<None Remove="Resources\GentiumPlus-Bold.ttf" />
+		<None Remove="Resources\GentiumPlus-BoldItalic.ttf" />
+		<None Remove="Resources\GentiumPlus-Italic.ttf" />
+		<None Remove="Resources\GentiumPlus-Regular.ttf" />
+		<None Remove="Resources\KadmosU.ttf" />
 		<None Remove="Resources\Layouts\Dashboard.Layout.config" />
 		<None Remove="Resources\logos_icon.png" />
 		<None Remove="Resources\NewProject.png" />
@@ -34,6 +41,8 @@
 		<None Remove="Resources\Notes.png" />
 		<None Remove="Resources\Paratext_Connected32.png" />
 		<None Remove="Resources\Paratext_Disconnected32.png" />
+		<None Remove="Resources\SBL_grk.ttf" />
+		<None Remove="Resources\SBL_Hbrw.ttf" />
 		<None Remove="Resources\Settings.png" />
 		<None Remove="Resources\settings_logo_128.png" />
 		<None Remove="Resources\settings_logo_96.png" />
@@ -48,6 +57,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro" Version="4.0.210" />
 		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.1" />
@@ -55,13 +65,13 @@
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
-		<PackageReference Include="MdXaml" Version="1.13.0" />
+		<PackageReference Include="MdXaml" Version="1.15.0" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1185.39" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1264.42" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Serilog" Version="2.11.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
@@ -69,6 +79,7 @@
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SIL.Machine" Version="2.5.11" />
+		<PackageReference Include="SIL.Scripture" Version="9.0.0" />
 		<PackageReference Include="TinyMapper" Version="3.0.3" />
 	</ItemGroup>
 
@@ -81,6 +92,27 @@
 		</Resource>
 		<Resource Include="Resources\ClearDashboard_logo_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GalSILB.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GalSILR.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Bold.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-BoldItalic.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Italic.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Regular.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\KadmosU.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="Resources\logos_icon.png">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -97,6 +129,8 @@
 		<Resource Include="Resources\Paratext_Disconnected32.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
+		<Resource Include="Resources\SBL_grk.ttf" />
+		<Resource Include="Resources\SBL_Hbrw.ttf" />
 		<Resource Include="Resources\settings_logo_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
@@ -111,18 +145,6 @@
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
 		<ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="Caliburn.Micro.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Caliburn.Micro.Platform.Core">
-	    <HintPath>..\Reference Assemblies\Caliburn.Micro.Platform.Core.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -568,9 +590,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Page Update="Views\Workflows\NewProject\CreateNewProjectWorkflowShellView.xaml">
+	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\Workflows\NewProject\" />
 	</ItemGroup>
 
 </Project>

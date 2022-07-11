@@ -17,9 +17,9 @@ namespace ClearDashboard.DAL.ViewModels
 
         }
 
-        public int? Id
+        public Guid Id
         {
-            get => Entity?.Id;
+            get => Entity.Id;
             set
             {
                 if (Entity != null)
@@ -30,7 +30,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public string? VerseNumber
+        public int? VerseNumber
         {
             get => Entity?.VerseNumber;
             set
@@ -43,20 +43,20 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public string? SilBookNumber
+        public int? BookNumber
         {
-            get => Entity?.SilBookNumber;
+            get => Entity?.BookNumber;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.SilBookNumber = value;
+                    Entity.BookNumber = value;
                 }
-                NotifyOfPropertyChange(nameof(SilBookNumber));
+                NotifyOfPropertyChange(nameof(BookNumber));
             }
         }
 
-        public string? ChapterNumber
+        public int? ChapterNumber
         {
             get => Entity?.ChapterNumber;
             set
@@ -82,20 +82,9 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTime? LastChanged
-        {
-            get => Entity?.LastChanged;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.LastChanged = value;
-                }
-                NotifyOfPropertyChange(nameof(LastChanged));
-            }
-        }
+     
 
-        public int? CorpusId
+        public Guid? CorpusId
         {
             get => Entity?.CorpusId;
             set
@@ -121,59 +110,79 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public virtual Token? Token
-        {
-            get => Entity?.Token;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.Token = value;
-                }
-                NotifyOfPropertyChange(nameof(Token));
-            }
-        }
+        //TODO:  Update to reflect new schema changes
 
-        public virtual ICollection<ParallelVersesLink> ParallelVersesLinks
-        {
-            get => Entity?.ParallelVersesLinks;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.ParallelVersesLinks = value;
-                }
-                NotifyOfPropertyChange(nameof(ParallelVersesLinks));
-            }
-        }
+        //public virtual Token? Token
+        //{
+        //    get => Entity?.Token;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.Token = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(Token));
+        //    }
+        //}
+
+        //public virtual ICollection<ParallelVersesLink> ParallelVersesLinks
+        //{
+        //    get => Entity?.ParallelVersesLinks;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.ParallelVersesLinks = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(ParallelVersesLinks));
+        //    }
+        //}
 
 
-        
+        // TODO:  This needs to be removed and the code that refers to it refacotred.
         public string? VerseBBCCCVVV
         {
-            get => Entity?.VerseBBCCCVVV;
+            get => Entity?.VerseBBBCCCVVV;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.VerseBBCCCVVV = value;
+                    Entity.VerseBBBCCCVVV = value;
                 }
                 NotifyOfPropertyChange(nameof(VerseBBCCCVVV));
             }
         }
 
+        //public string? BookStr
+        //{
+        //    get => Entity?.BookStr;
+        //    set
+        //    {
+        //        if (Entity != null)
+        //        {
+        //            Entity.BookStr = value;
+        //        }
+        //        NotifyOfPropertyChange(nameof(BookStr));
+        //    }
+        //}
 
 
-        public string? BookStr => Entity?.BookStr;
+        public string? BookStr => Entity?.SilBookAbbreviation;
 
         public string? ChapterStr => Entity?.ChapterStr;
 
-        public string? VerseStr => Entity?.VerseStr;
+        public string? VerseString => Entity?.VerseString;
 
         public string VerseId { get; set; } = string.Empty;
 
         public bool Found { get; set; }
 
         public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+
+        public VerseViewModel SetVerseFromBBBCCCVVV(string bbbcccvvv)
+        {
+            Entity.SetVerseFromBBBCCCVVV(bbbcccvvv);
+            return this;
+        }
     }
 }

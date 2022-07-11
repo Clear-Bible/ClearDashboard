@@ -60,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                                 //lines.Add($"{token.Marker} {token.Text}");
                                 break;
                             case UsfmTokenType.Chapter:
-                                //lines.Add($@"\c {token.Text}");
+                                lines.Add($@"\c {token.Text}");
                                 break;
                             case UsfmTokenType.Character:
                                 //lines.Add($"Marker Character: {token.Marker} {token.Text}");
@@ -114,7 +114,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
                 }
 
-                string targetChapterNum = verse.ChapterStr;
+                string? targetChapterNum = verse.ChapterStr;
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
                 if (chapters.Count > 0)
@@ -151,16 +151,36 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         private static string GetUsfmBookPath(ParatextProject project, Verse verse, string projectPath)
         {
-            var book = verse.BookStr;
             // get the file name for that book
-            var bookFile = project.BooksList.Where(b => b.BookId == verse.BookStr).FirstOrDefault();
+            string prefix = "";
+            foreach (var bookName in project.BookNames)
+            {
+                var data = bookName.Value;
+                if (data.BBB.PadLeft(3, '0') == verse.SilBookAbbreviation)
+                {
+                    prefix = data.fileID;
+                    break;
+                }
+            }
+
+            // find the right USFM file based upon the goofy book ID prefix that USFM has
+            // https://ubsicap.github.io/usfm/identification/books.html
+            var bookFile = project.BooksList.Where(b =>
+            {
+                if (b.FilePath != "")
+                {
+                    FileInfo fi = new FileInfo(b.FilePath);
+                    return fi.Name.StartsWith(prefix);
+                }
+                return false;
+            }).FirstOrDefault();
 
             if (bookFile is null)
             {
                 return string.Empty;
             }
 
-            var path = Path.Combine(projectPath, project.Name, bookFile.FilePath);
+            var path = Path.Combine(projectPath, project.Name!, bookFile.FilePath!);
             return path;
         }
 

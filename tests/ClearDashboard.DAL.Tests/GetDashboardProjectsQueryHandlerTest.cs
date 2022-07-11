@@ -1,11 +1,10 @@
 ﻿
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -15,12 +15,14 @@ using System.Windows.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
-
+using ClearDashboard.Wpf.Interfaces;
 using Action = System.Action;
+using Helpers;
+using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class WordMeaningsViewModel : ToolViewModel
+    public class WordMeaningsViewModel : ToolViewModel, IWorkspace, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
@@ -175,6 +177,17 @@ namespace ClearDashboard.Wpf.ViewModels
             GoBackCommand = new RelayCommand(RefreshWords);
         }
 
+        protected override async void OnViewReady(object view)
+        {
+            if (ProjectManager.CurrentVerse != String.Empty)
+            {
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                await ReloadWordMeanings().ConfigureAwait(false);
+            }
+
+            base.OnViewReady(view);
+        }
+
         #endregion //Constructor
 
         #region Methods
@@ -237,7 +250,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
                 LaunchWebPage.TryOpenUrl(greekPrefix + marbleResource.LogosRef);
             }
-
         }
 
 
@@ -373,6 +385,68 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => WordData);
 
             ButtonVisibility = Visibility.Hidden;
+        }
+
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse == incomingVerse)
+            {
+                return;
+            }
+
+            _currentVerse = incomingVerse;
+            CurrentBcv.SetVerseFromId(_currentVerse);
+            if (_currentVerse.EndsWith("000"))
+            {
+                // a zero based verse
+                TargetInlinesText.Clear();
+                NotifyOfPropertyChange(() => TargetInlinesText);
+                TargetHTML = "";
+                WordData.Clear();
+                NotifyOfPropertyChange(() => WordData);
+            }
+            else
+            {
+                // a normal verse
+                var verse = new Verse
+                {
+                    VerseBBBCCCVVV = _currentVerse
+                };
+
+                int BookNum;
+                try
+                {
+                    _currentBcv.SetVerseFromId(message.Verse);
+                    BookNum = _currentBcv.BookNum;
+                }
+                catch (Exception)
+                {
+                    Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
+                    BookNum = 01;
+                }
+                
+
+                if (BookNum < 40)
+                {
+                    _isOT = true;
+                }
+                else
+                {
+                    _isOT = false;
+                }
+
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
+
+                _ = ReloadWordMeanings();
+            }
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<WordMeaningsView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods

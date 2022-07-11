@@ -9,8 +9,9 @@ using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Workflows.NewProject;
+using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -70,6 +71,18 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
+        public void NewProject()
+        {
+            Logger.LogInformation("NewProject called.");
+            //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
+        }
+
+        public void AlignmentSample()
+        {
+            Logger.LogInformation("AlignmentSample called.");
+            //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
+        }
+
         public void Workspace(DashboardProject project)
         {
             if (project is null)
@@ -78,6 +91,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // TODO HACK TO READ IN PROJECT AS OBJECT
+            string sTempFile = @"c:\temp\project.json";
+            if (File.Exists(sTempFile) == false)
+            {
+                MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
+            }
+
             var jsonString =File.ReadAllText(@"c:\temp\project.json");
             project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
 

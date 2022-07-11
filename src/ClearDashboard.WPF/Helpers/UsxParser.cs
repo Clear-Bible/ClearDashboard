@@ -157,7 +157,7 @@ namespace ClearDashboard.Wpf.Helpers
                             matchResult = matchResult.NextMatch();
                         }
                     }
-                    catch (ArgumentException ex)
+                    catch (ArgumentException)
                     {
                         // Syntax error in the regular expression
                     }

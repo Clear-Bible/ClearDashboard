@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-
+﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public class DashboardProject 
     {
-        public string DirectoryPath { get; set; }
+        public string? DirectoryPath { get; set; }
        //TODO:  fix this to use the correct CLear.Engine directory path
        // public string ClearEngineDirectoryPath => Path.Combine(TargetProject.DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
@@ -22,88 +17,72 @@ namespace ClearDashboard.DataAccessLayer.Models
             ProjectPath = (string.IsNullOrEmpty(FullFilePath) ? string.Empty : new FileInfo(FullFilePath).DirectoryName) ?? string.Empty;
 
             BaseTargetName = TargetProject?.Name;
-            BaseTargetFullName = TargetProject?.FullName;
+            BaseTargetFullName = TargetProject?.LongName;
         }
 
        
-        public string ProjectName { get; set; }
+        public string? ProjectName { get; set; }
 
         public string ProjectPath { get; set; } 
 
 
 
-        public DateTime LastChanged { get; set; }
+        public DateTimeOffset Modified { get; set; }
        
-        public string FullFilePath { get; set; }
+        public string? FullFilePath { get; set; }
 
 
         /// <summary>
         /// the target project
         /// </summary>
         
-        public ParatextProject TargetProject { get; set; }
-       
+        public ParatextProject? TargetProject { get; set; }
 
-        
-        public ParatextProject InterlinearizerProject { get; set; }
-
+        public ParatextProject? InterlinearizerProject { get; set; }
 
         /// <summary>
         /// list of LWC projects
         /// </summary>
-
         public List<ParatextProject> LanguageOfWiderCommunicationProjects { get; set; } = new List<ParatextProject>();
 
         /// <summary>
         /// List of Back Translation projects
         /// </summary>
-      
         public List<ParatextProject> BackTranslationProjects { get; set; }
 
         /// <summary>
         /// The Paratext UserID of the creator
         /// </summary>
-        public string ParatextUser { get; set; }
+        public string? ParatextUser { get; set; }
 
         /// <summary>
         /// Date that this project was created
         /// </summary>
-        
-        public DateTime CreationDate { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-      
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-       
-        public string BaseTargetName { get; set; }
+        public string? BaseTargetName { get; set; }
 
         /// <summary>
         /// The Dashboard Project FullName
         /// </summary>
-       
-        public string BaseTargetFullName { get; set; }
-
+        public string? BaseTargetFullName { get; set; }
         
-        public string ShortFilePath { get; set; }
-   
+        public string? ShortFilePath { get; set; }
 
-        
-        public string JsonProjectName { get; set; }
+        public string? JsonProjectName { get; set; }
 
-      
         public int UserValidationLevel { get; set; }
-
 
         public int LastContentWordLevel { get; set; }
 
-
-      
         public bool ValidateProjectData()
         {
             if (ProjectName is "" or null)

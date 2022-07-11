@@ -5,11 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Data;
+using SIL.Providers;
 
 namespace ClearDashboard.DAL.Tests
 {
-    public class ProjectNameDbContextFactoryTests: TestBase
+    public class ProjectNameDbContextFactoryTests : TestBase
     {
+        #nullable disable
         public ProjectNameDbContextFactoryTests(ITestOutputHelper output) : base(output)
         {
             
@@ -18,24 +20,26 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task TestProjectDatabaseCreation()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
-            const string projectName = "Project6";
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            var projectName = Guid.NewGuid().ToString();
+            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
 
             Assert.NotNull(factory);
 
-            var context1 = await factory?.Get(projectName)!;
+            var assets = await factory?.Get(projectName)!;
+            var context = assets.ProjectDbContext;
 
-            Assert.NotNull(context1);
-            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-            var databaseName = $"{projectDirectory}\\{projectName}.sqlite";
-            Assert.True(File.Exists(databaseName));
-
-
-            // NB:  My 'Documents' folder is set with in my OneDrive folder 
-            // which places a lock on the file so I'm not able to 
-            // programmatically delete the database file.
-            //File.Delete(databaseName);
-            //Directory.Delete(projectDirectory, true);
+            try
+            {
+                Assert.NotNull(assets);
+                var databaseName = $"{projectDirectory}\\{projectName}.sqlite";
+                Assert.True(File.Exists(databaseName));
+            }
+            finally
+            {
+                await context.Database.EnsureDeletedAsync();
+                Directory.Delete(projectDirectory, true);
+            }
         }
     }
 }

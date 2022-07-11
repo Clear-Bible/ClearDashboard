@@ -9,18 +9,17 @@
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-		<PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+		<PackageReference Include="System.Data.SQLite" Version="1.0.116" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />
 	  <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
 	</ItemGroup>
 </Project>

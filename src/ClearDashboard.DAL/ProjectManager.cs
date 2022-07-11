@@ -11,59 +11,75 @@ using Nelibur.ObjectMapper;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
+
+//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Wpf")]
+//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Tests")]
 
 namespace ClearDashboard.DataAccessLayer
 {
+   
 
-    public abstract class ProjectManager : IDisposable
+    public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
+        #nullable disable
         #region Properties
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
-     
-   
+
+    
+
+        public User CurrentUser { get; set; }
+
+        public ProjectInfo CurrentProject { get; set; }
+        public ParatextProject CurrentParatextProject { get; set; }
+        public bool HasCurrentProject => CurrentProject != null;
+        public bool HasCurrentParatextProject => CurrentParatextProject != null;
+
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-        public Project ParatextProject { get; protected set; }
+       
 
         public bool ParatextVisible = false;
-        #endregion
-
-        #region Events
-
         public string ParatextUserName { get; set; } = "";
-
         private string _currentVerse;
+
         public string CurrentVerse
         {
-            get { return _currentVerse; }
+            get => _currentVerse;
             set
             {
-                // ensure that we are getting a fully delimited BB as things like
+                // ensure that we are getting a fully delimited BBB as things like
                 // 01 through 09 often get truncated to "1" through "9" without the 
                 // leading zero
                 var s = value;
-                if (s.Length < "BBCCCVVV".Length)
+                if (s.Length < "BBBCCCVVV".Length)
                 {
-                    s = value.PadLeft("BBCCCVVV".Length, '0');
+                    s = value.PadLeft("BBBCCCVVV".Length, '0');
                 }
                 _currentVerse = s;
             }
         }
 
         #endregion
+        
+        #region Events
+
+        #endregion
 
         #region Startup
 
-        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory)
         {
             Logger = logger;
             ProjectNameDbContextFactory = projectNameDbContextFactory;
@@ -75,8 +91,6 @@ namespace ClearDashboard.DataAccessLayer
 
 
         #endregion
-
-
 
         #region Methods
 
@@ -181,15 +195,19 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task GetParatextUserName()
         {
-            // TODO this is a hack that reads the first user in the Paratext project's pm directory
-            // from the localUsers.txt file.  This needs to be changed to the user we get from 
-            // the Paratext API
-            var user = ParatextProxy.GetCurrentParatextUser();
 
-            ParatextUserName = user;
+            var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
+            if (!result.Success)
+            {
+                Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            }
 
-            await PublishParatextUser(ParatextUserName);
-          
+            if (result.Data is not null)
+            {
+                ParatextUserName = result.Data.Name;
+
+                await PublishParatextUser(ParatextUserName);
+            }
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
@@ -200,7 +218,7 @@ namespace ClearDashboard.DataAccessLayer
             CurrentDashboardProject = new DashboardProject
             {
                 ParatextUser = ParatextUserName,
-                CreationDate = DateTime.Now
+                Created = DateTime.Now
             };
 
             return CurrentDashboardProject;
@@ -239,5 +257,6 @@ namespace ClearDashboard.DataAccessLayer
         }
         #endregion
 
+        
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models
@@ -9,9 +6,9 @@ namespace ClearDashboard.DataAccessLayer.Models
     [Serializable]
     public struct Enum<T> : IComparable<Enum<T>> where T : class, IEnumType
     {
-        public static readonly Enum<T> Null = new Enum<T>((string)null);
-        private static string defaultValue_;
-        private static HashSet<string> knownValues_;
+        public static readonly Enum<T> Null;// = new Enum<T>(default(string?));
+        private static string? defaultValue_;
+        private static HashSet<string>? knownValues_;
         private string _internalValue;
 
         public Enum(string value) => this._internalValue = value;
@@ -21,8 +18,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         [XmlText]
         public string InternalValue
         {
-            get => this._internalValue ?? Enum<T>.defaultValue_;
-            set => this._internalValue = value;
+            get => _internalValue ?? Enum<T>.defaultValue_;
+            set => _internalValue = value;
         }
 
         public static bool IsKnownValue(Enum<T> val)

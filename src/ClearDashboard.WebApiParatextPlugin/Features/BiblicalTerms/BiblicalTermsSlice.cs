@@ -16,11 +16,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
 {
     public class GetBiblicalTermsByTypeQueryHandler : IRequestHandler<GetBiblicalTermsByTypeQuery, RequestResult<List<BiblicalTermsData>>>
     {
-        private readonly IWindowPluginHost _host;
+        private readonly IPluginHost _host;
         private readonly IProject _project;
         private readonly ILogger<GetBiblicalTermsByTypeQueryHandler> _logger;
 
-        public GetBiblicalTermsByTypeQueryHandler(IWindowPluginHost host, IProject project, ILogger<GetBiblicalTermsByTypeQueryHandler> logger)
+        public GetBiblicalTermsByTypeQueryHandler(IPluginHost host, IProject project, ILogger<GetBiblicalTermsByTypeQueryHandler> logger)
         {
             _host = host;
             _project = project;
@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
         }
         public Task<RequestResult<List<BiblicalTermsData>>> Handle(GetBiblicalTermsByTypeQuery request, CancellationToken cancellationToken)
         {
-
+            // in 3
             var biblicalTermList = request.BiblicalTermsType == BiblicalTermsType.All
                 ? _host.GetBiblicalTermList(BiblicalTermListType.All)
                 : _project.BiblicalTermList;

@@ -11,7 +11,7 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
-
+    #nullable disable
     public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;
@@ -135,7 +135,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                       
                         var project = GetParatextProject(sSettingFilePath, DirectoryType.Project);
                         var sBookNamesPath = Path.Combine(directory, "booknames.xml");
-                        if (project.FullName != "")
+                        if (project.LongName != "")
                         {
                             // get the books
                             project.BooksList = GetBookList(project, directory);
@@ -145,7 +145,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                             var customVRSfilePath = Path.Combine(directory, "custom.vrs");
                             if (File.Exists(customVRSfilePath))
                             {
-                                project.HasCustomVRSfile = true;
+                                project.IsCustomVersification = true;
                                 project.CustomVRSfilePath = customVRSfilePath;
                             }
 
@@ -215,31 +215,31 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return projects;
         }
 
-        public string GetCurrentParatextUser()
-        {
-            if (_paratextResourcesPath == "")
-            {
-                GetParatextProjectsPath();
-            }
+        //public string GetCurrentParatextUser()
+        //{
+        //    if (_paratextResourcesPath == "")
+        //    {
+        //        GetParatextProjectsPath();
+        //    }
 
-            var user = "USER NOT DETERMINED";
-            var userfile = Path.Combine(this._paratextProjectPath, "localUsers.txt");
-            if (File.Exists(userfile))
-            {
-                var tmp = File.ReadAllText(userfile);
-                var users = tmp.Split("\r\n");
-                if (users.Length > 0)
-                {
-                    return users[0];
-                }
-            }
-            else
-            {
-                return "USER UNKNOWN";
-            }
+        //    var user = "USER NOT DETERMINED";
+        //    var userfile = Path.Combine(this._paratextProjectPath, "localUsers.txt");
+        //    if (File.Exists(userfile))
+        //    {
+        //        var tmp = File.ReadAllText(userfile);
+        //        var users = tmp.Split("\r\n");
+        //        if (users.Length > 0)
+        //        {
+        //            return users[0];
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return "USER UNKNOWN";
+        //    }
 
-            return user;
-        }
+        //    return user;
+        //}
 
         public List<ParatextProject> GetParatextResources()
         {
@@ -313,7 +313,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     {
                         paratextProject.Name = scriptureText.Name;
                         paratextProject.Guid = scriptureText.Guid;
-                        paratextProject.FullName = scriptureText.FullName;
+                        paratextProject.LongName = scriptureText.FullName;
                         paratextProject.Copyright = scriptureText.Copyright;
                         paratextProject.BooksPresent = scriptureText.BooksPresent;
                         paratextProject.FileNameBookNameForm = scriptureText.FileNameBookNameForm;
@@ -340,7 +340,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
                         if (scriptureText.Language != null)
                         {
-                            paratextProject.Language = scriptureText.Language;
+                            paratextProject.LanguageName = scriptureText.Language;
                         }
 
                         if (scriptureText.DefaultFont != null)

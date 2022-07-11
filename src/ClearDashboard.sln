@@ -7,20 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf", "Clear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "ClearDashboard.DAL\ClearDashboard.DAL.csproj", "{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}"
 EndProject
-Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Program Files\Paratext 9\Paratext.exe", "{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}"
-	ProjectSection(DebuggerProjectSystem) = preProject
-		PortSupplier = 00000000-0000-0000-0000-000000000000
-		Executable = %ParatextInstallDir%\Paratext.exe
-		RemoteMachine = 
-		StartingDirectory = %ParatextInstallDir%
-		Environment = Default
-		LaunchingEngine = fb0d4648-f776-4980-95f8-bb7f36ebc1ee
-		UseLegacyDebugEngines = No
-		LaunchSQLEngine = No
-		AttachLaunchAction = No
-		IORedirection = Auto
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "..\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
@@ -39,7 +25,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
+		Localization-How-To.md = Localization-How-To.md
+		..\NuGet-Configuration.md = ..\NuGet-Configuration.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
+		Paratext_SendReceive_Documentation.md = Paratext_SendReceive_Documentation.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paratext Integration", "Paratext Integration", "{EB6F7E37-7473-4388-8138-97FE4C99B3D1}"
@@ -53,6 +42,30 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.ViewModels", "ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj", "{7A071F89-943B-4283-8977-080B5C3A1A1F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin.CQRS", "ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj", "{9862DCCB-E85D-4A95-86E2-311FC987E4C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WPF.Tests", "ClearDashboard.WPF.Tests\ClearDashboard.WPF.Tests.csproj", "{9C3D2FA6-92EB-4184-9429-DD5898E5B565}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Interfaces", "ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj", "{E6CC1FEA-86BC-4434-B714-33A2A1976515}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Features", "ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj", "{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ClearDashboard.Installer", "ClearDashboard.Installer\ClearDashboard.Installer.vdproj", "{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{660DA1AC-FEEF-44D4-9B1C-6DEB1E2F4067}"
+EndProject
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Program Files\Paratext 9\Paratext.exe", "{E4D5365F-CD10-4BC1-9320-56E5589F68A5}"
+	ProjectSection(DebuggerProjectSystem) = preProject
+		PortSupplier = 00000000-0000-0000-0000-000000000000
+		Executable = %ParatextInstallDir%\Paratext.exe
+		RemoteMachine = 
+		StartingDirectory = %ParatextInstallDir%
+		Environment = Default
+		LaunchingEngine = fb0d4648-f776-4980-95f8-bb7f36ebc1ee
+		UseLegacyDebugEngines = No
+		LaunchSQLEngine = No
+		AttachLaunchAction = No
+		IORedirection = Auto
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,10 +91,6 @@ Global
 		{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}.Release|x64.ActiveCfg = Release|Any CPU
 		{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}.Release|x64.Build.0 = Release|Any CPU
-		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Debug|Any CPU.ActiveCfg = Release|x64
-		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Debug|x64.ActiveCfg = Release|x64
-		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Release|Any CPU.ActiveCfg = Release|x64
-		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6}.Release|x64.ActiveCfg = Release|x64
 		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B820B3-4C53-4D40-A23B-9568828A0EC0}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -154,6 +163,38 @@ Global
 		{9862DCCB-E85D-4A95-86E2-311FC987E4C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9862DCCB-E85D-4A95-86E2-311FC987E4C6}.Release|x64.ActiveCfg = Release|Any CPU
 		{9862DCCB-E85D-4A95-86E2-311FC987E4C6}.Release|x64.Build.0 = Release|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565}.Release|x64.Build.0 = Release|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Debug|x64.Build.0 = Debug|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Release|x64.ActiveCfg = Release|Any CPU
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515}.Release|x64.Build.0 = Release|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Debug|x64.Build.0 = Debug|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}.Release|x64.Build.0 = Release|Any CPU
+		{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5}.Debug|Any CPU.ActiveCfg = Debug
+		{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5}.Debug|x64.ActiveCfg = Debug
+		{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5}.Release|Any CPU.ActiveCfg = Release
+		{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5}.Release|x64.ActiveCfg = Release
+		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Debug|Any CPU.ActiveCfg = Release|x64
+		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Debug|x64.ActiveCfg = Release|x64
+		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Release|Any CPU.ActiveCfg = Release|x64
+		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,7 +202,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{769DFDD2-30E1-4E28-904C-ECB2F2D2B284} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
 		{7CF26008-1AA9-4F86-B394-C7FDDE99E07A} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
-		{E4DB6AA4-5B8F-4A9F-8500-2760B45A2CA6} = {EB6F7E37-7473-4388-8138-97FE4C99B3D1}
 		{77B820B3-4C53-4D40-A23B-9568828A0EC0} = {2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}
 		{755B768F-DAD9-4FB9-87B1-C03CECEF3590} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{50004CCE-532A-495F-87BD-47FA7BF7E77F} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
@@ -173,6 +213,12 @@ Global
 		{CE9F875A-E21E-47CB-8F62-A1567D65BAD2} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{7A071F89-943B-4283-8977-080B5C3A1A1F} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{9862DCCB-E85D-4A95-86E2-311FC987E4C6} = {EB6F7E37-7473-4388-8138-97FE4C99B3D1}
+		{9C3D2FA6-92EB-4184-9429-DD5898E5B565} = {2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}
+		{E6CC1FEA-86BC-4434-B714-33A2A1976515} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
+		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
+		{B6C4B4D5-9485-4026-BB7D-6D19DA4AF9D5} = {660DA1AC-FEEF-44D4-9B1C-6DEB1E2F4067}
+		{660DA1AC-FEEF-44D4-9B1C-6DEB1E2F4067} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
+		{E4D5365F-CD10-4BC1-9320-56E5589F68A5} = {EB6F7E37-7473-4388-8138-97FE4C99B3D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}

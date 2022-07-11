@@ -33,7 +33,7 @@ query handler, which forwards the result to the calling process.
  #### The call form the Dashboard app
 
  ``` csharp
-      var result = await ExecuteCommand(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
+      var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(BiblicalTermsType.Project), CancellationToken.None).ConfigureAwait(false);
       if (result.Success)
       {
           biblicalTermsList = result.Data;
@@ -374,3 +374,253 @@ public class GetDashboardProjectsQueryHandler : ResourceRequestHandler<GetDashbo
         }
     }
   ```
+
+## Sending messages to Paratext Example
+
+In the Dashboard app, we need to send verse changes from Dashboard to Paratext.  While similar to the prior to the example presented prior, there are a few changes which can be highlighted in this example.
+
+1. In the Dashboard, verse changes that happen from the BookChapterVerse control are picked up by the WorkSpaceViewModel.  In this module, we pick up the verse change as a string and send it through to the Mediator.
+
+```csharp
+    // send to the event aggregator for everyone else to hear about a verse change
+    _eventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+
+    // push to Paratext
+    if (ParatextSync)
+    {
+        _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+    }
+```
+
+The first `_eventAggregator.PublishOnUIThreadAsync` sends a notice out to the rest of the application that the verse control has changed.  The `ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None)` is what starts the process of sending the command over to Paratext.  Note in this case, we wrap that request within a `Task.Run()` to have it run in the background and not await the command's response back.
+
+2. The `SetCurrentVerseCommand` is a record defined the following way:
+
+```csharp
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Verse
+{
+    public record SetCurrentVerseCommand(string Verse) : IRequest<RequestResult<string>>
+    {
+        public string Verse { get; } = Verse;
+    }
+}
+```
+
+3. Mediator sends this to the handler here:
+
+```csharp
+namespace ClearDashboard.DataAccessLayer.Features.Verse
+{
+    public class SetCurrentVerseCommandHandler : ParatextRequestHandler<SetCurrentVerseCommand, RequestResult<string>, string>
+    {
+
+        public SetCurrentVerseCommandHandler([NotNull] ILogger<SetCurrentVerseCommandHandler> logger) : base(logger)
+        {
+            //no-op
+        }
+
+        public override async Task<RequestResult<string>> Handle(SetCurrentVerseCommand request, CancellationToken cancellationToken)
+        {
+            return await ExecuteRequest("verse", request, cancellationToken, HttpVerb.PUT);
+        }
+
+    }
+}
+```
+
+The thing to notice is that on the `ExecuteRequest("verse", request, cancellationToken, HttpVerb.PUT);` we have added in the final `HttpVerb.PUT` as we are sending data.  This normally defaults to `HttpVerb.GET`.
+
+4.  The unit test for this is defined:
+
+```csharp
+namespace ClearDashboard.DAL.Tests
+{
+    public class SetCurrentVerseCommandHandlerTests : TestBase
+    {
+        public SetCurrentVerseCommandHandlerTests(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        [Fact]
+        private async Task SetCurrentVerseTest()
+        {
+            var result =
+                await ExecuteAndTestRequest<SetCurrentVerseCommand, RequestResult<string>, string>(
+                    new SetCurrentVerseCommand("042001001"));
+
+            Assert.True(result.Success);
+        }
+    }
+}
+```
+
+5. On the Paratext side, we need to handle the receiving of this message. Working in reverse, the unit test for receiving a verse change this looks like:
+
+```csharp
+namespace ClearDashboard.WebApiParatextPlugin.Tests
+{
+    public class SetCurrentVerseCommandHandlerTests : TestBase
+    {
+        public SetCurrentVerseCommandHandlerTests(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        [Fact]
+        public async Task SetCurrentVerseTest()
+        {
+            string verse = "040001001";
+            try
+            {
+                await StartParatext();
+
+                var client = CreateHttpClient();
+
+                var response =
+                    await client.PutAsJsonAsync<SetCurrentVerseCommand>("verse", new SetCurrentVerseCommand(verse));
+
+                Assert.True(response.IsSuccessStatusCode);
+                var result = await response.Content.ReadAsAsync<RequestResult<string>>();
+
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+                Assert.NotNull(result.Data);
+                Assert.Equal(result.Data, verse);
+
+                Output.WriteLine(result.Data);
+            }
+            finally
+            {
+                await StopParatext();
+            }
+        }
+    }
+}
+```
+
+Again, notice the `client.PutAsJsonAsync` Put command part of this as we are passing data.
+
+6. The record type that Paratext is receiving is found here and is defined like the DAL side:
+
+```csharp
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Verse
+{
+    public record SetCurrentVerseCommand(string Verse) : IRequest<RequestResult<string>>
+    {
+        public string Verse { get; } = Verse;
+    }
+}
+```
+
+7. The Handler for this looks like (the second [HttpPut]):
+
+```csharp
+namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
+{
+    public class VerseController : FeatureSliceController
+    {
+        public VerseController(IMediator mediator, ILogger<VerseController> logger) : base(mediator, logger)
+        {
+
+        }
+
+        [HttpPost]
+        public async Task<RequestResult<string>> GetAsync([FromBody] GetCurrentVerseQuery query)
+        {
+            return await ExecuteRequestAsync<RequestResult<string>, string>(query, CancellationToken.None);
+        }
+
+        [HttpPut]
+        public async Task<RequestResult<string>> PutAsync([FromBody] SetCurrentVerseCommand command)
+        {
+            return await ExecuteRequestAsync<RequestResult<string>, string>(command, CancellationToken.None);
+        }
+
+    }
+}
+```
+
+8. In the slice, we handle this request like:
+
+```csharp
+namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
+{
+    public class SetCurrentVerseCommandHandler : IRequestHandler<SetCurrentVerseCommand, RequestResult<string>>
+    {
+        private readonly IVerseRef _verseRef;
+        private readonly ILogger<SetCurrentVerseCommandHandler> _logger;
+        private readonly IProject _project;
+        private readonly MainWindow _mainWindow;
+
+
+        public SetCurrentVerseCommandHandler(IVerseRef verseRef, ILogger<SetCurrentVerseCommandHandler> logger,
+            IProject project, MainWindow mainWindow)
+        {
+            _mainWindow = mainWindow;
+            _project = project;
+            _verseRef = verseRef;
+            _logger = logger;
+        }
+
+        public Task<RequestResult<string>> Handle(SetCurrentVerseCommand request, CancellationToken cancellationToken)
+        {
+
+            // get back on UI thread
+            Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+            {
+                // ReSharper disable once InconsistentNaming
+                var BBBCCCVVV = request.Verse.PadLeft(9, '0');
+                int book = 1;
+                int chapter = 1;
+                int verse = 1;
+
+                try
+                {
+                    book = int.Parse(BBBCCCVVV.Substring(0, 3));
+                    chapter = int.Parse(BBBCCCVVV.Substring(3, 3));
+                    verse = int.Parse(BBBCCCVVV.Substring(6, 3));
+                    _mainWindow.SwitchVerseReference(book, chapter, verse);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message);
+                }
+            }));
+
+            return Task.FromResult(new RequestResult<string>(request.Verse));
+        }
+    }
+}
+```
+
+Notice that since we are doing a change to something that is on the UI, we have to put the result back on the UI thread.
+
+9. In the MainWindow of our plugin, we set up a new versification reference based upon our current project like:
+
+```csharp
+    public void SwitchVerseReference(int book, int chapter, int verse)
+    {
+        if (this.InvokeRequired)
+        {
+            Action safeWrite = delegate { SwitchVerseReference(book, chapter, verse); };
+            this.Invoke(safeWrite);
+        }
+        else
+        {
+            try
+            {
+                // set up a new Versification reference for this verse
+                var newVerse = _project.Versification.CreateReference(book, chapter, verse);
+                _host.SetReferenceForSyncGroup(newVerse, _host.ActiveWindowState.SyncReferenceGroup);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                AppendText(Color.Red, ex.Message);
+            }
+        }
+    }
+```
+
+This step is required to get the verse into the same versification pattern that our project resides within.  We use the `_host` object to actually change the reference using our new verse.
+
+Paratext will now update the verse internally for the current Sync Group.

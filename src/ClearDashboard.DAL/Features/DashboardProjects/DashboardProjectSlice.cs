@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
@@ -64,7 +65,7 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                         // add as ListItem
                         var dashboardProject = new DashboardProject
                         {
-                            LastChanged = fi.LastWriteTime,
+                            Modified = fi.LastWriteTime,
                             ProjectName = di.Name,
                             ShortFilePath = fi.Name,
                             FullFilePath = fi.FullName

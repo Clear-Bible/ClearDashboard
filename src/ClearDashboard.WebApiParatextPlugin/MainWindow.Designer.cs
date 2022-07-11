@@ -35,6 +35,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnTest = new System.Windows.Forms.Button();
             this.listBoxClients = new System.Windows.Forms.ListBox();
             this.btnExportUSFM = new System.Windows.Forms.Button();
+            this.btnVersificationTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // rtb
@@ -51,7 +52,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(3, 28);
+            this.lblVersion.Location = new System.Drawing.Point(3, 9);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(35, 13);
             this.lblVersion.TabIndex = 21;
@@ -66,7 +67,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnRestart.TabIndex = 22;
             this.btnRestart.Text = "Restart Pipe";
             this.btnRestart.UseVisualStyleBackColor = true;
-            this.btnRestart.Visible = false;
             this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // btnTest
@@ -101,10 +101,22 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnExportUSFM.UseVisualStyleBackColor = true;
             this.btnExportUSFM.Click += new System.EventHandler(this.btnExportUSFM_Click);
             // 
+            // btnVersificationTest
+            // 
+            this.btnVersificationTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnVersificationTest.Location = new System.Drawing.Point(6, 47);
+            this.btnVersificationTest.Name = "btnVersificationTest";
+            this.btnVersificationTest.Size = new System.Drawing.Size(124, 23);
+            this.btnVersificationTest.TabIndex = 26;
+            this.btnVersificationTest.Text = "Versification Test";
+            this.btnVersificationTest.UseVisualStyleBackColor = true;
+            this.btnVersificationTest.Click += new System.EventHandler(this.btnVersificationTest_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnVersificationTest);
             this.Controls.Add(this.btnExportUSFM);
             this.Controls.Add(this.listBoxClients);
             this.Controls.Add(this.btnTest);
@@ -125,5 +137,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.ListBox listBoxClients;
         private System.Windows.Forms.Button btnExportUSFM;
+        private System.Windows.Forms.Button btnVersificationTest;
     }
 }
