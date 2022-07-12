@@ -4,6 +4,18 @@ set /p PASSWORD=<"..\code_signing_key\password.txt"
 rem get the absolute path to the relative key file
 CALL :NORMALIZEPATH "..\code_signing_key\ClearBible.pfx"
 
+::===================Dashboard Obfuscation=====================
+"C:\Program Files (x86)\Eziriz\.NET Reactor\dotNET_Reactor.Console.exe" -licensed -file "%CURRENTPATH%\..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf.dll"
+del "%CURRENTPATH%\..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf.dll"
+
+rem code sign the installer	
+..\code_signing_key\signing_tool\signtool.exe ^
+	sign /v /f %RETVAL% ^
+	/p "%PASSWORD%" ^
+	/t http://timestamp.comodoca.com/authenticode ^
+	"%CURRENTPATH%\..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.dll"
+
+::===================Plugin Obfuscation=====================
 "C:\Program Files (x86)\Eziriz\.NET Reactor\dotNET_Reactor.Console.exe" -file "%CURRENTPATH%\..\src\ClearDashboard.WebApiParatextPlugin\bin\Debug\net48\ClearDashboard.WebApiParatextPlugin.dll"
 del "%CURRENTPATH%\..\src\ClearDashboard.WebApiParatextPlugin\bin\Debug\net48\ClearDashboard.WebApiParatextPlugin.dll"
 
