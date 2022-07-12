@@ -72,7 +72,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             ProjectDbContext.Corpa.Add(corpus);
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
 
-            await ProjectDbContext.SaveChangesAsync();
+
+            // NB:  passing in the cancellation token to SaveChangesAsync.
+            await ProjectDbContext.SaveChangesAsync(cancellationToken);
             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
 
             return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
