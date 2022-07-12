@@ -35,8 +35,7 @@ namespace ClearDashboard.DAL.Tests
                 new Token { ChapterNumber = 2, VerseNumber = 11 }
             };
 
-            var groupedTokens = list.GroupBy(token => new { token.ChapterNumber, token.VerseNumber }, token => token)
-                .Select(token => token);
+            var groupedTokens = list.GroupBy(token => new { token.ChapterNumber, token.VerseNumber }, token => token);
 
             foreach (var groupToken in groupedTokens)
             {
