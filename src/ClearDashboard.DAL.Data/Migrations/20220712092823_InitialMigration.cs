@@ -48,7 +48,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectInfo",
+                name: "Project",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -60,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectInfo", x => x.Id);
+                    table.PrimaryKey("PK_Project", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -697,7 +697,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "NoteRecipient");
 
             migrationBuilder.DropTable(
-                name: "ProjectInfo");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "RawContent");

@@ -388,7 +388,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("ParallelCorpusHistory");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -411,7 +411,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectInfo");
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>

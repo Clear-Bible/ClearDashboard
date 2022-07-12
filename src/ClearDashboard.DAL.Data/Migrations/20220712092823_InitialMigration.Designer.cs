@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220708211058_InitialMigration")]
+    [Migration("20220712092823_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -390,7 +390,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("ParallelCorpusHistory");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -413,7 +413,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectInfo");
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
