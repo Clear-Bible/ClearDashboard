@@ -6,7 +6,6 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
-using Helpers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
