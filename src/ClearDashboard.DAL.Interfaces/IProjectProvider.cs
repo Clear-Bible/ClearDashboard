@@ -6,4 +6,6 @@ public interface IProjectProvider
 {
     ProjectInfo? CurrentProject { get; set; }
     ParatextProject? CurrentParatextProject { get; set; }
+    bool HasCurrentProject { get; }
+    bool HasCurrentParatextProject { get;  }
 }

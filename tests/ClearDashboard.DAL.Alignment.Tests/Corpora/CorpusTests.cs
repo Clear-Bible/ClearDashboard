@@ -71,10 +71,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
         [Fact]
         [Trait("Category", "Example")]
-        public async void Corpus__GetAllCorpusVersionIds()
+        public async void Corpus__GetAllCorpusIds()
         {
-            var corpusVersionIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
-            Assert.True(corpusVersionIds.Count() > 0);
+            var corpusIds = await TokenizedTextCorpus.GetAllCorpusIds(Mediator);
+            Assert.True(corpusIds.Count() > 0);
         }
 
         [Fact]

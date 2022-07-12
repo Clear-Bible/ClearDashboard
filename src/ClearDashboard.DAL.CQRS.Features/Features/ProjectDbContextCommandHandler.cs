@@ -30,7 +30,12 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
     {
         try 
         {
-            ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider.CurrentProject.ProjectName).ConfigureAwait(false);
+            if (!ProjectProvider!.HasCurrentProject)
+            {
+                throw new InvalidOperationException(nameof(ProjectProvider));
+            }
+
+            ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider?.CurrentProject!.ProjectName!).ConfigureAwait(false);
             return await SaveDataAsync(request, cancellationToken);
 
         }

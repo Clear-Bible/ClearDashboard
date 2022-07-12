@@ -7,5 +7,7 @@ namespace ClearDashboard.DAL.Tests.Mocks
     {
         public ProjectInfo? CurrentProject { get; set; }
         public ParatextProject? CurrentParatextProject { get; set; }
+        public bool HasCurrentProject => CurrentProject != null;
+        public bool HasCurrentParatextProject => CurrentParatextProject != null;
     }
 }

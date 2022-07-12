@@ -123,7 +123,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                     v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
                     v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
                     new ValueComparer<Dictionary<string, object>>(
-                        (c1, c2) => c1.SequenceEqual(c2),
+                        (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
 
@@ -133,7 +133,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                     v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
                     v => JsonSerializer.Deserialize<Dictionary<string,object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
                     new ValueComparer<Dictionary<string, object>>(
-                        (c1, c2) => c1.SequenceEqual(c2),
+                        (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
               
@@ -144,7 +144,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                     v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
                     v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
                     new ValueComparer<Dictionary<string, object>>(
-                        (c1, c2) => c1.SequenceEqual(c2),
+                        (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
 
