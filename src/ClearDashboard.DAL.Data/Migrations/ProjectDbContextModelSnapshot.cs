@@ -451,9 +451,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int?>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("SilBookAbbreviation")
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("SubwordNumber")
                         .HasColumnType("INTEGER");
 

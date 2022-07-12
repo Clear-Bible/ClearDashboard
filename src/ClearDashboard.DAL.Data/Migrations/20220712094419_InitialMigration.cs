@@ -243,7 +243,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    SilBookAbbreviation = table.Column<string>(type: "TEXT", nullable: true),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true)
                 },
