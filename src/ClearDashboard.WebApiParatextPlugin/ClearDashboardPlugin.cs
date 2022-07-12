@@ -6,7 +6,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 {
     public class ClearDashboardWebApiPlugin : IParatextWindowPlugin
     {
-        public const string PluginName = "ClearDashboard WebAPI Plugin";
+        public const string PluginName = "ClearDashboard Plugin";
         public string Name => PluginName;
         public Version Version => new Version(0, 0, 0, 2);
         public string VersionString => Version.ToString();

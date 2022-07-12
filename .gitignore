@@ -350,3 +350,6 @@ MigrationBackup/
 .ionide/
 /src/ClearDashboard.ParatextPlugin/MainWindow.resx.bak
 /src/nuget.config
+code_signing_key/password.txt
+installer/Output/ClearDashboard.exe
+installer/Output/ClearDashboardPlugin.exe

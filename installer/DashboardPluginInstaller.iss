@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=Output
-OutputBaseFilename=myPluginSetup
+OutputBaseFilename=ClearDashboardPlugin
 SetupIconFile=..\src\ClearDashboard.WPF\Assets\ClearDashboard_logo.ico
 Compression=lzma
 SolidCompression=yes
