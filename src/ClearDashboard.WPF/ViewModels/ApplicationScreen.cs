@@ -30,9 +30,16 @@ namespace ClearDashboard.Wpf.ViewModels
             set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => Set(ref _title, value);
+        }
+
         public ApplicationScreen()
         {
-
+            
         }
 
         public ApplicationScreen(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)

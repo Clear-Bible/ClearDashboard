@@ -14,6 +14,8 @@ namespace ViewModels.Workflows.NewProject
 {
     public class NewProjectWorkflowStepViewModel : WorkflowStepViewModel
     {
+
+
         private DashboardProject _dashboardProject;
 
         #region Constructors

@@ -3,22 +3,15 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using Microsoft.Extensions.Logging;
 
 namespace Converters
 {
-    public class ProjectFileNameValidationRule : ValidationRule
+
+    public static class ProjectNameValidator
     {
-        public int Min { get; set; }
-        public int Max { get; set; }
-
-        public ProjectFileNameValidationRule()
+        public static ValidationResult ValidProjectName(string projectName)
         {
-        }
-
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            string projectName = (string)value;
-
             bool foundMatch = false;
             try
             {
@@ -48,6 +41,17 @@ namespace Converters
             }
 
             return ValidationResult.ValidResult;
+        }
+    }
+    public class ProjectFileNameValidationRule : ValidationRule
+    {
+        public int Min { get; set; }
+        public int Max { get; set; }
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            var projectName = (string)value;
+            return ProjectNameValidator.ValidProjectName(projectName);
         }
     }
 }
