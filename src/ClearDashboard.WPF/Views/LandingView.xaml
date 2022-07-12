@@ -92,7 +92,7 @@
                 </Button.Tag>
             </Button>
 
-            <Button
+            <!--<Button
                 x:Name="AlignmentSample"
                 Margin="10,0,10,0"
                 Content="{helpers:Loc AlignmentSample}"
@@ -110,7 +110,7 @@
                 <Button.Tag>
                     <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
                 </Button.Tag>
-            </Button>
+            </Button>-->
 
             <!--<Button
                 x:Name="Workspace"
