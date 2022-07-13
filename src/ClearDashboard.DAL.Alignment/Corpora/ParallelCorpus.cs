@@ -48,7 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         internal ParallelCorpus(
             TokenizedTextCorpus sourceTokenizedTextCorpus,
             TokenizedTextCorpus targetTokenizedTextCorpus,
-            IEnumerable<EngineVerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> engineVerseMappings,
             ParallelCorpusId parallelCorpusId)
             : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, engineVerseMappings.ToList())
         {

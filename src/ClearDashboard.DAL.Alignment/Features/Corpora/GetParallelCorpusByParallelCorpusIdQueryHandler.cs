@@ -17,11 +17,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         GetParallelCorpusByParallelCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<EngineVerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> engineVerseMappings,
             ParallelCorpusId parallelCorpusId)>,
         (TokenizedCorpusId sourceTokenizedCorpusId,
         TokenizedCorpusId targetTokenizedCorpusId,
-        IEnumerable<EngineVerseMapping> engineVerseMappings,
+        IEnumerable<VerseMapping> engineVerseMappings,
         ParallelCorpusId parallelCorpusId)>
     {
 
@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<EngineVerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> engineVerseMappings,
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request,
             CancellationToken cancellationToken)
         {
@@ -52,15 +52,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                 TokenizedCorpusId targetTokenizedCorpusId,
-                IEnumerable<EngineVerseMapping> engineVerseMappings,
+                IEnumerable<VerseMapping> engineVerseMappings,
                 ParallelCorpusId parallelCorpusId)>
             (result: (new TokenizedCorpusId(new Guid()),
                     new TokenizedCorpusId(new Guid()),
-                    new List<EngineVerseMapping>()
+                    new List<VerseMapping>()
                     {
-                        new EngineVerseMapping(
-                            new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 1) },
-                            new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 1) })
+                        //new VerseMapping(
+                        //    new List<VerseId>() { new EngineVerseId("MAT", 1, 1) },
+                        //    new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 1) })
                     },
                     new ParallelCorpusId(new Guid()))
             );

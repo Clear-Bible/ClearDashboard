@@ -12,7 +12,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             IMediator mediator)
         {
             var command = new UpdateParallelCorpusCommand(
-                parallelCorpus.EngineVerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.EngineVerseMappingList", value: "null"), 
+                parallelCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.EngineVerseMappingList", value: "null"), 
                 parallelCorpus.ParallelCorpusId);
 
             var result = await mediator.Send(command);
@@ -63,7 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(
                 ((TokenizedTextCorpus) engineParallelTextCorpus.SourceCorpus).TokenizedCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedCorpusId,
-                engineParallelTextCorpus.EngineVerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.EngineVerseMappingList", value: "null")));
+                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.EngineVerseMappingList", value: "null")));
 
             if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
             {

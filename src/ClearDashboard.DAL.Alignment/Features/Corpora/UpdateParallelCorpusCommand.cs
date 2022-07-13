@@ -5,6 +5,6 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record UpdateParallelCorpusCommand(
-        IEnumerable<EngineVerseMapping> engineVerseMappingList,
+        IEnumerable<VerseMapping> engineVerseMappingList,
         ParallelCorpusId parallelCorpusId) : ProjectRequestCommand<ParallelCorpus>;
 }
