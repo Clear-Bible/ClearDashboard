@@ -84,8 +84,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Fea
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{63480243-167B-4D95-87C2-D61487568598}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Clear.Dashboard.Installer", "..\installer\Clear.Dashboard.Installer\Clear.Dashboard.Installer.vdproj", "{D4696553-CCB4-4E59-B621-968FC4D2B684}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,14 +264,6 @@ Global
 		{FAD09611-EF52-4823-85D4-920346C6965B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAD09611-EF52-4823-85D4-920346C6965B}.Release|x64.ActiveCfg = Release|Any CPU
 		{FAD09611-EF52-4823-85D4-920346C6965B}.Release|x64.Build.0 = Release|Any CPU
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Debug|Any CPU.ActiveCfg = Debug
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Debug|Any CPU.Build.0 = Debug
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Debug|x64.ActiveCfg = Debug
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Debug|x64.Build.0 = Debug
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Release|Any CPU.ActiveCfg = Release
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Release|Any CPU.Build.0 = Release
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Release|x64.ActiveCfg = Release
-		{D4696553-CCB4-4E59-B621-968FC4D2B684}.Release|x64.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -304,7 +294,6 @@ Global
 		{895F49F8-0B16-40FE-9076-8EF458FDDE77} = {EC4ED039-A101-4D97-8C1D-5BCFAC343F7E}
 		{FAD09611-EF52-4823-85D4-920346C6965B} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{63480243-167B-4D95-87C2-D61487568598} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
-		{D4696553-CCB4-4E59-B621-968FC4D2B684} = {63480243-167B-4D95-87C2-D61487568598}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}
