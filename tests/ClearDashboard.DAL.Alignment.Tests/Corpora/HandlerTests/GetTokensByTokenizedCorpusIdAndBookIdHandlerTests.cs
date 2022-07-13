@@ -40,12 +40,19 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.True(result.Success);
             Assert.NotNull(result.Data);
+
+            // Validate Matt 1:1
             Assert.Equal("1", result.Data.First().chapter);
             Assert.Equal("1", result.Data.First().verse);
             Assert.Equal(9, result.Data.First().tokens.Count());
             Assert.Equal("Βίβλος", result.Data.First().tokens.First().Text);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
                 String.Join(" ", result.Data.First().tokens.Select(t => t.Text)));
+
+            // Validate Matt 5:9
+            var matthewCh5V9 = result.Data.Single(datum => datum.chapter == "5" && datum.verse == "9");
+            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.tokens.Select(t => t.Text));
+            Assert.Equal("μακάριοι οἱ εἰρηνοποιοί , ὅτι αὐτοὶ υἱοὶ Θεοῦ κληθήσονται .", matthewCh5V9Text);
         }
         finally
         {
