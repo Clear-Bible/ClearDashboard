@@ -3,9 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
-using Microsoft.Extensions.Logging;
 
-namespace Converters
+namespace ClearDashboard.Wpf.Converters
 {
 
     public static class ProjectNameValidator

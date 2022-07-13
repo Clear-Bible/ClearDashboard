@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace Converters
+namespace ClearDashboard.Wpf.Converters
 {
     public class BoolToBrushConverter : IValueConverter
     {

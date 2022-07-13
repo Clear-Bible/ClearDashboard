@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace Converters
+namespace ClearDashboard.Wpf.Converters
 {
     internal class BiblicalTermsListViewWidthConvertor : MarkupExtension, IValueConverter
     {
