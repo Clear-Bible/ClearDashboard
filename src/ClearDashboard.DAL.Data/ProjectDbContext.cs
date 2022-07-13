@@ -51,7 +51,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
-        public virtual DbSet<ProjectInfo> ProjectInfos => Set<ProjectInfo>();
+        public virtual DbSet<Project> Projects => Set<Project>();
         //public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();

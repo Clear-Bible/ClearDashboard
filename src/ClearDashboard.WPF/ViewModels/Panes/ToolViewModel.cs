@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
-using Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Panes

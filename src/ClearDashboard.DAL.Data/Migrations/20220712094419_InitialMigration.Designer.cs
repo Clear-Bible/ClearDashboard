@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220708005459_InitialMigration")]
+    [Migration("20220712094419_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -390,7 +390,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("ParallelCorpusHistory");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ProjectInfo", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -413,7 +413,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectInfo");
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
@@ -452,9 +452,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<int?>("ChapterNumber")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("SilBookAbbreviation")
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("SubwordNumber")
                         .HasColumnType("INTEGER");
@@ -613,10 +610,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("ParallelCorpusHistoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ParallelCorpusId")
+                    b.Property<Guid?>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ParallelCorpusVersionId")
+                    b.Property<Guid?>("ParallelCorpusVersionId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -936,9 +933,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("VerseMappings")
-                        .HasForeignKey("ParallelCorpusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParallelCorpusId");
 
                     b.Navigation("ParallelCorpus");
                 });

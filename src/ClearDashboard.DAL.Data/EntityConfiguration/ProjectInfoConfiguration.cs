@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
 
-public class ProjectInfoConfiguration : IEntityTypeConfiguration<ProjectInfo>
+public class ProjectInfoConfiguration : IEntityTypeConfiguration<Project>
 {
-    public void Configure(EntityTypeBuilder<ProjectInfo> entityBuilder)
+    public void Configure(EntityTypeBuilder<Project> entityBuilder)
     {
         entityBuilder.HasKey(e => e.Id);
 
