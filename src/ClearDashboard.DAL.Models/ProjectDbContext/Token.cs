@@ -13,10 +13,10 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
  
-        public int? BookNumber { get; set; }
-        public int? ChapterNumber { get; set; }
-        public int? VerseNumber { get; set; }
-        public int? WordNumber { get; set; }
+        public int BookNumber { get; set; }
+        public int ChapterNumber { get; set; }
+        public int VerseNumber { get; set; }
+        public int WordNumber { get; set; }
         public int? SubwordNumber { get; set; }
 
         public Guid TokenizationId { get; set; }

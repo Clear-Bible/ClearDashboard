@@ -53,11 +53,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             gt.ToList().Select(
                                 t => new ClearBible.Engine.Corpora.Token(
                                     new TokenId(
-                                        t.BookNumber ?? 1,
-                                        t.ChapterNumber ?? 1,
-                                        t.VerseNumber ?? 1,
-                                        t.WordNumber ?? 1,
-                                        t.SubwordNumber ?? 1),
+                                        t.BookNumber,
+                                        t.ChapterNumber,
+                                        t.VerseNumber,
+                                        t.WordNumber,
+                                        t.SubwordNumber),
                                     t.Text)),
                             false)
                     )

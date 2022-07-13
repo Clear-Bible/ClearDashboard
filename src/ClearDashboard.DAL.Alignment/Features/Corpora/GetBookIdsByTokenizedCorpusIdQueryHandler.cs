@@ -36,33 +36,35 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
-        var tokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(i => i.Id == request.TokenizedCorpusId.Id);
+        var tokenizedCorpus =
+            ProjectDbContext.TokenizedCorpora.FirstOrDefault(i => i.Id == request.TokenizedCorpusId.Id);
 
         if (tokenizedCorpus == null)
         {
             return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                (
-                    // NB:  better to return default(T) which is the default on the constructor.
-                    //result: (new List<string>(), new CorpusId(new Guid())),
-                    success: false,
-                    message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
-                );
+            (
+                // NB:  better to return default(T) which is the default on the constructor.
+                //result: (new List<string>(), new CorpusId(new Guid())),
+                success: false,
+                message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
+            );
         }
 
         var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
-        var bookIdsToAbbreviations = FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
+        var bookIdsToAbbreviations =
+            FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
 
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
         {
-            if (!bookIdsToAbbreviations.TryGetValue(bookNumber ?? -1, out string? bookAbbreviation))
+            if (!bookIdsToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
                 return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                    (
-                        result: (new List<string>(), new CorpusId(new Guid())),
-                        success: false,
-                        message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
-                    );
+                (
+                    result: (new List<string>(), new CorpusId(new Guid())),
+                    success: false,
+                    message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
+                );
             }
 
             bookAbbreviations.Add(bookAbbreviation);
@@ -71,5 +73,4 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
             ((bookAbbreviations, new CorpusId(tokenizedCorpus.Corpus.Id)));
     }
-
 }
