@@ -10,9 +10,9 @@ using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
-using ViewModels.Popups;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -85,7 +85,7 @@ namespace ClearDashboard.Wpf.ViewModels
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.NoResize;
 
-            var newProjectPopupViewModel = IoC.Get<NewProjectPopupViewModel>();
+            var newProjectPopupViewModel = IoC.Get<NewProjectDialogViewModel>();
             var created = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
 
             //if (created.HasValue && created.Value)

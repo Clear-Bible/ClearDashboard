@@ -1,14 +1,16 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
-using FluentValidation;
-using System;
+﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Helpers;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
 
-namespace Validators
+namespace ClearDashboard.Wpf.Validators
 {
     public class ProjectValidator : AbstractValidator<Project>
     {
-        public ProjectValidator()
+        public ProjectValidator(ILogger<ProjectValidator> logger)
         {
             RuleFor(x => x.ProjectName).Custom((projectName, context) => {
 
@@ -38,7 +40,8 @@ namespace Validators
 
                 if (Directory.Exists(projectDirectory))
                 {
-                    context.AddFailure($"The project directory {projectDirectory} already exists.");
+                    var test = LocalizationStrings.Get("Landing_newproject", logger);
+                    context.AddFailure($"A project with the name '{projectName}' already exists. Please choose a unique name.");
                 }
             });
 

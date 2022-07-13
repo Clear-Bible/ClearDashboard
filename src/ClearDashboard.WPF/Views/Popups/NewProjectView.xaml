@@ -1,4 +1,4 @@
-﻿<popups:CustomWindow x:Class="Views.Popups.NewProjectPopupView"
+﻿<UserControl x:Class="ClearDashboard.Wpf.Views.Popups.NewProjectView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,25 +7,18 @@
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              Background="{DynamicResource MaterialDesignPaper}"
              Foreground="{DynamicResource PrimaryHueDarkBrush}"
-             Height="300"
-             Width="600"
-             ShowInTaskbar="False"
-             FlowDirection="{Binding WindowFlowDirection}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
-             TextElement.FontSize="13"
-             TextElement.FontWeight="Regular"
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextOptions.TextFormattingMode="Ideal"
-             TextOptions.TextRenderingMode="Auto"
-             WindowStartupLocation="CenterOwner"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
-             xmlns:popups="clr-namespace:ViewModels.Popups"
+             xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="200"
-             Title="{Binding Title}"
-             >
+             d:DesignHeight="150" d:DesignWidth="200">
+    <UserControl.Resources>
 
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="Margin" Value="0,8"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    </UserControl.Resources>
     
 
     <Grid>
@@ -43,13 +36,15 @@
             Orientation="Vertical">
            <TextBox
                 x:Name="ProjectName"
-                Height="32"
                 FontSize="20"
                 MinWidth="400"
                 materialDesign:HintAssist.Hint="Please enter a name for your project."
-                materialDesign:HintAssist.HelperTextFontSize="12"
-                materialDesign:HintAssist.IsFloating="False"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                materialDesign:HintAssist.FloatingScale="0.50"
+                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                VerticalAlignment="Center">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -71,9 +66,9 @@
             
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button x:Name="Create" Content="Create" Margin="5 5 5 5" />
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
+            <Button x:Name="Create" Content="CREATE" Margin="5 5 5 5" />
             <Button x:Name="Cancel" Content="CANCEL" Margin="5 5 5 5" />
         </StackPanel>
     </Grid>
-</popups:CustomWindow>
+</UserControl>

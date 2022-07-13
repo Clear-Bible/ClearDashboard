@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Workflows
 {
-    public abstract  class WorkflowShellViewModel : Conductor<WorkflowStepViewModel>.Collection.OneActive
+    public abstract  class WorkflowShellViewModel : Conductor<IWorkflowStepViewModel>.Collection.OneActive
     {
         protected ILogger<WorkflowShellViewModel> Logger { get; set; }
         protected IServiceProvider ServiceProvider { get; set; }
-        public List<WorkflowStepViewModel> Steps { get; set; }
+        public List<IWorkflowStepViewModel> Steps { get; set; }
         protected IEventAggregator EventAggregator { get; set; }
         protected INavigationService NavigationService { get; set; }
         protected DashboardProjectManager ProjectManager { get; set; }
@@ -45,7 +45,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             Logger = logger;
             NavigationService = navigationService;
             EventAggregator = eventAggregator;
-            Steps = new List<WorkflowStepViewModel>();
+            Steps = new List<IWorkflowStepViewModel>();
 
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
@@ -63,19 +63,19 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        public override Task ActivateItemAsync(WorkflowStepViewModel item, CancellationToken cancellationToken = new CancellationToken())
+        public override Task ActivateItemAsync(IWorkflowStepViewModel item, CancellationToken cancellationToken = new CancellationToken())
         {
             // TODO:  do whatever needs to be done when a new workflow step has been activated.
             return base.ActivateItemAsync(item, cancellationToken);
         }
 
-        protected WorkflowStepViewModel CurrentStep { get; set; }
-        protected override WorkflowStepViewModel DetermineNextItemToActivate(IList<WorkflowStepViewModel> list, int lastIndex)
+        protected IWorkflowStepViewModel CurrentStep { get; set; }
+        protected override IWorkflowStepViewModel DetermineNextItemToActivate(IList<IWorkflowStepViewModel> list, int lastIndex)
         {
             var current = list[lastIndex];
 
             var currentIndex = Steps.IndexOf(current);
-            WorkflowStepViewModel next;
+            IWorkflowStepViewModel next;
             switch (current.Direction)
             {
                 case Direction.Forwards:
