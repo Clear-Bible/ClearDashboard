@@ -92,7 +92,7 @@
                 </Button.Tag>
             </Button>
 
-            <Button
+            <!--<Button
                 x:Name="AlignmentSample"
                 Margin="10,0,10,0"
                 Content="{helpers:Loc AlignmentSample}"
@@ -102,7 +102,7 @@
                 </Button.Tag>
             </Button>
 
-            <!--<Button
+            <Button
                 x:Name="NewProject"
                 Margin="10,0,10,0"
                 Content="{helpers:Loc Landing_newproject}"

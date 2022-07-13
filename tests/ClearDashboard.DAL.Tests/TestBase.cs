@@ -170,14 +170,14 @@ namespace ClearDashboard.DAL.Tests
             return testUser;
         }
 
-        protected async Task<ProjectInfo> AddCurrentProject(ProjectDbContext context, string projectName)
+        protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName)
         {
-            var testProject = new ProjectInfo { ProjectName = projectName, IsRtl = true};
+            var testProject = new Project { ProjectName = projectName, IsRtl = true};
             var projectProvider = ServiceProvider.GetService<IProjectProvider>();
             Assert.NotNull(projectProvider);
             projectProvider!.CurrentProject = testProject;
 
-            context.ProjectInfos.Add(testProject);
+            context.Projects.Add(testProject);
             await context.SaveChangesAsync();
             return testProject;
         }

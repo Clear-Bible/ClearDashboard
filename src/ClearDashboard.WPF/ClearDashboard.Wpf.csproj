@@ -64,6 +64,7 @@
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
 		<PackageReference Include="MdXaml" Version="1.15.0" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
@@ -593,10 +594,6 @@
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\Workflows\NewProject\" />
 	</ItemGroup>
 
 </Project>

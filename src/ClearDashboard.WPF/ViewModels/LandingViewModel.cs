@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -11,6 +12,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
+using ViewModels.Popups;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -19,7 +21,7 @@ namespace ClearDashboard.Wpf.ViewModels
     {
         #region   Member Variables
         
-     
+        protected IWindowManager _windowManager;
         
         #endregion
 
@@ -42,10 +44,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(DashboardProjectManager projectManager, INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
+        public LandingViewModel(IWindowManager windowManager, DashboardProjectManager projectManager, INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             Logger.LogInformation("LandingViewModel constructor called.");
+            _windowManager = windowManager;
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -71,10 +74,29 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
-        public void NewProject()
+        public async void NewProject()
         {
             Logger.LogInformation("NewProject called.");
-            //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
+            
+            dynamic settings = new ExpandoObject();
+            settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
+            settings.ShowInTaskbar = false;
+            settings.Title = "Create New Project";
+            settings.WindowState = WindowState.Normal;
+            settings.ResizeMode = ResizeMode.NoResize;
+
+            var newProjectPopupViewModel = IoC.Get<NewProjectPopupViewModel>();
+            var created = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
+
+            //if (created.HasValue && created.Value)
+            if (created)
+            {
+                var projectName = newProjectPopupViewModel.ProjectName;
+
+                await ProjectManager.CreateNewProject(projectName);
+                //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
+            }
+
         }
 
         public void AlignmentSample()
