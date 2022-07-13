@@ -85,65 +85,67 @@ namespace ClearDashboard.Wpf.UserControls
 
             StringCollection SettingsStringCollection = new StringCollection();
             SettingsStringCollection = Properties.Settings.Default.TimeZones;
-
-            foreach (var group in SettingsStringCollection)
-            {
-                //menuItems = new ObservableCollection<MenuItemNest>
-                var groupArr = group.Split(";");
-                ObservableCollection<MenuItemNest> groupMenuItemNest = new();
-
-                foreach (var individual in groupArr)
+            if (SettingsStringCollection != null) {
+                foreach (var group in SettingsStringCollection)
                 {
-                    var individualArr = individual.Split(",");
-                    if (individualArr[2] != "self")
+                    //menuItems = new ObservableCollection<MenuItemNest>
+                    var groupArr = group.Split(";");
+                    ObservableCollection<MenuItemNest> groupMenuItemNest = new();
+
+                    foreach (var individual in groupArr)
                     {
-                        //cycle through each time zone and check what matches
-                        foreach (var timezone in _timezones)
+                        var individualArr = individual.Split(",");
+                        if (individualArr[2] != "self")
                         {
-                            if (timezone.DisplayName == individualArr[2])
+                            //cycle through each time zone and check what matches
+                            foreach (var timezone in _timezones)
                             {
-                                groupMenuItemNest.Add(new MenuItemNest
+                                if (timezone.DisplayName == individualArr[2])
                                 {
-                                    ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                                    CheckBoxIsChecked = individualArr[0],
-                                    ClockCheckBoxVisibility = Visibility.Visible,
-                                    TextBoxText = individualArr[1],
-                                    ClockTextBoxVisibility = Visibility.Visible,
-                                    NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
-                                    NameTimeVisibility = Visibility.Visible,
-                                    ClockTextBlockText = individualArr[2],
-                                    DeleteButtonVisibility = Visibility.Visible,
-                                    GroupName = individualArr[3],
-                                    MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
-                                    TimeZoneInfo = timezone,
-                                    MenuItems = _timeZoneMenuItemNest,
-                                    utcStringList = utcComboList,
-                                    UtcComboVisibility = Visibility.Visible,
-                                });
+                                    groupMenuItemNest.Add(new MenuItemNest
+                                    {
+                                        ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                                        CheckBoxIsChecked = individualArr[0],
+                                        ClockCheckBoxVisibility = Visibility.Visible,
+                                        TextBoxText = individualArr[1],
+                                        ClockTextBoxVisibility = Visibility.Visible,
+                                        NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
+                                        NameTimeVisibility = Visibility.Visible,
+                                        ClockTextBlockText = individualArr[2],
+                                        DeleteButtonVisibility = Visibility.Visible,
+                                        GroupName = individualArr[3],
+                                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                                        TimeZoneInfo = timezone,
+                                        MenuItems = _timeZoneMenuItemNest,
+                                        utcStringList = utcComboList,
+                                        UtcComboVisibility = Visibility.Visible,
+                                    });
+                                }
                             }
                         }
                     }
+
+                    var selfArr = groupArr[0].Split(",");
+                    MenuItemNest groupMenuItem = new MenuItemNest
+                    {
+                        ClockAddTimeZoneVisibility = Visibility.Visible,
+                        CheckBoxIsChecked = selfArr[0],
+                        ClockCheckBoxVisibility = Visibility.Visible,
+                        TextBoxText = selfArr[1],
+                        ClockTextBoxVisibility = Visibility.Visible,
+                        NameTimeVisibility = Visibility.Collapsed,
+                        ClockTextBlockText = selfArr[2],
+                        ClockTextBlockVisibility = Visibility.Collapsed,
+                        DeleteButtonVisibility = Visibility.Visible,
+                        GroupName = selfArr[3],
+                        MenuLevel = MenuItemNest.ClockMenuLevel.Group,
+                        MenuItems = groupMenuItemNest,
+                        UtcComboVisibility = Visibility.Collapsed,
+                    };
+
+                    SettingsMenuItemNest.Add(groupMenuItem);
                 }
 
-                var selfArr = groupArr[0].Split(",");
-                MenuItemNest groupMenuItem = new MenuItemNest
-                {
-                    ClockAddTimeZoneVisibility = Visibility.Visible,
-                    CheckBoxIsChecked = selfArr[0],
-                    ClockCheckBoxVisibility = Visibility.Visible,
-                    TextBoxText = selfArr[1],
-                    ClockTextBoxVisibility = Visibility.Visible,
-                    NameTimeVisibility = Visibility.Collapsed,
-                    ClockTextBlockText = selfArr[2],
-                    ClockTextBlockVisibility = Visibility.Collapsed,
-                    DeleteButtonVisibility = Visibility.Visible,
-                    GroupName = selfArr[3],
-                    MenuLevel = MenuItemNest.ClockMenuLevel.Group,
-                    MenuItems = groupMenuItemNest,
-                    UtcComboVisibility = Visibility.Collapsed,
-                };
-
-                SettingsMenuItemNest.Add(groupMenuItem);
             }
 
             SettingsMenuItemNest.Add(new MenuItemNest
