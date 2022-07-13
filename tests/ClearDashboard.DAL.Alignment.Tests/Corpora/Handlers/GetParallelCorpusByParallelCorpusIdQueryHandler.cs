@@ -14,12 +14,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
         GetParallelCorpusByParallelCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<VerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>>
     {
         public Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<VerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>>
             Handle(GetParallelCorpusByParallelCorpusIdQuery command, CancellationToken cancellationToken)
         {
@@ -30,15 +30,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             return Task.FromResult(
                 new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
-                    IEnumerable<VerseMapping> engineVerseMappings,
+                    IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
                 (result: (new TokenizedCorpusId(new Guid()),
                     new TokenizedCorpusId(new Guid()), 
                     new List<VerseMapping>() { 
-                        //new VerseMapping(
-                        //    new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)}, 
-                        //    new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })
-                    },
+                        new VerseMapping(
+                            new List<Verse>() {new Verse("MAT", 1, 1)}, 
+                            new List<Verse>() {new Verse("MAT", 1, 1) })},
                     new ParallelCorpusId(new Guid())),
                 success: true,
                 message: "successful result from test"));

@@ -7,5 +7,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     public record CreateParallelCorpusCommand(
         TokenizedCorpusId SourceTokenizedCorpusId,
         TokenizedCorpusId TargetTokenizedCorpusId,
-        IEnumerable<VerseMapping> engineVerseMappingList) : ProjectRequestCommand<ParallelCorpus>;
+        IEnumerable<VerseMapping> VerseMappings) : ProjectRequestCommand<ParallelCorpus>;
 }

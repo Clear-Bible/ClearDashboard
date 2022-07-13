@@ -132,11 +132,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 			Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
 			Assert.True(parallelCorpus.TargetCorpus.Count() > 0);
 
-			//parallelCorpus.VerseMappingList = parallelCorpus.VerseMappingList?.Append(
-			//	new VerseMapping(
-			//		new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 2) },
-			//		new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 2) })).ToList()
-			//		?? null; //already checked for null, this should never happen.
+			parallelCorpus.VerseMappingList = parallelCorpus.VerseMappingList?.Append(
+				new VerseMapping(
+					new List<Verse>() { new Verse("MAT", 1, 2) },
+					new List<Verse>() { new Verse("MAT", 1, 2) })).ToList()
+					?? null; //already checked for null, this should never happen.
 			
 			Assert.Equal(2, parallelCorpus.VerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 

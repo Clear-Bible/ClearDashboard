@@ -22,7 +22,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             //3. return created ParallelCorpus based on ParallelCorpusId
 
             var parallelCorpus = await ParallelCorpus.Get(new MediatorMock(), new ParallelCorpusId(new Guid()));
-            parallelCorpus.VerseMappingList = command.engineVerseMappingList.ToList();
+            parallelCorpus.VerseMappingList = command.VerseMappings.ToList();
 
             return new RequestResult<ParallelCorpus>
                     (result: parallelCorpus,

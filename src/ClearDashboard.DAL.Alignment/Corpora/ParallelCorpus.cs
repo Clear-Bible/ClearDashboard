@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 return new ParallelCorpus(
                     await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId), 
                     await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
-                    data.engineVerseMappings, 
+                    data.verseMappings, 
                     data.parallelCorpusId);
             }
             else
@@ -48,9 +48,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         internal ParallelCorpus(
             TokenizedTextCorpus sourceTokenizedTextCorpus,
             TokenizedTextCorpus targetTokenizedTextCorpus,
-            IEnumerable<VerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)
-            : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, engineVerseMappings.ToList())
+            : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, verseMappings.ToList())
         {
             ParallelCorpusId = parallelCorpusId;
         }
