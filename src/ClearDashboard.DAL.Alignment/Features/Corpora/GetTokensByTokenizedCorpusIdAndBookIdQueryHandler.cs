@@ -57,7 +57,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         t.ChapterNumber,
                                         t.VerseNumber,
                                         t.WordNumber,
-                                        t.SubwordNumber),
+                                        t.SubwordNumber ?? 0),
                                     t.Text)),
                             false)
                     )
