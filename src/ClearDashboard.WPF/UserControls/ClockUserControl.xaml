@@ -43,39 +43,26 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Background" Value="DarkGray" />
+                            <Setter Property="Background" Value="Gray" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Background" Value="DarkGray" />
+                            <Setter Property="Background" Value="Gray" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Utc">
                             <Setter Property="Width" Value="480" />
                             <Setter Property="Foreground" Value="Black" />
                         </DataTrigger>
                     </Style.Triggers>
-
-
                 </Style>
             </Menu.ItemContainerStyle>
             <Menu.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:ClockUserControl}" ItemsSource="{Binding Path=MenuItems}">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
-
                         <StackPanel
                             Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                            <Button
-                                x:Name="DeleteButton"
-                                Width="40"
-                                Height="22"
-                                Margin="2,0,0,0"
-                                VerticalAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Click="DeleteButton_OnClick"
-                                Content="-"
-                                Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}" />
                             <Button
                                 x:Name="AddButton"
                                 Width="40"
@@ -86,6 +73,16 @@
                                 Content="+"
                                 Tag="{Binding MenuItems, Mode=TwoWay}"
                                 Visibility="{Binding ClockAddTimeZoneVisibility}" />
+                            <Button
+                                x:Name="DeleteButton"
+                                Width="40"
+                                Height="22"
+                                Margin="2,0,0,0"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Click="DeleteButton_OnClick"
+                                Content="-"
+                                Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}" />
                             <TextBlock
                                 x:Name="NameTime"
                                 Width="65"
@@ -102,23 +99,31 @@
                                 VerticalContentAlignment="Center"
                                 Background="White"
                                 LostFocus="TextBox_OnLostFocus"
-                                Text="{Binding TextBoxText}"
-                                Visibility="{Binding ClockTextBoxVisibility}" 
                                 MouseEnter="TextBox_OnMouseEnter"
-                                MouseLeave="TextBox_OnMouseLeave"/>
-                            <TextBlock
-                                x:Name="Utc"
-                                Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
-                                VerticalAlignment="Center"
-                                Text="{Binding ClockTextBlockText, Mode=TwoWay}"
-                                Visibility="{Binding ClockTextBlockVisibility}" />
+                                MouseLeave="TextBox_OnMouseLeave"
+                                Text="{Binding TextBoxText}"
+                                Visibility="{Binding ClockTextBoxVisibility}" />
                             <CheckBox
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 Checked="CheckBoxChanged"
                                 IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
                                 Unchecked="CheckBoxChanged"
-                                Visibility="{Binding ClockCheckBoxVisibility}" />
+                                Visibility="{Binding ClockCheckBoxVisibility}">
+                                <CheckBox.Resources>
+                                    <!--  Unchecked state  -->
+                                    <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="DodgerBlue" />
+                                    <!--  Checked state  -->
+                                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="DeepSkyBlue" />
+                                </CheckBox.Resources>
+                            </CheckBox>
+                            <ComboBox ItemsSource="{Binding utcStringList}" SelectedIndex="0" Visibility="{Binding UtcComboVisibility}"/>
+                            <TextBlock
+                                x:Name="Utc"
+                                Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                                VerticalAlignment="Center"
+                                Text="{Binding ClockTextBlockText, Mode=TwoWay}"
+                                Visibility="{Binding ClockTextBlockVisibility}" />
                         </StackPanel>
                     </Grid>
                 </HierarchicalDataTemplate>

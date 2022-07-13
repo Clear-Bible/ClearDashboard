@@ -29,7 +29,9 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class ClockUserControl : UserControl, INotifyPropertyChanged
     {
-        System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
+        private List<string> utcComboList = new List<string> { "asd", "sdf", "dfg" };
+
+    System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
 
         private int _timeDisplayIndex = 0;
 
@@ -73,6 +75,7 @@ namespace ClearDashboard.Wpf.UserControls
                     DeleteButtonVisibility = Visibility.Collapsed,
                     TimeZoneInfo = timezone,
                     MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
+                    UtcComboVisibility = Visibility.Collapsed,
                     
                 });
             }
@@ -114,6 +117,8 @@ namespace ClearDashboard.Wpf.UserControls
                                     MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                                     TimeZoneInfo = timezone,
                                     MenuItems = _timeZoneMenuItemNest,
+                                    utcStringList = utcComboList,
+                                    UtcComboVisibility = Visibility.Visible,
                                 });
                             }
                         }
@@ -134,7 +139,8 @@ namespace ClearDashboard.Wpf.UserControls
                     DeleteButtonVisibility = Visibility.Visible,
                     GroupName = selfArr[3],
                     MenuLevel = MenuItemNest.ClockMenuLevel.Group,
-                    MenuItems = groupMenuItemNest
+                    MenuItems = groupMenuItemNest,
+                    UtcComboVisibility = Visibility.Collapsed,
                 };
 
                 SettingsMenuItemNest.Add(groupMenuItem);
@@ -150,6 +156,7 @@ namespace ClearDashboard.Wpf.UserControls
                 DeleteButtonVisibility = Visibility.Collapsed,
                 ClockTextBlockVisibility = Visibility.Collapsed,
                 MenuLevel = MenuItemNest.ClockMenuLevel.Group,
+                UtcComboVisibility = Visibility.Collapsed,
             });
 
             MenuItems = new ObservableCollection<MenuItemNest>
@@ -164,6 +171,7 @@ namespace ClearDashboard.Wpf.UserControls
                     DeleteButtonVisibility = Visibility.Collapsed,
                     MenuLevel = MenuItemNest.ClockMenuLevel.Display,
                     MenuItems = SettingsMenuItemNest,
+                    UtcComboVisibility = Visibility.Collapsed,
                 }
             };
 
@@ -221,7 +229,7 @@ namespace ClearDashboard.Wpf.UserControls
 
                         if (tempTime.Hour >= 9 && tempTime.Hour < 17)
                         {
-                            individual.Foreground = Brushes.ForestGreen;
+                            individual.Foreground = Brushes.LimeGreen;
                         }
                         else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
                         {
@@ -246,7 +254,7 @@ namespace ClearDashboard.Wpf.UserControls
                             
                             if (tempTime.Hour >= 9 && tempTime.Hour < 17)
                             {
-                                individual.Foreground = Brushes.ForestGreen;
+                                individual.Foreground = Brushes.LimeGreen;
                             }
                             else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
                             {
@@ -279,7 +287,7 @@ namespace ClearDashboard.Wpf.UserControls
                     
                     if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
                     {
-                        MenuItems[0].Foreground = Brushes.ForestGreen;
+                        MenuItems[0].Foreground = Brushes.LimeGreen;
                     }
                     else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
                     {
@@ -336,6 +344,7 @@ namespace ClearDashboard.Wpf.UserControls
                             MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                             TimeZoneInfo = TimeZoneInfo.Local,
                             MenuItems = _timeZoneMenuItemNest,
+                            UtcComboVisibility = Visibility.Visible,
                         });
                         
                         sortMenuItemsIndividual(nest);
@@ -358,6 +367,7 @@ namespace ClearDashboard.Wpf.UserControls
                         MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                         TimeZoneInfo = TimeZoneInfo.Local,
                         MenuItems = new(),
+                        UtcComboVisibility = Visibility.Collapsed,
                     });
 
                     //add an item to the group
@@ -374,7 +384,8 @@ namespace ClearDashboard.Wpf.UserControls
                         DeleteButtonVisibility = Visibility.Visible,
                         MenuItems = _timeZoneMenuItemNest,
                         MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
-                        TimeZoneInfo = TimeZoneInfo.Local
+                        TimeZoneInfo = TimeZoneInfo.Local,
+                        UtcComboVisibility = Visibility.Visible,
                     });
 
                     sortMenuItemsGroup();
@@ -599,6 +610,9 @@ namespace ClearDashboard.Wpf.UserControls
                 OnPropertyChanged();
             }
         }
+
+        public List<string> utcStringList { get; set; }
+        public Visibility UtcComboVisibility { get; set; }
 
         public ObservableCollection<MenuItemNest> MenuItems { get; set; }
 
