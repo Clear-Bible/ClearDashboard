@@ -29,41 +29,47 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         }
 
         protected override
-            Task<RequestResult
+            async Task<RequestResult
                 <IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
             GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
-            //Then iterate tokens and package them by verse then return enumerable.
+            try
+            {
+                var tokenizedCorpus = await ProjectDbContext.TokenizedCorpora.FindAsync(request.TokenizedCorpusId.Id);
 
-            var returnData = new List<(string chapter, string verse, IEnumerable<Token>, bool)>();
+                var groupedTokens = tokenizedCorpus.Tokens.GroupBy(
+                    t => new { t.ChapterNumber, t.VerseNumber },
+                    t => t
+                );
 
-            var tokenizedCorpus = ProjectDbContext.TokenizedCorpora.Find(request.TokenizedCorpusId.Id);
-
-            var groupedTokens = tokenizedCorpus.Tokens.GroupBy(
-                t => new { t.ChapterNumber, t.VerseNumber },
-                t => t
-            );
-
-            returnData.AddRange(groupedTokens.Select(gt =>
+                return new RequestResult<
+                    IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
+                >
                 (
-                    gt.Key.ChapterNumber.ToString(),
-                    gt.Key.VerseNumber.ToString(),
-                    gt.ToList().Select(
-                        t => new ClearBible.Engine.Corpora.Token(
-                            new TokenId("MAT", t.BookNumber ?? 1, t.ChapterNumber ?? 1, t.VerseNumber ?? 1,
-                                t.SubwordNumber ?? 1),
-                            t.Text)),
-                    false)
-            ));
-
-
-            return Task.FromResult(
-                new RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool
-                    isSentenceStart)>>
-                (result: returnData,
-                    success: true,
-                    message: "Nice work."));
+                    groupedTokens.Select(gt =>
+                        (
+                            gt.Key.ChapterNumber.ToString(),
+                            gt.Key.VerseNumber.ToString(),
+                            gt.ToList().Select(
+                                t => new ClearBible.Engine.Corpora.Token(
+                                    new TokenId(
+                                        t.BookNumber ?? 1,
+                                        t.ChapterNumber ?? 1,
+                                        t.VerseNumber ?? 1,
+                                        t.WordNumber ?? 1,
+                                        t.SubwordNumber ?? 1),
+                                    t.Text)),
+                            false)
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult<
+                        IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
+                    >
+                    (result: null, success: false, message: ex.Message);
+            }
         }
     }
 }

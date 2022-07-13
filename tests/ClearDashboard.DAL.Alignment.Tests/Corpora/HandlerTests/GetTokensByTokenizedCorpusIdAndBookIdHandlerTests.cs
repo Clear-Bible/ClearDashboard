@@ -44,8 +44,29 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.Equal("1", result.Data.First().verse);
             Assert.Equal(9, result.Data.First().tokens.Count());
             Assert.Equal("Βίβλος", result.Data.First().tokens.First().Text);
-            Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .", String.Join(" ", result.Data.First().tokens.Select(t => t.Text)));
+            Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
+                String.Join(" ", result.Data.First().tokens.Select(t => t.Text)));
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
 
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void GetDataAsync__HandlesError()
+    {
+        try
+        {
+            // Retrieve Tokens for a TokenizedCorpus that does not exist
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
+                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "40");
+            var result = await Mediator.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Null(result.Data);
+            Assert.Equal("Object reference not set to an instance of an object.", result.Message);
         }
         finally
         {
