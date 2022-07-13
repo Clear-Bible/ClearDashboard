@@ -7,7 +7,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
-using Helpers;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;
 using System;

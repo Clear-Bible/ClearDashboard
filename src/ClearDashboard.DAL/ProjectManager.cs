@@ -1,28 +1,21 @@
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using MediatR;
-using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.IO;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
-
-//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Wpf")]
-//[assembly: InternalsVisibleTo("ClearDashboard.DAL.Tests")]
 
 namespace ClearDashboard.DataAccessLayer
 {
-   
+
 
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
@@ -38,7 +31,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public User CurrentUser { get; set; }
 
-        public ProjectInfo CurrentProject { get; set; }
+        public Project CurrentProject { get; set; }
         public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
@@ -212,6 +205,8 @@ namespace ClearDashboard.DataAccessLayer
 
         public DashboardProject CurrentDashboardProject { get; set; }
 
+        public bool HasDashboardProject => CurrentDashboardProject != null;
+
 
         public DashboardProject CreateDashboardProject()
         {
@@ -224,11 +219,22 @@ namespace ClearDashboard.DataAccessLayer
             return CurrentDashboardProject;
         }
 
+        public async Task CreateNewProject(string projectName)
+        {
+            CreateDashboardProject();
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+
+        }
+
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
+
+
             var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
-            // Populate ProjectInfo table
+            // Populate Project table
             // Identify relationships
             //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
             //   2.Manuscript to target (use ToDb.ManuscriptParatextParallelCorporaToDb)

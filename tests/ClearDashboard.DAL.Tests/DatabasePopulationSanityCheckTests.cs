@@ -42,7 +42,7 @@ namespace ClearDashboard.DAL.Tests
         {
             var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
-            var projectName = $"Alignment{random.Next(1, 1000)}";
+            var projectName = $"Project{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
@@ -74,16 +74,16 @@ namespace ClearDashboard.DAL.Tests
                 context.Users.Add(testUser);
                 await context.SaveChangesAsync();
 
-                var projectInfo = new ProjectInfo
+                var projectInfo = new Project
                 {
                     IsRtl = true,
                     ProjectName = projectName
                 };
 
-                context.ProjectInfos.Add(projectInfo);
+                context.Projects.Add(projectInfo);
                 await context.SaveChangesAsync();
 
-                var roundTrippedProject = context.ProjectInfos.FirstOrDefault();
+                var roundTrippedProject = context.Projects.FirstOrDefault();
 
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
@@ -94,10 +94,10 @@ namespace ClearDashboard.DAL.Tests
                 //await context.AddCopyAsync(projectInfo);
                 //await context.SaveChangesAsync();
 
-                Assert.Equal(2, context.ProjectInfos.Count());
+                Assert.Equal(2, context.Projects.Count());
 
                 roundTrippedProject =
-                    context.ProjectInfos.OrderByDescending(project => project.Created).FirstOrDefault();
+                    context.Projects.OrderByDescending(project => project.Created).FirstOrDefault();
 
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);

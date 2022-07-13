@@ -9,8 +9,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
+    xmlns:createNewProject="clr-namespace:ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject"
     cm:Message.Attach="[Event SizeChanged] = [Action Page_SizeChanged($source,$eventArgs)]"
-    d:DataContext="{d:DesignInstance Type=newProject:CreateNewProjectWorkflowStepViewModel,
+    d:DataContext="{d:DesignInstance Type=createNewProject:CreateNewProjectWorkflowStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="1000"

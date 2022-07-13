@@ -4,7 +4,7 @@ namespace ClearDashboard.DAL.Interfaces;
 
 public interface IProjectProvider
 {
-    ProjectInfo? CurrentProject { get; set; }
+    Project? CurrentProject { get; set; }
     ParatextProject? CurrentParatextProject { get; set; }
     bool HasCurrentProject { get; }
     bool HasCurrentParatextProject { get;  }

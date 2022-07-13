@@ -48,7 +48,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectInfo",
+                name: "Project",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -60,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectInfo", x => x.Id);
+                    table.PrimaryKey("PK_Project", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -243,7 +243,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    SilBookAbbreviation = table.Column<string>(type: "TEXT", nullable: true),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -356,8 +355,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ParallelCorpusVersionId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ParallelCorpusVersionId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParallelCorpusId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ParallelCorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
@@ -369,8 +368,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_VerseMapping_ParallelCorpus_ParallelCorpusId",
                         column: x => x.ParallelCorpusId,
                         principalTable: "ParallelCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_VerseMapping_ParallelCorpusHistory_ParallelCorpusHistoryId",
                         column: x => x.ParallelCorpusHistoryId,
@@ -698,7 +696,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "NoteRecipient");
 
             migrationBuilder.DropTable(
-                name: "ProjectInfo");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "RawContent");

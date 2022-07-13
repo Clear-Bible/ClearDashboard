@@ -34,6 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             TokenizedCorpusId targetTokenizedCorpusId, 
             IEnumerable<VerseMapping> verseMappings, 
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
+
         {
             //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
             //1. the result of gathering all the VerseMappings to build an VerseMapping list.
@@ -41,14 +42,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var parallelCorpus =
                 await ProjectDbContext.ParallelCorpa
-                    .Include(pc=>pc.VerseMappings)
+                    .Include(pc => pc.VerseMappings)
                     .FirstOrDefaultAsync(pc => pc.Id == request.ParallelCorpusId.Id,
-                    cancellationToken);
+                        cancellationToken);
 
             //var verseMappings = parallelCorpus.VerseMappings.Select(vm=>new Verse(vm.))
 
-            return await Task.FromResult(
-                new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+
+            return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
                     IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
@@ -60,11 +61,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 new List<Verse>() {new Verse("MAT", 1, 1) })},
                         new ParallelCorpusId(new Guid())),
                     success: true,
-                    message: "successful result from test"));
+                    message: "successful result from test");
         }
-
-        
-
-        
     }
 }
