@@ -4,10 +4,12 @@ using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
 using Helpers;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class TextCollectionsViewModel : ToolViewModel
+    public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>
     {
 
         #region Member Variables
@@ -38,6 +40,8 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "TEXTCOLLECTION";
         }
 
+
+
         #endregion //Constructor
 
         #region Methods
@@ -45,6 +49,11 @@ namespace ClearDashboard.Wpf.ViewModels
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
+        }
+
+        public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion // Methods

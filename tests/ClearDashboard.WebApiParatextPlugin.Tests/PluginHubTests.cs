@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using Microsoft.AspNet.SignalR.Client;
 using Xunit;
 using Xunit.Abstractions;
@@ -49,6 +50,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 {
                     Assert.NotNull(project);
                     Output.WriteLine($"Returned project: {project.ShortName}");
+
+                });
+
+                hubProxy.On<List<TextCollection>>("textCollections", (textCollections) =>
+                {
+                    Assert.NotNull(textCollections);
+                    Output.WriteLine($"Returned textCollection: {textCollections.Count}");
 
                 });
 

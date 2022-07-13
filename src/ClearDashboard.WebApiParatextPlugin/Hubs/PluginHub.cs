@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System.Collections.Generic;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using MediatR;
@@ -7,6 +8,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.DependencyInjection;
 using System.Drawing;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -36,6 +38,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         public void SendVerse(string verse)
         {
             Clients.All.addMessage(verse);
+        }
+
+        public void SendTextCollections(List<TextCollection> textCollections)
+        {
+            Clients.All.addMessage(textCollections);
         }
 
         public void Ping(string message, int index)
