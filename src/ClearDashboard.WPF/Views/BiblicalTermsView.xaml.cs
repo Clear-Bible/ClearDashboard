@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using Helpers;
 using System;
 
 namespace ClearDashboard.Wpf.Views

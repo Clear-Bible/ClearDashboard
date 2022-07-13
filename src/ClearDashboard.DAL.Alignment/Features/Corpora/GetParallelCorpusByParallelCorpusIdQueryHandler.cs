@@ -30,10 +30,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
         }
 
-        protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
-            TokenizedCorpusId targetTokenizedCorpusId, 
-            IEnumerable<EngineVerseMapping> engineVerseMappings, 
-            ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+            TokenizedCorpusId targetTokenizedCorpusId,
+            IEnumerable<EngineVerseMapping> engineVerseMappings,
+            ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request,
+            CancellationToken cancellationToken)
         {
             //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
             //1. the result of gathering all the VerseMappings to build an EngineVerseMapping list.
@@ -41,30 +42,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var parallelCorpus =
                 await ProjectDbContext.ParallelCorpa
-                    .Include(pc=>pc.VerseMappings)
+                    .Include(pc => pc.VerseMappings)
                     .FirstOrDefaultAsync(pc => pc.Id == request.ParallelCorpusId.Id,
-                    cancellationToken);
+                        cancellationToken);
 
             //var engineVerseMappings = parallelCorpus.VerseMappings.Select(vm=>new EngineVerseId(vm.))
 
-            return await Task.FromResult(
-                new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                    TokenizedCorpusId targetTokenizedCorpusId,
-                    IEnumerable<EngineVerseMapping> engineVerseMappings,
-                    ParallelCorpusId parallelCorpusId)>
-                (result: (new TokenizedCorpusId(new Guid()),
-                        new TokenizedCorpusId(new Guid()),
-                        new List<EngineVerseMapping>() {
-                            new EngineVerseMapping(
-                                new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1)},
-                                new List<EngineVerseId>() {new EngineVerseId("MAT", 1, 1) })},
-                        new ParallelCorpusId(new Guid())),
-                    success: true,
-                    message: "successful result from test"));
+            // TODO: implement correctly.  Not sure how to create EngineVerseMapping from the latest schema.
+
+            return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+                TokenizedCorpusId targetTokenizedCorpusId,
+                IEnumerable<EngineVerseMapping> engineVerseMappings,
+                ParallelCorpusId parallelCorpusId)>
+            (result: (new TokenizedCorpusId(new Guid()),
+                    new TokenizedCorpusId(new Guid()),
+                    new List<EngineVerseMapping>()
+                    {
+                        new EngineVerseMapping(
+                            new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 1) },
+                            new List<EngineVerseId>() { new EngineVerseId("MAT", 1, 1) })
+                    },
+                    new ParallelCorpusId(new Guid()))
+            );
         }
-
-        
-
-        
     }
 }

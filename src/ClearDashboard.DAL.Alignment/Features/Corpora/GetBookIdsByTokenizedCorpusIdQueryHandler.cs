@@ -42,7 +42,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
                 (
-                    result: (new List<string>(), new CorpusId(new Guid())),
+                    // NB:  better to return default(T) which is the default on the constructor.
+                    //result: (new List<string>(), new CorpusId(new Guid())),
                     success: false,
                     message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
                 );

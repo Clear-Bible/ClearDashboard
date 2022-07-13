@@ -23,7 +23,6 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Views;
-using Helpers;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels

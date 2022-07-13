@@ -112,7 +112,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
 
                         //predict syntax tree aligner alignments then display
                         // (Legacy): Alignments as ordinal positions in versesmap - ONLY FOR COMPARISON
-                        output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeWordAlignmentModel.GetBestAlignmentAlignedWordPairs(engineParallelTextRow).Select(a => a.ToString()))}");
+                        // NOTE: uncommenting the next line doubles time for alignment to run.
+                        //output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeWordAlignmentModel.GetBestAlignmentAlignedWordPairs(engineParallelTextRow).Select(a => a.ToString()))}");
                             // ALIGNMENTS as source token to target token pairs
                         var syntaxTreeAlignments = translationCommandable.PredictParallelMappedVersesAlignedTokenIdPairs(syntaxTreeWordAlignmentModel, engineParallelTextRow);
                         output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeAlignments.Select(t => $"{t.sourceToken.TokenId}->{t.targetToken.TokenId}"))}");

@@ -10,7 +10,7 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using Helpers;
+using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
