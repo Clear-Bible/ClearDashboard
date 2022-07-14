@@ -38,6 +38,18 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows
             }
         }
 
+        private bool enableControls_;
+        public bool EnableControls
+        {
+            get => enableControls_;
+            set
+            {
+                Logger.LogInformation($"WorkflowShellViewModel - Setting EnableControls to {value} at {DateTime.Now:HH:mm:ss.fff}");
+                Set(ref enableControls_, value);
+            }
+        }
+
+
         protected WorkflowShellViewModel(DashboardProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             ProjectManager = projectManager;

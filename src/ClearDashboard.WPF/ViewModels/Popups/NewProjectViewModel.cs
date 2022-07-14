@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows;
@@ -35,7 +37,7 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
         }
 
         private string _projectName;
-        private bool _canCreate;
+       
         private Project _project;
 
 
@@ -54,33 +56,24 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
                 ProjectManager.CurrentDashboardProject.ProjectName = value;
                 Project.ProjectName = value;
                 ValidationResult = Validator.Validate(Project);
-                CanCreate = ValidationResult.IsValid;
+                CanMoveForwards = ValidationResult.IsValid;
+                CanMoveBackwards = ValidationResult.IsValid;
                 NotifyOfPropertyChange(nameof(Project));
 
             }
         }
 
-        public bool CanCancel => true /* can always cancel */;
-
-        public async void Cancel()
-        {
-            await TryCloseAsync(false);
-        }
-
-        public bool CanCreate
-        {
-            get => _canCreate;
-            set => Set(ref _canCreate , value);
-        }
-    
-        public async void Create()
-        {
-           await TryCloseAsync(true);
-        }
+     
 
         protected override ValidationResult Validate()
         {
             return (!string.IsNullOrEmpty(ProjectName)) ? Validator.Validate(Project) : null;
         }
+
+        //protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        //{
+        //    //ShowWorkflowButtons();
+        //    return base.OnActivateAsync(cancellationToken);
+        //}
     }
 }
