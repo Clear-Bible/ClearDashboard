@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Drawing;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -71,6 +72,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                     Clients.All.SendProject(result.Data);
                 }
             }
+
+            {
+                var result = await _mediator.Send(new GetTextCollectionsQuery());
+                if (result.Success)
+                {
+                    _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
+                    Clients.All.SendTextCollections(result.Data);
+                }
+            }
+
             await base.OnConnected();
         }
     }

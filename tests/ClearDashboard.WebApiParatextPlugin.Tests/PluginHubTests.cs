@@ -53,13 +53,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 });
 
-                hubProxy.On<List<TextCollection>>("textCollections", (textCollections) =>
-                {
-                    Assert.NotNull(textCollections);
-                    Output.WriteLine($"Returned textCollection: {textCollections.Count}");
-
-                });
-
                 await connection.Start();
 
                 var numberOfMessages = 10;
