@@ -73,7 +73,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.Null(result.Data);
-            Assert.Equal("Object reference not set to an instance of an object.", result.Message);
+            Assert.True(result.Message.StartsWith("System.NullReferenceException: Object reference not set to an instance of an object."));
         }
         finally
         {
