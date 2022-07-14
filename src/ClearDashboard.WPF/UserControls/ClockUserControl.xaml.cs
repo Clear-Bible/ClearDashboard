@@ -186,6 +186,7 @@ namespace ClearDashboard.Wpf.UserControls
             _refreshTimer.Elapsed += ClockRefresh;
             _refreshTimer.AutoReset = true;
             _refreshTimer.Enabled = true;
+            InstantClockRefresh();
         }
 
         private void SaveMenuToSettings()
@@ -315,14 +316,113 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
+        private void InstantClockRefresh()
+        {
+            //create list of checked menu items and update old ones
+            CheckedList = new();
+            foreach (var group in MenuItems[0].MenuItems)
+            {
+                if (group.CheckBoxIsChecked == "True")
+                {
+                    foreach (var individual in group.MenuItems)
+                    {
+                        var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
+                        individual.NameTime = tempTime.ToShortTimeString();
+
+                        if (tempTime.Hour >= 9 && tempTime.Hour < 17)
+                        {
+                            individual.Foreground = Brushes.LimeGreen;
+                        }
+                        else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
+                        {
+                            individual.Foreground = Brushes.DarkOrange;
+                        }
+                        else
+                        {
+                            individual.Foreground = Brushes.Red;
+                        }
+
+                        CheckedList.Add(individual);
+                    }
+                }
+                else
+                {
+                    if (group.MenuItems != null)
+                    {
+                        foreach (var individual in group.MenuItems)
+                        {
+                            var tempTime = TimeZoneInfo.ConvertTime(DateTime.Now, individual.TimeZoneInfo);
+                            individual.NameTime = tempTime.ToShortTimeString();
+
+                            if (tempTime.Hour >= 9 && tempTime.Hour < 17)
+                            {
+                                individual.Foreground = Brushes.LimeGreen;
+                            }
+                            else if (tempTime.Hour >= 8 && tempTime.Hour < 22)
+                            {
+                                individual.Foreground = Brushes.DarkOrange;
+                            }
+                            else
+                            {
+                                individual.Foreground = Brushes.Red;
+                            }
+
+                            if (individual.CheckBoxIsChecked == "True")
+                            {
+                                CheckedList.Add(individual);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //update UI to a new menu Item 
+            //_timeDisplayIndex++;
+            //if (_timeDisplayIndex >= CheckedList.Count || _timeDisplayIndex==-1)
+            //{
+            //    //_timeDisplayIndex = -1;
+
+            //    //this.Dispatcher.Invoke(() =>
+            //    //{
+            //    //    MenuItems[0].NameTime = DateTime.Now.ToShortTimeString().PadLeft(8, '0');
+            //    //    MenuItems[0].ClockTextBlockText = " Local Time";
+
+            //    //    if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
+            //    //    {
+            //    //        MenuItems[0].Foreground = Brushes.LimeGreen;
+            //    //    }
+            //    //    else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
+            //    //    {
+            //    //        MenuItems[0].Foreground = Brushes.DarkOrange;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        MenuItems[0].Foreground = Brushes.Red;
+            //    //    }
+
+            //    //});
+            //}
+            if(_timeDisplayIndex < CheckedList.Count && _timeDisplayIndex != -1)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime.PadLeft(8, '0');
+                    MenuItems[0].ClockTextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
+                    MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
+                });
+            }
+        }
+
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
             sortMenuItemsGroup();
+            InstantClockRefresh();
             SaveMenuToSettings();
         }
 
         private void CheckBoxChanged(object sender, RoutedEventArgs e)
         {
+            InstantClockRefresh();
             SaveMenuToSettings();
         }
 
@@ -399,6 +499,7 @@ namespace ClearDashboard.Wpf.UserControls
                     });
 
                     sortMenuItemsGroup();
+                    InstantClockRefresh();
                     SaveMenuToSettings();
                 }
             }
@@ -494,7 +595,7 @@ namespace ClearDashboard.Wpf.UserControls
 
                     if (comboBox.DataContext is MenuItemNest nest)
                     {
-                        //find the group that hte nest is in
+                        //find the group that the nest is in
                         foreach (var group in MenuItems[0].MenuItems)
                         {
                             if (group.MenuItems != null)
@@ -510,6 +611,8 @@ namespace ClearDashboard.Wpf.UserControls
                             }
                         }
                     }
+                    //call clock refesh without the dispaly part
+                    InstantClockRefresh();
                     SaveMenuToSettings();
                 }
             }
@@ -563,6 +666,10 @@ namespace ClearDashboard.Wpf.UserControls
             {
                 box.Foreground = Brushes.Gray;
             }
+            if (sender is ComboBox cbox)
+            {
+                cbox.Background = Brushes.CornflowerBlue;
+            }
         }
 
         private void TextBox_OnMouseLeave(object sender, MouseEventArgs e)
@@ -570,6 +677,10 @@ namespace ClearDashboard.Wpf.UserControls
             if (sender is TextBox box)
             {
                 box.Foreground = Brushes.Black;
+            }
+            if (sender is ComboBox cbox)
+            {
+                cbox.Background = Brushes.Transparent;
             }
         }
     }

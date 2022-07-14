@@ -123,7 +123,8 @@
                                 SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}" 
                                 Visibility="{Binding UtcComboVisibility}"
                                 Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
-                                 />
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"/>
                             <TextBlock
                                 x:Name="Utc"
                                 Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
