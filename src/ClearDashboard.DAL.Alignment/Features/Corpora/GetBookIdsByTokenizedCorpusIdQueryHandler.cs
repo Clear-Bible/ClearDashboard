@@ -52,7 +52,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
 
         var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
         var bookIdsToAbbreviations =
-            new FileGetBookIdsNonStaticAwesomeness().BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
+            FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
 
         var bookAbbreviations = new List<string>();
