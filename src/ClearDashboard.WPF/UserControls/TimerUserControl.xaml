@@ -9,7 +9,7 @@
     d:DesignHeight="200"
     d:DesignWidth="500"
     mc:Ignorable="d">
-    <Grid MinWidth="125" Height="37">
+    <Grid Height="37" MinWidth="125">
         <Border
             x:Name="TimerBorder"
             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
@@ -56,6 +56,7 @@
         </StackPanel>
         <TextBox
             x:Name="TimerBox"
+            Width="77"
             Margin="34,0,17,0"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
@@ -67,8 +68,7 @@
             LostFocus="TimerTbx_OnLostFocus"
             PreviewKeyDown="TimerTbx_OnPreviewKeyDown"
             PreviewTextInput="NumberValidationTextBox"
-            TextChanged="TimerTbx_OnTextChanged"
-            Width="77"/>
+            TextChanged="TimerTbx_OnTextChanged" />
 
 
     </Grid>
