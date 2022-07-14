@@ -437,7 +437,7 @@ namespace ClearDashboard.Wpf.UserControls
                         nest.Insert(nest.Count, new MenuItemNest
                         {
                             ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                            CheckBoxIsChecked = "False",
+                            CheckBoxIsChecked = "True",
                             ClockCheckBoxVisibility = Visibility.Visible,
                             TextBoxText = "newindividual",
                             ClockTextBoxVisibility = Visibility.Visible,
@@ -463,7 +463,7 @@ namespace ClearDashboard.Wpf.UserControls
                     MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count - 1, new MenuItemNest
                     {
                         ClockAddTimeZoneVisibility = Visibility.Visible,
-                        CheckBoxIsChecked = "False",
+                        CheckBoxIsChecked = "True",
                         ClockCheckBoxVisibility = Visibility.Visible,
                         TextBoxText = "newgroup",
                         ClockTextBoxVisibility = Visibility.Visible,
@@ -481,7 +481,7 @@ namespace ClearDashboard.Wpf.UserControls
                     MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new MenuItemNest
                     {
                         ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                        CheckBoxIsChecked = "False",
+                        CheckBoxIsChecked = "True",
                         ClockCheckBoxVisibility = Visibility.Visible,
                         TextBoxText = "newindividual",
                         ClockTextBoxVisibility = Visibility.Visible,
