@@ -307,7 +307,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       ParameterName = parameterName;
     }
 
-    [CanBeNull] public string ParameterName { get; }
+    [CanBeNull] public string? ParameterName { get; }
   }
 
   /// <summary>
@@ -563,7 +563,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       Comment = comment;
     }
 
-    [CanBeNull] public string Comment { get; }
+    [CanBeNull] public string? Comment { get; }
   }
 
   /// <summary>
@@ -619,7 +619,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       Justification = justification;
     }
 
-    [CanBeNull] public string Justification { get; }
+    [CanBeNull] public string? Justification { get; }
   }
 
   /// <summary>
@@ -675,7 +675,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       BasePath = basePath;
     }
 
-    [CanBeNull] public string BasePath { get; }
+    [CanBeNull] public string? BasePath { get; }
   }
 
   /// <summary>
@@ -739,7 +739,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
     /// Allows specifying a macro that will be executed for a <see cref="SourceTemplateAttribute">source template</see>
     /// parameter when the template is expanded.
     /// </summary>
-    [CanBeNull] public string Expression { get; set; }
+    [CanBeNull] public string? Expression { get; set; }
 
     /// <summary>
     /// Allows specifying which occurrence of the target parameter becomes editable when the template is deployed.
@@ -755,7 +755,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
     /// Identifies the target parameter of a <see cref="SourceTemplateAttribute">source template</see> if the
     /// <see cref="MacroAttribute"/> is applied on a template method.
     /// </summary>
-    [CanBeNull] public string Target { get; set; }
+    [CanBeNull] public string? Target { get; set; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -840,7 +840,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; }
+    [CanBeNull] public string? AnonymousProperty { get; }
   }
 
   /// <summary>
@@ -858,7 +858,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; }
+    [CanBeNull] public string? AnonymousProperty { get; }
   }
 
   /// <summary>
@@ -877,7 +877,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; }
+    [CanBeNull] public string? AnonymousProperty { get; }
   }
 
   /// <summary>
@@ -980,7 +980,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       Name = name;
     }
 
-    [CanBeNull] public string Name { get; }
+    [CanBeNull] public string? Name { get; }
   }
 
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -1174,9 +1174,9 @@ namespace ClearDashboard.DataAccessLayer.Annotations
     /// <summary>Specify a language of injected code fragment.</summary>
     public InjectedLanguage InjectedLanguage { get; }
     /// <summary>Specify a string that "precedes" injected string literal.</summary>
-    [CanBeNull] public string Prefix { get; set; }
+    [CanBeNull] public string? Prefix { get; set; }
     /// <summary>Specify a string that "follows" injected string literal.</summary>
-    [CanBeNull] public string Suffix { get; set; }
+    [CanBeNull] public string? Suffix { get; set; }
   }
 
   /// <summary>
@@ -1333,7 +1333,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       }
 
       [NotNull] public string BaseType { get; }
-      [CanBeNull] public string PageName { get; }
+      [CanBeNull] public string? PageName { get; }
   }
 
   [AttributeUsage(AttributeTargets.Method)]
@@ -1375,7 +1375,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
   public sealed class RouteParameterConstraintAttribute : Attribute
   {
     [NotNull] public string ConstraintName { get; }
-    [CanBeNull] public Type ProposedType { get; set; }
+    [CanBeNull] public Type? ProposedType { get; set; }
 
     public RouteParameterConstraintAttribute([NotNull] string constraintName)
     {
@@ -1400,7 +1400,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
       HttpVerb = httpVerb;
     }
 
-    [CanBeNull] public string HttpVerb { get; }
+    [CanBeNull] public string? HttpVerb { get; }
   }
 
   /// <summary>
@@ -1558,7 +1558,7 @@ namespace ClearDashboard.DataAccessLayer.Annotations
     /// Pattern includes textual part, which must contain only identifiers allowed in the target language,
     /// and placeholders, which allow matching variable parts of the target code blocks.
     /// </summary>
-    public string SearchTemplate { get; }
+    public string? SearchTemplate { get; }
 
     /// <summary>
     /// Message to show when the search pattern was found.
@@ -1566,38 +1566,38 @@ namespace ClearDashboard.DataAccessLayer.Annotations
     /// Code patterns with replace template produce suggestions by default.
     /// However, if replace template is not provided, then warning severity will be used.
     /// </summary>
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     /// <summary>
     /// Structural search replace pattern to use in code template replacement.
     /// </summary>
-    public string ReplaceTemplate { get; set; }
+    public string? ReplaceTemplate { get; set; }
 
     /// <summary>
     /// Replace message to show in the light bulb.
     /// </summary>
-    public string ReplaceMessage { get; set; }
+    public string? ReplaceMessage { get; set; }
 
     /// <summary>
     /// Apply code formatting after code replacement.
     /// </summary>
-    public bool FormatAfterReplace { get; set; } = true;
+    public bool? FormatAfterReplace { get; set; } = true;
 
     /// <summary>
     /// Whether similar code blocks should be matched.
     /// </summary>
-    public bool MatchSimilarConstructs { get; set; }
+    public bool? MatchSimilarConstructs { get; set; }
 
     /// <summary>
     /// Automatically insert namespace import directives or remove qualifiers that become redundant after the template is applied.
     /// </summary>
-    public bool ShortenReferences { get; set; }
+    public bool? ShortenReferences { get; set; }
 
     /// <summary>
     /// String to use as a suppression key.
     /// By default the following suppression key is used 'CodeTemplate_SomeType_SomeMember',
     /// where 'SomeType' and 'SomeMember' are names of the associated containing type and member to which this attribute is applied.
     /// </summary>
-    public string SuppressionKey { get; set; }
+    public string? SuppressionKey { get; set; }
   }
 }

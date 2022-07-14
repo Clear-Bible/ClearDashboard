@@ -43,16 +43,16 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public int? SilBookNumber
+        public int? BookNumber
         {
-            get => Entity?.SilBookNumber;
+            get => Entity?.BookNumber;
             set
             {
                 if (Entity != null)
                 {
-                    Entity.SilBookNumber = value;
+                    Entity.BookNumber = value;
                 }
-                NotifyOfPropertyChange(nameof(SilBookNumber));
+                NotifyOfPropertyChange(nameof(BookNumber));
             }
         }
 
@@ -82,18 +82,7 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-        public DateTimeOffset Modified
-        {
-            get => Entity.Modified;
-            set
-            {
-                if (Entity != null)
-                {
-                    Entity.Modified = value;
-                }
-                NotifyOfPropertyChange(nameof(Modified));
-            }
-        }
+     
 
         public Guid? CorpusId
         {
@@ -150,7 +139,7 @@ namespace ClearDashboard.DAL.ViewModels
         //}
 
 
-        
+        // TODO:  This needs to be removed and the code that refers to it refacotred.
         public string? VerseBBCCCVVV
         {
             get => Entity?.VerseBBBCCCVVV;
@@ -178,7 +167,7 @@ namespace ClearDashboard.DAL.ViewModels
         //}
 
 
-        public string? BookStr => Entity?.BookStr;
+        public string? BookStr => Entity?.SilBookAbbreviation;
 
         public string? ChapterStr => Entity?.ChapterStr;
 

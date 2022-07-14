@@ -1,0 +1,78 @@
+﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using MediatR;
+
+namespace ClearDashboard.DAL.Alignment.Corpora
+{
+    public static class ParallelCorpusExtensions
+    {
+        public static async Task<ParallelCorpus> Update(
+            this ParallelCorpus parallelCorpus, 
+            IMediator mediator)
+        {
+            var command = new UpdateParallelCorpusCommand(
+                parallelCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"), 
+                parallelCorpus.ParallelCorpusId);
+
+            var result = await mediator.Send(command);
+            if (result.Success && result.Data != null)
+            {
+                return result.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="engineParallelTextCorpus"></param>
+        /// <param name="mediator"></param>
+        /// <param name="sourceCorpusId"></param>
+        /// <param name="targetCorpusId"></param>
+        /// <param name="parallelCorpusId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidTypeEngineException"></exception>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<ParallelCorpus> Create(
+            this EngineParallelTextCorpus engineParallelTextCorpus,
+            IMediator mediator)
+        {
+            if (engineParallelTextCorpus.GetType() == typeof(ParallelCorpus))
+            {
+                throw new InvalidTypeEngineException(
+                    name: "engineParallelTextCorpus",
+                    value: "ParallelCorpus",
+                    message: "ParallelCorpus alreacy created");
+            }
+
+            if (
+                engineParallelTextCorpus.SourceCorpus.GetType() != typeof(TokenizedTextCorpus)
+                ||
+                engineParallelTextCorpus.TargetCorpus.GetType() != typeof(TokenizedTextCorpus))
+            {
+                throw new InvalidTypeEngineException(
+                    name: "sourceOrTargetCorpus",
+                    value: "Not TokenizedTextCorpus",
+                    message: "both SourceCorpus and TargetCorpus of engineParallelTextCorpus must be from the database (of type TokenizedTextCorpus");
+            }
+
+            var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(
+                ((TokenizedTextCorpus) engineParallelTextCorpus.SourceCorpus).TokenizedCorpusId,
+                ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedCorpusId,
+                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null")));
+
+            if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
+            {
+                return createParallelCorpusCommandResult.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(createParallelCorpusCommandResult.Message);
+            }
+        }
+    }
+}

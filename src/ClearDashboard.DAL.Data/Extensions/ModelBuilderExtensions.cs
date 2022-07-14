@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
+﻿using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
+using ClearDashboard.DataAccessLayer.Data.ValueGenerators;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -14,6 +10,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
 {
     public static class ModelBuilderExtensions
     {
+
+        public static void AddUserIdValueGenerator(this ModelBuilder modelBuilder)
+        {
+            var entitiesToIgnore = new List<string> { "User", "NoteRecipient" };
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(entityType=>!entitiesToIgnore.Contains(entityType.Name)))
+            {
+                var userIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name=="UserId" && (p.PropertyType == typeof(Guid) || p.PropertyType == typeof(Guid?)));
+                if (userIdProperty != null)
+                {
+                    modelBuilder
+                        .Entity(entityType.Name)
+                        .Property(userIdProperty.Name)
+                        .HasValueGenerator<UserIdValueGenerator>();
+                }
+
+            }
+        }
+
         public static void AddDateTimeOffsetToBinaryConverter(this ModelBuilder modelBuilder, string? databaseProviderName = null)
         {
             if (databaseProviderName is "Microsoft.EntityFrameworkCore.Sqlite")
@@ -62,8 +76,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             //new NoteConfiguration().Configure(modelBuilder.Entity<Note>());
             new ParallelCorpusConfiguration().Configure(modelBuilder.Entity<ParallelCorpus>());
             //new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
-            new ProjectInfoConfiguration().Configure(modelBuilder.Entity<ProjectInfo>());
-            new QuestionGroupConfiguration().Configure(modelBuilder.Entity<QuestionGroup>());
+            new ProjectInfoConfiguration().Configure(modelBuilder.Entity<Project>());
+            //new QuestionGroupConfiguration().Configure(modelBuilder.Entity<QuestionGroup>());
             //new RawContentConfiguration().Configure(modelBuilder.Entity<RawContent>());
             new TokenConfiguration().Configure(modelBuilder.Entity<Token>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());

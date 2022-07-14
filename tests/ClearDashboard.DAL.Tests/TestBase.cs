@@ -5,13 +5,22 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DAL.Tests.Mocks;
+using ClearDashboard.DAL.Tests.Slices.LanguageResources;
+using ClearDashboard.DAL.Tests.Slices.Users;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,11 +28,12 @@ namespace ClearDashboard.DAL.Tests
 {
     public class TestBase
     {
+        #nullable disable
         protected ITestOutputHelper Output { get; private set; }
         protected Process Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
-        private IServiceProvider? _serviceProvider = null;
+        private IServiceProvider _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
 
         protected TestBase(ITestOutputHelper output)
@@ -37,9 +47,10 @@ namespace ClearDashboard.DAL.Tests
         {
             Services.AddSingleton<IEventAggregator, EventAggregator>();
             Services.AddClearDashboardDataAccessLayer();
-           Services.AddMediatR(typeof(IMediatorRegistrationMarker));
-           Services.AddLogging();
-           Services.AddSingleton<IEventAggregator, EventAggregator>();
+            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
+            Services.AddLogging();
+            Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddSingleton<IProjectProvider, ProjectProvider>();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
@@ -62,13 +73,12 @@ namespace ClearDashboard.DAL.Tests
         protected async Task<RequestResult<TData>> ExecuteAndTestRequest<TRequest, TResult, TData>(TRequest query)
             where TRequest : IRequest<RequestResult<TData>>
             where TResult : RequestResult<TData>, new()
-            where TData : class, new()
         {
-            var mediator = ServiceProvider.GetService<IMediator>();
+            var mediator = ServiceProvider.GetService<IMediator>()!;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var result = new RequestResult<TData>(new TData(), false);
+            var result = new RequestResult<TData>(default(TData), false);
             try
             {
                 result = await mediator.Send(query);
@@ -124,7 +134,7 @@ namespace ClearDashboard.DAL.Tests
             if (StopParatextOnTestConclusion)
             {
                 Output.WriteLine("Stopping Paratext.");
-                Process.Kill(true);
+                Process?.Kill(true);
 
                 Process = null;
 
@@ -140,6 +150,36 @@ namespace ClearDashboard.DAL.Tests
             var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");
 
             return process;
+        }
+
+        protected T Copy<T>(T entity)
+        {
+            var json = JsonSerializer.Serialize(entity);
+            return JsonSerializer.Deserialize<T>(json);
+        }
+
+        protected async Task<User> AddDashboardUser(ProjectDbContext context)
+        {
+            var testUser = new User { FirstName = "Test", LastName = "User" };
+            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            Assert.NotNull(userProvider);
+            userProvider!.CurrentUser = testUser;
+
+            context.Users.Add(testUser);
+            await context.SaveChangesAsync();
+            return testUser;
+        }
+
+        protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName)
+        {
+            var testProject = new Project { ProjectName = projectName, IsRtl = true};
+            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
+            Assert.NotNull(projectProvider);
+            projectProvider!.CurrentProject = testProject;
+
+            context.Projects.Add(testProject);
+            await context.SaveChangesAsync();
+            return testProject;
         }
     }
 }

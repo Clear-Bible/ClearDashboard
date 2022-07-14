@@ -19,13 +19,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         {
            
         }
-        
+
         [Fact]
-        public async Task ReceiveMessageTest()
+        public async Task ReceiveMessageTestAsync()
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
 
                 var connection = new HubConnection("http://localhost:9000/signalr");
 
@@ -45,7 +45,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 });
 
-                hubProxy.On<Project>("sendProject", (project) =>
+                hubProxy.On<ParatextProject>("sendProject", (project) =>
                 {
                     Assert.NotNull(project);
                     Output.WriteLine($"Returned project: {project.ShortName}");
@@ -54,7 +54,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 await connection.Start();
 
-                for (var i = 1; i <= 10; i++)
+                var numberOfMessages = 10;
+
+                for (var i = 1; i <= numberOfMessages; i++)
                 {
                     _ = await hubProxy.Invoke<string>("ping", "Message", i);
                 }
@@ -62,14 +64,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 Output.WriteLine($"Received {_messages.Count} messages.");
 
                 Assert.NotEmpty(_messages);
-                Assert.Equal(10, _messages.Count);
+                Assert.Equal(numberOfMessages, _messages.Count);
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
         }
-
-      
+        
     }
 }

@@ -1,51 +1,55 @@
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using MediatR;
-using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 
 namespace ClearDashboard.DataAccessLayer
 {
 
-    public abstract class ProjectManager : IDisposable
+
+    public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
     {
+        #nullable disable
         #region Properties
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        protected ProjectNameDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
-     
-   
+
+    
+
+        public User CurrentUser { get; set; }
+
+        public Project CurrentProject { get; set; }
+        public ParatextProject CurrentParatextProject { get; set; }
+        public bool HasCurrentProject => CurrentProject != null;
+        public bool HasCurrentParatextProject => CurrentParatextProject != null;
+
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-        public Project ParatextProject { get; protected set; }
+       
 
         public bool ParatextVisible = false;
-        #endregion
-
-        #region Events
-
         public string ParatextUserName { get; set; } = "";
-
         private string _currentVerse;
+
         public string CurrentVerse
         {
-            get { return _currentVerse; }
+            get => _currentVerse;
             set
             {
                 // ensure that we are getting a fully delimited BBB as things like
@@ -61,10 +65,14 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         #endregion
+        
+        #region Events
+
+        #endregion
 
         #region Startup
 
-        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectNameDbContextFactory projectNameDbContextFactory)
+        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory)
         {
             Logger = logger;
             ProjectNameDbContextFactory = projectNameDbContextFactory;
@@ -76,8 +84,6 @@ namespace ClearDashboard.DataAccessLayer
 
 
         #endregion
-
-
 
         #region Methods
 
@@ -199,6 +205,8 @@ namespace ClearDashboard.DataAccessLayer
 
         public DashboardProject CurrentDashboardProject { get; set; }
 
+        public bool HasDashboardProject => CurrentDashboardProject != null;
+
 
         public DashboardProject CreateDashboardProject()
         {
@@ -211,11 +219,22 @@ namespace ClearDashboard.DataAccessLayer
             return CurrentDashboardProject;
         }
 
+        public async Task CreateNewProject(string projectName)
+        {
+            CreateDashboardProject();
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+
+        }
+
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
+
+
             var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
-            // Populate ProjectInfo table
+            // Populate Project table
             // Identify relationships
             //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
             //   2.Manuscript to target (use ToDb.ManuscriptParatextParallelCorporaToDb)
@@ -244,5 +263,6 @@ namespace ClearDashboard.DataAccessLayer
         }
         #endregion
 
+        
     }
 }

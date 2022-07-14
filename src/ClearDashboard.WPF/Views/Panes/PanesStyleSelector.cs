@@ -98,7 +98,7 @@ namespace ClearDashboard.Wpf.Views.Panes
                 return ToolStyle;
             }
 
-            if (item is TextCollectionViewModel)
+            if (item is TextCollectionsViewModel)
             {
                 return ToolStyle;
             }

@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
+﻿using ClearDashboard.DataAccessLayer.Models;
 using SIL.Scripture;
+using System;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Helpers
 {
     public static class Versification
     {
         public static List<VersificationList> GetVersificationFromOriginal(List<VersificationList> list,
-            Project paratextProject)
+            ParatextProject paratextProject)
         {
 
-            ScrVers projVersification = new ScrVers(paratextProject.ScrVersType);
+            ScrVers projVersification = new ScrVers(paratextProject.ScrVerseType);
 
             foreach (var verse in list)
             {

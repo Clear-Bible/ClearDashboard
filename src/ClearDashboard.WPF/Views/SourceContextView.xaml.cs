@@ -24,5 +24,6 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
         }
+
     }
 }

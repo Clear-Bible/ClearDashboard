@@ -1,7 +1,7 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +18,7 @@ namespace ClearDashboard.DAL.Tests
 
     public class GetSpellingStatusQueryHandler : TestBase
     {
+        #nullable disable
         public GetSpellingStatusQueryHandler([NotNull] ITestOutputHelper output) : base(output)
         {
             // no-op

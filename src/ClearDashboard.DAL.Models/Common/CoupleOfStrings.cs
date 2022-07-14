@@ -12,13 +12,13 @@ namespace ClearDashboard.DataAccessLayer.Models
 
     public class CoupleOfLists
     {
-        public List<string> stringA { get; set; }
-        public List<string> stringB { get; set; }
+        public List<string>? stringA { get; set; }
+        public List<string>? stringB { get; set; }
     }
 
     public class VersificationList
     {
-        public string TargetBBBCCCVV { get; set; }
-        public string SourceBBBCCCVV { get; set; }
+        public string? TargetBBBCCCVV { get; set; }
+        public string? SourceBBBCCCVV { get; set; }
     }
 }

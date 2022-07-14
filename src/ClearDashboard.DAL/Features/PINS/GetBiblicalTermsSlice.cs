@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
@@ -25,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetBiblicalTermsQueryHandler : XmlReaderRequestHandler<GetBiblicalTermsQuery,
         RequestResult<BiblicalTermsList>, BiblicalTermsList>
     {
-        private BiblicalTermsList _biblicalTermsList = new();
+        private BiblicalTermsList? _biblicalTermsList = new();
 
         public GetBiblicalTermsQueryHandler(ILogger<PINS.GetTermRenderingsQueryHandler> logger) : base(logger)
         {
@@ -80,7 +78,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                 XmlSerializer serializer = new XmlSerializer(typeof(BiblicalTermsList));
                 try
                 {
-                    _biblicalTermsList = (BiblicalTermsList)serializer.Deserialize(reader);
+                    _biblicalTermsList = (BiblicalTermsList?)serializer.Deserialize(reader);
                 }
                 catch (Exception e)
                 {
@@ -88,7 +86,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
                 }
             }
 
-            return _biblicalTermsList;
+            return _biblicalTermsList!;
         }
     }
 }

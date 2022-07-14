@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClearDashboard.Wpf.Properties;
 
 namespace ClearDashboard.Wpf.Helpers
 {
@@ -128,24 +124,24 @@ namespace ClearDashboard.Wpf.Helpers
 
         private void Load()
         {
-            _windowTop = Properties.Settings.Default.WindowTop;
-            _windowLeft = Properties.Settings.Default.WindowLeft;
-            _windowHeight = Properties.Settings.Default.WindowHeight;
-            _windowWidth = Properties.Settings.Default.WindowWidth;
-            _windowState = Properties.Settings.Default.WindowState;
+            _windowTop = Settings.Default.WindowTop;
+            _windowLeft = Settings.Default.WindowLeft;
+            _windowHeight = Settings.Default.WindowHeight;
+            _windowWidth = Settings.Default.WindowWidth;
+            _windowState = Settings.Default.WindowState;
         }
 
         public void Save()
         {
             if (_windowState != System.Windows.WindowState.Minimized)
             {
-                Properties.Settings.Default.WindowTop = _windowTop;
-                Properties.Settings.Default.WindowLeft = _windowLeft;
-                Properties.Settings.Default.WindowHeight = _windowHeight;
-                Properties.Settings.Default.WindowWidth = _windowWidth;
-                Properties.Settings.Default.WindowState = _windowState;
+                Settings.Default.WindowTop = _windowTop;
+                Settings.Default.WindowLeft = _windowLeft;
+                Settings.Default.WindowHeight = _windowHeight;
+                Settings.Default.WindowWidth = _windowWidth;
+                Settings.Default.WindowState = _windowState;
 
-                Properties.Settings.Default.Save();
+                Settings.Default.Save();
             }
         }
 

@@ -1,28 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Converters
 {
-    public class ProjectFileNameValidationRule : ValidationRule
+
+    public static class ProjectNameValidator
     {
-        public int Min { get; set; }
-        public int Max { get; set; }
-
-        public ProjectFileNameValidationRule()
+        public static ValidationResult ValidProjectName(string projectName)
         {
-        }
-
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            string projectName = (string)value;
-
             bool foundMatch = false;
             try
             {
@@ -52,6 +40,17 @@ namespace ClearDashboard.Wpf.Converters
             }
 
             return ValidationResult.ValidResult;
+        }
+    }
+    public class ProjectFileNameValidationRule : ValidationRule
+    {
+        public int Min { get; set; }
+        public int Max { get; set; }
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            var projectName = (string)value;
+            return ProjectNameValidator.ValidProjectName(projectName);
         }
     }
 }

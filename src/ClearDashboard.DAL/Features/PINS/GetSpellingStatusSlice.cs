@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,6 +17,8 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
     public class GetSpellingStatusQueryHandler : XmlReaderRequestHandler<GetSpellingStatusQuery,
         RequestResult<SpellingStatus>, SpellingStatus>
     {
+        #nullable disable
+
         private SpellingStatus _biblicalTermsList = new();
         private readonly ProjectManager _projectManager;
 

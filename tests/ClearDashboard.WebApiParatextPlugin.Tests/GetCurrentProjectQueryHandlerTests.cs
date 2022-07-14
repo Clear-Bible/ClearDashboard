@@ -25,18 +25,18 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
         }
 
         [Fact]
-        public async Task TestQuery()
+        public async Task TestQueryAsync()
         {
             try
             {
-                await StartParatext();
+                await StartParatextAsync();
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
                 var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<Project>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<ParatextProject>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);
@@ -44,7 +44,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
             finally
             {
-                await StopParatext();
+                await StopParatextAsync();
             }
 
         }

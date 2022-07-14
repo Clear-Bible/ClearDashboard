@@ -2,11 +2,11 @@
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;
 using System;
@@ -21,8 +21,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Features;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -143,11 +141,12 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // pull out the project font family
-            if (ProjectManager.ParatextProject is not null)
+            if (ProjectManager.CurrentParatextProject is not null)
             {
-                FontFamily = ProjectManager.ParatextProject.Language.FontFamily;
-                FontSize = ProjectManager.ParatextProject.Language.Size;
-                IsRtl = ProjectManager.ParatextProject.Language.IsRtol;
+                var paratextProject = ProjectManager.CurrentParatextProject;
+                FontFamily = paratextProject.Language.FontFamily;
+                FontSize = paratextProject.Language.Size;
+                IsRtl = paratextProject.Language.IsRtol;
             }
         }
 
@@ -620,7 +619,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 // this data from the BiblicalTerms & AllBiblicalTerms XML files has versification from the org.vrs
                 // convert it over to the current project versification format.
-                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.ParatextProject);
+                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.CurrentParatextProject);
 
                 // create the list to display
                 foreach (var verse in verseList)
@@ -665,6 +664,11 @@ namespace ClearDashboard.Wpf.ViewModels
                 new VersePopUpViewModel(navigationService: NavigationService, logger: Logger,
                     projectManager: ProjectManager, eventAggregator: EventAggregator,
                     verse: verses[0]));
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods

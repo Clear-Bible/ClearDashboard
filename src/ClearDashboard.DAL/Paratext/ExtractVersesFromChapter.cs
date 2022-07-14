@@ -114,7 +114,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
                 }
 
-                string targetChapterNum = verse.ChapterStr;
+                string? targetChapterNum = verse.ChapterStr;
                 int targetChapNum = Convert.ToInt32(targetChapterNum);
 
                 if (chapters.Count > 0)
@@ -156,7 +156,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             foreach (var bookName in project.BookNames)
             {
                 var data = bookName.Value;
-                if (data.BBB.PadLeft(3, '0') == verse.BookStr)
+                if (data.BBB.PadLeft(3, '0') == verse.SilBookAbbreviation)
                 {
                     prefix = data.fileID;
                     break;
@@ -180,7 +180,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 return string.Empty;
             }
 
-            var path = Path.Combine(projectPath, project.Name, bookFile.FilePath);
+            var path = Path.Combine(projectPath, project.Name!, bookFile.FilePath!);
             return path;
         }
 

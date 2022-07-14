@@ -4,6 +4,27 @@ namespace ClearDashboard.DataAccessLayer.Models
 {
     public class ParatextProject 
     {
+        public enum ProjectType
+        {
+            Standard,
+            Resource,
+            BackTranslation,
+            Daughter,
+            TransliterationManual,
+            TransliterationWithEncoder,
+            StudyBible,
+            ConsultantNotes,
+            GlobalConsultantNotes,
+            GlobalAnthropologyNotes,
+            StudyBibleAdditions,
+            Auxiliary,
+            AuxiliaryResource,
+            MarbleResource,
+            XmlResource,
+            XmlDictionary,
+            NotSelected
+        }
+
         public Dictionary<int, ParatextBookFileName> BookNames = new Dictionary<int, ParatextBookFileName>
         {
             // based upon the goofy USFM file IDs: https://ubsicap.github.io/usfm/identification/books.html
@@ -143,54 +164,34 @@ namespace ClearDashboard.DataAccessLayer.Models
         };
 
 
+        public ProjectType Type { get; set; }
         public DirectoryType DirectoryType { get; set; } = DirectoryType.Project;
-
-
-        public string FullName { get; set; }
-
         public CorpusType CorpusType { get; set; }
-
-      
-        public string Guid { get; set; }
-
-        
-        public string Language { get; set; }
-
-    
-        public string Encoding { get; set; }
-
-      
-        public string LanguageIsoCode { get; set; }
-
-      
-        public TranslationInfo TranslationInfo { get; set; }
-
-        public TranslationInfo BaseTranslation { get; set; }
-
-       
-        public string DefaultFont { get; set; }
-
-       
-        public string NormalizationForm { get; set; }
-
-      
-        public string Name { get; set; }
-
-       
-        public string Copyright { get; set; }
-
-      
-        public string ProjectPath { get; set; }
-
+        public string? Guid { get; set; }
+        public ScrLanguageWrapper? Language { get; set; }
+        public string? ShortName { get; set; }
+        public string? LongName { get; set; }
+        public string? LanguageName { get; set; }
+        public string? Encoding { get; set; }
+        public string? LanguageIsoCode { get; set; }
+        public TranslationInfo? TranslationInfo { get; set; }
+        public TranslationInfo? BaseTranslation { get; set; }
+        public string? DefaultFont { get; set; }
+        public string? NormalizationForm { get; set; }
+        public string? Name { get; set; }
+        public string? Copyright { get; set; }
+        public string? ProjectPath { get; set; }
         public bool IsRTL { get; set; } = false;
-        public string DirectoryPath { get; set; }
-        public string ClearEngineDirectoryPath { get; set; }
-        public string FileNamePrePart { get; set; }
-        public string FileNamePostPart { get; set; }
-        public string FileNameBookNameForm { get; set; }
-        public string BooksPresent { get; set; }
+        public string? DirectoryPath { get; set; }
+        public string? ClearEngineDirectoryPath { get; set; }
+        public string? FileNamePrePart { get; set; }
+        public string? FileNamePostPart { get; set; }
+        public string? FileNameBookNameForm { get; set; }
+        public string? BooksPresent { get; set; }
 
-        public bool HasCustomVRSfile { get; set; } = false;
+        public List<string> NonObservers { get; set; } = new List<string>();
+        public ScrVersType ScrVersType { get; set; } = ScrVersType.English;
+        public bool IsCustomVersification { get; set; } = false;
         public string CustomVRSfilePath { get; set; } = "";
 
         private int _versification;
@@ -203,33 +204,36 @@ namespace ClearDashboard.DataAccessLayer.Models
                 switch (_versification)
                 {
                     case 0:
-                        ScrVers = ScrVersType.Unknown;
+                        ScrVerseType = ScrVersType.Unknown;
                         break;
                     case 1:
-                        ScrVers = ScrVersType.Original;
+                        ScrVerseType = ScrVersType.Original;
                         break;
                     case 2:
-                        ScrVers = ScrVersType.Septuagint;
+                        ScrVerseType = ScrVersType.Septuagint;
                         break;
                     case 3:
-                        ScrVers = ScrVersType.Vulgate;
+                        ScrVerseType = ScrVersType.Vulgate;
                         break;
                     case 4:
-                        ScrVers = ScrVersType.English;
+                        ScrVerseType = ScrVersType.English;
                         break;
                     case 5:
-                        ScrVers = ScrVersType.RussianProtestant;
+                        ScrVerseType = ScrVersType.RussianProtestant;
                         break;
                     case 6:
-                        ScrVers = ScrVersType.RussianOrthodox;
+                        ScrVerseType = ScrVersType.RussianOrthodox;
                         break;
 
                 }
             }
         }
 
-        public ScrVersType ScrVers { get; set; }
+        public ScrVersType ScrVerseType { get; set; } = ScrVersType.English;
+
+        public List<BookInfo> AvailableBooks { get; set; } = new List<BookInfo>();
         public List<ParatextBook> BooksList { get; set; } = new List<ParatextBook>();
 
+        public Dictionary<string, string> BcvDictionary { get; set; } = new Dictionary<string, string>();
     }
 }

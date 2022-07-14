@@ -9,6 +9,7 @@ namespace ClearDashboard.DAL.Tests;
 
 public class GetCurrentProjectQueryHandlerTests : TestBase
 {
+    #nullable disable
     public GetCurrentProjectQueryHandlerTests(ITestOutputHelper output) : base(output)
     {
         //no-op
@@ -17,7 +18,7 @@ public class GetCurrentProjectQueryHandlerTests : TestBase
     [Fact]
     public async Task GetCurrentProjectTest()
     {
-        var result = await ExecuteParatextAndTestRequest<GetCurrentProjectQuery, RequestResult<Project>, Project>(new GetCurrentProjectQuery());
+        var result = await ExecuteParatextAndTestRequest<GetCurrentProjectQuery, RequestResult<ParatextProject>, ParatextProject>(new GetCurrentProjectQuery());
 
         Assert.NotNull(result.Data.ShortName);
         Output.WriteLine($"Project name: {result.Data.ShortName}");

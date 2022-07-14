@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,6 +14,7 @@ namespace ClearDashboard.DAL.Tests
 {
     public class PopulateNotesTablesTest : TestBase
     {
+        #nullable disable
         public PopulateNotesTablesTest(ITestOutputHelper output) : base(output)
         {
 
@@ -21,16 +23,20 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task NoteRecipientTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+
+            var userProvider = ServiceProvider.GetService<IUserProvider>()!;
+            Assert.NotNull(userProvider);
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
             Assert.NotNull(factory);
 
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {
                 var author = new User { FirstName = "Note", LastName = "Author" };
+                userProvider.CurrentUser = author;
                 var recipient1 = new User { FirstName = "Recipient",  LastName= "One" };
                 var recipient2 = new User { FirstName = "Recipient", LastName="Two" };
 
@@ -75,12 +81,12 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task NoteRawContentTest()
         {
-            var factory = ServiceProvider.GetService<ProjectNameDbContextFactory>();
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
             Assert.NotNull(factory);
 
             var assets = await factory?.Get(projectName)!;
-            var context = assets.AlignmentContext;
+            var context = assets.ProjectDbContext;
 
             try
             {

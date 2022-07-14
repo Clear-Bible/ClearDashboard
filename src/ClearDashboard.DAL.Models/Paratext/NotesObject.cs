@@ -6,7 +6,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     public class NotesObject 
     {
        
-        public Anchor Anchor { get; set; }
+        public Anchor? Anchor { get; set; }
 
         public List<Comment> Comments { get; set; } = new List<Comment>();
 
@@ -15,9 +15,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsResolved { get; set; }
 
         
-        public AssignedUser AssignedUser { get; set; }
+        public AssignedUser? AssignedUser { get; set; }
 
-        public object ReplyToUser { get; set; }
+        public object? ReplyToUser { get; set; }
 
     }
 }

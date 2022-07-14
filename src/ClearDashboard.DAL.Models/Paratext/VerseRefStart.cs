@@ -5,7 +5,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     public class VerseRefStart 
     {
      
-        public string BookCode { get; set; }
+        public string? BookCode { get; set; }
 
        
         public int BookNum { get; set; }
@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int Bbbcccvvv { get; set; }
 
         
-        public Versification Versification { get; set; }
+        public Versification? Versification { get; set; }
 
       
         public bool RepresentsMultipleVerses { get; set; }

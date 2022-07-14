@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void EnsureHttps(object? sender, CoreWebView2NavigationStartingEventArgs args)
+        private void EnsureHttps(object sender, CoreWebView2NavigationStartingEventArgs args)
         {
             String uri = args.Uri;
             if (!uri.StartsWith("https://"))

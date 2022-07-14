@@ -3,7 +3,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 {
     public class DashboardProject 
     {
-        public string DirectoryPath { get; set; }
+        public string? DirectoryPath { get; set; }
        //TODO:  fix this to use the correct CLear.Engine directory path
        // public string ClearEngineDirectoryPath => Path.Combine(TargetProject.DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
@@ -17,11 +17,11 @@ namespace ClearDashboard.DataAccessLayer.Models
             ProjectPath = (string.IsNullOrEmpty(FullFilePath) ? string.Empty : new FileInfo(FullFilePath).DirectoryName) ?? string.Empty;
 
             BaseTargetName = TargetProject?.Name;
-            BaseTargetFullName = TargetProject?.FullName;
+            BaseTargetFullName = TargetProject?.LongName;
         }
 
        
-        public string ProjectName { get; set; }
+        public string? ProjectName { get; set; }
 
         public string ProjectPath { get; set; } 
 
@@ -29,16 +29,16 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public DateTimeOffset Modified { get; set; }
        
-        public string FullFilePath { get; set; }
+        public string? FullFilePath { get; set; }
 
 
         /// <summary>
         /// the target project
         /// </summary>
         
-        public ParatextProject TargetProject { get; set; }
+        public ParatextProject? TargetProject { get; set; }
 
-        public ParatextProject InterlinearizerProject { get; set; }
+        public ParatextProject? InterlinearizerProject { get; set; }
 
         /// <summary>
         /// list of LWC projects
@@ -53,7 +53,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// <summary>
         /// The Paratext UserID of the creator
         /// </summary>
-        public string ParatextUser { get; set; }
+        public string? ParatextUser { get; set; }
 
         /// <summary>
         /// Date that this project was created
@@ -63,21 +63,21 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// The Dashboard Project Name
         /// </summary>
-        public string BaseTargetName { get; set; }
+        public string? BaseTargetName { get; set; }
 
         /// <summary>
         /// The Dashboard Project FullName
         /// </summary>
-        public string BaseTargetFullName { get; set; }
+        public string? BaseTargetFullName { get; set; }
         
-        public string ShortFilePath { get; set; }
+        public string? ShortFilePath { get; set; }
 
-        public string JsonProjectName { get; set; }
+        public string? JsonProjectName { get; set; }
 
         public int UserValidationLevel { get; set; }
 

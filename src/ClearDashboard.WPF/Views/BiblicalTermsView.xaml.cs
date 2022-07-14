@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClearDashboard.Wpf.ViewModels;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ClearDashboard.Wpf.ViewModels;
+using System;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -27,8 +16,10 @@ namespace ClearDashboard.Wpf.Views
         public BiblicalTermsView()
         {
             InitializeComponent();
+
+
         }
-        
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _vm = (BiblicalTermsViewModel)DataContext;
@@ -36,7 +27,8 @@ namespace ClearDashboard.Wpf.Views
             // listen for changes to the lower listview to make it scroll back 
             // to the top
             INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
-            viewModel.PropertyChanged += (sender, args) => {
+            viewModel.PropertyChanged += (sender, args) =>
+            {
                 if (args.PropertyName.Equals("SelectedItemVerses"))
                 {
                     if (SelectedItemVerses.Items.Count > 0)

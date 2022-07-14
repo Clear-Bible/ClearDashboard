@@ -58,371 +58,314 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="BtFormGlossLower" xml:space="preserve">
-    <value>Luciu:</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Proiecte</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="PinsGloss" xml:space="preserve">
-    <value>Luciu</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>copaci; fructe</value>
-  </data>
-  <data name="TargetContextFormatted" xml:space="preserve">
-    <value>Formatat</value>
-  </data>
-  <data name="1_John" xml:space="preserve">
-    <value>1 Ioan</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>meşteşuguri; pânză</value>
-  </data>
-  <data name="TargetContextZoomIn" xml:space="preserve">
-    <value>A mari</value>
-  </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>instrumente</value>
-  </data>
-  <data name="BtFormAll" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="PinsVerseReferences" xml:space="preserve">
-    <value>Referințe de vers</value>
-  </data>
-  <data name="Mark" xml:space="preserve">
-    <value>marcă</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="WmSense" xml:space="preserve">
-    <value>Sens:</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="update" xml:space="preserve">
-    <value>Actualizați</value>
-  </data>
-  <data name="PinsPhrase" xml:space="preserve">
-    <value>Fraza</value>
-  </data>
-  <data name="TargetContextUnformatted" xml:space="preserve">
-    <value>Neformat</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="2_Kings" xml:space="preserve">
-    <value>2 Regi</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="Luke" xml:space="preserve">
-    <value>Luca</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>instrumente; greutate; comerţ</value>
-  </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>activități religioase</value>
-  </data>
-  <data name="2_John" xml:space="preserve">
-    <value>2 Ioan</value>
-  </data>
-  <data name="Deuteronomy" xml:space="preserve">
-    <value>Deuteronom</value>
-  </data>
-  <data name="Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="Song of Songs" xml:space="preserve">
-    <value>Cântec de cântece</value>
-  </data>
-  <data name="Proverbs" xml:space="preserve">
-    <value>Proverbe</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="BtDomainsAll" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>agricultură</value>
-  </data>
-  <data name="BtFormTerm" xml:space="preserve">
-    <value>Termen</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>asociere</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="TargetContextZoomOut" xml:space="preserve">
-    <value>A micsora</value>
-  </data>
-  <data name="PinsFilter" xml:space="preserve">
-    <value>Filtru:</value>
-  </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>păgânism</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>ființe și puteri supranaturale</value>
-  </data>
-  <data name="2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="1_Timothy" xml:space="preserve">
-    <value>1 Timotei</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="Hebrews" xml:space="preserve">
-    <value>Evrei</value>
-  </data>
-  <data name="Titus" xml:space="preserve">
-    <value>Tit</value>
-  </data>
-  <data name="Ecclesiastes" xml:space="preserve">
-    <value>Ecclesiastes</value>
-  </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>oameni; autoritate</value>
-  </data>
-  <data name="Leviticus" xml:space="preserve">
-    <value>Levitic</value>
-  </data>
   <data name="2PE" xml:space="preserve">
     <value>2PE</value>
   </data>
-  <data name="Ezekiel" xml:space="preserve">
-    <value>Ezechiel</value>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>containere; creșterea animalelor</value>
   </data>
-  <data name="1_Thessalonians" xml:space="preserve">
-    <value>1 Tesaloniceni</value>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Psalmi</value>
   </data>
-  <data name="1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 Petru</value>
   </data>
-  <data name="BtDomainsMonument" xml:space="preserve">
-    <value>monument</value>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
   </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>Ruth</value>
   </data>
-  <data name="3_John" xml:space="preserve">
-    <value>3 Ioan</value>
+  <data name="PinsMatch" xml:space="preserve">
+    <value>Meci</value>
   </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>Zephaniah</value>
   </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>Acte</value>
   </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>instrumente; naştere</value>
   </data>
-  <data name="Revelation" xml:space="preserve">
-    <value>Revelatie</value>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>Coloseni</value>
   </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
   </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>construcții; creșterea animalelor</value>
-  </data>
-  <data name="PinsWord" xml:space="preserve">
-    <value>Cuvânt</value>
-  </data>
-  <data name="1_Kings" xml:space="preserve">
-    <value>1 Regi</value>
-  </data>
-  <data name="James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="BtBcvVerse" xml:space="preserve">
-    <value>Verset</value>
-  </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>Capitol</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="PinsNotes" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>moravuri și etică</value>
-  </data>
-  <data name="Landing_project" xml:space="preserve">
-    <value>Proiect</value>
-  </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>fructe</value>
-  </data>
-  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
-    <value>constructie; activități religioase</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="2_Timothy" xml:space="preserve">
-    <value>2 Timotei</value>
-  </data>
-  <data name="Zechariah" xml:space="preserve">
-    <value>Zaharia</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Șterge</value>
-  </data>
-  <data name="BtDomainsAffection" xml:space="preserve">
-    <value>afecţiune</value>
-  </data>
-  <data name="Philemon" xml:space="preserve">
-    <value>Philemon</value>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 Ioan</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
   </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
   </data>
-  <data name="BtFormRenderings" xml:space="preserve">
-    <value>Redări</value>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
   </data>
-  <data name="Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
   </data>
-  <data name="BtFormGloss" xml:space="preserve">
-    <value>Luciu</value>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>Lamentări</value>
   </data>
-  <data name="edit" xml:space="preserve">
-    <value>Editați | ×</value>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Toate</value>
   </data>
-  <data name="Judges" xml:space="preserve">
-    <value>Judecători</value>
-  </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>grup; zonă</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="BtFormWord" xml:space="preserve">
-    <value>Cuvânt:</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="BtFormFound" xml:space="preserve">
-    <value>Găsite</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="2_Thessalonians" xml:space="preserve">
-    <value>2 Tesaloniceni</value>
-  </data>
-  <data name="Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="2_Peter" xml:space="preserve">
-    <value>2 Petru</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="Jeremiah" xml:space="preserve">
-    <value>Ieremia</value>
-  </data>
-  <data name="WmDomain" xml:space="preserve">
-    <value>Domeniu:</value>
-  </data>
-  <data name="Colossians" xml:space="preserve">
-    <value>Coloseni</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Proiect nou</value>
-  </data>
-  <data name="Nehemiah" xml:space="preserve">
-    <value>Neemia</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Utilizator</value>
-  </data>
-  <data name="Hosea" xml:space="preserve">
-    <value>Osea</value>
-  </data>
-  <data name="Haggai" xml:space="preserve">
-    <value>Haggai</value>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>Exod</value>
   </data>
   <data name="1SA" xml:space="preserve">
     <value>1SA</value>
   </data>
-  <data name="Obadiah" xml:space="preserve">
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>grup</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>ierburi</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Luciu</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>meşteşuguri; pânză</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 Regi</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>instrumente; greutate; comerţ</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>constructie; activități religioase</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>Cântec de cântece</value>
+  </data>
+  <data name="PinsWord" xml:space="preserve">
+    <value>Cuvânt</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>Matei</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="PinsGloss" xml:space="preserve">
+    <value>Luciu</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>Luca</value>
+  </data>
+  <data name="PinsLexeme" xml:space="preserve">
+    <value>Lexem</value>
+  </data>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>agricultură</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>oameni; onoare, respect, statut</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>Ecclesiastes</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 Regi</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>Geneză</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>Romanian [ro]</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>animale</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Habakkuk</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>Filipeni</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Proiect nou</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>construcții; creșterea animalelor</value>
+  </data>
+  <data name="PinsPhrase" xml:space="preserve">
+    <value>Fraza</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>Osea</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Contează</value>
+  </data>
+  <data name="PinsPrefix" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="PinsStem" xml:space="preserve">
+    <value>Tulpină</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>semne și minuni</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Utilizator</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Termen</value>
+  </data>
+  <data name="BtDomainsPeople" xml:space="preserve">
+    <value>oameni</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>mamifere; animale salbatice</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 Corinteni</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>Tit</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>Neemia</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>ființe și puteri supranaturale; titluri</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>Loc de munca</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>decontare</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>Isaia</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 Corinteni</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>Verset</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 Cronici</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Domeniu de aplicare:</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="TargetContextUnformatted" xml:space="preserve">
+    <value>Neformat</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>Jude</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 Ioan</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
     <value>Obadia</value>
   </data>
-  <data name="WmSubDomain" xml:space="preserve">
-    <value>Subdomeniu:</value>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Proiect</value>
   </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
+  <data name="create" xml:space="preserve">
+    <value>Crea</value>
   </data>
-  <data name="PinsCode" xml:space="preserve">
-    <value>Cod</value>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Carte</value>
+  </data>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Cuvânt:</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>păgânism</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>Zaharia</value>
+  </data>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Redări</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>Deuteronom</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>Ieremia</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>sacrificii și oferte</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>Revelatie</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
   <data name="1CO" xml:space="preserve">
     <value>1CO</value>
@@ -430,296 +373,287 @@
   <data name="1JN" xml:space="preserve">
     <value>1JN</value>
   </data>
-  <data name="PinsLexeme" xml:space="preserve">
-    <value>Lexem</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="BtFormCategory" xml:space="preserve">
-    <value>Categorie</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>ființe și puteri supranaturale; titluri</value>
-  </data>
-  <data name="Isaiah" xml:space="preserve">
-    <value>Isaia</value>
-  </data>
-  <data name="PinsStem" xml:space="preserve">
-    <value>Tulpină</value>
-  </data>
-  <data name="BtFormRenderingsLower" xml:space="preserve">
-    <value>Redări</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="BtBcvAll" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>scop</value>
-  </data>
-  <data name="BtFormCounts" xml:space="preserve">
-    <value>Contează</value>
-  </data>
-  <data name="Exodus" xml:space="preserve">
-    <value>Exod</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>instrumente; naştere</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>zonă</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="PinsForms" xml:space="preserve">
-    <value>Forme</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Setări</value>
-  </data>
-  <data name="Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="1_Peter" xml:space="preserve">
-    <value>1 Petru</value>
-  </data>
-  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
-    <value>onoare, respect, statut</value>
-  </data>
-  <data name="2_Corinthians" xml:space="preserve">
-    <value>2 Corinteni</value>
-  </data>
-  <data name="Jude" xml:space="preserve">
-    <value>Jude</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="add" xml:space="preserve">
-    <value>Adăuga</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>animale</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>Romanian [ro]</value>
-  </data>
-  <data name="John" xml:space="preserve">
-    <value>Ioan</value>
-  </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>copaci; Parfumuri și condimente</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="create" xml:space="preserve">
-    <value>Crea</value>
-  </data>
-  <data name="PinsSuffix" xml:space="preserve">
-    <value>Sufix</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="BtDomainsAreaNature" xml:space="preserve">
-    <value>zonă; natură</value>
-  </data>
-  <data name="Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="1_Chronicles" xml:space="preserve">
-    <value>1 Cronici</value>
-  </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>Carte</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>mamifere; animale salbatice</value>
-  </data>
-  <data name="Acts" xml:space="preserve">
-    <value>Acte</value>
-  </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>persoană</value>
-  </data>
-  <data name="Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>ierburi</value>
-  </data>
-  <data name="Jonah" xml:space="preserve">
-    <value>Iona</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>pietre prețioase</value>
-  </data>
-  <data name="PinsLoadReferences" xml:space="preserve">
-    <value>Referințe de încărcare</value>
-  </data>
-  <data name="Joshua" xml:space="preserve">
-    <value>Iosua</value>
-  </data>
-  <data name="Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="Romans" xml:space="preserve">
-    <value>Romani</value>
-  </data>
-  <data name="2_Chronicles" xml:space="preserve">
-    <value>2 Cronici</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Anulare</value>
-  </data>
-  <data name="PinsOrigin" xml:space="preserve">
-    <value>Origine</value>
-  </data>
-  <data name="Ruth" xml:space="preserve">
-    <value>Ruth</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="BtFormSemanticDomain" xml:space="preserve">
-    <value>Domeniul semantic:</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>semne și minuni</value>
-  </data>
-  <data name="BtFormProject" xml:space="preserve">
-    <value>Proiect</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="PinsMatch" xml:space="preserve">
-    <value>Meci</value>
-  </data>
-  <data name="Psalms" xml:space="preserve">
-    <value>Psalmi</value>
-  </data>
-  <data name="PinsPrefix" xml:space="preserve">
-    <value>Prefix</value>
-  </data>
-  <data name="BtFormScope" xml:space="preserve">
-    <value>Domeniu de aplicare:</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="Ephesians" xml:space="preserve">
-    <value>Efeseni</value>
-  </data>
-  <data name="Galatians" xml:space="preserve">
-    <value>Galateni</value>
-  </data>
-  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
-    <value>containere; creșterea animalelor</value>
-  </data>
-  <data name="PinsLanguage" xml:space="preserve">
-    <value>Limba</value>
-  </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>sacrificii și oferte</value>
-  </data>
-  <data name="BtDomainsMourning" xml:space="preserve">
-    <value>doliu</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>Salvați</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>local</value>
-  </data>
-  <data name="1_Corinthians" xml:space="preserve">
-    <value>1 Corinteni</value>
-  </data>
-  <data name="Philippians" xml:space="preserve">
-    <value>Filipeni</value>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>Numere</value>
   </data>
   <data name="PinsClearFilter" xml:space="preserve">
     <value>Filtru clar</value>
   </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>Redarea lipsă</value>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
   </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>mamifere; animale domestice</value>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>zonă; natură</value>
+  </data>
+  <data name="Landing_project" xml:space="preserve">
+    <value>Proiect</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>Malachi</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 Timotei</value>
+  </data>
+  <data name="PinsFilter" xml:space="preserve">
+    <value>Filtru:</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>monument</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>Judecători</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>marcă</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>ființe și puteri supranaturale</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>moravuri și etică</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Adăuga</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 Cronici</value>
+  </data>
+  <data name="PinsSuffix" xml:space="preserve">
+    <value>Sufix</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>Ioan</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="PinsLoadReferences" xml:space="preserve">
+    <value>Referințe de încărcare</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="WmSense" xml:space="preserve">
+    <value>Sens:</value>
+  </data>
+  <data name="TargetContextFormatted" xml:space="preserve">
+    <value>Formatat</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>activități religioase</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>Levitic</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>Micah</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Capitol</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>asociere</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>onoare, respect, statut</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>fructe</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="ZEC" xml:space="preserve">
     <value>ZEC</value>
   </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>grup</value>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>persoană</value>
   </data>
-  <data name="Genesis" xml:space="preserve">
-    <value>Geneză</value>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Proiecte</value>
   </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>oameni; onoare, respect, statut</value>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>mamifere; animale domestice</value>
   </data>
-  <data name="Numbers" xml:space="preserve">
-    <value>Numere</value>
+  <data name="TargetContextZoomOut" xml:space="preserve">
+    <value>A micsora</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 Timotei</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>copaci; fructe</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 Tesaloniceni</value>
+  </data>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>Găsite</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>Evrei</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Redarea lipsă</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>Galateni</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 Samuel</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Toate</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Domeniul semantic:</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="PinsLanguage" xml:space="preserve">
+    <value>Limba</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>Redări</value>
+  </data>
+  <data name="PinsForms" xml:space="preserve">
+    <value>Forme</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>Iosua</value>
+  </data>
+  <data name="WmSubDomain" xml:space="preserve">
+    <value>Subdomeniu:</value>
+  </data>
+  <data name="PinsOrigin" xml:space="preserve">
+    <value>Origine</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 Ioan</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>Ezechiel</value>
+  </data>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>oameni; autoritate</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>scop</value>
+  </data>
+  <data name="PinsCode" xml:space="preserve">
+    <value>Cod</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>Efeseni</value>
+  </data>
+  <data name="WmDomain" xml:space="preserve">
+    <value>Domeniu:</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>local</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>doliu</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>Înțelepciune, înțelegere</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>Amos</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 Tesaloniceni</value>
   </data>
   <data name="2KI" xml:space="preserve">
     <value>2KI</value>
@@ -727,25 +661,94 @@
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
   </data>
-  <data name="BtDomainsPeople" xml:space="preserve">
-    <value>oameni</value>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>zonă</value>
   </data>
-  <data name="Esther" xml:space="preserve">
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 Petru</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="PinsNotes" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>instrumente</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>Proverbe</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>grup; zonă</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="expandView" xml:space="preserve">
+    <value>Extindeți vizualizarea</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="PinsVerseReferences" xml:space="preserve">
+    <value>Referințe de vers</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="TargetContextZoomIn" xml:space="preserve">
+    <value>A mari</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
   </data>
-  <data name="Job" xml:space="preserve">
-    <value>Loc de munca</value>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>Philemon</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>Romani</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>afecţiune</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>Luciu:</value>
   </data>
   <data name="BtDomainsNature" xml:space="preserve">
     <value>natură</value>
   </data>
-  <data name="Matthew" xml:space="preserve">
-    <value>Matei</value>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>pietre prețioase</value>
   </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
+  <data name="edit" xml:space="preserve">
+    <value>Editați | ×</value>
   </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>decontare</value>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>Iona</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>Toate</value>
   </data>
 </root>

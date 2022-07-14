@@ -2,7 +2,7 @@
     x:Class="ClearDashboard.Wpf.Views.BiblicalTermsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -11,6 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     x:Name="UserControl"
     d:DataContext="{d:DesignInstance Type=viewModels:BiblicalTermsViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -40,7 +41,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="47" />
             <RowDefinition Height="35" />
@@ -48,13 +49,41 @@
             <RowDefinition Height="12" />
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>
-        <!--  ROW 0  -->
 
+        <!--  ROW 0  -->
         <StackPanel Orientation="Horizontal">
+            <Button
+                Width="20"
+                Height="20"
+                Margin="5,5,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                ToolTip="{helpers:Localization expandView}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <materialDesign:PackIcon
+                    Background="Transparent"
+                    Foreground="{StaticResource TealMidBrush}"
+                    Kind="ArrowExpandAll" />
+            </Button>
 
             <Border
-                Grid.Row="0"
-                Margin="10,5,0,2"
+                Margin="5,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel
@@ -62,14 +91,14 @@
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <RadioButton
-                        Content="{helpers:Loc BtFormProject}"
+                        Content="{helpers:Localization BtFormProject}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                         Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                     <RadioButton
-                        Content="{helpers:Loc BtFormAll}"
+                        Content="{helpers:Localization BtFormAll}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
@@ -86,7 +115,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Loc BtFormWord}" />
+                        Content="{helpers:Localization BtFormWord}" />
                     <TextBox
                         x:Name="FilterText"
                         MinWidth="125"
@@ -101,7 +130,7 @@
                         Orientation="Vertical">
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="{helpers:Loc BtFormGloss}"
+                            Content="{helpers:Localization BtFormGloss}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
@@ -109,7 +138,7 @@
 
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="{helpers:Loc BtFormRenderings}"
+                            Content="{helpers:Localization BtFormRenderings}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
@@ -117,15 +146,13 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-
-
         </StackPanel>
 
         <!--  ROW 1  -->
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <!--  RENDERINGS FILTER  -->
             <Border
-                Margin="10,5,0,2"
+                Margin="30,5,0,2"
                 BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                 BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
@@ -149,7 +176,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Loc BtFormScope}" />
+                        Content="{helpers:Localization BtFormScope}" />
                     <ComboBox
                         x:Name="Scope"
                         MinWidth="50"
@@ -170,7 +197,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Loc BtFormSemanticDomain}" />
+                        Content="{helpers:Localization BtFormSemanticDomain}" />
                     <ComboBox
                         x:Name="Domains"
                         MinWidth="50"
@@ -238,7 +265,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="{helpers:Loc BtFormTerm}">
+                <DataGridTemplateColumn Width="Auto" Header="{helpers:Localization BtFormTerm}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -252,7 +279,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="{helpers:Loc BtFormCategory}">
+                <DataGridTemplateColumn Width="110" Header="{helpers:Localization BtFormCategory}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -265,7 +292,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150" Header="{helpers:Loc BtFormGlossLower}">
+                <DataGridTemplateColumn Width="150" Header="{helpers:Localization BtFormGlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -278,7 +305,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Loc BtFormCounts}">
+                <DataGridTemplateColumn Header="{helpers:Localization BtFormCounts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -289,7 +316,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Loc BtFormFound}">
+                <DataGridTemplateColumn Header="{helpers:Localization BtFormFound}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -300,7 +327,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="{helpers:Loc BtFormRenderingsLower}">
+                <DataGridTemplateColumn Width="200" Header="{helpers:Localization BtFormRenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -380,7 +407,7 @@
                         <TextBlock
                             Margin="5,0,5,0"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            Text="{helpers:Loc BtFormGlossLower}" />
+                            Text="{helpers:Localization BtFormGlossLower}" />
                         <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
                     </StackPanel>
                     <ListBox

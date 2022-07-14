@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using ClearDashboard.DAL.ViewModels;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.UserControls
 {
@@ -47,22 +46,19 @@ namespace ClearDashboard.Wpf.UserControls
         public BookChapterVerseViewModel CurrentBcv
         {
             get => (BookChapterVerseViewModel)GetValue(_currentBcv);
-            set
-            {
-                SetValue(_currentBcv, value);
-            }
+            set => SetValue(_currentBcv, value);
         }
 
 
-        public static readonly DependencyProperty _bookNames =
-            DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
-            new PropertyMetadata(new ObservableCollection<string>()));
+        //public static readonly DependencyProperty _bookNames =
+        //    DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
+        //    new PropertyMetadata(new ObservableCollection<string>()));
 
-        public ObservableCollection<string> BookNames
-        {
-            get => (ObservableCollection<string>)GetValue(_bookNames);
-            set => SetValue(_bookNames, value);
-        }
+        //public ObservableCollection<string> BookNames
+        //{
+        //    get => (ObservableCollection<string>)GetValue(_bookNames);
+        //    set => SetValue(_bookNames, value);
+        //}
 
         #endregion
 
@@ -73,8 +69,10 @@ namespace ClearDashboard.Wpf.UserControls
             LayoutRoot.DataContext = this;
 
             // Rotate the arrows
-            RotateTransform rotate = new();
-            rotate.Angle = 180;
+            RotateTransform rotate = new()
+            {
+                Angle = 180
+            };
 
             if (IsRtl)
             {
@@ -90,14 +88,14 @@ namespace ClearDashboard.Wpf.UserControls
             }
 
             // Why are these not enabled by default? I did not find an instance of them not enable in the project.
-            btnBookLeft.IsEnabled = true;
-            btnBookRight.IsEnabled = true;
+            BtnBookLeft.IsEnabled = true;
+            BtnBookRight.IsEnabled = true;
 
-            btnChapterLeft.IsEnabled = true;
-            btnChapterRight.IsEnabled = true;
+            BtnChapterLeft.IsEnabled = true;
+            BtnChapterRight.IsEnabled = true;
 
-            btnVerseLeft.IsEnabled = true;
-            btnVerseRight.IsEnabled = true;
+            BtnVerseLeft.IsEnabled = true;
+            BtnVerseRight.IsEnabled = true;
         }
 
         #endregion
@@ -106,66 +104,66 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void BookUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (cboBook.SelectedIndex > 0)
+            if (CboBook.SelectedIndex > 0)
             {
-                cboBook.SelectedIndex -= 1;
+                CboBook.SelectedIndex -= 1;
             }
         }
 
         private void BookDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            cboBook.SelectedIndex += 1;
+            CboBook.SelectedIndex += 1;
         }
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (cboChapter.SelectedIndex > 0)
+            if (CboChapter.SelectedIndex > 0)
             {
-                cboChapter.SelectedIndex -= 1;
+                CboChapter.SelectedIndex -= 1;
             }
             else // Switch to the previous book.
             {
                 BookUpArrow_Click(null, null);
-                cboChapter.SelectedIndex = cboChapter.Items.Count - 1;
+                CboChapter.SelectedIndex = CboChapter.Items.Count - 1;
             }
         }
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (cboChapter.SelectedIndex < cboChapter.Items.Count - 1)
+            if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
-                cboChapter.SelectedIndex += 1;
+                CboChapter.SelectedIndex += 1;
             }
             else // Switch to the next book.
             {
                 BookDownArrow_Click(null, null);
-                cboChapter.SelectedIndex = 0;
+                CboChapter.SelectedIndex = 0;
             }
         }
 
         private void VerseUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (cboVerse.SelectedIndex > 0)
+            if (CboVerse.SelectedIndex > 0)
             {
-                cboVerse.SelectedIndex -= 1;
+                CboVerse.SelectedIndex -= 1;
             }
             else // Switch to the previous chapter.
             {
                 ChapterUpArrow_Click(null, null);
-                cboVerse.SelectedIndex = cboVerse.Items.Count - 1;
+                CboVerse.SelectedIndex = CboVerse.Items.Count - 1;
             }
         }
 
         private void VerseDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (cboVerse.SelectedIndex < cboVerse.Items.Count - 1)
+            if (CboVerse.SelectedIndex < CboVerse.Items.Count - 1)
             {
-                cboVerse.SelectedIndex += 1;
+                CboVerse.SelectedIndex += 1;
             }
             else // Switch to the next chapter.
             {
                 ChapterDownArrow_Click(null, null);
-                cboVerse.SelectedIndex = 0;
+                CboVerse.SelectedIndex = 0;
             }
         }
 

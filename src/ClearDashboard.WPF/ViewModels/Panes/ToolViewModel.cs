@@ -49,6 +49,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
 
         #region Methods
 
+
         #endregion // Methods
 
     }

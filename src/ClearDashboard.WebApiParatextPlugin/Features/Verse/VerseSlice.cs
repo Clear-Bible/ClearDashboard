@@ -1,14 +1,13 @@
-﻿
-
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
-using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
 {
@@ -22,6 +21,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
             _verseRef = verseRef;
             _logger = logger;
         }
+
         public Task<RequestResult<string>> Handle(GetCurrentVerseQuery request, CancellationToken cancellationToken)
         {
             var queryResult = new RequestResult<string>(string.Empty);
@@ -32,15 +32,64 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
                 {
                     verseId = verseId.PadLeft(9, '0');
                 }
+
                 queryResult.Data = verseId;
-               
+
             }
             catch (Exception ex)
             {
                 queryResult.Success = false;
                 queryResult.Message = ex.Message;
             }
+
             return Task.FromResult(queryResult);
+        }
+    }
+
+    public class SetCurrentVerseCommandHandler : IRequestHandler<SetCurrentVerseCommand, RequestResult<string>>
+    {
+        private readonly IVerseRef _verseRef;
+        private readonly ILogger<SetCurrentVerseCommandHandler> _logger;
+        private readonly IProject _project;
+        private readonly MainWindow _mainWindow;
+
+
+        public SetCurrentVerseCommandHandler(IVerseRef verseRef, ILogger<SetCurrentVerseCommandHandler> logger,
+            IProject project, MainWindow mainWindow)
+        {
+            _mainWindow = mainWindow;
+            _project = project;
+            _verseRef = verseRef;
+            _logger = logger;
+        }
+
+        public Task<RequestResult<string>> Handle(SetCurrentVerseCommand request, CancellationToken cancellationToken)
+        {
+
+            // get back on UI thread
+            Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+            {
+                // ReSharper disable once InconsistentNaming
+                var BBBCCCVVV = request.Verse.PadLeft(9, '0');
+                int book = 1;
+                int chapter = 1;
+                int verse = 1;
+
+                try
+                {
+                    book = int.Parse(BBBCCCVVV.Substring(0, 3));
+                    chapter = int.Parse(BBBCCCVVV.Substring(3, 3));
+                    verse = int.Parse(BBBCCCVVV.Substring(6, 3));
+                    _mainWindow.SwitchVerseReference(book, chapter, verse);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message);
+                }
+            }));
+
+
+            return Task.FromResult(new RequestResult<string>(request.Verse));
         }
     }
 }

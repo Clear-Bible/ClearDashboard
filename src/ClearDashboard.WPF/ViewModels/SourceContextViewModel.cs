@@ -10,6 +10,8 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.Views;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -98,10 +100,8 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "SOURCECONTEXT";
         }
 
-
-        protected override void OnViewAttached(object view, object context)
+        protected override void OnViewReady(object view)
         {
-
             _currentVerse = _projectManager.CurrentVerse;
 
             CurrentBcv.SetVerseFromId(_currentVerse);
@@ -109,10 +109,22 @@ namespace ClearDashboard.Wpf.ViewModels
             // do not await this otherwise it freezes the UI
             Task.Run(() =>
             {
-                ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+                ProcessSourceVerseData(CurrentBcv.BBBCCCVVV).ConfigureAwait(false);
             }).ConfigureAwait(false);
-            
-            base.OnViewAttached(view, context);
+
+            base.OnViewReady(view);
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            _eventAggregator.SubscribeOnUIThread(this);
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            _eventAggregator.Unsubscribe(this);
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
 
@@ -120,9 +132,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
-        private async Task ProcessSourceVerseData(BookChapterVerseViewModel bcv)
+        private async Task ProcessSourceVerseData(string BBBCCCVVV)
         {
-            var verseDataResult = await ExecuteRequest(new GetManuscriptVerseByIdQuery(bcv.VerseLocationId), CancellationToken.None).ConfigureAwait(false);
+            var verseDataResult = await ExecuteRequest(new GetManuscriptVerseByIdQuery(BBBCCCVVV), CancellationToken.None).ConfigureAwait(false);
             if (verseDataResult.Success == false)
             {
                 Logger.LogError(verseDataResult.Message);
@@ -137,7 +149,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     foreach (var verse in verseDataResult.Data)
                     {
-                        if (verse.stringA.EndsWith(bcv.VerseIdText))
+                        if (verse.stringA.EndsWith(BBBCCCVVV.Substring(6,3)))
                         {
                             _currentBcv.SetVerseFromId(verse.stringA);
                             _sourceInlinesText.Add(
@@ -184,13 +196,16 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <param name="args"></param>
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            if (_currentVerse == "")
+            if (_currentVerse == "" || _currentVerse != message.Verse.PadLeft(9,'0'))
             {
-                _currentVerse = message.Verse;
+                _currentVerse = message.Verse.PadLeft(9, '0');
 
                 CurrentBcv.SetVerseFromId(_currentVerse);
 
-                await ProcessSourceVerseData(CurrentBcv).ConfigureAwait(false);
+                await ProcessSourceVerseData(CurrentBcv.BBBCCCVVV).ConfigureAwait(false);
+                
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
             }
             else
             {
@@ -198,6 +213,11 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             await Task.CompletedTask;
+        }
+
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<SourceContextView>.Show(this, actualWidth, actualHeight);
         }
 
         #endregion // Methods
