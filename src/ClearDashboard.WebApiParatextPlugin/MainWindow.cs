@@ -1,11 +1,10 @@
-﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
+﻿using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin.Hosting;
-using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Serilog;
 using System;
@@ -14,12 +13,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {

@@ -13,14 +13,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.TextCollections
 {
     public class TextCollectionsSlice
     {
-        public class GetCurrentProjectQueryHandler : IRequestHandler<GetTextCollectionsQuery, RequestResult<List<TextCollection>>>
+        public class GetTextCollectionsQueryHandler : IRequestHandler<GetTextCollectionsQuery, RequestResult<List<TextCollection>>>
         {
             private readonly IProject _project;
-            private readonly ILogger<GetCurrentProjectQueryHandler> _logger;
+            private readonly ILogger<GetTextCollectionsQueryHandler> _logger;
             private readonly IPluginHost _host;
             private readonly IVerseRef _verseRef;
 
-            public GetCurrentProjectQueryHandler(IProject project, ILogger<GetCurrentProjectQueryHandler> logger, IPluginHost host, IVerseRef verseRef)
+            public GetTextCollectionsQueryHandler(IProject project, ILogger<GetTextCollectionsQueryHandler> logger, IPluginHost host, IVerseRef verseRef)
             {
                 _project = project;
                 _logger = logger;
