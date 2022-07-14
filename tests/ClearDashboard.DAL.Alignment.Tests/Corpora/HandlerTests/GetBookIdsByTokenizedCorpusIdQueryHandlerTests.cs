@@ -61,8 +61,6 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.NotNull(result.Message);
-
-            Output.WriteLine(result.Message);
         }
         finally
         {

@@ -3,10 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
-
-//USE TO ACCESS Models
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -15,13 +12,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>,
         IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
     {
-        // **********************************************
-        // TODO:  Remove the following two lines
-        //public static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory,
-        //    "..", "..", "..", "Corpora", "data");
-        //public static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
-        // **********************************************
-
         public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory,
             IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(
             projectNameDbContextFactory, projectProvider, logger)
@@ -57,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         t.ChapterNumber,
                                         t.VerseNumber,
                                         t.WordNumber,
-                                        t.SubwordNumber ?? 0),
+                                        t.SubwordNumber),
                                     t.Text)),
                             false)
                     )
@@ -68,7 +58,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 return new RequestResult<
                         IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
                     >
-                    (result: null, success: false, message: ex.Message);
+                    (result: null, success: false, message: ex.ToString());
             }
         }
     }

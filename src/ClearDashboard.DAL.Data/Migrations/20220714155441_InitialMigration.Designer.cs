@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220713134901_InitialMigration")]
+    [Migration("20220714155441_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -453,7 +453,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SubwordNumber")
+                    b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")

@@ -242,7 +242,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     ChapterNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     VerseNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true)
                 },

@@ -451,7 +451,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SubwordNumber")
+                    b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")

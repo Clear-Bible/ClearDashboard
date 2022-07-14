@@ -17,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int ChapterNumber { get; set; }
         public int VerseNumber { get; set; }
         public int WordNumber { get; set; }
-        public int? SubwordNumber { get; set; }
+        public int SubwordNumber { get; set; }
 
         public Guid TokenizationId { get; set; }
         public virtual TokenizedCorpus? Tokenization { get; set; }
