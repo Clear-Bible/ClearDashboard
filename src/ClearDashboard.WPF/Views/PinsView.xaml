@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
-    xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -13,6 +12,7 @@
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     x:Name="PinsViewWindow"
     d:DataContext="{d:DesignInstance Type=viewModels:PinsViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -58,7 +58,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                ToolTip="{helpers:Loc expandView}">
+                ToolTip="{helpers:Localization expandView}">
                 <Button.Style>
                     <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                         <Setter Property="Padding" Value="0" />
@@ -84,7 +84,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="{helpers:Loc PinsFilter}"
+                Content="{helpers:Localization PinsFilter}"
                 Style="{StaticResource MaterialDesignLabel}" />
             <TextBox
                 Width="200"
@@ -96,7 +96,7 @@
                 Margin="10,0,0,0"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
-                Content="{helpers:Loc PinsClearFilter}"
+                Content="{helpers:Localization PinsClearFilter}"
                 Style="{StaticResource BlueMidButton}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
@@ -105,7 +105,7 @@
                 Height="25"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                Content="{helpers:Loc PinsLoadReferences}"
+                Content="{helpers:Localization PinsLoadReferences}"
                 Style="{StaticResource BlueMidButton}"
                 Visibility="Collapsed" />
         </StackPanel>
@@ -138,7 +138,7 @@
                     <MenuItem
                         Command="{Binding ClearFilterCommand}"
                         CommandParameter="{Binding}"
-                        Header="{helpers:Loc PinsClearFilter}" />
+                        Header="{helpers:Localization PinsClearFilter}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
@@ -164,7 +164,7 @@
 
             <DataGrid.Columns>
                 <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsVerseReferences}">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsVerseReferences}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -195,7 +195,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Loc PinsLexeme}">
+                    Header="{helpers:Localization PinsLexeme}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -214,7 +214,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Loc PinsGloss}">
+                    Header="{helpers:Localization PinsGloss}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -232,7 +232,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Loc PinsOrigin}">
+                    Header="{helpers:Localization PinsOrigin}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -246,7 +246,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lform  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsForms}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsForms}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -259,7 +259,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsLanguage}">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsLanguage}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -272,7 +272,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Code  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsCode}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsCode}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -285,7 +285,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Match  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Loc PinsMatch}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsMatch}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -298,7 +298,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPhrase}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsPhrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -311,7 +311,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsWord}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsWord}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -324,7 +324,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsPrefix}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsPrefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -337,7 +337,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsStem}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsStem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -350,7 +350,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Loc PinsSuffix}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsSuffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -366,7 +366,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="1000"
-                    Header="{helpers:Loc PinsNotes}">
+                    Header="{helpers:Localization PinsNotes}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock

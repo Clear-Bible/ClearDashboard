@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
-    xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -12,6 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     d:DataContext="{d:DesignInstance Type=viewModels:TargetContextViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -47,7 +47,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                        ToolTip="{helpers:Loc expandView}">
+                        ToolTip="{helpers:Localization expandView}">
                         <Button.Style>
                             <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                                 <Setter Property="Padding" Value="0" />
@@ -74,14 +74,14 @@
                         x:Name="radUnformatted"
                         Margin="15,0,0,0"
                         Checked="radUnformatted_Checked"
-                        Content="{helpers:Loc TargetContextUnformatted}"
+                        Content="{helpers:Localization TargetContextUnformatted}"
                         IsChecked="True"
                         Style="{StaticResource MaterialDesignRadioButton}" />
                     <RadioButton
                         x:Name="radFormatted"
                         Margin="10,0,0,0"
                         Checked="radFormatted_Checked"
-                        Content="{helpers:Loc TargetContextFormatted}"
+                        Content="{helpers:Localization TargetContextFormatted}"
                         Style="{StaticResource MaterialDesignRadioButton}" />
 
                     <Button
@@ -92,7 +92,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding ZoomOutCommand}"
                         FontSize="20"
-                        ToolTip="{helpers:Loc TargetContextZoomIn}">
+                        ToolTip="{helpers:Localization TargetContextZoomIn}">
                         +
                     </Button>
 
@@ -103,7 +103,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding ZoomInCommand}"
                         FontSize="20"
-                        ToolTip="{helpers:Loc TargetContextZoomOut}">
+                        ToolTip="{helpers:Localization TargetContextZoomOut}">
                         -
                     </Button>
                 </StackPanel>

@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using FluentValidation;
 
-namespace Validators
+namespace ClearDashboard.Wpf.Validators
 {
     public interface IValidator<in T> : INotifyDataErrorInfo
     {

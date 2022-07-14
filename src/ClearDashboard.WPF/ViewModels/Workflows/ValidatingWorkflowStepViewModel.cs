@@ -3,57 +3,51 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Workflows;
 
-public interface IWorkflowStepViewModel
-{
-    Direction Direction { get; set; }
-    Task MoveForwards();
-    Task MoveBackwards();
-}
-
-public abstract class WorkflowStepViewModel : ApplicationScreen, IWorkflowStepViewModel
+public abstract class ValidatingWorkflowStepViewModel<TEntity> 
+    : ValidatingApplicationScreen<TEntity>, IWorkflowStepViewModel
 {
 
     private Direction _direction;
+
     public Direction Direction
     {
         get => _direction;
         set => Set(ref _direction, value);
     }
 
-    protected WorkflowStepViewModel()
-    {
-
-    }
-
-    protected WorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager) :
-        base(navigationService, logger, projectManager, eventAggregator)
-    {
-
-    }
-
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
-    {
-        ShowWorkflowButtons();
-        EnableControls = (Parent as WorkflowShellViewModel).EnableControls;
-        return base.OnActivateAsync(cancellationToken);
-    }
-
     private bool enableControls_;
+
     public bool EnableControls
     {
         get => enableControls_;
         set
         {
-            Logger.LogInformation($"WorkflowStepViewModel - Setting EnableControls to {value} at {DateTime.Now:HH:mm:ss.fff}");
+            Logger.LogInformation(
+                $"WorkflowStepViewModel - Setting EnableControls to {value} at {DateTime.Now:HH:mm:ss.fff}");
             //(Parent as WorkflowShellViewModel).EnableControls = value;
             Set(ref enableControls_, value);
         }
     }
 
+    protected ValidatingWorkflowStepViewModel()
+    {
+
+    }
+
+    protected ValidatingWorkflowStepViewModel(IEventAggregator eventAggregator, INavigationService navigationService,
+        ILogger logger, DashboardProjectManager projectManager, IValidator<TEntity> validator)
+        : base(navigationService, logger, projectManager, eventAggregator, validator)
+    {
+
+    }
+
+    private bool _canMoveForwards;
+    private bool _canMoveBackwards;
 
     public async Task MoveForwards()
     {
@@ -68,6 +62,7 @@ public abstract class WorkflowStepViewModel : ApplicationScreen, IWorkflowStepVi
     }
 
     private bool _showBackButton;
+
     public bool ShowBackButton
     {
         get => _showBackButton;
@@ -76,10 +71,29 @@ public abstract class WorkflowStepViewModel : ApplicationScreen, IWorkflowStepVi
 
 
     private bool _showForwardButton;
+
     public bool ShowForwardButton
     {
         get => _showForwardButton;
         set => Set(ref _showForwardButton, value);
+    }
+
+    public bool CanMoveForwards
+    {
+        get => _canMoveForwards;
+        set => Set(ref _canMoveForwards, value);
+    }
+
+    public bool CanMoveBackwards
+    {
+        get => _canMoveBackwards;
+        set => Set(ref _canMoveBackwards, value);
+    }
+
+    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        ShowWorkflowButtons();
+        return base.OnActivateAsync(cancellationToken);
     }
 
     protected void ShowWorkflowButtons()
