@@ -274,101 +274,6 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         }
 
-        public List<TextCollection> GetTextCollectionsData()
-        {
-            // get the text collections
-            List<TextCollection> textCollections = new();
-
-            if (this.InvokeRequired)
-            {
-                MethodInvoker del = delegate { GetTextCollectionsData(); };
-                this.Invoke(del);
-                return _textCollections;
-            }
-            else
-            {
-                var windows = _host.AllOpenWindows;
-                foreach (var window in windows)
-                {
-                    // check if window is text collection
-                    if (window is ITextCollectionChildState tc)
-                    {
-                        // get the projects for this window
-                        var projects = tc.AllProjects;
-                        foreach (var proj in projects)
-                        {
-                            TextCollection textCollection = new();
-                            if (proj != null)
-                            {
-                                IEnumerable<IUSFMToken> tokens = null;
-                                try
-                                {
-                                    tokens = _project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum,
-                                        _verseRef.VerseNum);
-                                }
-                                catch (Exception e)
-                                {
-                                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {proj.ShortName} : {e.Message}");
-                                }
-
-                                if (tokens != null)
-                                {
-                                    textCollection.ReferenceShort = _project.ShortName;
-
-                                    foreach (var token in tokens)
-                                    {
-                                        if (token is IUSFMMarkerToken marker)
-                                        {
-                                            if (marker.Type == MarkerType.Verse)
-                                            {
-                                                //skip
-                                            }
-                                            else if (marker.Type == MarkerType.Paragraph)
-                                            {
-                                                textCollection.Data += "/ ";
-                                            }
-                                            else
-                                            {
-                                                textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
-                                            }
-                                        }
-                                        else if (token is IUSFMTextToken textToken)
-                                        {
-                                            textCollection.Data += textToken.Text + " ";
-                                        }
-                                        else if (token is IUSFMAttributeToken)
-                                        {
-                                            textCollection.Data += "Attribute Token: " + token.ToString();
-                                        }
-                                        else
-                                        {
-                                            textCollection.Data += "Unexpected token type: " + token.ToString();
-                                        }
-                                    }
-
-                                    // remove the last paragraph tag if at the end
-                                    if (textCollection.Data.Length > 2)
-                                    {
-                                        if (textCollection.Data.EndsWith("/ "))
-                                        {
-                                            textCollection.Data =
-                                                textCollection.Data.Substring(0, textCollection.Data.Length - 2);
-                                        }
-                                    }
-
-                                    textCollections.Add(textCollection);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            _textCollections = textCollections;
-
-            return _textCollections;
-        }
-
         #endregion Paratext overrides - standard functions
 
 
@@ -469,20 +374,23 @@ namespace ClearDashboard.WebApiParatextPlugin
                             }
                             else
                             {
-                                lines.Add($"{marker.Type} Marker: {marker.Data}");
+                                //lines.Add($"{marker.Type} Marker: {marker.Data}");
                             }
                         }
                         else if (token is IUSFMTextToken textToken)
                         {
-                            lines.Add(textToken.Text);
+                            if (textToken.IsScripture)
+                            {
+                                lines.Add(textToken.Text);
+                            }
                         }
                         else if (token is IUSFMAttributeToken)
                         {
-                            lines.Add("Attribute Token: " + token.ToString());
+                            //lines.Add("Attribute Token: " + token.ToString());
                         }
                         else
                         {
-                            lines.Add("Unexpected token type: " + token.ToString());
+                            //lines.Add("Unexpected token type: " + token.ToString());
                         }
                     }
 
@@ -498,6 +406,106 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                 textBox.Lines = lines.ToArray();
             }
+        }
+
+        public List<TextCollection> GetTextCollectionsData()
+        {
+            // get the text collections
+            List<TextCollection> textCollections = new();
+
+            if (this.InvokeRequired)
+            {
+                MethodInvoker del = delegate { GetTextCollectionsData(); };
+                this.Invoke(del);
+                return _textCollections;
+            }
+            else
+            {
+                _textCollections.Clear();
+
+                var windows = _host.AllOpenWindows;
+                foreach (var window in windows)
+                {
+                    // check if window is text collection
+                    if (window is ITextCollectionChildState tc)
+                    {
+                        // get the projects for this window
+                        var projects = tc.AllProjects;
+                        foreach (var project in projects)
+                        {
+                            TextCollection textCollection = new();
+                            if (project != null)
+                            {
+                                IEnumerable<IUSFMToken> tokens = null;
+                                try
+                                {
+                                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum,
+                                        _verseRef.VerseNum);
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+                                }
+
+                                if (tokens != null)
+                                {
+                                    textCollection.ReferenceShort = project.ShortName;
+
+                                    foreach (var token in tokens)
+                                    {
+                                        if (token is IUSFMMarkerToken marker)
+                                        {
+                                            if (marker.Type == MarkerType.Verse)
+                                            {
+                                                //skip
+                                            }
+                                            else if (marker.Type == MarkerType.Paragraph)
+                                            {
+                                                textCollection.Data += "/ ";
+                                            }
+                                            else
+                                            {
+                                                //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                                            }
+                                        }
+                                        else if (token is IUSFMTextToken textToken)
+                                        {
+                                            if (token.IsScripture)
+                                            {
+                                                textCollection.Data += textToken.Text + " ";
+                                            }
+                                        }
+                                        else if (token is IUSFMAttributeToken)
+                                        {
+                                            textCollection.Data += "Attribute Token: " + token.ToString();
+                                        }
+                                        else
+                                        {
+                                            textCollection.Data += "Unexpected token type: " + token.ToString();
+                                        }
+                                    }
+
+                                    // remove the last paragraph tag if at the end
+                                    if (textCollection.Data.Length > 2)
+                                    {
+                                        if (textCollection.Data.EndsWith("/ "))
+                                        {
+                                            textCollection.Data =
+                                                textCollection.Data.Substring(0, textCollection.Data.Length - 2);
+                                        }
+                                    }
+
+                                    textCollections.Add(textCollection);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            _textCollections = textCollections;
+
+            return _textCollections;
         }
 
 

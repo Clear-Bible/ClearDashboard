@@ -64,7 +64,7 @@
                 MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                 Margin="5"
                 VerticalAlignment="Top"
-                ItemsSource="{Binding TextCollectionLists}">
+                ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger= PropertyChanged}">
                 <ListView.View>
                     <GridView>
                         <GridView.ColumnHeaderContainerStyle>
@@ -73,7 +73,7 @@
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
 
-                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=TextCollectionListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <helpers:BindableTextBlock

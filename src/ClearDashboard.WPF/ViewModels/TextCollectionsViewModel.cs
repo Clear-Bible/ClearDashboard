@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Models;
 
 // ReSharper disable once CheckNamespace
@@ -24,6 +25,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Member Variables
 
+        private string _currentVerse = "";
 
         #endregion //Member Variables
 
@@ -34,9 +36,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
-        private List<TextCollectionList> _textCollectionLists = new();
+        private ObservableCollection<TextCollectionList> _textCollectionLists = new();
 
-        public List<TextCollectionList> TextCollectionLists
+        public ObservableCollection<TextCollectionList> TextCollectionLists
         {
             get { return _textCollectionLists; }
             set
@@ -85,11 +87,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 if (result.Success)
                 {
-                    TextCollectionLists.Clear();
-                    var data = result.Data;
-
                     OnUIThread(() =>
                     {
+                        TextCollectionLists.Clear();
+                        var data = result.Data;
+
                         foreach (var textCollection in data)
                         {
                             TextCollectionList tc = new();
@@ -97,8 +99,8 @@ namespace ClearDashboard.Wpf.ViewModels
                             var endPart = textCollection.Data;
                             var startPart = textCollection.ReferenceShort;
 
-                            tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Bold });
-                            tc.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
+                            tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                            tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = Brushes.Cyan });
 
                             TextCollectionLists.Add(tc);
                         }
@@ -124,7 +126,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            await CallGetTextCollections().ConfigureAwait(false);
+            if (_currentVerse != message.Verse.PadLeft(9, '0'))
+            {
+                _currentVerse = message.Verse.PadLeft(9, '0');
+                await CallGetTextCollections().ConfigureAwait(false);
+            }
         }
 
         #endregion // Methods
