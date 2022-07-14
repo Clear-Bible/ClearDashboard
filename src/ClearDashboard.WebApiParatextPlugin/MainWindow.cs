@@ -228,7 +228,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
 
-            // send the new verse
+            // send the new verse & text collections
             try
             {
                 if (newReference != _verseRef)
@@ -248,6 +248,22 @@ namespace ClearDashboard.WebApiParatextPlugin
                             $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
                     }
 
+
+                    //var textCollections = GetTextCollectionsData();
+
+                    //if (textCollections.Count > 0)
+                    //{
+                    //    try
+                    //    {
+                    //        await HubContext.Clients.All.SendTextCollections(textCollections);
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        AppendText(Color.Red,
+                    //            $"Unexpected error occurred calling PluginHub.SendTextCollections() : {ex.Message}");
+                    //    }
+                    //}
+
                 }
             }
             catch (Exception ex)
@@ -255,20 +271,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
             }
 
-            var textCollections = GetTextCollectionsData();
-
-            if (textCollections.Count > 0)
-            {
-                try
-                {
-                    await HubContext.Clients.All.SendTextCollections(textCollections);
-                }
-                catch (Exception ex)
-                {
-                    AppendText(Color.Red,
-                        $"Unexpected error occurred calling PluginHub.SendTextCollections() : {ex.Message}");
-                }
-            }
         }
 
         private List<TextCollection> GetTextCollectionsData()

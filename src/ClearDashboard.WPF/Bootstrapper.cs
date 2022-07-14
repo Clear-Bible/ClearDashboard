@@ -27,7 +27,6 @@ namespace ClearDashboard.Wpf
     {
         #region Properties
 
-        public string ResourceAccessToken { get; } = "AG5qSwcd1C5+Ru8BrbkHopZ57W8DKpG9inUiKtk0FamYbKLfT6DV2VAzVVdjBTRQahgGjC+cnjct0Jef7XUCVf37p6DH2iXx0MZITwzrxX4eGy0ZkojMB85oTOruay5xmejGGQ40CI5JiS0CBRSSrLh53ssc0LAf4=";
         protected FrameSet FrameSet { get; private set; }
         public static IHost Host { get; private set; }
         protected ILogger<Bootstrapper> Logger { get; private set; }

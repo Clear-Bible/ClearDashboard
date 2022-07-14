@@ -73,14 +73,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                 }
             }
 
-            {
-                var result = await _mediator.Send(new GetTextCollectionsQuery());
-                if (result.Success)
-                {
-                    _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
-                    Clients.All.SendTextCollections(result.Data);
-                }
-            }
+            //{
+            //    var result = await _mediator.Send(new GetTextCollectionsQuery());
+            //    if (result.Success)
+            //    {
+            //        _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
+            //        Clients.All.SendTextCollections(result.Data);
+            //    }
+            //}
 
             await base.OnConnected();
         }
