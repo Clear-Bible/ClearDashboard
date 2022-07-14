@@ -22,47 +22,65 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <DataTemplate x:Key="TokenBubble">
+            <Border BorderBrush="{DynamicResource MaterialDesignBody}" BorderThickness="1"  CornerRadius="3" Margin="5,2,5,2" Height="34">
 
+                <TextBlock Text="{Binding}" Margin="15,8,15,8"></TextBlock>
+            </Border>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="TokenBubblePanel">
+            <StackPanel Orientation="Horizontal"/>
+        </ItemsPanelTemplate>
     </Page.Resources>
 
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Button
+            Margin="5,5,0,0"
+            Padding="3"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            BorderThickness="0"
+            Command="NavigationCommands.BrowseBack">
+            <materialDesign:PackIcon Kind="ChevronLeft" />
+        </Button>
 
+        <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
-        <ItemsControl Name="Words" Grid.Row="0"  ItemsSource="{Binding Path=GreekPsalm}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Height="40">
-                        <TextBlock Foreground="Black" Text="{Binding}" Margin="10"></TextBlock>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <ItemsControl Name="Words2" Grid.Row="1"  ItemsSource="{Binding Path=HebrewPsalm}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Height="40">
-                        <TextBlock Foreground="Black" Text="{Binding}" Margin="10"></TextBlock>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="English words"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding EnglishWords}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
+        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Greek characters"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="2" ItemsSource="{Binding GreekChars}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
+        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Hebrew Psalm"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Path=HebrewPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
+        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek Psalm"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+
+        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="English from file"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Path=EnglishFile}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+
+        <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="Greek from file"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Path=GreekVerse1}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+
+        <!--<StackPanel Grid.Column="1" Orientation="Horizontal" Grid.Row="6">
+            <Button x:Name="LoadFiles">Load Files</Button>
+            <Button x:Name="BindProject">Bind Project</Button>
+        </StackPanel>-->
     </Grid>
 </Page>

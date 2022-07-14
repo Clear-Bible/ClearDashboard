@@ -1,35 +1,152 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Models;
+using SIL.Extensions;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
+using Token = ClearDashboard.DataAccessLayer.Models.Token;
+
+// using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class AlignmentSampleViewModel : ApplicationScreen
     {
-        public List<string> Words { get; set; } = new() { "foo", "bar" };
-
+        public List<string> EnglishWords { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
         public List<string> GreekChars { get; set; } = "α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω".Split(' ').ToList();
-
         public List<string> HebrewPsalm { get; set; } = "כִּֽי־אַ֭תָּה תָּאִ֣יר נֵרִ֑י יְהוָ֥ה אֱ֝לֹהַ֗י יַגִּ֥יהַּ חָשְׁכִּֽי׃".Split(' ').ToList();
         public List<string> GreekPsalm { get; set; } = "χι αθθα θαειρ νηρι YHWH ελωαι αγι οσχι".Split(' ').ToList();
 
+        private static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
+        private static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
+        private static readonly string GreekNTUsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "nestle1904");
+
+        private static ITextCorpus GetSampleEnglishTextCorpus()
+        {
+            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, UsfmTestProjectPath)
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>();
+        }
+
+        private static ITextCorpus GetSampleGreekTextCorpus()
+        {
+            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmTestProjectPath)
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>();
+        }
+
+        private static Corpus GetSampleCorpus(ITextCorpus textCorpus, string language)
+        {
+            var corpus = new Corpus
+            {
+                IsRtl = false,
+                Name = "Sample",
+                Language = language,
+                CorpusType = CorpusType.Standard,
+                Metadata =
+                {
+                    ["TokenizationQueryString"] = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()"
+                }
+            };
+
+            var tokenizedCorpus = new TokenizedCorpus();
+            textCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
+                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
+                {
+                    BookNumber = engineToken.TokenId.BookNumber,
+                    ChapterNumber = engineToken.TokenId.ChapterNumber,
+                    VerseNumber = engineToken.TokenId.VerseNumber,
+                    WordNumber = engineToken.TokenId.WordNumber,
+                    SubwordNumber = engineToken.TokenId.SubWordNumber,
+                    Text = engineToken.Text
+                }))
+            );
+            corpus.TokenizedCorpora.Add(tokenizedCorpus);
+            return corpus;
+        }
+
+        private static IEnumerable<string> GetBookAbbreviations(TokenizedCorpus tokenizedCorpus)
+        {
+            var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
+            var bookIdsToAbbreviations = FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
+
+            var bookAbbreviations = new List<string>();
+            foreach (var bookNumber in bookNumbers)
+            {
+                if (bookIdsToAbbreviations.TryGetValue(bookNumber ?? -1, out string? bookAbbreviation))
+                {
+                    bookAbbreviations.Add(bookAbbreviation);
+                }
+            }
+
+            return bookAbbreviations;
+        }
+
+        private Corpus _englishCorpus;
+        private Corpus EnglishCorpus => _englishCorpus ??= GetSampleCorpus(GetSampleEnglishTextCorpus(), "English");
+        private TokenizedCorpus EnglishTokenizedCorpus => EnglishCorpus.TokenizedCorpora.First();
+        public List<string> EnglishFile { get; set; } = new();
+        private Corpus _greekCorpus;
+        private Corpus GreekCorpus => _greekCorpus ??= GetSampleCorpus(GetSampleGreekTextCorpus(), "Greek");
+        private TokenizedCorpus GreekTokenizedCorpus => GreekCorpus.TokenizedCorpora.First();
+        public List<string> GreekVerse1 { get; set; } = new();
+
         public AlignmentSampleViewModel()
         {
-            var a = "כִּֽי־אַ֭תָּה תָּאִ֣יר נֵרִ֑י יְהוָ֥ה אֱ֝לֹהַ֗י יַגִּ֥יהַּ חָשְׁכִּֽי׃";
         }
 
         public AlignmentSampleViewModel(INavigationService navigationService, 
             ILogger<SettingsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            var greekChars = "α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω".Split(' ');
         }
 
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            LoadFiles();
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        public void LoadFiles()
+        {
+            EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            NotifyOfPropertyChange(nameof(EnglishFile));
+
+            GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            NotifyOfPropertyChange(nameof(GreekVerse1));
+        }
+
+        public void BindProject()
+        {
+            ProjectManager.CurrentProject = new ProjectInfo
+            {
+                Id = Guid.Parse(""),
+                ProjectName = "Alignment"
+            };
+            ProjectManager.CurrentUser = new User
+            {
+                Id = Guid.Parse("")
+            };
+        }
     }
 }
