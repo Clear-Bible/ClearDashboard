@@ -17,8 +17,8 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
+using ClearDashboard.Wpf.Validators;
 using SIL.Extensions;
-using Validators;
 
 
 namespace ClearDashboard.Wpf
