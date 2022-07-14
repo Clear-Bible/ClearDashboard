@@ -33,7 +33,7 @@
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Padding" Value="-30,0,-5,0" />
 
-                    <EventSetter Event="Click" Handler="Utc_OnClick" />
+                    <!--<EventSetter Event="Click" Handler="Utc_OnClick" />-->
 
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Display">
@@ -120,9 +120,10 @@
                             <ComboBox 
                                 SelectionChanged="UtcComboSelected"
                                 ItemsSource="{Binding utcStringList}" 
-                                SelectedItem="{Binding UtcComboSelectedString}" 
+                                SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}" 
                                 Visibility="{Binding UtcComboVisibility}"
-                                 Tag="{Binding MenuItems, Mode=TwoWay}"/>
+                                Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                                 />
                             <TextBlock
                                 x:Name="Utc"
                                 Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"

@@ -65,19 +65,19 @@ namespace ClearDashboard.Wpf.UserControls
             foreach (var timezone in _timezones)
             {
                 utcComboList.Add(timezone.DisplayName);
-                _timeZoneMenuItemNest.Add(new MenuItemNest
-                {
-                    ClockAddTimeZoneVisibility = Visibility.Collapsed,
-                    ClockCheckBoxVisibility = Visibility.Collapsed,
-                    ClockTextBoxVisibility = Visibility.Collapsed,
-                    NameTimeVisibility = Visibility.Collapsed,
-                    ClockTextBlockText = timezone.DisplayName,
-                    ClockTextBlockVisibility = Visibility.Visible,
-                    DeleteButtonVisibility = Visibility.Collapsed,
-                    TimeZoneInfo = timezone,
-                    MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
-                    UtcComboVisibility = Visibility.Collapsed,
-                });
+                //_timeZoneMenuItemNest.Add(new MenuItemNest
+                //{
+                //    ClockAddTimeZoneVisibility = Visibility.Collapsed,
+                //    ClockCheckBoxVisibility = Visibility.Collapsed,
+                //    ClockTextBoxVisibility = Visibility.Collapsed,
+                //    NameTimeVisibility = Visibility.Collapsed,
+                //    ClockTextBlockText = timezone.DisplayName,
+                //    ClockTextBlockVisibility = Visibility.Visible,
+                //    DeleteButtonVisibility = Visibility.Collapsed,
+                //    TimeZoneInfo = timezone,
+                //    MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
+                //    UtcComboVisibility = Visibility.Collapsed,
+                //});
             }
 
             //Construct Individual MenuItemNests
@@ -112,11 +112,12 @@ namespace ClearDashboard.Wpf.UserControls
                                         NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
                                         NameTimeVisibility = Visibility.Visible,
                                         ClockTextBlockText = individualArr[2],
+                                        ClockTextBlockVisibility = Visibility.Collapsed,
                                         DeleteButtonVisibility = Visibility.Visible,
                                         GroupName = individualArr[3],
                                         MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                                         TimeZoneInfo = timezone,
-                                        MenuItems = _timeZoneMenuItemNest,
+                                        //MenuItems = _timeZoneMenuItemNest,
                                         utcStringList = utcComboList,
                                         UtcComboVisibility = Visibility.Visible,
                                         UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
@@ -342,11 +343,12 @@ namespace ClearDashboard.Wpf.UserControls
                             ClockTextBoxVisibility = Visibility.Visible,
                             NameTime = DateTime.Now.ToShortTimeString(),
                             ClockTextBlockText = TimeZoneInfo.Local.DisplayName,
+                            ClockTextBlockVisibility = Visibility.Collapsed,
                             NameTimeVisibility = Visibility.Visible,
                             DeleteButtonVisibility = Visibility.Visible,
                             MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                             TimeZoneInfo = TimeZoneInfo.Local,
-                            MenuItems = _timeZoneMenuItemNest,
+                            //MenuItems = _timeZoneMenuItemNest,
                             UtcComboVisibility = Visibility.Visible,
                             utcStringList = utcComboList,
                             UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
@@ -386,8 +388,9 @@ namespace ClearDashboard.Wpf.UserControls
                         NameTime = DateTime.Now.ToShortTimeString(),
                         NameTimeVisibility = Visibility.Visible,
                         ClockTextBlockText = TimeZoneInfo.Local.DisplayName,
+                        ClockTextBlockVisibility = Visibility.Collapsed,
                         DeleteButtonVisibility = Visibility.Visible,
-                        MenuItems = _timeZoneMenuItemNest,
+                        //MenuItems = _timeZoneMenuItemNest,
                         MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                         TimeZoneInfo = TimeZoneInfo.Local,
                         UtcComboVisibility = Visibility.Visible,
@@ -448,48 +451,66 @@ namespace ClearDashboard.Wpf.UserControls
             }
         }
 
-        private void Utc_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem menuItem)
-            {
-                if (menuItem.DataContext is MenuItemNest nest)
-                {
-                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Utc)
-                    {
-                        _tempHeader = nest.ClockTextBlockText;
-                        _tempTimeZoneInfo = nest.TimeZoneInfo;
-                    }
+        //private void Utc_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is MenuItem menuItem)
+        //    {
+        //        if (menuItem.DataContext is MenuItemNest nest)
+        //        {
+        //            if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Utc)
+        //            {
+        //                _tempHeader = nest.ClockTextBlockText;
+        //                _tempTimeZoneInfo = nest.TimeZoneInfo;
+        //            }
 
-                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Individual)
-                    {
-                        nest.ClockTextBlockText = _tempHeader;
-                        nest.TimeZoneInfo = _tempTimeZoneInfo;
-                    }
+        //            if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Individual)
+        //            {
+        //                nest.ClockTextBlockText = _tempHeader;
+        //                nest.TimeZoneInfo = _tempTimeZoneInfo;
+        //            }
 
-                    if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Group)
-                    {
-                       sortMenuItemsIndividual(nest.MenuItems);
-                       SaveMenuToSettings();
-                    }
-                }
-            }
-        }
+        //            if (nest.MenuLevel == MenuItemNest.ClockMenuLevel.Group)
+        //            {
+        //               sortMenuItemsIndividual(nest.MenuItems);
+        //               SaveMenuToSettings();
+        //            }
+        //        }
+        //    }
+        //}
 
         private void UtcComboSelected(object sender, RoutedEventArgs e)
         {
             if (sender is ComboBox comboBox)
             {
-                if (comboBox.Tag is ObservableCollection<MenuItemNest> nest)
-                {   
-                        //_tempHeader = nest.ClockTextBlockText;
-                        //_tempTimeZoneInfo = nest.TimeZoneInfo;
-                    
-                        //nest.ClockTextBlockText = _tempHeader;
-                        //nest.TimeZoneInfo = _tempTimeZoneInfo;
-                 
-                        //sortMenuItemsIndividual(nest.MenuItems);
-                        //SaveMenuToSettings();
-                    
+                if (comboBox.Tag is TimeZoneInfo timeZoneInfo)
+                {
+                    foreach (var timezone in _timezones)
+                    {
+                        if (timezone.DisplayName == (string)comboBox.SelectedItem)
+                        {
+                            comboBox.Tag = timezone;
+                        }
+                    }
+
+                    if (comboBox.DataContext is MenuItemNest nest)
+                    {
+                        //find the group that hte nest is in
+                        foreach (var group in MenuItems[0].MenuItems)
+                        {
+                            if (group.MenuItems != null)
+                            {
+                                foreach (var individual in group.MenuItems)
+                                {
+                                    if (individual == nest)
+                                    {
+                                        sortMenuItemsIndividual(group.MenuItems);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    SaveMenuToSettings();
                 }
             }
         }
