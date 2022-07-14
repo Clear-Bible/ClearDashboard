@@ -455,6 +455,7 @@ namespace ClearDashboard.Wpf.UserControls
                         });
                         
                         sortMenuItemsIndividual(nest);
+                        InstantClockRefresh();
                         SaveMenuToSettings();
                     }
                 }
