@@ -42,17 +42,18 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         if (tokenizedCorpus == null)
         {
             return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                (
-                    // NB:  better to return default(T) which is the default on the constructor.
-                    //result: (new List<string>(), new CorpusId(new Guid())),
-                    success: false,
-                    message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
-                ));
+            (
+                // NB:  better to return default(T) which is the default on the constructor.
+                //result: (new List<string>(), new CorpusId(new Guid())),
+                success: false,
+                message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
+            ));
         }
 
         var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
         var bookIdsToAbbreviations =
-            FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
+            new FileGetBookIdsNonStaticAwesomeness().BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
+                x => x.silCannonBookAbbrev);
 
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
@@ -60,11 +61,11 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             if (!bookIdsToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
                 return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                    (
-                        result: (new List<string>(), new CorpusId(new Guid())),
-                        success: false,
-                        message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
-                    ));
+                (
+                    result: (new List<string>(), new CorpusId(new Guid())),
+                    success: false,
+                    message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
+                ));
             }
 
             bookAbbreviations.Add(bookAbbreviation);
