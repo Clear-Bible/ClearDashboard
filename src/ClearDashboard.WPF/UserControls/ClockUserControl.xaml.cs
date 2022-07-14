@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class ClockUserControl : UserControl, INotifyPropertyChanged
     {
-        private List<string> utcComboList = new List<string> { "asd", "sdf", "dfg" };
+        private List<string> utcComboList = new();
 
     System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
 
@@ -64,6 +64,7 @@ namespace ClearDashboard.Wpf.UserControls
             _timeZoneMenuItemNest = new();
             foreach (var timezone in _timezones)
             {
+                utcComboList.Add(timezone.DisplayName);
                 _timeZoneMenuItemNest.Add(new MenuItemNest
                 {
                     ClockAddTimeZoneVisibility = Visibility.Collapsed,
@@ -76,7 +77,6 @@ namespace ClearDashboard.Wpf.UserControls
                     TimeZoneInfo = timezone,
                     MenuLevel = MenuItemNest.ClockMenuLevel.Utc,
                     UtcComboVisibility = Visibility.Collapsed,
-                    
                 });
             }
 
@@ -119,6 +119,7 @@ namespace ClearDashboard.Wpf.UserControls
                                         MenuItems = _timeZoneMenuItemNest,
                                         utcStringList = utcComboList,
                                         UtcComboVisibility = Visibility.Visible,
+                                        UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                                     });
                                 }
                             }
@@ -347,6 +348,8 @@ namespace ClearDashboard.Wpf.UserControls
                             TimeZoneInfo = TimeZoneInfo.Local,
                             MenuItems = _timeZoneMenuItemNest,
                             UtcComboVisibility = Visibility.Visible,
+                            utcStringList = utcComboList,
+                            UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                         });
                         
                         sortMenuItemsIndividual(nest);
@@ -388,6 +391,8 @@ namespace ClearDashboard.Wpf.UserControls
                         MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
                         TimeZoneInfo = TimeZoneInfo.Local,
                         UtcComboVisibility = Visibility.Visible,
+                        utcStringList = utcComboList,
+                        UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                     });
 
                     sortMenuItemsGroup();
@@ -469,6 +474,26 @@ namespace ClearDashboard.Wpf.UserControls
                 }
             }
         }
+
+        private void UtcComboSelected(object sender, RoutedEventArgs e)
+        {
+            if (sender is ComboBox comboBox)
+            {
+                if (comboBox.Tag is ObservableCollection<MenuItemNest> nest)
+                {   
+                        //_tempHeader = nest.ClockTextBlockText;
+                        //_tempTimeZoneInfo = nest.TimeZoneInfo;
+                    
+                        //nest.ClockTextBlockText = _tempHeader;
+                        //nest.TimeZoneInfo = _tempTimeZoneInfo;
+                 
+                        //sortMenuItemsIndividual(nest.MenuItems);
+                        //SaveMenuToSettings();
+                    
+                }
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propName = null)
@@ -615,6 +640,16 @@ namespace ClearDashboard.Wpf.UserControls
 
         public List<string> utcStringList { get; set; }
         public Visibility UtcComboVisibility { get; set; }
+        private string _utcComboSelectedString{ get; set; } = "(UTC) Coordinated Universal Time";
+        public string UtcComboSelectedString
+        {
+            get { return _utcComboSelectedString; }
+            set
+            {
+                _utcComboSelectedString = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<MenuItemNest> MenuItems { get; set; }
 

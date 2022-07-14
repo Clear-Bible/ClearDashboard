@@ -117,7 +117,12 @@
                                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="DeepSkyBlue" />
                                 </CheckBox.Resources>
                             </CheckBox>
-                            <ComboBox ItemsSource="{Binding utcStringList}" SelectedIndex="0" Visibility="{Binding UtcComboVisibility}"/>
+                            <ComboBox 
+                                SelectionChanged="UtcComboSelected"
+                                ItemsSource="{Binding utcStringList}" 
+                                SelectedItem="{Binding UtcComboSelectedString}" 
+                                Visibility="{Binding UtcComboVisibility}"
+                                 Tag="{Binding MenuItems, Mode=TwoWay}"/>
                             <TextBlock
                                 x:Name="Utc"
                                 Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
