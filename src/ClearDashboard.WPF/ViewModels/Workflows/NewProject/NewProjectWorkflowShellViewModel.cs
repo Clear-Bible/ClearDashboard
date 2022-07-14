@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Workflows;
-using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 {
     public class NewProjectWorkflowShellViewModel : WorkflowShellViewModel
     {

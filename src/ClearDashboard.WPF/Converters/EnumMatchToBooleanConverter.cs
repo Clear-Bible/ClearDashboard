@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Converters
+namespace ClearDashboard.Wpf.Converters
 {
     public class EnumMatchToBooleanConverter : IValueConverter
     {

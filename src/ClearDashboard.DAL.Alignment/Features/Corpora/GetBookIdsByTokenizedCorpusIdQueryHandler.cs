@@ -30,7 +30,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         _mediator = mediator;
     }
 
-    protected override async Task<RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>> GetDataAsync(
+    protected override Task<RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>> GetDataAsync(
         GetBookIdsByTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
     {
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
@@ -41,13 +41,13 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
 
         if (tokenizedCorpus == null)
         {
-            return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-            (
-                // NB:  better to return default(T) which is the default on the constructor.
-                //result: (new List<string>(), new CorpusId(new Guid())),
-                success: false,
-                message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
-            );
+            return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
+                (
+                    // NB:  better to return default(T) which is the default on the constructor.
+                    //result: (new List<string>(), new CorpusId(new Guid())),
+                    success: false,
+                    message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
+                ));
         }
 
         var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
@@ -59,18 +59,18 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             if (!bookIdsToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
-                return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                (
-                    result: (new List<string>(), new CorpusId(new Guid())),
-                    success: false,
-                    message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
-                );
+                return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
+                    (
+                        result: (new List<string>(), new CorpusId(new Guid())),
+                        success: false,
+                        message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
+                    ));
             }
 
             bookAbbreviations.Add(bookAbbreviation);
         }
 
-        return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-            ((bookAbbreviations, new CorpusId(tokenizedCorpus.Corpus.Id)));
+        return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
+            ((bookAbbreviations, new CorpusId(tokenizedCorpus.Corpus.Id))));
     }
 }
