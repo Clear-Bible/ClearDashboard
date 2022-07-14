@@ -1,23 +1,30 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using System.Windows;
+using System.Windows.Documents;
+using Models;
 
+// ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>, IHandle<VerseChangedMessage>
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>,
+        IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
 
-     
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -27,48 +34,82 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Observable Properties
 
+        private List<TextCollectionList> _textCollectionLists = new();
+
+        public List<TextCollectionList> TextCollectionLists
+        {
+            get { return _textCollectionLists; }
+            set
+            {
+                _textCollectionLists = value;
+                NotifyOfPropertyChange(() => TextCollectionLists);
+            }
+        }
+
 
         #endregion //Observable Properties
 
         #region Constructor
+        // ReSharper disable once UnusedMember.Global
         public TextCollectionsViewModel()
         {
-
+            // no-op this is here for the XAML design time
         }
 
-        public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+        public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             this.Title = "🗐 TEXT COLLECTION";
             this.ContentId = "TEXTCOLLECTION";
         }
 
-        protected async override void OnViewAttached(object view, object context)
+        protected override async void OnViewAttached(object view, object context)
+        {
+            await CallGetTextCollections().ConfigureAwait(false);
+            base.OnViewAttached(view, context);
+        }
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private async Task CallGetTextCollections()
         {
             try
             {
                 var result = await ExecuteRequest(new GetTextCollectionsQuery(), CancellationToken.None)
                     .ConfigureAwait(false);
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
+
+
                 if (result.Success)
                 {
+                    TextCollectionLists.Clear();
                     var data = result.Data;
 
-                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
-                }
+                    OnUIThread(() =>
+                    {
+                        foreach (var textCollection in data)
+                        {
+                            TextCollectionList tc = new();
 
+                            var endPart = textCollection.Data;
+                            var startPart = textCollection.ReferenceShort;
+
+                            tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Bold });
+                            tc.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
+
+                            TextCollectionLists.Add(tc);
+                        }
+                    });
+                }
             }
             catch (Exception e)
             {
                 Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
             }
-
-            base.OnViewAttached(view, context);
         }
-
-
-        #endregion //Constructor
-
-        #region Methods
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
@@ -81,10 +122,9 @@ namespace ClearDashboard.Wpf.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            // TODO
-            return Task.CompletedTask;
+            await CallGetTextCollections().ConfigureAwait(false);
         }
 
         #endregion // Methods
