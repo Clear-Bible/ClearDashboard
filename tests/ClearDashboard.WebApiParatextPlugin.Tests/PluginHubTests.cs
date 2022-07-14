@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using Microsoft.AspNet.SignalR.Client;
 using Xunit;
 using Xunit.Abstractions;
