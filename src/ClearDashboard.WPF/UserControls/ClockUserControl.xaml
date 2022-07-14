@@ -9,12 +9,14 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Height="34" VerticalAlignment="Center">
+    <Grid
+        Height="36"
+        Margin="-1"
+        VerticalAlignment="Center">
 
         <Border
             x:Name="TimerBorder"
             Width="157"
-            Height="34"
             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="10" />
@@ -117,14 +119,15 @@
                                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="DeepSkyBlue" />
                                 </CheckBox.Resources>
                             </CheckBox>
-                            <ComboBox 
-                                SelectionChanged="UtcComboSelected"
-                                ItemsSource="{Binding utcStringList}" 
-                                SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}" 
-                                Visibility="{Binding UtcComboVisibility}"
-                                Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                            <ComboBox
+                                Height="26"
+                                ItemsSource="{Binding utcStringList}"
                                 MouseEnter="TextBox_OnMouseEnter"
-                                MouseLeave="TextBox_OnMouseLeave"/>
+                                MouseLeave="TextBox_OnMouseLeave"
+                                SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}"
+                                SelectionChanged="UtcComboSelected"
+                                Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                                Visibility="{Binding UtcComboVisibility}" />
                             <TextBlock
                                 x:Name="Utc"
                                 Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
