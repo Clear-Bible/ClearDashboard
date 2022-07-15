@@ -1,7 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora

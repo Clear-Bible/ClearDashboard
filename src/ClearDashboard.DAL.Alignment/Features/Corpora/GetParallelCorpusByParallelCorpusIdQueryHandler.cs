@@ -17,11 +17,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         GetParallelCorpusByParallelCorpusIdQuery,
         RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
             TokenizedCorpusId targetTokenizedCorpusId,
-            IEnumerable<Models.VerseMapping> verseMappings,
+            IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>,
         (TokenizedCorpusId sourceTokenizedCorpusId,
         TokenizedCorpusId targetTokenizedCorpusId,
-        IEnumerable<Models.VerseMapping> verseMappings,
+        IEnumerable<VerseMapping> verseMappings,
         ParallelCorpusId parallelCorpusId)>
     {
 
@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
             TokenizedCorpusId targetTokenizedCorpusId, 
-            IEnumerable<Models.VerseMapping> verseMappings, 
+            IEnumerable<VerseMapping> verseMappings, 
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
 
         {
@@ -51,14 +51,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
-                    IEnumerable<Models.VerseMapping> verseMappings,
+                    IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
                 (result: (new TokenizedCorpusId(new Guid()),
                         new TokenizedCorpusId(new Guid()),
-                        new List<Models.VerseMapping>() {
-                            new Models.VerseMapping(
-                                new List<Models.Verse>() {new Models.Verse("MAT", 1, 1)},
-                                new List<Models.Verse>() {new Models.Verse("MAT", 1, 1) })},
+                        new List<VerseMapping>() {
+                            new VerseMapping(
+                                new List<Verse>() {new Verse("MAT", 1, 1)},
+                                new List<Verse>() {new Verse("MAT", 1, 1) })},
                         new ParallelCorpusId(new Guid())),
                     success: true,
                     message: "successful result from test");

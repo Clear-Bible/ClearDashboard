@@ -6,7 +6,6 @@ using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
