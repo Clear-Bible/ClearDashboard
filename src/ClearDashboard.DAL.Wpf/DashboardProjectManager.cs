@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.AspNet.SignalR.Client;
@@ -15,6 +17,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 public record VerseChangedMessage(string Verse);
 
 public record ProjectChangedMessage(ParatextProject Project);
+
+public record TextCollectionChangedMessage(List<TextCollection> TextCollections);
 
 public record ParatextConnectedMessage(bool Connected);
 
@@ -141,6 +145,11 @@ public class DashboardProjectManager : ProjectManager
         {
             CurrentParatextProject = project;
             await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+        });
+
+        HubProxy.On<List<TextCollection>>("textCollections", async (textCollection) =>
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));
         });
 
         // ReSharper restore AsyncVoidLambda

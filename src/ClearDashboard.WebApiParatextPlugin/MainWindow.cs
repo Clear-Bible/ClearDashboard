@@ -1,23 +1,19 @@
-﻿using ClearDashboard.WebApiParatextPlugin.Extensions;
+﻿using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin.Hosting;
-using Microsoft.VisualStudio.Threading;
 using Paratext.PluginInterfaces;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -27,6 +23,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
+        private List<IProject> m_ProjectList = new ();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -36,6 +33,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IDisposable WebAppProxy { get; set; }
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
+        private List<TextCollection> _textCollections = new();
         #endregion
 
         #region startup
@@ -119,6 +117,14 @@ namespace ClearDashboard.WebApiParatextPlugin
             _project = parent.CurrentState.Project;
             _parent = parent;
             AppendText(Color.Green, $"OnAddedToParent called");
+
+            // Since DoLoad is done on a different thread than what was used
+            // to create the control, we need to use the Invoke method.
+            //Invoke((Action)(() => UpdateProjectList()));
+            //Invoke((Action)(() => ShowScripture()));
+
+            UpdateProjectList();
+            ShowScripture(_project);
         }
 
         public override string GetState()
@@ -130,6 +136,10 @@ namespace ClearDashboard.WebApiParatextPlugin
        
         public override void DoLoad(IProgressInfo progressInfo)
         {
+            // Since DoLoad is done on a different thread than what was used
+            // to create the control, we need to use the Invoke method.
+            Invoke((Action)(() => GetAllProjects()));
+
             StartWebHost();
         }
 
@@ -222,6 +232,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="newReference"></param>
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
+
+            // send the new verse & text collections
             try
             {
                 if (newReference != _verseRef)
@@ -241,19 +253,263 @@ namespace ClearDashboard.WebApiParatextPlugin
                             $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
                     }
 
+
+                    //var textCollections = GetTextCollectionsData();
+
+                    //if (textCollections.Count > 0)
+                    //{
+                    //    try
+                    //    {
+                    //        await HubContext.Clients.All.SendTextCollections(textCollections);
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        AppendText(Color.Red,
+                    //            $"Unexpected error occurred calling PluginHub.SendTextCollections() : {ex.Message}");
+                    //    }
+                    //}
+
                 }
             }
             catch (Exception ex)
             {
                 Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
             }
-          
+
         }
 
         #endregion Paratext overrides - standard functions
 
 
         #region Methods
+
+        private void UpdateProjectList()
+        {
+            m_ProjectList.Clear();
+            var windows = _host.AllOpenWindows;
+            ProjectsListBox.Items.Clear();
+            foreach (var window in windows)
+            {
+                if (window is ITextCollectionChildState tc)
+                {
+                    var projects = tc.AllProjects;
+                    foreach (var proj in projects)
+                    {
+                        m_ProjectList.Add(proj);
+                        ProjectsListBox.Items.Add(proj.ShortName);
+                    }
+                    _verseRef = tc.VerseRef;
+                    break;
+                }
+            }
+            if (ProjectsListBox.Items.Count > 0)
+            {
+                ProjectsListBox.SelectedIndex = 0;
+                ProjectListBox_SelectedIndexChanged(null, null);
+            }
+        }
+
+        private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool found = false;
+            if (ProjectsListBox.SelectedItem != null)
+            {
+                string name = ProjectsListBox.SelectedItem.ToString();
+                foreach (var proj in m_ProjectList)
+                {
+                    if (name == proj.ShortName)
+                    {
+                        ShowScripture(proj);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found)
+            {
+                textBox.Text = $"Cannot find project.";
+            }
+
+        }
+
+        private void ShowScripture(IProject project)
+        {
+            List<string> lines = new List<string>();
+            if (_project == null)
+            {
+                lines.Add("No project to display");
+            }
+            else
+            {
+                lines.Add("USFM Tokens:");
+                IEnumerable<IUSFMToken> tokens = null;
+                bool sawException = false;
+                try
+                {
+                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
+                }
+                catch (Exception e)
+                {
+                    lines.Add($" Cannot get the USFM Tokens for this project because {e.Message}");
+                    sawException = true;
+                }
+
+                if ((tokens == null) && (sawException == false))
+                {
+                    lines.Add("Cannot get the USFM Tokens for this project");
+                }
+
+                if (tokens != null)
+                {
+                    lines.Add(_project.ShortName);
+
+                    foreach (var token in tokens)
+                    {
+                        if (token is IUSFMMarkerToken marker)
+                        {
+                            if (marker.Type == MarkerType.Verse)
+                            {
+                                //skip
+                            }
+                            else if (marker.Type == MarkerType.Paragraph)
+                            {
+                                lines.Add("/");
+                            }
+                            else
+                            {
+                                //lines.Add($"{marker.Type} Marker: {marker.Data}");
+                            }
+                        }
+                        else if (token is IUSFMTextToken textToken)
+                        {
+                            if (textToken.IsScripture)
+                            {
+                                lines.Add(textToken.Text);
+                            }
+                        }
+                        else if (token is IUSFMAttributeToken)
+                        {
+                            //lines.Add("Attribute Token: " + token.ToString());
+                        }
+                        else
+                        {
+                            //lines.Add("Unexpected token type: " + token.ToString());
+                        }
+                    }
+
+                    // remove the last paragraph tag if at the end
+                    if (lines.Count > 0)
+                    {
+                        if (lines[lines.Count - 1] == "/")
+                        {
+                            lines.RemoveAt(lines.Count - 1);
+                        }
+                    }
+                }
+
+                textBox.Lines = lines.ToArray();
+            }
+        }
+
+        public List<TextCollection> GetTextCollectionsData()
+        {
+            // get the text collections
+            List<TextCollection> textCollections = new();
+
+            if (this.InvokeRequired)
+            {
+                MethodInvoker del = delegate { GetTextCollectionsData(); };
+                this.Invoke(del);
+                return _textCollections;
+            }
+            else
+            {
+                _textCollections.Clear();
+
+                var windows = _host.AllOpenWindows;
+                foreach (var window in windows)
+                {
+                    // check if window is text collection
+                    if (window is ITextCollectionChildState tc)
+                    {
+                        // get the projects for this window
+                        var projects = tc.AllProjects;
+                        foreach (var project in projects)
+                        {
+                            TextCollection textCollection = new();
+                            if (project != null)
+                            {
+                                IEnumerable<IUSFMToken> tokens = null;
+                                try
+                                {
+                                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum,
+                                        _verseRef.VerseNum);
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+                                }
+
+                                if (tokens != null)
+                                {
+                                    textCollection.ReferenceShort = project.ShortName;
+
+                                    foreach (var token in tokens)
+                                    {
+                                        if (token is IUSFMMarkerToken marker)
+                                        {
+                                            if (marker.Type == MarkerType.Verse)
+                                            {
+                                                //skip
+                                            }
+                                            else if (marker.Type == MarkerType.Paragraph)
+                                            {
+                                                textCollection.Data += "/ ";
+                                            }
+                                            else
+                                            {
+                                                //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                                            }
+                                        }
+                                        else if (token is IUSFMTextToken textToken)
+                                        {
+                                            if (token.IsScripture)
+                                            {
+                                                textCollection.Data += textToken.Text + " ";
+                                            }
+                                        }
+                                        else if (token is IUSFMAttributeToken)
+                                        {
+                                            textCollection.Data += "Attribute Token: " + token.ToString();
+                                        }
+                                        else
+                                        {
+                                            textCollection.Data += "Unexpected token type: " + token.ToString();
+                                        }
+                                    }
+
+                                    // remove the last paragraph tag if at the end
+                                    if (textCollection.Data.Length > 2)
+                                    {
+                                        if (textCollection.Data.EndsWith("/ "))
+                                        {
+                                            textCollection.Data =
+                                                textCollection.Data.Substring(0, textCollection.Data.Length - 2);
+                                        }
+                                    }
+
+                                    textCollections.Add(textCollection);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            _textCollections = textCollections;
+
+            return _textCollections;
+        }
 
 
         /// <summary>
@@ -350,7 +606,18 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
+        private void GetAllProjects()
+        {
+            var projects = _host.GetAllProjects();
 
+            listProjects.Items.Clear();
+            foreach (var p in projects)
+            {
+                string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
+                listProjects.Items.Add(text);
+            }
+        }
+        
         #endregion
     }
 }
