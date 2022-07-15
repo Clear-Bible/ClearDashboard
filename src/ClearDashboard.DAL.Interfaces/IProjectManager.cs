@@ -7,5 +7,5 @@ public interface IProjectManager
     IEnumerable<Project> GetAllProjects();
     Project LoadProject(string projectName);
     Project DeleteProject(string projectName);
-    Project CreateProject();
+    Project CreateProject(string projectName);
 }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace ClearDashboard.DataAccessLayer
 {
 
 
-    public abstract class ProjectManager : IUserProvider, IProjectProvider, IDisposable
+    public abstract class ProjectManager : IUserProvider, IProjectProvider, IProjectManager, IDisposable
     {
         #nullable disable
         #region Properties
@@ -87,14 +88,12 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Methods
 
-        protected abstract Task PublishParatextUser(string paratextUserName);
+        protected abstract Task PublishParatextUser(User user);
 
         public virtual async Task Initialize()
         {
-            await GetParatextUserName();
+            CurrentUser = await GetUser();
             EnsureDashboardProjectDirectory();
-           
-            
         }
 
         private void EnsureDashboardProjectDirectory()
@@ -186,21 +185,44 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public async Task GetParatextUserName()
+        public async Task<User> GetUser()
         {
+            // HACK:  Create a place holder User until we figure out
+            //        how to manage Users holistically
+            //        NOTE: every user will have the same GUID for now.
+
+            var user = new User
+            {
+                Id = Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7"),
+
+            };
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
-            if (!result.Success)
+
+            Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+
+
+            if (result.Success && result.HasData)
             {
-                Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+                var paratextUserName = result.Data.Name;
+                user.ParatextUserName = paratextUserName;
+                var userNameParts = paratextUserName.Split(" ");
+               
+                if (userNameParts.Length == 2)
+                {
+                    user.FirstName = userNameParts[0];
+                    user.LastName = userNameParts[1];
+
+                }
+                await PublishParatextUser(user);
+            }
+            else
+            {
+                user.FirstName = string.Empty;
+                user.LastName = string.Empty;
             }
 
-            if (result.Data is not null)
-            {
-                ParatextUserName = result.Data.Name;
-
-                await PublishParatextUser(ParatextUserName);
-            }
+            return user;
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
@@ -263,6 +285,25 @@ namespace ClearDashboard.DataAccessLayer
         }
         #endregion
 
-        
+
+        public IEnumerable<Project> GetAllProjects()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Project LoadProject(string projectName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Project DeleteProject(string projectName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Project CreateProject(string projectName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
