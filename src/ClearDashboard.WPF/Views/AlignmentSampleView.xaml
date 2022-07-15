@@ -25,9 +25,12 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TokenBubble">
-            <Border BorderBrush="{DynamicResource MaterialDesignBody}" BorderThickness="1"  CornerRadius="3" Margin="5,2,5,2" Height="34" 
-                    cal:Message.Attach="[Event MouseRightButtonDown] = [Action TextBoxRightClicked($dataContext)]">
-                <TextBlock Text="{Binding}" Margin="15,8,15,8" ></TextBlock>
+            <Border BorderBrush="{DynamicResource MaterialDesignBody}" BorderThickness="1"  CornerRadius="3" Margin="5,2" Padding="15,8" Height="34" 
+                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action TokenBubbleLeftClicked($dataContext)]; 
+                                        [Event MouseRightButtonDown] = [Action TokenBubbleRightClicked($dataContext)]; 
+                                        [Event MouseEnter] = [Action TokenBubbleMouseEntered($dataContext)];
+                                        [Event MouseLeave] = [Action TokenBubbleMouseLeft($dataContext)];">
+                <TextBlock Text="{Binding}" Margin="0" ></TextBlock>
             </Border>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="TokenBubblePanel">
@@ -82,9 +85,5 @@
         <ItemsControl Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Path=GreekVerse1}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
         <Label Grid.ColumnSpan="2" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
-        <!--<StackPanel Grid.Column="1" Orientation="Horizontal" Grid.Row="6">
-            <Button x:Name="LoadFiles">Load Files</Button>
-            <Button x:Name="BindProject">Bind Project</Button>
-        </StackPanel>-->
     </Grid>
 </Page>

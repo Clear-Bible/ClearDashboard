@@ -117,9 +117,27 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public void TextBoxRightClicked(string target)
+        public void TokenBubbleLeftClicked(string target)
+        {
+            Message = $"'{target}' left-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenBubbleRightClicked(string target)
         {
             Message = $"'{target}' right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenBubbleMouseEntered(string target)
+        {
+            Message = $"'{target}' hovering";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenBubbleMouseLeft(string target)
+        {
+            Message = String.Empty;
             NotifyOfPropertyChange(nameof(Message));
         }
 
