@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.ViewModels
             var bookAbbreviations = new List<string>();
             foreach (var bookNumber in bookNumbers)
             {
-                if (bookIdsToAbbreviations.TryGetValue(bookNumber ?? -1, out string bookAbbreviation))
+                if (bookIdsToAbbreviations.TryGetValue(bookNumber != null ? bookNumber : -1, out string bookAbbreviation))
                 {
                     bookAbbreviations.Add(bookAbbreviation);
                 }
@@ -159,7 +159,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void MockProjectAndUser()
         {
-            ProjectManager.CurrentProject = new ProjectInfo
+            ProjectManager.CurrentProject = new Project
             {
                 Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
                 ProjectName = "Alignment"
