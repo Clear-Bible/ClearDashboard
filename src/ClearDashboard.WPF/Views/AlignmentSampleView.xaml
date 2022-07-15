@@ -52,6 +52,7 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Button
@@ -69,21 +70,24 @@
         <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="English words"></Label>
         <ItemsControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding EnglishWords}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Greek characters"></Label>
-        <ItemsControl Grid.Column="1" Grid.Row="2" ItemsSource="{Binding GreekChars}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Greek lowercase"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="2" ItemsSource="{Binding GreekLowercase}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Hebrew Psalm"></Label>
-        <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Path=HebrewPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Greek uppercase"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding GreekUppercase}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek Psalm"></Label>
-        <ItemsControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Hebrew Psalm"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Path=HebrewPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="English from file"></Label>
-        <ItemsControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Path=EnglishFile}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Greek Psalm"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding GreekPsalm}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="Greek from file"></Label>
-        <ItemsControl Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Path=GreekVerse1}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+        <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="English from file"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Path=EnglishFile}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.ColumnSpan="2" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" Content="Greek from file"></Label>
+        <ItemsControl Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Path=GreekVerse1}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
+
+        <Label Grid.ColumnSpan="2" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
     </Grid>
 </Page>
