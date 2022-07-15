@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.ViewModels
             var bookAbbreviations = new List<string>();
             foreach (var bookNumber in bookNumbers)
             {
-                if (bookIdsToAbbreviations.TryGetValue(bookNumber ?? -1, out string? bookAbbreviation))
+                if (bookIdsToAbbreviations.TryGetValue(bookNumber ?? -1, out string bookAbbreviation))
                 {
                     bookAbbreviations.Add(bookAbbreviation);
                 }
@@ -105,12 +105,12 @@ namespace ClearDashboard.Wpf.ViewModels
         public List<string> GreekVerse1 { get; set; } = new();
         public string Message { get; set; }
 
+        // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService, 
-            ILogger<SettingsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+        public AlignmentSampleViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
         }
@@ -135,17 +135,20 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void TokenBubbleMouseLeft(string target)
         {
-            Message = String.Empty;
+            Message = string.Empty;
             NotifyOfPropertyChange(nameof(Message));
         }
+        // ReSharper restore UnusedMember.Global
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             LoadFiles();
+            MockProjectAndUser();
+
             return base.OnActivateAsync(cancellationToken);
         }
 
-        public void LoadFiles()
+        private void LoadFiles()
         {
             EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
             NotifyOfPropertyChange(nameof(EnglishFile));
@@ -154,16 +157,18 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(nameof(GreekVerse1));
         }
 
-        public void BindProject()
+        private void MockProjectAndUser()
         {
             ProjectManager.CurrentProject = new ProjectInfo
             {
-                Id = Guid.Parse(""),
+                Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
                 ProjectName = "Alignment"
             };
             ProjectManager.CurrentUser = new User
             {
-                Id = Guid.Parse("")
+                Id = Guid.Parse("75413790-4A32-482B-9A11-36BFBBC0AF9C"),
+                FirstName = "Test",
+                LastName = "User"
             };
         }
     }
