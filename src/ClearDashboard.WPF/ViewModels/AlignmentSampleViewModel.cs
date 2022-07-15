@@ -2,31 +2,26 @@
 using System.Collections.Generic;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Tokenization;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Models;
+using ClearDashboard.Wpf.Commands;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
 
-// using Models = ClearDashboard.DataAccessLayer.Models;
+// ReSharper disable IdentifierTypo
+// ReSharper disable StringLiteralTypo
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -37,20 +32,20 @@ namespace ClearDashboard.Wpf.ViewModels
         public List<string> HebrewPsalm { get; set; } = "כִּֽי־אַ֭תָּה תָּאִ֣יר נֵרִ֑י יְהוָ֥ה אֱ֝לֹהַ֗י יַגִּ֥יהַּ חָשְׁכִּֽי׃".Split(' ').ToList();
         public List<string> GreekPsalm { get; set; } = "χι αθθα θαειρ νηρι YHWH ελωαι αγι οσχι".Split(' ').ToList();
 
-        private static readonly string TestDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
-        private static readonly string UsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "Tes");
-        private static readonly string GreekNTUsfmTestProjectPath = Path.Combine(TestDataPath, "usfm", "nestle1904");
+        private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
+        private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
+        private static readonly string _greekNtUsfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "nestle1904");
 
         private static ITextCorpus GetSampleEnglishTextCorpus()
         {
-            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, UsfmTestProjectPath)
+            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>();
         }
 
         private static ITextCorpus GetSampleGreekTextCorpus()
         {
-            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmTestProjectPath)
+            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _greekNtUsfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>();
         }
@@ -110,6 +105,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private Corpus GreekCorpus => _greekCorpus ??= GetSampleCorpus(GetSampleGreekTextCorpus(), "Greek");
         private TokenizedCorpus GreekTokenizedCorpus => GreekCorpus.TokenizedCorpora.First();
         public List<string> GreekVerse1 { get; set; } = new();
+        public string Message { get; set; }
 
         public AlignmentSampleViewModel()
         {
@@ -119,6 +115,12 @@ namespace ClearDashboard.Wpf.ViewModels
             ILogger<SettingsViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
+        }
+
+        public void TextBoxRightClicked(string target)
+        {
+            Message = $"'{target}' right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
