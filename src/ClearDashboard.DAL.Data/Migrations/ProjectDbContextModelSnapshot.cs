@@ -445,13 +445,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("BookNumber")
+                    b.Property<int>("BookNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ChapterNumber")
+                    b.Property<int>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SubwordNumber")
+                    b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
@@ -460,10 +460,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("TokenizationId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("VerseNumber")
+                    b.Property<int>("VerseNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("WordNumber")
+                    b.Property<int>("WordNumber")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
