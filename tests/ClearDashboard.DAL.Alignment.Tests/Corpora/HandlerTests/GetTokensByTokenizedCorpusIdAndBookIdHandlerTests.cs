@@ -33,7 +33,6 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             await Mediator.Send(command);
 
             // Retrieve Tokens
-            Output.WriteLine(ProjectDbContext?.TokenizedCorpora.First().Id.ToString());
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
                 new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "40");
             var result = await Mediator.Send(query);
@@ -42,12 +41,13 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result.Data);
 
             // Validate Matt 1:1
-            Assert.Equal("1", result.Data.First().chapter);
-            Assert.Equal("1", result.Data.First().verse);
-            Assert.Equal(9, result.Data.First().tokens.Count());
-            Assert.Equal("Βίβλος", result.Data.First().tokens.First().Text);
+            var matthewCh1V1 = result.Data.First();
+            Assert.Equal("1", matthewCh1V1.chapter);
+            Assert.Equal("1", matthewCh1V1.verse);
+            Assert.Equal(9, matthewCh1V1.tokens.Count());
+            Assert.Equal("Βίβλος", matthewCh1V1.tokens.First().Text);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
-                String.Join(" ", result.Data.First().tokens.Select(t => t.Text)));
+                String.Join(" ", matthewCh1V1.tokens.Select(t => t.Text)));
 
             // Validate Matt 5:9
             var matthewCh5V9 = result.Data.Single(datum => datum.chapter == "5" && datum.verse == "9");
@@ -73,7 +73,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.Null(result.Data);
-            Assert.True(result.Message.StartsWith("System.NullReferenceException: Object reference not set to an instance of an object."));
+            Assert.True(result.Message.StartsWith(
+                "System.NullReferenceException: Object reference not set to an instance of an object."));
         }
         finally
         {
