@@ -131,7 +131,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void TokenBubbleMouseEntered(string target)
         {
-            Message = $"'{target}' hovering";
+            Message = $"Hovering over '{target}'";
             NotifyOfPropertyChange(nameof(Message));
         }
 

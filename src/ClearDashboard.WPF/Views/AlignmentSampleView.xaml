@@ -25,13 +25,13 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TokenBubble">
-            <Border BorderBrush="{DynamicResource MaterialDesignBody}" BorderThickness="1"  CornerRadius="3" Margin="5,2" Padding="15,8" Height="34" 
-                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action TokenBubbleLeftClicked($dataContext)]; 
+            <Button BorderBrush="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderThickness="1"  Margin="6,2" Padding="10,2" Height="30" IsDefault="False"
+                    cal:Message.Attach="[Event Click] = [Action TokenBubbleLeftClicked($dataContext)]; 
                                         [Event MouseRightButtonDown] = [Action TokenBubbleRightClicked($dataContext)]; 
                                         [Event MouseEnter] = [Action TokenBubbleMouseEntered($dataContext)];
                                         [Event MouseLeave] = [Action TokenBubbleMouseLeft($dataContext)];">
                 <TextBlock Text="{Binding}" Margin="0" ></TextBlock>
-            </Border>
+            </Button>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="TokenBubblePanel">
             <StackPanel Orientation="Horizontal"/>
