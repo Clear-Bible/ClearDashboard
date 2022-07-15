@@ -24,6 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
         protected ProjectDbContext? ProjectDbContext { get; set; }
         protected string? ProjectName { get; set; }
+        protected bool DeleteDatabase { get; set; } = true;
 
         protected TestBase(ITestOutputHelper output)
         {
@@ -43,7 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
         }
 
-        private async void  SetupTests()
+        private async void SetupTests()
         {
             var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
@@ -54,19 +55,19 @@ namespace ClearDashboard.DAL.Alignment.Tests
             var assets = await factory?.Get(ProjectName)!;
             ProjectDbContext= assets.ProjectDbContext;
 
-           
             var testUser = await AddDashboardUser(ProjectDbContext);
             var projectInfo = await AddCurrentProject(ProjectDbContext, ProjectName);
         }
 
         protected async Task DeleteDatabaseContext()
         {
-          
+            if (DeleteDatabase)
+            {
                 Output.WriteLine($"Deleting database: {ProjectName}");
                 await ProjectDbContext!.Database.EnsureDeletedAsync();
                 var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{ProjectName}";
                 Directory.Delete(projectDirectory, true);
-      
+            }
         }
 
         protected async Task<User> AddDashboardUser(ProjectDbContext context)
