@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace Converters
+namespace ClearDashboard.Wpf.Converters
 {
     public class ActiveDocumentConverter : IValueConverter
     {

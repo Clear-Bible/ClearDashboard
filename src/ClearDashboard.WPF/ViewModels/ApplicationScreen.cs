@@ -9,13 +9,13 @@ using MediatR;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ApplicationScreen : Screen, IDisposable
+    public abstract class ApplicationScreen : Screen, IDisposable
     {
         public ILogger Logger { get; private set; }
         public INavigationService NavigationService { get; private set; }
         public DashboardProjectManager ProjectManager { get; private set; }
         public IEventAggregator EventAggregator { get; private set; }
-
+        
         private bool isBusy_;
         public bool IsBusy
         {
@@ -30,22 +30,31 @@ namespace ClearDashboard.Wpf.ViewModels
             set => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
-        public ApplicationScreen()
+        private string _title;
+        public string Title
         {
-
+            get => _title;
+            set => Set(ref _title, value);
         }
 
-        public ApplicationScreen(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        protected ApplicationScreen()
+        {
+            
+        }
+
+        protected ApplicationScreen(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
         {
             NavigationService = navigationService;
             Logger = logger;
             ProjectManager = projectManager;
             EventAggregator = eventAggregator;
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+           
             EventAggregator.SubscribeOnUIThread(this);
             return base.OnActivateAsync(cancellationToken);
         }
@@ -85,6 +94,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 IsBusy = false;
             }
         }
-       
+
+     
     }
 }

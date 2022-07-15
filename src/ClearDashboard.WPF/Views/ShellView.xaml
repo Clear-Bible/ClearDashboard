@@ -10,8 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
+    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -68,7 +68,7 @@
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
-                        <Run Text="{helpers:Loc ShellView_user}" />
+                        <Run Text="{helpers:Localization ShellView_user}" />
                     </TextBlock>
                     <TextBlock
                         x:Name="ParatextUserName"
@@ -152,17 +152,15 @@
                     </Button>
 
                     <userControls:TimerUserControl
-                        x:Name="Timercontrol" 
+                        x:Name="Timercontrol"
                         VerticalAlignment="Top"
-                        VerticalContentAlignment="Center"/>
+                        VerticalContentAlignment="Center" />
+                    <userControls:ClockUserControl x:Name="Clockcontrol" Height="34" />
 
-                    <!--<userControls:ClockUserControl
-                        x:Name="Clockcontrol" 
-                        VerticalAlignment="Center"
-                        VerticalContentAlignment="Center"/>-->
                 </StackPanel>
             </Grid>
         </Border>
+
 
         <!--
             NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be

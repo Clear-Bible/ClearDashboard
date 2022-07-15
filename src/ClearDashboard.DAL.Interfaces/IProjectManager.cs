@@ -4,8 +4,8 @@ namespace ClearDashboard.DAL.Interfaces;
 
 public interface IProjectManager
 {
-    IEnumerable<ProjectInfo> GetAllProjects();
-    ProjectInfo LoadProject(string projectName);
-    ProjectInfo DeleteProject(string projectName);
-    ProjectInfo CreateProject();
+    IEnumerable<Project> GetAllProjects();
+    Project LoadProject(string projectName);
+    Project DeleteProject(string projectName);
+    Project CreateProject();
 }

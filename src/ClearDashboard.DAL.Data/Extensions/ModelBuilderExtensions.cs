@@ -76,7 +76,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             //new NoteConfiguration().Configure(modelBuilder.Entity<Note>());
             new ParallelCorpusConfiguration().Configure(modelBuilder.Entity<ParallelCorpus>());
             //new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
-            new ProjectInfoConfiguration().Configure(modelBuilder.Entity<ProjectInfo>());
+            new ProjectInfoConfiguration().Configure(modelBuilder.Entity<Project>());
             //new QuestionGroupConfiguration().Configure(modelBuilder.Entity<QuestionGroup>());
             //new RawContentConfiguration().Configure(modelBuilder.Entity<RawContent>());
             new TokenConfiguration().Configure(modelBuilder.Entity<Token>());

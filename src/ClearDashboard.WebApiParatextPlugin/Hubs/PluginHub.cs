@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System.Collections.Generic;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using MediatR;
@@ -7,6 +8,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.DependencyInjection;
 using System.Drawing;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -38,6 +41,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(verse);
         }
 
+        public void SendTextCollections(List<TextCollection> textCollections)
+        {
+            Clients.All.addMessage(textCollections);
+        }
+
         public void Ping(string message, int index)
         {
             _logger.AppendText(Color.CornflowerBlue, $"Received ping - {message}: {index}");
@@ -64,6 +72,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                     Clients.All.SendProject(result.Data);
                 }
             }
+
+            //{
+            //    var result = await _mediator.Send(new GetTextCollectionsQuery());
+            //    if (result.Success)
+            //    {
+            //        _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
+            //        Clients.All.SendTextCollections(result.Data);
+            //    }
+            //}
+
             await base.OnConnected();
         }
     }

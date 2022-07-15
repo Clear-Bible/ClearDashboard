@@ -8,6 +8,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         : ProjectRequestQuery<
             (TokenizedCorpusId sourceTokenizedCorpusId, 
             TokenizedCorpusId targetTokenizedCorpusId, 
-            IEnumerable<EngineVerseMapping> engineVerseMappings,
+            IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>;
 }
