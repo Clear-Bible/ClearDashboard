@@ -124,7 +124,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             //Invoke((Action)(() => ShowScripture()));
 
             UpdateProjectList();
-            ShowScripture();
+            ShowScripture(_project);
         }
 
         public override string GetState()
@@ -136,6 +136,10 @@ namespace ClearDashboard.WebApiParatextPlugin
        
         public override void DoLoad(IProgressInfo progressInfo)
         {
+            // Since DoLoad is done on a different thread than what was used
+            // to create the control, we need to use the Invoke method.
+            Invoke((Action)(() => GetAllProjects()));
+
             StartWebHost();
         }
 
@@ -315,8 +319,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     if (name == proj.ShortName)
                     {
-                        _project = proj;
-                        ShowScripture();
+                        ShowScripture(proj);
                         found = true;
                         break;
                     }
@@ -329,7 +332,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         }
 
-        private void ShowScripture()
+        private void ShowScripture(IProject project)
         {
             List<string> lines = new List<string>();
             if (_project == null)
@@ -343,7 +346,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 bool sawException = false;
                 try
                 {
-                    tokens = _project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
+                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
                 }
                 catch (Exception e)
                 {
@@ -603,7 +606,18 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
+        private void GetAllProjects()
+        {
+            var projects = _host.GetAllProjects();
 
+            listProjects.Items.Clear();
+            foreach (var p in projects)
+            {
+                string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
+                listProjects.Items.Add(text);
+            }
+        }
+        
         #endregion
     }
 }

@@ -238,11 +238,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BookNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    BookNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    VerseNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    WordNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true)
                 },
