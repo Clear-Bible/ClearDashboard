@@ -23,7 +23,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
-        private List<IProject> m_ProjectList = new();
+        private List<IProject> _projectList = new();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -289,7 +289,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void UpdateProjectList()
         {
-            m_ProjectList.Clear();
+            _projectList.Clear();
             var windows = _host.AllOpenWindows;
             ProjectsListBox.Items.Clear();
             foreach (var window in windows)
@@ -299,7 +299,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     var projects = tc.AllProjects;
                     foreach (var proj in projects)
                     {
-                        m_ProjectList.Add(proj);
+                        _projectList.Add(proj);
                         ProjectsListBox.Items.Add(proj.ShortName);
                     }
                     _verseRef = tc.VerseRef;
@@ -319,7 +319,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (ProjectsListBox.SelectedItem != null)
             {
                 string name = ProjectsListBox.SelectedItem.ToString();
-                foreach (var proj in m_ProjectList)
+                foreach (var proj in _projectList)
                 {
                     if (name == proj.ShortName)
                     {
