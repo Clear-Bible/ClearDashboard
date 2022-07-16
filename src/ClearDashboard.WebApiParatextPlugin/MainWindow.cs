@@ -331,7 +331,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             if (!found)
             {
-                textBox.Text = $"Cannot find project.";
+                textBox.Text = "Cannot find project.";
             }
 
         }
