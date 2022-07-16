@@ -23,7 +23,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
-        private List<IProject> m_ProjectList = new ();
+        private List<IProject> m_ProjectList = new();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -52,7 +52,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         }
 
-     
+
         #region Please leave these for debugging plug-in start up crashes
         private static void ThreadExceptionEventHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
@@ -101,7 +101,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             Log.Error($"OnLoad {exception.Message}");
             AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
-  
+
 
         #region Paratext overrides - standard functions
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
@@ -133,7 +133,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             return null;
         }
 
-       
+
         public override void DoLoad(IProgressInfo progressInfo)
         {
             // Since DoLoad is done on a different thread than what was used
@@ -143,15 +143,19 @@ namespace ClearDashboard.WebApiParatextPlugin
             StartWebHost();
         }
 
+
+        private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions" };
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
         {
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
 
-            if (truncatedName.Contains("XmlSerializers"))
-            {
-                return null;
-            }
+            if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
+                if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
+                {
+                    AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                    return null;
+                }
             // Load the most up to date version
             Assembly assembly;
             try
@@ -163,7 +167,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Console.WriteLine(e);
                 throw;
             }
-            AppendText(Color.Red, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
+            AppendText(Color.Orange, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
 
             return assembly;
         }
@@ -190,7 +194,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup.Configuration(appBuilder);
                     });
 
-              
+
 
                 AppendText(Color.Green, "Owin Web Api host started");
             }
@@ -202,7 +206,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
-            SetProject(newProject, reloadWebHost:true);
+            SetProject(newProject, reloadWebHost: true);
         }
 
 
@@ -537,7 +541,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
-        
+
         public void SwitchVerseReference(int book, int chapter, int verse)
         {
             if (this.InvokeRequired)
@@ -569,7 +573,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private void btnRestart_Click(object sender, EventArgs e)
         {
 
-          // clear out the existing data
+            // clear out the existing data
             if (rtb.InvokeRequired)
             {
                 rtb.Invoke((MethodInvoker)(() => rtb.Clear()));
@@ -594,7 +598,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             hubProxy.Clients.All.Send(Guid.NewGuid(), @"Can you hear me?");
-        
+
         }
 
         private void btnVersificationTest_Click(object sender, EventArgs e)
@@ -617,7 +621,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 listProjects.Items.Add(text);
             }
         }
-        
+
         #endregion
     }
 }
