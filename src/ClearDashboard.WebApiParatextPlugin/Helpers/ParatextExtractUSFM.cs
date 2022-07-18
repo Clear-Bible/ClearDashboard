@@ -20,12 +20,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
         ///     \MyDocuments\ClearDashboard_Projects\DataFiles\{projectID} directory along with
         /// the settings.xml and the custom versification files
         /// </summary>
-        /// <param name="m_project"></param>
+        /// <param name="project"></param>
         /// <param name="mainWindow"></param>
-        public void ExportUSFMScripture(IProject m_project, MainWindow mainWindow)
+        public string ExportUSFMScripture(IProject project, MainWindow mainWindow)
         {
             string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", m_project.ID);
+            exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", project.ID);
 
             if (!Directory.Exists(exportPath))
             {
@@ -36,12 +36,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 catch (Exception e)
                 {
                     mainWindow.AppendText(Color.Red, e.Message);
-                    return;
+                    return exportPath;
                 }
             }
 
             // copy over the project's settings file
-            string settingsFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml");
+            string settingsFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml");
             if (File.Exists(settingsFile))
             {
                 try
@@ -56,9 +56,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 FixParatextSettingsFile(Path.Combine(exportPath, "settings.xml"));
 
             }
+            else
+            {
+                // TODO create settings file
+
+            }
 
             // copy over the project's custom versification file
-            string versificationFile = Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "custom.vrs");
+            string versificationFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "custom.vrs");
             if (File.Exists(versificationFile))
             {
                 try
@@ -72,22 +77,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             // copy over project's usfm.sty
-            string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, "settings.xml"), "StyleSheet");
             bool bFound = false;
-            if (stylePath != "")
+            if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml")))
             {
-                if (stylePath != "usfm.sty") // standard stylesheet
+                string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
+                
+                if (stylePath != "")
                 {
-                    if (File.Exists(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath)))
+                    if (stylePath != "usfm.sty") // standard stylesheet
                     {
-                        try
+                        if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath)))
                         {
-                            File.Copy(Path.Combine(GetParatextProjectsPath(), m_project.ShortName, stylePath),
-                                Path.Combine(exportPath, "usfm.sty"), true);
-                        }
-                        catch (Exception e)
-                        {
-                            mainWindow.AppendText(Color.Red, e.Message);
+                            try
+                            {
+                                File.Copy(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath),
+                                    Path.Combine(exportPath, "usfm.sty"), true);
+                            }
+                            catch (Exception e)
+                            {
+                                mainWindow.AppendText(Color.Red, e.Message);
+                            }
                         }
                     }
                 }
@@ -111,35 +120,35 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
 
-            for (int bookNum = 0; bookNum < m_project.AvailableBooks.Count; bookNum++)
+            for (int bookNum = 0; bookNum < project.AvailableBooks.Count; bookNum++)
             {
-                if (BibleBookScope.IsBibleBook(m_project.AvailableBooks[bookNum].Code))
+                if (BibleBookScope.IsBibleBook(project.AvailableBooks[bookNum].Code))
                 {
-                    mainWindow.AppendText(Color.Blue, $"Processing {m_project.AvailableBooks[bookNum].Code}");
+                    mainWindow.AppendText(Color.Blue, $"Processing {project.AvailableBooks[bookNum].Code}");
 
                     StringBuilder sb = new StringBuilder();
                     // do the header
-                    sb.AppendLine($@"\id {m_project.AvailableBooks[bookNum].Code}");
+                    sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
 
                     int bookFileNum = 0;
-                    if (m_project.AvailableBooks[bookNum].Number >= 40)
+                    if (project.AvailableBooks[bookNum].Number >= 40)
                     {
                         // do that crazy USFM file naming where Matthew starts at 41
-                        bookFileNum = m_project.AvailableBooks[bookNum].Number + 1;
+                        bookFileNum = project.AvailableBooks[bookNum].Number + 1;
                     }
                     else
                     {
                         // normal OT book
-                        bookFileNum = m_project.AvailableBooks[bookNum].Number;
+                        bookFileNum = project.AvailableBooks[bookNum].Number;
                     }
                     var fileName = bookFileNum.ToString().PadLeft(3, '0')
-                                   + m_project.AvailableBooks[bookNum].Code + ".sfm";
+                                   + project.AvailableBooks[bookNum].Code + ".sfm";
 
                     IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
                     try
                     {
                         // get tokens by book number (from object) and chapter
-                        tokens = m_project.GetUSFMTokens(m_project.AvailableBooks[bookNum].Number);
+                        tokens = project.GetUSFMTokens(project.AvailableBooks[bookNum].Number);
                     }
                     catch (Exception)
                     {
@@ -238,6 +247,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                     
                 }
             }
+
+            return exportPath;
         }
 
         // update the settings file to use "normal" file extensions

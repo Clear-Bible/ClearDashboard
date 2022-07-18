@@ -10,10 +10,13 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using SIL.Linq;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -606,18 +609,102 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
-        private void GetAllProjects()
+        public List<IProject> GetAllProjects()
         {
-            var projects = _host.GetAllProjects();
+            List<IProject> allProjects = new();
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            
+            projects.ForEach(p => allProjects.Add(p));
 
-            listProjects.Items.Clear();
-            foreach (var p in projects)
+            allProjects = allProjects.OrderBy(x => x.Type)
+                .ThenBy(n => n.ShortName)
+                .ToList();
+
+            foreach (var p in allProjects)
             {
                 string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
-                listProjects.Items.Add(text);
+
+                switch (p.Type)
+                {
+                    case ProjectType.Auxiliary:
+                        AppendText(Color.Brown, text);
+                        break;
+                    case ProjectType.BackTranslation:
+                        AppendText(Color.DarkOliveGreen, text);
+                        break;
+                    case ProjectType.ConsultantNotes:
+                        AppendText(Color.Aqua, text);
+                        break;
+                    case ProjectType.Daughter:
+                        AppendText(Color.DeepPink, text);
+                        break;
+                    case ProjectType.EnhancedResource:
+                        AppendText(Color.BlueViolet, text);
+                        break;
+                    case ProjectType.SourceLanguage:
+                        AppendText(Color.Orange, text);
+                        break;
+                    case ProjectType.Standard:
+                        AppendText(Color.CadetBlue, text);
+                        break;
+                    case ProjectType.StudyBible:
+                    case ProjectType.StudyBibleAdditions:
+                        AppendText(Color.DarkSalmon, text);
+                        break;
+                    case ProjectType.TransliterationManual:
+                    case ProjectType.TransliterationWithEncoder:
+                        AppendText(Color.DarkSlateBlue, text);
+                        break;
+                    case ProjectType.Xml:
+                        AppendText(Color.Brown, text);
+                        break;
+                }
             }
+
+            // test 
+            var proj = allProjects.FirstOrDefault(x => x.ShortName == "HEB/GRK");
+            var referenceUsfm = GetReferenceUSFM(proj.ID);
+
+            return allProjects;
         }
         
         #endregion
+
+        public ReferenceUsfm GetReferenceUSFM(string requestId)
+        {
+            ReferenceUsfm referenceUsfm = new();
+            referenceUsfm.Id = requestId;
+
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == requestId);
+
+            if (project == null)
+            {
+                return referenceUsfm;
+            }
+
+            // creating usfm directory
+            try
+            {
+                ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+                var path = paratextExtractUSFM.ExportUSFMScripture(project, this);
+
+                referenceUsfm.UsfmDirectoryPath = path;
+                referenceUsfm.Name = project.ShortName;
+                referenceUsfm.LongName = project.LongName;
+                referenceUsfm.Language = project.LanguageName;
+                referenceUsfm.IsRTL = project.Language.IsRtoL;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                AppendText(Color.Red, e.Message);
+            }
+
+            
+            return referenceUsfm;
+        }
     }
 }
