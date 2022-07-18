@@ -1,0 +1,50 @@
+﻿<popups:CustomWindow
+    x:Class="ClearDashboard.Wpf.Views.Popups.RegistrationDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
+    Title="{Binding Title}"
+    Width="600"
+    Height="300"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    ShowInTaskbar="False"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ContentControl
+            x:Name="ActiveItem"
+            Grid.Column="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10,10"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                x:Name="Register"
+                Margin="5,5,5,5"
+                Content="REGISTER" />
+            <Button
+                x:Name="Cancel"
+                Margin="5,5,5,5"
+                Content="CANCEL" />
+        </StackPanel>
+
+    </Grid>
+</popups:CustomWindow>

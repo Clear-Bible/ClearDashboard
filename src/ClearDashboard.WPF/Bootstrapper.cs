@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
