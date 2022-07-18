@@ -115,10 +115,9 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) 
+        public AlignmentSampleViewModel(INavigationService navigationService, ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            _mediator = mediator;
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -146,12 +145,12 @@ namespace ClearDashboard.Wpf.ViewModels
         }
         // ReSharper restore UnusedMember.Global
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             LoadFiles();
             MockProjectAndUser();
-            RetrieveTokens();
-            return base.OnActivateAsync(cancellationToken);
+            await RetrieveTokens(cancellationToken);
+            await base.OnActivateAsync(cancellationToken);
         }
 
         private void LoadFiles()
@@ -178,10 +177,19 @@ namespace ClearDashboard.Wpf.ViewModels
             };
         }
 
-        private async Task RetrieveTokens()
+        public async Task RetrieveTokens(CancellationToken cancellationToken)
         {
-            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("6E6DB898-4194-4AAD-B9C5-BDD36E5E52B8")), "40");
-            var result = await _mediator.Send(query);
+            try
+            {
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("6E6DB898-4194-4AAD-B9C5-BDD36E5E52B8")), "40");
+                var result = await ExecuteRequest(query, cancellationToken);
+                var status = result.Success;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
