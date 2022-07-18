@@ -28,7 +28,10 @@ namespace ClearDashboard.DAL.Tests
                 await ExecuteParatextAndTestRequest<GetReferenceUsfmQuery, RequestResult<ReferenceUsfm>, ReferenceUsfm>(
                     new GetReferenceUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
 
-
+            Assert.True(result.HasData);
+            Assert.NotNull(result.Data);
+            Assert.NotEmpty(result.Data.UsfmDirectoryPath);
+            Assert.Equal("Biblia Hebraica Stuttgartensia", result.Data.LongName);
         }
 
     }
