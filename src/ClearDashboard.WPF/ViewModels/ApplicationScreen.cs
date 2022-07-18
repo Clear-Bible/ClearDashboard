@@ -54,7 +54,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-           
             EventAggregator.SubscribeOnUIThread(this);
             return base.OnActivateAsync(cancellationToken);
         }

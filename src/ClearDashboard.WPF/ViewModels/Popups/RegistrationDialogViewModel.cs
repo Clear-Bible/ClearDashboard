@@ -15,7 +15,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 {
     private RegistrationViewModel _registrationViewModel;
 
-    public string ProjectName => _registrationViewModel.ProjectName;
+    public string LicenseKey => _registrationViewModel.LicenseKey;
 
     private bool _canCreate;
 

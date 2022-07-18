@@ -6,7 +6,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.Registration
 {
     public class RegistrationWorkflowStepViewModel : WorkflowStepViewModel
     {
@@ -29,8 +29,6 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
         {
 
         }
-
-
 
         #endregion
 

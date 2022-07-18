@@ -5,7 +5,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
+namespace ClearDashboard.Wpf.ViewModels.Workflows.Registration
 {
     public class RegistrationWorkflowShellViewModel : WorkflowShellViewModel
     {

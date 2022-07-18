@@ -38,12 +38,12 @@
             VerticalAlignment="Top"
             Orientation="Vertical">
             <TextBox
-                x:Name="ProjectName"
+                x:Name="LicenseKey"
                 MinWidth="400"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter a name for your project."
+                materialDesign:HintAssist.Hint="Please enter your license key."
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -51,7 +51,7 @@
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
-                        Path="ProjectName"
+                        Path="LicenseKey"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
@@ -69,9 +69,7 @@
                         </StackPanel>
                     </ControlTemplate>
                 </Validation.ErrorTemplate>
-
             </TextBox>
-
         </StackPanel>
 
         <userControls:WorkflowFooter Grid.Row="1" Grid.Column="0"/>
