@@ -27,13 +27,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //2. Create VerseMappings with verses
             //3. return created ParallelCorpus based on ParallelCorpusId
 
-            var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
+            //var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
 
 
             return new RequestResult<ParallelCorpus>
-                    (result: parallelCorpus,
+                    (result: null,
                     success: true,
-                    message: "successful result from test");
+                    message: "mikey");
         }
     }
 }
