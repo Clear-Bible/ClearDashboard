@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -63,12 +62,20 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
             }
         }
 
+        public override async Task MoveForwardsAction()
+        {
+            ProjectManager.CreateProject(ProjectName);
+
+            await base.MoveForwardsAction();
+        }
      
 
         protected override ValidationResult Validate()
         {
             return (!string.IsNullOrEmpty(ProjectName)) ? Validator.Validate(Project) : null;
         }
+
+       // override 
 
         //protected override Task OnActivateAsync(CancellationToken cancellationToken)
         //{

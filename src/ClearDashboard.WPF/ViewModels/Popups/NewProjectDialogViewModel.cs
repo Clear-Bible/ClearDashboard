@@ -47,6 +47,7 @@ public class NewProjectDialogViewModel : WorkflowShellViewModel
 
     public async void Cancel()
     {
+        var deletedProject = await ProjectManager.DeleteProject(_newProjectViewModel.ProjectName);
         await TryCloseAsync(false);
     }
 

@@ -10,7 +10,10 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer
 
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IProjectManager, IDisposable
     {
-        #nullable disable
+#nullable disable
         #region Properties
 
         protected ILogger Logger { get; private set; }
@@ -28,7 +31,7 @@ namespace ClearDashboard.DataAccessLayer
         protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
         protected IMediator Mediator { get; private set; }
 
-    
+
 
         public User CurrentUser { get; set; }
 
@@ -42,7 +45,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
 
-       
+
 
         public bool ParatextVisible = false;
         public string ParatextUserName { get; set; } = "";
@@ -66,7 +69,7 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         #endregion
-        
+
         #region Events
 
         #endregion
@@ -207,7 +210,7 @@ namespace ClearDashboard.DataAccessLayer
                 var paratextUserName = result.Data.Name;
                 user.ParatextUserName = paratextUserName;
                 var userNameParts = paratextUserName.Split(" ");
-               
+
                 if (userNameParts.Length == 2)
                 {
                     user.FirstName = userNameParts[0];
@@ -271,7 +274,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void Dispose()
         {
-           
+
         }
 
 
@@ -286,24 +289,75 @@ namespace ClearDashboard.DataAccessLayer
         #endregion
 
 
-        public IEnumerable<Project> GetAllProjects()
+        public Task<IEnumerable<Project>> GetAllProjects()
         {
             throw new NotImplementedException();
         }
 
-        public Project LoadProject(string projectName)
+        public Task<Project> LoadProject(string projectName)
         {
             throw new NotImplementedException();
         }
 
-        public Project DeleteProject(string projectName)
+        public async Task<Project> DeleteProject(string projectName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+                if (projectAssets.ProjectDbContext != null)
+                {
+                    var project = projectAssets.ProjectDbContext.Projects.FirstOrDefault();
+
+                    //projectAssets.ProjectDbContext!.Database.EnsureDeleted();
+                    await projectAssets.ProjectDbContext!.Database.EnsureDeletedAsync();
+
+
+                    if (Directory.Exists(projectAssets.ProjectDirectory))
+                    {
+                        Directory.Delete(projectAssets.ProjectDirectory, true);
+                    }
+
+                    return project;
+                }
+
+                throw new NullReferenceException($"The 'ProjectDbContext' for the project {projectName} could not be created.");
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{projectName}'");
+                throw;
+            }
+
         }
 
-        public Project CreateProject(string projectName)
+        public async Task<Project> CreateProject(string projectName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+                if (projectAssets.ProjectDbContext != null)
+                {
+                    var project = new Project()
+                    {
+                        ProjectName = projectName
+                    };
+
+
+                    await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                    await projectAssets.ProjectDbContext.SaveChangesAsync();
+
+                    return project;
+                }
+                throw new NullReferenceException($"The 'ProjectDbContext' for the project {projectName} could not be created.");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{projectName}'");
+                throw;
+            }
         }
     }
 }
