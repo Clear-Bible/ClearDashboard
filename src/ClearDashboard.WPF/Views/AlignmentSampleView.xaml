@@ -53,6 +53,7 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Button
@@ -89,5 +90,7 @@
         <ItemsControl Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Path=GreekVerse1}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
         <Label Grid.ColumnSpan="2" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+
+        <Button x:Name="RetrieveTokens" Grid.Row="9"></Button>
     </Grid>
 </Page>

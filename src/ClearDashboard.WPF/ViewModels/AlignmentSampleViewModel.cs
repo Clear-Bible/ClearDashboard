@@ -11,7 +11,11 @@ using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -24,6 +28,7 @@ namespace ClearDashboard.Wpf.ViewModels
 {
     public class AlignmentSampleViewModel : ApplicationScreen
     {
+        private readonly IMediator _mediator;
         public List<string> EnglishWords { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
         public List<string> GreekLowercase { get; set; } = "α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω".Split(' ').ToList();
         public List<string> GreekUppercase { get; set; } = "Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω".Split(' ').ToList();
@@ -110,9 +115,10 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+        public AlignmentSampleViewModel(INavigationService navigationService, ILogger logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
+            _mediator = mediator;
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -144,7 +150,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             LoadFiles();
             MockProjectAndUser();
-
+            RetrieveTokens();
             return base.OnActivateAsync(cancellationToken);
         }
 
@@ -170,6 +176,12 @@ namespace ClearDashboard.Wpf.ViewModels
                 FirstName = "Test",
                 LastName = "User"
             };
+        }
+
+        private async Task RetrieveTokens()
+        {
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("6E6DB898-4194-4AAD-B9C5-BDD36E5E52B8")), "40");
+            var result = await _mediator.Send(query);
         }
     }
 }
