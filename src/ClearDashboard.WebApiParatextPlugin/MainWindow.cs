@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models.Common;
@@ -26,7 +27,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
-        private List<IProject> m_ProjectList = new ();
+        private List<IProject> m_ProjectList = new();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -55,7 +56,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         }
 
-     
+
         #region Please leave these for debugging plug-in start up crashes
         private static void ThreadExceptionEventHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
@@ -104,7 +105,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             Log.Error($"OnLoad {exception.Message}");
             AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
-  
+
 
         #region Paratext overrides - standard functions
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
@@ -121,11 +122,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             _parent = parent;
             AppendText(Color.Green, $"OnAddedToParent called");
 
-            // Since DoLoad is done on a different thread than what was used
-            // to create the control, we need to use the Invoke method.
-            //Invoke((Action)(() => UpdateProjectList()));
-            //Invoke((Action)(() => ShowScripture()));
-
             UpdateProjectList();
             ShowScripture(_project);
         }
@@ -136,14 +132,18 @@ namespace ClearDashboard.WebApiParatextPlugin
             return null;
         }
 
-       
+
         public override void DoLoad(IProgressInfo progressInfo)
         {
+            StartWebHost();
+
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
-            Invoke((Action)(() => GetAllProjects()));
+            //Invoke((Action)(() => GetAllProjects()));
 
-            StartWebHost();
+            //Invoke((Action)(() => GetUsfmForBook("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 40)));
+
+
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -193,7 +193,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup.Configuration(appBuilder);
                     });
 
-              
+
 
                 AppendText(Color.Green, "Owin Web Api host started");
             }
@@ -205,7 +205,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
-            SetProject(newProject, reloadWebHost:true);
+            SetProject(newProject, reloadWebHost: true);
         }
 
 
@@ -540,7 +540,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
-        
+
         public void SwitchVerseReference(int book, int chapter, int verse)
         {
             if (this.InvokeRequired)
@@ -572,7 +572,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private void btnRestart_Click(object sender, EventArgs e)
         {
 
-          // clear out the existing data
+            // clear out the existing data
             if (rtb.InvokeRequired)
             {
                 rtb.Invoke((MethodInvoker)(() => rtb.Clear()));
@@ -597,7 +597,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             hubProxy.Clients.All.Send(Guid.NewGuid(), @"Can you hear me?");
-        
+
         }
 
         private void btnVersificationTest_Click(object sender, EventArgs e)
@@ -614,7 +614,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             List<IProject> allProjects = new();
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
-            
+
             projects.ForEach(p => allProjects.Add(p));
 
             allProjects = allProjects.OrderBy(x => x.Type)
@@ -668,7 +668,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return allProjects;
         }
-        
+
         #endregion
 
         public ReferenceUsfm GetReferenceUSFM(string requestId)
@@ -703,8 +703,158 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Red, e.Message);
             }
 
-            
+
             return referenceUsfm;
+        }
+
+        public IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)> GetUsfmForBook(
+            string ParatextId, int bookNum)
+        {
+
+            // get the right project
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextId);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+
+            if (BibleBookScope.IsBibleBook(project.AvailableBooks[bookNum].Code) == false)
+            {
+                return null;
+            }
+
+            AppendText(Color.Blue, $"Processing {project.AvailableBooks[bookNum].Code}");
+
+            StringBuilder sb = new StringBuilder();
+            //// do the header
+            //sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
+
+            //int bookFileNum;
+            //if (project.AvailableBooks[bookNum].Number >= 40)
+            //{
+            //    // do that crazy USFM file naming where Matthew starts at 41
+            //    bookFileNum = project.AvailableBooks[bookNum].Number + 1;
+            //}
+            //else
+            //{
+            //    // normal OT book
+            //    bookFileNum = project.AvailableBooks[bookNum].Number;
+            //}
+
+            //var fileName = bookFileNum.ToString().PadLeft(3, '0')
+            //               + project.AvailableBooks[bookNum].Code + ".sfm";
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                tokens = project.GetUSFMTokens(project.AvailableBooks[bookNum].Number);
+            }
+            catch (Exception)
+            {
+                AppendText(Color.Orange, $"No Scripture for {bookNum}");
+                return null;
+            }
+            
+            string chapter;
+            string verse;
+            string verseText = "";
+
+            bool lastTokenChapter = false;
+            bool lastTokenText = false;
+            bool lastVerseZero = false;
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    // a verse token
+                    if (marker.Type == MarkerType.Verse)
+                    {
+                        lastTokenText = false;
+                        if (!lastTokenChapter || lastVerseZero)
+                        {
+                            sb.AppendLine();
+                        }
+
+                        // this includes single verses (\v 1) and multiline (\v 1-3)
+                        sb.Append($@"\v {marker.Data.Trim()} ");
+                        verse = marker.Data.Trim();
+                        
+                        lastTokenChapter = false;
+                        lastVerseZero = false;
+                    }
+                    else if (marker.Type == MarkerType.Chapter)
+                    {
+                        lastVerseZero = false;
+                        lastTokenText = false;
+                        // new chapter
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine(@"\c " + marker.Data);
+                        chapter = marker.Data.Trim();
+                        
+                        lastTokenChapter = true;
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture)
+                    {
+                        // verse text
+
+                        // check to see if this is a verse zero
+                        if (textToken.VerseRef.VerseNum == 0)
+                        {
+                            if (lastVerseZero == false)
+                            {
+                                sb.Append(@"\v 0 " + textToken.Text);
+                                verseText = textToken.Text;
+                            }
+                            else
+                            {
+                                sb.Append(textToken.Text);
+                                verseText = textToken.Text;
+                            }
+
+                            lastVerseZero = true;
+                            lastTokenText = true;
+                        }
+                        else
+                        {
+                            // check to see if the last character is a space
+                            if (sb[sb.Length - 1] == ' ' && lastTokenText)
+                            {
+                                sb.Append(textToken.Text.TrimStart());
+                                verseText = textToken.Text.TrimStart();
+                            }
+                            else
+                            {
+                                if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                {
+                                    sb.Append(textToken.Text.TrimStart());
+                                    verseText = textToken.Text.TrimStart();
+                                }
+                                else
+                                {
+                                    sb.Append(textToken.Text);
+                                    verseText = textToken.Text;
+                                }
+
+                            }
+
+                            lastTokenText = true;
+                        }
+                    }
+                }
+            }
+
+
+            return null; //TODO
+
         }
     }
 }
