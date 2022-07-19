@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
 using MediatR;
@@ -23,13 +24,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         }
 
         [HttpPost]
-        public async Task<RequestResult<IEnumerable<(string a, string b)>>> GetAsync([FromBody] GetBookUsfmByParatextIdBookIdQuery command)
+        public async Task<RequestResult<List<UsfmVerse>>> GetAsync([FromBody] GetBookUsfmByParatextIdBookIdQuery command)
         {
             var result =
-                await ExecuteRequestAsync<
-                    RequestResult<IEnumerable<(string a, string b)>>,
-                    IEnumerable<(string a, string b)>>(command,
-                    CancellationToken.None);
+                await ExecuteRequestAsync<RequestResult<List<UsfmVerse>>,
+                    List<UsfmVerse>>(command, CancellationToken.None);
             return result;
 
         }

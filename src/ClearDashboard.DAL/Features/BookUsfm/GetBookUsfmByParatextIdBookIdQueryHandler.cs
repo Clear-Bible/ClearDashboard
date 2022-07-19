@@ -7,13 +7,12 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
 {
     public class GetBookUsfmByParatextIdBookIdQueryHandler 
-        : ParatextRequestHandler<GetBookUsfmByParatextIdBookIdQuery, RequestResult<
-                IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>, 
-            IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
+        : ParatextRequestHandler<GetBookUsfmByParatextIdBookIdQuery, RequestResult<List<UsfmVerse>>, List<UsfmVerse>>
     {
 
         public GetBookUsfmByParatextIdBookIdQueryHandler([NotNull] ILogger<GetBiblicalTermsByTypeQueryHandler> logger) :
@@ -24,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
         
 
         public override async
-            Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>> Handle(
+            Task<RequestResult<List<UsfmVerse>>> Handle(
                 GetBookUsfmByParatextIdBookIdQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("bookusfmbyparatextidbookid", request, cancellationToken);
