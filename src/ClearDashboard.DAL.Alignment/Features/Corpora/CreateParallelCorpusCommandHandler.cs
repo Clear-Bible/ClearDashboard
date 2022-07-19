@@ -87,9 +87,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 new ClearDashboard.DAL.Alignment.Corpora.ParallelCorpusId(parallelCorpusModel.Id);
 
             return new RequestResult<ParallelCorpus>
-            (result: new ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, request.VerseMappings, parallelCorpusId),
-                success: true,
-                message: "That was a pain.");
+            (result: new ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus(sourceTokenizedTextCorpus,
+                targetTokenizedTextCorpus, request.VerseMappings, parallelCorpusId)
+            );
         }
 
         private IEnumerable<string> FilterBookAbbreviationsForTokens(IEnumerable<Models.Token> tokens)

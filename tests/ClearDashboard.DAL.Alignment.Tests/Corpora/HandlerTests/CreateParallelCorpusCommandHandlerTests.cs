@@ -68,11 +68,39 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                 new CreateParallelCorpusCommand(new TokenizedCorpusId(sourceTokenizedCorpusId),
                     new TokenizedCorpusId(targetTokenizedCorpusId), verseMappings);
             var result = await Mediator.Send(command);
-            Output.WriteLine(result.Message);
-            Assert.Equal("That was a pain.", result.Message);
+
+            // General assertions
             Assert.NotNull(result);
             Assert.True(result.Success);
+            Assert.Equal("Success", result.Message);
             Assert.NotNull(result.Data);
+
+            // Validate persisted ParallelCorpus data
+            Assert.Equal(1, ProjectDbContext.ParallelCorpa.Count());
+            var theParallelCorporaEntry = ProjectDbContext.ParallelCorpa.First();
+            Assert.Equal(1, theParallelCorporaEntry.VerseMappings.Count);
+
+            Assert.Equal(sourceTokenizedCorpusId, theParallelCorporaEntry.SourceTokenizedCorpusId);
+            Assert.Equal(targetTokenizedCorpusId, theParallelCorporaEntry.TargetTokenizedCorpusId);
+
+            Assert.Equal("New Testament 1", theParallelCorporaEntry.SourceTokenizedCorpus?.Corpus?.Name);
+            Assert.Equal("New Testament 2", theParallelCorporaEntry.TargetTokenizedCorpus?.Corpus?.Name);
+
+            // Validate returned ParallelCorpus Data
+            var returnedParallelCorpus = result.Data;
+            Assert.NotNull(returnedParallelCorpus);
+            Assert.NotNull(returnedParallelCorpus.SourceCorpus);
+            Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
+                returnedParallelCorpus.SourceCorpus.Texts.First().GetRows().First().Text);
+            Assert.NotNull(returnedParallelCorpus.TargetCorpus);
+            Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
+                returnedParallelCorpus.TargetCorpus.Texts.First().GetRows().First().Text);
+            Assert.Equal(1, returnedParallelCorpus.VerseMappingList.Count);
+
+            Assert.Equal(1, returnedParallelCorpus.VerseMappingList.First().SourceVerses.First().ChapterNum);
+            Assert.Equal(1, returnedParallelCorpus.VerseMappingList.First().SourceVerses.First().VerseNum);
+            Assert.Equal(1, returnedParallelCorpus.VerseMappingList.First().TargetVerses.First().ChapterNum);
+            Assert.Equal(1, returnedParallelCorpus.VerseMappingList.First().TargetVerses.First().VerseNum);
         }
         finally
         {
