@@ -10,10 +10,14 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using SIL.Linq;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -118,11 +122,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             _parent = parent;
             AppendText(Color.Green, $"OnAddedToParent called");
 
-            // Since DoLoad is done on a different thread than what was used
-            // to create the control, we need to use the Invoke method.
-            //Invoke((Action)(() => UpdateProjectList()));
-            //Invoke((Action)(() => ShowScripture()));
-
             UpdateProjectList();
             ShowScripture(_project);
         }
@@ -136,11 +135,17 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public override void DoLoad(IProgressInfo progressInfo)
         {
+            StartWebHost();
+
+            
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
-            Invoke((Action)(() => GetAllProjects()));
-
-            StartWebHost();
+            //Invoke((Action)(() => GetAllProjects()));
+            
+            //Invoke((Action)(() => GetUsfmForBook("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 40)));
+            
+            //zzSur
+            //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
         }
 
 
@@ -151,11 +156,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
 
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
-                if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
-                {
-                    AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+            {
+                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
                     return null;
-                }
+            }
             // Load the most up to date version
             Assembly assembly;
             try
@@ -610,18 +614,260 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
-        private void GetAllProjects()
+        public List<IProject> GetAllProjects()
         {
-            var projects = _host.GetAllProjects();
+            List<IProject> allProjects = new();
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
 
-            listProjects.Items.Clear();
-            foreach (var p in projects)
+            projects.ForEach(p => allProjects.Add(p));
+
+            allProjects = allProjects.OrderBy(x => x.Type)
+                .ThenBy(n => n.ShortName)
+                .ToList();
+
+            foreach (var p in allProjects)
             {
                 string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
                 listProjects.Items.Add(text);
             }
         }
-
+        
         #endregion
+
+        public ReferenceUsfm GetReferenceUSFM(string requestId)
+        {
+            ReferenceUsfm referenceUsfm = new();
+            referenceUsfm.Id = requestId;
+
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == requestId);
+
+            if (project == null)
+            {
+                return referenceUsfm;
+            }
+
+            // creating usfm directory
+            try
+            {
+                ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+                var path = paratextExtractUSFM.ExportUSFMScripture(project, this);
+
+                referenceUsfm.UsfmDirectoryPath = path;
+                referenceUsfm.Name = project.ShortName;
+                referenceUsfm.LongName = project.LongName;
+                referenceUsfm.Language = project.LanguageName;
+                referenceUsfm.IsRTL = project.Language.IsRtoL;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                AppendText(Color.Red, e.Message);
+            }
+
+
+            return referenceUsfm;
+        }
+        
+        public List<UsfmVerse> GetUsfmForBook(
+            string ParatextId, int bookNum)
+        {
+
+            // get the right project
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextId);
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Number == bookNum);
+            if (book == null)
+            {
+                return null;
+            }
+            if (BibleBookScope.IsBibleBook(book.Code) == false)
+            {
+                return null;
+            }
+
+            List<UsfmVerse> verses = new List<UsfmVerse>();
+
+
+            AppendText(Color.Blue, $"Processing {book.Code}");
+
+            StringBuilder sb = new StringBuilder();
+            //// do the header
+            //sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
+
+            //int bookFileNum;
+            //if (project.AvailableBooks[bookNum].Number >= 40)
+            //{
+            //    // do that crazy USFM file naming where Matthew starts at 41
+            //    bookFileNum = project.AvailableBooks[bookNum].Number + 1;
+            //}
+            //else
+            //{
+            //    // normal OT book
+            //    bookFileNum = project.AvailableBooks[bookNum].Number;
+            //}
+
+            //var fileName = bookFileNum.ToString().PadLeft(3, '0')
+            //               + project.AvailableBooks[bookNum].Code + ".sfm";
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                tokens = project.GetUSFMTokens(book.Number);
+            }
+            catch (Exception)
+            {
+                AppendText(Color.Orange, $"No Scripture for {bookNum}");
+                return null;
+            }
+            
+            string chapter = "";
+            string verse = "";
+            string verseText = "";
+
+            bool lastTokenChapter = false;
+            bool lastTokenText = false;
+            bool lastVerseZero = false;
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    // a verse token
+                    if (marker.Type == MarkerType.Verse)
+                    {
+                        lastTokenText = false;
+                        if (!lastTokenChapter || lastVerseZero)
+                        {
+                            sb.AppendLine();
+                        }
+
+                        // this includes single verses (\v 1) and multiline (\v 1-3)
+                        sb.Append($@"\v {marker.Data.Trim()} ");
+
+                        if (verse != "" && chapter != "" && verseText != "")
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = verse,
+                                Text = verseText
+                            };
+                            verses.Add(usfm);
+                            verseText = "";
+                        }
+
+                        verse = marker.Data.Trim();
+                        
+                        lastTokenChapter = false;
+                        lastVerseZero = false;
+                    }
+                    else if (marker.Type == MarkerType.Chapter)
+                    {
+                        lastVerseZero = false;
+                        lastTokenText = false;
+                        // new chapter
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine(@"\c " + marker.Data);
+
+                        if (verse != "" && chapter != "" && verseText != "")
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = verse,
+                                Text = verseText
+                            };
+                            verses.Add(usfm);
+                            verseText = "";
+                        }
+                        chapter = marker.Data.Trim();
+                        
+                        lastTokenChapter = true;
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture)
+                    {
+                        // verse text
+
+                        // check to see if this is a verse zero
+                        if (textToken.VerseRef.VerseNum == 0)
+                        {
+                            if (lastVerseZero == false)
+                            {
+                                sb.Append(@"\v 0 " + textToken.Text);
+                                verseText = textToken.Text;
+                            }
+                            else
+                            {
+                                sb.Append(textToken.Text);
+                                verseText = textToken.Text;
+                            }
+
+                            lastVerseZero = true;
+                            lastTokenText = true;
+                        }
+                        else
+                        {
+                            // check to see if the last character is a space
+                            if (sb[sb.Length - 1] == ' ' && lastTokenText)
+                            {
+                                sb.Append(textToken.Text.TrimStart());
+                                verseText += textToken.Text.TrimStart();
+                            }
+                            else
+                            {
+                                if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                {
+                                    sb.Append(textToken.Text.TrimStart());
+                                    verseText = textToken.Text.TrimStart();
+                                }
+                                else
+                                {
+                                    sb.Append(textToken.Text);
+                                    verseText += textToken.Text;
+                                }
+
+                            }
+
+                            lastTokenText = true;
+                        }
+                    }
+                }
+            }
+
+            // do the last verse
+            if (verse != "" && chapter != "" && verseText != "")
+            {
+                var usfm = new UsfmVerse
+                {
+                    Chapter = chapter,
+                    Verse = verse,
+                    Text = verseText
+                };
+                verses.Add(usfm);
+            }
+
+
+            foreach (var v in verses)
+            {
+                Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            }
+
+            return verses; //TODO
+
+        }
     }
 }
