@@ -29,7 +29,7 @@ namespace ClearDashboard.WPF.Tests
         {
             try
             {
-                using (FileStream fileStream = new("TestData.txt", FileMode.Open))
+                using (FileStream fileStream = new("license.key", FileMode.Open))
                 {
                     using (Aes aes = Aes.Create())
                     {
@@ -83,7 +83,7 @@ namespace ClearDashboard.WPF.Tests
                     FirstName = "Bob",
                     LastName = "Smith"
                 };
-                using (FileStream fileStream = new("TestData.txt", FileMode.OpenOrCreate))
+                using (FileStream fileStream = new("license.key", FileMode.OpenOrCreate))
                 {
                     using (Aes aes = Aes.Create())
                     {
