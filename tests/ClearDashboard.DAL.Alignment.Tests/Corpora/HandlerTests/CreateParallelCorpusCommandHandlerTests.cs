@@ -31,8 +31,31 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
     {
         try
         {
-            var sourceTokenizedCorpusId = new TokenizedCorpusId(new Guid());
-            var targetTokenizedCorpusId = new TokenizedCorpusId(new Guid());
+            var sourceTextCorpus = TestDataHelpers.GetSampleGreekCorpus();
+
+            var sourceCommand = new CreateTokenizedCorpusFromTextCorpusCommand(sourceTextCorpus, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var sourceCommandResult = await Mediator.Send(sourceCommand);
+
+            var targetTextCorpus = TestDataHelpers.GetSampleGreekCorpus();
+
+            var targetCommand = new CreateTokenizedCorpusFromTextCorpusCommand(targetTextCorpus, false,
+                "New Testament 2",
+                "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCommandResult = await Mediator.Send(targetCommand);
+
+            var sourceTokenizedCorpusId =
+                ProjectDbContext.TokenizedCorpora.First(tc => tc.Corpus.Name == "New Testament 1").Id;
+            var targetTokenizedCorpusId =
+                ProjectDbContext.TokenizedCorpora.First(tc => tc.Corpus.Name == "New Testament 2").Id;
+
             var verseMappings = new List<VerseMapping>()
             {
                 new VerseMapping(
@@ -42,9 +65,11 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             };
 
             var command =
-                new CreateParallelCorpusCommand(sourceTokenizedCorpusId, targetTokenizedCorpusId, verseMappings);
+                new CreateParallelCorpusCommand(new TokenizedCorpusId(sourceTokenizedCorpusId),
+                    new TokenizedCorpusId(targetTokenizedCorpusId), verseMappings);
             var result = await Mediator.Send(command);
-            Assert.Equal("mikey", result.Message);
+            Output.WriteLine(result.Message);
+            Assert.Equal("That was a pain.", result.Message);
             Assert.NotNull(result);
             Assert.True(result.Success);
             Assert.NotNull(result.Data);
