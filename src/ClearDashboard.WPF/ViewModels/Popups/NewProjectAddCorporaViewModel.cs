@@ -12,6 +12,8 @@ namespace ClearDashboard.Wpf.ViewModels.Popups;
 
 public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<Project>
 {
+    private CorpusSourceType _corpusSourceType;
+
     public NewProjectAddCorporaViewModel()
     {
         // used by Caliburn Micro for design time    
@@ -26,8 +28,15 @@ public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<Pro
     {
     }
 
+    public CorpusSourceType CorpusSourceType
+    {
+        get => _corpusSourceType;
+        set => Set(ref _corpusSourceType,value);
+    }
+
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
+        CorpusSourceType = CorpusSourceType.Paratext;
         CanMoveBackwards = true;
         return base.OnActivateAsync(cancellationToken);
     }

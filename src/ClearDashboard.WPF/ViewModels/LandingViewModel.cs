@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.ViewModels
             dynamic settings = new ExpandoObject();
             settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
             settings.ShowInTaskbar = false;
-            settings.Title = "Create New Project";
+            //settings.Title = "Create New Project";  // TODO:  localize
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.NoResize;
 

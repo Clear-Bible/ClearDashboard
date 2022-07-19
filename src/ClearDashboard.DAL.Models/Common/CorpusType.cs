@@ -10,3 +10,11 @@ public enum CorpusType
     Daughter,
     MarbleResource,
 }
+
+public enum CorpusSourceType
+{
+    Manuscript,
+    // ReSharper disable once InconsistentNaming
+    USFM,
+    Paratext
+}

@@ -30,7 +30,8 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
                 ProjectManager.CreateDashboardProject();
             }
 
-            Title = "Create New Project";
+            //Title = "Create New Project";
+            DisplayName = "**** Create New Project";
 
             Project = new Project();
         }
@@ -64,8 +65,9 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
 
         public override async Task MoveForwardsAction()
         {
-            ProjectManager.CreateProject(ProjectName);
-
+            ProjectManager.CurrentProject =  await ProjectManager.CreateProject(ProjectName);
+            ((NewProjectDialogViewModel)Parent).DisplayName = ProjectManager.CurrentProject.ProjectName;
+            ((NewProjectDialogViewModel)Parent).DialogTitle = ProjectManager.CurrentProject.ProjectName;
             await base.MoveForwardsAction();
         }
      

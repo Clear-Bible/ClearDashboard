@@ -11,67 +11,69 @@
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
              xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
+             xmlns:local="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="200">
+             d:DataContext="{d:DesignInstance Type=popups:NewProjectAddCorporaViewModel,
+                                     IsDesignTimeCreatable=True}"
+             d:DesignHeight="150" d:DesignWidth="400"
+             >
     <UserControl.Resources>
 
-    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
-        <Setter Property="Margin" Value="0,8"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
+
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+            <Setter Property="Margin" Value="5,5"/>
+            <Setter Property="FontSize" Value="11"></Setter>
+            
+        </Style>
+
+        <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignLightRadioButton}">
+            <Setter Property="Margin" Value="0, 0, 5,0" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+        </Style>
+
+        <converters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
+        <converters:EnumToValuesConverter x:Key="EnumToValuesConverter" />
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </UserControl.Resources>
-    
+
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+      
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <Label Content="Corpus Type"></Label>
+            <StackPanel
+                Margin="5,0,0,5"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <RadioButton
+                    Content="Manuscript"
+                   GroupName="corpusType"
+                    IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Manuscript}"
+                    TabIndex="1"/>
 
-        <StackPanel
-            Grid.Row="0" 
-            Grid.Column="0" 
-            Margin="0 40"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Orientation="Vertical">
-<Label Content="Add Corpora" FontSize="40" Foreground="Azure"></Label>
-            <!--<TextBox
-                x:Name="ProjectName"
-                FontSize="20"
-                MinWidth="400"
-                materialDesign:HintAssist.Hint="Please enter a name for your project."
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                materialDesign:HintAssist.FloatingScale="0.50"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                VerticalAlignment="Center">
-                <TextBox.Text>
-                    <Binding
-                        Mode="TwoWay"
-                        Path="ProjectName"
-                        UpdateSourceTrigger="PropertyChanged"
-                         ValidatesOnDataErrors="True">
-                    </Binding>
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <AdornedElementPlaceholder  />
-                            <TextBlock Margin="10" Text="{Binding [0].ErrorContent}" TextWrapping="Wrap" Foreground="{DynamicResource MaterialDesignValidationErrorBrush}" MaxWidth="400" FontSize="16"/>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
-               
-            </TextBox>-->
-            
+                <RadioButton
+                    Content="USFM"
+                    GroupName="corpusType"
+                    IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=USFM}"
+                    TabIndex="2"/>
+
+                <RadioButton
+                    Content="Paratext"
+                    GroupName="corpusType"
+                    IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Paratext}"
+                    TabIndex="3"/>
+            </StackPanel>
         </StackPanel>
-
         <userControls:WorkflowFooter  Grid.Row="1" Grid.Column="0"  />
-        <!--<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
-            <Button x:Name="MoveBackwards" Content="Back" Margin="5 5 5 5" />
-            <Button x:Name="MoveForwards" Content="Next" Margin="5 5 5 5" />
-        </StackPanel>-->
     </Grid>
 </UserControl>
