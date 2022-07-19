@@ -109,4 +109,43 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Load")]
+    public async void Corpus__CreateTokenizedCorpus__FullNT_x3()
+    {
+        try
+        {
+            var textCorpus = TestDataHelpers.GetFullGreekCorpus();
+
+            var command1 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "New Testament 1", "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+
+            var command2 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "New Testament 2", "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+
+            var command3 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "New Testament 3", "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var result1 = await Mediator.Send(command1);
+            var result2 = await Mediator.Send(command2);
+            var result3 = await Mediator.Send(command3);
+
+            Assert.Equal(3, ProjectDbContext.Corpa.Count());
+            Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.Count);
+            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 1").TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 2").TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 3").TokenizedCorpora.First().Tokens.Count);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
 }
