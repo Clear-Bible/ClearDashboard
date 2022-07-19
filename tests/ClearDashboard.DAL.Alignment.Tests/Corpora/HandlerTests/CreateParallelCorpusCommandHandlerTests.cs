@@ -107,4 +107,38 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__Error_Case()
+    {
+        try
+        {
+            var sourceTokenizedCorpusId = new TokenizedCorpusId(new Guid());
+            var targetTokenizedCorpusId = new TokenizedCorpusId(new Guid());
+
+            var verseMappings = new List<VerseMapping>()
+            {
+                new VerseMapping(
+                    new List<Verse>() { new Verse("Jms", 1, 1) },
+                    new List<Verse>() { new Verse("Jms", 1, 1) }
+                )
+            };
+
+            var command =
+                new CreateParallelCorpusCommand(new TokenizedCorpusId(sourceTokenizedCorpusId.Id),
+                    new TokenizedCorpusId(targetTokenizedCorpusId.Id), verseMappings);
+            var result = await Mediator.Send(command);
+
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Equal("An error occurred while saving the entity changes. See the inner exception for details.",
+                result.Message);
+            Assert.Null(result.Data);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
 }
