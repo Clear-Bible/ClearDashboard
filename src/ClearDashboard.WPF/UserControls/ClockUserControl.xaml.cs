@@ -31,7 +31,7 @@ namespace ClearDashboard.Wpf.UserControls
     {
         private List<string> utcComboList = new();
 
-    System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
+    //System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
 
         private int _timeDisplayIndex = 0;
 
@@ -183,9 +183,9 @@ namespace ClearDashboard.Wpf.UserControls
             MenuItems[0].ClockTextBlockText = " Local Time";
          
 
-            _refreshTimer.Elapsed += ClockRefresh;
-            _refreshTimer.AutoReset = true;
-            _refreshTimer.Enabled = true;
+            //_refreshTimer.Elapsed += ClockRefresh;
+            //_refreshTimer.AutoReset = true;
+            //_refreshTimer.Enabled = true;
             InstantClockRefresh();
         }
 

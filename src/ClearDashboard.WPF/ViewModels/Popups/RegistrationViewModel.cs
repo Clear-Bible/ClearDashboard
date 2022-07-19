@@ -1,18 +1,18 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Workflows;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
+using LicenseUser = ClearDashboard.Wpf.Models.LicenseUser;
 
 namespace ClearDashboard.Wpf.ViewModels.Popups
 {
-    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<Project>
+    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
     {
-       
+        private RegistrationDialogViewModel _parent;
         public RegistrationViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -22,59 +22,75 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
             ILogger<WorkSpaceViewModel> logger,
             DashboardProjectManager projectManager, 
             IEventAggregator eventAggregator,
-            IValidator<Project> projectValidator)
-            : base(eventAggregator, navigationService, logger, projectManager, projectValidator)
+            IValidator<LicenseUser> licenseValidator)                                               
+            : base(eventAggregator, navigationService, logger, projectManager, licenseValidator)
         {
-          
-            if (!ProjectManager.HasDashboardProject)
-            {
-                ProjectManager.CreateDashboardProject();
-            }
-
-            Title = "Create New Project";
-
-            Project = new Project();
+            LicenseUser = new LicenseUser();
         }
 
-        
-       
-        private Project _project;
-
-
-        public Project Project
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            get => _project;
-            private init => Set(ref _project, value);
+            _parent = this.Parent as RegistrationDialogViewModel;
+            return base.OnInitializeAsync(cancellationToken);
+        }
+
+        private LicenseUser _licenseUser;
+        public LicenseUser LicenseUser
+        {
+            get { return _licenseUser; }
+            set { _licenseUser = value; }
         }
 
         private string _licenseKey;
         public string LicenseKey
         {
-            get => _licenseKey;
+            get { return _licenseKey; }
             set
             {
                 Set(ref _licenseKey, value);
-                //ProjectManager.CurrentDashboardProject.LicenseKey = value;
-                //Project.LicenseKey = value;
-                ValidationResult = Validator.Validate(Project);
-                CanMoveForwards = ValidationResult.IsValid;
-                CanMoveBackwards = ValidationResult.IsValid;
-                NotifyOfPropertyChange(nameof(Project));
-
+                LicenseUser.LicenseKey = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(LicenseUser));
+                
             }
         }
 
-     
+        private string _firstName;
+        public string FirstName
+        {
+            get { return _firstName; }
+            set
+            {
+                Set(ref _firstName, value);
+                LicenseUser.FirstName = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(LicenseUser));
+            }
+        }
+
+        private string _lastName;
+        public string LastName
+        {
+            get { return _lastName; }
+            set
+            {
+                Set(ref _lastName, value);
+                LicenseUser.LastName = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(LicenseUser));
+            }
+        }
 
         protected override ValidationResult Validate()
         {
-            return (!string.IsNullOrEmpty(LicenseKey)) ? Validator.Validate(Project) : null;
+            
+            var ValidationResult = Validator.Validate(LicenseUser);
+            if (ValidationResult != null && _parent != null)
+            {
+                _parent.CanRegister = ValidationResult.IsValid;
+            }
+            return ValidationResult;
+           
         }
-
-        //protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        //{
-        //    //ShowWorkflowButtons();
-        //    return base.OnActivateAsync(cancellationToken);
-        //}
     }
 }

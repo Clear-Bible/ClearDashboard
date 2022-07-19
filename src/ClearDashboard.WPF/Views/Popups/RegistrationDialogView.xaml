@@ -21,29 +21,30 @@
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <ContentControl
             x:Name="ActiveItem"
             Grid.Column="0"
             HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Stretch" />
+            VerticalContentAlignment="Stretch" 
+            />
 
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
-            Margin="10,10"
+            Margin="0,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
                 x:Name="Register"
                 Margin="5,5,5,5"
                 Content="REGISTER" />
-            <Button
+           <!--<Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
-                Content="CANCEL" />
+                Content="CANCEL" />-->
         </StackPanel>
 
     </Grid>

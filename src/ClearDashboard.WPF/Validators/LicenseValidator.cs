@@ -1,52 +1,38 @@
 ﻿using System;
-using System.IO;
 using System.Text.RegularExpressions;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Models;
+using LicenseUser = ClearDashboard.Wpf.Models.LicenseUser;
 
 namespace ClearDashboard.Wpf.Validators
 {
-    public class LicenseValidator : AbstractValidator<LicenseUser>
+    public class LicenseUserValidator : AbstractValidator<LicenseUser>
     {
-        public LicenseValidator(ILogger<LicenseValidator> logger)
+        public LicenseUserValidator(ILogger<LicenseUserValidator> logger)
         {
+            RuleFor(x => x.FirstName).Custom((firstName, context) => {
+
+                if (string.IsNullOrEmpty(firstName))
+                {
+                    context.AddFailure($"Please enter your first name."); ;
+                }
+            });
+
+            RuleFor(x => x.LastName).Custom((lastName, context) => {
+
+                if (string.IsNullOrEmpty(lastName))
+                {
+                    context.AddFailure($"Please enter your last name."); ;
+                }
+            });
+
             RuleFor(x => x.LicenseKey).Custom((licenseKey, context) => {
 
                 if (string.IsNullOrEmpty(licenseKey))
                 {
-                    return;
+                    context.AddFailure($"Enter your license key."); ;
                 }
-
-                var foundMatch = false;
-                try
-                {
-                    foundMatch = Regex.IsMatch(licenseKey, @"^([a-zA-Z0-9\s\-]+)$");
-                }
-                catch (ArgumentException ex)
-                {
-                    context.AddFailure($"Error {ex.Message}");
-                }
-
-                if (!foundMatch)
-                {
-                    context.AddFailure($"The license key '{licenseKey}' contains illegal characters.  Valid characters include 'A-Z' (lowercase and uppercase), numbers '0-9' and '-'.");
-                }
-
-                //// check to see if the project directory already exists:
-             
-                //var projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects", projectName);
-
-                //if (Directory.Exists(projectDirectory))
-                //{
-                //    var test = LocalizationStrings.Get("Landing_newproject", logger);
-                //    context.AddFailure($"A project with the name '{projectName}' already exists. Please choose a unique name.");
-                //}
             });
-
-
         }
 
     }

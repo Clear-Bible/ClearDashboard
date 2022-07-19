@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Documents;
 
-namespace Models
+namespace ClearDashboard.Wpf.Models
 {
     public class TextCollectionList
     {

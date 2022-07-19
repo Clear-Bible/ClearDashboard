@@ -12,5 +12,11 @@ namespace ClearDashboard.Wpf.Views.Popups
         {
             InitializeComponent();
         }
+        
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //we can check if all three are done
+            //we can tell when to turn on register button
+        }
     }
 }

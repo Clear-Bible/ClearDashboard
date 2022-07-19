@@ -28,4 +28,10 @@
     <ProjectReference Include="..\ClearDashboard.Wpf\ClearDashboard.Wpf.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="license.key">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using ClearDashboard.DataAccessLayer.Models;
 
-namespace Models
+namespace ClearDashboard.Wpf.Models
 {
-    public class LicenseUser
+    public class LicenseUser : IdentifiableEntity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string LicenseKey { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return string.Format("{0}, {1}", FirstName, LastName);
-            }
-        }
+        public string FullName => $"{FirstName}, {LastName}";
         public string ParatextUserName { get; set; } = null;
-        public string LastAlignmentLevelId { get; set; } = null;
-        public List<object> AlignmentVersions { get; set; }
-        public List<object> AlignmentSets { get; set; }
-        public string Id { get; set; }
     }
 }

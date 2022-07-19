@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Models;
+using ClearDashboard.Wpf.Models;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.ViewModels
