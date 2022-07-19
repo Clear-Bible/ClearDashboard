@@ -1,14 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using Paratext.PluginInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using ClearDashboard.WebApiParatextPlugin;
-using Microsoft.Win32;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Helpers
 {
@@ -22,6 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
         /// </summary>
         /// <param name="project"></param>
         /// <param name="mainWindow"></param>
+        // ReSharper disable once InconsistentNaming
         public string ExportUSFMScripture(IProject project, MainWindow mainWindow)
         {
             string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -92,6 +90,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                             {
                                 File.Copy(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath),
                                     Path.Combine(exportPath, "usfm.sty"), true);
+                                bFound = true;
                             }
                             catch (Exception e)
                             {
@@ -130,7 +129,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                     // do the header
                     sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
 
-                    int bookFileNum = 0;
+                    int bookFileNum;
                     if (project.AvailableBooks[bookNum].Number >= 40)
                     {
                         // do that crazy USFM file naming where Matthew starts at 41
@@ -172,7 +171,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     sb.AppendLine();
                                 }
                                 // this includes single verses (\v 1) and multiline (\v 1-3)
-                                sb.Append($@"\v {marker.Data.ToString().Trim()} ");
+                                sb.Append($@"\v {marker.Data.Trim()} ");
                                 lastTokenChapter = false;
                                 lastVerseZero = false;
                             }
@@ -199,7 +198,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                 {
                                     if (lastVerseZero == false)
                                     {
-                                        sb.Append($@"\v 0 " + textToken.Text);
+                                        sb.Append(@"\v 0 " + textToken.Text);
                                     }
                                     else
                                     {
@@ -258,38 +257,41 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             doc.Load(path);
 
             XmlElement root = doc.DocumentElement;
-            var node = root.SelectSingleNode("//Naming");
-
-            if (node != null)
+            if (root != null)
             {
-                node.Attributes["PrePart"].Value = "";
-                node.Attributes["PostPart"].Value = ".sfm";
-                node.Attributes["BookNameForm"].Value = "41MAT";
-            }
+                var node = root.SelectSingleNode("//Naming");
+
+                if (node is { Attributes: { } })
+                {
+                    node.Attributes["PrePart"].Value = "";
+                    node.Attributes["PostPart"].Value = ".sfm";
+                    node.Attributes["BookNameForm"].Value = "41MAT";
+                }
 
 
-            node = root.SelectSingleNode("//FileNameForm");
-            if (node != null)
-            {
-                node.InnerText = "41MAT";
-            }
+                node = root.SelectSingleNode("//FileNameForm");
+                if (node != null)
+                {
+                    node.InnerText = "41MAT";
+                }
 
-            node = root.SelectSingleNode("//FileNameBookNameForm");
-            if (node != null)
-            {
-                node.InnerText = "41MAT";
-            }
+                node = root.SelectSingleNode("//FileNameBookNameForm");
+                if (node != null)
+                {
+                    node.InnerText = "41MAT";
+                }
 
-            node = root.SelectSingleNode("//FileNamePostPart");
-            if (node != null)
-            {
-                node.InnerText = ".sfm";
-            }
+                node = root.SelectSingleNode("//FileNamePostPart");
+                if (node != null)
+                {
+                    node.InnerText = ".sfm";
+                }
 
-            node = root.SelectSingleNode("//FileNamePrePart");
-            if (node != null)
-            {
-                node.InnerText = "";
+                node = root.SelectSingleNode("//FileNamePrePart");
+                if (node != null)
+                {
+                    node.InnerText = "";
+                }
             }
 
             doc.Save(path);

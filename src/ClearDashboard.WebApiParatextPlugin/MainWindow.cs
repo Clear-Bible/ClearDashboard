@@ -137,13 +137,12 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             StartWebHost();
 
+            
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
             //Invoke((Action)(() => GetAllProjects()));
 
             //Invoke((Action)(() => GetUsfmForBook("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 40)));
-
-
         }
 
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
