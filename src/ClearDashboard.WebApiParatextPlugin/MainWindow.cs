@@ -629,10 +629,51 @@ namespace ClearDashboard.WebApiParatextPlugin
             foreach (var p in allProjects)
             {
                 string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
-                listProjects.Items.Add(text);
+
+                switch (p.Type)
+                {
+                    case ProjectType.Auxiliary:
+                        AppendText(Color.Brown, text);
+                        break;
+                    case ProjectType.BackTranslation:
+                        AppendText(Color.DarkOliveGreen, text);
+                        break;
+                    case ProjectType.ConsultantNotes:
+                        AppendText(Color.Aqua, text);
+                        break;
+                    case ProjectType.Daughter:
+                        AppendText(Color.DeepPink, text);
+                        break;
+                    case ProjectType.EnhancedResource:
+                        AppendText(Color.BlueViolet, text);
+                        break;
+                    case ProjectType.SourceLanguage:
+                        AppendText(Color.Orange, text);
+                        break;
+                    case ProjectType.Standard:
+                        AppendText(Color.CadetBlue, text);
+                        break;
+                    case ProjectType.StudyBible:
+                    case ProjectType.StudyBibleAdditions:
+                        AppendText(Color.DarkSalmon, text);
+                        break;
+                    case ProjectType.TransliterationManual:
+                    case ProjectType.TransliterationWithEncoder:
+                        AppendText(Color.DarkSlateBlue, text);
+                        break;
+                    case ProjectType.Xml:
+                        AppendText(Color.Brown, text);
+                        break;
+                }
             }
+
+            // test 
+            var proj = allProjects.FirstOrDefault(x => x.ShortName == "HEB/GRK");
+            var referenceUsfm = GetReferenceUSFM(proj.ID);
+
+            return allProjects;
         }
-        
+
         #endregion
 
         public ReferenceUsfm GetReferenceUSFM(string requestId)
