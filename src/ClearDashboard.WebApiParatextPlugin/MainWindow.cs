@@ -617,6 +617,28 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
+        public List<ParatextProjectMetadata> GetProjectMetadata()
+        {
+            var projectMetadata = new List<ParatextProjectMetadata>();
+            var projects = _host.GetAllProjects(true);
+
+
+            foreach (var project in projects)
+            {
+                var metadata = new ParatextProjectMetadata
+                {
+                    Id = project.ID,
+                    LanguageName = project.LanguageName,
+                    Name = project.ShortName,
+                    LongName = project.LongName,
+                    //CorpusType = 
+                };
+                projectMetadata.Add(metadata);
+            }
+
+            return projectMetadata;
+        }
+
         public List<ParatextProject> GetAllProjects(bool showInConsole = false)
         {
             List<ParatextProject> allProjects = new();
