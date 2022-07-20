@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Microsoft.EntityFrameworkCore;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -25,12 +26,26 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             try
             {
-                var tokenizedCorpus = await ProjectDbContext.TokenizedCorpora.FindAsync(request.TokenizedCorpusId.Id);
+                var tokenizedCorpus = ProjectDbContext.TokenizedCorpora
+                    .Include(tc => tc.Tokens)
+                    .FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id);
 
-                var groupedTokens = tokenizedCorpus.Tokens.GroupBy(
-                    t => new { t.ChapterNumber, t.VerseNumber },
-                    t => t
-                );
+                if (tokenizedCorpus == null)
+                {
+                    throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
+                }
+
+
+                var groupedTokens = tokenizedCorpus.Tokens
+                    .OrderBy(t => t.BookNumber)
+                    .ThenBy(t => t.ChapterNumber)
+                    .ThenBy(t => t.VerseNumber)
+                    .ThenBy(t => t.WordNumber)
+                    .ThenBy(t => t.SubwordNumber)
+                    .GroupBy(
+                        t => new { t.ChapterNumber, t.VerseNumber },
+                        t => t
+                    );
 
                 return new RequestResult<
                     IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>

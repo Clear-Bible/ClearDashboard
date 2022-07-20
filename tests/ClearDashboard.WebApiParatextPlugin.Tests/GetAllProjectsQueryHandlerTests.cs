@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
+using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,25 +9,27 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
-    public class GetTextCollectionsQueryHandlerTests : TestBase
+    public class GetAllProjectsQueryHandlerTests : TestBase
     {
-        public GetTextCollectionsQueryHandlerTests(ITestOutputHelper output) : base(output)
+        public GetAllProjectsQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
         }
 
 
-        [Fact] 
-        public async Task GetTextCollectionsTestAsync()
+        [Fact]
+        public async Task GetAllProjectsTestAsync()
         {
             try
             {
                 await StartParatextAsync();
                 var client = CreateHttpClient();
 
-                var response = await client.PostAsJsonAsync<GetTextCollectionsQuery>("textcollections", new GetTextCollectionsQuery());
+                var response =
+                    await client.PostAsJsonAsync<GetAllProjectsQuery>("allprojects",
+                        new GetAllProjectsQuery());
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<List<TextCollection>>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<List<IProject>>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);
@@ -35,7 +37,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 if (result != null)
                 {
-                    Output.WriteLine($"TextCollections Returned: {result.Data.Count.ToString()}");
+                    Output.WriteLine($"All Projects Returned: {result.Data.Count.ToString()}");
                 }
             }
             finally
