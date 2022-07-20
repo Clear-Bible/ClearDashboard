@@ -13,6 +13,7 @@ using ClearDashboard.WebApiParatextPlugin.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Owin.Cors;
+using Newtonsoft.Json;
 using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -86,7 +87,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             config.DependencyResolver = new DefaultDependencyResolver(ServiceProvider);
            // config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
             config.Formatters.Remove(config.Formatters.XmlFormatter);
+          //config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
+          //    { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
+            
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
