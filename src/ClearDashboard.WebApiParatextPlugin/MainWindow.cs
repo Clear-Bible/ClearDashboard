@@ -9,6 +9,7 @@ using Paratext.PluginInterfaces;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -142,7 +143,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
-            //Invoke((Action)(() => GetAllProjects(true)));
+            Invoke((Action)(() => GetAllProjects(true)));
 
             //Invoke((Action)(() => GetUsfmForBook("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 40)));
 
@@ -625,44 +626,47 @@ namespace ClearDashboard.WebApiParatextPlugin
                 .ThenBy(n => n.ShortName)
                 .ToList();
 
-            foreach (var p in allProjects)
+            if (showInConsole)
             {
-                string text = $"{p.ShortName} is a {p.Type} Project: {p.Guid}";
-
-                switch (p.Type)
+                foreach (var p in allProjects)
                 {
-                    case ParatextProject.ProjectType.Auxiliary:
-                        AppendText(Color.Brown, text);
-                        break;
-                    case ParatextProject.ProjectType.BackTranslation:
-                        AppendText(Color.DarkOliveGreen, text);
-                        break;
-                    case ParatextProject.ProjectType.ConsultantNotes:
-                        AppendText(Color.Aqua, text);
-                        break;
-                    case ParatextProject.ProjectType.Daughter:
-                        AppendText(Color.DeepPink, text);
-                        break;
-                    case ParatextProject.ProjectType.MarbleResource:
-                        AppendText(Color.BlueViolet, text);
-                        break;
-                    case ParatextProject.ProjectType.Resource:
-                        AppendText(Color.Orange, text);
-                        break;
-                    case ParatextProject.ProjectType.Standard:
-                        AppendText(Color.CadetBlue, text);
-                        break;
-                    case ParatextProject.ProjectType.StudyBible:
-                    case ParatextProject.ProjectType.StudyBibleAdditions:
-                        AppendText(Color.DarkSalmon, text);
-                        break;
-                    case ParatextProject.ProjectType.TransliterationManual:
-                    case ParatextProject.ProjectType.TransliterationWithEncoder:
-                        AppendText(Color.DarkSlateBlue, text);
-                        break;
-                    case ParatextProject.ProjectType.XmlDictionary:
-                        AppendText(Color.Brown, text);
-                        break;
+                    string text = $"{p.ShortName} is a {p.CorpusType} Project: {p.Guid}";
+
+                    switch (p.Type)
+                    {
+                        case ParatextProject.ProjectType.Auxiliary:
+                            AppendText(Color.Brown, text);
+                            break;
+                        case ParatextProject.ProjectType.BackTranslation:
+                            AppendText(Color.DarkOliveGreen, text);
+                            break;
+                        case ParatextProject.ProjectType.ConsultantNotes:
+                            AppendText(Color.Aqua, text);
+                            break;
+                        case ParatextProject.ProjectType.Daughter:
+                            AppendText(Color.DeepPink, text);
+                            break;
+                        case ParatextProject.ProjectType.MarbleResource:
+                            AppendText(Color.BlueViolet, text);
+                            break;
+                        case ParatextProject.ProjectType.Resource:
+                            AppendText(Color.Orange, text);
+                            break;
+                        case ParatextProject.ProjectType.Standard:
+                            AppendText(Color.CadetBlue, text);
+                            break;
+                        case ParatextProject.ProjectType.StudyBible:
+                        case ParatextProject.ProjectType.StudyBibleAdditions:
+                            AppendText(Color.DarkSalmon, text);
+                            break;
+                        case ParatextProject.ProjectType.TransliterationManual:
+                        case ParatextProject.ProjectType.TransliterationWithEncoder:
+                            AppendText(Color.DarkSlateBlue, text);
+                            break;
+                        case ParatextProject.ProjectType.XmlDictionary:
+                            AppendText(Color.Brown, text);
+                            break;
+                    }
                 }
             }
 
@@ -753,6 +757,36 @@ namespace ClearDashboard.WebApiParatextPlugin
                     ProjectGuid = project.ID,
                 };
 
+            }
+
+            Debug.WriteLine($"{project.ShortName} {project.Type}");
+            if (project.Type != null)
+            {
+                paratextProject.CorpusType = CorpusType.Unknown;
+
+                switch (project.Type)
+                {
+                    case ProjectType.Standard:
+                        paratextProject.CorpusType = CorpusType.Standard;
+                        paratextProject.Type = ParatextProject.ProjectType.Standard;
+                        break;
+                    case ProjectType.BackTranslation:
+                        paratextProject.CorpusType = CorpusType.BackTranslation;
+                        paratextProject.Type = ParatextProject.ProjectType.BackTranslation;
+                        break;
+                    case ProjectType.EnhancedResource:
+                        paratextProject.CorpusType = CorpusType.MarbleResource;
+                        paratextProject.Type = ParatextProject.ProjectType.MarbleResource;
+                        break;
+                    case ProjectType.Auxiliary:
+                        paratextProject.CorpusType = CorpusType.Auxiliary;
+                        paratextProject.Type = ParatextProject.ProjectType.Auxiliary;
+                        break;
+                    case ProjectType.Daughter:
+                        paratextProject.CorpusType = CorpusType.Daughter;
+                        paratextProject.Type = ParatextProject.ProjectType.Daughter;
+                        break;
+                }
             }
 
             paratextProject.Versification = (int)project.Versification.Type;
