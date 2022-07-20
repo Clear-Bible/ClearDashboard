@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
-using Paratext.PluginInterfaces;
+using System.Collections.Generic;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects
 {
-    public record GetAllProjectsQuery() : IRequest<RequestResult<List<IProject>>>;
+    public record GetAllProjectsQuery() : IRequest<RequestResult<List<ParatextProject>>>;
 }
