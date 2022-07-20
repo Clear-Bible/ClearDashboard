@@ -22,7 +22,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             MarbleResource,
             XmlResource,
             XmlDictionary,
-            NotSelected
+            NotSelected,
+            SourceLanguage
         }
 
         public Dictionary<int, ParatextBookFileName> BookNames = new Dictionary<int, ParatextBookFileName>

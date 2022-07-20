@@ -666,6 +666,9 @@ namespace ClearDashboard.WebApiParatextPlugin
                         case ParatextProject.ProjectType.XmlDictionary:
                             AppendText(Color.Brown, text);
                             break;
+                        case ParatextProject.ProjectType.SourceLanguage:
+                            AppendText(Color.DarkGreen, text);
+                            break;
                     }
                 }
             }
@@ -748,6 +751,27 @@ namespace ClearDashboard.WebApiParatextPlugin
                     case ProjectType.Daughter:
                         corpusType = CorpusType.Daughter;
                         break;
+                    case ProjectType.TransliterationManual:
+                        corpusType = CorpusType.TransliterationManual;
+                        break;
+                    case ProjectType.TransliterationWithEncoder:
+                        corpusType = CorpusType.TransliterationWithEncoder;
+                        break;
+                    case ProjectType.ConsultantNotes:
+                        corpusType = CorpusType.ConsultantNotes;
+                        break;
+                    case ProjectType.StudyBible:
+                        corpusType = CorpusType.StudyBible;
+                        break;
+                    case ProjectType.StudyBibleAdditions:
+                        corpusType = CorpusType.StudyBibleAdditions;
+                        break;
+                    case ProjectType.Xml:
+                        corpusType = CorpusType.Xml;
+                        break;
+                    case ProjectType.SourceLanguage:
+                        corpusType = CorpusType.SourceLanguage;
+                        break;
                 }
 
                 paratextProject.BaseTranslation = new TranslationInfo
@@ -759,7 +783,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             }
 
-            Debug.WriteLine($"{project.ShortName} {project.Type}");
+            
             if (project.Type != null)
             {
                 paratextProject.CorpusType = CorpusType.Unknown;
@@ -786,11 +810,39 @@ namespace ClearDashboard.WebApiParatextPlugin
                         paratextProject.CorpusType = CorpusType.Daughter;
                         paratextProject.Type = ParatextProject.ProjectType.Daughter;
                         break;
+                    case ProjectType.TransliterationManual:
+                        paratextProject.CorpusType = CorpusType.TransliterationManual;
+                        paratextProject.Type = ParatextProject.ProjectType.TransliterationManual;
+                        break;
+                    case ProjectType.TransliterationWithEncoder:
+                        paratextProject.CorpusType = CorpusType.TransliterationWithEncoder;
+                        paratextProject.Type = ParatextProject.ProjectType.TransliterationWithEncoder;
+                        break;
+                    case ProjectType.ConsultantNotes:
+                        paratextProject.CorpusType = CorpusType.ConsultantNotes;
+                        paratextProject.Type = ParatextProject.ProjectType.ConsultantNotes;
+                        break;
+                    case ProjectType.StudyBible:
+                        paratextProject.CorpusType = CorpusType.StudyBible;
+                        paratextProject.Type = ParatextProject.ProjectType.StudyBible;
+                        break;
+                    case ProjectType.StudyBibleAdditions:
+                        paratextProject.CorpusType = CorpusType.StudyBibleAdditions;
+                        paratextProject.Type = ParatextProject.ProjectType.StudyBibleAdditions;
+                        break;
+                    case ProjectType.Xml:
+                        paratextProject.CorpusType = CorpusType.Xml;
+                        paratextProject.Type = ParatextProject.ProjectType.XmlDictionary;
+                        break;
+                    case ProjectType.SourceLanguage:
+                        paratextProject.CorpusType = CorpusType.SourceLanguage;
+                        paratextProject.Type = ParatextProject.ProjectType.SourceLanguage;
+                        break;
                 }
             }
+            Debug.WriteLine($"{project.ShortName} {project.Type} {paratextProject.CorpusType}");
 
             paratextProject.Versification = (int)project.Versification.Type;
-
 
             return paratextProject;
         }
