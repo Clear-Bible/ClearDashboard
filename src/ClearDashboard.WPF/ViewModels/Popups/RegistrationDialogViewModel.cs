@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using Caliburn.Micro;
@@ -13,6 +14,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Workflows;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
+using Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -55,7 +57,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
     public async void Cancel()
     {
-        await TryCloseAsync(false);
+        System.Windows.Application.Current.Shutdown();
     }
 
     private bool _canRegister;
@@ -68,128 +70,54 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
     public async void Register()
     {
         var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.key"), LicenseKey);
+        //File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
 
         //decrypt code
-        var decryptedLicenseKey = await DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.key"));//fix this
+        var decryptedLicenseKey = LicenseCryption.DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));//fix this
         decryptedLicenseKey = "{\"FirstName\":\"Bob\",\"LastName\":\"Smith\",\"LicenseKey\":\"61809dd9-fdfe-4f25-bc64-a6a9e2f5138d\",\"FullName\":\"Bob Smith\",\"ParatextUserName\":null,\"LastAlignmentLevelId\":null,\"AlignmentVersions\":[],\"AlignmentSets\":[],\"Id\":\"1a0f98d3-5661-4256-bc99-357a8f8290e3\"}";
 
         //validate contents (not null or empty)
-        var jsonLicense = JObject.Parse(decryptedLicenseKey);
-        LicenseUser licenseUser = new LicenseUser();
         try
         {
-            licenseUser.FirstName = jsonLicense.GetValue("FirstName").ToString();
-            licenseUser.LastName = jsonLicense.GetValue("LastName").ToString();
-            licenseUser.ParatextUserName = jsonLicense.GetValue("ParatextUserName").ToString();
-            licenseUser.LicenseKey = jsonLicense.GetValue("LicenseKey").ToString();
-        }
-        catch (Exception ex)
-        {
-            //complain that the Key is bad
-        }
+            var decryptedLicenseUser = LicenseCryption.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-        //load projects
-    }
+            LicenseUser givenLicenseUser = new LicenseUser();
+            givenLicenseUser.FirstName = _registrationViewModel.FirstName;
+            givenLicenseUser.LastName = _registrationViewModel.LastName;
+            //givenLicenseUser.ParatextUserName = _registrationViewModel.LicenseKey;
+            //givenLicenseUser.LicenseKey = _registrationViewModel.FirstName;
 
-    private async Task<string> DecryptFromFile(string path)
-    {
-        try
-        {
-            using (FileStream fileStream = new(path, FileMode.Open))
+            bool match = CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+            if (match)
             {
-                using (Aes aes = Aes.Create())
-                {
-                    byte[] iv = new byte[aes.IV.Length];
-                    int numBytesToRead = aes.IV.Length;
-                    int numBytesRead = 0;
-                    while (numBytesToRead > 0)
-                    {
-                        int n = fileStream.Read(iv, numBytesRead, numBytesToRead);
-                        if (n == 0) break;
-
-                        numBytesRead += n;
-                        numBytesToRead -= n;
-                    }
-
-                    byte[] key =
-                    {
-                            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-                            0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
-                        };
-
-                    using (CryptoStream cryptoStream = new(
-                               fileStream,
-                               aes.CreateDecryptor(key, iv),
-                               CryptoStreamMode.Read))
-                    {
-                        using (StreamReader decryptReader = new(cryptoStream))
-                        {
-                            string decryptedMessage = await decryptReader.ReadToEndAsync();
-                            //_output.WriteLine($"The decrypted original message: {decryptedMessage}");
-                            return decryptedMessage;
-                        }
-                    }
-                }
+                await TryCloseAsync(true);
+                //load projects
+            }
+            else
+            {
+                MessageBox.Show("The contents of the Decrypted license key do not match the information you provided.");
             }
         }
+
         catch (Exception ex)
         {
-            //_output.WriteLine($"The decryption failed. {ex}");
-            return "";
+            MessageBox.Show("There was a problem with the contents of the decrypted license key.  Certain Json elements could not be found.  Your key may not have been encrypted correctly");
         }
     }
 
-    private async Task EncryptToFile()
+    public bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
     {
-        try
+        if (given.FirstName == decrypted.FirstName && 
+            given.LastName == decrypted.LastName && 
+            given.ParatextUserName == decrypted.ParatextUserName && 
+            given.LicenseKey == decrypted.LicenseKey)
         {
-
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                LicenseKey = Guid.NewGuid().ToString(),
-                FirstName = "Bob",
-                LastName = "Smith"
-            };
-
-            using (FileStream fileStream = new("TestData.txt", FileMode.OpenOrCreate))
-            {
-                using (Aes aes = Aes.Create())
-                {
-                    byte[] key =
-                    {
-                            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-                            0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
-                        };
-                    aes.Key = key;
-
-                    byte[] iv = aes.IV;
-                    fileStream.Write(iv, 0, iv.Length);
-
-                    using (CryptoStream cryptoStream = new(
-                               fileStream,
-                               aes.CreateEncryptor(),
-                               CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter encryptWriter = new(cryptoStream))
-                        {
-                            //encryptWriter.WriteLine($"LicenseKey: {Guid.NewGuid()}");
-                            //encryptWriter.WriteLine($"UserId: {Guid.NewGuid()}");
-                            //encryptWriter.WriteLine($"FirstName: Bob");
-                            //encryptWriter.WriteLine($"LastName: Smith");
-
-                            encryptWriter.WriteLine(JsonSerializer.Serialize<User>(user));
-                        }
-                    }
-                }
-            }
-
-            //_output.WriteLine("The file was encrypted.");
+            return true;
         }
-        catch (Exception ex)
+        else
         {
-            //_output.WriteLine($"The encryption failed. {ex}");
+            return false;
         }
     }
 }

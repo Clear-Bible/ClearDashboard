@@ -22,6 +22,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
+using Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -30,6 +31,8 @@ namespace ClearDashboard.Wpf.ViewModels
         #region   Member Variables
         
         protected IWindowManager _windowManager;
+
+        private bool _licenseCleared = false;
         
         #endregion
 
@@ -58,32 +61,52 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
 
-            //check if they have license key
-            //Check for License.Key
-            var DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var FilePath = Path.Combine(DocumentsPath, "ClearDashboard_Projects\\license.key");
-            if (!File.Exists(FilePath))
+            if (!_licenseCleared)
             {
-                //decrypt file at FilePath
-                //var contents = DecryptFromFile(FilePath);
+                //check if they have license key
+                //Check for License.txt
+                var DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var FilePath = Path.Combine(DocumentsPath, "ClearDashboard_Projects\\license.txt");
+                if (File.Exists(FilePath))
+                {
+                    //decrypt file at FilePath
+                    try
+                    {
+                        var decryptedLicenseKey = LicenseCryption.DecryptFromFile(FilePath);
+                        var decryptedLicenseUser = LicenseCryption.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                        this.OnActivateAsync(cancellationToken: CancellationToken.None);
+                        _licenseCleared = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("There was an issue decrypting your license key.");
+                        PopupRegistration();
+                    }
+                }
+                else
+                {
+                    PopupRegistration();
+                }
             }
-            else
-            {
-                //popup license key form
-                Logger.LogInformation("Registration called.");
+        }
 
-                dynamic settings = new ExpandoObject();
-                settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
-                settings.ShowInTaskbar = false;
-                settings.Title = "Register License";
-                settings.WindowState = WindowState.Normal;
-                settings.ResizeMode = ResizeMode.NoResize;
+        private void PopupRegistration()
+        {
+            //popup license key form
+            Logger.LogInformation("Registration called.");
 
-                var registrationPopupViewModel = IoC.Get<RegistrationDialogViewModel>();
-               
-                var created = _windowManager.ShowDialogAsync(registrationPopupViewModel, null, settings);
-                
-            }
+            dynamic settings = new ExpandoObject();
+            settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
+            settings.ShowInTaskbar = false;
+            settings.Title = "Register License";
+            settings.WindowState = WindowState.Normal;
+            settings.ResizeMode = ResizeMode.NoResize;
+
+            var registrationPopupViewModel = IoC.Get<RegistrationDialogViewModel>();
+
+            var created = _windowManager.ShowDialogAsync(registrationPopupViewModel, null, settings);
+            this.OnActivateAsync(cancellationToken: CancellationToken.None);
+            _licenseCleared = true;
         }
 
         protected override void OnViewAttached(object view, object context)

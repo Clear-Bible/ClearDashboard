@@ -119,6 +119,44 @@
 
 
             <TextBox
+                x:Name="ParatextUserName"
+                Width="250"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                materialDesign:HintAssist.FloatingScale="0.50"
+                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:HintAssist.Hint="Please enter your paratext user name"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="20"
+                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                TextChanged="TextChanged">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="ParatextUserName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <AdornedElementPlaceholder />
+                            <TextBlock
+                                MaxWidth="350"
+                                Margin="0"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
+            </TextBox>
+
+
+            <TextBox
                 x:Name="LicenseKey"
                 Width="250"
                 HorizontalAlignment="Left"

@@ -28,8 +28,7 @@
             x:Name="ActiveItem"
             Grid.Column="0"
             HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Stretch" 
-            />
+            VerticalContentAlignment="Stretch" />
 
         <StackPanel
             Grid.Row="1"
@@ -41,10 +40,10 @@
                 x:Name="Register"
                 Margin="5,5,5,5"
                 Content="REGISTER" />
-           <!--<Button
+            <Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
-                Content="CANCEL" />-->
+                Content="CLOSE APPLICATION" />
         </StackPanel>
 
     </Grid>

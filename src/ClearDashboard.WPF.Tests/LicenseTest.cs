@@ -22,14 +22,14 @@ namespace ClearDashboard.WPF.Tests
         public async Task EncryptDecryptTest()
         {
             await EncryptToFile();
-            await DecryptFromFile();
+            //await DecryptFromFile();
         }
 
         private async Task DecryptFromFile()
         {
             try
             {
-                using (FileStream fileStream = new("license.txt", FileMode.Open))
+                using (FileStream fileStream = new("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", FileMode.Open))
                 {
                     using (Aes aes = Aes.Create())
                     {
@@ -83,7 +83,7 @@ namespace ClearDashboard.WPF.Tests
                     FirstName = "Bob",
                     LastName = "Smith"
                 };
-                using (FileStream fileStream = new("license.txt", FileMode.OpenOrCreate))
+                using (FileStream fileStream = new("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", FileMode.OpenOrCreate))
                 {
                     using (Aes aes = Aes.Create())
                     {
