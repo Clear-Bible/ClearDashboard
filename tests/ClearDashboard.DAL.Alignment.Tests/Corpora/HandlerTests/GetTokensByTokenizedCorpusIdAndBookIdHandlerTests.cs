@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,7 +24,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void GetDataAsync__ValidateResults()
+    public async Task GetDataAsync__ValidateResults()
     {
         try
         {
@@ -31,10 +34,13 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
                 "Resource",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             await Mediator.Send(command);
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            var context = await factory.GetDatabaseContext(ProjectName);
+            //Assert.Equal(context, ProjectDbContext);
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "40");
+                new Alignment.Corpora.TokenizedCorpusId(context.TokenizedCorpora.First().Id), "40");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -42,16 +48,16 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Validate Matt 1:1
             var matthewCh1V1 = result.Data.First();
-            Assert.Equal("1", matthewCh1V1.chapter);
-            Assert.Equal("1", matthewCh1V1.verse);
-            Assert.Equal(9, matthewCh1V1.tokens.Count());
-            Assert.Equal("Βίβλος", matthewCh1V1.tokens.First().Text);
+            Assert.Equal("1", matthewCh1V1.Chapter);
+            Assert.Equal("1", matthewCh1V1.Verse);
+            Assert.Equal(9, matthewCh1V1.Tokens.Count());
+            Assert.Equal("Βίβλος", matthewCh1V1.Tokens.First().Text);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
-                String.Join(" ", matthewCh1V1.tokens.Select(t => t.Text)));
+                String.Join(" ", matthewCh1V1.Tokens.Select(t => t.Text)));
 
             // Validate Matt 5:9
-            var matthewCh5V9 = result.Data.Single(datum => datum.chapter == "5" && datum.verse == "9");
-            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.tokens.Select(t => t.Text));
+            var matthewCh5V9 = result.Data.Single(datum => datum.Chapter == "5" && datum.Verse == "9");
+            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.Tokens.Select(t => t.Text));
             Assert.Equal("μακάριοι οἱ εἰρηνοποιοί , ὅτι αὐτοὶ υἱοὶ Θεοῦ κληθήσονται .", matthewCh5V9Text);
         }
         finally

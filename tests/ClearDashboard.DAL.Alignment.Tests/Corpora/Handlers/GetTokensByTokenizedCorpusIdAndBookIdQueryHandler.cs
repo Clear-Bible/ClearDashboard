@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
 using MediatR;
@@ -16,10 +17,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : IRequestHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
-        RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+        RequestResult<IEnumerable<VerseTokens>>>
     {
-        public Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
-            Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
+        public Task<RequestResult<IEnumerable<VerseTokens>>>             Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
         {
             //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
             //Then iterate tokens and package them by verse then return enumerable.
@@ -34,21 +34,21 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
                 .SelectMany(g => g
                     .GroupBy(sg => ((VerseRef)sg.Ref).VerseNum)
                     .OrderBy(sg => sg.Key)
-                    .Select(sg => new
-                    {
-                        Chapter = g.Key,
-                        Verse = sg.Key,
-                        Tokens = sg
+                    .Select(sg => new VerseTokens
+                    (
+                        Chapter: g.Key.ToString(),
+                        Verse: sg.Key.ToString(),
+                        Tokens: sg
                             .SelectMany(v => ((TokensTextRow)v).Tokens),
-                        IsSentenceStart = sg
+                        IsSentenceStart: sg
                             .First().IsSentenceStart
-                    })
+                    )
                 )
-                .Select(cvts => (cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart));
+                .Select(cvts => new VerseTokens(cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart)));
 
 
             return Task.FromResult(
-                new RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
+                new RequestResult<IEnumerable<VerseTokens>>
                 (result: chapterVerseTokens,
                 success: true,
                 message: "successful result from test"));
