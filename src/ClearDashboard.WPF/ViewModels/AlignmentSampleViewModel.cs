@@ -14,6 +14,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Extensions;
@@ -109,6 +110,23 @@ namespace ClearDashboard.Wpf.ViewModels
         private TokenizedCorpus GreekTokenizedCorpus => GreekCorpus.TokenizedCorpora.First();
         public List<string> GreekVerse1 { get; set; } = new();
         public string Message { get; set; }
+        private VerseTokens DatabaseVerseTokens { get; set; }
+
+        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.Text).ToList() : new List<string>();
+
+        public string DatabaseVerseDetokenized
+        {
+            get
+            {
+                if (DatabaseVerseTokens != null)
+                {
+                    var detokenizer = new LatinWordDetokenizer();
+                    return detokenizer.Detokenize(DatabaseVerseTokensText);
+                }
+                return string.Empty;
+            }
+        }
+        public List<string> DatabaseVerseWords => DatabaseVerseDetokenized.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
         // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
@@ -148,7 +166,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             LoadFiles();
-            MockProjectAndUser();
+            await MockProjectAndUser();
             await RetrieveTokens(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
         }
@@ -162,7 +180,7 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(nameof(GreekVerse1));
         }
 
-        private void MockProjectAndUser()
+        private async Task MockProjectAndUser()
         {
             ProjectManager.CurrentProject = new Project
             {
@@ -175,15 +193,20 @@ namespace ClearDashboard.Wpf.ViewModels
                 FirstName = "Test",
                 LastName = "User"
             };
+            await ProjectManager.CreateNewProject("Alignment");
         }
 
         public async Task RetrieveTokens(CancellationToken cancellationToken)
         {
             try
             {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("6E6DB898-4194-4AAD-B9C5-BDD36E5E52B8")), "40");
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "40");
                 var result = await ExecuteRequest(query, cancellationToken);
-                var status = result.Success;
+
+                if (result.Success && result.Data != null)
+                {
+                    DatabaseVerseTokens = result.Data.FirstOrDefault(v => v.Chapter == "1" && v.Verse == "1");
+                }
             }
             catch (Exception e)
             {
