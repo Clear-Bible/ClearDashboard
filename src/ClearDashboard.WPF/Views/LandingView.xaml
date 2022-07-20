@@ -95,7 +95,7 @@
             <Button
                 x:Name="AlignmentSample"
                 Margin="10,0,10,0"
-                Content="Alignment Sample"
+                Content="Token Display"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
