@@ -1,8 +1,8 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,9 +18,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.AllProjects
         }
 
         [HttpPost]
-        public async Task<RequestResult<List<IProject>>> GetAsync([FromBody] GetAllProjectsQuery command)
+        public async Task<RequestResult<List<ParatextProject>>> GetAsync([FromBody] GetAllProjectsQuery command)
         {
-            var result = await ExecuteRequestAsync<RequestResult<List<IProject>>, List<IProject>>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<List<ParatextProject>>, List<ParatextProject>>(command, CancellationToken.None);
             return result;
         }
     }

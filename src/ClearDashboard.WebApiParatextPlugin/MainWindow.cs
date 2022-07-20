@@ -16,8 +16,10 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using SIL.Linq;
+using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -137,13 +139,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             StartWebHost();
 
-            
+
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
-            //Invoke((Action)(() => GetAllProjects()));
-            
+            //Invoke((Action)(() => GetAllProjects(true)));
+
             //Invoke((Action)(() => GetUsfmForBook("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 40)));
-            
+
             //zzSur
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
         }
@@ -611,13 +613,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             newVerse = v.ChangeVersification(newVerse);
         }
 
-        public List<IProject> GetAllProjects()
+        public List<ParatextProject> GetAllProjects(bool showInConsole = false)
         {
-            List<IProject> allProjects = new();
+            List<ParatextProject> allProjects = new();
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
 
-            projects.ForEach(p => allProjects.Add(p));
+            projects.ForEach(p => allProjects.Add(BuildParatextProject(p)));
 
             allProjects = allProjects.OrderBy(x => x.Type)
                 .ThenBy(n => n.ShortName)
@@ -625,53 +627,139 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             foreach (var p in allProjects)
             {
-                string text = $"{p.ShortName} is a {p.Type} Project: {p.ID}";
+                string text = $"{p.ShortName} is a {p.Type} Project: {p.Guid}";
 
                 switch (p.Type)
                 {
-                    case ProjectType.Auxiliary:
+                    case ParatextProject.ProjectType.Auxiliary:
                         AppendText(Color.Brown, text);
                         break;
-                    case ProjectType.BackTranslation:
+                    case ParatextProject.ProjectType.BackTranslation:
                         AppendText(Color.DarkOliveGreen, text);
                         break;
-                    case ProjectType.ConsultantNotes:
+                    case ParatextProject.ProjectType.ConsultantNotes:
                         AppendText(Color.Aqua, text);
                         break;
-                    case ProjectType.Daughter:
+                    case ParatextProject.ProjectType.Daughter:
                         AppendText(Color.DeepPink, text);
                         break;
-                    case ProjectType.EnhancedResource:
+                    case ParatextProject.ProjectType.MarbleResource:
                         AppendText(Color.BlueViolet, text);
                         break;
-                    case ProjectType.SourceLanguage:
+                    case ParatextProject.ProjectType.Resource:
                         AppendText(Color.Orange, text);
                         break;
-                    case ProjectType.Standard:
+                    case ParatextProject.ProjectType.Standard:
                         AppendText(Color.CadetBlue, text);
                         break;
-                    case ProjectType.StudyBible:
-                    case ProjectType.StudyBibleAdditions:
+                    case ParatextProject.ProjectType.StudyBible:
+                    case ParatextProject.ProjectType.StudyBibleAdditions:
                         AppendText(Color.DarkSalmon, text);
                         break;
-                    case ProjectType.TransliterationManual:
-                    case ProjectType.TransliterationWithEncoder:
+                    case ParatextProject.ProjectType.TransliterationManual:
+                    case ParatextProject.ProjectType.TransliterationWithEncoder:
                         AppendText(Color.DarkSlateBlue, text);
                         break;
-                    case ProjectType.Xml:
+                    case ParatextProject.ProjectType.XmlDictionary:
                         AppendText(Color.Brown, text);
                         break;
                 }
             }
 
             // test 
-            var proj = allProjects.FirstOrDefault(x => x.ShortName == "HEB/GRK");
-            var referenceUsfm = GetReferenceUSFM(proj.ID);
+            //var proj = allProjects.FirstOrDefault(x => x.ShortName == "HEB/GRK");
+            //if (proj != null)
+            //{
+            //    var referenceUsfm = GetReferenceUSFM(proj.Guid);
+            //}
+            
 
             return allProjects;
         }
 
-        #endregion
+        private ParatextProject BuildParatextProject(IProject project)
+        {
+            var paratextProject = new ParatextProject();
+
+            paratextProject.ShortName = project.ShortName;
+            paratextProject.Name = project.ShortName;
+            paratextProject.Guid = project.ID;
+            paratextProject.LongName = project.LongName;
+
+            foreach (var book in project.AvailableBooks)
+            {
+                paratextProject.AvailableBooks.Add(new BookInfo
+                {
+                    Code = book.Code,
+                    InProjectScope = book.InProjectScope,
+                    Number = book.Number
+                });
+            }
+
+            foreach (var user in project.NonObserverUsers)
+            {
+                paratextProject.NonObservers.Add(user.ToString());
+            }
+
+            paratextProject.NormalizationForm = project.NormalizationType.ToString();
+
+            if (project.LanguageName != null)
+            {
+                paratextProject.LanguageName = project.LanguageName;
+            }
+
+            if (project.Language.Font != null)
+            {
+                paratextProject.DefaultFont = project.Language.Font.FontFamily;
+            }
+
+            if (project.Language.Id != null)
+            {
+                paratextProject.LanguageIsoCode = project.Language.Id;
+            }
+
+            if (project.Language.IsRtoL)
+            {
+                paratextProject.IsRTL = true;
+            }
+
+            if (project.BaseProject != null)
+            {
+                CorpusType corpusType = CorpusType.Unknown;
+
+                switch (project.BaseProject.Type)
+                {
+                    case ProjectType.Standard:
+                        corpusType = CorpusType.Standard;
+                        break;
+                    case ProjectType.BackTranslation:
+                        corpusType = CorpusType.BackTranslation;
+                        break;
+                    case ProjectType.EnhancedResource:
+                        corpusType = CorpusType.MarbleResource;
+                        break;
+                    case ProjectType.Auxiliary:
+                        corpusType = CorpusType.Auxiliary;
+                        break;
+                    case ProjectType.Daughter:
+                        corpusType = CorpusType.Daughter;
+                        break;
+                }
+
+                paratextProject.BaseTranslation = new TranslationInfo
+                {
+                    CorpusType = corpusType,
+                    ProjectName = project.BaseProject.ShortName,
+                    ProjectGuid = project.ID,
+                };
+
+            }
+
+            paratextProject.Versification = (int)project.Versification.Type;
+
+
+            return paratextProject;
+        }
 
         public ReferenceUsfm GetReferenceUSFM(string requestId)
         {
@@ -708,7 +796,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return referenceUsfm;
         }
-        
+
         public List<UsfmVerse> GetUsfmForBook(
             string ParatextId, int bookNum)
         {
@@ -768,7 +856,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Orange, $"No Scripture for {bookNum}");
                 return null;
             }
-            
+
             string chapter = "";
             string verse = "";
             string verseText = "";
@@ -805,7 +893,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                         }
 
                         verse = marker.Data.Trim();
-                        
+
                         lastTokenChapter = false;
                         lastVerseZero = false;
                     }
@@ -830,7 +918,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                             verseText = "";
                         }
                         chapter = marker.Data.Trim();
-                        
+
                         lastTokenChapter = true;
                     }
                 }
@@ -907,5 +995,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             return verses; //TODO
 
         }
+
+        #endregion
     }
 }
