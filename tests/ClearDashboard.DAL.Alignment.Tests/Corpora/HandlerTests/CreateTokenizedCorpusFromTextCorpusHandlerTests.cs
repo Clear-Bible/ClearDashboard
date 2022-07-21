@@ -153,16 +153,32 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             var result2 = await Mediator.Send(command2);
             var result3 = await Mediator.Send(command3);
 
+            ProjectDbContext.ChangeTracker.Clear();
+
+            var corpusNT1 = ProjectDbContext.Corpa
+                .Include(c => c.TokenizedCorpora)
+                .ThenInclude(tc => tc.Tokens)
+                .FirstOrDefault(c => c.Name == "New Testament 1");
+
+            var corpusNT2 = ProjectDbContext.Corpa
+                .Include(c => c.TokenizedCorpora)
+                .ThenInclude(tc => tc.Tokens)
+                .FirstOrDefault(c => c.Name == "New Testament 2");
+
+            var corpusNT3 = ProjectDbContext.Corpa
+                .Include(c => c.TokenizedCorpora)
+                .ThenInclude(tc => tc.Tokens)
+                .FirstOrDefault(c => c.Name == "New Testament 3");
+
             Assert.Equal(3, ProjectDbContext.Corpa.Count());
-            Assert.Equal(1, ProjectDbContext.Corpa.First().TokenizedCorpora.Count);
-            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 1").TokenizedCorpora.First().Tokens.Count);
-            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 2").TokenizedCorpora.First().Tokens.Count);
-            Assert.Equal(157590, ProjectDbContext.Corpa.First(c => c.Name == "New Testament 3").TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(1, corpusNT1?.TokenizedCorpora.Count);
+            Assert.Equal(157590, corpusNT1?.TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(157590, corpusNT2?.TokenizedCorpora.First().Tokens.Count);
+            Assert.Equal(157590, corpusNT3?.TokenizedCorpora.First().Tokens.Count);
         }
         finally
         {
             await DeleteDatabaseContext();
         }
     }
-
 }
