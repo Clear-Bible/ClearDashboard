@@ -141,7 +141,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\ClearEngine\src\ClearBible.Engine\ClearBible.Engine.csproj" />
-		<ProjectReference Include="..\..\..\machine\src\SIL.Machine\SIL.Machine.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
