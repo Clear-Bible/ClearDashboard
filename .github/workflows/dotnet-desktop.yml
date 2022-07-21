@@ -83,8 +83,11 @@ jobs:
     - name: Setup NuGet
       uses: Nuget/setup-nuget@v1.0.5
       
-    - name: Configure NuGet package sources
+    - name: Configure Caliburn.Micro NuGet package source
       run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
+      
+    - name: Configure ClearBible GitHub NuGet package source
+      run: dotnet nuget add source --name ClearBible "https://nuget.pkg.github.com/clear-bible/index.json"
   
     #- name: Restore NuGet packages
     #  run: nuget restore $env:Solution_Path
