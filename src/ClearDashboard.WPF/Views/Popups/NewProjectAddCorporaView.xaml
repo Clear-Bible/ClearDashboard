@@ -47,6 +47,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
       
         <StackPanel Grid.Row="0" Orientation="Vertical">
@@ -74,6 +75,17 @@
                     TabIndex="3"/>
             </StackPanel>
         </StackPanel>
-        <userControls:WorkflowFooter  Grid.Row="1" Grid.Column="0"  />
+        <ComboBox Margin="10,10" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" Grid.Row="1">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="10" Text="{Binding CorpusTypeDisplay}"></TextBlock>
+                        <TextBlock FontSize="16" Text="{Binding Name}"></TextBlock>
+                        <TextBlock FontSize="10" Text="{Binding LongName}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <userControls:WorkflowFooter  Grid.Row="2" Grid.Column="0"  />
     </Grid>
 </UserControl>

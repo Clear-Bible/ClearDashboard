@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.ViewModels.Workflows;
 using FluentValidation;
 using FluentValidation.Results;
@@ -10,9 +13,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Popups;
 
-public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<Project>
+public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>
 {
     private CorpusSourceType _corpusSourceType;
+    private List<ParatextProjectMetadata> _projects;
+    private ParatextProjectMetadata _selectedProject;
 
     public NewProjectAddCorporaViewModel()
     {
@@ -23,7 +28,7 @@ public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<Pro
         ILogger<WorkSpaceViewModel> logger,
         DashboardProjectManager projectManager,
         IEventAggregator eventAggregator,
-        IValidator<Project> projectValidator)
+        IValidator<DataAccessLayer.Models.Project> projectValidator)
         : base(eventAggregator, navigationService, logger, projectManager, projectValidator)
     {
     }
@@ -34,11 +39,29 @@ public class NewProjectAddCorporaViewModel : ValidatingWorkflowStepViewModel<Pro
         set => Set(ref _corpusSourceType,value);
     }
 
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    public List<ParatextProjectMetadata> Projects
+    {
+        get => _projects;
+        set => Set(ref _projects, value);
+    }
+
+    public ParatextProjectMetadata SelectedProject
+    {
+        get => _selectedProject;
+        set => Set(ref _selectedProject, value);
+    }
+
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         CorpusSourceType = CorpusSourceType.Paratext;
         CanMoveBackwards = true;
-        return base.OnActivateAsync(cancellationToken);
+        var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+        if (result.Success)
+        {
+            Projects = result.Data.OrderBy(p=>p.Name).ToList();
+        }
+
+        await base.OnActivateAsync(cancellationToken);
     }
 
     protected override ValidationResult Validate()

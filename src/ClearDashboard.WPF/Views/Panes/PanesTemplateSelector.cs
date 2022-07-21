@@ -5,7 +5,7 @@ using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Views.Panes
 {
-    class PanesTemplateSelector : DataTemplateSelector
+    internal class PanesTemplateSelector : DataTemplateSelector
     {
         public PanesTemplateSelector()
         {
