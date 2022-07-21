@@ -90,8 +90,14 @@ namespace ClearDashboard.WebApiParatextPlugin
           //config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
           //    { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
-            
+
             config.Routes.MapHttpRoute(
+                name: "ControllerAndActionOnly",
+                routeTemplate: "api/{controller}/{action}",
+                defaults: new { }
+            );
+
+         config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

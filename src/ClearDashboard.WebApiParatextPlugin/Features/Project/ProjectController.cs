@@ -26,7 +26,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         }
 
         [HttpPost]
-        [Route("metadata")]
+        //[Route("api/projects/metadata}")]
+        [ActionName("metadata")]
         public async Task<RequestResult<List<ParatextProjectMetadata>>> GetProjectMetadataAsync([FromBody] GetProjectMetadataQuery query)
         {
             return await ExecuteRequestAsync<RequestResult<List<ParatextProjectMetadata>>, List<ParatextProjectMetadata>>(query, CancellationToken.None);

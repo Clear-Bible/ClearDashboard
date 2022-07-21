@@ -322,18 +322,15 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool found = false;
+            var found = false;
             if (ProjectsListBox.SelectedItem != null)
             {
-                string name = ProjectsListBox.SelectedItem.ToString();
-                foreach (var proj in _projectList)
+                var name = ProjectsListBox.SelectedItem.ToString();
+                foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
                 {
-                    if (name == proj.ShortName)
-                    {
-                        ShowScripture(proj);
-                        found = true;
-                        break;
-                    }
+                    ShowScripture(proj);
+                    found = true;
+                    break;
                 }
             }
             if (!found)
@@ -619,24 +616,60 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
-            var projectMetadata = new List<ParatextProjectMetadata>();
             var projects = _host.GetAllProjects(true);
 
 
-            foreach (var project in projects)
-            {
-                var metadata = new ParatextProjectMetadata
+            return projects.Select(project => new ParatextProjectMetadata
                 {
                     Id = project.ID,
                     LanguageName = project.LanguageName,
                     Name = project.ShortName,
                     LongName = project.LongName,
-                    //CorpusType = 
-                };
-                projectMetadata.Add(metadata);
-            }
+                    CorpusType = DetermineCorpusType(project.Type)
+                })
+                .ToList();
+        }
 
-            return projectMetadata;
+        private CorpusType DetermineCorpusType(ProjectType projectType)
+        {
+            try
+            {
+                return (CorpusType)(projectType);
+            }
+            catch
+            {
+                return CorpusType.Unknown;
+            }
+            
+            //switch (projectType)
+            //{
+            //    case ProjectType.Standard:
+            //        return CorpusType.Standard;
+            //    case ProjectType.BackTranslation:
+            //        return CorpusType.BackTranslation;
+            //    case ProjectType.EnhancedResource:
+            //       return CorpusType.MarbleResource;
+            //    case ProjectType.Auxiliary:
+            //       return CorpusType.Auxiliary;
+            //    case ProjectType.Daughter:
+            //        return CorpusType.Daughter;
+            //    case ProjectType.TransliterationManual:
+            //        return CorpusType.TransliterationManual;
+            //    case ProjectType.TransliterationWithEncoder:
+            //        return CorpusType.TransliterationWithEncoder;
+            //    case ProjectType.ConsultantNotes:
+            //        return CorpusType.ConsultantNotes;
+            //    case ProjectType.StudyBible:
+            //        return CorpusType.StudyBible;
+            //    case ProjectType.StudyBibleAdditions:
+            //        return CorpusType.StudyBibleAdditions;
+            //    case ProjectType.Xml:
+            //        return CorpusType.Xml;
+            //    case ProjectType.SourceLanguage:
+            //        return CorpusType.SourceLanguage;
+            //    default:
+            //        return CorpusType.Unknown;
+            //}
         }
 
         public List<ParatextProject> GetAllProjects(bool showInConsole = false)

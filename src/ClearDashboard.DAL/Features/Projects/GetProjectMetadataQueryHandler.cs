@@ -22,9 +22,9 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
             //no-op
         }
 
-        public async override Task<RequestResult<List<ParatextProjectMetadata>>> Handle(GetProjectMetadataQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<List<ParatextProjectMetadata>>> Handle(GetProjectMetadataQuery request, CancellationToken cancellationToken)
         {
-            return await ExecuteRequest("projects/metadata", request, cancellationToken);
+            return await ExecuteRequest("project/metadata", request, cancellationToken);
         }
     }
 }
