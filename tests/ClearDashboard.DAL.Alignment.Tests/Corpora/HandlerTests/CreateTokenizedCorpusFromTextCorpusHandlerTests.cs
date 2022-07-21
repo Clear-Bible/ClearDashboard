@@ -133,7 +133,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
     {
         try
         {
-            var textCorpus = TestDataHelpers.GetFullGreekCorpus();
+            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
 
             var command1 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "New Testament 1", "grc",
                 "Resource",
