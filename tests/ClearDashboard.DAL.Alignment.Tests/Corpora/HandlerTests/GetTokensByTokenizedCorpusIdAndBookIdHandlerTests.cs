@@ -37,7 +37,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "40");
+                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -63,6 +63,41 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void GetDataAsync__HandlesInvalidBookAbbreviation()
+    {
+        try
+        {
+            // Load data
+            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "Greek NT", "grc",
+                "Resource",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+            await Mediator.Send(command);
+
+
+            ProjectDbContext.ChangeTracker.Clear();
+
+            // Retrieve Tokens
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
+                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
+            var result = await Mediator.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Null(result.Data);
+            Assert.StartsWith(
+                "System.Exception: Unable to map book abbreviation: BARF to book number.",
+                result.Message
+            );
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
 
     [Fact]
     [Trait("Category", "Handlers")]
