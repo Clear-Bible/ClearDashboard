@@ -20,10 +20,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
-
                 <ResourceDictionary Source="Style/NewProjectStyles.xaml"/>
-
-                        <!--<materialDesign:BundledTheme
+                <!--<materialDesign:BundledTheme
                     BaseTheme="Dark"
                     PrimaryColor="DeepPurple"
                     SecondaryColor="Lime" />
