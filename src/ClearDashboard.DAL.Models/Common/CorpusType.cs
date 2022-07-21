@@ -6,9 +6,19 @@ public enum CorpusType
     Standard,
     Resource,
     BackTranslation,
-    Auxiliary,
     Daughter,
     MarbleResource,
+
+    TransliterationManual,
+    TransliterationWithEncoder,
+    StudyBible,
+    ConsultantNotes,
+    StudyBibleAdditions,
+    Auxiliary,
+    Xml,
+    SourceLanguage,
+    Dictionary,
+    EnhancedResource,
 }
 
 public enum CorpusSourceType
