@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.Design;
+using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -35,10 +37,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
-                //var intifiedBookId = Int32.Parse(request.BookId);
+
+                var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
 
                 var groupedTokens = tokenizedCorpus.Tokens
-                    .Where(t => t.BookNumber.ToString() == request.BookId)
+                    .Where(t => t.BookNumber == bookNumberForAbbreviation)
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
@@ -76,6 +79,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
                     >
                     (result: null, success: false, message: ex.ToString());
+            }
+        }
+
+        private int GetBookNumberForSILAbbreviation(string silBookAbbreviation)
+        {
+            var bookMappingDatum = FileGetBookIds.BookIds
+                .FirstOrDefault(bookDatum => bookDatum.silCannonBookAbbrev == silBookAbbreviation);
+
+            if (bookMappingDatum == null)
+            {
+                throw new Exception(
+                    $"Unable to map book abbreviation: {silBookAbbreviation} to book number."
+                );
+            }
+
+            if (Int32.TryParse(bookMappingDatum.clearTreeBookNum, out int intifiedBookNumber))
+            {
+                return intifiedBookNumber;
+            }
+            else
+            {
+                throw new Exception(
+                    $"Unable to parse book number {bookMappingDatum.clearTreeBookNum} for SIL Book abbreviation {silBookAbbreviation}"
+                    );
             }
         }
     }

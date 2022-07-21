@@ -6,9 +6,11 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using DalStuff = ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -48,11 +50,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             await ProjectDbContext.SaveChangesAsync();
 
             // Create a `ParallelCorpus` to be returned
-            var sourceTokenizedCorpus =
-                await ProjectDbContext.TokenizedCorpora.FindAsync(request.SourceTokenizedCorpusId.Id);
+            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora
+                .Include(tc => tc.Corpus)
+                .Include(tc => tc.Tokens)
+                .FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
 
-            var targetTokenizedCorpus =
-                await ProjectDbContext.TokenizedCorpora.FindAsync(request.TargetTokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora
+                .Include(tc => tc.Corpus)
+                .Include(tc => tc.Tokens)
+                .FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
 
             if (sourceTokenizedCorpus == null || targetTokenizedCorpus == null ||
                 sourceTokenizedCorpus.Corpus == null || targetTokenizedCorpus.Corpus == null)
@@ -64,14 +70,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             var sourceTokenizedCorpusId =
-                new ClearDashboard.DAL.Alignment.Corpora.TokenizedCorpusId(sourceTokenizedCorpus.Id);
+                new DalStuff.TokenizedCorpusId(sourceTokenizedCorpus.Id);
             var targetTokenizedCorpusId =
-                new ClearDashboard.DAL.Alignment.Corpora.TokenizedCorpusId(targetTokenizedCorpus.Id);
+                new DalStuff.TokenizedCorpusId(targetTokenizedCorpus.Id);
 
-            var sourceCorpusId =
-                new ClearDashboard.DAL.Alignment.Corpora.CorpusId(sourceTokenizedCorpus.Corpus.Id);
-            var targetCorpusId =
-                new ClearDashboard.DAL.Alignment.Corpora.CorpusId(targetTokenizedCorpus.Corpus.Id);
+            var sourceCorpusId = new DalStuff.CorpusId(sourceTokenizedCorpus.Corpus.Id);
+            var targetCorpusId = new DalStuff.CorpusId(targetTokenizedCorpus.Corpus.Id);
+
             var sourceTokenizedTextCorpus =
                 new TokenizedTextCorpus(sourceTokenizedCorpusId, sourceCorpusId, _mediator,
                     FilterBookAbbreviationsForTokens(sourceTokenizedCorpus.Tokens));
@@ -83,11 +88,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // Perhaps models should be plain nouns (i.e. `ParallelCorpus`)
             // ... and domain models can have a verb in the name (i.e. `?`)
             // ... or *something*?
-            var parallelCorpusId =
-                new ClearDashboard.DAL.Alignment.Corpora.ParallelCorpusId(parallelCorpusModel.Id);
+            var parallelCorpusId = new DalStuff.ParallelCorpusId(parallelCorpusModel.Id);
 
             return new RequestResult<ParallelCorpus>
-            (result: new ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus(sourceTokenizedTextCorpus,
+            (result: new DalStuff.ParallelCorpus(sourceTokenizedTextCorpus,
                 targetTokenizedTextCorpus, request.VerseMappings, parallelCorpusId)
             );
         }
