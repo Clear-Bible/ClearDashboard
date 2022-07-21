@@ -81,45 +81,65 @@ namespace ClearDashboard.WPF.Tests
                     Id = Guid.NewGuid(),
                     LicenseKey = Guid.NewGuid().ToString(),
                     FirstName = "Bob",
-                    LastName = "Smith"
+                    LastName = "Smith",
                 };
-                using (FileStream fileStream = new("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", FileMode.OpenOrCreate))
+
+                var serialized = JsonSerializer.Serialize<User>(user);
+                string numbers = "";
+                foreach (char c in serialized)
                 {
-                    using (Aes aes = Aes.Create())
-                    {
-                        byte[] key =
-                        {
-                            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-                            0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
-                        };
-                        aes.Key = key;
-
-                        byte[] iv = aes.IV;
-                        fileStream.Write(iv, 0, iv.Length);
-
-                        using (CryptoStream cryptoStream = new(
-                                   fileStream,
-                                   aes.CreateEncryptor(),
-                                   CryptoStreamMode.Write))
-                        {
-                            using (StreamWriter encryptWriter = new(cryptoStream))
-                            {
-                                //encryptWriter.WriteLine($"LicenseKey: {Guid.NewGuid()}");
-                                //encryptWriter.WriteLine($"UserId: {Guid.NewGuid()}");
-                                //encryptWriter.WriteLine($"FirstName: Bob");
-                                //encryptWriter.WriteLine($"LastName: Smith");
-
-                                encryptWriter.WriteLine(JsonSerializer.Serialize<User>(user));
-                            }
-                        }
-                    }
+                    numbers += String.Format("{0}", Convert.ToByte(c)).PadLeft(3, '0');
                 }
+
+                File.WriteAllText("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", numbers.ToString());
+
+                //using (FileStream fileStream = new("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", FileMode.OpenOrCreate))
+                //{
+                //    using (Aes aes = Aes.Create())
+                //    {
+                //        byte[] key =
+                //        {
+                //            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                //            0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
+                //        };
+                //        aes.Key = key;
+
+                //        byte[] iv = aes.IV;
+                //        fileStream.Write(iv, 0, iv.Length);
+
+                //        using (CryptoStream cryptoStream = new(
+                //                   fileStream,
+                //                   aes.CreateEncryptor(),
+                //                   CryptoStreamMode.Write))
+                //        {
+                //            using (StreamWriter encryptWriter = new(cryptoStream))
+                //            {
+                //                //encryptWriter.WriteLine($"LicenseKey: {Guid.NewGuid()}");
+                //                //encryptWriter.WriteLine($"UserId: {Guid.NewGuid()}");
+                //                //encryptWriter.WriteLine($"FirstName: Bob");
+                //                //encryptWriter.WriteLine($"LastName: Smith");
+
+                //                encryptWriter.WriteLine(JsonSerializer.Serialize<User>(user));
+                //            }
+                //        }
+                //    }
+                //}
 
                 _output.WriteLine("The file was encrypted.");
             }
             catch (Exception ex)
             {
                 _output.WriteLine($"The encryption failed. {ex}");
+            }
+        }
+
+        private async Task EncryptNumbersFile()
+        {
+            string text = "Hello";
+            string numbers = "";
+                foreach (char c in text)
+            {
+                numbers += String.Format("{0}", Convert.ToByte(c)).PadLeft(3,'0');
             }
         }
     }

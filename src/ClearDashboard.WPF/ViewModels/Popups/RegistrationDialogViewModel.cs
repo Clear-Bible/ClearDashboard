@@ -70,12 +70,12 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
     public async void Register()
     {
         var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        //File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+        File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
         File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
 
         //decrypt code
         var decryptedLicenseKey = LicenseCryption.DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));//fix this
-        decryptedLicenseKey = "{\"FirstName\":\"Bob\",\"LastName\":\"Smith\",\"LicenseKey\":\"61809dd9-fdfe-4f25-bc64-a6a9e2f5138d\",\"FullName\":\"Bob Smith\",\"ParatextUserName\":null,\"LastAlignmentLevelId\":null,\"AlignmentVersions\":[],\"AlignmentSets\":[],\"Id\":\"1a0f98d3-5661-4256-bc99-357a8f8290e3\"}";
+        //decryptedLicenseKey = "{\"FirstName\":\"Bob\",\"LastName\":\"Smith\",\"LicenseKey\":\"61809dd9-fdfe-4f25-bc64-a6a9e2f5138d\",\"FullName\":\"Bob Smith\",\"ParatextUserName\":null,\"LastAlignmentLevelId\":null,\"AlignmentVersions\":[],\"AlignmentSets\":[],\"Id\":\"1a0f98d3-5661-4256-bc99-357a8f8290e3\"}";
 
         //validate contents (not null or empty)
         try
@@ -96,13 +96,13 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             }
             else
             {
-                MessageBox.Show("The contents of the Decrypted license key do not match the information you provided.");
+                MessageBox.Show("The contents of the decrypted license key do not match the information you provided.");
             }
         }
 
         catch (Exception ex)
         {
-            MessageBox.Show("There was a problem with the contents of the decrypted license key.  Certain Json elements could not be found.  Your key may not have been encrypted correctly");
+            MessageBox.Show("The key provided is faulty.  When decrypted, certain Json elements could not be found.");
         }
     }
 

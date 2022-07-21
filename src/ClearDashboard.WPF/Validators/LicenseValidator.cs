@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(firstName))
                 {
-                    context.AddFailure($"Please enter your first name."); ;
+                    context.AddFailure($"First name missing."); ;
                 }
             });
 
@@ -22,7 +22,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(lastName))
                 {
-                    context.AddFailure($"Please enter your last name."); ;
+                    context.AddFailure($"Last name missing."); ;
                 }
             });
 
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(licenseKey))
                 {
-                    context.AddFailure($"Enter your license key."); ;
+                    context.AddFailure($"License key missing."); ;
                 }
             });
         }

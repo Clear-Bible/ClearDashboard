@@ -34,27 +34,24 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="0,0"
+            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
 
-
-
             <TextBox
                 x:Name="FirstName"
-                Width="250"
+                Width="360"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your first name."
+                materialDesign:HintAssist.Hint="Please enter your first name"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                TextChanged="TextChanged">
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -82,7 +79,7 @@
 
             <TextBox
                 x:Name="LastName"
-                Width="250"
+                Width="360"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Left"
@@ -92,8 +89,7 @@
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                TextChanged="TextChanged">
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -119,23 +115,22 @@
 
 
             <TextBox
-                x:Name="ParatextUserName"
-                Width="250"
+                x:Name="LicenseKey"
+                Width="360"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your paratext user name"
+                materialDesign:HintAssist.Hint="Please enter your license key"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                TextChanged="TextChanged">
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
-                        Path="ParatextUserName"
+                        Path="LicenseKey"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
@@ -155,25 +150,23 @@
                 </Validation.ErrorTemplate>
             </TextBox>
 
-
             <TextBox
-                x:Name="LicenseKey"
-                Width="250"
+                x:Name="ParatextUserName"
+                Width="360"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your license key"
+                materialDesign:HintAssist.Hint="Please enter your Paratext user name"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                TextChanged="TextChanged">
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
-                        Path="LicenseKey"
+                        Path="ParatextUserName"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
