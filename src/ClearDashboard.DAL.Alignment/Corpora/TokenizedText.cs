@@ -31,8 +31,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     throw new MediatorErrorEngineException("GetTokensByTokenizedCorpusIdAndBookIdQuery returned null data");
 
                 return verses
-                    .SelectMany(verse => CreateRows(verse.chapter, verse.verse, "", verse.isSentenceStart) // text parameter is set by TokensTextRow from the tokens
-                        .Select(tr => new TokensTextRow(tr, verse.tokens.ToList()))); //MUST return TokensTextRow. 
+                    .SelectMany(verse => CreateRows(verse.Chapter, verse.Verse, "", verse.IsSentenceStart) // text parameter is set by TokensTextRow from the tokens
+                        .Select(tr => new TokensTextRow(tr, verse.Tokens.ToList()))); //MUST return TokensTextRow. 
             }
             else
             {
