@@ -37,7 +37,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 .Transform<IntoTokensTextRowProcessor>();
         }
 
-        public static ITextCorpus GetFullGreekCorpus()
+        public static ITextCorpus GetFullGreekNTCorpus()
         {
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmFullTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
