@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 

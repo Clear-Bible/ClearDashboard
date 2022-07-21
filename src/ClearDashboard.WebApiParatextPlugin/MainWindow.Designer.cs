@@ -33,7 +33,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.lblVersion = new System.Windows.Forms.Label();
             this.btnRestart = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
-            this.listBoxClients = new System.Windows.Forms.ListBox();
             this.btnExportUSFM = new System.Windows.Forms.Button();
             this.btnVersificationTest = new System.Windows.Forms.Button();
             this.ProjectsListBox = new System.Windows.Forms.ListBox();
@@ -82,15 +81,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
-            // listBoxClients
-            // 
-            this.listBoxClients.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxClients.FormattingEnabled = true;
-            this.listBoxClients.Location = new System.Drawing.Point(301, 76);
-            this.listBoxClients.Name = "listBoxClients";
-            this.listBoxClients.Size = new System.Drawing.Size(161, 56);
-            this.listBoxClients.TabIndex = 24;
-            // 
             // btnExportUSFM
             // 
             this.btnExportUSFM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -117,7 +107,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // 
             this.ProjectsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ProjectsListBox.FormattingEnabled = true;
-            this.ProjectsListBox.Location = new System.Drawing.Point(302, 137);
+            this.ProjectsListBox.Location = new System.Drawing.Point(300, 76);
             this.ProjectsListBox.Margin = new System.Windows.Forms.Padding(2);
             this.ProjectsListBox.Name = "ProjectsListBox";
             this.ProjectsListBox.Size = new System.Drawing.Size(161, 121);
@@ -128,13 +118,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             // 
             this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox.Location = new System.Drawing.Point(302, 262);
+            this.textBox.Location = new System.Drawing.Point(302, 201);
             this.textBox.Margin = new System.Windows.Forms.Padding(2);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
             this.textBox.ReadOnly = true;
             this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox.Size = new System.Drawing.Size(160, 96);
+            this.textBox.Size = new System.Drawing.Size(160, 157);
             this.textBox.TabIndex = 28;
             // 
             // MainWindow
@@ -145,7 +135,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.Controls.Add(this.ProjectsListBox);
             this.Controls.Add(this.btnVersificationTest);
             this.Controls.Add(this.btnExportUSFM);
-            this.Controls.Add(this.listBoxClients);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnRestart);
             this.Controls.Add(this.lblVersion);
@@ -162,7 +151,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.ListBox listBoxClients;
         private System.Windows.Forms.Button btnExportUSFM;
         private System.Windows.Forms.Button btnVersificationTest;
         private System.Windows.Forms.ListBox ProjectsListBox;
