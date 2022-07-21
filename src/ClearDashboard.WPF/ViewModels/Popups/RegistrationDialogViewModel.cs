@@ -73,10 +73,8 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
         File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
 
-        //decrypt code
         var decryptedLicenseKey = LicenseCryption.DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));//fix this
-        
-        //validate contents (not null or empty)
+       
         try
         {
             var decryptedLicenseUser = LicenseCryption.DecryptedJsonToLicenseUser(decryptedLicenseKey);

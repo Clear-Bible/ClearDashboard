@@ -63,13 +63,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (!_licenseCleared)
             {
-                //check if they have license key
-                //Check for License.txt
                 var DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 var FilePath = Path.Combine(DocumentsPath, "ClearDashboard_Projects\\license.txt");
                 if (File.Exists(FilePath))
                 {
-                    //decrypt file at FilePath
                     try
                     {
                         var decryptedLicenseKey = LicenseCryption.DecryptFromFile(FilePath);
@@ -93,7 +90,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void PopupRegistration()
         {
-            //popup license key form
             Logger.LogInformation("Registration called.");
 
             dynamic settings = new ExpandoObject();

@@ -14,8 +14,6 @@ namespace ClearDashboard.WPF.Tests
     {
         private readonly ITestOutputHelper _output;
 
-        
-
         public LicensingTests(ITestOutputHelper output)
         {
             _output = output;
@@ -24,11 +22,13 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public async Task EncryptDecryptTest()
         {
+
+            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string FilePath = Path.Combine(DocumentsPath, "ClearDashboard_Projects\\license.txt");
+
             AesCryptoServiceProvider crypt_provider = new();
             crypt_provider.BlockSize = 128;
             crypt_provider.KeySize = 128;
-            //crypt_provider.GenerateIV();//
-            //crypt_provider.GenerateKey();//
 
             byte[] key =
             {
@@ -36,23 +36,19 @@ namespace ClearDashboard.WPF.Tests
                 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
             };
             crypt_provider.Key = key;
-
-            //crypt_provider.GenerateIV();
+            
             crypt_provider.IV = key;
 
             crypt_provider.Mode = CipherMode.CBC;
             crypt_provider.Padding = PaddingMode.PKCS7;
-            EncryptToFile(crypt_provider);
-            await DecryptFromFile(crypt_provider);
+            EncryptToFile(crypt_provider, FilePath);
+            await DecryptFromFile(crypt_provider, FilePath);
         }
 
-        
-
-        private void EncryptToFile(AesCryptoServiceProvider crypt_provider)
+        private void EncryptToFile(AesCryptoServiceProvider crypt_provider, string path)
         {
             try
             {
-
                 var user = new User
                 {
                     Id = Guid.NewGuid(),
@@ -68,7 +64,7 @@ namespace ClearDashboard.WPF.Tests
                 byte[] encrypted_bytes = transform.TransformFinalBlock(decrypted_bytes, 0, decrypted_bytes.Length);
                 string str = Convert.ToBase64String(encrypted_bytes);
                 
-                File.WriteAllText("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt", str);
+                File.WriteAllText(path, str);
 
                 _output.WriteLine("The file was encrypted.");
             }
@@ -78,12 +74,11 @@ namespace ClearDashboard.WPF.Tests
             }
         }
 
-        private async Task DecryptFromFile(AesCryptoServiceProvider crypt_provider)
+        private async Task DecryptFromFile(AesCryptoServiceProvider crypt_provider, string path)
         {
             try
             {
-                
-                var str = File.ReadAllText("C:\\Users\\rober\\Documents\\ClearDashboard_Projects\\license.txt");
+                var str = File.ReadAllText(path);
 
                 ICryptoTransform transform = crypt_provider.CreateDecryptor();
 
