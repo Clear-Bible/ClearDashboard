@@ -16,28 +16,54 @@ namespace Helpers
         {
             try
             {
-                string temp = "";
-                string text2 = "";
+                //string temp = "";
+                //string text2 = "";
 
-                var numbers = File.ReadAllText(path);
+                //var numbers = File.ReadAllText(path);
 
-                for (int n = 0; n < numbers.Length; ++n)
+                //for (int n = 0; n < numbers.Length; ++n)
+                //{
+                //    temp += numbers[n];
+                //    if ((n + 1) % 3 == 0)
+                //    {
+                //        int x = Int32.Parse(temp);
+                //        text2 += Convert.ToChar(x).ToString();
+                //        temp = "";
+                //    }
+                //}
+
+                //return text2;
+
+                var str = File.ReadAllText(path);
+
+                AesCryptoServiceProvider crypt_provider = new();
+                crypt_provider.BlockSize = 128;
+                crypt_provider.KeySize = 128;
+
+                //crypt_provider.GenerateKey();
+                byte[] key =
                 {
-                    temp += numbers[n];
-                    if ((n + 1) % 3 == 0)
-                    {
-                        int x = Int32.Parse(temp);
-                        text2 += Convert.ToChar(x).ToString();
-                        temp = "";
-                    }
-                }
+                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                    0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
+                };
+                crypt_provider.Key = key;
 
-                return text2;
+                //crypt_provider.GenerateIV();
+                crypt_provider.IV = key;
+
+                crypt_provider.Mode = CipherMode.CBC;
+                crypt_provider.Padding = PaddingMode.PKCS7;
+                
+                ICryptoTransform transform = crypt_provider.CreateDecryptor();
+                byte[] encrypted_bytes = Convert.FromBase64String(str);
+                byte[] decrypted_bytes = transform.TransformFinalBlock(encrypted_bytes, 0, encrypted_bytes.Length);
+                
+                var serialized = ASCIIEncoding.ASCII.GetString(decrypted_bytes);
+
+                return serialized;
 
                 //using (FileStream fileStream = new(path, FileMode.Open))
                 //{
-
-
                 //    using (Aes aes = Aes.Create())
                 //    {
                 //        byte[] iv = new byte[aes.IV.Length];

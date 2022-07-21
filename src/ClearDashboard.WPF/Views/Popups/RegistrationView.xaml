@@ -10,6 +10,7 @@
     xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
+    d:DataContext="{d:DesignInstance Type=popups:RegistrationViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -150,6 +151,42 @@
                 </Validation.ErrorTemplate>
             </TextBox>
 
+            <!--<RichTextBox
+                x:Name="LicenseKey"
+                Width="360"
+                Height="40"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Bottom"
+                materialDesign:HintAssist.FloatingScale="0.50"
+                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:HintAssist.Hint="Please enter your license key"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="20"
+                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                helpers:RichTextBoxHelper.DocumentXaml="{Binding LicenseKeyFlow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                --><!--<FlowDocument>
+                    <Paragraph>
+                        <Run FontSize="20" Text="{Binding Path=LicenseKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                    </Paragraph>
+                </FlowDocument>--><!--
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <AdornedElementPlaceholder />
+                            <TextBlock
+                                MaxWidth="350"
+                                Margin="0"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
+            </RichTextBox>-->
+
             <TextBox
                 x:Name="ParatextUserName"
                 Width="360"
@@ -186,84 +223,6 @@
                 </Validation.ErrorTemplate>
             </TextBox>
 
-            <!--<RichTextBox
-                x:Name="LicenseKey"
-                Width="250"
-                Height="85"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Bottom"
-                materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your license key."
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                BorderBrush="DarkGray"
-                FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                TextChanged="TextChanged">
-                <FlowDocument PageHeight="180">
-                    <Paragraph>
-                        <Run
-                            FontSize="12"
-                            Foreground="DarkGray"
-                            Text="{Binding Path=LicenseKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </Paragraph>
-                </FlowDocument>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
-                                MaxWidth="350"
-                                Margin="0"
-                                FontSize="16"
-                                Foreground="IndianRed"
-                                Text="{Binding [0].ErrorContent}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
-            </RichTextBox>-->
-
-
-
-            <!--<TextBox
-                x:Name="LicenseKey"
-                Width="250"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
-                materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your license key"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                TextChanged="TextChanged">
-                <TextBox.Text>
-                    <Binding
-                        Mode="TwoWay"
-                        Path="LicenseKey"
-                        UpdateSourceTrigger="PropertyChanged"
-                        ValidatesOnDataErrors="True" />
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
-                                MaxWidth="350"
-                                Margin="0"
-                                FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                                Text="{Binding [0].ErrorContent}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
-            </TextBox>-->
 
 
         </StackPanel>

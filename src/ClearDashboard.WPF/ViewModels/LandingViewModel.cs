@@ -85,6 +85,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 else
                 {
+                    MessageBox.Show("Your license key file is missing.");
                     PopupRegistration();
                 }
             }
