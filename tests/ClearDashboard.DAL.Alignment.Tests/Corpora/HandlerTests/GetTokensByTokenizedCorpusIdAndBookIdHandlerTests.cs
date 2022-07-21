@@ -38,6 +38,9 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var context = await factory.GetDatabaseContext(ProjectName);
             //Assert.Equal(context, ProjectDbContext);
 
+
+            ProjectDbContext.ChangeTracker.Clear();
+
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
                 new Alignment.Corpora.TokenizedCorpusId(context.TokenizedCorpora.First().Id), "40");
@@ -45,6 +48,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.True(result.Success);
             Assert.NotNull(result.Data);
+
 
             // Validate Matt 1:1
             var matthewCh1V1 = result.Data.First();
@@ -68,19 +72,22 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void GetDataAsync__HandlesError()
+    public async void GetDataAsync__HandlesMissingTokenizedCorpus()
     {
         try
         {
-            // Retrieve Tokens for a TokenizedCorpus that does not exist
+            ProjectDbContext.ChangeTracker.Clear();
+
+            // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
                 new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "40");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
+            Assert.StartsWith(
+                "System.Exception: Tokenized Corpus 00000000-0000-0000-0000-000000000000 does not exist.",
+                result.Message);
             Assert.Null(result.Data);
-            Assert.True(result.Message.StartsWith(
-                "System.NullReferenceException: Object reference not set to an instance of an object."));
         }
         finally
         {
