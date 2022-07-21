@@ -63,8 +63,6 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Progra
 		IORedirection = Auto
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment", "ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj", "{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,14 +187,6 @@ Global
 		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Debug|x64.ActiveCfg = Release|x64
 		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Release|Any CPU.ActiveCfg = Release|x64
 		{E4D5365F-CD10-4BC1-9320-56E5589F68A5}.Release|x64.ActiveCfg = Release|x64
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Debug|x64.Build.0 = Debug|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Release|x64.ActiveCfg = Release|Any CPU
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,7 +209,6 @@ Global
 		{E6CC1FEA-86BC-4434-B714-33A2A1976515} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{43D0746E-6B55-427E-A209-CD7D4AFF4CE1} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 		{E4D5365F-CD10-4BC1-9320-56E5589F68A5} = {EB6F7E37-7473-4388-8138-97FE4C99B3D1}
-		{FB3BD3A5-DEA4-42B5-979D-A85EAD0973FC} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}
