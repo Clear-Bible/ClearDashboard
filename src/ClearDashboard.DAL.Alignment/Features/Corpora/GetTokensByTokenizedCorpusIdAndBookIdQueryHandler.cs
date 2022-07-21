@@ -36,8 +36,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
+                var intifiedBookId = Int32.Parse(request.BookId);
 
                 var groupedTokens = tokenizedCorpus.Tokens
+                    .Where(t => t.BookNumber == intifiedBookId)
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
