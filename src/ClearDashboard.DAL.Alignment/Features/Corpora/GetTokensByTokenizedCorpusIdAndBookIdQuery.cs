@@ -4,7 +4,7 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetTokensByTokenizedCorpusIdAndBookIdQuery : ProjectRequestQuery<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
+    public record GetTokensByTokenizedCorpusIdAndBookIdQuery : ProjectRequestQuery<IEnumerable<VerseTokens>>
     {
 
         public GetTokensByTokenizedCorpusIdAndBookIdQuery(TokenizedCorpusId tokenizedCorpusId, string bookId) 
