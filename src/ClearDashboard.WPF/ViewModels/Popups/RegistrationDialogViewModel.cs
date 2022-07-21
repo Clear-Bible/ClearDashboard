@@ -75,8 +75,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
         //decrypt code
         var decryptedLicenseKey = LicenseCryption.DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));//fix this
-        //decryptedLicenseKey = "{\"FirstName\":\"Bob\",\"LastName\":\"Smith\",\"LicenseKey\":\"61809dd9-fdfe-4f25-bc64-a6a9e2f5138d\",\"FullName\":\"Bob Smith\",\"ParatextUserName\":null,\"LastAlignmentLevelId\":null,\"AlignmentVersions\":[],\"AlignmentSets\":[],\"Id\":\"1a0f98d3-5661-4256-bc99-357a8f8290e3\"}";
-
+        
         //validate contents (not null or empty)
         try
         {
@@ -92,7 +91,6 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             if (match)
             {
                 await TryCloseAsync(true);
-                //load projects
             }
             else
             {
