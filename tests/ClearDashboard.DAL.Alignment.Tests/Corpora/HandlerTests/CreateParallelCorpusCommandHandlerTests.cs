@@ -11,6 +11,7 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
@@ -69,6 +70,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                     new TokenizedCorpusId(targetTokenizedCorpusId), verseMappings);
             var result = await Mediator.Send(command);
 
+            ProjectDbContext.ChangeTracker.Clear();
+
             // General assertions
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -76,8 +79,15 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.NotNull(result.Data);
 
             // Validate persisted ParallelCorpus data
+
             Assert.Equal(1, ProjectDbContext.ParallelCorpa.Count());
-            var theParallelCorporaEntry = ProjectDbContext.ParallelCorpa.First();
+            var theParallelCorporaEntry = ProjectDbContext.ParallelCorpa
+                .Include(pc => pc.VerseMappings)
+                .Include(pc => pc.SourceTokenizedCorpus)
+                .ThenInclude(stc => stc.Corpus)
+                .Include(pc => pc.TargetTokenizedCorpus)
+                .ThenInclude(ttc => ttc.Corpus)
+                .First();
             Assert.Equal(1, theParallelCorporaEntry.VerseMappings.Count);
 
             Assert.Equal(sourceTokenizedCorpusId, theParallelCorporaEntry.SourceTokenizedCorpusId);
