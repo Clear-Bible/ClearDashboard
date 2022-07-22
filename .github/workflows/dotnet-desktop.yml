@@ -89,15 +89,15 @@ jobs:
     - name: Configure Caliburn.Micro NuGet package source
       run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
 
-    #- name: Restore NuGet packages
-    #  run: nuget restore $env:Solution_Path
+    - name: Restore NuGet packages
+      run: nuget restore $env:Solution_Path
       
     # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
+    #- name: Restore the application
       #run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
-      run: dotnet restore $env:Solution_Path /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+    #  run: dotnet restore $env:Solution_Path /p:Configuration=$env:Configuration
+    #  env:
+    #    Configuration: ${{ matrix.configuration }}
 
     - name: Build
       run: dotnet build $env:Solution_Path --no-restore
