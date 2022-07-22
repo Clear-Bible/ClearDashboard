@@ -20,6 +20,7 @@ using MediatR;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
 
 // ReSharper disable IdentifierTypo
@@ -133,9 +134,12 @@ namespace ClearDashboard.Wpf.ViewModels
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService, ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+        public AlignmentSampleViewModel(INavigationService navigationService, 
+            ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            IMediator mediator) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
+            _mediator = mediator;
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -167,7 +171,8 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             LoadFiles();
             await MockProjectAndUser();
-            await RetrieveTokens(cancellationToken);
+            //await RetrieveTokensViaQuery(cancellationToken);
+            await RetrieveTokensViaCorpusClass();
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -196,7 +201,7 @@ namespace ClearDashboard.Wpf.ViewModels
             await ProjectManager.CreateNewProject("Alignment");
         }
 
-        public async Task RetrieveTokens(CancellationToken cancellationToken)
+        public async Task RetrieveTokensViaQuery(CancellationToken cancellationToken)
         {
             try
             {
@@ -207,6 +212,23 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     DatabaseVerseTokens = result.Data.FirstOrDefault(v => v.Chapter == "1" && v.Verse == "1");
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task RetrieveTokensViaCorpusClass()
+        {
+            try
+            {
+                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
+                var book = corpus.Where(row => ((VerseRef) row.Ref).BookNum == 40);
+                var chapter = book.Where(row => ((VerseRef) row.Ref).ChapterNum == 1);
+                var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
+                DatabaseVerseTokens = new VerseTokens("40", "1", verse.Tokens, true);
             }
             catch (Exception e)
             {

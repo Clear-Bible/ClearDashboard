@@ -9,6 +9,7 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.UserControls"
     Title="AlignmentSample"
     d:DataContext="{d:DesignInstance Type=viewModels:AlignmentSampleViewModel,  IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -34,7 +35,7 @@
             </Button>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="TokenBubblePanel">
-            <StackPanel Orientation="Horizontal"/>
+            <WrapPanel Orientation="Horizontal"/>
         </ItemsPanelTemplate>
     </Page.Resources>
 
@@ -45,6 +46,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
@@ -99,6 +101,9 @@
         <Label Grid.Column="0" Grid.Row="10" VerticalAlignment="Center" Content="Words from tokenized text"></Label>
         <ItemsControl Grid.Column="1" Grid.Row="10" ItemsSource="{Binding Path=DatabaseVerseWords}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />
 
-        <Label Grid.ColumnSpan="2" Grid.Row="11" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.Column="0" Grid.Row="11" VerticalAlignment="Center" Content="User Control"></Label>
+        <controls:TextDisplayControl Grid.Column="1" Grid.Row="11" />
+
+        <Label Grid.ColumnSpan="2" Grid.Row="12" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
     </Grid>
 </Page>
