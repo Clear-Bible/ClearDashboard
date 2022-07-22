@@ -79,8 +79,6 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="SIL.Machine" Version="2.5.11" />
-		<PackageReference Include="SIL.Scripture" Version="9.0.0" />
 		<PackageReference Include="TinyMapper" Version="3.0.3" />
 	</ItemGroup>
 
@@ -591,6 +589,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Page Update="Views\Popups\NewProjectAddCorporaView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>

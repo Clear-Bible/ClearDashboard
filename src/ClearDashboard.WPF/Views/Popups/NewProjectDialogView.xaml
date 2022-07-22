@@ -16,7 +16,17 @@
                Height="300"
                Width="600"
                WindowStartupLocation="CenterOwner"
-               Title="{Binding Title}">
+               d:DataContext="{d:DesignInstance Type=popups:NewProjectDialogViewModel,
+                                     IsDesignTimeCreatable=True}"
+               Title="{Binding DialogTitle, Mode=TwoWay}">
+    <popups:CustomWindow.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10,10" />
+            <Setter Property="FontSize" Value="24"></Setter>
+        </Style>
+    </popups:CustomWindow.Resources>
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -28,7 +38,7 @@
             Grid.Column="0"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch" />
-       
+            <!--<Label Grid.Row="1" Grid.Column="0" Foreground="{DynamicResource MaterialDesignPaper}"  Content="{Binding DisplayName}" ></Label>-->
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
                 <Button x:Name="Create" Content="CREATE" Margin="5 5 5 5" />
                 <Button x:Name="Cancel" Content="CANCEL" Margin="5 5 5 5" />

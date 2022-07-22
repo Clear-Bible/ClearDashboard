@@ -30,7 +30,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
-        private List<IProject> m_ProjectList = new();
+        private List<IProject> _projectList = new();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
@@ -151,14 +151,17 @@ namespace ClearDashboard.WebApiParatextPlugin
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
         }
 
+
+        private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions" };
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
         {
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
 
-            if (truncatedName.Contains("XmlSerializers"))
+            if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
-                return null;
+                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                    return null;
             }
             // Load the most up to date version
             Assembly assembly;
@@ -171,7 +174,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Console.WriteLine(e);
                 throw;
             }
-            AppendText(Color.Red, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
+            AppendText(Color.Orange, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
 
             return assembly;
         }
@@ -293,7 +296,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void UpdateProjectList()
         {
-            m_ProjectList.Clear();
+            _projectList.Clear();
             var windows = _host.AllOpenWindows;
             ProjectsListBox.Items.Clear();
             foreach (var window in windows)
@@ -303,7 +306,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     var projects = tc.AllProjects;
                     foreach (var proj in projects)
                     {
-                        m_ProjectList.Add(proj);
+                        _projectList.Add(proj);
                         ProjectsListBox.Items.Add(proj.ShortName);
                     }
                     _verseRef = tc.VerseRef;
@@ -319,23 +322,20 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool found = false;
+            var found = false;
             if (ProjectsListBox.SelectedItem != null)
             {
-                string name = ProjectsListBox.SelectedItem.ToString();
-                foreach (var proj in m_ProjectList)
+                var name = ProjectsListBox.SelectedItem.ToString();
+                foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
                 {
-                    if (name == proj.ShortName)
-                    {
-                        ShowScripture(proj);
-                        found = true;
-                        break;
-                    }
+                    ShowScripture(proj);
+                    found = true;
+                    break;
                 }
             }
             if (!found)
             {
-                textBox.Text = $"Cannot find project.";
+                textBox.Text = "Cannot find project.";
             }
 
         }
@@ -612,6 +612,64 @@ namespace ClearDashboard.WebApiParatextPlugin
             var newVerse = v.CreateReference(19, 20, 1);
 
             newVerse = v.ChangeVersification(newVerse);
+        }
+
+        public List<ParatextProjectMetadata> GetProjectMetadata()
+        {
+            var projects = _host.GetAllProjects(true);
+
+
+            return projects.Select(project => new ParatextProjectMetadata
+                {
+                    Id = project.ID,
+                    LanguageName = project.LanguageName,
+                    Name = project.ShortName,
+                    LongName = project.LongName,
+                    CorpusType = DetermineCorpusType(project.Type)
+                })
+                .ToList();
+        }
+
+        private CorpusType DetermineCorpusType(ProjectType projectType)
+        {
+            try
+            {
+                return (CorpusType)(projectType);
+            }
+            catch
+            {
+                return CorpusType.Unknown;
+            }
+            
+            //switch (projectType)
+            //{
+            //    case ProjectType.Standard:
+            //        return CorpusType.Standard;
+            //    case ProjectType.BackTranslation:
+            //        return CorpusType.BackTranslation;
+            //    case ProjectType.EnhancedResource:
+            //       return CorpusType.MarbleResource;
+            //    case ProjectType.Auxiliary:
+            //       return CorpusType.Auxiliary;
+            //    case ProjectType.Daughter:
+            //        return CorpusType.Daughter;
+            //    case ProjectType.TransliterationManual:
+            //        return CorpusType.TransliterationManual;
+            //    case ProjectType.TransliterationWithEncoder:
+            //        return CorpusType.TransliterationWithEncoder;
+            //    case ProjectType.ConsultantNotes:
+            //        return CorpusType.ConsultantNotes;
+            //    case ProjectType.StudyBible:
+            //        return CorpusType.StudyBible;
+            //    case ProjectType.StudyBibleAdditions:
+            //        return CorpusType.StudyBibleAdditions;
+            //    case ProjectType.Xml:
+            //        return CorpusType.Xml;
+            //    case ProjectType.SourceLanguage:
+            //        return CorpusType.SourceLanguage;
+            //    default:
+            //        return CorpusType.Unknown;
+            //}
         }
 
         public List<ParatextProject> GetAllProjects(bool showInConsole = false)
