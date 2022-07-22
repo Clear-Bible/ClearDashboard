@@ -129,5 +129,17 @@ namespace ClearDashboard.Wpf.Properties {
                 this["TimeZones"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProjectLayout {
+            get {
+                return ((string)(this["LastProjectLayout"]));
+            }
+            set {
+                this["LastProjectLayout"] = value;
+            }
+        }
     }
 }
