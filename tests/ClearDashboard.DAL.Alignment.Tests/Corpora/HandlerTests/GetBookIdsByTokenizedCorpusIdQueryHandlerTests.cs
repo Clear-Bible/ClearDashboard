@@ -28,8 +28,14 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
         {
             var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, true, "NameX", "LanguageX", "BackTranslation", string.Empty);
-            var commandResult = await Mediator.Send(command);
+            // Create the corpus in the database:
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "BackTranslation");
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, string.Empty);
+            var commandResult = await Mediator!.Send(command);
+
+            ProjectDbContext.ChangeTracker.Clear();
 
             var query = new GetBookIdsByTokenizedCorpusIdQuery(commandResult.Data?.TokenizedCorpusId!);
             var queryResult = await Mediator.Send(query);

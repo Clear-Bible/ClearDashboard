@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Exceptions;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -60,6 +61,26 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             if (result.Success)
             {                                                      
                 return new TokenizedTextCorpus(command.TokenizedCorpusId, result.Data.corpusId, mediator, result.Data.bookIds);
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<CorpusId> CreateCorpus(
+            IMediator mediator,
+            bool IsRtl,
+            string Name,
+            string Language,
+            string CorpusType)
+        {
+            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType);
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
             }
             else
             {

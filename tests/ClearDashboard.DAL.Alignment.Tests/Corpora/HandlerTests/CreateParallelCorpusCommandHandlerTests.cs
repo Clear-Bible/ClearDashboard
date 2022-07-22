@@ -34,20 +34,22 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
         {
             var sourceTextCorpus = TestDataHelpers.GetSampleGreekCorpus();
 
-            var sourceCommand = new CreateTokenizedCorpusFromTextCorpusCommand(sourceTextCorpus, false,
+            var sourceCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false,
                 "New Testament 1",
                 "grc",
-                "Resource",
+                "Resource");
+            var sourceCommand = new CreateTokenizedCorpusFromTextCorpusCommand(sourceTextCorpus, sourceCorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var sourceCommandResult = await Mediator.Send(sourceCommand);
 
             var targetTextCorpus = TestDataHelpers.GetSampleGreekCorpus();
 
-            var targetCommand = new CreateTokenizedCorpusFromTextCorpusCommand(targetTextCorpus, false,
+            var targetCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false,
                 "New Testament 2",
                 "grc",
-                "Resource",
+                "Resource");
+            var targetCommand = new CreateTokenizedCorpusFromTextCorpusCommand(targetTextCorpus, targetCorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var targetCommandResult = await Mediator.Send(targetCommand);

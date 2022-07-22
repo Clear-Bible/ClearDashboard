@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -26,18 +27,19 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         try
         {
             // Load data
-            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "Greek NT", "grc",
-                "Resource",
+            var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-            await Mediator.Send(command);
-
+            var createResult = await Mediator!.Send(command);
+            Assert.True(createResult.Success);
+            Assert.NotNull(createResult.Data);
+            var tokenizedTextCorpus = createResult.Data!;
 
             ProjectDbContext.ChangeTracker.Clear();
 
             // Retrieve Tokens
-            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "MAT");
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -72,8 +74,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             // Load data
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "Greek NT", "grc",
-                "Resource",
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             await Mediator.Send(command);
 
