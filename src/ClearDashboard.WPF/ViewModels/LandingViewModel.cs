@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Popups;
+using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -117,25 +118,29 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void Workspace(DashboardProject project)
         {
-            if (project is null)
-            {
-                return;
-            }
+            //if (project is null)
+            //{
+            //    return;
+            //}
 
-            // TODO HACK TO READ IN PROJECT AS OBJECT
+            //// TODO HACK TO READ IN PROJECT AS OBJECT
             string sTempFile = @"c:\temp\project.json";
             if (File.Exists(sTempFile) == false)
             {
                 MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
             }
 
-            var jsonString =File.ReadAllText(@"c:\temp\project.json");
+            var jsonString = File.ReadAllText(@"c:\temp\project.json");
             project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
 
 
-            Logger.LogInformation("Workspace called."); 
+            Logger.LogInformation("Workspace called.");
             ProjectManager.CurrentDashboardProject = project;
-            NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+            
+
+            //NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+
+             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
 
         public void Settings()

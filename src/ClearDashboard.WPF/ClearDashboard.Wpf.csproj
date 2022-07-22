@@ -140,6 +140,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />

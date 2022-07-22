@@ -1,10 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.ViewModels.Panes;
+using Microsoft.Extensions.Logging;
 
-namespace ViewModels.Project
+namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    internal class CorpusViewModel
+    public class CorpusViewModel : PaneViewModel
     {
+
+        public CorpusViewModel()
+        {
+
+        }
+
+        public CorpusViewModel(INavigationService navigationService, ILogger<CorpusViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+            : base(navigationService, logger, projectManager, eventAggregator)
+        {
+            Title = "Corpus";
+            ContentId = "CORPUSTOOL";
+        }
     }
 }
