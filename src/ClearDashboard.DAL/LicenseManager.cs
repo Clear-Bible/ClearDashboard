@@ -29,7 +29,7 @@ namespace ClearDashboard.DataAccessLayer
             return crypt_provider;
         }
 
-        public static void EncryptLicenseUser(LicenseUser licenseUser, string path)
+        public static void EncryptToDirectory(LicenseUser licenseUser, string path)
         {
             try
             {
@@ -94,6 +94,20 @@ namespace ClearDashboard.DataAccessLayer
         public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
         {
             return JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
+        }
+
+        public static bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        {
+            if (given.FirstName == decrypted.FirstName &&
+                given.LastName == decrypted.LastName)// &&
+                //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

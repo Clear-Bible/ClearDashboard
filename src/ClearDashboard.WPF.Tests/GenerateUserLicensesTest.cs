@@ -50,7 +50,7 @@ namespace ClearDashboard.WPF.Tests
                 LicenseKey = id.ToString("N"),
             };
 
-            LicenseManager.EncryptLicenseUser(licenseUser, filePath);
+            LicenseManager.EncryptToDirectory(licenseUser, filePath);
         }
     }
 }

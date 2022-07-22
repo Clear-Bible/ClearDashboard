@@ -82,7 +82,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             givenLicenseUser.LastName = _registrationViewModel.LastName;
             //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
-            bool match = CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+            bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
             if (match)
             {
                 File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
@@ -97,20 +97,6 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         catch (Exception ex)
         {
             MessageBox.Show("The key provided is faulty.  When decrypted, certain json elements could not be found.");
-        }
-    }
-
-    public bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
-    {
-        if (given.FirstName == decrypted.FirstName && 
-            given.LastName == decrypted.LastName)// &&
-            //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 }
