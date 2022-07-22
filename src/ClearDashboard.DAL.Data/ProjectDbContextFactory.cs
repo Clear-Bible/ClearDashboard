@@ -24,23 +24,24 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public async Task<ProjectAssets> Get(string projectName)
         {
+            projectName = projectName.Replace(" ", "_");
             var projectAssets = new ProjectAssets
             {
                 ProjectName = projectName,
                 ProjectDirectory = EnsureProjectDirectory(projectName),
             };
 
-            projectAssets.ProjectDbContext = await GetAlignmentContext(projectAssets.DataContextPath);
+            projectAssets.ProjectDbContext = await GetProjectDbContext(projectAssets.DataContextPath);
             return projectAssets;
 
         }
 
         public async Task<ProjectDbContext> GetDatabaseContext(string projectName)
         {
-           return await GetAlignmentContext(EnsureProjectDirectory(projectName));
+           return await GetProjectDbContext(EnsureProjectDirectory(projectName));
         }
 
-        private async Task<ProjectDbContext> GetAlignmentContext(string fullPath)
+        private async Task<ProjectDbContext> GetProjectDbContext(string fullPath)
         {
             var context = _serviceProvider.GetService<ProjectDbContext>();
             if (context != null)
@@ -58,14 +59,14 @@ namespace ClearDashboard.DataAccessLayer.Data
                 {
                     if (_logger != null)
                     {
-                        _logger.LogError(ex, "An error occurred while creating an instance the AlignmentContext.");
+                        _logger.LogError(ex, "An error occurred while creating an instance the ProjectDbContext.");
                     }
 
                     throw;
                 }
                 return context;
             }
-            throw new NullReferenceException("Please ensure 'AlignmentContext' has been registered with the dependency injection container.");
+            throw new NullReferenceException("Please ensure 'ProjectDbContext' has been registered with the dependency injection container.");
         }
 
         private string EnsureProjectDirectory(string projectName)
@@ -74,6 +75,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 throw new ArgumentNullException(nameof(projectName), "A project name must be provided in order for a 'Project' database context to returned.");
             }
+
+            
             var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); 
             if (!Directory.Exists(directoryPath))
             {

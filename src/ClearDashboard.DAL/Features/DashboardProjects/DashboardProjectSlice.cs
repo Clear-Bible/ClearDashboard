@@ -53,34 +53,33 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
             }
             else
             {
-                foreach (var dirName in directories)
+                foreach (var directoryName in directories)
                 {
                     // find the Alignment JSONs
-                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, dirName), "*.sqlite");
+                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
                     foreach (var file in files)
                     {
-                        var fi = new FileInfo(file);
-                        var di = new DirectoryInfo(dirName);
+                        var fileInfo = new FileInfo(file);
+                        var directoryInfo = new DirectoryInfo(directoryName);
 
                         // add as ListItem
                         var dashboardProject = new DashboardProject
                         {
-                            Modified = fi.LastWriteTime,
-                            ProjectName = di.Name,
-                            ShortFilePath = fi.Name,
-                            FullFilePath = fi.FullName
+                            Modified = fileInfo.LastWriteTime,
+                            ProjectName = directoryInfo.Name,
+                            ShortFilePath = fileInfo.Name,
+                            FullFilePath = fileInfo.FullName
                         };
 
                         // check for user prefs file
-                        if (File.Exists(Path.Combine(dirName, "prefs.jsn")))
+                        if (File.Exists(Path.Combine(directoryName, "prefs.jsn")))
                         {
                             // load in the user prefs
-                            var up = new UserPrefs();
-                            up = up.LoadUserPrefFile(dashboardProject);
+                            var userPreferences = UserPreferences.LoadUserPreferencesFile(dashboardProject);
 
                             // add this to the ProjectViewModel
-                            dashboardProject.LastContentWordLevel = up.LastContentWordLevel;
-                            dashboardProject.UserValidationLevel = up.ValidationLevel;
+                            dashboardProject.LastContentWordLevel = userPreferences.LastContentWordLevel;
+                            dashboardProject.UserValidationLevel = userPreferences.ValidationLevel;
                         }
 
                         //dashboardProject.JsonProjectName = GetJsonProjectName(file);

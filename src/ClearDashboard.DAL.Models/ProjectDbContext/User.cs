@@ -14,10 +14,16 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        //public string? LicenseKey { get; set; }
+
+        [NotMapped]
+        public string LicenseKey { get; set; }
 
         [NotMapped] 
         public string FullName => $"{FirstName} {LastName}";
+
+        [NotMapped]
+        public string ParatextUserName { get; set; }
+
         public int? LastAlignmentLevelId { get; set; }
 
         public virtual ICollection<AlignmentVersion> AlignmentVersions { get; set; }

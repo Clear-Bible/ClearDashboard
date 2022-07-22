@@ -1,6 +1,6 @@
 ﻿namespace ClearDashboard.DataAccessLayer.Models
 {
-    public enum EViewType
+    public enum ViewType
     {
         Target,
         Lemma

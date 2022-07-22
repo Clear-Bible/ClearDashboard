@@ -24,7 +24,7 @@ public record TextCollectionChangedMessage(List<TextCollection> TextCollections)
 
 public record ParatextConnectedMessage(bool Connected);
 
-public record ParatextUserMessage(string ParatextUserName);
+public record UserMessage(User user);
 
 public record LogActivityMessage(string message);
 
@@ -74,6 +74,8 @@ public class DashboardProjectManager : ProjectManager
                 HubConnection.Closed += HandleSignalRConnectionClosed;
                 HubConnection.Error += HandleSignalRConnectionError;
                 await PublishSignalRConnected(true);
+
+                CurrentUser = await GetUser();
 
             }
         }
@@ -131,9 +133,9 @@ public class DashboardProjectManager : ProjectManager
         await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
     }
 
-    protected override async Task PublishParatextUser(string paratextUserName)
+    protected override async Task PublishParatextUser(User user)
     {
-        await EventAggregator.PublishOnUIThreadAsync(new ParatextUserMessage(paratextUserName));
+        await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
     }
 
     protected  async Task HookSignalREvents()

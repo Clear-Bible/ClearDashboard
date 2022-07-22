@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -10,8 +11,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : ProjectDbContextQueryHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
-        RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>,
-        IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
+        RequestResult<IEnumerable<VerseTokens>>,
+        IEnumerable<VerseTokens>>
     {
         public GetTokensByTokenizedCorpusIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory,
             IProjectProvider projectProvider, ILogger<GetTokensByTokenizedCorpusIdAndBookIdQueryHandler> logger) : base(
@@ -21,7 +22,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override
             async Task<RequestResult
-                <IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+                <IEnumerable<VerseTokens>>>
             GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
             try
@@ -49,32 +50,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         t => t
                     );
 
-                return new RequestResult<
-                    IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
-                >
+                return new RequestResult<IEnumerable<VerseTokens>>
                 (
                     groupedTokens.Select(gt =>
-                        (
-                            gt.Key.ChapterNumber.ToString(),
-                            gt.Key.VerseNumber.ToString(),
-                            gt.ToList().Select(
-                                t => new ClearBible.Engine.Corpora.Token(
-                                    new TokenId(
-                                        t.BookNumber,
-                                        t.ChapterNumber,
-                                        t.VerseNumber,
-                                        t.WordNumber,
-                                        t.SubwordNumber),
-                                    t.Text)),
-                            false)
+                        ( 
+                            new VerseTokens(gt.Key.ChapterNumber.ToString(),
+                                gt.Key.VerseNumber.ToString(),
+                                gt.ToList().Select(
+                                    t => new ClearBible.Engine.Corpora.Token(
+                                        new TokenId(
+                                            t.BookNumber,
+                                            t.ChapterNumber,
+                                            t.VerseNumber,
+                                            t.WordNumber,
+                                            t.SubwordNumber),
+                                        t.Text)),
+                                 false
+                                )
+                           )
                     )
                 );
             }
             catch (Exception ex)
             {
-                return new RequestResult<
-                        IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>
-                    >
+                return new RequestResult<IEnumerable<VerseTokens>>
                     (result: null, success: false, message: ex.ToString());
             }
         }

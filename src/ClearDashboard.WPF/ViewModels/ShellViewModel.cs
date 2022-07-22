@@ -20,7 +20,7 @@ using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<ParatextUserMessage>
+    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
     {
         private readonly TranslationSource _translationSource;
 
@@ -263,9 +263,9 @@ namespace ClearDashboard.Wpf.ViewModels
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(ParatextUserMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
         {
-            ParatextUserName = message.ParatextUserName;
+            ParatextUserName = message.user.FullName;
             await Task.CompletedTask;
         }
 

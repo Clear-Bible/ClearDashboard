@@ -18,23 +18,32 @@ public class NewProjectDialogViewModel : WorkflowShellViewModel
     public string ProjectName => _newProjectViewModel.ProjectName;
 
     private bool _canCreate;
+    private string _dialogTitle;
 
     public NewProjectDialogViewModel(DashboardProjectManager projectManager, IServiceProvider serviceProvider, ILogger<WorkflowShellViewModel> logger, INavigationService navigationService, IEventAggregator eventAggregator) 
         : base(projectManager, serviceProvider, logger, navigationService, eventAggregator)
     {
+       
     }
-    
+
+    public string DialogTitle
+    {
+        get => _dialogTitle;
+        set => Set(ref _dialogTitle, string.IsNullOrEmpty(value) ? "Create New Project" : $"Create New Project: {value}");
+    }
+
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
     {
         await base.OnInitializeAsync(cancellationToken);
+        DialogTitle = string.Empty;
+        DisplayName = string.Empty;
 
         _newProjectViewModel = ServiceProvider.GetService<NewProjectViewModel>();
 
-
         Steps.Add(_newProjectViewModel);
 
-        var step2 = ServiceProvider.GetService<NewProjectViewModel>();
+        var step2 = ServiceProvider.GetService<NewProjectAddCorporaViewModel>();
         Steps.Add(step2);
 
         CurrentStep = Steps[0];
@@ -47,6 +56,12 @@ public class NewProjectDialogViewModel : WorkflowShellViewModel
 
     public async void Cancel()
     {
+        if (!string.IsNullOrEmpty(_newProjectViewModel.ProjectName))
+        {
+            var deletedProject = await ProjectManager.DeleteProject(_newProjectViewModel.ProjectName);
+        }
+       
+        ProjectManager.CurrentProject = null;
         await TryCloseAsync(false);
     }
 
