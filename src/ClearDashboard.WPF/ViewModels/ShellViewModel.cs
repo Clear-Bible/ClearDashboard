@@ -7,19 +7,23 @@ using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Dynamic;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
     {
         private readonly TranslationSource _translationSource;
-       
+
         #region Properties
         private string _paratextUserName;
         public string ParatextUserName
@@ -129,7 +133,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
       
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager) 
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             _translationSource = translationSource;
@@ -142,8 +146,17 @@ namespace ClearDashboard.Wpf.ViewModels
            
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+#if RELEASE
+            ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
+#endif
+            return base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {        
+
             InitializeProjectManager();
             await base.OnActivateAsync(cancellationToken);
         }
@@ -175,9 +188,9 @@ namespace ClearDashboard.Wpf.ViewModels
             SetLanguage();
         }
 
-        #endregion
+#endregion
 
-        #region Caliburn.Micro overrides
+#region Caliburn.Micro overrides
 
        
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -186,9 +199,9 @@ namespace ClearDashboard.Wpf.ViewModels
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
         private void HandleNamedPipeChanged(object sender, EventArgs args)
         {
@@ -240,10 +253,10 @@ namespace ClearDashboard.Wpf.ViewModels
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
-        #endregion
+#endregion
 
 
-        #region EventAggregator message handling
+#region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
@@ -256,6 +269,6 @@ namespace ClearDashboard.Wpf.ViewModels
             await Task.CompletedTask;
         }
 
-        #endregion
+#endregion
     }
 }

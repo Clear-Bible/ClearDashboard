@@ -14,6 +14,14 @@ using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System;
+
+
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -22,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region   Member Variables
         
         protected IWindowManager _windowManager;
-        
+
         #endregion
 
         #region Observable Objects
@@ -50,6 +58,8 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
         }
+
+        
 
         protected override void OnViewAttached(object view, object context)
         { base.OnViewAttached(view, context);
