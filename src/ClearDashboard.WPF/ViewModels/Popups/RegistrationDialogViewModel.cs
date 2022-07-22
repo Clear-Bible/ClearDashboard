@@ -9,12 +9,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Workflows;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
-using Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -69,25 +69,23 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
     public async void Register()
     {
-        var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
-        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
-
-        var decryptedLicenseKey = LicenseCryption.DecryptFromFile(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));//fix this
-       
         try
         {
-            var decryptedLicenseUser = LicenseCryption.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
 
+            var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
+            var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+            
             LicenseUser givenLicenseUser = new LicenseUser();
             givenLicenseUser.FirstName = _registrationViewModel.FirstName;
             givenLicenseUser.LastName = _registrationViewModel.LastName;
-            //givenLicenseUser.ParatextUserName = _registrationViewModel.LicenseKey;
-            //givenLicenseUser.LicenseKey = _registrationViewModel.FirstName;
+            //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
             bool match = CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
             if (match)
             {
+                File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
                 await TryCloseAsync(true);
             }
             else
@@ -98,16 +96,15 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
         catch (Exception ex)
         {
-            MessageBox.Show("The key provided is faulty.  When decrypted, certain Json elements could not be found.");
+            MessageBox.Show("The key provided is faulty.  When decrypted, certain json elements could not be found.");
         }
     }
 
     public bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
     {
         if (given.FirstName == decrypted.FirstName && 
-            given.LastName == decrypted.LastName && 
-            given.ParatextUserName == decrypted.ParatextUserName && 
-            given.LicenseKey == decrypted.LicenseKey)
+            given.LastName == decrypted.LastName)// &&
+            //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
         {
             return true;
         }

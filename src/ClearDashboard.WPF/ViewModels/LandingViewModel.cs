@@ -22,7 +22,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
-using Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -32,8 +31,6 @@ namespace ClearDashboard.Wpf.ViewModels
         
         protected IWindowManager _windowManager;
 
-        private bool _licenseCleared = false;
-        
         #endregion
 
         #region Observable Objects
@@ -60,51 +57,9 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
-
-            if (!_licenseCleared)
-            {
-                var DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var FilePath = Path.Combine(DocumentsPath, "ClearDashboard_Projects\\license.txt");
-                if (File.Exists(FilePath))
-                {
-                    try
-                    {
-                        var decryptedLicenseKey = LicenseCryption.DecryptFromFile(FilePath);
-                        var decryptedLicenseUser = LicenseCryption.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        this.OnActivateAsync(cancellationToken: CancellationToken.None);
-                        _licenseCleared = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("There was an issue decrypting your license key.");
-                        PopupRegistration();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Your license key file is missing.");
-                    PopupRegistration();
-                }
-            }
         }
 
-        private void PopupRegistration()
-        {
-            Logger.LogInformation("Registration called.");
-
-            dynamic settings = new ExpandoObject();
-            settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
-            settings.ShowInTaskbar = false;
-            settings.Title = "License Registration";
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-
-            var registrationPopupViewModel = IoC.Get<RegistrationDialogViewModel>();
-
-            var created = _windowManager.ShowDialogAsync(registrationPopupViewModel, null, settings);
-            this.OnActivateAsync(cancellationToken: CancellationToken.None);
-            _licenseCleared = true;
-        }
+        
 
         protected override void OnViewAttached(object view, object context)
         { base.OnViewAttached(view, context);

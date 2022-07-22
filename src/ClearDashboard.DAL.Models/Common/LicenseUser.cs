@@ -13,13 +13,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             get
             {
-                return string.Format("{1}, {0}", FirstName, LastName);
+                return string.Format("{0} {1}", FirstName, LastName);
             }
         }
-        public string ParatextUserName { get; set; } = null;
-        public string LastAlignmentLevelId { get; set; } = null;
-        public List<object> AlignmentVersions { get; set; }
-        public List<object> AlignmentSets { get; set; }
         public string Id { get; set; }
     }
 }

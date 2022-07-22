@@ -90,11 +90,11 @@
                                 <materialDesign:PackIcon Kind="TrashCanOutline" />
                             </Button>
                             <CheckBox
-                                ToolTip="Include in clock display rotation"
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 Checked="CheckBoxChanged"
                                 IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
+                                ToolTip="Include in clock display rotation"
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding ClockCheckBoxVisibility}">
                                 <CheckBox.Resources>
@@ -114,7 +114,6 @@
                                 TextAlignment="Right"
                                 Visibility="{Binding NameTimeVisibility}" />
                             <TextBox
-                                ToolTip="Name the item"
                                 Width="200"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
@@ -124,9 +123,9 @@
                                 MouseEnter="TextBox_OnMouseEnter"
                                 MouseLeave="TextBox_OnMouseLeave"
                                 Text="{Binding TextBoxText}"
+                                ToolTip="Name the item"
                                 Visibility="{Binding ClockTextBoxVisibility}" />
                             <ComboBox
-                                ToolTip="Select timezone"
                                 Height="26"
                                 ItemsSource="{Binding utcStringList}"
                                 MouseEnter="TextBox_OnMouseEnter"
@@ -134,6 +133,7 @@
                                 SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}"
                                 SelectionChanged="UtcComboSelected"
                                 Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                                ToolTip="Select timezone"
                                 Visibility="{Binding UtcComboVisibility}" />
                             <TextBlock
                                 x:Name="Utc"

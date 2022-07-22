@@ -36,7 +36,6 @@ namespace ClearDashboard.WPF.Tests
                 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
             };
             crypt_provider.Key = key;
-            
             crypt_provider.IV = key;
 
             crypt_provider.Mode = CipherMode.CBC;
@@ -49,16 +48,16 @@ namespace ClearDashboard.WPF.Tests
         {
             try
             {
-                var user = new User
+                var licenseUser = new LicenseUser
                 {
-                    Id = Guid.NewGuid(),
-                    LicenseKey = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString("N"),
+                    LicenseKey = Guid.NewGuid().ToString("N"),
                     FirstName = "Bob",
                     LastName = "Smith",
                 };
 
                 ICryptoTransform transform = crypt_provider.CreateEncryptor();
-                var serialized = JsonSerializer.Serialize<User>(user);
+                var serialized = JsonSerializer.Serialize<LicenseUser>(licenseUser);
 
                 var decrypted_bytes = ASCIIEncoding.ASCII.GetBytes(serialized);
                 byte[] encrypted_bytes = transform.TransformFinalBlock(decrypted_bytes, 0, decrypted_bytes.Length);
