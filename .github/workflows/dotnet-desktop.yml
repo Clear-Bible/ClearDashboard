@@ -83,12 +83,12 @@ jobs:
     - name: Setup NuGet
       uses: Nuget/setup-nuget@v1.0.5
       
+    - name: Configure ClearBible GitHub NuGet package source
+      run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/OWNER/index.json"   
+      
     - name: Configure Caliburn.Micro NuGet package source
       run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
-      
-    - name: Configure ClearBible GitHub NuGet package source
-      run: dotnet dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/clear-bible/index.json" 
-  
+
     #- name: Restore NuGet packages
     #  run: nuget restore $env:Solution_Path
       
