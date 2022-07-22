@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\machine\src\SIL.Machine.Translation.Thot\SIL.Machine.Translation.Thot.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
   </ItemGroup>
