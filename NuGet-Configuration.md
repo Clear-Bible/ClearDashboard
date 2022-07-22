@@ -34,4 +34,4 @@ you will need to add a `nuget.config` file to the same directory as `ClearDashbo
 2. Follow the instructions from [Create a Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create a PAT
 3. Select writepackages, readpackages and deletepackages as shown below
 
-![GitHub PAT](documentation-images/GithubNugetPat.png)
+![GitHub PAT](documentation-images/GithubNugetPat.png) 
