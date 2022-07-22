@@ -36,11 +36,25 @@ namespace ClearDashboard.Wpf.UserControls
         {
             get => (bool)GetValue(WrapProperty);
             set => SetValue(WrapProperty, value);
+        }        
+        
+        /// <summary>
+        /// Identifies the ParagraphMode dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ParagraphModeProperty = DependencyProperty.Register("ParagraphMode", typeof(bool), typeof(TextDisplayControl));
+        
+        /// <summary>
+        /// Gets or sets whether paragraph mode is enabled.
+        /// </summary>
+        public bool ParagraphMode
+        {
+            get => (bool)GetValue(ParagraphModeProperty);
+            set => SetValue(ParagraphModeProperty, value);
         }
 
-        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap || ParagraphMode ? "WrapPanelTemplate" : "StackPanelTemplate");
 
-        public Brush WordBorderBrush => (Brush)FindResource("MaterialDesignBody");
+        public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
 
         public TextDisplayControl()
         {

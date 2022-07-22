@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearDashboard.Wpf.UserControls"
              xmlns:cm="http://caliburnmicro.com"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=local:TextDisplayControl,  IsDesignTimeCreatable=True}"
 
@@ -12,7 +13,9 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TokenBubble">
-            <Button BorderBrush="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderThickness="1"  Margin="6,2" Padding="10,2" Height="30" IsDefault="False"
+            <Button BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.WordBorderBrush}" 
+                    Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderThickness="1"  Margin="6,2" Padding="10,2" Height="30" IsDefault="False"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
                     cm:Message.Attach="[Event Click] = [Action TokenBubbleLeftClicked($dataContext)]; 
                                         [Event MouseRightButtonDown] = [Action TokenBubbleRightClicked($dataContext)]; 
                                         [Event MouseEnter] = [Action TokenBubbleMouseEntered($dataContext)];
@@ -27,7 +30,5 @@
             <StackPanel Orientation="{Binding Orientation}"/>
         </ItemsPanelTemplate>
     </UserControl.Resources>
-    <!--<ItemsControl ItemsSource="{Binding Words}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{StaticResource TokenBubblePanel}" />-->
     <ItemsControl ItemsSource="{Binding Words}" ItemTemplate="{StaticResource TokenBubble}" ItemsPanel="{Binding ItemsPanelTemplate}" />
-
 </UserControl>
