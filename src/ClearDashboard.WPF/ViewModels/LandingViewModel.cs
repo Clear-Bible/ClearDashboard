@@ -106,6 +106,11 @@ namespace ClearDashboard.Wpf.ViewModels
             //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
+        public void ProjectWorkspace(DashboardProject project)
+        {
+            NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+        }
+
         public void Workspace(DashboardProject project)
         {
             //if (project is null)
@@ -128,9 +133,9 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager.CurrentDashboardProject = project;
             
 
-            //NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
 
-             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+             //NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
 
         public void Settings()

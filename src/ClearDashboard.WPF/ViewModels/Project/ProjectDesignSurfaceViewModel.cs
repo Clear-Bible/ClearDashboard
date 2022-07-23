@@ -16,7 +16,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public ProjectDesignSurfaceViewModel(INavigationService navigationService, ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "ProjectDesignSurface";
+            Title = "PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
         }
     }
