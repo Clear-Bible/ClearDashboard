@@ -122,6 +122,35 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__CreateUsingHandler()
+    {
+        try
+        {
+            var sourceCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, targetCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            Assert.Equal(15, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
+            Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 15);
+            Assert.True(parallelTokenizedCorpus.TargetCorpus.Count() == 15);
+
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
     public async void ParallelCorpus__Error_Case()
     {
         try

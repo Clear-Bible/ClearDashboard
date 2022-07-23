@@ -1,10 +1,11 @@
-﻿using System.Data.Entity;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 
@@ -41,27 +42,99 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //2. associated source and target TokenizedCorpusId
 
             var parallelCorpus =
-                await ProjectDbContext.ParallelCorpa
+                ProjectDbContext.ParallelCorpa
+                    .Include(pc => pc.SourceTokenizedCorpus)
+                    .Include(pc => pc.TargetTokenizedCorpus)
                     .Include(pc => pc.VerseMappings)
-                    .FirstOrDefaultAsync(pc => pc.Id == request.ParallelCorpusId.Id,
-                        cancellationToken);
+                    .ThenInclude(vm => vm.VerseMappingVerseAssociations)
+                    .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
-            //var verseMappings = parallelCorpus.VerseMappings.Select(vm=>new Verse(vm.))
+            var invalidArgMsg = "";
+            if (parallelCorpus == null)
+            {
+                invalidArgMsg = $"ParallelCorpus not found for ParallelCorpusId {request.ParallelCorpusId.Id}";
+            }
 
+            if (parallelCorpus!.SourceTokenizedCorpus == null || parallelCorpus.TargetTokenizedCorpus == null)
+            {
+                invalidArgMsg = $"ParallelCorpus {request.ParallelCorpusId.Id} has null source or target tokenized corpus";
+            }
 
-            return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+            if (!string.IsNullOrEmpty(invalidArgMsg))
+            {
+                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                     TokenizedCorpusId targetTokenizedCorpusId,
                     IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
-                (result: (new TokenizedCorpusId(new Guid()),
-                        new TokenizedCorpusId(new Guid()),
-                        new List<VerseMapping>() {
-                            new VerseMapping(
-                                new List<Verse>() {new Verse("MAT", 1, 1)},
-                                new List<Verse>() {new Verse("MAT", 1, 1) })},
-                        new ParallelCorpusId(new Guid())),
-                    success: true,
-                    message: "successful result from test");
+                (
+                    success: false,
+                    message: invalidArgMsg
+                );
+            }
+
+            var bookIdsToAbbreviations =
+                FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
+
+            var sourceCorpusId = parallelCorpus.SourceTokenizedCorpus!.CorpusId;
+            var targetCorpusId = parallelCorpus.TargetTokenizedCorpus!.CorpusId;
+
+            // FIXME:  handle TokenVerseAssociations!
+
+            try
+            {
+                var verseMappings = parallelCorpus.VerseMappings
+                    .Where(vm => vm.VerseMappingVerseAssociations != null)
+                    .Select(vm =>
+                    {
+                        var sourceVerses = vm.VerseMappingVerseAssociations!
+                            .Where(vma => vma.Verse != null && vma.Verse.CorpusId == sourceCorpusId)
+                            .Select(vma => ValidateBuildVerse(vma.Verse!, bookIdsToAbbreviations));
+                        var targetVerses = vm.VerseMappingVerseAssociations!
+                            .Where(vma => vma.Verse != null && vma.Verse.CorpusId == targetCorpusId)
+                            .Select(vma => ValidateBuildVerse(vma.Verse!, bookIdsToAbbreviations));
+
+                        return new VerseMapping(sourceVerses, targetVerses);
+                    });
+
+
+                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+                        TokenizedCorpusId targetTokenizedCorpusId,
+                        IEnumerable<VerseMapping> verseMappings,
+                        ParallelCorpusId parallelCorpusId)>
+                    ((
+                        new TokenizedCorpusId(parallelCorpus.SourceTokenizedCorpusId),
+                        new TokenizedCorpusId(parallelCorpus.TargetTokenizedCorpusId),
+                        verseMappings,
+                        new ParallelCorpusId(parallelCorpus.Id)
+                    ));
+
+            }
+            catch (NullReferenceException e)
+            {
+                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
+                        TokenizedCorpusId targetTokenizedCorpusId,
+                        IEnumerable<VerseMapping> verseMappings,
+                        ParallelCorpusId parallelCorpusId)>
+                (
+                    success: false,
+                    message: e.Message
+                );
+            }
+        }
+
+        private Verse ValidateBuildVerse(Models.Verse verse, Dictionary<int, string> bookIdsToAbbreviations)
+        {
+            string? bookAbbreviation;
+            if (verse.BookNumber == null || verse.ChapterNumber == null || verse.VerseNumber == null)
+            {
+                throw new NullReferenceException($"Source verse {verse.Id} in database has null book, chapter or verse number.  Unable to convert to engine Verse");
+            }
+            else if (!bookIdsToAbbreviations.TryGetValue((int)verse.BookNumber, out bookAbbreviation))
+            {
+                throw new NullReferenceException($"Source verse {verse.Id} in database has unknown book number {verse.BookNumber}.  Unable to determine book abbreviation in order to convert to engine Verse");
+            }
+
+            return new Verse((string)bookAbbreviation, (int)verse.ChapterNumber, (int)verse.VerseNumber);
         }
     }
 }
