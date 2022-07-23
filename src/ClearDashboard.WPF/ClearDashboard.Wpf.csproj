@@ -594,6 +594,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Page Update="Views\Popups\RegistrationDialogView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Popups\RegistrationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
 	  <Page Update="Views\Popups\NewProjectAddCorporaView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
@@ -601,6 +607,12 @@
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Workflows\Registration\RegistrationStepView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Workflows\Registration\RegistrationWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
 	</ItemGroup>

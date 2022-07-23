@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region   Member Variables
         
         protected IWindowManager _windowManager;
-        
+
         #endregion
 
         #region Observable Objects
@@ -52,6 +52,8 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
         }
+
+        
 
         protected override void OnViewAttached(object view, object context)
         { base.OnViewAttached(view, context);

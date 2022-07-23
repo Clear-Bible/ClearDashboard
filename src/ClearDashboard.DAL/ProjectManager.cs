@@ -256,9 +256,19 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
+            try
+            {
+                var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
+                projectAssets.ProjectDbContext.Users.Add(CurrentUser);
+                projectAssets.ProjectDbContext.Projects.Add(
+                    new Project() { ProjectName = dashboardProject.ProjectName });
+                await projectAssets.ProjectDbContext.SaveChangesAsync();
 
-
-            var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message);
+            }
             // Populate Project table
             // Identify relationships
             //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds

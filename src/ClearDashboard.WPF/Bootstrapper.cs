@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using ClearDashboard.Wpf.Validators;
+using FluentValidation;
 using SIL.Extensions;
 
 
@@ -60,8 +62,8 @@ namespace ClearDashboard.Wpf
         {
             FrameSet = serviceCollection.AddCaliburnMicro();
             serviceCollection.AddClearDashboardDataAccessLayer();
-            //serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
-            serviceCollection.AddScoped<FluentValidation.IValidator<Project>, ProjectValidator>();
+            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+            //serviceCollection.AddScoped<FluentValidation.IValidator<Project>, ProjectValidator>();
             serviceCollection.AddLogging();
             serviceCollection.AddLocalization();
         }
