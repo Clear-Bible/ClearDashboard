@@ -228,10 +228,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         }
 
 
-
         private async void Initialize()
         {
-            
             Items.Clear();
             // documents
             await ActivateItemAsync<AlignmentViewModel>();
@@ -275,6 +273,21 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         private void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
         {
+           
+            layoutSerializer.LayoutSerializationCallback += (_, e) =>
+            {
+                if (e.Model.ContentId is not null)
+                {
+                   
+
+                    var item = Items.Cast<IAvalonDockWindow>()
+                        .FirstOrDefault(item => item.ContentId == e.Model.ContentId);
+
+                    e.Content = item;
+                  
+                }
+            };
+
             try
             {
                 layoutSerializer.Deserialize(filePath);
@@ -295,13 +308,11 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
 
             // save to settings
-            Settings.Default.LastProjectLayout = filePath;
+            Settings.Default.LastLayout = filePath;
             _lastLayout = filePath;
         }
 
- 
 
- 
 
         public static class WorkspaceLayoutNames
         {
