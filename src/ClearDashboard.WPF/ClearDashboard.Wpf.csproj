@@ -597,6 +597,9 @@
 	  <Page Update="Views\Popups\NewProjectAddCorporaView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
+	  <Page Update="Views\Project\NewProjectDialogView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>

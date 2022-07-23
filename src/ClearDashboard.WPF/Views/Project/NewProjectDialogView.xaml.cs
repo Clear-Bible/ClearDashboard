@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.Wpf.UserControls;
 
-namespace ClearDashboard.Wpf.Views.Popups
+namespace ClearDashboard.Wpf.Views.Project
 {
     /// <summary>
     /// Interaction logic for NewProjectDialogView.xaml

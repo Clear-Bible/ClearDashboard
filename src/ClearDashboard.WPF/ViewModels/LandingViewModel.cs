@@ -15,6 +15,7 @@ using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
+using NewProjectDialogViewModel = ClearDashboard.Wpf.ViewModels.Project.NewProjectDialogViewModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -95,7 +96,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var projectName = newProjectPopupViewModel.ProjectName;
 
                 await ProjectManager.CreateNewProject(projectName);
-                //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
+                NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
             }
 
         }

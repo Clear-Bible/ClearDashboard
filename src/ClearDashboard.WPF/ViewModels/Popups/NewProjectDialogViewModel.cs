@@ -43,8 +43,8 @@ public class NewProjectDialogViewModel : WorkflowShellViewModel
 
         Steps.Add(_newProjectViewModel);
 
-        var step2 = ServiceProvider.GetService<NewProjectAddCorporaViewModel>();
-        Steps.Add(step2);
+        //var step2 = ServiceProvider.GetService<NewProjectAddCorporaViewModel>();
+        //Steps.Add(step2);
 
         CurrentStep = Steps[0];
 

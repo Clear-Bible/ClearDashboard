@@ -1,9 +1,10 @@
-﻿<popups:CustomWindow  x:Class="ClearDashboard.Wpf.Views.Popups.NewProjectDialogView"
+﻿<userControls:CustomWindow  x:Class="ClearDashboard.Wpf.Views.Popups.NewProjectDialogView"
                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
+               xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
                mc:Ignorable="d"
                FlowDirection="{Binding WindowFlowDirection}"
                FontFamily="{DynamicResource MaterialDesignFont}"
@@ -19,14 +20,14 @@
                d:DataContext="{d:DesignInstance Type=popups:NewProjectDialogViewModel,
                                      IsDesignTimeCreatable=True}"
                Title="{Binding DialogTitle, Mode=TwoWay}">
-    <popups:CustomWindow.Resources>
+    <userControls:CustomWindow.Resources>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}"></Setter>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,10" />
             <Setter Property="FontSize" Value="24"></Setter>
         </Style>
-    </popups:CustomWindow.Resources>
+    </userControls:CustomWindow.Resources>
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -45,4 +46,4 @@
             </StackPanel>
     
     </Grid>
-</popups:CustomWindow>
+</userControls:CustomWindow>
