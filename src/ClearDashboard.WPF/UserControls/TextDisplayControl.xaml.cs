@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,10 +21,34 @@ namespace ClearDashboard.Wpf.UserControls
     /// </summary>
     public partial class TextDisplayControl : UserControl
     {
-        public List<string> Words { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
+        /// <summary>
+        /// Identifies the Words dependency property.
+        /// </summary>
+        public static readonly DependencyProperty WordsProperty = DependencyProperty.Register("Words", typeof(IEnumerable), typeof(TextDisplayControl));
 
-        public Orientation Orientation { get; set; } = Orientation.Horizontal;
-        
+        /// <summary>
+        /// Gets or sets the words to display in the control.
+        /// </summary>
+        public IEnumerable Words
+        {
+            get => (IEnumerable)GetValue(WordsProperty);
+            set => SetValue(WordsProperty, value);
+        }
+        //public List<string> Words { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
+        /// <summary>
+        /// Identifies the Orientation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TextDisplayControl));
+
+        /// <summary>
+        /// Gets or sets the orientation for text display.
+        /// </summary>
+        public Orientation Orientation
+        {
+            get => (Orientation) GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
+        }
+
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
@@ -56,6 +81,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
 
+        
         public TextDisplayControl()
         {
             InitializeComponent();
