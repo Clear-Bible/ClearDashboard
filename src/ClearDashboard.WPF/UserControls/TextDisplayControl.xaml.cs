@@ -85,7 +85,7 @@ namespace ClearDashboard.Wpf.UserControls
         public TextDisplayControl()
         {
             InitializeComponent();
-            DataContext = this;
+            //DataContext = this;
         }
     }
 }
