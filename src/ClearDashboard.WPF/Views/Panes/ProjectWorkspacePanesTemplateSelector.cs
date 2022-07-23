@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using AvalonDock.Layout;
-using ViewModels.Project;
+using ClearDashboard.Wpf.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Views.Panes;
 

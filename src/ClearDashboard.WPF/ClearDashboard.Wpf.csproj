@@ -58,6 +58,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Caliburn.Micro" Version="4.0.210" />
+		<PackageReference Include="ClearBible.Engine" Version="1.0.7" />
 		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.1" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.1" />
@@ -140,6 +141,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
@@ -589,10 +591,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Page Update="Views\Popups\RegistrationDialogView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Popups\RegistrationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
 	  <Page Update="Views\Popups\NewProjectAddCorporaView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Workflows\Registration\RegistrationStepView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Workflows\Registration\RegistrationWorkflowShellView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
 	</ItemGroup>

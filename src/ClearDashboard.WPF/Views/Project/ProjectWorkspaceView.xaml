@@ -5,10 +5,18 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Views"
       xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
+      xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
+      xmlns:system="clr-namespace:System;assembly=System.Runtime"
+      xmlns:project="clr-namespace:Views.Project"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProjectWorkspace">
-
+    <Page.Resources>
+        <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
+        <system:Boolean x:Key="TRUE">True</system:Boolean>
+        <system:Boolean x:Key="FALSE">False</system:Boolean>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
     <Grid>
         <DockingManager
             x:Name="dockManager"
@@ -20,8 +28,23 @@
             Theme="{Binding SelectedTheme.Item2}">
             <DockingManager.LayoutItemTemplateSelector>
                 <panes:ProjectWorkspacePanesTemplateSelector>
-                    </panes:ProjectWorkspacePanesTemplateSelector>
-                    </DockingManager.LayoutItemTemplateSelector>
+                    <panes:ProjectWorkspacePanesTemplateSelector.AlignmentViewDataTemplate>
+                        <DataTemplate>
+                            <project:AlignmentView />
+                        </DataTemplate>
+                    </panes:ProjectWorkspacePanesTemplateSelector.AlignmentViewDataTemplate>
+                    <panes:ProjectWorkspacePanesTemplateSelector.CorpusViewDataTemplate>
+                        <DataTemplate>
+                            <project:CorpusView />
+                        </DataTemplate>
+                    </panes:ProjectWorkspacePanesTemplateSelector.CorpusViewDataTemplate>
+                    <panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
+                        <DataTemplate>
+                            <project:ProjectDesignSurfaceView />
+                        </DataTemplate>
+                    </panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
+                </panes:ProjectWorkspacePanesTemplateSelector>
+            </DockingManager.LayoutItemTemplateSelector>
 
             <DockingManager.LayoutItemContainerStyleSelector>
                 <panes:PanesStyleSelector>

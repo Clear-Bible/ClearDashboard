@@ -25,8 +25,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -34,11 +32,8 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
-
-        #nullable disable
-        private readonly IEventAggregator EventAggregator;
-
         #region Member Variables
+        private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
         private ILogger<WorkSpaceViewModel> Logger { get; }
         private INavigationService NavigationService { get; }
