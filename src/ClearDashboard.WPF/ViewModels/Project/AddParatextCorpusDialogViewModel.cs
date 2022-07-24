@@ -83,4 +83,10 @@ public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddP
     {
         await TryCloseAsync(true);
     }
+
+    public bool CanCancel => true /* can always cancel */;
+    public async void Cancel()
+    {
+       await TryCloseAsync(false);
+    }
 }

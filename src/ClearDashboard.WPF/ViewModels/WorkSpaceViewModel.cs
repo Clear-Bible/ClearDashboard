@@ -541,7 +541,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 var files = Directory.GetFiles(path, "*.Layout.config");
 
-                foreach (var file in files)
+                foreach (var file in files.Where(f=>!f.StartsWith("Project")))
                 {
                     FileInfo fileInfo = new FileInfo(file);
                     string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);

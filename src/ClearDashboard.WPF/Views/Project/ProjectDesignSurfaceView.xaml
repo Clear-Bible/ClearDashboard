@@ -54,8 +54,11 @@
         </Grid.RowDefinitions>
         <materialDesign:Card Background="{DynamicResource PrimaryHueMidBrush}"
                              Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                             Padding="10"
-                             UniformCornerRadius="10">
+                             Padding="5"
+                             Margin="5"
+                             UniformCornerRadius="5"
+                             BorderBrush="Black"
+                             BorderThickness="5">
             <StackPanel Grid.Row ="0" MinWidth="400">
                 <Label Content="Add Corpora" Margin="5, 5, 0,5" FontSize="16"></Label>
                 <WrapPanel >
@@ -90,9 +93,13 @@
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
-        <Canvas x:Name="DesignSurface" Grid.Row="1" Background="AliceBlue">
+        <Border  Grid.Row="1" Background="Transparent" BorderThickness="5" BorderBrush="Black">
+        <Canvas x:Name="DesignSurface" 
+                Grid.Row="1" 
+                
+                >
            
         </Canvas>
-       
+        </Border>
     </Grid>
 </UserControl>

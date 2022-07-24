@@ -16,7 +16,9 @@ using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
 using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
+using Point = System.Drawing.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
@@ -71,27 +73,41 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             _designSurfaceCanvas.Children.Clear();
             foreach (var corpus in Copora)
             {
-                var rectangle = new Rectangle()
+                //var rectangle = new Rectangle()
+                //{
+                //    //Content = corpus.Name,
+                //    Width = 300,
+                //    Height = 100,
+                //    Fill = Application.Current.FindResource("OrangeMidBrush") as Brush,
+                //    RadiusX = 3,
+                //    RadiusY = 3,
+                //    Effect = new DropShadowEffect
+                //    {
+                //        BlurRadius = 5,
+                //        ShadowDepth = 2,
+                //        Opacity = 0.75
+                //    },
+                //    Visibility = Visibility.Visible
+
+
+
+                //};
+                //Canvas.SetTop(rectangle, 10.0);
+                //Canvas.SetLeft(rectangle, 10.0);
+                //_designSurfaceCanvas.Children.Add(rectangle);
+
+                var txt2 = new TextBlock
                 {
-                    //Content = corpus.Name,
-                    Width = 300,
-                    Height = 100,
-                    Fill = Application.Current.FindResource("OrangeMidBrush") as Brush,
-                    RadiusX = 3,
-                    RadiusY = 3,
-                    Effect = new DropShadowEffect
-                    {
-                        BlurRadius = 5,
-                        ShadowDepth = 2,
-                        Opacity = 0.75
-                    }
-
-
-
+                    FontSize = 22,
+                    Text = corpus.Name,
+                    Foreground = Brushes.Orange,
+                    Width = 100,
+                    Height = 50
                 };
-                Canvas.SetTop(rectangle, 10.0);
-                Canvas.SetLeft(rectangle, 10.0);
-                _designSurfaceCanvas.Children.Add(rectangle);
+                Canvas.SetTop(txt2, _designSurfaceCanvas.Height / 2);
+                Canvas.SetLeft(txt2, _designSurfaceCanvas.Width / 2);
+                _designSurfaceCanvas.Children.Add(txt2);
+               
             }
         }
 

@@ -25,6 +25,7 @@
           WindowStartupLocation="CenterOwner"
           helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
           Background="{DynamicResource Transparent}"
+          Foreground="{DynamicResource MaterialDesignPaper}"
           AllowsTransparency="True"
           WindowStyle="None"
           d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
@@ -52,6 +53,10 @@
             <Setter Property="FontSize" Value="24"></Setter>
         </Style>
 
+        <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"></Setter>
+        </Style>
+
         <!--<Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignLightRadioButton}">
             <Setter Property="Margin" Value="0, 0, 5,0" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
@@ -62,31 +67,43 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </Window.Resources>
 
+    <Border CornerRadius="25" 
+            BorderBrush="{DynamicResource MaterialDesignDarkBackground}" 
+            BorderThickness="2" 
+            Padding="6" 
+            Background="Black">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-      
-        <StackPanel Grid.Row="0" Orientation="Vertical">
-            <Label Content="Select Paratext Corpus"></Label>
-        </StackPanel>
-        <ComboBox Margin="10,10" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" Grid.Row="1">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="10" Text="{Binding CorpusTypeDisplay}"></TextBlock>
-                        <TextBlock FontSize="16" Text="{Binding Name}"></TextBlock>
-                        <TextBlock FontSize="10" Text="{Binding LongName}"></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
-            <Button x:Name="Ok" Content="OK" Margin="5 5 5 5" />
-            <Button x:Name="Cancel" Content="CANCEL" Margin="5 5 5 5" />
-        </StackPanel>
-    </Grid>
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <Label Content="Select Paratext Corpus"></Label>
+            </StackPanel>
+            <ComboBox Grid.Row="1" 
+                      Margin="10,0" 
+                      VerticalAlignment="Top"
+                     
+                     
+                      ItemsSource="{Binding Projects}" 
+                      SelectedItem="{Binding SelectedProject}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}"></TextBlock>
+                            <TextBlock FontSize="24" Text="{Binding Name}"></TextBlock>
+                            <TextBlock FontSize="12" Text="{Binding LongName}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+           
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
+                <Button x:Name="Ok" Content="OK" Margin="5 5 5 5" />
+                <Button x:Name="Cancel" Content="CANCEL" Margin="5 5 5 5" />
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

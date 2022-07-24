@@ -308,7 +308,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
 
             // save to settings
-            Settings.Default.LastLayout = filePath;
+            Settings.Default.LastProjectLayout = filePath;
             _lastLayout = filePath;
         }
 
