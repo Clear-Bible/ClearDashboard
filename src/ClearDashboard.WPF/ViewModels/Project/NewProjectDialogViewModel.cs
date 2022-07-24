@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using FluentValidation;
 using FluentValidation.Results;
@@ -27,17 +29,34 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
 
             //Title = "Create New Project";
-            DisplayName = "**** Create New Project";
-
+            //DisplayName = "**** Create New Project";
+            ////DialogTitle = string.Empty; ;
+            //ProjectName = null;
             Project = new DataAccessLayer.Models.Project();
         }
 
-        private string _dialogTitle;
-        public string DialogTitle
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            get => _dialogTitle;
-            set => Set(ref _dialogTitle, string.IsNullOrEmpty(value) ? "Create New Project" : $"Create New Project: {value}");
+            if (!ProjectManager.HasDashboardProject)
+            {
+                ProjectManager.CreateDashboardProject();
+            }
+
+            //Title = "Create New Project";
+            DisplayName = "**** Create New Project";
+            //DialogTitle = string.Empty; ;
+            ProjectName = null;
+           // Project = new DataAccessLayer.Models.Project();
+            return base.OnInitializeAsync(cancellationToken);
         }
+
+        private string _dialogTitle;
+
+        public string DialogTitle => "Create New Project";//string.IsNullOrEmpty(_projectName) ? "Create New Project" : $"Create New Project: {_projectName}";
+        //{
+        //    get => _dialogTitle;
+        //    set => Set(ref _dialogTitle, string.IsNullOrEmpty(value) ? "Create New Project" : $"Create New Project: {_projectName}");
+        //}
 
         private DataAccessLayer.Models.Project _project;
         public DataAccessLayer.Models.Project Project
@@ -58,6 +77,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 ValidationResult = Validator.Validate(Project);
                 CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
                 NotifyOfPropertyChange(nameof(Project));
+                NotifyOfPropertyChange(nameof(DialogTitle));
 
             }
         }

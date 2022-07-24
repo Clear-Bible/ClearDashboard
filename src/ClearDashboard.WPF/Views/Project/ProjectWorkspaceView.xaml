@@ -9,6 +9,7 @@
       xmlns:system="clr-namespace:System;assembly=System.Runtime"
       xmlns:project="clr-namespace:Views.Project"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:project1="clr-namespace:ClearDashboard.Wpf.Views.Project"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProjectWorkspace">
@@ -70,7 +71,7 @@
                     </panes:ProjectWorkspacePanesTemplateSelector.CorpusViewDataTemplate>
                     <panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
                         <DataTemplate>
-                            <project:ProjectDesignSurfaceView />
+                            <project1:ProjectDesignSurfaceView />
                         </DataTemplate>
                     </panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
                 </panes:ProjectWorkspacePanesTemplateSelector>

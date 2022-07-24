@@ -17,6 +17,8 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     WindowStartupLocation="CenterOwner"
+    Background="{DynamicResource MaterialDesign}"
+    Foreground="{DynamicResource PrimaryHueDarkBrush}"
     mc:Ignorable="d">
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
