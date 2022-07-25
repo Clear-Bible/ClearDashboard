@@ -30,9 +30,8 @@ namespace ClearDashboard.DAL.Tests
 
             foreach (var project in results.Data)
             {
-                Output.WriteLine($"{project.Name} :: {project.LongName}");
+                Output.WriteLine($"{project.Name} :: {project.Type} :: {project.LongName}");
                 Output.WriteLine($"   ID: {project.Guid}");
-                Output.WriteLine($"{project.Name},  {project.Type}");
             }
         }
 
