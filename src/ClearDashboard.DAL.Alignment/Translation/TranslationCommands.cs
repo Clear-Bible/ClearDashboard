@@ -124,8 +124,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             EngineParallelTextCorpus parallelCorpus, 
             IWordAlignmentModel smtTrainedWordAlignmentModel, 
             SyntaxTreeWordAlignerHyperparameters hyperparameters,
-            string syntaxTreesPath,
-            IProgress<ProgressStatus>? progress = null)
+            IProgress<ProgressStatus>? progress = null,
+            string? syntaxTreesPath = null
+            )
         {
             var manuscriptTree = new SyntaxTrees(syntaxTreesPath);
 

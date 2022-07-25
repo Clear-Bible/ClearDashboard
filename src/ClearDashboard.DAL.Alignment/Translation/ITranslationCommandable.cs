@@ -40,15 +40,15 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="parallelCorpus"></param>
         /// <param name="smtTrainedWordAlignmentModel"></param>
         /// <param name="progress"></param>
-        /// <param name="syntaxTreesPath"></param>
         /// <param name="fileGetSyntaxTreeWordAlignerHyperparametersLocation"></param>
+        /// <param name="syntaxTreesPath"></param>
         /// <returns></returns>
         Task<SyntaxTreeWordAlignmentModel> TrainSyntaxTreeModel(
             EngineParallelTextCorpus parallelCorpus,
             IWordAlignmentModel smtTrainedWordAlignmentModel,
             SyntaxTreeWordAlignerHyperparameters hyperparameters,
-            string syntaxTreesPath,
-            IProgress<ProgressStatus>? progress = null);
+            IProgress<ProgressStatus>? progress = null,
+            string? syntaxTreesPath = null);
 
         /// <summary>
         /// Used to predict the alignments for all engine parallel verses.

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
@@ -13,6 +15,7 @@ using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using Xunit;
 using Xunit.Abstractions;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
@@ -20,6 +23,28 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
     {
         public CorpusTests(ITestOutputHelper output) : base(output)
         {
+        }
+
+        [Fact]
+        public void SyntaxTrees_Read()
+        {
+            try
+            {
+                var syntaxTree = new SyntaxTrees();
+                var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree);
+
+                // now get the first 5 verses
+                foreach (var tokensTextRow in sourceCorpus.Cast<TokensTextRow>().Take(5))
+                {
+                    var sourceVerseText = string.Join(" ", tokensTextRow.Segment);
+                    Output.WriteLine($"Source: {sourceVerseText}");
+                }
+            }
+            catch (EngineException eex)
+            {
+                Output.WriteLine(eex.ToString());
+                throw eex;
+            }
         }
 
         [Fact]
@@ -87,6 +112,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
             var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator, corpusIds.First());
             Assert.True(tokenizedCorpusIds.Count() > 0);
+        }
+
+        [Fact]
+        [Trait("Category", "Example")]
+        public void Corpus__BookTest()
+        {
+            Output.WriteLine(BookIds
+                .Where(b => b.silCannonBookAbbrev.Equals("1JN"))
+                .Select(b => b.silCannonBookNum)
+                .First());
         }
 
         [Fact]
