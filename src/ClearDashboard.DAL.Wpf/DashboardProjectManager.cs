@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +24,7 @@ public record TextCollectionChangedMessage(List<TextCollection> TextCollections)
 
 public record ParatextConnectedMessage(bool Connected);
 
-public record ParatextUserMessage(string ParatextUserName);
+public record UserMessage(User user);
 
 public record LogActivityMessage(string message);
 
@@ -35,9 +37,14 @@ public class DashboardProjectManager : ProjectManager
     protected HubConnection HubConnection { get; private set; }
     protected IHubProxy HubProxy { get; private set; }
 
-    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
+    private readonly IWindowManager _windowManager;
+
+    private bool _licenseCleared = false;
+
+    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory, IWindowManager windowManager) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
     {
         EventAggregator = eventAggregator;
+        _windowManager = windowManager;
     }
     public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
@@ -67,6 +74,8 @@ public class DashboardProjectManager : ProjectManager
                 HubConnection.Closed += HandleSignalRConnectionClosed;
                 HubConnection.Error += HandleSignalRConnectionError;
                 await PublishSignalRConnected(true);
+
+                CurrentUser = await GetUser();
 
             }
         }
@@ -124,9 +133,9 @@ public class DashboardProjectManager : ProjectManager
         await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
     }
 
-    protected override async Task PublishParatextUser(string paratextUserName)
+    protected override async Task PublishParatextUser(User user)
     {
-        await EventAggregator.PublishOnUIThreadAsync(new ParatextUserMessage(paratextUserName));
+        await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
     }
 
     protected  async Task HookSignalREvents()
@@ -154,4 +163,58 @@ public class DashboardProjectManager : ProjectManager
 
         await Task.CompletedTask;
     }
+
+    public void CheckLicense <TViewModel>(TViewModel viewModel)
+        {
+            if (!_licenseCleared)
+            {
+                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
+                if (File.Exists(filePath))
+                {
+                    try
+                    {
+                        var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
+                        var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                        if (decryptedLicenseUser != null)
+                        {
+                            CurrentUser = new User
+                            {
+                                FirstName = decryptedLicenseUser.FirstName,
+                                LastName = decryptedLicenseUser.LastName,
+                                Id = Guid.Parse(decryptedLicenseUser.Id)
+                            };
+
+                        }
+
+                        _licenseCleared = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("There was an issue decrypting your license key.");
+                        PopupRegistration(viewModel);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Your license key file is missing.");
+                    PopupRegistration(viewModel);
+                }
+            }
+        }
+
+        private void PopupRegistration <TViewModel>(TViewModel viewModel)
+        {
+            Logger.LogInformation("Registration called.");
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
+            settings.ShowInTaskbar = false;
+            settings.Title = "License Registration";
+            settings.WindowState = WindowState.Normal;
+            settings.ResizeMode = ResizeMode.NoResize;
+
+            var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
+            _licenseCleared = true;
+        }
 }

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
 using MediatR;
@@ -16,9 +17,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetTokensByTokenizedCorpusIdAndBookIdQueryHandler : IRequestHandler<
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
-        RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+        RequestResult<IEnumerable<VerseTokens>>>
     {
-        public Task<RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>>
+        public Task<RequestResult<IEnumerable<VerseTokens>>>
             Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
         {
             //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
@@ -44,11 +45,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
                             .First().IsSentenceStart
                     })
                 )
-                .Select(cvts => (cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart));
+                .Select(cvts => new VerseTokens(cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart));
 
 
             return Task.FromResult(
-                new RequestResult<IEnumerable<(string chapter, string verse, IEnumerable<Token> tokens, bool isSentenceStart)>>
+                new RequestResult<IEnumerable<VerseTokens>>
                 (result: chapterVerseTokens,
                 success: true,
                 message: "successful result from test"));

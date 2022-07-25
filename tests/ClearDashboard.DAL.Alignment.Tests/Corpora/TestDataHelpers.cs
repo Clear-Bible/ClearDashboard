@@ -19,6 +19,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
         public static readonly string GreekNTUsfmTestProjectPath =
             Path.Combine(TestDataPath, "usfm", "nestle1904");
 
+        public static readonly string GreekNTUsfmFullTestProjectPath =
+            Path.Combine(TestDataPath, "usfm", "nestle1904Full");
+
+
         public static ITextCorpus GetSampleTextCorpus()
         {
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, UsfmTestProjectPath)
@@ -29,6 +33,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
         public static ITextCorpus GetSampleGreekCorpus()
         {
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmTestProjectPath)
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>();
+        }
+
+        public static ITextCorpus GetFullGreekNTCorpus()
+        {
+            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmFullTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>();
         }
