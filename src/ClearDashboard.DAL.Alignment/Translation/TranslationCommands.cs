@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
