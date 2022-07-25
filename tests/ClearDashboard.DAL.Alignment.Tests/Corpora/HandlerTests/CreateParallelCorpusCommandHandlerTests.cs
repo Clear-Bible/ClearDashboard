@@ -62,8 +62,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var verseMappings = new List<VerseMapping>()
             {
                 new VerseMapping(
-                    new List<Verse>() { new Verse("Jms", 1, 1) },
-                    new List<Verse>() { new Verse("Jms", 1, 1) }
+                    new List<Verse>() { new Verse("Jas", 1, 1) },
+                    new List<Verse>() { new Verse("Jas", 1, 1) }
                 )
             };
 
@@ -161,8 +161,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var verseMappings = new List<VerseMapping>()
             {
                 new VerseMapping(
-                    new List<Verse>() { new Verse("Jms", 1, 1) },
-                    new List<Verse>() { new Verse("Jms", 1, 1) }
+                    new List<Verse>() { new Verse("Jas", 1, 1) },
+                    new List<Verse>() { new Verse("Jas", 1, 1) }
                 )
             };
 
@@ -173,8 +173,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             Assert.NotNull(result);
             Assert.False(result.Success);
-            Assert.Equal("An error occurred while saving the entity changes. See the inner exception for details.",
-                result.Message);
+            Assert.Contains("SourceTokenizedCorpus not found for TokenizedCorpusId", result.Message);
             Assert.Null(result.Data);
         }
         finally

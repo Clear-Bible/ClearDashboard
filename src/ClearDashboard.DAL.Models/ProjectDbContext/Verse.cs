@@ -23,7 +23,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public Guid? CorpusId { get; set; }
         public virtual Corpus? Corpus { get; set; }
-
+        public Guid? VerseMappingId { get; set; }
+        public VerseMapping? VerseMapping { get; set; }
 
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
 

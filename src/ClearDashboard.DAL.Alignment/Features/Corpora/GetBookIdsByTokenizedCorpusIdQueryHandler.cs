@@ -53,14 +53,14 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         }
 
         var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
-        var bookIdsToAbbreviations =
+        var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
 
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
         {
-            if (!bookIdsToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
+            if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
                 return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
                 (

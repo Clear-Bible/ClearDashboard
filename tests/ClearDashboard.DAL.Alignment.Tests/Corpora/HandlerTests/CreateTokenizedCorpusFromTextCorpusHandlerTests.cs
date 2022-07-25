@@ -199,7 +199,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 .Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1)
                 .OrderBy(t => t.WordNumber);
             Assert.Equal(9, matthewCh1V1Tokens.Count());
-            Assert.Equal("Βίβλος", matthewCh1V1Tokens.First().Text);
+            Assert.Equal("Βίβλος", matthewCh1V1Tokens.First().SurfaceText);
         }
         finally
         {

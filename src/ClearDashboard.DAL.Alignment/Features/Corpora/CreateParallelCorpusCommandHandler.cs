@@ -59,43 +59,64 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 TargetTokenizedCorpus = targetTokenizedCorpus
             };
 
-            var bookAbbreviationsToIds =
-                FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum));
+            var bookAbbreviationsToNumbers =
+                FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
 
             // FIXME:  handle TokenVerseAssociations!
 
-            parallelCorpusModel.VerseMappings.AddRange(request.VerseMappings
-                .Select(vm =>
-                {
-                    var verseMapping = new Models.VerseMapping
+            try
+            {
+                parallelCorpusModel.VerseMappings.AddRange(request.VerseMappings
+                    .Select(vm =>
                     {
-                        ParallelCorpus = parallelCorpusModel
-                    };
-                    verseMapping.VerseMappingVerseAssociations.AddRange(vm.SourceVerses
-                        .Select(v => new Models.VerseMappingVerseAssociation
+                        var verseMapping = new Models.VerseMapping
                         {
-                            Verse = new Models.Verse
-                            {
-                                VerseNumber = v.VerseNum,
-                                BookNumber = bookAbbreviationsToIds[v.Book],
-                                ChapterNumber = v.ChapterNum,
-                                CorpusId = sourceTokenizedCorpus!.CorpusId
+                            ParallelCorpus = parallelCorpusModel
+                        };
+                        verseMapping.Verses.AddRange(vm.SourceVerses
+                            .Select(v => {
+                                int bookNumber;
+                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out bookNumber))
+                                {
+                                    throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
+                                }
+                                return new Models.Verse
+                                {
+                                    VerseNumber = v.VerseNum,
+                                    BookNumber = bookNumber,
+                                    ChapterNumber = v.ChapterNum,
+                                    CorpusId = sourceTokenizedCorpus!.CorpusId
+                                };
                             }
-                        }));
-                    verseMapping.VerseMappingVerseAssociations.AddRange(vm.TargetVerses
-                        .Select(v => new Models.VerseMappingVerseAssociation
-                        {
-                            Verse = new Models.Verse
-                            {
-                                VerseNumber = v.VerseNum,
-                                BookNumber = bookAbbreviationsToIds[v.Book],
-                                ChapterNumber = v.ChapterNum,
-                                CorpusId = targetTokenizedCorpus!.CorpusId
+                            ));
+                        verseMapping.Verses.AddRange(vm.TargetVerses
+                            .Select(v => {
+                                int bookNumber;
+                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out bookNumber))
+                                {
+                                    throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
+                                }
+                                return new Models.Verse
+                                {
+                                    VerseNumber = v.VerseNum,
+                                    BookNumber = bookNumber,
+                                    ChapterNumber = v.ChapterNum,
+                                    CorpusId = targetTokenizedCorpus!.CorpusId
+                                };
                             }
-                        }));
-                    return verseMapping;
-                })
-            );
+                            ));
+                        return verseMapping;
+                    })
+                );
+            }
+            catch (NullReferenceException e)
+            {
+                return new RequestResult<ParallelCorpus>
+                (
+                    success: false,
+                    message: e.Message
+                );
+            }
 
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
             await ProjectDbContext.SaveChangesAsync();

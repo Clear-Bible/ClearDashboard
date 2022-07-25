@@ -8,7 +8,6 @@ using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -46,7 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Include(pc => pc.SourceTokenizedCorpus)
                     .Include(pc => pc.TargetTokenizedCorpus)
                     .Include(pc => pc.VerseMappings)
-                    .ThenInclude(vm => vm.VerseMappingVerseAssociations)
+                    .ThenInclude(vm => vm.Verses)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -72,7 +71,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            var bookIdsToAbbreviations =
+            var bookNumbersToAbbreviations =
                 FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
 
             var sourceCorpusId = parallelCorpus.SourceTokenizedCorpus!.CorpusId;
@@ -83,15 +82,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             try
             {
                 var verseMappings = parallelCorpus.VerseMappings
-                    .Where(vm => vm.VerseMappingVerseAssociations != null)
+                    .Where(vm => vm.Verses != null)
                     .Select(vm =>
                     {
-                        var sourceVerses = vm.VerseMappingVerseAssociations!
-                            .Where(vma => vma.Verse != null && vma.Verse.CorpusId == sourceCorpusId)
-                            .Select(vma => ValidateBuildVerse(vma.Verse!, bookIdsToAbbreviations));
-                        var targetVerses = vm.VerseMappingVerseAssociations!
-                            .Where(vma => vma.Verse != null && vma.Verse.CorpusId == targetCorpusId)
-                            .Select(vma => ValidateBuildVerse(vma.Verse!, bookIdsToAbbreviations));
+                        var sourceVerses = vm.Verses!
+                            .Where(v => v.CorpusId == sourceCorpusId)
+                            .Select(v => ValidateBuildVerse(v, bookNumbersToAbbreviations));
+                        var targetVerses = vm.Verses!
+                            .Where(v => v.CorpusId == targetCorpusId)
+                            .Select(v => ValidateBuildVerse(v, bookNumbersToAbbreviations));
 
                         return new VerseMapping(sourceVerses, targetVerses);
                     });
@@ -107,7 +106,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         verseMappings,
                         new ParallelCorpusId(parallelCorpus.Id)
                     ));
-
             }
             catch (NullReferenceException e)
             {
@@ -122,14 +120,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
         }
 
-        private Verse ValidateBuildVerse(Models.Verse verse, Dictionary<int, string> bookIdsToAbbreviations)
+        private Verse ValidateBuildVerse(Models.Verse verse, Dictionary<int, string> bookNumbersToAbbreviations)
         {
             string? bookAbbreviation;
             if (verse.BookNumber == null || verse.ChapterNumber == null || verse.VerseNumber == null)
             {
                 throw new NullReferenceException($"Source verse {verse.Id} in database has null book, chapter or verse number.  Unable to convert to engine Verse");
             }
-            else if (!bookIdsToAbbreviations.TryGetValue((int)verse.BookNumber, out bookAbbreviation))
+            else if (!bookNumbersToAbbreviations.TryGetValue((int)verse.BookNumber, out bookAbbreviation))
             {
                 throw new NullReferenceException($"Source verse {verse.Id} in database has unknown book number {verse.BookNumber}.  Unable to determine book abbreviation in order to convert to engine Verse");
             }

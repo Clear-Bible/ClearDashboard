@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                             t.VerseNumber,
                                             t.WordNumber,
                                             t.SubwordNumber),
-                                        t.Text)),
+                                        t.SurfaceText)),
                                 false
                             )
                         )
