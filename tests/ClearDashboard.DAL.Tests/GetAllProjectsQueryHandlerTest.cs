@@ -26,6 +26,12 @@ namespace ClearDashboard.DAL.Tests
             Assert.NotEmpty(results.Data);
             Assert.True(results.HasData);
             Assert.True(results.Success);
+
+            foreach (var project in results.Data)
+            {
+                Output.WriteLine($"{project.Name} :: {project.LongName}");
+                Output.WriteLine($"   ID: {project.Guid}");
+            }
         }
     }
 }
