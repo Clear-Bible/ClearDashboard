@@ -93,13 +93,17 @@
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
-        <Border  Grid.Row="1" Background="Transparent" BorderThickness="5" BorderBrush="Black">
-        <Canvas x:Name="DesignSurface" 
-                Grid.Row="1" 
-                
-                >
-           
-        </Canvas>
-        </Border>
+        <!--<Border  Grid.Row="1" Background="Transparent" BorderThickness="5" BorderBrush="Black">-->
+        <Canvas Grid.Row="1" x:Name="CanvasDesignSurface" Background="AliceBlue">
+                <Border Canvas.Left="10" 
+                        Canvas.Top="10" 
+                        Height="75" 
+                        Width="150" 
+                        Background="Blue"
+                        CornerRadius="5">
+                     <TextBlock Text="zz_SUR" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </Border>
+         </Canvas>
+        <!--</Border>-->
     </Grid>
 </UserControl>

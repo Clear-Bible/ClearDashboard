@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Views.Project
 {
@@ -10,6 +11,11 @@ namespace ClearDashboard.Wpf.Views.Project
         public ProjectDesignSurfaceView()
         {
             InitializeComponent();
+        }
+
+        public void AddControl(FrameworkElement control)
+        {
+            this.CanvasDesignSurface.Children.Add(control);
         }
     }
 }
