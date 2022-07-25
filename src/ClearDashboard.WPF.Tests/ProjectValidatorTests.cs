@@ -5,20 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Validators;
 using FluentValidation.Results;
-using Validators;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ClearDashboard.WPF.Tests
 {
-    public  class ProjectValidatorTests
+    public  class ProjectValidatorTests : TestBase
     {
         private readonly ITestOutputHelper _output;
+        private readonly ILogger<ProjectValidator> _logger;
 
-        public ProjectValidatorTests(ITestOutputHelper output)
+        public ProjectValidatorTests(ITestOutputHelper output) : base(output)
         {
             _output = output;
+
+            _logger = ServiceProvider.GetService<ILogger<ProjectValidator>>();
         }
 
         [Fact]
@@ -28,7 +33,7 @@ namespace ClearDashboard.WPF.Tests
             {
                 ProjectName = Guid.NewGuid().ToString(),
             };
-            var projectValidator = new ProjectValidator();
+            var projectValidator = new ProjectValidator(_logger);
 
             var results = projectValidator.Validate(project);
 
@@ -51,7 +56,7 @@ namespace ClearDashboard.WPF.Tests
                     ProjectName = projectName,
                 };
 
-                var projectValidator = new ProjectValidator();
+                var projectValidator = new ProjectValidator(_logger);
                 var results = projectValidator.Validate(project);
 
                 Assert.False(results.IsValid);
@@ -83,7 +88,7 @@ namespace ClearDashboard.WPF.Tests
                 ProjectName = "!BANG"
             };
 
-            var projectValidator = new ProjectValidator();
+            var projectValidator = new ProjectValidator(_logger);
             var results = projectValidator.Validate(project);
 
             Assert.False(results.IsValid);

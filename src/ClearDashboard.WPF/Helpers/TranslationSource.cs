@@ -87,12 +87,12 @@ namespace ClearDashboard.Wpf.Helpers
         }
     }
 
-    public class LocExtension : MarkupExtension
+    public class LocalizationExtension : MarkupExtension
     {
         private TranslationSource TranslationSource { get; set; }
         public string StringName { get; }
 
-        public LocExtension(string stringName)
+        public LocalizationExtension(string stringName)
         {
             StringName = stringName;
         }
@@ -121,7 +121,7 @@ namespace ClearDashboard.Wpf.Helpers
         {
 
             TranslationSource = IoC.Get<TranslationSource>();
-            // targetObject is the control that is using the LocExtension
+            // targetObject is the control that is using the LocalizationExtension
             var targetObject = (serviceProvider as IProvideValueTarget)?.TargetObject;
 
             if (targetObject?.GetType().Name == "SharedDp") // is extension used in a control template?

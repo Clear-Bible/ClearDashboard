@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 
-namespace ViewModels.Popups
+namespace ClearDashboard.Wpf.ViewModels.Popups
 {
     public partial class CustomWindow : Window
     {

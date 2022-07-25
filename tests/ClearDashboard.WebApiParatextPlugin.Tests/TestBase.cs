@@ -50,7 +50,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 Process = await InternalStartParatextAsync();
                 StopParatextOnTestConclusion = true;
 
-                var seconds = 2;
+                var seconds = 10;
                 Output.WriteLine($"Waiting for {seconds} seconds for Paratext to complete initialization.");
                 await Task.Delay(TimeSpan.FromSeconds(seconds));
             }

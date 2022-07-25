@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ClearDashboard.Wpf.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="WindowTop" Type="System.Double" Scope="User">
@@ -24,6 +24,12 @@
       <Value Profile="(Default)">en</Value>
     </Setting>
     <Setting Name="LastLayout" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TimeZones" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastProjectLayout" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

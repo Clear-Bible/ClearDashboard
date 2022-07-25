@@ -4,13 +4,15 @@ using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
-    public class ClearDashboardWebApiPlugin : IParatextWindowPlugin
+    public class ClearDashboardWebApiPlugin : IParatextWindowPlugin, IRestrictedResourceAccess
     {
-        public const string PluginName = "ClearDashboard WebAPI Plugin";
+        public const string PluginName = "ClearDashboard Plugin";
         public string Name => PluginName;
         public Version Version => new Version(0, 0, 0, 2);
         public string VersionString => Version.ToString();
         public string Publisher => "Clear Bible Inc.";
+        public string ResourceAccessToken { get; } = "AG5qSwcflRGwIO7udd1C5+Ru8BrbkHopZ57W8DKpG9inUiKtk0FamYbKLfT6DV2VAzVVdjBTRQahgGjC+cnjct0Jef7XUCVf37p6DH2iXx0MZITwzrxX4eGy0ZkojMB85oTOruay5xmejGGQ40CI5JiS0CBRSSrLh53ssc0LAf4=";
+
 
 
         public string GetDescription(string locale)

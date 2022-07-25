@@ -10,33 +10,141 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid
-        Height="40"
-        MinWidth="140"
-        Background="Aquamarine">
-        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+        Height="36"
+        Margin="-1"
+        VerticalAlignment="Center">
 
+        <Border
+            x:Name="TimerBorder"
+            Width="157"
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="10" />
+        <Menu
+            x:Name="Menu"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            ItemsSource="{Binding MenuItems}">
 
-            <ComboBox
-                Width="10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                VerticalContentAlignment="Center"
-                Background="Brown">
-                <ComboBoxItem Content="Name1 11:20am" />
-                <ComboBoxItem Content="iOS" />
-                <ComboBoxItem Content="Linux" />
-                <ComboBoxItem Content="Windows" />
-            </ComboBox>
+            <Menu.ItemContainerStyle>
+                <Style x:Name="ItemTemp" TargetType="{x:Type MenuItem}">
 
-            <ComboBox Background="BlueViolet">
-                <ComboBoxItem Content="Name1 11:20am" IsSelected="True" />
-                <ComboBoxItem Content="iOS" />
-                <ComboBoxItem Content="Linux" />
-                <ComboBoxItem Content="Windows" />
-            </ComboBox>
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="-30,0,-5,0" />
 
+                    <!--<EventSetter Event="Click" Handler="Utc_OnClick" />-->
 
-
-        </StackPanel>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Display">
+                            <Setter Property="Width" Value="157" />
+                            <Setter Property="Height" Value="44" />
+                            <Setter Property="Padding" Value="5,0,0,0" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Background" Value="Gray" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Background" Value="Gray" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Utc">
+                            <Setter Property="Width" Value="480" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Menu.ItemContainerStyle>
+            <Menu.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:ClockUserControl}" ItemsSource="{Binding Path=MenuItems}">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <StackPanel
+                            Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <Button
+                                x:Name="AddButton"
+                                Width="40"
+                                Height="22"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Click="AddButton_OnClick"
+                                Content="+"
+                                Tag="{Binding MenuItems, Mode=TwoWay}"
+                                ToolTip="Add"
+                                Visibility="{Binding ClockAddTimeZoneVisibility}" />
+                            <Button
+                                x:Name="DeleteButton"
+                                Width="40"
+                                Height="22"
+                                Margin="2,0,0,0"
+                                Padding="-1"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Click="DeleteButton_OnClick"
+                                ToolTip="Delete"
+                                Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}">
+                                <materialDesign:PackIcon Kind="TrashCanOutline" />
+                            </Button>
+                            <CheckBox
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Checked="CheckBoxChanged"
+                                IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
+                                ToolTip="Include in clock display rotation"
+                                Unchecked="CheckBoxChanged"
+                                Visibility="{Binding ClockCheckBoxVisibility}">
+                                <CheckBox.Resources>
+                                    <!--  Unchecked state  -->
+                                    <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="DodgerBlue" />
+                                    <!--  Checked state  -->
+                                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="DeepSkyBlue" />
+                                </CheckBox.Resources>
+                            </CheckBox>
+                            <TextBlock
+                                x:Name="NameTime"
+                                Width="65"
+                                Padding="0,0,5,0"
+                                VerticalAlignment="Center"
+                                Foreground="{Binding Foreground}"
+                                Text="{Binding NameTime}"
+                                TextAlignment="Right"
+                                Visibility="{Binding NameTimeVisibility}" />
+                            <TextBox
+                                Width="200"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="White"
+                                LostFocus="TextBox_OnLostFocus"
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"
+                                Text="{Binding TextBoxText}"
+                                ToolTip="Name the item"
+                                Visibility="{Binding ClockTextBoxVisibility}" />
+                            <ComboBox
+                                Height="26"
+                                ItemsSource="{Binding utcStringList}"
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"
+                                SelectedItem="{Binding ClockTextBlockText, Mode=TwoWay}"
+                                SelectionChanged="UtcComboSelected"
+                                Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                                ToolTip="Select timezone"
+                                Visibility="{Binding UtcComboVisibility}" />
+                            <TextBlock
+                                x:Name="Utc"
+                                Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                                VerticalAlignment="Center"
+                                Text="{Binding ClockTextBlockText, Mode=TwoWay}"
+                                Visibility="{Binding ClockTextBlockVisibility}" />
+                        </StackPanel>
+                    </Grid>
+                </HierarchicalDataTemplate>
+            </Menu.ItemTemplate>
+        </Menu>
     </Grid>
 </UserControl>

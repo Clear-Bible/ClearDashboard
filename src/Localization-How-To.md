@@ -49,7 +49,7 @@ Example:
         FontSize="20"
         Foreground="{StaticResource PrimaryHueDarkBrush}">
         <Run Text="Dashboard " />
-        <Run Text="{helpers:Loc Landing_projects}" />
+        <Run Text="{helpers:Localization Landing_projects}" />
     </TextBlock>
 ```
 
