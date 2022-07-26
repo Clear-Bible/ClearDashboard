@@ -1,6 +1,6 @@
-﻿using ClearBible.Engine.Exceptions;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;

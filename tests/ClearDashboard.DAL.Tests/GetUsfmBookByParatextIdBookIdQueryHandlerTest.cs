@@ -31,5 +31,16 @@ namespace ClearDashboard.DAL.Tests
             Assert.NotNull(results.Data);
         }
 
+        [Fact]
+        public async Task GetUsfmBookByParatextIdBookId_zzSUR_Test()
+        {
+            var results =
+                await ExecuteParatextAndTestRequest<GetBookUsfmByParatextIdBookIdQuery,
+                    RequestResult<List<UsfmVerse>>, List<UsfmVerse>>(
+                    new GetBookUsfmByParatextIdBookIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 1));
+
+            Assert.True(results.Success);
+            Assert.NotNull(results.Data);
+        }
     }
 }
