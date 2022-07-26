@@ -37,8 +37,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //3. return created ParallelCorpus based on ParallelCorpusId
             //var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
 
-            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
-            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
+            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
 
             if (sourceTokenizedCorpus == null || targetTokenizedCorpus == null)
             {
@@ -80,13 +80,37 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
                                 }
-                                return new Models.Verse
+                            // Heavy where clause, but done only in the context of a TokenizedCorpus 
+                            // set of tokens...so maybe not that bad?
+                            var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
+                                sourceTokenizedCorpus.Tokens
+                                    .Where(t =>
+                                        t.BookNumber == tid.BookNumber &&
+                                        t.ChapterNumber == tid.ChapterNumber &&
+                                        t.VerseNumber == tid.VerseNumber &&
+                                        t.WordNumber == tid.WordNumber &&
+                                        t.SubwordNumber == tid.SubWordNumber)
+                                    .Select(t => t.Id)
+                                );                                
+                                var verse = new Models.Verse
                                 {
                                     VerseNumber = v.VerseNum,
                                     BookNumber = bookNumber,
                                     ChapterNumber = v.ChapterNum,
-                                    CorpusId = sourceTokenizedCorpus!.CorpusId
+                                    CorpusId = sourceTokenizedCorpus!.CorpusId,
+                                    TokenVerseAssociations = tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
+                                    {
+                                        TokenId = td
+                                    }).ToList()
                                 };
+                                if (tokenDatabaseIds.Count() > 0)
+                                {
+                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
+                                    {
+                                        TokenId = td
+                                    }));
+                                }
+                                return verse;
                             }
                             ));
                         verseMapping.Verses.AddRange(vm.TargetVerses
@@ -96,13 +120,33 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
                                 }
-                                return new Models.Verse
+                                // Heavy where clause, but done only in the context of a TokenizedCorpus 
+                                // set of tokens...so maybe not that bad?
+                                var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
+                                    targetTokenizedCorpus.Tokens
+                                        .Where(t =>
+                                            t.BookNumber == tid.BookNumber &&
+                                            t.ChapterNumber == tid.ChapterNumber &&
+                                            t.VerseNumber == tid.VerseNumber &&
+                                            t.WordNumber == tid.WordNumber &&
+                                            t.SubwordNumber == tid.SubWordNumber)
+                                        .Select(t => t.Id)
+                                    );
+                                var verse = new Models.Verse
                                 {
                                     VerseNumber = v.VerseNum,
                                     BookNumber = bookNumber,
                                     ChapterNumber = v.ChapterNum,
                                     CorpusId = targetTokenizedCorpus!.CorpusId
                                 };
+                                if (tokenDatabaseIds.Count() > 0)
+                                {
+                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
+                                    {
+                                        TokenId = td
+                                    }));
+                                }
+                                return verse;
                             }
                             ));
                         return verseMapping;

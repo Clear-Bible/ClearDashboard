@@ -16,7 +16,7 @@ using Xunit;
 using Xunit.Abstractions;
 using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 using Verse = ClearBible.Engine.Corpora.Verse;
-using Models = ClearDashboard.DataAccessLayer.Models;
+using SIL.Extensions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -139,6 +139,49 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
 
             Assert.Equal(15, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
+            Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 15);
+            Assert.True(parallelTokenizedCorpus.TargetCorpus.Count() == 15);
+
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__CreateUsingHandlerWithTokens()
+    {
+        try
+        {
+            var sourceCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, targetCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedCorpusId.Id);
+            
+            // Take the verse mapping list and recreate it but with TokenIds added to each set of verses
+            parallelTextCorpus.VerseMappingList =
+                parallelTextCorpus.VerseMappingList!.Take(5).Select(vm =>
+                    new VerseMapping(
+                        vm.SourceVerses.Select(v => new Verse(v.Book, v.ChapterNum, v.VerseNum, sourceTokenizedCorpus.Tokens.Take(5)
+                            .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber)))),
+                        vm.TargetVerses.Select(v => new Verse(v.Book, v.ChapterNum, v.VerseNum, targetTokenizedCorpus.Tokens.Take(4)
+                            .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber))))
+                    )
+                ).ToList();
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            Assert.Equal(5, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
             Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 15);
             Assert.True(parallelTokenizedCorpus.TargetCorpus.Count() == 15);
 
