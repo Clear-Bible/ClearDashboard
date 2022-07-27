@@ -11,9 +11,18 @@ using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Popups;
+using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System;
+
+
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -22,7 +31,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region   Member Variables
         
         protected IWindowManager _windowManager;
-        
+
         #endregion
 
         #region Observable Objects
@@ -50,6 +59,8 @@ namespace ClearDashboard.Wpf.ViewModels
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
         }
+
+        
 
         protected override void OnViewAttached(object view, object context)
         { base.OnViewAttached(view, context);
@@ -81,7 +92,7 @@ namespace ClearDashboard.Wpf.ViewModels
             dynamic settings = new ExpandoObject();
             settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
             settings.ShowInTaskbar = false;
-            settings.Title = "Create New Project";
+            //settings.Title = "Create New Project";  // TODO:  localize
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.NoResize;
 
@@ -107,25 +118,29 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void Workspace(DashboardProject project)
         {
-            if (project is null)
-            {
-                return;
-            }
+            //if (project is null)
+            //{
+            //    return;
+            //}
 
-            // TODO HACK TO READ IN PROJECT AS OBJECT
+            //// TODO HACK TO READ IN PROJECT AS OBJECT
             string sTempFile = @"c:\temp\project.json";
             if (File.Exists(sTempFile) == false)
             {
                 MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
             }
 
-            var jsonString =File.ReadAllText(@"c:\temp\project.json");
+            var jsonString = File.ReadAllText(@"c:\temp\project.json");
             project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
 
 
-            Logger.LogInformation("Workspace called."); 
+            Logger.LogInformation("Workspace called.");
             ProjectManager.CurrentDashboardProject = project;
-            NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+            
+
+            //NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+
+             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
 
         public void Settings()

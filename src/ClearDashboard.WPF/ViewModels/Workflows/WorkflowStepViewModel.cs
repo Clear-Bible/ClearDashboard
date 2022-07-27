@@ -12,6 +12,8 @@ public interface IWorkflowStepViewModel
     Direction Direction { get; set; }
     Task MoveForwards();
     Task MoveBackwards();
+    Task MoveForwardsAction();
+    Task MoveBackwardsAction();
 }
 
 public abstract class WorkflowStepViewModel : ApplicationScreen, IWorkflowStepViewModel
@@ -55,15 +57,43 @@ public abstract class WorkflowStepViewModel : ApplicationScreen, IWorkflowStepVi
     }
 
 
+    private bool _canMoveForwards;
+    private bool _canMoveBackwards;
+
+    public bool CanMoveForwards
+    {
+        get => _canMoveForwards;
+        set => Set(ref _canMoveForwards, value);
+    }
+
+    public bool CanMoveBackwards
+    {
+        get => _canMoveBackwards;
+        set => Set(ref _canMoveBackwards, value);
+    }
+
+    public virtual async Task MoveForwardsAction()
+    {
+        await Task.CompletedTask;
+    }
+
+    public virtual async Task MoveBackwardsAction()
+    {
+        await Task.CompletedTask;
+    }
+
+
     public async Task MoveForwards()
     {
         Direction = Direction.Forwards;
+        await MoveForwardsAction();
         await TryCloseAsync();
     }
 
     public async Task MoveBackwards()
     {
         Direction = Direction.Backwards;
+        await MoveBackwardsAction();
         await TryCloseAsync();
     }
 

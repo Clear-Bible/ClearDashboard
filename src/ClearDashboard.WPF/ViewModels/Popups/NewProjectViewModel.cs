@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -7,10 +6,9 @@ using ClearDashboard.Wpf.ViewModels.Workflows;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
-
 namespace ClearDashboard.Wpf.ViewModels.Popups
 {
-    public class NewProjectViewModel : ValidatingWorkflowStepViewModel<Project>
+    public class NewProjectViewModel : ValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>
     {
        
         public NewProjectViewModel()
@@ -22,7 +20,7 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
             ILogger<WorkSpaceViewModel> logger,
             DashboardProjectManager projectManager, 
             IEventAggregator eventAggregator,
-            IValidator<Project> projectValidator)
+            IValidator<DataAccessLayer.Models.Project> projectValidator)
             : base(eventAggregator, navigationService, logger, projectManager, projectValidator)
         {
           
@@ -31,17 +29,18 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
                 ProjectManager.CreateDashboardProject();
             }
 
-            Title = "Create New Project";
+            //Title = "Create New Project";
+            DisplayName = "**** Create New Project";
 
-            Project = new Project();
+            Project = new DataAccessLayer.Models.Project();
         }
 
         private string _projectName;
        
-        private Project _project;
+        private DataAccessLayer.Models.Project _project;
 
 
-        public Project Project
+        public DataAccessLayer.Models.Project Project
         {
             get => _project;
             private init => Set(ref _project, value);
@@ -63,12 +62,21 @@ namespace ClearDashboard.Wpf.ViewModels.Popups
             }
         }
 
+        public override async Task MoveForwardsAction()
+        {
+            ProjectManager.CurrentProject =  await ProjectManager.CreateProject(ProjectName);
+            ((NewProjectDialogViewModel)Parent).DisplayName = ProjectManager.CurrentProject.ProjectName;
+            ((NewProjectDialogViewModel)Parent).DialogTitle = ProjectManager.CurrentProject.ProjectName;
+            await base.MoveForwardsAction();
+        }
      
 
         protected override ValidationResult Validate()
         {
             return (!string.IsNullOrEmpty(ProjectName)) ? Validator.Validate(Project) : null;
         }
+
+       // override 
 
         //protected override Task OnActivateAsync(CancellationToken cancellationToken)
         //{

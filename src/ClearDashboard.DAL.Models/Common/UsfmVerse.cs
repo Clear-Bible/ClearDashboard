@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ClearDashboard.DataAccessLayer.Models.Common
+﻿namespace ClearDashboard.DataAccessLayer.Models.Common
 {
     public class UsfmVerse
     {

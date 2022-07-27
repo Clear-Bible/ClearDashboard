@@ -31,7 +31,7 @@ namespace ClearDashboard.Wpf.UserControls
     {
         private List<string> utcComboList = new();
 
-    System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
+        System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
 
         private int _timeDisplayIndex = 0;
 
@@ -181,7 +181,7 @@ namespace ClearDashboard.Wpf.UserControls
 
             MenuItems[0].NameTime = DateTime.Now.ToShortTimeString().PadLeft(8,'0');
             MenuItems[0].ClockTextBlockText = " Local Time";
-         
+
 
             _refreshTimer.Elapsed += ClockRefresh;
             _refreshTimer.AutoReset = true;
@@ -760,7 +760,7 @@ namespace ClearDashboard.Wpf.UserControls
             set { _groupName = value; }
         }
 
-        private Brush _foreground { get; set; } = Brushes.Orange;
+        private Brush _foreground { get; set; } = Brushes.LimeGreen;
         public Brush Foreground
         {
             get { return _foreground; }

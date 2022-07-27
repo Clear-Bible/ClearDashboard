@@ -23,8 +23,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
 {
     public class TranslationTests
     {
-        public static readonly string SyntaxTreePath = Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..", "ClearEngine", "syntaxtrees");
         public static readonly string CorpusProjectPath = Path.Combine(AppContext.BaseDirectory,
             "..", "..", "..", "Translation", "data", "WEB-PT");
         public static readonly string HyperparametersFiles = Path.Combine(AppContext.BaseDirectory,
@@ -45,7 +43,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
         {
             try
             {
-                var syntaxTree = new SyntaxTrees(SyntaxTreePath);
+                var syntaxTree = new SyntaxTrees();
                 var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree);
 
                 var targetCorpus = new ParatextTextCorpus(CorpusProjectPath)
@@ -76,7 +74,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                         parallelTextCorpus,
                         smtWordAlignmentModel,
                         hyperparameters,
-                        SyntaxTreePath,
                         new DelegateProgress(status =>
                             output_.WriteLine($"Training syntax tree alignment model: {status.PercentCompleted:P}")));
 
