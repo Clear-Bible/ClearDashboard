@@ -29,7 +29,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         try
         {
             // Load data
-            var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
+            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "Greek NT", "grc",
                 "Resource",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");

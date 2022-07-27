@@ -36,8 +36,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
+                var intifiedBookId = Int32.Parse(request.BookId);
 
                 var groupedTokens = tokenizedCorpus.Tokens
+                    .Where(t => t.BookNumber == intifiedBookId)
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
@@ -48,33 +50,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         t => t
                     );
 
-                return new RequestResult<
-                    IEnumerable<VerseTokens>
-                >
+                return new RequestResult<IEnumerable<VerseTokens>>
                 (
                     groupedTokens.Select(gt =>
-                        new VerseTokens
-                        (
-                            gt.Key.ChapterNumber.ToString(),
-                            gt.Key.VerseNumber.ToString(),
-                            gt.ToList().Select(
-                                t => new ClearBible.Engine.Corpora.Token(
-                                    new TokenId(
-                                        t.BookNumber,
-                                        t.ChapterNumber,
-                                        t.VerseNumber,
-                                        t.WordNumber,
-                                        t.SubwordNumber),
-                                    t.Text)),
-                            false)
+                        ( 
+                            new VerseTokens(gt.Key.ChapterNumber.ToString(),
+                                gt.Key.VerseNumber.ToString(),
+                                gt.ToList().Select(
+                                    t => new ClearBible.Engine.Corpora.Token(
+                                        new TokenId(
+                                            t.BookNumber,
+                                            t.ChapterNumber,
+                                            t.VerseNumber,
+                                            t.WordNumber,
+                                            t.SubwordNumber),
+                                        t.Text)),
+                                 false
+                                )
+                           )
                     )
                 );
             }
             catch (Exception ex)
             {
-                return new RequestResult<
-                        IEnumerable<VerseTokens>
-                    >
+                return new RequestResult<IEnumerable<VerseTokens>>
                     (result: null, success: false, message: ex.ToString());
             }
         }

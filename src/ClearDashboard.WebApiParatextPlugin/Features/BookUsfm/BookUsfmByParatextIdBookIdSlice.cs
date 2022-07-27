@@ -25,11 +25,19 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         public Task<RequestResult<List<UsfmVerse>>> Handle(GetBookUsfmByParatextIdBookIdQuery request,
             CancellationToken cancellationToken)
         {
+            var data = _mainWindow.GetUsfmForBook(request.ParatextId, request.BookNum);
+            
+            // update the isSentenceStart field using Machine's parser
+            foreach (var d in data)
+            {
+                d.isSentenceStart = SIL.Machine.Utils.StringExtensions.HasSentenceEnding(d.Text);
+            }
+            
             var queryResult = new RequestResult<List<UsfmVerse>>(new List<UsfmVerse>());
             
             try
             {
-                queryResult.Data = _mainWindow.GetUsfmForBook(request.ParatextId, request.BookNum);
+                queryResult.Data = data;
             }
             catch (Exception ex)
             {

@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,6 +27,26 @@ namespace ClearDashboard.DAL.Tests
             Assert.NotEmpty(results.Data);
             Assert.True(results.HasData);
             Assert.True(results.Success);
+
+            foreach (var project in results.Data)
+            {
+                Output.WriteLine($"{project.Name} :: {project.Type} :: {project.LongName}");
+                Output.WriteLine($"   ID: {project.Guid}");
+            }
+        }
+
+        [Fact]
+        public async Task GetParatextProjectMetadata()
+        {
+            var results =
+                await ExecuteParatextAndTestRequest<GetProjectMetadataQuery, RequestResult<List<ParatextProjectMetadata>>,
+                    List<ParatextProjectMetadata>>(new GetProjectMetadataQuery());
+
+
+            foreach (var project in results.Data)
+            {
+                Output.WriteLine($"Name: {project.Name}, LongName: {project.LongName} \t CorpusType: {project.CorpusType}, \t LongName: {project.LanguageName}, ");
+            }
         }
     }
 }

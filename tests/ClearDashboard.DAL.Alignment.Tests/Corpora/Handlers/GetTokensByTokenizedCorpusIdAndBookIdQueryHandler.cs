@@ -19,7 +19,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
         GetTokensByTokenizedCorpusIdAndBookIdQuery,
         RequestResult<IEnumerable<VerseTokens>>>
     {
-        public Task<RequestResult<IEnumerable<VerseTokens>>>             Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
+        public Task<RequestResult<IEnumerable<VerseTokens>>>
+            Handle(GetTokensByTokenizedCorpusIdAndBookIdQuery command, CancellationToken cancellationToken)
         {
             //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
             //Then iterate tokens and package them by verse then return enumerable.
@@ -34,17 +35,17 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
                 .SelectMany(g => g
                     .GroupBy(sg => ((VerseRef)sg.Ref).VerseNum)
                     .OrderBy(sg => sg.Key)
-                    .Select(sg => new VerseTokens
-                    (
-                        Chapter: g.Key.ToString(),
-                        Verse: sg.Key.ToString(),
-                        Tokens: sg
+                    .Select(sg => new
+                    {
+                        Chapter = g.Key,
+                        Verse = sg.Key,
+                        Tokens = sg
                             .SelectMany(v => ((TokensTextRow)v).Tokens),
-                        IsSentenceStart: sg
+                        IsSentenceStart = sg
                             .First().IsSentenceStart
-                    )
+                    })
                 )
-                .Select(cvts => new VerseTokens(cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart)));
+                .Select(cvts => new VerseTokens(cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart));
 
 
             return Task.FromResult(

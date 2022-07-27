@@ -24,6 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public async Task<ProjectAssets> Get(string projectName)
         {
+            projectName = projectName.Replace(" ", "_");
             var projectAssets = new ProjectAssets
             {
                 ProjectName = projectName,
@@ -74,6 +75,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 throw new ArgumentNullException(nameof(projectName), "A project name must be provided in order for a 'Project' database context to returned.");
             }
+
+            
             var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName); 
             if (!Directory.Exists(directoryPath))
             {

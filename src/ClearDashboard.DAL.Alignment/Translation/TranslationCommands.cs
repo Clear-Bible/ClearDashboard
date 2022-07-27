@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
@@ -124,8 +125,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             EngineParallelTextCorpus parallelCorpus, 
             IWordAlignmentModel smtTrainedWordAlignmentModel, 
             SyntaxTreeWordAlignerHyperparameters hyperparameters,
-            string syntaxTreesPath,
-            IProgress<ProgressStatus>? progress = null)
+            IProgress<ProgressStatus>? progress = null,
+            string? syntaxTreesPath = null
+            )
         {
             var manuscriptTree = new SyntaxTrees(syntaxTreesPath);
 
