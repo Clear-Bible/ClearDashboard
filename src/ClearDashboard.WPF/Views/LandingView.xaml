@@ -92,30 +92,20 @@
                 </Button.Tag>
             </Button>
 
-          <!--    <Button
+            <Button
                 x:Name="AlignmentSample"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization AlignmentSample}"
+                Content="Token Display"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
-                </Button.Tag>
-            </Button>-->
-
-            <Button
-              x:Name="NewProject"
-                Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_newproject}"
-                Style="{StaticResource BigButton}">
-                <Button.Tag>
-                    <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
                 </Button.Tag>
             </Button>
 
             <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_project}"
+                Content="{helpers:Loc Landing_project}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
@@ -171,10 +161,8 @@
                                                         <Run Text="Database: " />
                                                         <Run Text="{Binding ShortFilePath}" />
                                                     </TextBlock>
-                                                    <TextBlock
-                                                        Margin="25,0,0,0"
-                                                        FontStyle="Italic"
-                                                        Text="{Binding Modified}" />
+                                                    <TextBlock Margin="25,0,0,0" FontStyle="Italic"
+                                                               Text="{Binding Modified}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

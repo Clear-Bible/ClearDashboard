@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -36,10 +37,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
-                var intifiedBookId = Int32.Parse(request.BookId);
+                var bookAbbreviationsToNumbers =
+                    FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
+                if (!bookAbbreviationsToNumbers.TryGetValue(request.BookId, out int bookNumber))
+                {
+                    throw new Exception($"Invalid book '{request.BookId}' found in request");
+                }
 
                 var groupedTokens = tokenizedCorpus.Tokens
-                    .Where(t => t.BookNumber == intifiedBookId)
+                    .Where(t => t.BookNumber == bookNumber)
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
