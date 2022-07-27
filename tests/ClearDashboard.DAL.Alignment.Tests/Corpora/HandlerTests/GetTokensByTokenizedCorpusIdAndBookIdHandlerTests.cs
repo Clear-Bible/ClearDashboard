@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,7 +24,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void GetDataAsync__ValidateResults()
+    public async Task GetDataAsync__ValidateResults()
     {
         try
         {
@@ -31,13 +34,16 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
                 "Resource",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             await Mediator.Send(command);
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            var context = await factory.GetDatabaseContext(ProjectName);
+            //Assert.Equal(context, ProjectDbContext);
 
 
             ProjectDbContext.ChangeTracker.Clear();
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "40");
+                new Alignment.Corpora.TokenizedCorpusId(context.TokenizedCorpora.First().Id), "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -74,7 +80,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "40");
+                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);

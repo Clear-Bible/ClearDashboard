@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 {
@@ -21,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
         {
             serviceCollection.AddLogging();
 
-            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker));
+            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateTokenizedCorpusFromTokenizedCorpusCommandHandler));
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());

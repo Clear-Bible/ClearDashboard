@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System.Data.Entity;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using System.Text;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -36,8 +37,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
-        var tokenizedCorpus =
-            ProjectDbContext.TokenizedCorpora.FirstOrDefault(i => i.Id == request.TokenizedCorpusId.Id);
+        var tokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id);
 
         if (tokenizedCorpus == null)
         {
@@ -50,7 +50,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             ));
         }
 
-        var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
+        var bookNumbers = ProjectDbContext.Tokens.Where(t => t.TokenizationId == request.TokenizedCorpusId.Id).GroupBy(token => token.BookNumber).Select(g => g.Key);
         var bookIdsToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
@@ -72,6 +72,6 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         }
 
         return Task.FromResult(new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-            ((bookAbbreviations, new CorpusId(tokenizedCorpus.Corpus.Id))));
+            ((bookAbbreviations, new CorpusId(tokenizedCorpus.CorpusId))));
     }
 }
