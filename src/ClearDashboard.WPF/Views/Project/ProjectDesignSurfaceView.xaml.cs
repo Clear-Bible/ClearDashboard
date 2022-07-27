@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+
 
 namespace ClearDashboard.Wpf.Views.Project
 {
@@ -13,9 +15,16 @@ namespace ClearDashboard.Wpf.Views.Project
             InitializeComponent();
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+           
+        }
+
         public void AddControl(FrameworkElement control)
         {
-            this.CanvasDesignSurface.Children.Add(control);
+            DesignSurfaceCanvas.Dispatcher.Invoke(() => { DesignSurfaceCanvas.Children.Add(control); });
+
         }
     }
 }

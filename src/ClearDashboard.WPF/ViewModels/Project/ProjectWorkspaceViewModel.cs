@@ -17,12 +17,13 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    public class ProjectWorkspaceViewModel : Conductor<IScreen>.Collection.AllActive
+    public class ProjectWorkspaceViewModel : Conductor<Screen>.Collection.OneActive
     {
 
         private IEventAggregator EventAggregator { get; }
@@ -178,12 +179,29 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         /// <typeparam name="TViewModel"></typeparam>
         /// <returns></returns>
         private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
-            where TViewModel : class, IScreen
+            where TViewModel : Screen
         {
             var viewModel = IoC.Get<TViewModel>();
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
+        }
+
+        public Task ActivateOrCreate<T>(string displayName)
+            where T : Screen
+        {
+            var item = Items.OfType<T>().FirstOrDefault(x => x.DisplayName == displayName);
+            if (item == null)
+            {
+                item = (T)Activator.CreateInstance(typeof(T));
+                item.Parent = this;
+                item.ConductWith(this);
+                item.DisplayName = displayName;
+                //item.IsDirty = ++_createCount % 2 > 0;
+            }
+            return ActivateItemAsync(item, CancellationToken.None);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -224,11 +242,17 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");
             }
 
-            Initialize();
+           
+        }
+
+        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            await Initialize();
+            await base.OnInitializeAsync(cancellationToken);
         }
 
 
-        private async void Initialize()
+        private async Task Initialize()
         {
             Items.Clear();
             // documents
@@ -238,11 +262,14 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             // tools
             await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
 
+            LoadWindows();
+
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
             var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
             LoadLayout(layoutSerializer, filePath);
 
-            LoadWindows();
+            
+           
         }
 
         private void LoadWindows()
@@ -274,7 +301,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         private void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
         {
            
-            layoutSerializer.LayoutSerializationCallback += (_, e) =>
+            layoutSerializer.LayoutSerializationCallback += async (_, e) =>
             {
                 if (e.Model.ContentId is not null)
                 {

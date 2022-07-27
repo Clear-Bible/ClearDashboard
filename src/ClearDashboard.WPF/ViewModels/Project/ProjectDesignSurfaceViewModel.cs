@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
+﻿using AvalonDock.Controls;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
-using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
-using Brush = System.Windows.Media.Brush;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Effects;
+using ClearDashboard.Wpf.Views;
 using Brushes = System.Windows.Media.Brushes;
-using Color = System.Windows.Media.Color;
-using Point = System.Drawing.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
@@ -58,35 +53,61 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
             Corpora.Add(corpus);
 
-            DrawCopora();
+            //View = (ProjectDesignSurfaceView)ViewLocator.LocateForModel(this, null, null);
+            //ViewModelBinder.Bind(this, View, null);
+
+         
+            //DesignSurfaceCanvas = (Canvas)View.FindName("DesignSurfaceCanvas");
+
+            //DrawCopora();
             return base.OnInitializeAsync(cancellationToken);
         }
 
 
         protected ProjectDesignSurfaceView View { get; set; }
-        protected Canvas DesignSurfaceCanvas { get; set; }
+        public Canvas DesignSurfaceCanvas { get; set; }
         protected override void OnViewAttached(object view, object context)
         {
-            if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
-            {
-                View = (ProjectDesignSurfaceView)view;
-                DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("CanvasDesignSurface");
-            }
-
-            base.OnViewAttached(view, context);
+            //if (View == null)
+            //{
+            //    if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
+            //    {
+            //        View = (ProjectDesignSurfaceView)view;
+            //        DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
+            //    }
+            //    base.OnViewAttached(view, context);
+            //}
         }
 
         protected override void OnViewLoaded(object view)
         {
-            DrawCopora();
+           
+           
             base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
+            {
+                View = (ProjectDesignSurfaceView)view;
+
+                var canvases = View.FindVisualChildren<Canvas>();
+                DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
+
+                DesignSurfaceCanvas.Visibility = Visibility.Hidden;
+
+                Panel.SetZIndex(DesignSurfaceCanvas, 1000);
+            }
+            //DrawCopora();
+            base.OnViewReady(view);
         }
 
         private void DrawCopora()
         {
 
-            //OnUIThread(() =>
-            //{
+            OnUIThread(() =>
+            {
                 DesignSurfaceCanvas.Children.Clear();
                 foreach (var corpus in Corpora)
                 {
@@ -97,7 +118,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         //Content = corpus.Name,
                         Width = 300,
                         Height = 100,
-                        Fill = Application.Current.FindResource("OrangeMidBrush") as Brush,
+                        Fill = Brushes.Blue,//Application.Current.FindResource("OrangeMidBrush") as Brush,
                         RadiusX = 3,
                         RadiusY = 3,
                         Effect = new DropShadowEffect
@@ -113,27 +134,16 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     };
                     Canvas.SetTop(rectangle, 10.0);
                     Canvas.SetLeft(rectangle, 210.0);
-                    DesignSurfaceCanvas.Children.Add(rectangle);
-                    //View.AddControl(rectangle);
+                    //DesignSurfaceCanvas.Children.Add(rectangle);
+                    View.AddControl(rectangle);
 
-                    var txt2 = new TextBlock
-                    {
-                        FontSize = 22,
-                        Text = corpus.Name,
-                        Foreground = Brushes.Orange,
-                        Width = 100,
-                        Height = 50
-                    };
-                    Canvas.SetTop(txt2, DesignSurfaceCanvas.Height / 2);
-                    Canvas.SetLeft(txt2, DesignSurfaceCanvas.Width / 2);
-                    DesignSurfaceCanvas.Children.Add(txt2);
-
+                  
                     //DesignSurfaceCanvas.InvalidateMeasure();
                     DesignSurfaceCanvas.UpdateLayout();
 
 
                 }
-           // });
+            });
         }
 
         public void AddManuscriptCorpus()

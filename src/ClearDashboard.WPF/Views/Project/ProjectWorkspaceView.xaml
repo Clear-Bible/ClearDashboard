@@ -3,13 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Views"
       xmlns:panes="clr-namespace:ClearDashboard.Wpf.Views.Panes"
       xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
       xmlns:system="clr-namespace:System;assembly=System.Runtime"
-      xmlns:project="clr-namespace:Views.Project"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:project1="clr-namespace:ClearDashboard.Wpf.Views.Project"
+      xmlns:project="clr-namespace:ClearDashboard.Wpf.Views.Project"
+      xmlns:views="clr-namespace:ClearDashboard.Wpf.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProjectWorkspace">
@@ -52,7 +51,7 @@
         <DockingManager
             x:Name="dockManager"
             Grid.Row="1"
-            ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
+            ActiveContent="{Binding ActiveItem, Mode=TwoWay}"
             AllowMixedOrientation="True"
             AnchorablesSource="{Binding Tools}"
             DocumentsSource="{Binding Documents}"
@@ -71,7 +70,7 @@
                     </panes:ProjectWorkspacePanesTemplateSelector.CorpusViewDataTemplate>
                     <panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
                         <DataTemplate>
-                            <project1:ProjectDesignSurfaceView />
+                            <project:ProjectDesignSurfaceView />
                         </DataTemplate>
                     </panes:ProjectWorkspacePanesTemplateSelector.ProjectDesignSurfaceDataTemplate>
                 </panes:ProjectWorkspacePanesTemplateSelector>
