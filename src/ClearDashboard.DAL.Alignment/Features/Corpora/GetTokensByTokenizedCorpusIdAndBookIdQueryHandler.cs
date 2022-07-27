@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.Design;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Corpora;
-//<<<<<<< HEAD
 using ClearBible.Engine.Persistence;
-//=======
 using ClearDashboard.DAL.Alignment.Corpora;
-//>>>>>>> main
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -40,7 +36,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 {
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
-
 
                 var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
 
