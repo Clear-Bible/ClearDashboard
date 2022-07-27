@@ -35,6 +35,7 @@ namespace ClearDashboard.Wpf.UserControls
             set => SetValue(WordsProperty, value);
         }
         //public List<string> Words { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
+
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
@@ -48,6 +49,20 @@ namespace ClearDashboard.Wpf.UserControls
             get => (Orientation) GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
         }
+        
+        ///// <summary>
+        ///// Identifies the WordMargin dependency property.
+        ///// </summary>
+        //public static readonly DependencyProperty WordMarginProperty = DependencyProperty.Register("WordMargin", typeof(Thickness), typeof(TextDisplayControl));
+
+        ///// <summary>
+        ///// Gets or sets the margin around each word for text display.
+        ///// </summary>
+        //public Thickness WordMargin
+        //{
+        //    get => (Thickness) GetValue(WordMarginProperty);
+        //    set => SetValue(WordMarginProperty, value);
+        //}
 
         /// <summary>
         /// Identifies the Wrap dependency property.
@@ -81,6 +96,13 @@ namespace ClearDashboard.Wpf.UserControls
 
         public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
 
+        private Thickness ParagraphMargin = new(0,0,0,0);
+        private Thickness StackMargin = new(6,2,6,2);
+        public Thickness WordMargin => ParagraphMode ? ParagraphMargin : StackMargin;        
+        
+        private Thickness ParagraphPadding = new(5,0,5,0);
+        private Thickness StackPadding = new(10,2,10,2);
+        public Thickness WordPadding => ParagraphMode ? ParagraphPadding : StackPadding;
         
         public TextDisplayControl()
         {
