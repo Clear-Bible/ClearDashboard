@@ -37,6 +37,9 @@ namespace ClearDashboard.Wpf.ViewModels
         public List<string> HebrewPsalm { get; set; } = "כִּֽי־אַ֭תָּה תָּאִ֣יר נֵרִ֑י יְהוָ֥ה אֱ֝לֹהַ֗י יַגִּ֥יהַּ חָשְׁכִּֽי׃".Split(' ').ToList();
         public List<string> GreekPsalm { get; set; } = "χι αθθα θαειρ νηρι YHWH ελωαι αγι οσχι".Split(' ').ToList();
 
+        public List<string> Paragraph { get; set; } =
+            "In the beginning God created the heavens and the earth. Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.".Split(' ').ToList();
+
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
         private static readonly string _greekNtUsfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "nestle1904");
@@ -228,7 +231,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var book = corpus.Where(row => ((VerseRef) row.Ref).BookNum == 40);
                 var chapter = book.Where(row => ((VerseRef) row.Ref).ChapterNum == 1);
                 var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
-                DatabaseVerseTokens = new VerseTokens("40", "1", verse.Tokens, true);
+                DatabaseVerseTokens = new VerseTokens("40", "1", verse.Tokens.Where(t => t.TokenId.BookNumber == 40), true);
             }
             catch (Exception e)
             {
