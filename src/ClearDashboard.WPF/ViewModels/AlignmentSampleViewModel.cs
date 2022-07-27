@@ -190,7 +190,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private async Task MockProjectAndUser()
         {
-            ProjectManager.CurrentProject = new Project
+            ProjectManager.CurrentProject = new DataAccessLayer.Models.Project
             {
                 Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
                 ProjectName = "Alignment"
