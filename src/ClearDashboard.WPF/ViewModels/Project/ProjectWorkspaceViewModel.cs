@@ -17,12 +17,13 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    public class ProjectWorkspaceViewModel : Conductor<IScreen>.Collection.AllActive
+    public class ProjectWorkspaceViewModel : Conductor<Screen>.Collection.OneActive
     {
 
         private IEventAggregator EventAggregator { get; }
@@ -178,12 +179,29 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         /// <typeparam name="TViewModel"></typeparam>
         /// <returns></returns>
         private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
-            where TViewModel : class, IScreen
+            where TViewModel : Screen
         {
             var viewModel = IoC.Get<TViewModel>();
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
+        }
+
+        public Task ActivateOrCreate<T>(string displayName)
+            where T : Screen
+        {
+            var item = Items.OfType<T>().FirstOrDefault(x => x.DisplayName == displayName);
+            if (item == null)
+            {
+                item = (T)Activator.CreateInstance(typeof(T));
+                item.Parent = this;
+                item.ConductWith(this);
+                item.DisplayName = displayName;
+                //item.IsDirty = ++_createCount % 2 > 0;
+            }
+            return ActivateItemAsync(item, CancellationToken.None);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -196,15 +214,21 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            //if (_lastLayout == "")
-            //{
-            //    SelectedLayoutText = "Last Saved";
-            //    OkSave();
-            //}
+            if (_lastLayout == "")
+            {
+                SaveLayout();
+            }
 
             // unsubscribe to the event aggregator
             EventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        public void SaveLayout()
+        {
+            var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
+            var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
+            layoutSerializer.Serialize(filePath);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -218,64 +242,18 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");
             }
 
-            Initialize();
+           
+        }
+
+        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            await Initialize();
+            await base.OnInitializeAsync(cancellationToken);
         }
 
 
-        private ObservableCollection<LayoutFile> GetFileLayouts()
+        private async Task Initialize()
         {
-            int id = 0;
-            ObservableCollection<LayoutFile> fileLayouts = new();
-            // add in the default layouts
-            var path = Path.Combine(Environment.CurrentDirectory, @"Resources\ProjectLayouts");
-            if (Directory.Exists(path))
-            {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                    fileLayouts.Add(new LayoutFile
-                    {
-                        LayoutName = name,
-                        LayoutID = "StandardLayout:" + id.ToString(),
-                        LayoutPath = file,
-                        LayoutType = LayoutFile.eLayoutType.Standard
-                    });
-                    id++;
-                }
-            }
-
-            // get the project layouts
-            path = Path.Combine("ProjectWorkspace", "shared");
-            if (Directory.Exists(path))
-            {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
-
-                    fileLayouts.Add(new LayoutFile
-                    {
-                        LayoutName = name,
-                        LayoutID = "ProjectLayout:" + id.ToString(),
-                        LayoutPath = file,
-                        LayoutType = LayoutFile.eLayoutType.Project
-                    });
-                    id++;
-                }
-            }
-
-            return fileLayouts;
-        }
-
-        private async void Initialize()
-        {
-            FileLayouts = GetFileLayouts();
             Items.Clear();
             // documents
             await ActivateItemAsync<AlignmentViewModel>();
@@ -284,64 +262,67 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             // tools
             await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
 
-            // remove all existing windows
-            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+            LoadWindows();
 
-            if (Settings.Default.LastProjectLayout == "")
+            var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
+            var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
+            LoadLayout(layoutSerializer, filePath);
+
+            
+           
+        }
+
+        private void LoadWindows()
+        {
+            // build a layout
+            _tools.Clear();
+            _documents.Clear();
+
+            foreach (var t in Items)
             {
-                // bring up the default layout
-                LoadLayout(layoutSerializer, FileLayouts[0].LayoutPath);
+                var type = t;
+                switch (type)
+                {
+                    case AlignmentViewModel:
+                    case CorpusViewModel:
+                        _documents.Add((PaneViewModel)t);
+                        break;
+                    case ProjectDesignSurfaceViewModel:
+                        _tools.Add((ToolViewModel)t);
+                        break;
+                }
             }
-            else
-            {
-                // check to see if the layout exists
-                string layoutPath = Settings.Default.LastProjectLayout;
-                LoadLayout(layoutSerializer, File.Exists(layoutPath) ? layoutPath : FileLayouts[0].LayoutPath);
-            }
+
+            NotifyOfPropertyChange(() => Documents);
+            NotifyOfPropertyChange(() => Tools);
         }
 
 
         private void LoadLayout(XmlLayoutSerializer layoutSerializer, string filePath)
         {
-            // Here I've implemented the LayoutSerializationCallback just to show
-            //  a way to feed layout deserialization with content loaded at runtime
-            // Actually I could in this case let AvalonDock to attach the contents
-            // from current layout using the content ids
-            // LayoutSerializationCallback should anyway be handled to attach contents
-            // not currently loaded
-#pragma warning disable CA1416 // Validate platform compatibility
-            layoutSerializer.LayoutSerializationCallback += (_, e) =>
+           
+            layoutSerializer.LayoutSerializationCallback += async (_, e) =>
             {
                 if (e.Model.ContentId is not null)
                 {
-                    Debug.WriteLine(e.Model.ContentId);
+                   
 
-                    switch (e.Model.ContentId.ToUpper())
-                    {
-                        // Documents
-                        case WorkspaceLayoutNames.AlignmentTool:
-                            e.Content = GetPaneViewModelFromItems("AlignmentViewModel");
-                            break;
-                        case WorkspaceLayoutNames.CorpusTool:
-                            e.Content = GetPaneViewModelFromItems("CorpusViewModel");
-                            break;
-                        case WorkspaceLayoutNames.ProjectDesignSurfaceTool:
-                            e.Content = GetPaneViewModelFromItems("ProjectDesignSurfaceViewModel");
-                            break;
-                       
-                    }
+                    var item = Items.Cast<IAvalonDockWindow>()
+                        .FirstOrDefault(item => item.ContentId == e.Model.ContentId);
+
+                    e.Content = item;
+                  
                 }
             };
-#pragma warning restore CA1416 // Validate platform compatibility
+
             try
             {
-                //throw new Exception();
                 layoutSerializer.Deserialize(filePath);
             }
             catch (Exception e)
             {
                 Logger.LogError(e.Message);
-                filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
+                filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
                 if (File.Exists(filePath))
                 {
                     // load in the default layout
@@ -349,183 +330,16 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 }
                 else
                 {
-                    // build a layout
-                    _tools.Clear();
-                    _documents.Clear();
-
-                    foreach (var t in Items)
-                    {
-                        var type = t;
-                        switch (type)
-                        {
-                            case DashboardViewModel:
-                            case ConcordanceViewModel:
-                            case StartPageViewModel:
-                            case AlignmentToolViewModel:
-                            case TreeDownViewModel:
-                                _documents.Add((PaneViewModel)t);
-                                break;
-
-                            case BiblicalTermsViewModel:
-                            case WordMeaningsViewModel:
-                            case SourceContextViewModel:
-                            case TargetContextViewModel:
-                            case NotesViewModel:
-                            case PinsViewModel:
-                            case TextCollectionsViewModel:
-                                _tools.Add((ToolViewModel)t);
-                                break;
-                        }
-                    }
-
-                    NotifyOfPropertyChange(() => Documents);
-                    //NotifyOfPropertyChange(() => BookNames);
+                    LoadWindows();
                 }
             }
 
             // save to settings
-            Settings.Default.LastLayout = filePath;
+            Settings.Default.LastProjectLayout = filePath;
             _lastLayout = filePath;
         }
 
-        /// <summary>
-        /// return the correct existing vm from Items list - DOCUMENTS
-        /// </summary>
-        /// <param name="vm"></param>
-        /// <returns></returns>
-        private PaneViewModel GetPaneViewModelFromItems(string vm)
-        {
-            foreach (var t in Items)
-            {
-                var type = t;
-                if (type.GetType().Name == vm)
-                {
-                    switch (type)
-                    {
-                        case DashboardViewModel:
-                        case ConcordanceViewModel:
-                        case StartPageViewModel:
-                        case AlignmentToolViewModel:
-                        case TreeDownViewModel:
-                            return (PaneViewModel)t;
-                    }
-                }
-            }
 
-            return (PaneViewModel)Items[0];
-        }
-
-        /// <summary>
-        /// return the correct existing vm from Items list - TOOLS
-        /// </summary>
-        /// <param name="vm"></param>
-        /// <returns></returns>
-        private ToolViewModel GetToolViewModelFromItems(string vm)
-        {
-            foreach (var t in Items)
-            {
-                var type = t;
-                if (type.GetType().Name == vm)
-                {
-                    switch (type)
-                    {
-                        case BiblicalTermsViewModel:
-                        case WordMeaningsViewModel:
-                        case SourceContextViewModel:
-                        case TargetContextViewModel:
-                        case NotesViewModel:
-                        case PinsViewModel:
-                        case TextCollectionsViewModel:
-                            return (ToolViewModel)t;
-                    }
-                }
-            }
-
-            return (ToolViewModel)Items[0];
-        }
-
-        private (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
-        {
-            // window has been closed so we need to reopen it
-            switch (windowTag)
-            {
-                // Documents
-                case WorkspaceLayoutNames.AlignmentTool:
-                    var vm1 = GetPaneViewModelFromItems("AlignmentViewModel");
-                    return (vm1, vm1.Title, vm1.DockSide);
-                case WorkspaceLayoutNames.CorpusTool:
-                    var vm2 = GetPaneViewModelFromItems("CopusViewModel");
-                    return (vm2, vm2.Title, vm2.DockSide);
-                case WorkspaceLayoutNames.ProjectDesignSurfaceTool:
-                    var vm7 = GetPaneViewModelFromItems("ProjectDesignSurfaceViewModel");
-                    return (vm7, vm7.Title, vm7.DockSide);
-                
-
-            }
-            return (null, null, PaneViewModel.EDockSide.Bottom);
-        }
-
-        /// <summary>
-        /// Un hide window
-        /// </summary>
-        /// <param name="windowTag"></param>
-        private void UnHideWindow(string windowTag)
-        {
-            // find the pane in the dockmanager with this contentID
-#pragma warning disable CA1416 // Validate platform compatibility
-            var windowPane = _dockingManager.Layout.Descendents()
-                .OfType<LayoutAnchorable>()
-                .SingleOrDefault(a =>
-                {
-                    if (a.ContentId is not null)
-                    {
-                        return a.ContentId.ToUpper() == windowTag.ToUpper();
-                    }
-                    return false;
-                });
-
-            if (windowPane != null)
-            {
-                if (windowPane.IsAutoHidden)
-                {
-                    windowPane.ToggleAutoHide();
-                }
-                else if (windowPane.IsHidden)
-                {
-                    windowPane.Show();
-                }
-                else if (windowPane.IsVisible)
-                {
-                    windowPane.IsActive = true;
-                }
-            }
-            else
-            {
-                // window has been closed so reload it
-                windowPane = new LayoutAnchorable
-                {
-                    ContentId = windowTag
-                };
-
-                // setup the right ViewModel for the pane
-                var obj = LoadWindow(windowTag);
-                windowPane.Content = obj.vm;
-                windowPane.Title = obj.title;
-                windowPane.IsActive = true;
-
-
-                // set where it will doc on layout
-                if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
-                {
-                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
-                }
-                else if (obj.dockSide == PaneViewModel.EDockSide.Left)
-                {
-                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
-                }
-            }
-#pragma warning restore CA1416 // Validate platform compatibility
-        }
 
         public static class WorkspaceLayoutNames
         {
