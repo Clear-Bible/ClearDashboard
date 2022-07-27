@@ -208,7 +208,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "40");
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
                 var result = await ExecuteRequest(query, cancellationToken);
 
                 if (result.Success && result.Data != null)
