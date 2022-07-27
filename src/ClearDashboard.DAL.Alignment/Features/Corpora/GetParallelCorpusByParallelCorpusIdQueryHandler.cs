@@ -40,13 +40,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //1. the result of gathering all the VerseMappings to build an VerseMapping list.
             //2. associated source and target TokenizedCorpusId
 
+#nullable disable
+            // FIXME:  added the #nullable disable to keep studio from complaining - I think - about
+            // how vm.Verses might be null.  Is it really possible for VerseMappings to have null Verses?
             var parallelCorpus =
                 ProjectDbContext.ParallelCorpa
                     .Include(pc => pc.SourceTokenizedCorpus)
                     .Include(pc => pc.TargetTokenizedCorpus)
                     .Include(pc => pc.VerseMappings)
                     .ThenInclude(vm => vm.Verses)
+                    .ThenInclude(v => v.TokenVerseAssociations)
+                    .ThenInclude(tva => tva.Token)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
+#nullable restore
 
             var invalidArgMsg = "";
             if (parallelCorpus == null)
@@ -76,8 +82,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var sourceCorpusId = parallelCorpus.SourceTokenizedCorpus!.CorpusId;
             var targetCorpusId = parallelCorpus.TargetTokenizedCorpus!.CorpusId;
-
-            // FIXME:  handle TokenVerseAssociations!
 
             try
             {
@@ -131,8 +135,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 throw new NullReferenceException($"Source verse {verse.Id} in database has unknown book number {verse.BookNumber}.  Unable to determine book abbreviation in order to convert to engine Verse");
             }
-
-            return new Verse((string)bookAbbreviation, (int)verse.ChapterNumber, (int)verse.VerseNumber);
+            
+            return new Verse(
+                (string)bookAbbreviation, 
+                (int)verse.ChapterNumber, 
+                (int)verse.VerseNumber,
+                verse.TokenVerseAssociations.Where(tva => tva.Token != null).Select(tva => 
+                    new TokenId(tva.Token!.BookNumber, tva.Token!.ChapterNumber, tva.Token!.VerseNumber, tva.Token!.WordNumber, tva.Token!.SubwordNumber))
+            );
         }
     }
 }

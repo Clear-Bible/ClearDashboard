@@ -62,8 +62,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookAbbreviationsToNumbers =
                 FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
 
-            // FIXME:  handle TokenVerseAssociations!
-
             try
             {
                 parallelCorpusModel.VerseMappings.AddRange(request.VerseMappings
@@ -80,28 +78,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
                                 }
-                            // Heavy where clause, but done only in the context of a TokenizedCorpus 
-                            // set of tokens...so maybe not that bad?
-                            var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
-                                sourceTokenizedCorpus.Tokens
-                                    .Where(t =>
-                                        t.BookNumber == tid.BookNumber &&
-                                        t.ChapterNumber == tid.ChapterNumber &&
-                                        t.VerseNumber == tid.VerseNumber &&
-                                        t.WordNumber == tid.WordNumber &&
-                                        t.SubwordNumber == tid.SubWordNumber)
-                                    .Select(t => t.Id)
-                                );                                
+                                // Heavy where clause, but done only in the context of a TokenizedCorpus's
+                                // set of tokens...so maybe not that bad?
+                                var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
+                                    sourceTokenizedCorpus.Tokens
+                                        .Where(t =>
+                                            t.BookNumber == tid.BookNumber &&
+                                            t.ChapterNumber == tid.ChapterNumber &&
+                                            t.VerseNumber == tid.VerseNumber &&
+                                            t.WordNumber == tid.WordNumber &&
+                                            t.SubwordNumber == tid.SubWordNumber)
+                                        .Select(t => t.Id)
+                                    );                                
                                 var verse = new Models.Verse
                                 {
                                     VerseNumber = v.VerseNum,
                                     BookNumber = bookNumber,
                                     ChapterNumber = v.ChapterNum,
-                                    CorpusId = sourceTokenizedCorpus!.CorpusId,
-                                    TokenVerseAssociations = tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
-                                    {
-                                        TokenId = td
-                                    }).ToList()
+                                    CorpusId = sourceTokenizedCorpus!.CorpusId
                                 };
                                 if (tokenDatabaseIds.Count() > 0)
                                 {
@@ -120,7 +114,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
                                 }
-                                // Heavy where clause, but done only in the context of a TokenizedCorpus 
+                                // Heavy where clause, but done only in the context of a TokenizedCorpus's 
                                 // set of tokens...so maybe not that bad?
                                 var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
                                     targetTokenizedCorpus.Tokens

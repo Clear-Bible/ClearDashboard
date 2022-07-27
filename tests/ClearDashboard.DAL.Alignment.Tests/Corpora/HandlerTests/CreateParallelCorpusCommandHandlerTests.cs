@@ -163,23 +163,84 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, targetCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
+            var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
+                .Include(tc => tc.Tokens)
+                .First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
+                .Include(tc => tc.Tokens)
+                .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedCorpusId.Id);
+
+            var sourceTokenGuidIds = sourceTokenizedCorpus.Tokens
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+            var targetTokenGuidIds = targetTokenizedCorpus.Tokens
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+
+            Assert.True(sourceTokenGuidIds.Keys.Count > 100);
+            Assert.True(targetTokenGuidIds.Keys.Count > 100);
+            Assert.Empty(sourceTokenGuidIds.Keys.Intersect(targetTokenGuidIds.Keys));
+
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-            var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedCorpusId.Id);
-            var targetTokenizedCorpus = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedCorpusId.Id);
-            
+            Assert.NotNull(parallelTextCorpus.VerseMappingList);
+            Assert.True(parallelTextCorpus.VerseMappingList!.Count >= 5);
+
             // Take the verse mapping list and recreate it but with TokenIds added to each set of verses
+            int vmi = 0;
             parallelTextCorpus.VerseMappingList =
                 parallelTextCorpus.VerseMappingList!.Take(5).Select(vm =>
-                    new VerseMapping(
-                        vm.SourceVerses.Select(v => new Verse(v.Book, v.ChapterNum, v.VerseNum, sourceTokenizedCorpus.Tokens.Take(5)
-                            .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber)))),
-                        vm.TargetVerses.Select(v => new Verse(v.Book, v.ChapterNum, v.VerseNum, targetTokenizedCorpus.Tokens.Take(4)
-                            .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber))))
-                    )
+                    {
+                        vmi++;
+                        int svi = 0, tvi = 0;
+                        return new VerseMapping(
+                            vm.SourceVerses.Select(v =>
+                            {
+                                svi++;
+                                return new Verse(v.Book, v.ChapterNum, v.VerseNum, sourceTokenGuidIds.Values.Skip(vmi * svi * 3).Take(vmi));
+                            }).ToList(),
+                            vm.TargetVerses.Select(v =>
+                            {
+                                tvi++;
+                                return new Verse(v.Book, v.ChapterNum, v.VerseNum, targetTokenGuidIds.Values.Skip(vmi * tvi * 4).Take(vmi));
+                            }).ToList()
+                        ); ;
+                    }
                 ).ToList();
 
             var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            ProjectDbContext.ChangeTracker.Clear();
+
+#nullable disable
+            var parallelCorpusFromDB = 
+                ProjectDbContext!.ParallelCorpa
+                    .Include(pc => pc.SourceTokenizedCorpus)
+                    .Include(pc => pc.TargetTokenizedCorpus)
+                    .Include(pc => pc.VerseMappings)
+                    .ThenInclude(vm => vm.Verses)
+                    .ThenInclude(v => v.TokenVerseAssociations)
+                    .ThenInclude(tva => tva.Token)
+                    .FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
+#nullable restore
+
+            Assert.NotNull(parallelCorpusFromDB);
+            Assert.Equal(parallelCorpusFromDB!.SourceTokenizedCorpusId, sourceTokenizedCorpus.Id);
+            Assert.Equal(parallelCorpusFromDB!.TargetTokenizedCorpusId, targetTokenizedCorpus.Id);
+            Assert.Equal(5, parallelCorpusFromDB!.VerseMappings.Count);
+
+            var sourceTokenGuidsFromDB = parallelCorpusFromDB.VerseMappings
+                .SelectMany(vm => vm.Verses!
+                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.Token!.TokenizationId == sourceTokenizedCorpus.Id)
+                .Select(tva => tva.TokenId)));
+            var targetTokenGuidsFromDB = parallelCorpusFromDB.VerseMappings
+                .SelectMany(vm => vm.Verses!
+                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.Token!.TokenizationId == targetTokenizedCorpus.Id)
+                .Select(tva => tva.TokenId)));
+
+            Assert.True(sourceTokenGuidsFromDB.Count() > 0);
+            Assert.True(targetTokenGuidsFromDB.Count() > 0);
+            Assert.Empty(sourceTokenGuidsFromDB.Intersect(targetTokenGuidsFromDB));
+            Assert.Empty(sourceTokenGuidsFromDB.Except(sourceTokenGuidIds.Keys));
+            Assert.Empty(targetTokenGuidsFromDB.Except(targetTokenGuidIds.Keys));
 
             Assert.Equal(5, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
             Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 15);

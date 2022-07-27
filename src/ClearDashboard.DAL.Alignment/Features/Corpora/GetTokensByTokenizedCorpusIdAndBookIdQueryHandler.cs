@@ -63,14 +63,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             new VerseTokens(gt.Key.ChapterNumber.ToString(),
                                 gt.Key.VerseNumber.ToString(),
                                 gt.ToList().Select(
-                                    t => new ClearBible.Engine.Corpora.Token(
+                                    t => new Token(
                                         new TokenId(
                                             t.BookNumber,
                                             t.ChapterNumber,
                                             t.VerseNumber,
                                             t.WordNumber,
                                             t.SubwordNumber),
-                                        t.SurfaceText)),
+                                        t.SurfaceText ?? string.Empty)),
                                 false
                             )
                         )
