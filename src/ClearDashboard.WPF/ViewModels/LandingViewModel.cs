@@ -102,12 +102,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        public void AlignmentSample()
-        {
-            Logger.LogInformation("AlignmentSample called.");
-            //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-        }
-
         public void ProjectWorkspace(DashboardProject project)
         {
             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
