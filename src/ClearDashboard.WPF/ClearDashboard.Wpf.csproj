@@ -238,6 +238,9 @@
 			<Generator>SettingsSingleFileGenerator</Generator>
 			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
 		</None>
+		<None Update="Resources\Layouts\Project.Layout.config">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\marble-concordances\BHSAnalysis.xml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -614,6 +617,12 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
 	  <Page Update="Views\Popups\NewProjectAddCorporaView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Project\AddParatextCorpusDialogView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	  <Page Update="Views\Project\NewProjectDialogView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	  </Page>
 	  <Page Update="Views\Workflows\CreateNewProject\CreateNewProjectWorkflowShellView.xaml">

@@ -172,7 +172,28 @@
                                     <!--  TOOL BUTTONS  -->
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
-
+                                        <Button
+                                            x:Name="ProjectWorkspace"
+                                            Width="165"
+                                            Margin="15,8,12,12"
+                                            cal:Message.Attach="ProjectWorkspace($dataContext)"
+                                            IsEnabled="True">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
+                                                    <Setter Property="Padding" Value="0,3,0,3" />
+                                                </Style>
+                                            </Button.Style>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    Width="36"
+                                                    Height="36"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignPaper}"
+                                                    Kind="MonitorDashboard" />
+                                                <TextBlock VerticalAlignment="Center">Project</TextBlock>
+                                            </StackPanel>
+                                        </Button>
                                         <Button
                                             x:Name="Workspace"
                                             Width="165"

@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using System.Collections.ObjectModel;
 using System.Dynamic;
@@ -15,14 +16,7 @@ using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
-using System;
-
-
-using System.Security.Cryptography;
-using System.Text.Json;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.ViewModels.Popups;
+using NewProjectDialogViewModel = ClearDashboard.Wpf.ViewModels.Project.NewProjectDialogViewModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -85,29 +79,32 @@ namespace ClearDashboard.Wpf.ViewModels
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
+      
         public async void NewProject()
         {
             Logger.LogInformation("NewProject called.");
-            
-            dynamic settings = new ExpandoObject();
-            settings.WindowStyle = WindowStyle.ThreeDBorderWindow;
-            settings.ShowInTaskbar = false;
-            //settings.Title = "Create New Project";  // TODO:  localize
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
 
-            var newProjectPopupViewModel = IoC.Get<NewProjectDialogViewModel>();
-            var created = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
+            await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
+                DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
 
-            //if (created.HasValue && created.Value)
-            if (created)
+            // Define a callback method to create a new project if we
+            // have a valid project name
+
+            async Task<bool> Callback(NewProjectDialogViewModel viewModel)
             {
-                var projectName = newProjectPopupViewModel.ProjectName;
+                if (viewModel.ProjectName != null)
+                {
+                    await ProjectManager.CreateNewProject(viewModel.ProjectName);
+                    return true;
+                }
 
-                await ProjectManager.CreateNewProject(projectName);
-                //NavigationService.NavigateToViewModel<NewProjectWorkflowShellViewModel>();
+                return false;
             }
+        }
 
+        public void ProjectWorkspace(DashboardProject project)
+        {
+            NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
 
         public void Workspace(DashboardProject project)
@@ -132,9 +129,9 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager.CurrentDashboardProject = project;
             
 
-            //NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
 
-             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+             //NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
 
         public void Settings()

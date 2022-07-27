@@ -1,0 +1,109 @@
+﻿<Window  x:Class="ClearDashboard.Wpf.Views.Project.AddParatextCorpusDialogView"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+          xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+          xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
+          
+       
+          xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
+          xmlns:local="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+          xmlns:project="clr-namespace:ClearDashboard.Wpf.ViewModels.Project"
+          mc:Ignorable="d" 
+          FlowDirection="{Binding WindowFlowDirection}"
+          FontFamily="{DynamicResource MaterialDesignFont}"
+          TextElement.FontSize="13"
+          TextElement.FontWeight="Regular"
+          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+          TextOptions.TextFormattingMode="Ideal"
+          TextOptions.TextRenderingMode="Auto"
+          ShowInTaskbar="False"
+          Height="300"
+          Width="600"
+          WindowStartupLocation="CenterOwner"
+          helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+          Background="{DynamicResource Transparent}"
+          Foreground="{DynamicResource MaterialDesignPaper}"
+          AllowsTransparency="True"
+          WindowStyle="None"
+          d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
+                                     IsDesignTimeCreatable=True}"
+          d:DesignHeight="150" d:DesignWidth="400"
+ >
+    <Window.Resources>
+
+
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!--<Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+            <Setter Property="Margin" Value="5,5"/>
+            <Setter Property="FontSize" Value="11"></Setter>
+            
+        </Style>-->
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10,10" />
+            <Setter Property="FontSize" Value="24"></Setter>
+        </Style>
+
+        <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"></Setter>
+        </Style>
+
+        <!--<Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignLightRadioButton}">
+            <Setter Property="Margin" Value="0, 0, 5,0" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+        </Style>-->
+
+        <converters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
+        <converters:EnumToValuesConverter x:Key="EnumToValuesConverter" />
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </Window.Resources>
+
+    <Border CornerRadius="25" 
+            BorderBrush="{DynamicResource MaterialDesignDarkBackground}" 
+            BorderThickness="2" 
+            Padding="6" 
+            Background="Black">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <Label Content="Select Paratext Corpus"></Label>
+            </StackPanel>
+            <ComboBox Grid.Row="1" 
+                      Margin="10,0" 
+                      VerticalAlignment="Top"
+                     
+                     
+                      ItemsSource="{Binding Projects}" 
+                      SelectedItem="{Binding SelectedProject}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}"></TextBlock>
+                            <TextBlock FontSize="24" Text="{Binding Name}"></TextBlock>
+                            <TextBlock FontSize="12" Text="{Binding LongName}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+           
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
+                <Button x:Name="Ok" Content="OK" Margin="5 5 5 5" />
+                <Button x:Name="Cancel" Content="CANCEL" Margin="5 5 5 5" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

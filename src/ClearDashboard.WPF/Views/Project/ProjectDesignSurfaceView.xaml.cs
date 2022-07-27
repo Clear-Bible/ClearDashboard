@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Views.Project
+
+namespace ClearDashboard.Wpf.Views.Project
 {
     /// <summary>
     /// Interaction logic for ProjectDesignSurfaceView.xaml
@@ -21,6 +13,18 @@ namespace Views.Project
         public ProjectDesignSurfaceView()
         {
             InitializeComponent();
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+           
+        }
+
+        public void AddControl(FrameworkElement control)
+        {
+            DesignSurfaceCanvas.Dispatcher.Invoke(() => { DesignSurfaceCanvas.Children.Add(control); });
+
         }
     }
 }

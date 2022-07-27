@@ -6,7 +6,7 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels.Panes
 {
 
-	public class DocumentViewModel : PaneViewModel
+	public class DocumentViewModel : PaneViewModel, IAvalonDockWindow
 	{
 		#region fields
 		private static ImageSourceConverter ISC = new ImageSourceConverter();

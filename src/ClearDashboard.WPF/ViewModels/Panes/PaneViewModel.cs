@@ -5,10 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Panes
 {
+
+    public interface IAvalonDockWindow
+    {
+        string ContentId { get; }
+    }
     /// <summary>
     /// 
     /// </summary>
-    public class PaneViewModel : ApplicationScreen
+    public class PaneViewModel : ApplicationScreen, IAvalonDockWindow
     {
         public enum EDockSide
         {

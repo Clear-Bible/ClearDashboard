@@ -1,21 +1,17 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls">
 
-    <Style x:Key="NewProjectWindow" TargetType="{x:Type popups:CustomWindow}">
-        <!--<Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+    <Style x:Key="NewProjectWindow" TargetType="{x:Type userControls:CustomWindow}">
+        <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.WindowTextBrushKey}}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="AllowsTransparency" Value="True"/>-->
-        <!--<Setter Property="WindowStyle" Value="ToolWindow"/>-->
+        <Setter Property="AllowsTransparency" Value="True"/>
+        <Setter Property="WindowStyle" Value="ToolWindow"/>
         <Setter Property="SizeToContent" Value="WidthAndHeight" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type popups:CustomWindow}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        CornerRadius="10">
+                <ControlTemplate TargetType="{x:Type userControls:CustomWindow}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="10" Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
