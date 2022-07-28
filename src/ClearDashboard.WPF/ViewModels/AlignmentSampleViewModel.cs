@@ -81,7 +81,8 @@ namespace ClearDashboard.Wpf.ViewModels
                     VerseNumber = engineToken.TokenId.VerseNumber,
                     WordNumber = engineToken.TokenId.WordNumber,
                     SubwordNumber = engineToken.TokenId.SubWordNumber,
-                    Text = engineToken.Text
+                    SurfaceText = engineToken.SurfaceText,
+                    TrainingText = engineToken.TrainingText
                 }))
             );
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
@@ -116,7 +117,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public string Message { get; set; }
         private VerseTokens DatabaseVerseTokens { get; set; }
 
-        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.Text).ToList() : new List<string>();
+        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
 
         public string DatabaseVerseDetokenized
         {
@@ -181,10 +182,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void LoadFiles()
         {
-            EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(EnglishFile));
 
-            GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(GreekVerse1));
         }
 

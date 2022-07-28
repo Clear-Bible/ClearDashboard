@@ -37,15 +37,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
-                var bookAbbreviationsToNumbers =
-                    FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
-                if (!bookAbbreviationsToNumbers.TryGetValue(request.BookId, out int bookNumber))
-                {
-                    throw new Exception($"Invalid book '{request.BookId}' found in request");
-                }
+                var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
 
                 var groupedTokens = tokenizedCorpus.Tokens
-                    .Where(t => t.BookNumber == bookNumber)
+                    .Where(t => t.BookNumber == bookNumberForAbbreviation)
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
@@ -59,21 +54,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 return new RequestResult<IEnumerable<VerseTokens>>
                 (
                     groupedTokens.Select(gt =>
-                        ( 
+                        (
                             new VerseTokens(gt.Key.ChapterNumber.ToString(),
                                 gt.Key.VerseNumber.ToString(),
                                 gt.ToList().Select(
-                                    t => new ClearBible.Engine.Corpora.Token(
+                                    t => new Token(
                                         new TokenId(
                                             t.BookNumber,
                                             t.ChapterNumber,
                                             t.VerseNumber,
                                             t.WordNumber,
                                             t.SubwordNumber),
-                                        t.Text)),
-                                 false
-                                )
-                           )
+                                        t.SurfaceText ?? string.Empty,
+                                        t.TrainingText ?? string.Empty)),
+                                false
+                            )
+                        )
                     )
                 );
             }
@@ -81,6 +77,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 return new RequestResult<IEnumerable<VerseTokens>>
                     (result: null, success: false, message: ex.ToString());
+            }
+        }
+
+        private int GetBookNumberForSILAbbreviation(string silBookAbbreviation)
+        {
+            var bookMappingDatum = FileGetBookIds.BookIds
+                .FirstOrDefault(bookDatum => bookDatum.silCannonBookAbbrev == silBookAbbreviation);
+
+            if (bookMappingDatum == null)
+            {
+                throw new Exception(
+                    $"Unable to map book abbreviation: {silBookAbbreviation} to book number."
+                );
+            }
+
+            if (Int32.TryParse(bookMappingDatum.clearTreeBookNum, out int intifiedBookNumber))
+            {
+                return intifiedBookNumber;
+            }
+            else
+            {
+                throw new Exception(
+                    $"Unable to parse book number {bookMappingDatum.clearTreeBookNum} for SIL Book abbreviation {silBookAbbreviation}"
+                );
             }
         }
     }

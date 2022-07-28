@@ -8,6 +8,7 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Persistence;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Translation;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
 using ClearDashboard.DAL.Alignment.Translation;
 using MediatR;
@@ -100,11 +101,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
 
                         //predict primary smt aligner alignments only then display - ONLY FOR COMPARISON
                         var smtOrdinalAlignments = smtWordAlignmentModel.GetBestAlignment(engineParallelTextRow.SourceSegment, engineParallelTextRow.TargetSegment);
-                        IEnumerable<(Token sourceToken, Token targetToken, double score)> smtSourceTargetTokenIdPairs = engineParallelTextRow.GetAlignedTokenIdPairs(smtOrdinalAlignments);
+                        IEnumerable<AlignedTokenPairs> smtSourceTargetTokenIdPairs = engineParallelTextRow.GetAlignedTokenPairs(smtOrdinalAlignments);
                             // (Legacy): Alignments as ordinal positions in versesmap
                         output_.WriteLine($"SMT Alignment        : {smtOrdinalAlignments}");
                             // Alignments as source token to target token pairs
-                        output_.WriteLine($"SMT Alignment        : {string.Join(" ", smtSourceTargetTokenIdPairs.Select(t => $"{t.sourceToken.TokenId}->{t.targetToken.TokenId}"))}");
+                        output_.WriteLine($"SMT Alignment        : {string.Join(" ", smtSourceTargetTokenIdPairs.Select(t => $"{t.SourceToken.TokenId}->{t.TargetToken.TokenId}"))}");
 
 
                         //predict syntax tree aligner alignments then display
@@ -113,7 +114,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                         //output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeWordAlignmentModel.GetBestAlignmentAlignedWordPairs(engineParallelTextRow).Select(a => a.ToString()))}");
                             // ALIGNMENTS as source token to target token pairs
                         var syntaxTreeAlignments = translationCommandable.PredictParallelMappedVersesAlignedTokenIdPairs(syntaxTreeWordAlignmentModel, engineParallelTextRow);
-                        output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeAlignments.Select(t => $"{t.sourceToken.TokenId}->{t.targetToken.TokenId}"))}");
+                        output_.WriteLine($"Syntax tree Alignment: {string.Join(" ", syntaxTreeAlignments.Select(t => $"{t.SourceToken.TokenId}->{t.TargetToken.TokenId}"))}");
                     }
                 }
             }

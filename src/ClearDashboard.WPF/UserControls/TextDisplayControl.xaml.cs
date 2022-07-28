@@ -1,38 +1,27 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.UserControls
 {
     /// <summary>
-    /// Interaction logic for TextDisplayControl.xaml
+    /// A control for displaying a list of words/tokens.
     /// </summary>
     public partial class TextDisplayControl : UserControl
     {
         /// <summary>
-        /// Identifies the Words dependency property.
+        /// Identifies the ItemsSource dependency property.
         /// </summary>
-        public static readonly DependencyProperty WordsProperty = DependencyProperty.Register("Words", typeof(IEnumerable), typeof(TextDisplayControl));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(TextDisplayControl));
 
         /// <summary>
-        /// Gets or sets the words to display in the control.
+        /// Gets or sets a collection to display in the control.
         /// </summary>
-        public IEnumerable Words
+        public IEnumerable ItemsSource
         {
-            get => (IEnumerable)GetValue(WordsProperty);
-            set => SetValue(WordsProperty, value);
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
         }
 
         /// <summary>

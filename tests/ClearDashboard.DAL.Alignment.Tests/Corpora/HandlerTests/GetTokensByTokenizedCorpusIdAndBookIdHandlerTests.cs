@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -8,9 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,26 +22,24 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async Task GetDataAsync__ValidateResults()
+    public async void GetDataAsync__ValidateResults()
     {
         try
         {
             // Load data
-            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, false, "Greek NT", "grc",
-                "Resource",
+            var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-            await Mediator.Send(command);
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
-            var context = await factory.GetDatabaseContext(ProjectName);
-            //Assert.Equal(context, ProjectDbContext);
-
+            var createResult = await Mediator!.Send(command);
+            Assert.True(createResult.Success);
+            Assert.NotNull(createResult.Data);
+            var tokenizedTextCorpus = createResult.Data!;
 
             ProjectDbContext.ChangeTracker.Clear();
 
             // Retrieve Tokens
-            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(context.TokenizedCorpora.First().Id), "MAT");
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -55,13 +51,13 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.Equal("1", matthewCh1V1.Chapter);
             Assert.Equal("1", matthewCh1V1.Verse);
             Assert.Equal(9, matthewCh1V1.Tokens.Count());
-            Assert.Equal("Βίβλος", matthewCh1V1.Tokens.First().Text);
+            Assert.Equal("Βίβλος", matthewCh1V1.Tokens.First().SurfaceText);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
-                String.Join(" ", matthewCh1V1.Tokens.Select(t => t.Text)));
+                String.Join(" ", matthewCh1V1.Tokens.Select(t => t.SurfaceText)));
 
             // Validate Matt 5:9
             var matthewCh5V9 = result.Data.Single(datum => datum.Chapter == "5" && datum.Verse == "9");
-            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.Tokens.Select(t => t.Text));
+            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.Tokens.Select(t => t.SurfaceText));
             Assert.Equal("μακάριοι οἱ εἰρηνοποιοί , ὅτι αὐτοὶ υἱοὶ Θεοῦ κληθήσονται .", matthewCh5V9Text);
         }
         finally
@@ -69,6 +65,41 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void GetDataAsync__HandlesInvalidBookAbbreviation()
+    {
+        try
+        {
+            // Load data
+            var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+            await Mediator.Send(command);
+
+
+            ProjectDbContext.ChangeTracker.Clear();
+
+            // Retrieve Tokens
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
+                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
+            var result = await Mediator.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Null(result.Data);
+            Assert.StartsWith(
+                "System.Exception: Unable to map book abbreviation: BARF to book number.",
+                result.Message
+            );
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
 
     [Fact]
     [Trait("Category", "Handlers")]
@@ -80,7 +111,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MAT");
+                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "40");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
