@@ -65,7 +65,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                             t.VerseNumber,
                                             t.WordNumber,
                                             t.SubwordNumber),
-                                        t.SurfaceText ?? string.Empty)),
+                                        t.SurfaceText ?? string.Empty,
+                                        t.TrainingText ?? string.Empty)),
                                 false
                             )
                         )

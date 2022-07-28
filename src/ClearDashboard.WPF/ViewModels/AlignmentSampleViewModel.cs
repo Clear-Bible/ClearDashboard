@@ -81,7 +81,8 @@ namespace ClearDashboard.Wpf.ViewModels
                     VerseNumber = engineToken.TokenId.VerseNumber,
                     WordNumber = engineToken.TokenId.WordNumber,
                     SubwordNumber = engineToken.TokenId.SubWordNumber,
-                    SurfaceText = engineToken.Text
+                    SurfaceText = engineToken.SurfaceText,
+                    TrainingText = engineToken.TrainingText
                 }))
             );
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
@@ -116,7 +117,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public string Message { get; set; }
         private VerseTokens DatabaseVerseTokens { get; set; }
 
-        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.Text).ToList() : new List<string>();
+        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
 
         public string DatabaseVerseDetokenized
         {
