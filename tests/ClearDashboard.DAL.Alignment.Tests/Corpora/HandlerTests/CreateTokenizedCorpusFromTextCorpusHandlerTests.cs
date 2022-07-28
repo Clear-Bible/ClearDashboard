@@ -78,13 +78,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 Output.WriteLine($"tokenIds: {tokenIds}");
 
                 //display tokens tokenized
-                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.Text));
+                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.SurfaceText));
                 Output.WriteLine($"tokensText: {tokensText}");
 
                 //display tokens detokenized
                 var detokenizer = new LatinWordDetokenizer();
                 var tokensTextDetokenized =
-                    detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.Text).ToList());
+                    detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.SurfaceText).ToList());
                 Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
             }
         }

@@ -61,7 +61,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         VerseNumber = token.TokenId.VerseNumber,
                         WordNumber = token.TokenId.WordNumber,
                         SubwordNumber = token.TokenId.SubWordNumber,
-                        SurfaceText = token.Text
+                        SurfaceText = token.SurfaceText,
+                        TrainingText = token.TrainingText
                     })
                 ));
 
