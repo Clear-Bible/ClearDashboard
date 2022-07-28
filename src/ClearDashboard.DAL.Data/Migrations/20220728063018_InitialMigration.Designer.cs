@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220714155441_InitialMigration")]
+    [Migration("20220728063018_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -456,10 +456,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("SurfaceText")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TokenizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrainingText")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("VerseNumber")
@@ -583,6 +586,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("VerseBBBCCCVVV")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("VerseMappingId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("VerseNumber")
                         .HasColumnType("INTEGER");
 
@@ -594,6 +600,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("CorpusHistoryId");
 
                     b.HasIndex("CorpusId");
+
+                    b.HasIndex("VerseMappingId");
 
                     b.ToTable("Verse");
                 });
@@ -613,9 +621,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ParallelCorpusVersionId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -626,33 +631,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("ParallelCorpusId");
 
                     b.ToTable("VerseMapping");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingVerseAssociation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("VerseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("VerseMappingId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VerseId");
-
-                    b.HasIndex("VerseMappingId");
-
-                    b.ToTable("VerseMappingVerseAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentAssociation", b =>
@@ -922,7 +900,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("Verses")
                         .HasForeignKey("CorpusId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
+                        .WithMany("Verses")
+                        .HasForeignKey("VerseMappingId");
+
                     b.Navigation("Corpus");
+
+                    b.Navigation("VerseMapping");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
@@ -936,21 +920,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("ParallelCorpusId");
 
                     b.Navigation("ParallelCorpus");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMappingVerseAssociation", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "Verse")
-                        .WithMany()
-                        .HasForeignKey("VerseId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
-                        .WithMany("VerseMappingVerseAssociations")
-                        .HasForeignKey("VerseMappingId");
-
-                    b.Navigation("Verse");
-
-                    b.Navigation("VerseMapping");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
@@ -1034,7 +1003,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
                 {
-                    b.Navigation("VerseMappingVerseAssociations");
+                    b.Navigation("Verses");
                 });
 #pragma warning restore 612, 618
         }
