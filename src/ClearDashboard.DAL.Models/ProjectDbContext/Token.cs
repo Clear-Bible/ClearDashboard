@@ -22,7 +22,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Guid TokenizationId { get; set; }
         public virtual TokenizedCorpus? Tokenization { get; set; }
 
-        public string? Text { get; set; }
+        public string? SurfaceText { get; set; }
+
+        public string? TrainingText { get; set; }
 
         public virtual Adornment? Adornment { get; set; }
 

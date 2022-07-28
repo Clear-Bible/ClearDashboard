@@ -22,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
         {
             serviceCollection.AddLogging();
 
-            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateTokenizedCorpusFromTokenizedCorpusCommandHandler));
+            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateTokenizedCorpusFromTextCorpusCommandHandler));
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
