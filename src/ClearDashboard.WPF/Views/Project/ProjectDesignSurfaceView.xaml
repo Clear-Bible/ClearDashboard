@@ -93,16 +93,7 @@
             </StackPanel>
         </materialDesign:Card>
         <Border  Grid.Row="1" Background="Transparent" BorderThickness="5" BorderBrush="Black">
-        <Canvas x:Name="DesignSurfaceCanvas">
-                <Border Canvas.Left="10" 
-                        Canvas.Top="10" 
-                        Height="75" 
-                        Width="150" 
-                        Background="Blue"
-                        CornerRadius="5">
-                     <TextBlock Text="zz_SUR" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                </Border>
-         </Canvas>
+        <Canvas Name="DesignSurfaceCanvas" Visibility="Visible"></Canvas>
         </Border>
     </Grid>
 </UserControl>

@@ -104,7 +104,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void ProjectWorkspace(DashboardProject project)
         {
-            NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+            ProjectManager.CurrentDashboardProject = project;
+            NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
+          
         }
 
         public void Workspace(DashboardProject project)
@@ -129,7 +131,7 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager.CurrentDashboardProject = project;
             
 
-             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+          
 
              //NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
         }
