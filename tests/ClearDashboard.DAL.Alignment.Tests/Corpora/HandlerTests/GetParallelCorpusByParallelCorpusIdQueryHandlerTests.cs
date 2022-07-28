@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
@@ -81,13 +83,17 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 }
                 ).ToList();
 
+            // Save:
             var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
 
+            // Clear ProjectDbContext:
             ProjectDbContext.ChangeTracker.Clear();
 
+            // Get:
             var query = new GetParallelCorpusByParallelCorpusIdQuery(parallelTokenizedCorpus.ParallelCorpusId);
             var queryResult = await Mediator!.Send(query);
 
+            // Validate:
             Assert.NotNull(queryResult);
             Assert.True(queryResult.Success);
             Assert.Equal(sourceTokenizedTextCorpus.TokenizedCorpusId, queryResult.Data.sourceTokenizedCorpusId);
@@ -111,6 +117,67 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             Assert.NotEqual(sourceTokenIds, targetTokenIds);
             Assert.Empty(sourceTokenIds.Except(sourceTokenGuidIds.Values));
             Assert.Empty(targetTokenIds.Except(targetTokenGuidIds.Values));
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void BookIds__InvalidParallelCorpusId()
+    {
+        try
+        {
+            var query = new GetParallelCorpusByParallelCorpusIdQuery(new ParallelCorpusId(Guid.NewGuid()));
+
+            var result = await Mediator!.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.NotNull(result.Message);
+            Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void BookIds__NullTokenizedCorpus()
+    {
+        try
+        {
+            var sourceCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCorpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, targetCorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
+            Assert.NotNull(parallelCorpusDB);
+
+            // Remove the source tokenized corpus:
+            parallelCorpusDB!.SourceTokenizedCorpus = null;
+
+            // Commit to database:
+            await ProjectDbContext.SaveChangesAsync();
+
+            var query = new GetParallelCorpusByParallelCorpusIdQuery(parallelTokenizedCorpus.ParallelCorpusId);
+
+            var result = await Mediator!.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.NotNull(result.Message);
+            Output.WriteLine(result.Message);
         }
         finally
         {

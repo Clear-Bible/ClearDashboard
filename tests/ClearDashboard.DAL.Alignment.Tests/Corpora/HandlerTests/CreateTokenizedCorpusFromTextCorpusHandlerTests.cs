@@ -95,7 +95,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
     }
 
     [Fact]
-    public async void Corpus__CreateMultipleTokenizedCorpa()
+    public async void TokenizedCorpus__CreateMultiple()
     {
         try
         {
@@ -159,7 +159,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Validate Persistence")]
-    public async void Corpus__ValidateTokenizedCorpus()
+    public async void TokenizedCorpus__Validate()
     {
         try
         {
@@ -176,7 +176,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             // Like getting a new context.
             // Imitates a fresh runtime process fetching data.
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext!.ChangeTracker.Clear();
 
             // Validate correctness of data
             Assert.Equal(1, ProjectDbContext.Corpa.Count());
@@ -209,7 +209,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Load")]
-    public async void Corpus__CreateTokenizedCorpus__FullNT_x3()
+    public async void TokenizedCorpus__Create__FullNT_x3()
     {
         try
         {
@@ -255,6 +255,27 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal(157590, corpusNT1?.TokenizedCorpora.First().Tokens.Count);
             Assert.Equal(157590, corpusNT2?.TokenizedCorpora.First().Tokens.Count);
             Assert.Equal(157590, corpusNT3?.TokenizedCorpora.First().Tokens.Count);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handler")]
+    public async void TokenizedCorpus__InvalidCorpusId()
+    {
+        try
+        {
+            var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, new CorpusId(new Guid()), "bogus");
+
+            var result = await Mediator!.Send(command);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Null(result.Data);
+            Output.WriteLine(result.Message);
         }
         finally
         {

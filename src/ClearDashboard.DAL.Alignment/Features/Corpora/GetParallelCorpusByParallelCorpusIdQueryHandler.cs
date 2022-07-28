@@ -57,12 +57,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var invalidArgMsg = "";
             if (parallelCorpus == null)
             {
-                invalidArgMsg = $"ParallelCorpus not found for ParallelCorpusId {request.ParallelCorpusId.Id}";
+                invalidArgMsg = $"ParallelCorpus not found for ParallelCorpusId '{request.ParallelCorpusId.Id}'";
             }
-
-            if (parallelCorpus!.SourceTokenizedCorpus == null || parallelCorpus.TargetTokenizedCorpus == null)
+            else if (parallelCorpus!.SourceTokenizedCorpus == null || parallelCorpus.TargetTokenizedCorpus == null)
             {
-                invalidArgMsg = $"ParallelCorpus {request.ParallelCorpusId.Id} has null source or target tokenized corpus";
+                // Not sure this condition is possible, since we
+                // are using .Include() for both properties:
+                invalidArgMsg = $"ParallelCorpus '{request.ParallelCorpusId.Id}' has null source or target tokenized corpus";
             }
 
             if (!string.IsNullOrEmpty(invalidArgMsg))
@@ -80,25 +81,54 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookNumbersToAbbreviations =
                 FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
 
-            var sourceCorpusId = parallelCorpus.SourceTokenizedCorpus!.CorpusId;
-            var targetCorpusId = parallelCorpus.TargetTokenizedCorpus!.CorpusId;
+            var sourceCorpusId = parallelCorpus!.SourceTokenizedCorpus!.CorpusId;
+            var targetCorpusId = parallelCorpus!.TargetTokenizedCorpus!.CorpusId;
 
             try
             {
-                var verseMappings = parallelCorpus.VerseMappings
+                var verseMappings = parallelCorpus!.VerseMappings
                     .Where(vm => vm.Verses != null)
                     .Select(vm =>
                     {
                         var sourceVerses = vm.Verses!
                             .Where(v => v.CorpusId == sourceCorpusId)
-                            .Select(v => ValidateBuildVerse(v, bookNumbersToAbbreviations));
+                            .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
+                            .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
+                            .Select(v => new Verse(
+                                bookNumbersToAbbreviations[(int)v.BookNumber!],
+                                (int)v.ChapterNumber!,
+                                (int)v.VerseNumber!,
+                                v.TokenVerseAssociations
+                                    .Where(tva => tva.Token != null)
+                                    .Select(tva =>
+                                        new TokenId(
+                                            tva.Token!.BookNumber,
+                                            tva.Token!.ChapterNumber,
+                                            tva.Token!.VerseNumber,
+                                            tva.Token!.WordNumber,
+                                            tva.Token!.SubwordNumber))
+                            ));
                         var targetVerses = vm.Verses!
                             .Where(v => v.CorpusId == targetCorpusId)
-                            .Select(v => ValidateBuildVerse(v, bookNumbersToAbbreviations));
+                            .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
+                            .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
+                            .Select(v => new Verse(
+                                bookNumbersToAbbreviations[(int)v.BookNumber!],
+                                (int)v.ChapterNumber!,
+                                (int)v.VerseNumber!,
+                                v.TokenVerseAssociations
+                                    .Where(tva => tva.Token != null)
+                                    .Select(tva =>
+                                        new TokenId(
+                                            tva.Token!.BookNumber, 
+                                            tva.Token!.ChapterNumber, 
+                                            tva.Token!.VerseNumber, 
+                                            tva.Token!.WordNumber, 
+                                            tva.Token!.SubwordNumber))
+                            ));
 
                         return new VerseMapping(sourceVerses, targetVerses);
                     });
-
 
                 return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
                         TokenizedCorpusId targetTokenizedCorpusId,
@@ -122,27 +152,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     message: e.Message
                 );
             }
-        }
-
-        private Verse ValidateBuildVerse(Models.Verse verse, Dictionary<int, string> bookNumbersToAbbreviations)
-        {
-            string? bookAbbreviation;
-            if (verse.BookNumber == null || verse.ChapterNumber == null || verse.VerseNumber == null)
-            {
-                throw new NullReferenceException($"Source verse {verse.Id} in database has null book, chapter or verse number.  Unable to convert to engine Verse");
-            }
-            else if (!bookNumbersToAbbreviations.TryGetValue((int)verse.BookNumber, out bookAbbreviation))
-            {
-                throw new NullReferenceException($"Source verse {verse.Id} in database has unknown book number {verse.BookNumber}.  Unable to determine book abbreviation in order to convert to engine Verse");
-            }
-            
-            return new Verse(
-                (string)bookAbbreviation, 
-                (int)verse.ChapterNumber, 
-                (int)verse.VerseNumber,
-                verse.TokenVerseAssociations.Where(tva => tva.Token != null).Select(tva => 
-                    new TokenId(tva.Token!.BookNumber, tva.Token!.ChapterNumber, tva.Token!.VerseNumber, tva.Token!.WordNumber, tva.Token!.SubwordNumber))
-            );
         }
     }
 }

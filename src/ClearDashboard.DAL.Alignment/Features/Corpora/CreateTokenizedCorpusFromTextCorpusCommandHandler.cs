@@ -36,9 +36,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // 1. creates a new associated TokenizedCorpus (associated with the parent CorpusId provided in the request),
             // 2. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
 
+            var corpus = ProjectDbContext!.Corpa.FirstOrDefault(c => c.Id == request.CorpusId.Id);
+            if (corpus == null)
+            {
+                return new RequestResult<TokenizedTextCorpus>
+                (
+                    success: false,
+                    message: $"Invalid CorpusId '{request.CorpusId.Id}' found in request"
+                );
+            }
+
             var tokenizedCorpus = new TokenizedCorpus
             {
-                CorpusId = request.CorpusId.Id,
+                Corpus = corpus,
                 TokenizationFunction = request.TokenizationFunction
             };
             

@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
@@ -35,7 +37,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, string.Empty);
             var commandResult = await Mediator!.Send(command);
 
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext!.ChangeTracker.Clear();
 
             var query = new GetBookIdsByTokenizedCorpusIdQuery(commandResult.Data?.TokenizedCorpusId!);
             var queryResult = await Mediator.Send(query);
@@ -57,16 +59,60 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void BookIds_QueryBogusId()
+    public async void BookIds__InvalidTokenizedCorpusId()
     {
         try
         {
             var query = new GetBookIdsByTokenizedCorpusIdQuery(new TokenizedCorpusId(Guid.NewGuid()));
 
-            var result = await Mediator.Send(query);
+            var result = await Mediator!.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.NotNull(result.Message);
+            Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void BookIds__InvalidTokenBookNumber()
+    {
+        try
+        {
+            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, corpusId, ".a.function()");
+
+            var tokenizedCorpus = ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == tokenizedTextCorpus.TokenizedCorpusId.Id);
+            Assert.NotNull(tokenizedCorpus);
+
+            // Add token with bogus book number:
+            tokenizedCorpus!.Tokens.Add(
+                new Models.Token
+                {
+                    BookNumber = 9999,
+                    ChapterNumber = 1,
+                    VerseNumber = 1,
+                    WordNumber = 1,
+                    SubwordNumber = 1
+                }
+            );
+
+            // Commit to database:
+            await ProjectDbContext.SaveChangesAsync();
+
+            // Run the query:
+            var query = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpus.TokenizedCorpusId);
+
+            var result = await Mediator!.Send(query);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.NotNull(result.Message);
+            Output.WriteLine(result.Message);
         }
         finally
         {

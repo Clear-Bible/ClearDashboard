@@ -46,8 +46,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 (
                     success: false,
                     message: sourceTokenizedCorpus == null ?
-                        $"SourceTokenizedCorpus not found for TokenizedCorpusId {request.SourceTokenizedCorpusId.Id}" :
-                        $"TargetTokenizedCorpus not found for TokenizedCorpusId {request.TargetTokenizedCorpusId.Id}"
+                        $"SourceTokenizedCorpus not found for TokenizedCorpusId '{request.SourceTokenizedCorpusId.Id}'" :
+                        $"TargetTokenizedCorpus not found for TokenizedCorpusId '{request.TargetTokenizedCorpusId.Id}'"
                 );
             }
 
