@@ -1,5 +1,7 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.Translation;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
@@ -22,24 +24,24 @@ namespace ClearDashboard.DAL.Alignment.Translation
             mediator_ = mediator;
         }
 
-        public IEnumerable<(Token sourceToken, Token targetToken, double score)> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
+        public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<(Token sourceToken, Token targetToken, double score)> PredictParallelMappedVersesAlignedTokenIdPairs(
+        public IEnumerable<AlignedTokenPairs> PredictParallelMappedVersesAlignedTokenIdPairs(
             IWordAligner wordAligner, 
             EngineParallelTextRow parallelMappedVerses)
         {
             if (wordAligner is ISyntaxTreeWordAligner)
             {
                 var syntaxTreeOrdinalAlignedWordPairs = ((ISyntaxTreeWordAligner) wordAligner).GetBestAlignmentAlignedWordPairs(parallelMappedVerses);
-                return parallelMappedVerses.GetAlignedTokenIdPairs(syntaxTreeOrdinalAlignedWordPairs);
+                return parallelMappedVerses.GetAlignedTokenPairs(syntaxTreeOrdinalAlignedWordPairs);
             }
             else
             {
                 var smtOrdinalAlignments =  wordAligner.GetBestAlignment(parallelMappedVerses.SourceSegment, parallelMappedVerses.TargetSegment);
-                return   parallelMappedVerses.GetAlignedTokenIdPairs(smtOrdinalAlignments);
+                return parallelMappedVerses.GetAlignedTokenPairs(smtOrdinalAlignments);
             }
         }
 
@@ -124,8 +126,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             EngineParallelTextCorpus parallelCorpus, 
             IWordAlignmentModel smtTrainedWordAlignmentModel, 
             SyntaxTreeWordAlignerHyperparameters hyperparameters,
-            string syntaxTreesPath,
-            IProgress<ProgressStatus>? progress = null)
+            IProgress<ProgressStatus>? progress = null,
+            string? syntaxTreesPath = null
+            )
         {
             var manuscriptTree = new SyntaxTrees(syntaxTreesPath);
 

@@ -482,6 +482,8 @@ namespace ClearDashboard.Wpf.ViewModels
             }
             else
             {
+                //var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
+                //Settings.Default.LastLayout = filePath;
                 // check to see if the layout exists
                 string layoutPath = Settings.Default.LastLayout;
                 LoadLayout(layoutSerializer, File.Exists(layoutPath) ? layoutPath : FileLayouts[0].LayoutPath);
@@ -539,7 +541,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 var files = Directory.GetFiles(path, "*.Layout.config");
 
-                foreach (var file in files)
+                foreach (var file in files.Where(f=>!f.StartsWith("Project")))
                 {
                     FileInfo fileInfo = new FileInfo(file);
                     string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
@@ -836,6 +838,10 @@ namespace ClearDashboard.Wpf.ViewModels
             // save to settings
             Settings.Default.LastLayout = filePath;
             _lastLayout = filePath;
+
+            // save the layout
+            //var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
+            layoutSerializer.Serialize(filePath);
         }
 
         /// <summary>

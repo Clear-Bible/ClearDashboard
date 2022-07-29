@@ -7,7 +7,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
     /// <summary>
     /// 
     /// </summary>
-    public class ToolViewModel : PaneViewModel
+    public class ToolViewModel : PaneViewModel, IAvalonDockWindow
     {
         #region Member Variables
         private bool _isVisible = true;

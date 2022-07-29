@@ -16,7 +16,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public CorpusViewModel(INavigationService navigationService, ILogger<CorpusViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "Corpus";
+            Title = "CORPUS";
             ContentId = "CORPUSTOOL";
         }
     }

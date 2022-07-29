@@ -5,14 +5,14 @@ public class VerseMapping : SynchronizableTimestampedEntity
     public VerseMapping()
     {
         // ReSharper disable VirtualMemberCallInConstructor
-        VerseMappingVerseAssociations = new HashSet<VerseMappingVerseAssociation>();
+        Verses = new HashSet<Verse>();
        
 
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
-    public virtual Guid? ParallelCorpusVersionId { get; set; }
+    public virtual Guid? ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
 
-    public virtual ICollection<VerseMappingVerseAssociation>? VerseMappingVerseAssociations { get; set; }
+    public virtual ICollection<Verse> Verses { get; set; }
 }

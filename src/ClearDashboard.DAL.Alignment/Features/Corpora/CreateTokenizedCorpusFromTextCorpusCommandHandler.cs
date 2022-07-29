@@ -33,45 +33,40 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
-            // 1. creates a new Corpus,
-            // 2. creates a new associated TokenizedCorpus,
-            // 3. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
+            // 1. creates a new associated TokenizedCorpus (associated with the parent CorpusId provided in the request),
+            // 2. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
 
-            var corpus = new Corpus
+            var corpus = ProjectDbContext!.Corpa.FirstOrDefault(c => c.Id == request.CorpusId.Id);
+            if (corpus == null)
             {
-                IsRtl = request.IsRtl,
-                Name = request.Name,
-                Language = request.Language,
-            };
-
-            if (Enum.TryParse<CorpusType>(request.CorpusType, out CorpusType corpusType))
-            {
-                corpus.CorpusType = corpusType;
-            } 
-            else
-            {
-                corpus.CorpusType = CorpusType.Unknown;
+                return new RequestResult<TokenizedTextCorpus>
+                (
+                    success: false,
+                    message: $"Invalid CorpusId '{request.CorpusId.Id}' found in request"
+                );
             }
 
-            corpus.Metadata["TokenizationQueryString"] = request.TokenizationQueryString;
+            var tokenizedCorpus = new TokenizedCorpus
+            {
+                Corpus = corpus,
+                TokenizationFunction = request.TokenizationFunction
+            };
+            
+            tokenizedCorpus.Tokens.AddRange(request.TextCorpus.Cast<TokensTextRow>()
+                .SelectMany(tokensTextRow => tokensTextRow.Tokens
+                    .Select(token => new Models.Token
+                    {
+                        BookNumber = token.TokenId.BookNumber,
+                        ChapterNumber = token.TokenId.ChapterNumber,
+                        VerseNumber = token.TokenId.VerseNumber,
+                        WordNumber = token.TokenId.WordNumber,
+                        SubwordNumber = token.TokenId.SubWordNumber,
+                        SurfaceText = token.SurfaceText,
+                        TrainingText = token.TrainingText
+                    })
+                ));
 
-            var tokenizedCorpus = new TokenizedCorpus();
-
-            request.TextCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
-                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Models.Token
-                {
-                    BookNumber = engineToken.TokenId.BookNumber,
-                    ChapterNumber = engineToken.TokenId.ChapterNumber,
-                    VerseNumber = engineToken.TokenId.VerseNumber,
-                    WordNumber = engineToken.TokenId.WordNumber,
-                    SubwordNumber = engineToken.TokenId.SubWordNumber,
-                    Text = engineToken.Text
-                }))
-            );
-
-            ProjectDbContext.Corpa.Add(corpus);
-            corpus.TokenizedCorpora.Add(tokenizedCorpus);
-
+            ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
 
             // NB:  passing in the cancellation token to SaveChangesAsync.
             await ProjectDbContext.SaveChangesAsync(cancellationToken);

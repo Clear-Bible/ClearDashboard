@@ -1,4 +1,5 @@
-﻿using ClearDashboard.Wpf.ViewModels.Popups;
+﻿using ClearDashboard.Wpf.UserControls;
+using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.Views.Popups
 {

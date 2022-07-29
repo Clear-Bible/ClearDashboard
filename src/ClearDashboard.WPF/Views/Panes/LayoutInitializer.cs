@@ -7,6 +7,13 @@ namespace ClearDashboard.Wpf.Views.Panes
     {
         public bool BeforeInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableToShow, ILayoutContainer destinationContainer)
         {
+
+            // Lock tool windows in their default layout position
+            //anchorableToShow.CanMove = false;
+            //anchorableToShow.CanHide = false;
+            //anchorableToShow.CanFloat = false;
+            //anchorableToShow.CanAutoHide = false;
+
             //AD wants to add the anchorable into destinationContainer
             //just for test provide a new anchorablepane 
             //if the pane is floating let the manager go ahead
@@ -22,6 +29,8 @@ namespace ClearDashboard.Wpf.Views.Panes
                 return true;
             }
 
+        
+
             return false;
 
         }
@@ -34,6 +43,9 @@ namespace ClearDashboard.Wpf.Views.Panes
 
         public bool BeforeInsertDocument(LayoutRoot layout, LayoutDocument anchorableToShow, ILayoutContainer destinationContainer)
         {
+            //anchorableToShow.CanMove = false;
+            //anchorableToShow.CanFloat = false;
+            //anchorableToShow.CanClose = false;
             return false;
         }
 

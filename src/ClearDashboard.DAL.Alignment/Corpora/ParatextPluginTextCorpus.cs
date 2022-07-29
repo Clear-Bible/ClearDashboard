@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;

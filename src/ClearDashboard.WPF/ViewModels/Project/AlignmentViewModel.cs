@@ -16,7 +16,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public AlignmentViewModel(INavigationService navigationService, ILogger<AlignmentViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "Alignment";
+            Title = "⳼ ALIGNMENT TOOL";
             ContentId = "ALIGNMENTTOOL";
         }
     }

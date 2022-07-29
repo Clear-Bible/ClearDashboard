@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
+using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
@@ -73,7 +74,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     VerseNumber = engineToken.TokenId.VerseNumber,
                     WordNumber = engineToken.TokenId.WordNumber,
                     SubwordNumber = engineToken.TokenId.SubWordNumber,
-                    Text = engineToken.Text
+                    SurfaceText = engineToken.SurfaceText,
+                    TrainingText = engineToken.TrainingText
                 }))
             );
             corpus.TokenizedCorpora.Add(tokenizedCorpus);
@@ -108,7 +110,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public string Message { get; set; }
         private VerseTokens DatabaseVerseTokens { get; set; }
 
-        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.Text).ToList() : new List<string>();
+        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
 
         public string DatabaseVerseDetokenized
         {
@@ -169,10 +171,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         private void LoadFiles()
         {
-            EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(EnglishFile));
 
-            GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.Text).ToList();
+            GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(GreekVerse1));
         }
 
@@ -196,7 +198,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             try
             {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "40");
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
                 var result = await ExecuteRequest(query, cancellationToken);
 
                 if (result.Success && result.Data != null)

@@ -3,11 +3,22 @@ using System.IO;
 using System.Text.RegularExpressions;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Helpers;
+using ClearDashboard.Wpf.ViewModels.Project;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Validators
 {
+
+    public class AddParatextCorpusDialogViewModelValidator: AbstractValidator<AddParatextCorpusDialogViewModel>
+    {
+        public AddParatextCorpusDialogViewModelValidator(ILogger<AddParatextCorpusDialogViewModelValidator> logger)
+        {
+            RuleFor(x => x.SelectedProject).NotNull();
+        }
+
+    }
+
     public class ProjectValidator : AbstractValidator<Project>
     {
         public ProjectValidator(ILogger<ProjectValidator> logger)

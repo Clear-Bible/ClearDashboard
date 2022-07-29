@@ -22,14 +22,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override Task<RequestResult<IEnumerable<ParallelCorpusId>>> GetDataAsync(GetAllParallelCorpusIdsQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(
-                new RequestResult<IEnumerable<ParallelCorpusId>>
-                (result: new List<ParallelCorpusId>()
-                    {
-                        new ParallelCorpusId(new Guid())
-                    },
-                    success: true,
-                    message: "successful result from test"));
-        }
+            //DB Impl notes: query ParallelCorpus table and return all ids
+            var parallelCorpusIds = ProjectDbContext.Corpa.Select(c => new ParallelCorpusId(c.Id));
+
+            return Task.FromResult(new RequestResult<IEnumerable<ParallelCorpusId>>(parallelCorpusIds));
+       }
     }
 }
