@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
+using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
