@@ -11,7 +11,6 @@ using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
-using DalStuff = ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {

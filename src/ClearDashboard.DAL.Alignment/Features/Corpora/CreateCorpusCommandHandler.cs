@@ -3,20 +3,17 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 
-//USE TO ACCESS Models
-using Models = ClearDashboard.DataAccessLayer.Models;
+using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
+using ModelCorpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class CreateCorpusCommandHandler : ProjectDbContextCommandHandler<
-        CreateCorpusCommand,
-        RequestResult<CorpusId>,
-        CorpusId>
+    public class CreateCorpusCommandHandler : ProjectDbContextCommandHandler<CreateCorpusCommand,
+        RequestResult<Corpus>, Corpus>
     {
         private readonly IMediator _mediator;
 
@@ -28,35 +25,36 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<CorpusId>> SaveDataAsync(
+        protected override async Task<RequestResult<Corpus>> SaveDataAsync(
             CreateCorpusCommand request, CancellationToken cancellationToken)
         {
             //DB Impl notes:
             // 1. creates a new Corpus
 
-            var corpus = new Corpus
+            var modelCorpus = new ModelCorpus
             {
                 IsRtl = request.IsRtl,
                 Name = request.Name,
                 Language = request.Language,
             };
 
-            if (Enum.TryParse<CorpusType>(request.CorpusType, out CorpusType corpusType))
+            if (Enum.TryParse<ModelCorpusType>(request.CorpusType, out ModelCorpusType corpusType))
             {
-                corpus.CorpusType = corpusType;
+                modelCorpus.CorpusType = corpusType;
             } 
             else
             {
-                corpus.CorpusType = CorpusType.Unknown;
+                modelCorpus.CorpusType = ModelCorpusType.Unknown;
             }
 
-            ProjectDbContext.Corpa.Add(corpus);
+            ProjectDbContext.Corpa.Add(modelCorpus);
 
             // NB:  passing in the cancellation token to SaveChangesAsync.
             await ProjectDbContext.SaveChangesAsync(cancellationToken);
-            var corpusId = new CorpusId(corpus.Id);
 
-            return new RequestResult<CorpusId>(corpusId);
+            var corpus = await Corpus.Get(_mediator, new CorpusId(modelCorpus.Id));
+
+            return new RequestResult<Corpus>(corpus);
         }
     }
 }
