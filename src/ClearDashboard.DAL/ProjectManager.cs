@@ -306,7 +306,8 @@ namespace ClearDashboard.DataAccessLayer
 
         public Task<Project> LoadProject(string projectName)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
         public async Task<Project> DeleteProject(string projectName)
