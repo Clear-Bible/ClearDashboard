@@ -94,7 +94,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             }
         }
 
-        catch (Exception ex)
+        catch (Exception)
         {
             MessageBox.Show("The key provided is faulty.  When decrypted, certain json elements could not be found.");
         }

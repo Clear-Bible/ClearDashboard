@@ -35,12 +35,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         private int _timeDisplayIndex = 0;
 
-        private TimeZoneInfo _localTimeZoneInfo = TimeZoneInfo.Local;
-        private TimeZoneInfo _tempTimeZoneInfo = null;
-        private string _tempHeader = "";
         private ReadOnlyCollection<TimeZoneInfo> _timezones = TimeZoneInfo.GetSystemTimeZones();
-
-        private ObservableCollection<MenuItemNest> _timeZoneMenuItemNest;
 
         private ObservableCollection<MenuItemNest> _menuItems;
         public ObservableCollection<MenuItemNest> MenuItems
@@ -61,7 +56,6 @@ namespace ClearDashboard.Wpf.UserControls
             DataContext = this;
 
             //Construct MenuItemNest of TimeZones
-            _timeZoneMenuItemNest = new();
             foreach (var timezone in _timezones)
             {
                 utcComboList.Add(timezone.DisplayName);
@@ -513,7 +507,6 @@ namespace ClearDashboard.Wpf.UserControls
                 button.Visibility = Visibility.Collapsed;
                 List<MenuItemNest> removeIndividualList = new();
                 List<MenuItemNest> removeGroupList = new();
-                bool allClear = false;
 
                 foreach (var group in MenuItems[0].MenuItems)
                 {
@@ -688,8 +681,6 @@ namespace ClearDashboard.Wpf.UserControls
 
     public class MenuItemNest : INotifyPropertyChanged
     {
-        private readonly ICommand _command;
-
         public MenuItemNest()
         {
             //_command = new MenuCommand(Execute);
@@ -786,13 +777,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         public ObservableCollection<MenuItemNest> MenuItems { get; set; }
 
-        public ICommand Command
-        {
-            get
-            {
-                return _command;
-            }
-        }
+        public ICommand Command { get; }
 
         private void Execute()
         {

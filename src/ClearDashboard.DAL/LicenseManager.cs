@@ -3,15 +3,16 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-        private static AesCryptoServiceProvider CreateCryptoProvider()
+        private static Aes CreateCryptoProvider()
         {
-            AesCryptoServiceProvider crypt_provider = new();
+            var crypt_provider = Aes.Create();
             crypt_provider.BlockSize = 128;
             crypt_provider.KeySize = 128;
 
@@ -51,6 +52,7 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString());
                 throw;
             }
         }
@@ -64,7 +66,7 @@ namespace ClearDashboard.DataAccessLayer
                 return DecryptFromString(str);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "";
             }
@@ -85,7 +87,7 @@ namespace ClearDashboard.DataAccessLayer
                 return serialized;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "";
             }
@@ -93,7 +95,22 @@ namespace ClearDashboard.DataAccessLayer
 
         public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
         {
-            return JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
+            try
+            {
+                var licenseUser = JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
+                if (licenseUser != null)
+                {
+                    return licenseUser;
+                }
+                else { 
+                    return new LicenseUser();
+                }
+            }
+            catch (Exception)
+            {
+               return new LicenseUser();
+            }
+
         }
 
         public static bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
