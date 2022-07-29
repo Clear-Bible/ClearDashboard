@@ -33,11 +33,11 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
             // Create the corpus in the database:
-            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
 
             // Create the TokenizedCorpus + Tokens in the database:
             var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, tokenizationFunction);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, tokenizationFunction);
 
             var result = await Mediator!.Send(command);
             Assert.NotNull(result);
@@ -50,14 +50,14 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var corpus = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.CorpusId.Id);
+            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.CorpusId.Id);
 
-            Assert.NotNull(corpus);
-            Assert.True(corpus.IsRtl);
-            Assert.Equal("NameX", corpus.Name);
-            Assert.Equal("LanguageX", corpus.Language);
-            Assert.Equal("Standard", corpus.CorpusType.ToString());
-            Assert.Equal(tokenizationFunction, corpus.TokenizedCorpora.First().TokenizationFunction);
+            Assert.NotNull(corpusDB);
+            Assert.True(corpusDB.IsRtl);
+            Assert.Equal("NameX", corpusDB.Name);
+            Assert.Equal("LanguageX", corpusDB.Language);
+            Assert.Equal("Standard", corpusDB.CorpusType.ToString());
+            Assert.Equal(tokenizationFunction, corpusDB.TokenizedCorpora.First().TokenizationFunction);
 
             foreach (var tokensTextRow in tokenizedTextCorpus?.Cast<TokensTextRow>()!)
             {
@@ -100,44 +100,44 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         try
         {
             // Create the corpus in the database:
-            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
 
             // Create the TokenizedCorpus + Tokens in the database:
             var tokenizationFunction1 = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
             var tokenizedTextCorpus1 = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, corpusId, tokenizationFunction1);
+                .Create(Mediator!, corpus.CorpusId, tokenizationFunction1);
 
             Assert.NotNull(tokenizedTextCorpus1);
 
             var tokenizationFunction2 = ".Tokenize<ZwspWordTokenizer>()";
             var tokenizedTextCorpus2 = await tokenizedTextCorpus1
                 .Tokenize<ZwspWordTokenizer>()
-                .Create(Mediator!, corpusId, tokenizationFunction1 + tokenizationFunction2);
+                .Create(Mediator!, corpus.CorpusId, tokenizationFunction1 + tokenizationFunction2);
 
             Assert.NotNull(tokenizedTextCorpus2);
 
             var tokenizationFunction3 = ".Tokenize<LineSegmentTokenizer>()";
             var tokenizedTextCorpus3 = await tokenizedTextCorpus1
                 .Tokenize<LineSegmentTokenizer>()
-                .Create(Mediator!, corpusId, tokenizationFunction1 + tokenizationFunction3);
+                .Create(Mediator!, corpus.CorpusId, tokenizationFunction1 + tokenizationFunction3);
 
             Assert.NotNull(tokenizedTextCorpus3);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var corpus = ProjectDbContext!.Corpa
+            var corpusDB = ProjectDbContext!.Corpa
                 .Include(c => c.TokenizedCorpora)
                 .ThenInclude(tc => tc.Tokens)
-                .FirstOrDefault(c => c.Id == corpusId.Id);
+                .FirstOrDefault(c => c.Id == corpus.CorpusId.Id);
 
-            Assert.NotNull(corpus);
-            Assert.True(corpus!.IsRtl);
-            Assert.Equal("NameX", corpus.Name);
-            Assert.Equal("LanguageX", corpus.Language);
-            Assert.Equal("Standard", corpus.CorpusType.ToString());
-            Assert.True(corpus!.TokenizedCorpora.Count == 3);
+            Assert.NotNull(corpusDB);
+            Assert.True(corpusDB!.IsRtl);
+            Assert.Equal("NameX", corpusDB.Name);
+            Assert.Equal("LanguageX", corpusDB.Language);
+            Assert.Equal("Standard", corpusDB.CorpusType.ToString());
+            Assert.True(corpusDB!.TokenizedCorpora.Count == 3);
 
-            var tokenizedCorpora = corpus.TokenizedCorpora.OrderBy(tc => tc.Created).ToList();
+            var tokenizedCorpora = corpusDB.TokenizedCorpora.OrderBy(tc => tc.Created).ToList();
 
             Assert.NotNull(tokenizedCorpora);
             Assert.Equal(tokenizationFunction1, tokenizedCorpora[0].TokenizationFunction);
@@ -166,8 +166,8 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
             var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
 
-            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "New Testament", "grc", "Resource");
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, tokenizationFunction);
+            var corpus = await Corpus.Create(Mediator!, false, "New Testament", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, tokenizationFunction);
 
             var result = await Mediator.Send(command);
             Assert.NotNull(result);
@@ -190,9 +190,9 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 .ToList();
 
             Assert.Single(corpora);
-            var corpus = corpora.First();
-            Assert.Single(corpus.TokenizedCorpora);
-            var tokenizedCorpus = corpus.TokenizedCorpora.First();
+            var corpusDB = corpora.First();
+            Assert.Single(corpusDB.TokenizedCorpora);
+            var tokenizedCorpus = corpusDB.TokenizedCorpora.First();
             Assert.Equal(tokenizationFunction, tokenizedCorpus.TokenizationFunction);
             Assert.Equal(20723, tokenizedCorpus.Tokens.Count);
             var matthewCh1V1Tokens = tokenizedCorpus.Tokens
@@ -215,18 +215,18 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         {
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
 
-            var corpusId1 = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "New Testament 1", "grc", "Resource");
-            var command1 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId1,
+            var corpus1 = await Corpus.Create(Mediator!, false, "New Testament 1", "grc", "Resource");
+            var command1 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus1.CorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
 
-            var corpusId2 = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "New Testament 2", "grc", "Resource");
-            var command2 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId2,
+            var corpus2 = await Corpus.Create(Mediator!, false, "New Testament 2", "grc", "Resource");
+            var command2 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus2.CorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
 
-            var corpusId3 = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "New Testament 3", "grc", "Resource");
-            var command3 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId3,
+            var corpus3 = await Corpus.Create(Mediator!, false, "New Testament 3", "grc", "Resource");
+            var command3 = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus3.CorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var result1 = await Mediator.Send(command1);

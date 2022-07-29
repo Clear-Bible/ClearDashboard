@@ -14,5 +14,5 @@ public class VerseMapping : SynchronizableTimestampedEntity
     public virtual Guid? ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
 
-    public virtual ICollection<Verse>? Verses { get; set; }
+    public virtual ICollection<Verse> Verses { get; set; }
 }
