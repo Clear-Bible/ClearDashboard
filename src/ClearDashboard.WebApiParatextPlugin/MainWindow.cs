@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -619,15 +620,31 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
 
 
-            return projects.Select(project => new ParatextProjectMetadata
+            var metadata=  projects.Select(project => new ParatextProjectMetadata
                 {
                     Id = project.ID,
                     LanguageName = project.LanguageName,
                     Name = project.ShortName,
                     LongName = project.LongName,
-                    CorpusType = DetermineCorpusType(project.Type)
+                    CorpusType = DetermineCorpusType(project.Type),
                 })
                 .ToList();
+
+            var projectNames = metadata.Select(project => project.Name).ToList();
+
+            // TODO:  get the paratext project directory programmatically.
+            var directoryInfo = new DirectoryInfo("C:\\My Paratext 9 Projects");
+            var directories = directoryInfo.GetDirectories();
+            foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
+            {
+                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                if (projectMetadatum != null)
+                {
+                    projectMetadatum.ProjectPath = directory.FullName;
+                }
+            }
+
+            return metadata;
         }
 
         private CorpusType DetermineCorpusType(ProjectType projectType)

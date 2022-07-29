@@ -8,6 +8,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string Name { get; set; }
         public string LongName { get; set; }
         public string LanguageName { get; set; }
+        public string ProjectPath { get; set; }
 
         public string CorpusTypeDisplay => CorpusType.ToString();
     }
