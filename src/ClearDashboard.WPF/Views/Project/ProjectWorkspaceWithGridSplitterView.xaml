@@ -48,9 +48,44 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ContentControl Grid.Column="0"  x:Name="Toolbar" cm:View.Model="{Binding ProjectDesignSurfaceViewModel}"  />
-            <!--<project:ProjectDesignSurfaceView Grid.Column="0"  cm:Bind.Model="{Binding ProjectDesignSurfaceViewModel}"/>-->
             <GridSplitter x:Name="Splitter" Grid.Column="1" Width="5" ResizeDirection="Columns" ResizeBehavior="CurrentAndNext"  ShowsPreview="True"/>
-            <Border Background="Coral" Grid.Column="2" HorizontalAlignment="Stretch"></Border>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <DockPanel>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                DockPanel.Dock="Top">
+                        <!--<Button x:Name="ShowPageOne"
+                                Content="Show Page One" />
+                        <Button x:Name="ShowPageTwo"
+                                Content="Show Page Two" />-->
+                        <ItemsControl ItemsSource="{Binding Items}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding DisplayName}" Margin="20, 10"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <ContentControl x:Name="ActiveItem" />
+                </DockPanel>
+
+
+                <!--<StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                    <Label Content="{Binding DisplayName}" Margin="20, 10"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>-->
+            </Grid>
         </Grid>
     </Grid>
 

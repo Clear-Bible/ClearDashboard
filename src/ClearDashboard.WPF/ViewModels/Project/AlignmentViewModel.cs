@@ -18,6 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Title = "⳼ ALIGNMENT TOOL";
             ContentId = "ALIGNMENTTOOL";
+            DisplayName = "⳼ ALIGNMENT TOOL";
         }
     }
 }

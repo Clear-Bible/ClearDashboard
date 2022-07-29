@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         protected override async void OnViewLoaded(object view)
         {
           
-            var project = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
+            //var project = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
             
             base.OnViewLoaded(view);
         }
@@ -157,26 +157,28 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 if (viewModel.SelectedProject != null)
                 {
-                    //await ProjectManager.CreateNewProject(viewModel.ProjectName);
-                    //return true;
+                    var selectedParatextProjectMetadata = viewModel.SelectedProject;
 
                     // TODO:
                     // Add Corpus
                     // Get Books from Paratext
                     var corpus = new Corpus
                     {
-                        Name = viewModel.SelectedProject.Name,
-                        Language = viewModel.SelectedProject.LanguageName,
-                        CorpusType = viewModel.SelectedProject.CorpusType,
+                        Name = selectedParatextProjectMetadata.Name,
+                        Language = selectedParatextProjectMetadata.LanguageName,
+                        CorpusType = selectedParatextProjectMetadata.CorpusType,
+                        ParatextGuid = selectedParatextProjectMetadata.Id
 
                     };
+
+                    corpus.Metadata.Add("ProjectPath", selectedParatextProjectMetadata.ProjectPath);
 
                     Corpora.Add(corpus);
                     DrawCopora();
 
                 }
 
-                // We don;t want to navigate anywhere.
+                // We don't want to navigate anywhere.
                 return false;
             }
         }

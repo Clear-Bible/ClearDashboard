@@ -24,6 +24,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel { get; set; }
 
+        public AlignmentViewModel AlignmentViewModel { get; set; }
+        public CorpusViewModel CorpusViewModel { get; set; }
+
         /// <summary>
         /// Required for design-time support
         /// </summary>
@@ -36,7 +39,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
         public ProjectWorkspaceWithGridSplitterViewModel(INavigationService navigationService,
             ILogger<ProjectWorkspaceWithGridSplitterViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator, AlignmentViewModel alignmentViewModel, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, CorpusViewModel corpusViewModel)
 
         {
             EventAggregator = eventAggregator;
@@ -45,7 +48,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             NavigationService = navigationService;
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
-            ProjectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
+            ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel; //IoC.Get<ProjectDesignSurfaceViewModel>();
+            AlignmentViewModel = alignmentViewModel;
+            CorpusViewModel = corpusViewModel;
 
         }
 
@@ -121,6 +126,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
             //await ActivateDesignSurface();
             // documents
+
+            await base.ActivateItemAsync(CorpusViewModel);
+            await base.ActivateItemAsync(AlignmentViewModel);
             //await ActivateItemAsync<AlignmentViewModel>();
             //await ActivateItemAsync<CorpusViewModel>();
 
