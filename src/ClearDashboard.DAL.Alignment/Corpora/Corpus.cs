@@ -3,8 +3,6 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 
-using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
-
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
@@ -15,8 +13,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public string? Language { get; set; }
         
         // FIXME:  Should this be a string?  A different (higher level) enum?
-        public ModelCorpusType CorpusType { get; set; }
-        internal Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? language, ModelCorpusType corpusType)
+        public int CorpusType { get; set; }
+        internal Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? language, int corpusType)
         {
             CorpusId = corpusId;
             IsRtl = isRtl;

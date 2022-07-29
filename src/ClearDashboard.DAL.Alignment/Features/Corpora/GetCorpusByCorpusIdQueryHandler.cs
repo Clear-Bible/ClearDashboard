@@ -49,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     corpus.IsRtl, 
                     corpus.Name, 
                     corpus.Language, 
-                    corpus.CorpusType)
+                    ((int)corpus.CorpusType))
             );
         }
     }

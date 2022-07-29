@@ -32,7 +32,7 @@ public class GetCorpusByCorpusIdQueryHandlerTests : TestBase
     {
         try
         {
-            var command = new CreateCorpusCommand(true, "a name", "a language", "Standard");
+            var command = new CreateCorpusCommand(true, "a name", "a language", "StudyBible");
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
@@ -53,7 +53,7 @@ public class GetCorpusByCorpusIdQueryHandlerTests : TestBase
             Assert.True(corpusDB.IsRtl);
             Assert.Equal("a name", corpusDB.Name);
             Assert.Equal("a language", corpusDB.Language);
-            Assert.Equal(Models.CorpusType.Standard, corpusDB.CorpusType);
+            Assert.Equal((int)Models.CorpusType.StudyBible, corpusDB.CorpusType);
         }
         finally
         {
