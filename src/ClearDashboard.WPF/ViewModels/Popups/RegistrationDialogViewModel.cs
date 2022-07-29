@@ -55,7 +55,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
     public bool CanCancel => true /* can always cancel */;
 
-    public async void Cancel()
+    public void Cancel()
     {
         System.Windows.Application.Current.Shutdown();
     }

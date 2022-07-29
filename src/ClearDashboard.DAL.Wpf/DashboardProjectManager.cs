@@ -176,7 +176,7 @@ public class DashboardProjectManager : ProjectManager
                     {
                         var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
                         var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        if (decryptedLicenseUser != null)
+                        if (decryptedLicenseUser.Id != null)
                         {
                             CurrentUser = new User
                             {
@@ -189,7 +189,7 @@ public class DashboardProjectManager : ProjectManager
 
                         _licenseCleared = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MessageBox.Show("There was an issue decrypting your license key.");
                         PopupRegistration(viewModel);
