@@ -35,7 +35,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 if (result != null)
                 {
-                    Output.WriteLine($"TextCollections Returned: {result.Data.Count.ToString()}");
+                    Output.WriteLine($"TextCollections Returned: {result?.Data?.Count.ToString()}");
                 }
             }
             finally

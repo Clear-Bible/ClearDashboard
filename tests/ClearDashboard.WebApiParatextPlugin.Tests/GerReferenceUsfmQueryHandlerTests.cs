@@ -39,8 +39,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 Assert.True(result.Success);
                 Assert.NotNull(result.Data);
 
-                Assert.NotEmpty(result.Data.UsfmDirectoryPath);
-                Assert.Equal("Biblia Hebraica Stuttgartensia", result.Data.LongName);
+                Assert.NotEmpty(result?.Data?.UsfmDirectoryPath);
+                Assert.Equal("Biblia Hebraica Stuttgartensia", result?.Data?.LongName);
 
             }
             finally

@@ -15,6 +15,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 {
+    #nullable disable
     public GetTokensByTokenizedCorpusIdAndBookIdHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -33,7 +34,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             await Mediator.Send(command);
 
 
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext?.ChangeTracker.Clear();
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
@@ -45,17 +46,17 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
 
             // Validate Matt 1:1
-            var matthewCh1V1 = result.Data.First();
-            Assert.Equal("1", matthewCh1V1.Chapter);
-            Assert.Equal("1", matthewCh1V1.Verse);
-            Assert.Equal(9, matthewCh1V1.Tokens.Count());
-            Assert.Equal("Βίβλος", matthewCh1V1.Tokens.First().Text);
+            var matthewCh1V1 = result?.Data?.First();
+            Assert.Equal("1", matthewCh1V1?.Chapter);
+            Assert.Equal("1", matthewCh1V1?.Verse);
+            Assert.Equal(9, matthewCh1V1?.Tokens.Count());
+            Assert.Equal("Βίβλος", matthewCh1V1?.Tokens.First().Text);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
-                String.Join(" ", matthewCh1V1.Tokens.Select(t => t.Text)));
+                String.Join(" ", matthewCh1V1?.Tokens?.Select(t => t.Text)));
 
             // Validate Matt 5:9
-            var matthewCh5V9 = result.Data.Single(datum => datum.Chapter == "5" && datum.Verse == "9");
-            var matthewCh5V9Text = String.Join(" ", matthewCh5V9.Tokens.Select(t => t.Text));
+            var matthewCh5V9 = result?.Data?.Single(datum => datum.Chapter == "5" && datum.Verse == "9");
+            var matthewCh5V9Text = String.Join(" ", matthewCh5V9?.Tokens.Select(t => t.Text));
             Assert.Equal("μακάριοι οἱ εἰρηνοποιοί , ὅτι αὐτοὶ υἱοὶ Θεοῦ κληθήσονται .", matthewCh5V9Text);
         }
         finally

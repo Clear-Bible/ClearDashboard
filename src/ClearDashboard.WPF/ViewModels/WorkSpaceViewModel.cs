@@ -32,6 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
     public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
+        #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
@@ -118,7 +119,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         private string _selectedLayoutText;
-
         public string SelectedLayoutText
         {
             get => _selectedLayoutText;
@@ -432,7 +432,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // unsubscribe to the event aggregator
-            EventAggregator.Unsubscribe(this);
+            EventAggregator?.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -488,7 +488,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // grab the dictionary of all the verse lookups
-            if (ProjectManager.CurrentParatextProject is not null)
+            if (ProjectManager?.CurrentParatextProject is not null)
             {
                 BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             }
@@ -501,7 +501,7 @@ namespace ClearDashboard.Wpf.ViewModels
             InComingChangesStarted = true;
 
             // set the CurrentBcv prior to listening to the event
-            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
 
             CalculateBooks();
             CalculateChapters();
@@ -521,7 +521,7 @@ namespace ClearDashboard.Wpf.ViewModels
             IsBusy = true;
             try
             {
-                return ProjectManager.ExecuteRequest(request, cancellationToken);
+                return ProjectManager?.ExecuteRequest(request, cancellationToken);
             }
             finally
             {
@@ -556,7 +556,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // get the project layouts
-            path = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+            path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
             if (Directory.Exists(path))
             {
                 var files = Directory.GetFiles(path, "*.Layout.config");
@@ -1161,7 +1161,7 @@ namespace ClearDashboard.Wpf.ViewModels
         // ReSharper disable once UnusedMember.Global
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            if (ProjectManager.CurrentParatextProject is not null)
+            if (ProjectManager?.CurrentParatextProject is not null)
             {
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);

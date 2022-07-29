@@ -18,6 +18,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 {
+    #nullable disable
     public CreateTokenizedCorpusFromTextCorpusHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -95,17 +96,17 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             // Like getting a new context.
             // Imitates a fresh runtime process fetching data.
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext?.ChangeTracker.Clear();
 
             // Validate correctness of data
-            Assert.Equal(1, ProjectDbContext.Corpa.Count());
-            Assert.False(ProjectDbContext.Corpa.First().IsRtl);
-            Assert.Equal("grc", ProjectDbContext.Corpa.First().Language);
-            Assert.Equal("New Testament", ProjectDbContext.Corpa.First().Name);
+            Assert.Equal(1, ProjectDbContext?.Corpa.Count());
+            Assert.False(ProjectDbContext?.Corpa.First().IsRtl);
+            Assert.Equal("grc", ProjectDbContext?.Corpa.First().Language);
+            Assert.Equal("New Testament", ProjectDbContext?.Corpa.First().Name);
             Assert.Equal(".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
-                ProjectDbContext.Corpa.First().Metadata["TokenizationQueryString"].ToString());
+                ProjectDbContext?.Corpa.First().Metadata["TokenizationQueryString"].ToString());
 
-            var corpora = ProjectDbContext.Corpa
+            var corpora = ProjectDbContext?.Corpa
                 .Include(c => c.TokenizedCorpora)
                 .ThenInclude(tc => tc.Tokens)
                 .ToList();

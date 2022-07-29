@@ -1,12 +1,4 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
-using System.Collections.ObjectModel;
-using System.Dynamic;
-using System.IO;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -14,15 +6,14 @@ using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
-using MessageBox = System.Windows.Forms.MessageBox;
-using System;
-
-
-using System.Security.Cryptography;
+using System.Collections.ObjectModel;
+using System.Dynamic;
+using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.ViewModels.Popups;
+using System.Windows;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

@@ -18,6 +18,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     public class CorpusTests : TestBase
     {
+        #nullable disable
         public CorpusTests(ITestOutputHelper output) : base(output)
         {
         }
