@@ -5,11 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
              xmlns:project="clr-namespace:ClearDashboard.Wpf.ViewModels.Project"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=project:AlignmentViewModel,
                                      IsDesignTimeCreatable=True}">
-    <Grid>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:VerseTokensValueConvertor x:Key="VerseTokensValueConvertor" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -24,6 +31,23 @@
             FontSize="64"
             Text="Alignment" />
 
-        <userControls:TextDisplayControl Grid.Column="0" Grid.Row="1" Margin="10" ItemsSource="{Binding DatabaseVerseTokensText}" VerticalAlignment="Center"/>
+        <ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"  ItemsSource="{Binding Verses}" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <userControls:TextDisplayControl 
+                                                     Margin="10" 
+                                                     ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor} }" 
+                                                    />
+
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!--<userControls:TextDisplayControl cm:Bind.Model="{Binding}" 
+                                         Grid.Column="0" Grid.Row="1" 
+                                         Margin="10" 
+                                         ItemsSource="{Binding DatabaseVerseTokensText}" 
+                                         VerticalAlignment="Center"/>-->
     </Grid>
 </UserControl>
