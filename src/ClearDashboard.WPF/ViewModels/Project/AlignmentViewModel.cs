@@ -39,7 +39,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public void TokenBubbleRightClicked(string target)
         {
             Message = $"'{target}' right-clicked";
-  }
+        }
 
         public void TokenBubbleMouseEntered(string target)
         {
@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             set
             {
                 Set(ref _verseTokens, value);
-                NotifyOfPropertyChange(()=> DatabaseVerseTokensText);
+                NotifyOfPropertyChange(() => DatabaseVerseTokensText);
             }
         }
 
@@ -71,23 +71,46 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
+            Logger.LogInformation("Received TokenizedTextCorpusMessage.");
 
-            var corpus = message.TokenizedTextCorpus;
+            await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    // wait to allow the UI to catch up.
+                    await Task.Delay(250, cancellationToken);
 
-            Logger.LogInformation("Getting book '40'");
-            var book = corpus.Where(row => ((VerseRef)row.Ref).BookNum == 40);
-            Logger.LogInformation("Got book '40'");
-            Logger.LogInformation("Getting Chapter '1'");
-            var chapter = book.Where(row => ((VerseRef)row.Ref).ChapterNum == 1);
-            Logger.LogInformation("Got Chapter '1'");
-            Logger.LogInformation("Getting Verse '1'");
-            var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
-            Logger.LogInformation("Got Verse '1'");
-           // OnUIThread(()=>{
-                VerseTokens = new VerseTokens("40", "1", verse.Tokens.Where(t => t.TokenId.BookNumber == 40), true);
-           // });
+                    await SendProgressBarVisibilityMessage(true);
 
-            await Task.CompletedTask;
+                    await SendProgressBarMessage("Retrieving verse tokens.");
+                    var corpus = message.TokenizedTextCorpus;
+
+                    await SendProgressBarMessage("Getting book '40'");
+                    var book = corpus.Where(row => ((VerseRef)row.Ref).BookNum == 40);
+                    await SendProgressBarMessage("Got book '40'");
+                    await SendProgressBarMessage("Getting Chapter '1'");
+                    var chapter = book.Where(row => ((VerseRef)row.Ref).ChapterNum == 1);
+                    await SendProgressBarMessage("Got Chapter '1'");
+                    await SendProgressBarMessage("Getting Verse '1'");
+                    var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
+                    await SendProgressBarMessage("Got Verse '1'");
+                    OnUIThread(() =>
+                        {
+                            VerseTokens = new VerseTokens("40", "1",
+                                verse.Tokens.Where(t => t.TokenId.BookNumber == 40), true);
+                        });
+
+                    await SendProgressBarMessage("Completed retrieving verse tokens.");
+
+
+                }
+                finally
+                {
+                    await SendProgressBarVisibilityMessage(false);
+                }
+
+            }, cancellationToken);
+
         }
     }
 }
