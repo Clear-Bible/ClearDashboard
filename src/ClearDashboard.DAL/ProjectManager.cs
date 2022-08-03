@@ -204,7 +204,7 @@ namespace ClearDashboard.DataAccessLayer
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
 
-            Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            Logger.LogInformation(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
 
 
             if (result.Success && result.HasData)
