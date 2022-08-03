@@ -471,7 +471,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookNumber");
+
+                    b.HasIndex("ChapterNumber");
+
                     b.HasIndex("TokenizationId");
+
+                    b.HasIndex("VerseNumber");
 
                     b.ToTable("Token");
                 });
