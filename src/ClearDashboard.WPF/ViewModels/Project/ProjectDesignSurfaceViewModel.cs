@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Logger.LogInformation("AddParatextCorpus called.");
 
-            await (Parent as ProjectWorkspaceViewModel).ActiveAlignmentView();
+            //await (Parent as ProjectWorkspaceViewModel).ActiveAlignmentView();
 
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
@@ -131,36 +131,38 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                     //try
                     //{
-                    //Task.Factory.StartNew(() => { //long task });
-                    var metadata = viewModel.SelectedProject;
+                    await Task.Factory.StartNew(async () => { //long task 
+                        var metadata = viewModel.SelectedProject;
 
-                    if (viewModel.SelectedProject.HasProjectPath)
-                    {
-                        //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
-                        // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
+                        if (viewModel.SelectedProject.HasProjectPath)
+                        {
+                            //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
+                            // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
 
-                        Logger.LogInformation($"Creating corpus '{metadata.Name}");
-                        var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
-                            metadata.LanguageName, metadata.CorpusTypeDisplay);
+                            Logger.LogInformation($"Creating corpus '{metadata.Name}");
+                            var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
+                                metadata.LanguageName, metadata.CorpusTypeDisplay);
 
-                        OnUIThread(()=> Corpora.Add(corpus));
-                        
+                            OnUIThread(()=> Corpora.Add(corpus));
+                            
 
-                        Logger.LogInformation($"Tokenizing and transforming {metadata.Name} corpus.");
-                        var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
-                            .Tokenize<LatinWordTokenizer>()
-                            .Transform<IntoTokensTextRowProcessor>();
-                        Logger.LogInformation($"Completed Tokenizing and Transforming {metadata.Name} corpus.");
+                            Logger.LogInformation($"Tokenizing and transforming {metadata.Name} corpus.");
+                            var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
+                                .Tokenize<LatinWordTokenizer>()
+                                .Transform<IntoTokensTextRowProcessor>();
+                            Logger.LogInformation($"Completed Tokenizing and Transforming {metadata.Name} corpus.");
 
 
-                        Logger.LogInformation($"Creating tokenized text corpus for {metadata.Name} corpus.");
-                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                            ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-                        Logger.LogInformation($"Completed creating tokenized text corpus for {metadata.Name} corpus.");
+                            Logger.LogInformation($"Creating tokenized text corpus for {metadata.Name} corpus.");
+                            var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                            Logger.LogInformation($"Completed creating tokenized text corpus for {metadata.Name} corpus.");
 
-                        await EventAggregator.PublishOnUIThreadAsync(
-                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus));
-                    }
+                            await EventAggregator.PublishOnUIThreadAsync(
+                                new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus));
+                        }
+
+                    });
 
                     //}
                     //finally
