@@ -79,7 +79,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
-                _logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
+                //_logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
                 await Database.MigrateAsync();
             }
