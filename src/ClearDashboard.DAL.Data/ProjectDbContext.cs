@@ -157,7 +157,6 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.TargetTokenizedCorpus)
                 .WithMany(e => e.TargetParallelCorpora);
 
-
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method
             modelBuilder.ConfigureRawContentEntities();
@@ -172,6 +171,13 @@ namespace ClearDashboard.DataAccessLayer.Data
             // This ensures that the User Id for the current Dashboard user is always
             // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
+
+            modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
+            modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
+            modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
+
+            //modelBuilder.Entity<Token>()
+            //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
         }
 

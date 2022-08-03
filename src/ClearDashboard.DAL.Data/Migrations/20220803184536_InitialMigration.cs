@@ -604,9 +604,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "NoteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Token_BookNumber",
+                table: "Token",
+                column: "BookNumber");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_ChapterNumber",
+                table: "Token",
+                column: "ChapterNumber");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Token_TokenizationId",
                 table: "Token",
                 column: "TokenizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_VerseNumber",
+                table: "Token",
+                column: "VerseNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TokenizedCorpus_CorpusHistoryId",
