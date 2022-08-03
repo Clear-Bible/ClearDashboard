@@ -627,7 +627,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                     Name = project.ShortName,
                     LongName = project.LongName,
                     CorpusType = DetermineCorpusType(project.Type),
-                })
+                    IsRtl = project.Language.IsRtoL
+            })
                 .ToList();
 
             var projectNames = metadata.Select(project => project.Name).ToList();
