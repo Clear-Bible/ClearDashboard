@@ -57,12 +57,7 @@
 
                 <DockPanel>
                     <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
                                 DockPanel.Dock="Top">
-                        <!--<Button x:Name="ShowPageOne"
-                                Content="Show Page One" />
-                        <Button x:Name="ShowPageTwo"
-                                Content="Show Page Two" />-->
                         <ItemsControl ItemsSource="{Binding Items}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>

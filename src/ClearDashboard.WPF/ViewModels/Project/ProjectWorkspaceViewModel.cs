@@ -255,20 +255,21 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         private async Task Initialize()
         {
             Items.Clear();
-            // documents
-            await ActivateItemAsync<AlignmentViewModel>();
+            //documents
             await ActivateItemAsync<CorpusViewModel>();
+            await ActivateItemAsync<AlignmentViewModel>();
+           
 
             // tools
             await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
-
             LoadWindows();
+
 
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
             var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
             LoadLayout(layoutSerializer, filePath);
 
-            
+
            
         }
 
@@ -305,13 +306,15 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 if (e.Model.ContentId is not null)
                 {
-                   
-
                     var item = Items.Cast<IAvalonDockWindow>()
                         .FirstOrDefault(item => item.ContentId == e.Model.ContentId);
 
+                    //if (item is { ContentId: "ALIGNMENTTOOL" })
+                    //{
+                        await ActivateItemAsync((Screen)item);
+                    //}
+
                     e.Content = item;
-                  
                 }
             };
 
@@ -339,7 +342,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             _lastLayout = filePath;
         }
 
-
+        public async Task ActiveAlignmentView()
+        {
+            await ActivateItemAsync<AlignmentViewModel>();
+        }
 
         public static class WorkspaceLayoutNames
         {

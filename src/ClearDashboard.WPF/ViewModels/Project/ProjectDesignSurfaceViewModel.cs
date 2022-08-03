@@ -1,25 +1,36 @@
-﻿using AvalonDock.Controls;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using Caliburn.Micro;
+//using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Effects;
-using ClearDashboard.Wpf.Views;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using MediatR;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
+//using SIL.Extensions;
 using Brushes = System.Windows.Media.Brushes;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
+
+    public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
+
+    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus);
+
     public class ProjectDesignSurfaceViewModel : ToolViewModel
     {
+        private readonly IMediator _mediator;
         private ObservableCollection<Corpus> _corpora;
         public ObservableCollection<Corpus> Corpora
         {
@@ -32,9 +43,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         }
 
-        public ProjectDesignSurfaceViewModel(INavigationService navigationService, ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public ProjectDesignSurfaceViewModel(IMediator mediator, INavigationService navigationService, ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
+            _mediator = mediator;
             Title = "PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
@@ -50,13 +62,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             return base.OnActivateAsync(cancellationToken);
         }
-
-
-
-
+        
         public ProjectDesignSurfaceView View { get; set; }
         public Canvas DesignSurfaceCanvas { get; set; }
-        protected override void OnViewAttached(object view, object context)
+        protected override async  void OnViewAttached(object view, object context)
         {
             if (View == null)
             {
@@ -65,72 +74,32 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     View = (ProjectDesignSurfaceView)view;
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
                 }
-                base.OnViewAttached(view, context);
+
+               
             }
+
+            await GetCorpora();
+            base.OnViewAttached(view, context);
         }
 
         protected override async void OnViewLoaded(object view)
         {
-          
-            //var project = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
-            
             base.OnViewLoaded(view);
         }
 
-        protected override void OnViewReady(object view)
+        protected override async  void OnViewReady(object view)
         {
+            await GetCorpora();
             base.OnViewReady(view);
         }
 
-        private void DrawCopora()
+        private async Task GetCorpora()
         {
+           // var corpora = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
+            //await EventAggregator.PublishOnUIThreadAsync(new CorporaLoadedMessage(corpora));
+            
+           // Corpora = new ObservableCollection<Corpus>(corpora);
 
-            OnUIThread(() =>
-            {
-                DesignSurfaceCanvas.Children.Clear();
-                var index = 0;
-                foreach (var corpus in Corpora)
-                {
-                    var border = CreateCorpusDisplay(corpus);
-
-                    if (index <= 3)
-                    {
-                        Canvas.SetTop(border, 10.0);
-                    }
-                    else
-                    {
-                        Canvas.SetTop(border, 85.0);
-                    }
-
-                    Canvas.SetLeft(border, 10 + (index * 200));
-                    DesignSurfaceCanvas.Children.Add(border);
-
-                    index++;
-
-                }
-            });
-        }
-
-        private static Border CreateCorpusDisplay(Corpus corpus)
-        {
-            var border = new Border
-            {
-                Height = 75,
-                Width = 150,
-                Background = Brushes.Blue,
-                CornerRadius = new CornerRadius(5)
-            };
-
-            var textBlock = new TextBlock
-            {
-                FontSize = 20,
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Text = corpus.Name,
-            };
-
-            border.Child = textBlock;
-            return border;
         }
 
         public void AddManuscriptCorpus()
@@ -147,37 +116,59 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Logger.LogInformation("AddParatextCorpus called.");
 
+            await (Parent as ProjectWorkspaceViewModel).ActiveAlignmentView();
+
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
-            // Define a callback method to create a new project if we
-            // have a valid project name
-
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
+                //OnUIThread(async () =>
+                //{
                 if (viewModel.SelectedProject != null)
                 {
-                    var selectedParatextProjectMetadata = viewModel.SelectedProject;
+                    //IsBusy = true;
 
-                    // TODO:
-                    // Add Corpus
-                    // Get Books from Paratext
-                    var corpus = new Corpus
+                    //try
+                    //{
+                    //Task.Factory.StartNew(() => { //long task });
+                    var metadata = viewModel.SelectedProject;
+
+                    if (viewModel.SelectedProject.HasProjectPath)
                     {
-                        Name = selectedParatextProjectMetadata.Name,
-                        Language = selectedParatextProjectMetadata.LanguageName,
-                        CorpusType = selectedParatextProjectMetadata.CorpusType,
-                        ParatextGuid = selectedParatextProjectMetadata.Id
+                        //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
+                        // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
 
-                    };
+                        Logger.LogInformation($"Creating corpus '{metadata.Name}");
+                        var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
+                            metadata.LanguageName, metadata.CorpusTypeDisplay);
 
-                    corpus.Metadata.Add("ProjectPath", selectedParatextProjectMetadata.ProjectPath);
+                        OnUIThread(()=> Corpora.Add(corpus));
+                        
 
-                    Corpora.Add(corpus);
-                    DrawCopora();
+                        Logger.LogInformation($"Tokenizing and transforming {metadata.Name} corpus.");
+                        var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
+                            .Tokenize<LatinWordTokenizer>()
+                            .Transform<IntoTokensTextRowProcessor>();
+                        Logger.LogInformation($"Completed Tokenizing and Transforming {metadata.Name} corpus.");
 
+
+                        Logger.LogInformation($"Creating tokenized text corpus for {metadata.Name} corpus.");
+                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                            ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                        Logger.LogInformation($"Completed creating tokenized text corpus for {metadata.Name} corpus.");
+
+                        await EventAggregator.PublishOnUIThreadAsync(
+                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus));
+                    }
+
+                    //}
+                    //finally
+                    //{
+                    //    IsBusy = false;
+                    //}
                 }
-
+                // });
                 // We don't want to navigate anywhere.
                 return false;
             }
