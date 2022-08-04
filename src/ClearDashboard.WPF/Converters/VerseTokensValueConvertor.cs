@@ -8,6 +8,20 @@ using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Wpf.Converters;
 
+public class VerseTokensToChapterVerseValueConvertor : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value is VerseTokens verseTokens ? $"Chapter: {verseTokens.Chapter}, Verse: {verseTokens.Verse}" : string.Empty;
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 public class VerseTokensValueConvertor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

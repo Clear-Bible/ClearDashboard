@@ -142,25 +142,25 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                                 var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
                                     metadata.LanguageName, metadata.CorpusTypeDisplay);
-                                await SendProgressBarMessage($"Created corpus '{metadata.Name}");
+                                await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
 
                                 OnUIThread(() => Corpora.Add(corpus));
 
-                                await SendProgressBarMessage($"Tokenizing and transforming {metadata.Name} corpus.");
+                                await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
                                 var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 await SendProgressBarMessage(
-                                    $"Completed Tokenizing and Transforming {metadata.Name} corpus.");
+                                    $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
 
 
                                 await SendProgressBarMessage(
-                                    $"Creating tokenized text corpus for {metadata.Name} corpus.");
+                                    $"Creating tokenized text corpus for '{metadata.Name}' corpus.");
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,
                                     corpus.CorpusId,
                                     ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
                                 await SendProgressBarMessage(
-                                    $"Completed creating tokenized text corpus for {metadata.Name} corpus.");
+                                    $"Completed creating tokenized text corpus for '{metadata.Name}' corpus.");
 
                                 Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                                 await EventAggregator.PublishOnCurrentThreadAsync(

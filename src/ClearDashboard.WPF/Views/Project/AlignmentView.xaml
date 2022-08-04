@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:VerseTokensValueConvertor x:Key="VerseTokensValueConvertor" />
+            <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor"/>
             <converters:TokensTextRowValueConvertor x:Key="TokensTextRowValueConvertor"/>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -32,20 +33,31 @@
             FontSize="64"
             Text="Alignment" />
 
-        <!--<ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"  ItemsSource="{Binding Verses}" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2" 
+                  ItemsSource="{Binding Verses}" 
+                  VirtualizingStackPanel.IsVirtualizing ="True"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.IsDeferredScrollingEnabled="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <userControls:TextDisplayControl 
-                                                     Margin="10" 
-                                                     ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor} }" 
+                    <StackPanel Orientation="Vertical">
+                        <Label FontSize="12" Foreground="{DynamicResource MaterialDesignBody}" Margin="2" Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"></Label>
+                        <userControls:TextDisplayControl 
+                                    Margin="10" 
+                                    ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor} }" 
                                                     />
+                    </StackPanel>
 
                     
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>-->
+        </ListView>
 
-        <ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"  ItemsSource="{Binding TokensTextRows}" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <!--<ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"  
+                  ItemsSource="{Binding TokensTextRows}" 
+                  VirtualizingStackPanel.IsVirtualizing ="True"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.IsDeferredScrollingEnabled="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <userControls:TextDisplayControl 
@@ -54,7 +66,7 @@
                     />
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ListView>-->
 
         <!--<userControls:TextDisplayControl cm:Bind.Model="{Binding}" 
                                          Grid.Column="0" Grid.Row="1" 
