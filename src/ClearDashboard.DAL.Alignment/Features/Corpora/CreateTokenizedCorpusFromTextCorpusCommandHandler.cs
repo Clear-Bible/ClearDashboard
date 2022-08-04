@@ -71,6 +71,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //        })
             //    ));
 
+
+           
             var tokens = request.TextCorpus.Cast<TokensTextRow>()
                 .SelectMany(tokensTextRow => tokensTextRow.Tokens
                     .Select(token => new Models.Token
@@ -93,6 +95,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     x => x.silCannonBookAbbrev);
 
             var bookAbbreviations = new List<string>();
+
             foreach (var bookNumber in bookNumbers)
             {
                 if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
@@ -108,7 +111,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: About to BulkInsertAsync");
-            await ProjectDbContext.BulkInsertAsync(tokens);
+            await ProjectDbContext.BulkInsertAsync(tokens, cancellationToken: cancellationToken);
             System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: Completed BulkInsertAsync.  About to Get");
 
             //            await ProjectDbContext.SaveChangesAsync(cancellationToken);
