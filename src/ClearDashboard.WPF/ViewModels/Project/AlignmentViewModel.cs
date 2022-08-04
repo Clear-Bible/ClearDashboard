@@ -76,10 +76,17 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             set => Set(ref _message, value);
         }
 
+        private ObservableCollection<TokensTextRow> tokensTextRows_;
+        public ObservableCollection<TokensTextRow> TokensTextRows
+        {
+            get => tokensTextRows_;
+            set => Set( ref tokensTextRows_, value);
+        }
+
         public ObservableCollection<VerseTokens> Verses
         {
             get => _verses;
-            set => Set( ref _verses, value);
+            set => Set(ref _verses, value);
         }
 
         public List<string> DatabaseVerseTokensText => VerseTokens != null ? VerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
@@ -97,29 +104,38 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                     await SendProgressBarVisibilityMessage(true);
 
-                    await SendProgressBarMessage("Retrieving verse tokens.");
+                    //await SendProgressBarMessage("Retrieving verse tokens.");
                     var corpus = message.TokenizedTextCorpus;
 
-                    await SendProgressBarMessage("Getting book tokens");
-                    var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(corpus.TokenizedCorpusId, "MAL");
-                    var result = await ProjectManager.ExecuteRequest(query, cancellationToken);
+                    //await SendProgressBarMessage("Getting book tokens");
+                    //var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(corpus.TokenizedCorpusId, "MAL");
+                    //var result = await ProjectManager.ExecuteRequest(query, cancellationToken);
 
-                    if (result is { Data: { }, Success: true, HasData: true })
+                    //if (result is { Data: { }, Success: true, HasData: true })
+                    //{
+                    //        OnUIThread(() =>
+                    //        {
+                    //            Verses = new ObservableCollection<VerseTokens>(result.Data);
+                    //            //VerseTokens = result.Data.First(vt => vt.Chapter == "1" && vt.Verse == "1");
+                    //        });
+                    //}
+
+                    //await SendProgressBarMessage("Getting book '40', Chapter '1', Verse '1'");
+                    OnUIThread(async () =>
                     {
-                      
-                            
-                            OnUIThread(() =>
-                            {
-                                Verses = new ObservableCollection<VerseTokens>(result.Data);
-                                //VerseTokens = result.Data.First(vt => vt.Chapter == "1" && vt.Verse == "1");
-                            });
-                   
-                    }
+                        await SendProgressBarMessage("Getting book '40', Chapter '1', Verse '1'");
+                        var tokensTextRows = corpus["MAL"].GetRows().Cast<TokensTextRow>().Where(ttr =>
+                            ttr.Tokens.Count(t => t.TokenId.ChapterNumber == 1 && t.TokenId.VerseNumber == 1) > 0).ToList();
 
-                   // await SendProgressBarMessage("Getting book '40', Chapter '1', Verse '1'");
-                   // var verse = corpus.First(row => ((VerseRef)row.Ref).BookNum == 40
-                   //                                 && ((VerseRef)row.Ref).ChapterNum == 1
-                   //                                 && ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
+                        await SendProgressBarMessage($"Found {tokensTextRows.Count} TokensTextRow entities.");
+                        TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                    });
+                     
+
+
+                    //var verse = corpus.First(row => ((VerseRef)row.Ref).BookNum == 40
+                    //                                && ((VerseRef)row.Ref).ChapterNum == 1
+                    //                                && ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
 
                     //await SendProgressBarMessage("Getting book '40'");
                     //var book = corpus.Where(row => ((VerseRef)row.Ref).BookNum == 40);
@@ -132,8 +148,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     //await SendProgressBarMessage("Got Verse '1'");
                     //OnUIThread(() =>
                     //    {
-                    //        VerseTokens = new VerseTokens("40", "1",
+                    //        VerseTokens = new VerseTokens("5", "1",
                     //            verse.Tokens.Where(t => t.TokenId.BookNumber == 40), true);
+
+                    //        Verses = new ObservableCollection<VerseTokens>(new List<VerseTokens> {VerseTokens});
                     //    });
 
                     await SendProgressBarMessage("Completed retrieving verse tokens.");
