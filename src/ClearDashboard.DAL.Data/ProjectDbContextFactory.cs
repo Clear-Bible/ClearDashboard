@@ -48,10 +48,10 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 try
                 {
-                    if (_logger != null)
-                    {
-                        _logger.LogInformation($"Attempting to create or migrate '{fullPath}'");
-                    }
+                    //if (_logger != null)
+                    //{
+                    //    _logger.LogInformation($"Attempting to create or migrate '{fullPath}'");
+                    //}
                     context.DatabasePath = fullPath;
                     await context.Migrate();
                 }

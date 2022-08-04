@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
@@ -10,12 +11,13 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+//using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -29,7 +31,7 @@ namespace ClearDashboard.DataAccessLayer
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
-        protected IMediator Mediator { get; private set; }
+        public IMediator Mediator { get; private set; }
 
 
 
@@ -202,7 +204,7 @@ namespace ClearDashboard.DataAccessLayer
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
 
-            Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            Logger.LogInformation(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
 
 
             if (result.Success && result.HasData)
@@ -249,7 +251,11 @@ namespace ClearDashboard.DataAccessLayer
             CreateDashboardProject();
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
+            CurrentProject = await CreateProject(projectName);
+
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+
+
 
         }
 
@@ -304,9 +310,12 @@ namespace ClearDashboard.DataAccessLayer
             throw new NotImplementedException();
         }
 
-        public Task<Project> LoadProject(string projectName)
+        public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
         {
-            throw new NotImplementedException();
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            return projectAssets.ProjectDbContext.Corpa.Include(corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
+           // return null;
         }
 
         public async Task<Project> DeleteProject(string projectName)

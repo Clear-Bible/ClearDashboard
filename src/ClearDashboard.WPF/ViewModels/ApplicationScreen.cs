@@ -9,6 +9,10 @@ using MediatR;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
+
+    public record ProgressBarVisibilityMessage(bool Show);
+    public record ProgressBarMessage(string Message);
+
     public abstract class ApplicationScreen : Screen, IDisposable
     {
         public ILogger Logger { get; private set; }
@@ -54,12 +58,14 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            Logger.LogInformation($"Subscribing {this.GetType().Name} to the EventAggregator");
             EventAggregator.SubscribeOnUIThread(this);
             return base.OnActivateAsync(cancellationToken);
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+            Logger.LogInformation($"Unsubscribing {this.GetType().Name} from the EventAggregator");
             EventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -80,6 +86,20 @@ namespace ClearDashboard.Wpf.ViewModels
             GC.SuppressFinalize(this);
         }
 
+
+        protected async Task SendProgressBarMessage(string message, double delayInSeconds = 1.5)
+        {
+            Logger.LogInformation(message);
+            await Task.Delay(TimeSpan.FromSeconds(delayInSeconds));
+            await EventAggregator.PublishOnUIThreadAsync(
+                new ProgressBarMessage(message));
+        }
+
+        protected async Task SendProgressBarVisibilityMessage(bool show)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(
+                new ProgressBarVisibilityMessage(show));
+        }
 
         public Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {

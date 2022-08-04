@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
@@ -28,19 +27,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             try
             {
-                var tokenizedCorpus = ProjectDbContext.TokenizedCorpora
-                    .Include(tc => tc.Tokens)
-                    .FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id);
-
-                if (tokenizedCorpus == null)
-                {
-                    throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
-                }
 
                 var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
+                var tokens = ProjectDbContext.Tokens.Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
+                                                                    && token.BookNumber == bookNumberForAbbreviation);
 
-                var groupedTokens = tokenizedCorpus.Tokens
-                    .Where(t => t.BookNumber == bookNumberForAbbreviation)
+
+                var groupedTokens = tokens
                     .OrderBy(t => t.BookNumber)
                     .ThenBy(t => t.ChapterNumber)
                     .ThenBy(t => t.VerseNumber)
@@ -51,13 +44,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         t => t
                     );
 
+                // need an await to get the compiler to be 'quiet'
+                await Task.CompletedTask;
+
                 return new RequestResult<IEnumerable<VerseTokens>>
                 (
                     groupedTokens.Select(gt =>
                         (
                             new VerseTokens(gt.Key.ChapterNumber.ToString(),
                                 gt.Key.VerseNumber.ToString(),
-                                gt.ToList().Select(
+                                gt.Select(
                                     t => new Token(
                                         new TokenId(
                                             t.BookNumber,
@@ -72,12 +68,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         )
                     )
                 );
+                
             }
             catch (Exception ex)
             {
                 return new RequestResult<IEnumerable<VerseTokens>>
                     (result: null, success: false, message: ex.ToString());
             }
+
+           
         }
 
         private int GetBookNumberForSILAbbreviation(string silBookAbbreviation)
