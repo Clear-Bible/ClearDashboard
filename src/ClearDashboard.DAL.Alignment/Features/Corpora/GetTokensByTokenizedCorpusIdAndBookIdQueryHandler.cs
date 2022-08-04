@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
@@ -28,8 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             try
             {
-              
-               
+
                 var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
                 var tokens = ProjectDbContext.Tokens.Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
                                                                     && token.BookNumber == bookNumberForAbbreviation);
