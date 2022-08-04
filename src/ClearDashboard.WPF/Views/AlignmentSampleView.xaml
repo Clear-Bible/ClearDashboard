@@ -37,7 +37,7 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="150" />
             <RowDefinition Height="250" />
             <RowDefinition Height="100" />
             <RowDefinition />
