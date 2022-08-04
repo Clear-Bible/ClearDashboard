@@ -158,6 +158,70 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
     }
 
     [Fact]
+    public async void TokenizedCorpus__CreateGetByBookChapterVerse()
+    {
+        try
+        {
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, corpus.CorpusId, tokenizationFunction);
+
+            Assert.NotNull(tokenizedTextCorpus);
+
+            var bookIds = tokenizedTextCorpus.Texts.Select(t => t.Id).ToList();
+            Assert.True(bookIds.Count > 0);
+
+            Output.WriteLine("");
+            foreach (var bookId in bookIds)
+            {
+                Output.WriteLine($"Book ID in tokenized text corpus: {bookId}");
+            }
+
+            Output.WriteLine("");
+            foreach (var bookId in bookIds)
+            {
+                Output.WriteLine($"Book ID: {bookId}");
+
+                var chapterVerseGroups = tokenizedTextCorpus[bookId].GetRows().Cast<TokensTextRow>()
+                    .SelectMany(ttr => ttr.Tokens).GroupBy(t => t.TokenId.ChapterNumber)
+                    .Select(g => new
+                    {
+                        ChapterNumber = g.Key,
+                        Verses = g.GroupBy(v => v.TokenId.VerseNumber)
+                                .Select(vg => new
+                                {
+                                    VerseNumber = vg.Key,
+                                    Tokens = vg.ToList()
+                                })
+                    });
+
+                Assert.True(chapterVerseGroups.Count() > 0);
+
+                foreach (var chapter in chapterVerseGroups)
+                {
+                    Assert.True(chapter.Verses.Count() > 0);
+
+                    Output.WriteLine($"\tChapter number: {chapter.ChapterNumber}");
+                    foreach (var verse in chapter.Verses)
+                    {
+                        Output.WriteLine($"\t\tVerse number {verse.VerseNumber}: [" + String.Join(" ", verse.Tokens.Select(t => t.SurfaceText)) + "]");
+                    }
+                }
+            }
+
+            Output.WriteLine("");
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
     [Trait("Category", "Validate Persistence")]
     public async void TokenizedCorpus__Validate()
     {
