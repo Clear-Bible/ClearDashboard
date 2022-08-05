@@ -27,11 +27,11 @@
         <TextBlock
             Grid.Row="0"
             Grid.Column="0"
-            Margin="20"
+            Margin="20, 0"
             VerticalAlignment="Top"
-            Background="Goldenrod"
-            FontSize="64"
-            Text="Alignment" />
+            FontSize="24"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            Text="{Binding CurrentBookDisplay}" />
 
         <ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2" 
                   ItemsSource="{Binding Verses}" 

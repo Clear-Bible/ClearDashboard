@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Extensions;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
@@ -66,12 +66,24 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         }
 
         private string _message;
-       
         public string Message
         {
             get => _message;
             set => Set(ref _message, value);
         }
+
+        private string _currentBook;
+        public string CurrentBook
+        {
+            get => _currentBook;
+            set
+            {
+                Set(ref _currentBook, value);
+                NotifyOfPropertyChange(()=> CurrentBookDisplay);
+            }
+        }
+
+        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook) ? string.Empty : $"Book: {CurrentBook}";
 
         private ObservableCollection<TokensTextRow> _tokensTextRows;
         public ObservableCollection<TokensTextRow> TokensTextRows
@@ -88,30 +100,24 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 try
                 {
-                    // wait to allow the UI to catch up.
-                    await Task.Delay(250, cancellationToken);
-                    await SendProgressBarVisibilityMessage(true);
+
+                    CurrentBook = "GEN";
+                   
+                    // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
+                    await SendProgressBarVisibilityMessage(true, 250);
 
                     var corpus = message.TokenizedTextCorpus;
-                    await SendProgressBarMessage("Getting book '40', Chapter '1'");
+                    await SendProgressBarMessage($"Getting book '{CurrentBook}'");
 
-                    //var tokensTextRows = corpus["MAL"].GetRows().Cast<TokensTextRow>().ToList() ;
-
-                    // var tokensTextRows = corpus["MAL"].GetRows().Cast<TokensTextRow>()
-                    //.Where(ttr =>ttr.Tokens.Count(t => t.TokenId.ChapterNumber == 1 && t.TokenId.VerseNumber == 1) > 0).ToList();
-
-                    var tokensTextRows = corpus["MAL"].GetRows().Cast<TokensTextRow>()
+                    var tokensTextRows = corpus[CurrentBook].GetRows().Cast<TokensTextRow>()
                    .Where(ttr => ttr.Tokens.Count(t => t.TokenId.ChapterNumber == 1) > 0).ToList();
-
-                    var verseTokensList = CreateVerseTokensList(tokensTextRows);
 
                     await SendProgressBarMessage($"Found {tokensTextRows.Count} TokensTextRow entities.");
 
                     OnUIThread(()=>
                     {
-                        
                         TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
-                        Verses = new ObservableCollection<VerseTokens>(verseTokensList);
+                        Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
                     });
                      
                     await SendProgressBarMessage("Completed retrieving verse tokens.");
@@ -123,16 +129,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
             }, cancellationToken);
 
-        }
-
-        private List<VerseTokens> CreateVerseTokensList(List<TokensTextRow> tokensTextRows)
-        {
-            return (from row in tokensTextRows let firstToken = row.Tokens.FirstOrDefault() 
-                where firstToken != null 
-                let tokenId = firstToken.TokenId 
-                select 
-                    new VerseTokens(tokenId.ChapterNumber.ToString(), tokenId.VerseNumber.ToString(), row.Tokens, row.IsSentenceStart))
-                .ToList();
         }
     }
 }
