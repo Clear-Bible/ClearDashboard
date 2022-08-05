@@ -186,12 +186,12 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             {
                 Output.WriteLine($"Book ID: {bookId}");
 
-                var chapterVerseGroups = tokenizedTextCorpus[bookId].GetRows().Cast<TokensTextRow>()
-                    .SelectMany(ttr => ttr.Tokens).GroupBy(t => t.TokenId.ChapterNumber)
+                var chapterVerseGroups = tokenizedTextCorpus.GetRows(new List<string>() {  bookId }).Cast<TokensTextRow>()
+                    .SelectMany(ttr => ttr.Tokens).OrderBy(t => t.TokenId.ChapterNumber).GroupBy(t => t.TokenId.ChapterNumber)
                     .Select(g => new
                     {
                         ChapterNumber = g.Key,
-                        Verses = g.GroupBy(v => v.TokenId.VerseNumber)
+                        Verses = g.OrderBy(v => v.TokenId.VerseNumber).GroupBy(v => v.TokenId.VerseNumber)
                                 .Select(vg => new
                                 {
                                     VerseNumber = vg.Key,

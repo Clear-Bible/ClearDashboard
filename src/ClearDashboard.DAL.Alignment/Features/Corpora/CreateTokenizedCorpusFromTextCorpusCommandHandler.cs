@@ -53,76 +53,59 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 TokenizationFunction = request.TokenizationFunction
             };
 
-            ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
+            // ITextCorpus Text ids always book ids/abbreviations:  
+            var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
 
-            await ProjectDbContext.SaveChangesAsync(cancellationToken);
-
-            //tokenizedCorpus.Tokens.AddRange(request.TextCorpus.Cast<TokensTextRow>()
-            //    .SelectMany(tokensTextRow => tokensTextRow.Tokens
-            //        .Select(token => new Models.Token
-            //        {
-            //            BookNumber = token.TokenId.BookNumber,
-            //            ChapterNumber = token.TokenId.ChapterNumber,
-            //            VerseNumber = token.TokenId.VerseNumber,
-            //            WordNumber = token.TokenId.WordNumber,
-            //            SubwordNumber = token.TokenId.SubWordNumber,
-            //            SurfaceText = token.SurfaceText,
-            //            TrainingText = token.TrainingText
-            //        })
-            //    ));
-
-
-           
-            var tokens = request.TextCorpus.Cast<TokensTextRow>()
-                .SelectMany(tokensTextRow => tokensTextRow.Tokens
-                    .Select(token => new Models.Token
-                    {
-                        Id = Guid.NewGuid(),
-                        TokenizationId = tokenizedCorpus.Id,
-                        BookNumber = token.TokenId.BookNumber,
-                        ChapterNumber = token.TokenId.ChapterNumber,
-                        VerseNumber = token.TokenId.VerseNumber,
-                        WordNumber = token.TokenId.WordNumber,
-                        SubwordNumber = token.TokenId.SubWordNumber,
-                        SurfaceText = token.SurfaceText,
-                        TrainingText = token.TrainingText
-                    })
-                ).ToList();
-
-            var bookNumbers = tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
-            var bookNumbersToAbbreviations =
-                ClearBible.Engine.Persistence.FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
-                    x => x.silCannonBookAbbrev);
-
-            var bookAbbreviations = new List<string>();
-
-            foreach (var bookNumber in bookNumbers)
+//            using var transaction = ProjectDbContext.Database.BeginTransaction();
+            try
             {
-                if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
+                ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
+
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+
+                // Bulk insert at a book granularity, and within each book 
+                // order by chapter and verse number:
+                foreach (var bookId in bookIds)
                 {
-                    return new RequestResult<TokenizedTextCorpus>
-                    (
-                        success: false,
-                        message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
-                    );
+                    var chapterTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
+                        .SelectMany(ttr => ttr.Tokens)
+                        .OrderBy(t => t.TokenId.ChapterNumber)
+                        .ThenBy(t => t.TokenId.VerseNumber)
+                        .Select(token => new Models.Token
+                        {
+                            Id = Guid.NewGuid(),
+                            TokenizationId = tokenizedCorpus.Id,
+                            BookNumber = token.TokenId.BookNumber,
+                            ChapterNumber = token.TokenId.ChapterNumber,
+                            VerseNumber = token.TokenId.VerseNumber,
+                            WordNumber = token.TokenId.WordNumber,
+                            SubwordNumber = token.TokenId.SubWordNumber,
+                            SurfaceText = token.SurfaceText,
+                            TrainingText = token.TrainingText
+                        });
+
+                    await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(), cancellationToken: cancellationToken);
                 }
 
-                bookAbbreviations.Add(bookAbbreviation);
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+//                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult<TokenizedTextCorpus>
+                (
+                    success: false,
+                    message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
+                );
             }
 
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: About to BulkInsertAsync");
-            await ProjectDbContext.BulkInsertAsync(tokens, cancellationToken: cancellationToken);
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: Completed BulkInsertAsync.  About to Get");
-
-            //            await ProjectDbContext.SaveChangesAsync(cancellationToken);
 //            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
-            var tokenizedTextCorpus =  new TokenizedTextCorpus(
+            var tokenizedTextCorpus = new TokenizedTextCorpus(
                 new TokenizedCorpusId(tokenizedCorpus.Id),
-                request.CorpusId, 
-                _mediator, 
-                bookAbbreviations);
-
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: Completed Get");
+                request.CorpusId,
+                _mediator,
+                bookIds);
 
             return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
         }
