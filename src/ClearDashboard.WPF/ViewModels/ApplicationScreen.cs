@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        protected async Task SendProgressBarMessage(string message, double delayInSeconds = 1.5)
+        protected async Task SendProgressBarMessage(string message, double delayInSeconds = 1.0)
         {
             Logger.LogInformation(message);
             await Task.Delay(TimeSpan.FromSeconds(delayInSeconds));
@@ -95,10 +95,13 @@ namespace ClearDashboard.Wpf.ViewModels
                 new ProgressBarMessage(message));
         }
 
-        protected async Task SendProgressBarVisibilityMessage(bool show)
+        protected async Task SendProgressBarVisibilityMessage(bool show, double delayInMilliseconds = 0.0)
         {
-            await EventAggregator.PublishOnUIThreadAsync(
-                new ProgressBarVisibilityMessage(show));
+            if (delayInMilliseconds > 0.0)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(delayInMilliseconds));
+            }
+            await EventAggregator.PublishOnUIThreadAsync(new ProgressBarVisibilityMessage(show));
         }
 
         public Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
