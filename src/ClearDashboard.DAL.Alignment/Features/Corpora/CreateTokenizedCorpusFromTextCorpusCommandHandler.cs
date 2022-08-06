@@ -7,7 +7,6 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
 using EFCore.BulkExtensions;
 
 //USE TO ACCESS Models
@@ -56,49 +55,50 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // ITextCorpus Text ids always book ids/abbreviations:  
             var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
 
-//            using var transaction = ProjectDbContext.Database.BeginTransaction();
-            try
-            {
-                ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
-
-                await ProjectDbContext.SaveChangesAsync(cancellationToken);
-
-                // Bulk insert at a book granularity, and within each book 
-                // order by chapter and verse number:
-                foreach (var bookId in bookIds)
+            //using (var transaction = await ProjectDbContext.Database.BeginTransactionAsync(cancellationToken))
+            //{
+                try
                 {
-                    var chapterTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
-                        .SelectMany(ttr => ttr.Tokens)
-                        .OrderBy(t => t.TokenId.ChapterNumber)
-                        .ThenBy(t => t.TokenId.VerseNumber)
-                        .Select(token => new Models.Token
-                        {
-                            Id = Guid.NewGuid(),
-                            TokenizationId = tokenizedCorpus.Id,
-                            BookNumber = token.TokenId.BookNumber,
-                            ChapterNumber = token.TokenId.ChapterNumber,
-                            VerseNumber = token.TokenId.VerseNumber,
-                            WordNumber = token.TokenId.WordNumber,
-                            SubwordNumber = token.TokenId.SubWordNumber,
-                            SurfaceText = token.SurfaceText,
-                            TrainingText = token.TrainingText
-                        });
+                    ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
+                    await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
-                    await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(), cancellationToken: cancellationToken);
+                    // Bulk insert at a book granularity, and within each book 
+                    // order by chapter and verse number:
+                    foreach (var bookId in bookIds)
+                    {
+                        var chapterTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
+                            .SelectMany(ttr => ttr.Tokens)
+                            .OrderBy(t => t.TokenId.ChapterNumber)
+                            .ThenBy(t => t.TokenId.VerseNumber)
+                            .Select(token => new Models.Token
+                            {
+                                Id = Guid.NewGuid(),
+                                TokenizationId = tokenizedCorpus.Id,
+                                BookNumber = token.TokenId.BookNumber,
+                                ChapterNumber = token.TokenId.ChapterNumber,
+                                VerseNumber = token.TokenId.VerseNumber,
+                                WordNumber = token.TokenId.WordNumber,
+                                SubwordNumber = token.TokenId.SubWordNumber,
+                                SurfaceText = token.SurfaceText,
+                                TrainingText = token.TrainingText
+                            });
+
+                        await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(), cancellationToken: cancellationToken);
+                    }
+
+                    // Commit transaction if all commands succeed, transaction will auto-rollback
+                    // when disposed if either commands fails
+                    //await transaction.CommitAsync(cancellationToken);
                 }
-
-                // Commit transaction if all commands succeed, transaction will auto-rollback
-                // when disposed if either commands fails
-//                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                return new RequestResult<TokenizedTextCorpus>
-                (
-                    success: false,
-                    message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
-                );
-            }
+                catch (Exception ex)
+                {
+                    return new RequestResult<TokenizedTextCorpus>
+                    (
+                        success: false,
+                        message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
+                    );
+                }
+            //}
 
 //            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
             var tokenizedTextCorpus = new TokenizedTextCorpus(
