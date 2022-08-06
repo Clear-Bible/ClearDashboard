@@ -32,6 +32,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 var tokens = ProjectDbContext.Tokens.Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
                                                                     && token.BookNumber == bookNumberForAbbreviation);
 
+                if (tokens.Count() == 0 && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
+                {
+                    throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
+                }
 
                 var groupedTokens = tokens
                     .OrderBy(t => t.BookNumber)
@@ -91,14 +95,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            if (Int32.TryParse(bookMappingDatum.clearTreeBookNum, out int intifiedBookNumber))
+            if (Int32.TryParse(bookMappingDatum.silCannonBookNum, out int intifiedBookNumber))
             {
                 return intifiedBookNumber;
             }
             else
             {
                 throw new Exception(
-                    $"Unable to parse book number {bookMappingDatum.clearTreeBookNum} for SIL Book abbreviation {silBookAbbreviation}"
+                    $"Unable to parse book number {bookMappingDatum.silCannonBookNum} for SIL Book abbreviation {silBookAbbreviation}"
                 );
             }
         }
