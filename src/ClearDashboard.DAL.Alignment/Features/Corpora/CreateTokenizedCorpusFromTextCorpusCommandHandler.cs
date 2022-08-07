@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -56,7 +57,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // ITextCorpus Text ids always book ids/abbreviations:  
             var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
 
-//            using var transaction = ProjectDbContext.Database.BeginTransaction();
+            var connection = ProjectDbContext.Database.GetDbConnection();
+            await connection.OpenAsync(cancellationToken);
+            //using var transaction = connection.BeginTransaction();
+            //await using var transaction = await ProjectDbContext.Database.BeginTransactionAsync(cancellationToken);
             try
             {
                 ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
@@ -84,12 +88,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             TrainingText = token.TrainingText
                         });
 
-                    await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(), cancellationToken: cancellationToken);
+                    await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(),
+                        cancellationToken: cancellationToken);
                 }
 
                 // Commit transaction if all commands succeed, transaction will auto-rollback
                 // when disposed if either commands fails
-//                transaction.Commit();
+                //await transaction.CommitAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -98,6 +103,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     success: false,
                     message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
                 );
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
 
 //            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
