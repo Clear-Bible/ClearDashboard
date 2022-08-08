@@ -194,13 +194,13 @@ public class DashboardProjectManager : ProjectManager
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("There was an issue decrypting your license key.");
+                        //MessageBox.Show("There was an issue decrypting your license key.");
                         PopupRegistration(viewModel);
                     }
                 }
                 else
                 {   
-                    MessageBox.Show("Your license key file is missing.");
+                    //MessageBox.Show("Your license key file is missing.");
                     PopupRegistration(viewModel);
                 }
             }

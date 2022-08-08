@@ -41,6 +41,9 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
     {
         await base.OnInitializeAsync(cancellationToken);
 
+        
+        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_missing", _logger));
+
         _registrationViewModel = ServiceProvider.GetService<RegistrationViewModel>();
 
 
