@@ -48,11 +48,12 @@
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your first name"
+                materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_firstName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <!--  materialDesign:HintAssist.Hint="Please enter your first name"  -->
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -86,11 +87,12 @@
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your last name"
+                materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_lastName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <!--  materialDesign:HintAssist.Hint="Please enter your last name"  -->
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -123,11 +125,12 @@
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                materialDesign:HintAssist.Hint="Please enter your license key"
+                materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_licenseKey}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <!--  materialDesign:HintAssist.Hint="Please enter your license key"  -->
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"

@@ -199,7 +199,7 @@ public class DashboardProjectManager : ProjectManager
                     }
                 }
                 else
-                {
+                {   
                     MessageBox.Show("Your license key file is missing.");
                     PopupRegistration(viewModel);
                 }
