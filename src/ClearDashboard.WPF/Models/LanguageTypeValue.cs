@@ -8,6 +8,9 @@ namespace ClearDashboard.Wpf.Models
     public enum LanguageTypeValue
     {
         [RTL(false)]
+        [Description("en-US"), DefaultValue("English Language")]
+        enUS,
+        [RTL(false)]
         [Description("am"), DefaultValue("አማርኛ")]
         am,
         [RTL(true)]
@@ -16,9 +19,6 @@ namespace ClearDashboard.Wpf.Models
         [RTL(false)]
         [Description("de"), DefaultValue("Deutsche Sprache")]
         de,
-        [RTL(false)]
-        [Description("en-US"), DefaultValue("English Language")]
-        enUS,
         [RTL(false)]
         [Description("es"), DefaultValue("Lengua española")]
         es,

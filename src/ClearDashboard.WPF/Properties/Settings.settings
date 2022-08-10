@@ -21,7 +21,7 @@
       <Value Profile="(Default)">Inherit</Value>
     </Setting>
     <Setting Name="language_code" Type="System.String" Scope="User">
-      <Value Profile="(Default)">en</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastLayout" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
