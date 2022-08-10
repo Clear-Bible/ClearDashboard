@@ -58,110 +58,533 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PinsGloss" xml:space="preserve">
-    <value>Glanz</value>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>Kolosser</value>
   </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="edit" xml:space="preserve">
-    <value>Bearbeiten</value>
-  </data>
-  <data name="BtDomainsTreesFruits" xml:space="preserve">
-    <value>Bäume; Früchte</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galater</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="BtFormWord" xml:space="preserve">
-    <value>Wort:</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
+  <data name="PinsOrigin" xml:space="preserve">
+    <value>Herkunft</value>
   </data>
   <data name="JON" xml:space="preserve">
     <value>JON</value>
   </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>Joshua</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>Genesis</value>
-  </data>
-  <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Epheser</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Titus</value>
-  </data>
-  <data name="cancel" xml:space="preserve">
-    <value>Absagen</value>
-  </data>
-  <data name="BtDomainsAnimals" xml:space="preserve">
-    <value>Tiere</value>
-  </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
     <value>Offenbarung</value>
   </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 Korinther</value>
+  <data name="BtDomainsTools" xml:space="preserve">
+    <value>Werkzeug</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 Peter</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
   </data>
   <data name="BtDomainsPeople" xml:space="preserve">
     <value>Personen</value>
   </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
   </data>
-  <data name="BtDomainsMourning" xml:space="preserve">
-    <value>Trauer</value>
+  <data name="BtFormFound" xml:space="preserve">
+    <value>Gefunden</value>
   </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>Kolosser</value>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
   </data>
-  <data name="PinsClearFilter" xml:space="preserve">
-    <value>Klaren Filter</value>
+  <data name="NewProjectDialogView_enterName" xml:space="preserve">
+    <value>Bitte geben Sie einen Namen für Ihr Projekt ein.</value>
   </data>
-  <data name="BtDomainsPaganism" xml:space="preserve">
-    <value>Heidentum</value>
+  <data name="BtFormRenderingsLower" xml:space="preserve">
+    <value>Renderings</value>
   </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
+  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
+    <value>Säugetiere; Haustiere</value>
   </data>
-  <data name="ClockUserControl_localTime" xml:space="preserve">
-    <value>Ortszeit</value>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>Genesis</value>
   </data>
-  <data name="BtDomainsPurpose" xml:space="preserve">
-    <value>Zweck</value>
+  <data name="RegistrationDialogView_register" xml:space="preserve">
+    <value>REGISTRIEREN</value>
   </data>
-  <data name="BtBcvChapter" xml:space="preserve">
-    <value>Kapitel</value>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>Jude</value>
+  </data>
+  <data name="NewProjectDialog_title" xml:space="preserve">
+    <value>Neues Projekt erstellen</value>
+  </data>
+  <data name="BtBcvBook" xml:space="preserve">
+    <value>Buch</value>
+  </data>
+  <data name="BtFormScope" xml:space="preserve">
+    <value>Zielfernrohr:</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 Korinther</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 Chroniken</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>Epheser</value>
+  </data>
+  <data name="UID Key []" xml:space="preserve">
+    <value>German [de]</value>
+  </data>
+  <data name="RegistrationView_licenseKey" xml:space="preserve">
+    <value>Bitte geben Sie ihren Lizenzschlüssel ein</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>Prediger</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 John</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>übernatürliche Wesen und Kräfte; Titel</value>
+  </data>
+  <data name="BtDomainsLocale" xml:space="preserve">
+    <value>Gebietsschema</value>
   </data>
   <data name="TargetContextZoomOut" xml:space="preserve">
     <value>Rauszoomen</value>
   </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>Hesekiel</value>
   </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 John</value>
   </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>Richter</value>
+  <data name="BtFormWord" xml:space="preserve">
+    <value>Wort:</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>Akte</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="LicenseValidator_firstMissing" xml:space="preserve">
+    <value>Vorname fehlen</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="BtDomainsPaganism" xml:space="preserve">
+    <value>Heidentum</value>
+  </data>
+  <data name="RegistrationView_firstName" xml:space="preserve">
+    <value>Bitte geben Sie Ihren Vornamen ein</value>
+  </data>
+  <data name="BtDomainsAffection" xml:space="preserve">
+    <value>Zuneigung</value>
+  </data>
+  <data name="BtFormSemanticDomain" xml:space="preserve">
+    <value>Semantische Domäne:</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="BtDomainsPurpose" xml:space="preserve">
+    <value>Zweck</value>
+  </data>
+  <data name="Landing_settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>Philipper</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="BtDomainsReligiousActivities" xml:space="preserve">
+    <value>Religiöse Aktivitäten</value>
+  </data>
+  <data name="BtRenderingAllTerms" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="TargetContextUnformatted" xml:space="preserve">
+    <value>Unformatiert</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 Korinther</value>
+  </data>
+  <data name="BtDomainsAll" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="ProjectValidator_illegalCharacters" xml:space="preserve">
+    <value>Der angegebene Projektname enthält illegale Zeichen. Gültige Zeichen umfassen 'A-Z' (Kleinbuchstaben und Großbuchstaben), Zahlen '0-9' und die Zeichen '-' und '_'.</value>
+  </data>
+  <data name="BtDomainsAssociation" xml:space="preserve">
+    <value>Verband</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 Könige</value>
+  </data>
+  <data name="ClockUserControl_localTime" xml:space="preserve">
+    <value>Ortszeit</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="PinsStem" xml:space="preserve">
+    <value>Stengel</value>
+  </data>
+  <data name="BtDomainsPerson" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 Könige</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>Lied der Lieder</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="TargetContextZoomIn" xml:space="preserve">
+    <value>Hineinzoomen</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="BtDomainsGemstones" xml:space="preserve">
+    <value>Edelsteine</value>
+  </data>
+  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
+    <value>Opfer und Opfergaben</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="BtDomainsMourning" xml:space="preserve">
+    <value>Trauer</value>
+  </data>
+  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
+    <value>Werkzeug; Gewicht; Handel</value>
+  </data>
+  <data name="BtFormAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 Thessalonicher</value>
+  </data>
+  <data name="BtBcvVerse" xml:space="preserve">
+    <value>Vers</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>Ruth</value>
+  </data>
+  <data name="PinsGloss" xml:space="preserve">
+    <value>Glanz</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>Joshua</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>Matthew</value>
+  </data>
+  <data name="BtDomainsNature" xml:space="preserve">
+    <value>Natur</value>
+  </data>
+  <data name="BtDomainsCraftsCloth" xml:space="preserve">
+    <value>Kunsthandwerk; Stoff</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="RegistrationDialogViewModel_missing" xml:space="preserve">
+    <value>Ihr Lizenzschlüssel fehlt entweder oder gebrochen.</value>
+  </data>
+  <data name="BtFormCategory" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 Peter</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 Samuel</value>
+  </data>
+  <data name="expandView" xml:space="preserve">
+    <value>Ansicht erweitern</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 Timotheus</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Leviticus</value>
   </data>
-  <data name="BtDomainsAll" xml:space="preserve">
-    <value>*</value>
+  <data name="BtDomainsAgriculture" xml:space="preserve">
+    <value>Landwirtschaft</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>Wehklagen</value>
+  </data>
+  <data name="BtDomainsGroupArea" xml:space="preserve">
+    <value>Gruppe; Bereich</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>Amos</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="PinsSuffix" xml:space="preserve">
+    <value>Suffix</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="RegistrationDialogViewModel_faultyKey" xml:space="preserve">
+    <value>Der Schlüssel ist fehlerhaft. Bei der Entschlüsselung konnten bestimmte JSON -Elemente nicht gefunden werden.</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="BtDomainsAreaNature" xml:space="preserve">
+    <value>Bereich; Natur</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>Deuteronomie</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>Arbeit</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>Philemon</value>
+  </data>
+  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>übernatürliche Wesen und Kräfte</value>
+  </data>
+  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
+    <value>Werkzeug; Geburt</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="BtFormProject" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="PinsFilter" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="BtFormGlossLower" xml:space="preserve">
+    <value>Glanz:</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="BtRenderingMissingRenderings" xml:space="preserve">
+    <value>Fehlende Renderings</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="TargetContextFormatted" xml:space="preserve">
+    <value>Formatiert</value>
+  </data>
+  <data name="PinsLoadReferences" xml:space="preserve">
+    <value>Lastreferenzen</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>Titus</value>
+  </data>
+  <data name="BtDomainsFruits" xml:space="preserve">
+    <value>Früchte</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>Zahlen</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>Galater</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
+    <value>Weisheit, Verständnis</value>
+  </data>
+  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
+    <value>Bäume; Parfums und Gewürze</value>
+  </data>
+  <data name="BtFormTerm" xml:space="preserve">
+    <value>Begriff</value>
+  </data>
+  <data name="ProjectValidator_sameName" xml:space="preserve">
+    <value>Ein Projekt mit demselben Namen gibt es bereits. Bitte wählen Sie einen eindeutigen Namen.</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="BtBcvChapter" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
+    <value>Moral und Ethik</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>Zephaniah</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Psalmen</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="BtDomainsSettlement" xml:space="preserve">
+    <value>Siedlung</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>Nehemiah</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>Jesaja</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="PinsLanguage" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="PinsClearFilter" xml:space="preserve">
+    <value>Klaren Filter</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>Exodus</value>
+  </data>
+  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
+    <value>Zeichen und Wunder</value>
+  </data>
+  <data name="create" xml:space="preserve">
+    <value>Schaffen</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>Hosea</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>Esther</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
+    <value>Ehre, Respekt, Status</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>Markieren</value>
+  </data>
+  <data name="Landing_newproject" xml:space="preserve">
+    <value>Neues Projekt</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="PinsMatch" xml:space="preserve">
+    <value>Passen</value>
+  </data>
+  <data name="BtFormCounts" xml:space="preserve">
+    <value>Zählt</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 Thessalonicher</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Absagen</value>
+  </data>
+  <data name="BtDomainsGroup" xml:space="preserve">
+    <value>Gruppe</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Zecharja</value>
@@ -169,625 +592,223 @@
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>Lukas</value>
   </data>
-  <data name="BtDomainsGroupArea" xml:space="preserve">
-    <value>Gruppe; Bereich</value>
-  </data>
-  <data name="BtDomainsSignsAndWonders" xml:space="preserve">
-    <value>Zeichen und Wunder</value>
-  </data>
-  <data name="BtDomainsMoralsAndEthics" xml:space="preserve">
-    <value>Moral und Ethik</value>
-  </data>
-  <data name="WmSubDomain" xml:space="preserve">
-    <value>Subdomain:</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="BtDomainsToolsChildbirth" xml:space="preserve">
-    <value>Werkzeug; Geburt</value>
-  </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 Korinther</value>
-  </data>
-  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>Konstruktionen; Tierhaltung</value>
-  </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
-  </data>
-  <data name="RegistrationView_firstName" xml:space="preserve">
-    <value>Bitte geben Sie Ihren Vornamen ein</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>John</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Sprichwörter</value>
-  </data>
-  <data name="LicenseValidator_lastMissing" xml:space="preserve">
-    <value>Nachname fehlen</value>
-  </data>
-  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
-    <value>Personen; Ehre, Respekt, Status</value>
-  </data>
-  <data name="BtDomainsTreesPerfumesAndSpices" xml:space="preserve">
-    <value>Bäume; Parfums und Gewürze</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PinsCode" xml:space="preserve">
-    <value>Code</value>
-  </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>Philipper</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Lied der Lieder</value>
-  </data>
-  <data name="BtDomainsGroup" xml:space="preserve">
-    <value>Gruppe</value>
-  </data>
-  <data name="TargetContextZoomIn" xml:space="preserve">
-    <value>Hineinzoomen</value>
-  </data>
-  <data name="BtDomainsFruits" xml:space="preserve">
-    <value>Früchte</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="add" xml:space="preserve">
-    <value>Hinzufügen</value>
-  </data>
-  <data name="BtDomainsGemstones" xml:space="preserve">
-    <value>Edelsteine</value>
-  </data>
-  <data name="BtFormRenderings" xml:space="preserve">
-    <value>Renderings</value>
-  </data>
-  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
-    <value>Säugetiere; wilde Tiere</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="BtFormGlossLower" xml:space="preserve">
-    <value>Glanz:</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 Thessalonicher</value>
-  </data>
-  <data name="PinsPhrase" xml:space="preserve">
-    <value>Phrase</value>
-  </data>
-  <data name="RegistrationDialogView_closeApplication" xml:space="preserve">
-    <value>SCHLIESSE DIE ANWENDUNG</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="RegistrationView_lastName" xml:space="preserve">
-    <value>Bitte geben Sie ihren Nachnamen ein</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="LicenseValidator_licenseMissing" xml:space="preserve">
-    <value>Lizenzschlüssel fehlt</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 Könige</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>übernatürliche Wesen und Kräfte; Titel</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 Thessalonicher</value>
-  </data>
-  <data name="PinsOrigin" xml:space="preserve">
-    <value>Herkunft</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 John</value>
-  </data>
-  <data name="BtFormScope" xml:space="preserve">
-    <value>Zielfernrohr:</value>
-  </data>
-  <data name="PinsMatch" xml:space="preserve">
-    <value>Passen</value>
-  </data>
-  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
-    <value>Behälter; Tierhaltung</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
   <data name="Landing_project" xml:space="preserve">
     <value>Projekt</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>Hosea</value>
-  </data>
-  <data name="UID Key []" xml:space="preserve">
-    <value>German [de]</value>
-  </data>
-  <data name="BtDomainsMammalsDomesticAnimals" xml:space="preserve">
-    <value>Säugetiere; Haustiere</value>
-  </data>
-  <data name="BtDomainsAreaNature" xml:space="preserve">
-    <value>Bereich; Natur</value>
-  </data>
-  <data name="delete" xml:space="preserve">
-    <value>Löschen</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 Peter</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="Landing_newproject" xml:space="preserve">
-    <value>Neues Projekt</value>
-  </data>
-  <data name="RegistrationDialogView_register" xml:space="preserve">
-    <value>REGISTRIEREN</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>Akte</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Hebräer</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>Markieren</value>
-  </data>
-  <data name="BtBcvAll" xml:space="preserve">
-    <value>Alle</value>
-  </data>
-  <data name="PinsStem" xml:space="preserve">
-    <value>Stengel</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>Arbeit</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>Deuteronomie</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Nehemiah</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>Hesekiel</value>
-  </data>
-  <data name="BtFormGloss" xml:space="preserve">
-    <value>Glanz</value>
-  </data>
-  <data name="BtDomainsTools" xml:space="preserve">
-    <value>Werkzeug</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="BtDomainsAgriculture" xml:space="preserve">
-    <value>Landwirtschaft</value>
-  </data>
-  <data name="RegistrationDialogViewModel_missing" xml:space="preserve">
-    <value>Ihr Lizenzschlüssel fehlt entweder oder gebrochen.</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="BtFormProject" xml:space="preserve">
-    <value>Projekt</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
-  </data>
-  <data name="BtFormSemanticDomain" xml:space="preserve">
-    <value>Semantische Domäne:</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 Könige</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 Chroniken</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="BtDomainsMonument" xml:space="preserve">
-    <value>Monument</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="BtFormTerm" xml:space="preserve">
-    <value>Begriff</value>
-  </data>
-  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
-    <value>Personen; Behörde</value>
-  </data>
-  <data name="BtDomainsCraftsCloth" xml:space="preserve">
-    <value>Kunsthandwerk; Stoff</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>Jesaja</value>
-  </data>
-  <data name="PinsNotes" xml:space="preserve">
-    <value>Anmerkungen</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="PinsSuffix" xml:space="preserve">
-    <value>Suffix</value>
-  </data>
-  <data name="RegistrationDialogViewModel_mismatchCatch" xml:space="preserve">
-    <value>Der Inhalt des entschlüsselten Lizenzschlüssels stimmt nicht mit den von Ihnen bereitgestellten Informationen überein.</value>
-  </data>
-  <data name="TargetContextUnformatted" xml:space="preserve">
-    <value>Unformatiert</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>Matthew</value>
-  </data>
-  <data name="BtDomainsSettlement" xml:space="preserve">
-    <value>Siedlung</value>
-  </data>
-  <data name="PinsForms" xml:space="preserve">
-    <value>Formen</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>Esther</value>
-  </data>
-  <data name="BtFormCategory" xml:space="preserve">
-    <value>Kategorie</value>
-  </data>
-  <data name="BtFormAll" xml:space="preserve">
-    <value>Alle</value>
-  </data>
-  <data name="LicenseValidator_firstMissing" xml:space="preserve">
-    <value>Vorname fehlen</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="BtBcvBook" xml:space="preserve">
-    <value>Buch</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="RegistrationView_licenseKey" xml:space="preserve">
-    <value>Bitte geben Sie ihren Lizenzschlüssel ein</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 Peter</value>
-  </data>
-  <data name="save" xml:space="preserve">
-    <value>Speichern</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 John</value>
   </data>
   <data name="1SA" xml:space="preserve">
     <value>1SA</value>
   </data>
-  <data name="PinsLanguage" xml:space="preserve">
-    <value>Sprache</value>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 John</value>
   </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
-  <data name="create" xml:space="preserve">
-    <value>Schaffen</value>
+  <data name="error" xml:space="preserve">
+    <value>Fehler</value>
   </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 Chroniken</value>
+  <data name="add" xml:space="preserve">
+    <value>Hinzufügen</value>
   </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="BtDomainsSacrificesAndOfferings" xml:space="preserve">
-    <value>Opfer und Opfergaben</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="BtFormCounts" xml:space="preserve">
-    <value>Zählt</value>
-  </data>
-  <data name="BtBcvVerse" xml:space="preserve">
-    <value>Vers</value>
-  </data>
-  <data name="BtDomainsToolsWeightCommerce" xml:space="preserve">
-    <value>Werkzeug; Gewicht; Handel</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="BtDomainsPerson" xml:space="preserve">
-    <value>Person</value>
-  </data>
-  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
-    <value>Konstruktion; Religiöse Aktivitäten</value>
-  </data>
-  <data name="BtDomainsAssociation" xml:space="preserve">
-    <value>Verband</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Jude</value>
+  <data name="BtDomainsPeopleAuthority" xml:space="preserve">
+    <value>Personen; Behörde</value>
   </data>
   <data name="PinsPrefix" xml:space="preserve">
     <value>Präfix</value>
   </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
   </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
   </data>
-  <data name="update" xml:space="preserve">
-    <value>Aktualisieren</value>
-  </data>
-  <data name="BtDomainsHonorRespectStatus" xml:space="preserve">
-    <value>Ehre, Respekt, Status</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timotheus</value>
-  </data>
-  <data name="BtDomainsGrasses" xml:space="preserve">
-    <value>Gräser</value>
-  </data>
-  <data name="expandView" xml:space="preserve">
-    <value>Ansicht erweitern</value>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
   </data>
   <data name="WmDomain" xml:space="preserve">
     <value>Domain:</value>
   </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 John</value>
-  </data>
-  <data name="WmSense" xml:space="preserve">
-    <value>Sinn:</value>
-  </data>
-  <data name="BtDomainsWisdomUnderstanding" xml:space="preserve">
-    <value>Weisheit, Verständnis</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="ShellView_user" xml:space="preserve">
-    <value>Benutzer</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
-  </data>
-  <data name="PinsWord" xml:space="preserve">
-    <value>Wort</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Psalmen</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="BtRenderingMissingRenderings" xml:space="preserve">
-    <value>Fehlende Renderings</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>Ruth</value>
-  </data>
-  <data name="PinsFilter" xml:space="preserve">
-    <value>Filter:</value>
-  </data>
-  <data name="BtDomainsSupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>übernatürliche Wesen und Kräfte</value>
-  </data>
-  <data name="BtFormRenderingsLower" xml:space="preserve">
-    <value>Renderings</value>
-  </data>
-  <data name="BtDomainsArea" xml:space="preserve">
-    <value>Bereich</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philemon</value>
-  </data>
-  <data name="PinsLexeme" xml:space="preserve">
-    <value>Lexeme</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Wehklagen</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="BtDomainsNature" xml:space="preserve">
-    <value>Natur</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="BtDomainsReligiousActivities" xml:space="preserve">
-    <value>Religiöse Aktivitäten</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="Landing_settings" xml:space="preserve">
-    <value>Einstellungen</value>
-  </data>
-  <data name="BtRenderingAllTerms" xml:space="preserve">
-    <value>Alle</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Zahlen</value>
-  </data>
-  <data name="BtDomainsLocale" xml:space="preserve">
-    <value>Gebietsschema</value>
-  </data>
-  <data name="PinsLoadReferences" xml:space="preserve">
-    <value>Lastreferenzen</value>
-  </data>
-  <data name="Landing_projects" xml:space="preserve">
-    <value>Projekte</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Römer</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="PinsVerseReferences" xml:space="preserve">
-    <value>Verse Referenzen</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="BtFormFound" xml:space="preserve">
-    <value>Gefunden</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Prediger</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="RegistrationDialogViewModel_faultyKey" xml:space="preserve">
-    <value>Der Schlüssel ist fehlerhaft. Bei der Entschlüsselung konnten bestimmte JSON -Elemente nicht gefunden werden.</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>Exodus</value>
-  </data>
-  <data name="TargetContextFormatted" xml:space="preserve">
-    <value>Formatiert</value>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
   </data>
-  <data name="BtDomainsAffection" xml:space="preserve">
-    <value>Zuneigung</value>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>Hebräer</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="BtDomainsMonument" xml:space="preserve">
+    <value>Monument</value>
+  </data>
+  <data name="RegistrationDialogViewModel_mismatchCatch" xml:space="preserve">
+    <value>Der Inhalt des entschlüsselten Lizenzschlüssels stimmt nicht mit den von Ihnen bereitgestellten Informationen überein.</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="LicenseValidator_lastMissing" xml:space="preserve">
+    <value>Nachname fehlen</value>
+  </data>
+  <data name="BtDomainsAnimals" xml:space="preserve">
+    <value>Tiere</value>
+  </data>
+  <data name="LicenseValidator_licenseMissing" xml:space="preserve">
+    <value>Lizenzschlüssel fehlt</value>
+  </data>
+  <data name="RegistrationDialogView_closeApplication" xml:space="preserve">
+    <value>SCHLIESSE DIE ANWENDUNG</value>
+  </data>
+  <data name="BtDomainsTreesFruits" xml:space="preserve">
+    <value>Bäume; Früchte</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>Römer</value>
+  </data>
+  <data name="RegistrationView_lastName" xml:space="preserve">
+    <value>Bitte geben Sie ihren Nachnamen ein</value>
+  </data>
+  <data name="BtDomainsConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>Konstruktionen; Tierhaltung</value>
+  </data>
+  <data name="BtDomainsPeopleHonorRespectStatus" xml:space="preserve">
+    <value>Personen; Ehre, Respekt, Status</value>
+  </data>
+  <data name="WmSense" xml:space="preserve">
+    <value>Sinn:</value>
+  </data>
+  <data name="WmSubDomain" xml:space="preserve">
+    <value>Subdomain:</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>Micah</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>Jona</value>
+  </data>
+  <data name="ShellView_user" xml:space="preserve">
+    <value>Benutzer</value>
+  </data>
+  <data name="BtDomainsMammalsWildAnimals" xml:space="preserve">
+    <value>Säugetiere; wilde Tiere</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="BtDomainsConstructionReligiousActivities" xml:space="preserve">
+    <value>Konstruktion; Religiöse Aktivitäten</value>
+  </data>
+  <data name="Landing_projects" xml:space="preserve">
+    <value>Projekte</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>Richter</value>
+  </data>
+  <data name="BtDomainsArea" xml:space="preserve">
+    <value>Bereich</value>
+  </data>
+  <data name="PinsPhrase" xml:space="preserve">
+    <value>Phrase</value>
+  </data>
+  <data name="PinsCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="PinsWord" xml:space="preserve">
+    <value>Wort</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>Malachi</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 Chroniken</value>
+  </data>
+  <data name="PinsLexeme" xml:space="preserve">
+    <value>Lexeme</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Habakkuk</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="BtFormGloss" xml:space="preserve">
+    <value>Glanz</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="PinsForms" xml:space="preserve">
+    <value>Formen</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="PinsVerseReferences" xml:space="preserve">
+    <value>Verse Referenzen</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>Sprichwörter</value>
+  </data>
+  <data name="AddParatextCorpusDialog_title" xml:space="preserve">
+    <value>Wählen Sie Paratext Corpus</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="BtBcvAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="BtDomainsGrasses" xml:space="preserve">
+    <value>Gräser</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>Jeremia</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="PinsNotes" xml:space="preserve">
+    <value>Anmerkungen</value>
+  </data>
+  <data name="BtDomainsContainersAnimalHusbandry" xml:space="preserve">
+    <value>Behälter; Tierhaltung</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="BtFormRenderings" xml:space="preserve">
+    <value>Renderings</value>
   </data>
 </root>
