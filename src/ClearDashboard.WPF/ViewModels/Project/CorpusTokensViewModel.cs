@@ -13,20 +13,20 @@ using ClearDashboard.DAL.Alignment.Extensions;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    public class AlignmentViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>
+    public class CorpusTokensViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>
     {
        
 
-        public AlignmentViewModel()
+        public CorpusTokensViewModel()
         {
             // required by design-time binding
         }
 
-        public AlignmentViewModel(INavigationService navigationService, ILogger<AlignmentViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "⳼ ALIGNMENT TOOL";
-            ContentId = "ALIGNMENTTOOL";
+            Title = "CORPUS TOKENS";
+            ContentId = "CORPUSTOKENS";
             
         }
 
@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            DisplayName = "⳼ ALIGNMENT TOOL";
+            DisplayName = "Corpus Tokens";
             TokensTextRows = new ObservableCollection<TokensTextRow>();
             Verses = new ObservableCollection<VerseTokens>();
             return base.OnInitializeAsync(cancellationToken);
