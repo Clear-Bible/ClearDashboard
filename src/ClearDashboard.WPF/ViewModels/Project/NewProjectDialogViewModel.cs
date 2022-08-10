@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -9,7 +10,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 {
     public class NewProjectDialogViewModel : ValidatingApplicationScreen<DataAccessLayer.Models.Project>
     {
-       
+        private ILogger _logger;
         public NewProjectDialogViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -52,7 +53,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         private string _dialogTitle;
 
-        public string DialogTitle => "Create New Project";//string.IsNullOrEmpty(_projectName) ? "Create New Project" : $"Create New Project: {_projectName}";
+        public string DialogTitle => LocalizationStrings.Get("NewProjectDialog_title", _logger);//string.IsNullOrEmpty(_projectName) ? "Create New Project" : $"Create New Project: {_projectName}";
         //{
         //    get => _dialogTitle;
         //    set => Set(ref _dialogTitle, string.IsNullOrEmpty(value) ? "Create New Project" : $"Create New Project: {_projectName}");

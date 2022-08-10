@@ -42,7 +42,7 @@ internal class ProjectWorkspacePanesTemplateSelector : DataTemplateSelector
         if (item is CorpusViewModel)
             return CorpusViewDataTemplate;
 
-        if (item is AlignmentViewModel)
+        if (item is CorpusTokensViewModel)
             return AlignmentViewDataTemplate;
 
 
