@@ -11,26 +11,26 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    //public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ProjectDbContextQueryHandler<
-    //    GetVersificationAndBookIdByParatextPluginIdQuery,
-    //    RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
-    //    (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-    //{
+    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ProjectDbContextQueryHandler<
+        GetVersificationAndBookIdByParatextPluginIdQuery,
+        RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
+        (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
+    {
 
-    //    public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,  ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) 
-    //        : base(projectNameDbContextFactory, projectProvider, logger)
-    //    {
-    //    }
+        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger)
+            : base(projectNameDbContextFactory, projectProvider, logger)
+        {
+        }
 
-    //    protected override Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>> GetDataAsync(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
-    //    {
-    //        //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
+        protected override Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>> GetDataAsync(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
+        {
+            //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
 
-    //        return Task.FromResult(
-    //            new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-    //            (result: (ScrVers.Original, new List<string>()),
-    //                success: true,
-    //                message: "successful result from test"));
-    //    }
-    //}
+            return Task.FromResult(
+                new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
+                (result: (ScrVers.Original, new List<string>()),
+                    success: true,
+                    message: "successful result from test"));
+        }
+    }
 }

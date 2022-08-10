@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
 {
     public class GetVersificationBooksByParatextIdQueryHandler :
-        IRequestHandler<GetVersificationAndBookIdByParatextPluginIdQuery, RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
+        IRequestHandler<GetVersificationAndBookIdByParatextPluginIdQuery, RequestResult<VersificationBookIds>>
     {
         private readonly ILogger<GetVersificationBooksByParatextIdQueryHandler> _logger;
         private readonly MainWindow _mainWindow;
@@ -23,15 +24,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
             _mainWindow = mainWindow;
         }
 
-        public Task<RequestResult<(ScrVers versification, IEnumerable<string> bookAbbreviations)>> Handle(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<VersificationBookIds>> Handle(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
         {
             var data = _mainWindow.GetVersificationAndBooksForProject(request.ParatextProjectId);
 
-            var queryResult = new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>();
+            var queryResult = new RequestResult<VersificationBookIds>();
 
             try
             {
                 queryResult.Data = data;
+                queryResult.Success = true;
             }
             catch (Exception ex)
             {

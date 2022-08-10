@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
 {
@@ -14,16 +15,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
     {
         public VersificationBooksByParatextIdController(IMediator mediator, ILogger<VersificationBooksByParatextIdController> logger) : base(mediator, logger)
         {
-
+            //no-op
         }
 
         [HttpPost]
-        public async Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>> 
-            GetAsync([FromBody] GetVersificationAndBookIdByParatextPluginIdQuery command)
+        public async Task<RequestResult<VersificationBookIds>> GetAsync([FromBody] GetVersificationAndBookIdByParatextPluginIdQuery command)
         {
-            var result =
-                await ExecuteRequestAsync<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
-                    (ScrVers? versification, IEnumerable<string> bookAbbreviations)>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<VersificationBookIds>, VersificationBookIds>(command, CancellationToken.None);
             return result;
 
         }

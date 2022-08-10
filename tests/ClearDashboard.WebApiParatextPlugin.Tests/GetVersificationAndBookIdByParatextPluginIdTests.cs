@@ -2,7 +2,6 @@
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -27,16 +26,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
                 var response = await client.PostAsJsonAsync<GetVersificationAndBookIdByParatextPluginIdQuery>(
-                    "versificationandbookidbyparatextpluginId",
+                    "versificationbooksbyparatextid",
                     new GetVersificationAndBookIdByParatextPluginIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f"));
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<List<UsfmVerse>>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<VersificationBookIds>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);
-                Assert.NotNull(result.Data);
-
+                Assert.NotNull(result.Data.Versification);
+                Assert.NotNull(result.Data.BookAbbreviations);
             }
             finally
             {

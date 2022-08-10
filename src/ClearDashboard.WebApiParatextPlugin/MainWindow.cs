@@ -141,7 +141,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             StartWebHost();
 
-
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
             //Invoke((Action)(() => GetAllProjects(true)));
@@ -942,20 +941,51 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
-        public (ScrVers? versification, IEnumerable<string> bookAbbreviations) GetVersificationAndBooksForProject(string ParatextProjectId)
+        public VersificationBookIds GetVersificationAndBooksForProject(string ParatextProjectId)
         {
             // get the right project
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
             var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
+            VersificationBookIds versificationBookIds = new VersificationBookIds();
+
             if (project != null)
             {
-                //SIL.Scripture.Versification versification = Convert.ToInt32(project.Versification);
+                switch (project.Versification.Type)
+                {
+    
+                    case StandardScrVersType.English:
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                    case StandardScrVersType.RussianProtestant:
+                        versificationBookIds.Versification = ScrVers.RussianProtestant;
+                        break;
+                    case StandardScrVersType.RussianOrthodox:
+                        versificationBookIds.Versification = ScrVers.RussianOrthodox;
+                        break;
+                    case StandardScrVersType.Original:
+                        versificationBookIds.Versification = ScrVers.Original;
+                        break;
+                    case StandardScrVersType.Vulgate:
+                        versificationBookIds.Versification = ScrVers.Vulgate;
+                        break;
+                    case StandardScrVersType.Unknown:
+                        // there is no "Unknown" ScrVers so set to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
 
-                //return (versification, null);
+                    default:
+                        // default to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                }
+
+                var books = project.AvailableBooks.Where(b => b.Code != "");
+                versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+                return versificationBookIds;
             }
-            return (ScrVers.English, new List<string>());
+            return new VersificationBookIds();
         }
 
 
