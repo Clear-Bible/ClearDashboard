@@ -8,6 +8,8 @@ using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
+using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -51,26 +53,68 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 Corpus = corpus,
                 TokenizationFunction = request.TokenizationFunction
             };
-            
-            tokenizedCorpus.Tokens.AddRange(request.TextCorpus.Cast<TokensTextRow>()
-                .SelectMany(tokensTextRow => tokensTextRow.Tokens
-                    .Select(token => new Models.Token
-                    {
-                        BookNumber = token.TokenId.BookNumber,
-                        ChapterNumber = token.TokenId.ChapterNumber,
-                        VerseNumber = token.TokenId.VerseNumber,
-                        WordNumber = token.TokenId.WordNumber,
-                        SubwordNumber = token.TokenId.SubWordNumber,
-                        SurfaceText = token.SurfaceText,
-                        TrainingText = token.TrainingText
-                    })
-                ));
 
-            ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
+            // ITextCorpus Text ids always book ids/abbreviations:  
+            var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
 
-            // NB:  passing in the cancellation token to SaveChangesAsync.
-            await ProjectDbContext.SaveChangesAsync(cancellationToken);
-            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
+            var connection = ProjectDbContext.Database.GetDbConnection();
+            await connection.OpenAsync(cancellationToken);
+            //using var transaction = connection.BeginTransaction();
+            //await using var transaction = await ProjectDbContext.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                ProjectDbContext.TokenizedCorpora.Add(tokenizedCorpus);
+
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+
+                // Bulk insert at a book granularity, and within each book 
+                // order by chapter and verse number:
+                foreach (var bookId in bookIds)
+                {
+                    var chapterTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
+                        .SelectMany(ttr => ttr.Tokens)
+                        .OrderBy(t => t.TokenId.ChapterNumber)
+                        .ThenBy(t => t.TokenId.VerseNumber)
+                        .Select(token => new Models.Token
+                        {
+                            Id = Guid.NewGuid(),
+                            TokenizationId = tokenizedCorpus.Id,
+                            BookNumber = token.TokenId.BookNumber,
+                            ChapterNumber = token.TokenId.ChapterNumber,
+                            VerseNumber = token.TokenId.VerseNumber,
+                            WordNumber = token.TokenId.WordNumber,
+                            SubwordNumber = token.TokenId.SubWordNumber,
+                            SurfaceText = token.SurfaceText,
+                            TrainingText = token.TrainingText
+                        });
+
+                    await ProjectDbContext.BulkInsertAsync(chapterTokens.ToList(),
+                        cancellationToken: cancellationToken);
+                }
+
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                //await transaction.CommitAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult<TokenizedTextCorpus>
+                (
+                    success: false,
+                    message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
+                );
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
+//            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
+            var tokenizedTextCorpus = new TokenizedTextCorpus(
+                new TokenizedCorpusId(tokenizedCorpus.Id),
+                request.CorpusId,
+                _mediator,
+                bookIds);
 
             return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
         }

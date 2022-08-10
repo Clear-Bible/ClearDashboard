@@ -72,8 +72,18 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Margin="5">
-            <Button
+            <!--<Button
                 x:Name="CreateNewProject"
+                Margin="10,0,10,0"
+                Content="{helpers:Localization Landing_newproject}"
+                Style="{StaticResource BigButton}">
+                <Button.Tag>
+                    <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
+                </Button.Tag>
+            </Button>-->
+
+            <Button
+                x:Name="NewProject"
                 Margin="10,0,10,0"
                 Content="{helpers:Localization Landing_newproject}"
                 Style="{StaticResource BigButton}">
@@ -105,7 +115,7 @@
             <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"
-                Content="{helpers:Loc Landing_project}"
+                Content="{helpers:Localization Landing_project}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>

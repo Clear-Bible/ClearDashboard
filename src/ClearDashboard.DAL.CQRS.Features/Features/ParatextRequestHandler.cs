@@ -48,11 +48,11 @@ namespace ClearDashboard.DAL.CQRS.Features
 
                 if (result.Success)
                 {
-                    Logger.LogInformation($"Successfully called {HttpClient.BaseAddress}/{requestUri}.");
+                    Logger.LogInformation($"Successfully called {HttpClient.BaseAddress}{requestUri}.");
                 }
                 else
                 {
-                    Logger.LogError($"Call to {HttpClient.BaseAddress}/{requestUri} was not successful: {result.Message}");
+                    Logger.LogError($"Call to {HttpClient.BaseAddress}{requestUri} was not successful: {result.Message}");
                 }
 
                 return result;

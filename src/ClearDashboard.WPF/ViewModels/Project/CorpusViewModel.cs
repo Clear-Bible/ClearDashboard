@@ -18,6 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Title = "CORPUS";
             ContentId = "CORPUSTOOL";
+            DisplayName = "CORPUS";
         }
     }
 }

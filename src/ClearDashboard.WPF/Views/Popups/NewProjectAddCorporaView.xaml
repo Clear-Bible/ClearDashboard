@@ -1,40 +1,41 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Views.Popups.NewProjectAddCorporaView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
-             Background="{DynamicResource MaterialDesignPaper}"
-             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
-             xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
-             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
-             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
-             xmlns:local="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
-             mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=popups:NewProjectAddCorporaViewModel,
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Views.Popups.NewProjectAddCorporaView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:popups="clr-namespace:ClearDashboard.Wpf.ViewModels.Popups"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
+    d:DataContext="{d:DesignInstance Type=popups:NewProjectAddCorporaViewModel,
                                      IsDesignTimeCreatable=True}"
-             d:DesignHeight="150" d:DesignWidth="400"
-             >
+    d:DesignHeight="150"
+    d:DesignWidth="400"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
 
-        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
-            <Setter Property="Margin" Value="0,8"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
-            <Setter Property="Margin" Value="5,5"/>
-            <Setter Property="FontSize" Value="11"></Setter>
-            
+        <Style BasedOn="{StaticResource MaterialDesignLabel}" TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="5,5" />
+            <Setter Property="FontSize" Value="11" />
+
         </Style>
 
-        <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignLightRadioButton}">
-            <Setter Property="Margin" Value="0, 0, 5,0" />
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+        <Style BasedOn="{StaticResource MaterialDesignLightRadioButton}" TargetType="{x:Type RadioButton}">
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
         </Style>
 
         <converters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
@@ -49,43 +50,47 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-      
+
         <StackPanel Grid.Row="0" Orientation="Vertical">
-            <Label Content="Corpus Type"></Label>
+            <Label Content="Corpus Type" />
             <StackPanel
                 Margin="5,0,0,5"
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
                 <RadioButton
                     Content="Manuscript"
-                   GroupName="corpusType"
+                    GroupName="corpusType"
                     IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Manuscript}"
-                    TabIndex="1"/>
+                    TabIndex="1" />
 
                 <RadioButton
                     Content="USFM"
                     GroupName="corpusType"
                     IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=USFM}"
-                    TabIndex="2"/>
+                    TabIndex="2" />
 
                 <RadioButton
                     Content="Paratext"
                     GroupName="corpusType"
                     IsChecked="{Binding Path=CorpusSourceType, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Paratext}"
-                    TabIndex="3"/>
+                    TabIndex="3" />
             </StackPanel>
         </StackPanel>
-        <ComboBox Margin="10,10" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" Grid.Row="1">
+        <ComboBox
+            Grid.Row="1"
+            Margin="10,10"
+            ItemsSource="{Binding Projects}"
+            SelectedItem="{Binding SelectedProject}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="10" Text="{Binding CorpusTypeDisplay}"></TextBlock>
-                        <TextBlock FontSize="16" Text="{Binding Name}"></TextBlock>
-                        <TextBlock FontSize="10" Text="{Binding LongName}"></TextBlock>
+                        <TextBlock FontSize="10" Text="{Binding CorpusTypeDisplay}" />
+                        <TextBlock FontSize="16" Text="{Binding Name}" />
+                        <TextBlock FontSize="10" Text="{Binding LongName}" />
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <userControls:WorkflowFooter  Grid.Row="2" Grid.Column="0"  />
+        <userControls:WorkflowFooter Grid.Row="2" Grid.Column="0" />
     </Grid>
 </UserControl>
