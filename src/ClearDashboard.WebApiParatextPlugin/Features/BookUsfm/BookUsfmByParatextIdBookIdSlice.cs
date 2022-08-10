@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         public Task<RequestResult<List<UsfmVerse>>> Handle(GetBookUsfmByParatextIdBookIdQuery request,
             CancellationToken cancellationToken)
         {
-            var data = _mainWindow.GetUsfmForBook(request.ParatextId, request.BookNum);
+            var data = _mainWindow.GetUsfmForBook(request.ParatextProjectId, request.BookNum);
             
             // update the isSentenceStart field using Machine's parser
             foreach (var d in data)

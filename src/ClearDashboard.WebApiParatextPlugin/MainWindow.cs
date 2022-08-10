@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using SIL.Linq;
+using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -941,14 +942,31 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
+        public (ScrVers? versification, IEnumerable<string> bookAbbreviations) GetVersificationAndBooksForProject(string ParatextProjectId)
+        {
+            // get the right project
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
+
+            if (project != null)
+            {
+                //SIL.Scripture.Versification versification = Convert.ToInt32(project.Versification);
+
+                //return (versification, null);
+            }
+            return (ScrVers.English, new List<string>());
+        }
+
+
         public List<UsfmVerse> GetUsfmForBook(
-            string ParatextId, int bookNum)
+            string ParatextProjectId, int bookNum)
         {
 
             // get the right project
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
-            var project = projects.FirstOrDefault(p => p.ID == ParatextId);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
             if (project == null)
             {

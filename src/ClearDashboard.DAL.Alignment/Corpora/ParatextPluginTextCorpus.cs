@@ -34,7 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             if (result.Success)
             {
                 return new ParatextPluginTextCorpus(
-                    command.ParatextPluginId, 
+                    command.ParatextProjectId, 
                     mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
                     result.Data.bookAbbreviations);
             }
