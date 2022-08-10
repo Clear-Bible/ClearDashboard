@@ -1,13 +1,10 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using Xunit;
 using Xunit.Abstractions;
 
