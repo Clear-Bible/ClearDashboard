@@ -8,52 +8,52 @@ namespace ClearDashboard.Wpf.Models
     public enum LanguageTypeValue
     {
         [RTL(false)]
-        [Description("en-US"), DefaultValue("English Language")]
+        [Description("en-US"), DefaultValue("English Language")]//multiple
         enUS,
         [RTL(false)]
-        [Description("am"), DefaultValue("አማርኛ")]
-        am,
+        [Description("am-ET"), DefaultValue("አማርኛ")]
+        amET,
         [RTL(true)]
-        [Description("ar"), DefaultValue("عربي")]
-        ar,
+        [Description("ar-EG"), DefaultValue("عربي")]//multiple
+        arEG,
         [RTL(false)]
-        [Description("de"), DefaultValue("Deutsche Sprache")]
-        de,
+        [Description("de-DE"), DefaultValue("Deutsche Sprache")]//multiple
+        deDE,
         [RTL(false)]
-        [Description("es"), DefaultValue("Lengua española")]
-        es,
+        [Description("es-MX"), DefaultValue("Lengua española")]//multiple
+        esMX,
         [RTL(false)]
-        [Description("fr"), DefaultValue("Langue française")]
-        fr,
+        [Description("fr-FR"), DefaultValue("Langue française")]//multiple
+        frFR,
         [RTL(false)]
-        [Description("hi"), DefaultValue("हिन्दी")]
-        hi,
+        [Description("hi-IN"), DefaultValue("हिन्दी")]
+        hiIN,
         [RTL(false)]
-        [Description("id"), DefaultValue("Bahasa Indo")]
-        id,
+        [Description("id-ID"), DefaultValue("Bahasa Indo")]
+        idID,
         [RTL(false)]
-        [Description("km"), DefaultValue("ខ្មែរ")]
-        km,
+        [Description("km-KM"), DefaultValue("ខ្មែរ")]
+        kmKM,
         [RTL(false)]
-        [Description("pt"), DefaultValue("Idioma portugues")]
-        pt,
+        [Description("pt-PT"), DefaultValue("Idioma portugues")]
+        ptPT,
         [RTL(false)]
         [Description("pt-BR"), DefaultValue("Língua portuguesa (Brasil)")]
         ptBR,
         [RTL(false)]
-        [Description("ro"), DefaultValue("Română")]
-        ro,
+        [Description("ro-RO"), DefaultValue("Română")]//multiple
+        roRO,
         [RTL(false)]
-        [Description("ru-RU"), DefaultValue("русский")]
+        [Description("ru-RU"), DefaultValue("русский")]//multiple
         ruRU,
         [RTL(false)]
-        [Description("vi"), DefaultValue("Ngôn ngữ tiếng Việt")]
-        vi,
+        [Description("vi-VN"), DefaultValue("Ngôn ngữ tiếng Việt")]
+        viVN,
         [RTL(false)]
-        [Description("zh-CN"), DefaultValue("简体中文")]
+        [Description("zh-CN"), DefaultValue("简体中文")]//multiple
         zhCN,
         [RTL(false)]
-        [Description("zh-TW"), DefaultValue("繁體中文")]
+        [Description("zh-TW"), DefaultValue("繁體中文")]//multiple
         zhTW,
 
     }
