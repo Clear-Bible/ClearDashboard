@@ -2,6 +2,7 @@
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
@@ -26,11 +27,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
 
+            var result = ExecuteRequest(new GetVersificationAndBookIdByParatextPluginIdQuery(), CancellationToken.None)
+                .ConfigureAwait(false);
+
+
+
             return Task.FromResult(
                 new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
                 (result: (ScrVers.Original, new List<string>()),
                     success: true,
                     message: "successful result from test"));
         }
+
     }
 }
