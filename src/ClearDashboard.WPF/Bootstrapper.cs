@@ -151,8 +151,14 @@ namespace ClearDashboard.Wpf
         #region Logging
         private void SetupLogging()
         {
+            var fullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboard.log");
+            //create if does not exist
+            DirectoryInfo di = new DirectoryInfo(fullPath);
+            if (di.Exists == false)
+            {
+                di.Create();
+            }
 
-            var fullPath = Path.Combine(Environment.CurrentDirectory, "Logs\\ClearDashboard.log");
             var level = LogEventLevel.Information;
 #if DEBUG
             level = LogEventLevel.Verbose;
