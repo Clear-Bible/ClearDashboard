@@ -810,7 +810,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var selectedScope = rowView[1].ToString();
 
                 // filter down to scope if present
-                if (selectedScope != FilterScopeEnum.BtBcvAll.ToString())
+                if (selectedScope != FilterScopeEnum.BiblicalTermsBcv_All.ToString())
                 {
                     if (ProjectManager.CurrentVerse.Length != 8)
                     {
