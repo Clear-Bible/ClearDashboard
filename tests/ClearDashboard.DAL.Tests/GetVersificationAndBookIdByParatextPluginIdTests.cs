@@ -19,9 +19,9 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetVersificationAndBookIdByParatextPluginIdTest()
         {
             var results =
-                await ExecuteParatextAndTestRequest<GetVersificationAndBookIdByParatextPluginIdQuery,
+                await ExecuteParatextAndTestRequest<GetVersificationAndBookIdByParatextProjectIdQuery,
                     RequestResult<VersificationBookIds>, VersificationBookIds>(
-                    new GetVersificationAndBookIdByParatextPluginIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
+                    new GetVersificationAndBookIdByParatextProjectIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
 
             Assert.True(results.Success);
             Assert.NotNull(results.Data);
@@ -33,9 +33,9 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetVersificationAndBookIdByParatextPluginId_zzSUR_Test()
         {
             var results =
-                await ExecuteParatextAndTestRequest<GetVersificationAndBookIdByParatextPluginIdQuery,
+                await ExecuteParatextAndTestRequest<GetVersificationAndBookIdByParatextProjectIdQuery,
                     RequestResult<VersificationBookIds>, VersificationBookIds>(
-                    new GetVersificationAndBookIdByParatextPluginIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f"));
+                    new GetVersificationAndBookIdByParatextProjectIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f"));
 
             Assert.True(results.Success);
             Assert.NotNull(results.Data);

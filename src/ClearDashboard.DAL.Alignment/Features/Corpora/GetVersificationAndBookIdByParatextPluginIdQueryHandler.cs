@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
@@ -8,13 +9,13 @@ using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ParatextRequestHandler<
+    public class GetVersificationAndBookIdByParatextProjectIdQueryHandler : ParatextRequestHandler<
         GetVersificationAndBookIdByParatextProjectIdQuery,
         RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
         (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
     {
 
-        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger):base(logger)
+        public GetVersificationAndBookIdByParatextProjectIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextProjectIdQueryHandler> logger):base(logger)
         {
         }
         

@@ -5,7 +5,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm
 {
-    public record GetBookUsfmByParatextIdBookIdQuery
+    public record GetRowsByParatextProjectIdAndBookIdQuery
         (string ParatextProjectId, string BookId) : IRequest<RequestResult<List<UsfmVerse>>>
     {
         public string ParatextProjectId { get; } = ParatextProjectId;

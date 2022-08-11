@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using Microsoft.Win32;
 using SIL.Linq;
 using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
@@ -633,8 +634,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             var projectNames = metadata.Select(project => project.Name).ToList();
 
-            // TODO:  get the paratext project directory programmatically.
-            var directoryInfo = new DirectoryInfo("C:\\My Paratext 9 Projects");
+            var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
             foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
             {
@@ -645,8 +645,23 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
             }
 
+            foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
+            {
+                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                if (projectMetadatum != null)
+                {
+                    projectMetadatum.CorpusType = CorpusType.Resource;
+                }
+            }
+
             return metadata;
         }
+
+        private string GetParatextProjectsPath()
+        {
+            return (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
+        }
+
 
         private CorpusType DetermineCorpusType(ProjectType projectType)
         {
