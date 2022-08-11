@@ -94,9 +94,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             }
         }
 
-//        [Fact]
+        [Fact]
         [Trait("Category", "Example")]
-        internal async void Corpus__ImportZZ_SURFromParatext_SaveToDb()
+        public async void Corpus__ImportZZ_SURFromParatext_SaveToDb()
         {
             try
             {
