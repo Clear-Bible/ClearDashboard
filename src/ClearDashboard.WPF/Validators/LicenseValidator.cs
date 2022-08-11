@@ -16,7 +16,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(firstName))
                 {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_firstMissing",_logger)); ;
+                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_FirstMissing",_logger)); ;
                 }
             });
 
@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(lastName))
                 {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_lastMissing", _logger)); ;
+                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger)); ;
                 }
             });
 
@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (string.IsNullOrEmpty(licenseKey))
                 {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_licenseMissing",_logger)); ;
+                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_LicenseMissing",_logger)); ;
                 }
             });
         }

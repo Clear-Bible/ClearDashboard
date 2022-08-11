@@ -44,7 +44,7 @@ namespace ClearDashboard.Wpf.Validators
                 if (!foundMatch)
                 {
                     //context.AddFailure($"The project name '{projectName}' contains illegal characters.  Valid characters include 'A-Z' (lowercase and uppercase), numbers '0-9' and the characters '-' and '_'.");
-                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_illegalCharacters", _logger));
+                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_IllegalCharacters", _logger));
                 }
 
                 // check to see if the project directory already exists:
@@ -53,9 +53,9 @@ namespace ClearDashboard.Wpf.Validators
 
                 if (Directory.Exists(projectDirectory))
                 {
-                    var test = LocalizationStrings.Get("Landing_newproject", logger);
+                    var test = LocalizationStrings.Get("Landing_NewProject", logger);
                     //context.AddFailure($"A project with the name '{projectName}' already exists. Please choose a unique name.");
-                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_sameName", _logger));
+                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_SameName", _logger));
                 }
             });
 

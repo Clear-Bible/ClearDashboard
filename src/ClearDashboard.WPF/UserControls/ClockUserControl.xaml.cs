@@ -241,7 +241,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         private string GetLocalizedLocalTimeString()
         {
-            return LocalizationStrings.Get("ClockUserControl_localTime", _logger);
+            return LocalizationStrings.Get("ClockUserControl_LocalTime", _logger);
         }
 
         private void InstantClockRefresh()

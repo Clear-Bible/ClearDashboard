@@ -44,11 +44,11 @@
             <Button
                 x:Name="Register"
                 Margin="5,5,5,5"
-                Content="{helpers:Localization RegistrationDialogView_register}" />
+                Content="{helpers:Localization RegistrationDialogView_Register}" />
             <Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
-                Content="{helpers:Localization RegistrationDialogView_closeApplication}" />
+                Content="{helpers:Localization RegistrationDialogView_CloseApplication}" />
         </StackPanel>
 
     </Grid>

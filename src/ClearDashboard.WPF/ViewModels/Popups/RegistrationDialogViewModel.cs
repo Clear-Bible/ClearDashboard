@@ -42,7 +42,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         await base.OnInitializeAsync(cancellationToken);
 
         
-        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_missing", _logger));
+        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_Missing", _logger));
 
         _registrationViewModel = ServiceProvider.GetService<RegistrationViewModel>();
 
@@ -95,13 +95,13 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             }
             else
             {
-                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_mismatchCatch", _logger));
+                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", _logger));
             }
         }
 
         catch (Exception)
         {
-            MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_faultyKey", _logger));
+            MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", _logger));
         }
     }
 }
