@@ -151,30 +151,36 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Message = $"'{e.SurfaceText}' clicked";
             NotifyOfPropertyChange(nameof(Message));
-        }
-
-        //public void TokenBubbleLeftClicked(string target)
-        //{
-        //    Message = $"'{target}' left-clicked";
-        //    NotifyOfPropertyChange(nameof(Message));
-        //}
-
-        public void TokenBubbleRightClicked(string target)
+        }        
+        
+        public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{target}' right-clicked";
+            Message = $"'{e.SurfaceText}' double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenBubbleMouseEntered(string target)
+        public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"Hovering over '{target}'";
+            Message = $"'{e.SurfaceText}' right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenBubbleMouseLeft(string target)
+        public void TokenMouseEnter(TokenEventArgs e)
         {
-            //Message = string.Empty;
-            //NotifyOfPropertyChange(nameof(Message));
+            Message = $"Entered '{e.SurfaceText}'";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseLeave(TokenEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseWheel(TokenEventArgs e)
+        {
+            Message = $"'{e.SurfaceText}' mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
         }
         // ReSharper restore UnusedMember.Global
 

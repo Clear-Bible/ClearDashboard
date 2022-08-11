@@ -65,7 +65,12 @@
 
         <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek"></Label>
         <controls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
-                                     cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)]" />
+                                     cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
+                                                         [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
+                                                         [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
+                                                         [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
+                                                         [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
+                                                         [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />
 
         <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Tokens from database"></Label>
         <controls:TextDisplayControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding DatabaseVerseTokensText}" VerticalAlignment="Center"/>
