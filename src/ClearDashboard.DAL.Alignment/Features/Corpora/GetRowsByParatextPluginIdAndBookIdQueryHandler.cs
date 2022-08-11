@@ -11,7 +11,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
 
-        public GetRowsByParatextProjectIdAndBookIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) : base(logger)
+        public GetRowsByParatextProjectIdAndBookIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextProjectIdQueryHandler> logger) : base(logger)
         {
             //no-op
         }

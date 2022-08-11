@@ -12,7 +12,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
 {
     public class GetVersificationBooksByParatextIdQueryHandler :
-        IRequestHandler<GetVersificationAndBookIdByParatextPluginIdQuery, RequestResult<VersificationBookIds>>
+        IRequestHandler<GetVersificationAndBookIdByParatextProjectIdQuery, RequestResult<VersificationBookIds>>
     {
         private readonly ILogger<GetVersificationBooksByParatextIdQueryHandler> _logger;
         private readonly MainWindow _mainWindow;
@@ -24,7 +24,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
             _mainWindow = mainWindow;
         }
 
-        public Task<RequestResult<VersificationBookIds>> Handle(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<VersificationBookIds>> Handle(GetVersificationAndBookIdByParatextProjectIdQuery request, CancellationToken cancellationToken)
         {
             var data = _mainWindow.GetVersificationAndBooksForProject(request.ParatextProjectId);
 

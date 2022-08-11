@@ -19,7 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         }
 
         [HttpPost]
-        public async Task<RequestResult<List<UsfmVerse>>> GetAsync([FromBody] GetBookUsfmByParatextIdBookIdQuery command)
+        public async Task<RequestResult<List<UsfmVerse>>> GetAsync([FromBody] GetRowsByParatextProjectIdAndBookIdQuery command)
         {
             var result =
                 await ExecuteRequestAsync<RequestResult<List<UsfmVerse>>,
