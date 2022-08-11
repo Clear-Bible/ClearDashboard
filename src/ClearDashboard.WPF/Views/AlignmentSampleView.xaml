@@ -64,7 +64,8 @@
         <controls:TextDisplayControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding HebrewPsalm}" VerticalAlignment="Center"/>
 
         <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek"></Label>
-        <controls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center"/>
+        <controls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
+                                     cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)]" />
 
         <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Tokens from database"></Label>
         <controls:TextDisplayControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding DatabaseVerseTokensText}" VerticalAlignment="Center"/>

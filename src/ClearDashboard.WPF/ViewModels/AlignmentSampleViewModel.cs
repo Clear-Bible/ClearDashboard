@@ -16,6 +16,7 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.UserControls;
 using MediatR;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
@@ -146,11 +147,17 @@ namespace ClearDashboard.Wpf.ViewModels
             _mediator = mediator;
         }
 
-        public void TokenBubbleLeftClicked(string target)
+        public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{target}' left-clicked";
+            Message = $"'{e.SurfaceText}' clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
+
+        //public void TokenBubbleLeftClicked(string target)
+        //{
+        //    Message = $"'{target}' left-clicked";
+        //    NotifyOfPropertyChange(nameof(Message));
+        //}
 
         public void TokenBubbleRightClicked(string target)
         {
@@ -166,8 +173,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void TokenBubbleMouseLeft(string target)
         {
-            Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
+            //Message = string.Empty;
+            //NotifyOfPropertyChange(nameof(Message));
         }
         // ReSharper restore UnusedMember.Global
 
