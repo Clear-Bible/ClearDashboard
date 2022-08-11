@@ -33,7 +33,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         protected override IEnumerable<TextRow> GetVersesInDocOrder()
         {
-            var command = new GetRowsByParatextPluginIdAndBookIdQuery(paratextPluginId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
+            var command = new GetRowsByParatextProjectIdAndBookIdQuery(paratextPluginId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
             if (result.Success)

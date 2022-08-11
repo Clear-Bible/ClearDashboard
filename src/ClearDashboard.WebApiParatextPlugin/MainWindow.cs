@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using SIL.Linq;
+using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -140,7 +141,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
-
 
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
@@ -959,54 +959,91 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
-        public List<UsfmVerse> GetUsfmForBook(
-            string ParatextId, int bookNum)
+        public VersificationBookIds GetVersificationAndBooksForProject(string ParatextProjectId)
         {
-
             // get the right project
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
-            var project = projects.FirstOrDefault(p => p.ID == ParatextId);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
+
+            VersificationBookIds versificationBookIds = new VersificationBookIds();
+
+            if (project != null)
+            {
+                switch (project.Versification.Type)
+                {
+    
+                    case StandardScrVersType.English:
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                    case StandardScrVersType.RussianProtestant:
+                        versificationBookIds.Versification = ScrVers.RussianProtestant;
+                        break;
+                    case StandardScrVersType.RussianOrthodox:
+                        versificationBookIds.Versification = ScrVers.RussianOrthodox;
+                        break;
+                    case StandardScrVersType.Original:
+                        versificationBookIds.Versification = ScrVers.Original;
+                        break;
+                    case StandardScrVersType.Vulgate:
+                        versificationBookIds.Versification = ScrVers.Vulgate;
+                        break;
+                    case StandardScrVersType.Unknown:
+                        // there is no "Unknown" ScrVers so set to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+
+                    default:
+                        // default to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                }
+
+                var books = project.AvailableBooks.Where(b => b.Code != "");
+                versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+                return versificationBookIds;
+            }
+            return new VersificationBookIds();
+        }
+
+
+        /// <summary>
+        /// Given a projectId and bookId, return the parsed verse text for the book
+        /// </summary>
+        /// <param name="ParatextProjectId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        public List<UsfmVerse> GetUsfmForBook(
+            string ParatextProjectId, string bookId)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            // get the right project
+            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
             if (project == null)
             {
                 return null;
             }
 
-            var book = project.AvailableBooks.FirstOrDefault(b => b.Number == bookNum);
+            // filter down to the book desired
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
             if (book == null)
             {
                 return null;
             }
+            
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
             {
                 return null;
             }
 
             List<UsfmVerse> verses = new List<UsfmVerse>();
-
-
             AppendText(Color.Blue, $"Processing {book.Code}");
 
             StringBuilder sb = new StringBuilder();
-            //// do the header
-            //sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
-
-            //int bookFileNum;
-            //if (project.AvailableBooks[bookNum].Number >= 40)
-            //{
-            //    // do that crazy USFM file naming where Matthew starts at 41
-            //    bookFileNum = project.AvailableBooks[bookNum].Number + 1;
-            //}
-            //else
-            //{
-            //    // normal OT book
-            //    bookFileNum = project.AvailableBooks[bookNum].Number;
-            //}
-
-            //var fileName = bookFileNum.ToString().PadLeft(3, '0')
-            //               + project.AvailableBooks[bookNum].Code + ".sfm";
-
             IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
             try
             {
@@ -1015,7 +1052,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception)
             {
-                AppendText(Color.Orange, $"No Scripture for {bookNum}");
+                AppendText(Color.Orange, $"No Scripture for {bookId}");
                 return null;
             }
 
@@ -1148,13 +1185,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                 verses.Add(usfm);
             }
 
+            //foreach (var v in verses)
+            //{
+            //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            //}
 
-            foreach (var v in verses)
-            {
-                Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
-            }
-
-            return verses; //TODO
+            return verses;
 
         }
 

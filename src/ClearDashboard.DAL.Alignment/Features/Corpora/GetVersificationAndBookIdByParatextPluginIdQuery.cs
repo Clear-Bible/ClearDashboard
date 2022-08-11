@@ -3,12 +3,13 @@ using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetVersificationAndBookIdByParatextPluginIdQuery : ProjectRequestQuery<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
+    public record GetVersificationAndBookIdByParatextProjectIdQuery : ProjectRequestQuery<(ScrVers? versification,
+        IEnumerable<string> bookAbbreviations)>
     {
-        public GetVersificationAndBookIdByParatextPluginIdQuery(string paratextPluginId)
+        public GetVersificationAndBookIdByParatextProjectIdQuery(string paratextProjectId)
         {
-            ParatextPluginId = paratextPluginId;
+            ParatextProjectId = paratextProjectId;
         }
-        public string ParatextPluginId { get; }
+        public string ParatextProjectId { get; }
     }
 }

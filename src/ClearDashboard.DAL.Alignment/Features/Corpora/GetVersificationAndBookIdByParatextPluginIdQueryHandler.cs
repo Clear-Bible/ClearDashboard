@@ -1,36 +1,37 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
 
 //USE TO ACCESS Models
-using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ProjectDbContextQueryHandler<
-        GetVersificationAndBookIdByParatextPluginIdQuery,
+    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ParatextRequestHandler<
+        GetVersificationAndBookIdByParatextProjectIdQuery,
         RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>,
         (ScrVers? versification, IEnumerable<string> bookAbbreviations)>
     {
 
-        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,  ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) 
-            : base(projectNameDbContextFactory, projectProvider, logger)
+        public GetVersificationAndBookIdByParatextPluginIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger):base(logger)
         {
         }
-
-        protected override Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>> GetDataAsync(GetVersificationAndBookIdByParatextPluginIdQuery request, CancellationToken cancellationToken)
+        
+        public override async Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
+            Handle(GetVersificationAndBookIdByParatextProjectIdQuery request, CancellationToken cancellationToken)
         {
-            //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
+            var result = await ExecuteRequest("versificationbooksbyparatextid", request, CancellationToken.None)
+                .ConfigureAwait(false);
 
-            return Task.FromResult(
-                new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-                (result: (ScrVers.Original, new List<string>()),
-                    success: true,
-                    message: "successful result from test"));
+            if (result.Success == false)
+            {
+                return new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
+                (result: (ScrVers.Original, new List<string>()), success: false, message: result.Message);
+            }
+
+            return new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
+                (result: (result.Data.versification, result.Data.bookAbbreviations), success: true, message: "");
         }
     }
 }
