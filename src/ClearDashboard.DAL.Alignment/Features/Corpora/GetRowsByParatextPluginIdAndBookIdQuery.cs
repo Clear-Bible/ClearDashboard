@@ -4,12 +4,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetRowsByParatextPluginIdAndBookIdQuery : ProjectRequestQuery<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
-        public GetRowsByParatextPluginIdAndBookIdQuery(string paratextPluginId, string bookId)
+        public GetRowsByParatextPluginIdAndBookIdQuery(string paratextProjectId, string bookId)
         {
-            ParatextPluginId = paratextPluginId;
+            ParatextProjectId = paratextProjectId;
             BookId = bookId;
         }
-        public string ParatextPluginId { get;  }
+        public string ParatextProjectId { get;  }
         public string BookId { get;  }
     }
 }

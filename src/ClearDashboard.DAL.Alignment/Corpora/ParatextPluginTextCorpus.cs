@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             IMediator mediator,
             string paratextProjectId)
         {
-            var command = new GetVersificationAndBookIdByParatextPluginIdQuery(paratextProjectId);
+            var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
 
             var result = await mediator.Send(command);
             if (result.Success)
