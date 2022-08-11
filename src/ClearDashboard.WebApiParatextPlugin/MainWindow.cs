@@ -1005,10 +1005,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             return new VersificationBookIds();
         }
-
+        
 
         public List<UsfmVerse> GetUsfmForBook(
-            string ParatextProjectId, int bookNum)
+            string ParatextProjectId, string bookId)
         {
 
             // get the right project
@@ -1021,7 +1021,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 return null;
             }
 
-            var book = project.AvailableBooks.FirstOrDefault(b => b.Number == bookNum);
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
             if (book == null)
             {
                 return null;
@@ -1037,24 +1037,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             AppendText(Color.Blue, $"Processing {book.Code}");
 
             StringBuilder sb = new StringBuilder();
-            //// do the header
-            //sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
-
-            //int bookFileNum;
-            //if (project.AvailableBooks[bookNum].Number >= 40)
-            //{
-            //    // do that crazy USFM file naming where Matthew starts at 41
-            //    bookFileNum = project.AvailableBooks[bookNum].Number + 1;
-            //}
-            //else
-            //{
-            //    // normal OT book
-            //    bookFileNum = project.AvailableBooks[bookNum].Number;
-            //}
-
-            //var fileName = bookFileNum.ToString().PadLeft(3, '0')
-            //               + project.AvailableBooks[bookNum].Code + ".sfm";
-
             IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
             try
             {
@@ -1063,7 +1045,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception)
             {
-                AppendText(Color.Orange, $"No Scripture for {bookNum}");
+                AppendText(Color.Orange, $"No Scripture for {bookId}");
                 return null;
             }
 

@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -17,9 +18,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         public override async Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>> Handle(GetRowsByParatextProjectIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await ExecuteRequest("bookusfmbyparatextidbookid", request, CancellationToken.None)
-                .ConfigureAwait(false);
-
+            var result = await ExecuteRequest("bookusfmbyparatextidbookid", request, CancellationToken.None).ConfigureAwait(false);
+            
             if (result.Success == false)
             {
                 return new RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
