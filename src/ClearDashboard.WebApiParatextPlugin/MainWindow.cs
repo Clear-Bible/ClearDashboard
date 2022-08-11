@@ -1005,15 +1005,20 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             return new VersificationBookIds();
         }
-        
 
+
+        /// <summary>
+        /// Given a projectId and bookId, return the parsed verse text for the book
+        /// </summary>
+        /// <param name="ParatextProjectId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
         public List<UsfmVerse> GetUsfmForBook(
             string ParatextProjectId, string bookId)
         {
-
-            // get the right project
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
+            // get the right project
             var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
             if (project == null)
@@ -1021,19 +1026,21 @@ namespace ClearDashboard.WebApiParatextPlugin
                 return null;
             }
 
+            // filter down to the book desired
             var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
             if (book == null)
             {
                 return null;
             }
+            
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
             {
                 return null;
             }
 
             List<UsfmVerse> verses = new List<UsfmVerse>();
-
-
             AppendText(Color.Blue, $"Processing {book.Code}");
 
             StringBuilder sb = new StringBuilder();
@@ -1178,13 +1185,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                 verses.Add(usfm);
             }
 
+            //foreach (var v in verses)
+            //{
+            //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            //}
 
-            foreach (var v in verses)
-            {
-                Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
-            }
-
-            return verses; //TODO
+            return verses;
 
         }
 
