@@ -3,7 +3,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer
@@ -52,7 +51,6 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
                 throw;
             }
         }
