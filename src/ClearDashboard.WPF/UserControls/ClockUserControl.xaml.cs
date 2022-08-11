@@ -320,11 +320,14 @@ namespace ClearDashboard.Wpf.UserControls
         {
             this.Dispatcher.Invoke(() =>
             {
-               
-             MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime;
-            MenuItems[0].TextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
-            MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
-        });
+                if (_timeDisplayIndex >= 0)
+                {
+                    MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime;
+                    MenuItems[0].TextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
+                    MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
+
+                }
+            });
         }
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
