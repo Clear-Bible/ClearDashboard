@@ -45,10 +45,22 @@ namespace ClearDashboard.Wpf.Views.Panes
             set;
         }
 
+        public DataTemplate CorpusTokensViewTemplate
+        {
+            get;
+            set;
+        }
+
         // ====================
         //        TOOLS
         // ====================
         public DataTemplate BiblicalTermsViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate ProjectDesignSurfaceViewTemplate
         {
             get;
             set;

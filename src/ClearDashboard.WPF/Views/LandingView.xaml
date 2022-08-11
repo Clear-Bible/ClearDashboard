@@ -154,6 +154,18 @@
 
                                         <!--  PROJECT TEXT  -->
                                         <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                            <Button
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                cal:Message.Attach="DeleteProject($dataContext)"
+                                                Width="30"
+                                                Height="30"
+                                                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                                                <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
+                                                <materialDesign:PackIcon
+                                                    Foreground="{StaticResource RedDarkBrush}"
+                                                    Kind="DeleteForever" />
+                                            </Button>
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock
                                                     Width="370"
@@ -171,8 +183,10 @@
                                                         <Run Text="Database: " />
                                                         <Run Text="{Binding ShortFilePath}" />
                                                     </TextBlock>
-                                                    <TextBlock Margin="25,0,0,0" FontStyle="Italic"
-                                                               Text="{Binding Modified}" />
+                                                    <TextBlock
+                                                        Margin="25,0,0,0"
+                                                        FontStyle="Italic"
+                                                        Text="{Binding Modified}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -183,7 +197,7 @@
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            x:Name="ProjectWorkspace"
+                                            x:Name="DeleteProject"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"
