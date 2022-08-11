@@ -25,6 +25,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -634,12 +635,13 @@ namespace ClearDashboard.Wpf.ViewModels
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
                         new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+                        new() { Header = "🗂🛠 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
                         new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
                         new() { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
                         new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
+                        new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
                     }
                 },
                 new() { Header = "Help", Id = "HelpID", ViewModel = this, }
@@ -758,6 +760,11 @@ namespace ClearDashboard.Wpf.ViewModels
                             e.Content = GetPaneViewModelFromItems("TreeDownViewModel");
                             break;
 
+                        case WorkspaceLayoutNames.CorpusTokens:
+                            e.Content = GetPaneViewModelFromItems("CorpusTokensViewModel");
+                            break;
+
+                        
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
                             e.Content = GetToolViewModelFromItems("BiblicalTermsViewModel");
@@ -779,6 +786,9 @@ namespace ClearDashboard.Wpf.ViewModels
                             break;
                         case WorkspaceLayoutNames.TextCollection:
                             e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
+                            break;
+                        case WorkspaceLayoutNames.ProjectDesignSurface:
+                            e.Content = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
                             break;
 
                     }
@@ -815,6 +825,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case StartPageViewModel:
                             case AlignmentToolViewModel:
                             case TreeDownViewModel:
+                            case CorpusTokensViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
@@ -825,6 +836,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case NotesViewModel:
                             case PinsViewModel:
                             case TextCollectionsViewModel:
+                            case ProjectDesignSurfaceViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
                         }
@@ -863,6 +875,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         case StartPageViewModel:
                         case AlignmentToolViewModel:
                         case TreeDownViewModel:
+                        case CorpusTokensViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -892,6 +905,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         case NotesViewModel:
                         case PinsViewModel:
                         case TextCollectionsViewModel:
+                        case ProjectDesignSurfaceViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -924,7 +938,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 case WorkspaceLayoutNames.TreeDown:
                     var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
                     return (vm11, vm11.Title, vm11.DockSide);
-
+                case WorkspaceLayoutNames.CorpusTokens:
+                    var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
+                    return (vm12, vm12.Title, vm12.DockSide);
+                
                 // Tools
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
@@ -944,7 +961,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
-
+                case WorkspaceLayoutNames.ProjectDesignSurface:
+                    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
+                    return (vm13, vm13.Title, vm13.DockSide);
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
@@ -1213,5 +1232,7 @@ namespace ClearDashboard.Wpf.ViewModels
         public const string TextCollection = "TEXTCOLLECTION";
         public const string TreeDown = "TREEDOWN";
         public const string WordMeanings = "WORDMEANINGS";
+        public const string ProjectDesignSurface = "PROJECTDESIGNSURFACE";
+        public const string CorpusTokens = "CONTEXTTOKENS";
     }
 }

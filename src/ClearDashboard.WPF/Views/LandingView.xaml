@@ -143,7 +143,10 @@
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
+                    VerticalContentAlignment="Top"
                     ItemsSource="{Binding DashboardProjects}"
+                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     Style="{StaticResource MaterialDesignListBox}">
 
                     <ListView.ItemTemplate>
@@ -154,17 +157,16 @@
 
                                         <!--  PROJECT TEXT  -->
                                         <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                            <!--  DELETE PROJECT BUTTON  -->
                                             <Button
-                                                Style="{StaticResource MaterialDesignIconButton}"
-                                                cal:Message.Attach="DeleteProject($dataContext)"
                                                 Width="30"
                                                 Height="30"
+                                                cal:Message.Attach="DeleteProject($dataContext)"
                                                 Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                                Style="{StaticResource MaterialDesignIconButton}">
                                                 <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
-                                                <materialDesign:PackIcon
-                                                    Foreground="{StaticResource RedDarkBrush}"
-                                                    Kind="DeleteForever" />
+                                                <materialDesign:PackIcon Foreground="{StaticResource RedDarkBrush}" Kind="DeleteForever" />
                                             </Button>
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock
