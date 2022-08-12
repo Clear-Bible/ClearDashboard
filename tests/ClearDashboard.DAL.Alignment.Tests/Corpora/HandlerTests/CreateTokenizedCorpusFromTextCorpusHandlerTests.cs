@@ -19,6 +19,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 {
+    #nullable disable
     public CreateTokenizedCorpusFromTextCorpusHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -248,7 +249,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal("grc", ProjectDbContext.Corpa.First().Language);
             Assert.Equal("New Testament", ProjectDbContext.Corpa.First().Name);
 
-            var corpora = ProjectDbContext.Corpa
+            var corpora = ProjectDbContext?.Corpa
                 .Include(c => c.TokenizedCorpora)
                 .ThenInclude(tc => tc.Tokens)
                 .ToList();

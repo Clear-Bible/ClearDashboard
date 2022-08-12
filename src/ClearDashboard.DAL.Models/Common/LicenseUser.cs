@@ -6,9 +6,9 @@ namespace ClearDashboard.DataAccessLayer.Models
 {
     public class LicenseUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string LicenseKey { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? LicenseKey { get; set; }
         public string FullName
         {
             get
@@ -16,6 +16,6 @@ namespace ClearDashboard.DataAccessLayer.Models
                 return string.Format("{0} {1}", FirstName, LastName);
             }
         }
-        public string Id { get; set; }
+        public string? Id { get; set; }
     }
 }

@@ -68,7 +68,7 @@
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
-                        <Run Text="{helpers:Localization ShellView_user}" />
+                        <Run Text="{helpers:Localization ShellView_User}" />
                     </TextBlock>
                     <TextBlock
                         x:Name="ParatextUserName"
