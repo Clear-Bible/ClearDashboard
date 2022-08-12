@@ -250,11 +250,13 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(string projectName)
         {
             CreateDashboardProject();
+
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
 
 
 

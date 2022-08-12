@@ -82,8 +82,18 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Logger.LogInformation("NewProject called.");
 
-            await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
+            if (ProjectManager.HasDashboardProject)
+            {
+                ProjectManager.CreateDashboardProject();
+            }
+
+            await ProjectManager.InvokeDialog<NewProjectDialogViewModel, WorkSpaceViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
+
+            //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
+            //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
+
+
             //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
             //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
             // Define a callback method to create a new project if we
