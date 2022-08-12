@@ -214,10 +214,10 @@ namespace ClearDashboard.DAL.Tests
             finally
             {
                 Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
+                //await context.Database.EnsureDeletedAsync();
                 var projectDirectory =
                     $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                //Directory.Delete(projectDirectory, true);
             }
         }
 
@@ -267,10 +267,10 @@ namespace ClearDashboard.DAL.Tests
             finally
             {
                 Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
+                //await context.Database.EnsureDeletedAsync();
                 var projectDirectory =
                     $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+               // Directory.Delete(projectDirectory, true);
             }
         }
     }
