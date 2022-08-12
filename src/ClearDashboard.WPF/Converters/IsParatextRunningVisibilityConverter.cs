@@ -14,7 +14,8 @@ namespace ClearDashboard.Wpf.Converters
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Process.GetProcessesByName("Paratext").Length > 0 ?  Visibility.Hidden : Visibility.Visible;
+            Visibility visibility = (Visibility)value;
+            return (visibility == Visibility.Visible);
         }
     }
 }

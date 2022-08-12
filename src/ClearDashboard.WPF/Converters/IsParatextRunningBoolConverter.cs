@@ -13,7 +13,8 @@ namespace ClearDashboard.Wpf.Converters
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Process.GetProcessesByName("Paratext").Length <= 0;
+            bool boolValue = (bool)value;
+            return (boolValue == true);
         }
     }
 }
