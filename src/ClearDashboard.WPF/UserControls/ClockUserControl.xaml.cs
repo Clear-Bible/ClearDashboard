@@ -332,13 +332,15 @@ namespace ClearDashboard.Wpf.UserControls
                         MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime;
                         MenuItems[0].TextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
                         MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
-
                     }
                 });
             }
             catch (Exception ex)
             {
-                SetClockToLocalTime();
+                if (ex.Message != "A task was canceled.")
+                {
+                    SetClockToLocalTime();
+                }
             }
         }
 

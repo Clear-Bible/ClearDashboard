@@ -812,7 +812,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 // filter down to scope if present
                 if (selectedScope != FilterScopeEnum.BiblicalTermsBcv_All.ToString())
                 {
-                    if (ProjectManager.CurrentVerse.Length != 8)
+                    if (ProjectManager.CurrentVerse.Length != 9)
                     {
                         return false;
                     }
@@ -825,7 +825,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
-                                    var book = _currentBcv.BookNum.ToString();
+                                    var book = _currentBcv.Book.ToString();
                                     if (book == ProjectManager.CurrentVerse.Substring(0, 3))
                                     {
                                         // found the book
@@ -839,8 +839,8 @@ namespace ClearDashboard.Wpf.ViewModels
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
-                                    var book = _currentBcv.BookNum.ToString();
-                                    var chapter = _currentBcv.ChapterNum.ToString();
+                                    var book = _currentBcv.Book.ToString();
+                                    var chapter = _currentBcv.ChapterIdText.ToString();
                                     if (book+chapter == ProjectManager.CurrentVerse.Substring(0, 6))
                                     {
                                         // found the chapter
@@ -853,7 +853,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             case "BiblicalTermsBcv_Verse":
                                 foreach (var term in terms.References)
                                 {
-                                    if (term == ProjectManager.CurrentVerse)
+                                    if (term.PadLeft(9, '0') == ProjectManager.CurrentVerse)
                                     {
                                         // found the verse
                                         isBcvFound = true;
@@ -871,18 +871,22 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
-            // filter based on semantic domain
-            var bFoundSemanticDomain = false;
-            if (obj is BiblicalTermsData bt)
+            // filter based on semantic domain (only in )
+            if (SelectedBiblicalTermsType == SelectedBtEnum.OptionProject)
             {
-                if (SelectedDomain is not null && bt.SemanticDomain is not null)
+                var bFoundSemanticDomain = false;
+                if (obj is BiblicalTermsData bt)
                 {
-                    bFoundSemanticDomain = SelectedDomain[1].ToString() == "BiblicalTermsDomains_All" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
-                }
+                    if (SelectedDomain is not null && bt.SemanticDomain is not null)
+                    {
+                        bFoundSemanticDomain = SelectedDomain[1].ToString() == "BiblicalTermsDomains_All" ||
+                                               bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
+                    }
 
-                if (! bFoundSemanticDomain)
-                {
-                    return false;
+                    if (bFoundSemanticDomain == false)
+                    {
+                        return false;
+                    }
                 }
             }
 
