@@ -59,7 +59,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                ToolTip="{helpers:Localization expandView}">
+                ToolTip="{helpers:Localization ExpandView}">
                 <Button.Style>
                     <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                         <Setter Property="Padding" Value="0" />
@@ -91,14 +91,14 @@
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <RadioButton
-                        Content="{helpers:Localization BtFormProject}"
+                        Content="{helpers:Localization BiblicalTermsForm_Project}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                         Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                     <RadioButton
-                        Content="{helpers:Localization BtFormAll}"
+                        Content="{helpers:Localization BiblicalTermsForm_All}"
                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         GroupName="radBTType"
                         IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
@@ -115,7 +115,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Localization BtFormWord}" />
+                        Content="{helpers:Localization BiblicalTermsForm_Word}" />
                     <TextBox
                         x:Name="FilterText"
                         MinWidth="125"
@@ -130,7 +130,7 @@
                         Orientation="Vertical">
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="{helpers:Localization BtFormGloss}"
+                            Content="{helpers:Localization BiblicalTermsForm_Gloss}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
@@ -138,7 +138,7 @@
 
                         <RadioButton
                             Margin="0,0,5,0"
-                            Content="{helpers:Localization BtFormRenderings}"
+                            Content="{helpers:Localization BiblicalTermsForm_Renderings}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radFilterType"
                             IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
@@ -176,7 +176,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Localization BtFormScope}" />
+                        Content="{helpers:Localization BiblicalTermsForm_Scope}" />
                     <ComboBox
                         x:Name="Scope"
                         MinWidth="50"
@@ -197,7 +197,7 @@
                     <Label
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Content="{helpers:Localization BtFormSemanticDomain}" />
+                        Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
                     <ComboBox
                         x:Name="Domains"
                         MinWidth="50"
@@ -265,7 +265,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="{helpers:Localization BtFormTerm}">
+                <DataGridTemplateColumn Width="Auto" Header="{helpers:Localization BiblicalTermsForm_Term}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -279,7 +279,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="{helpers:Localization BtFormCategory}">
+                <DataGridTemplateColumn Width="110" Header="{helpers:Localization BiblicalTermsForm_Category}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -292,7 +292,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150" Header="{helpers:Localization BtFormGlossLower}">
+                <DataGridTemplateColumn Width="150" Header="{helpers:Localization BiblicalTermsForm_GlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -305,7 +305,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BtFormCounts}">
+                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Counts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -316,7 +316,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BtFormFound}">
+                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Found}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -327,7 +327,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="{helpers:Localization BtFormRenderingsLower}">
+                <DataGridTemplateColumn Width="200" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -407,7 +407,7 @@
                         <TextBlock
                             Margin="5,0,5,0"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            Text="{helpers:Localization BtFormGlossLower}" />
+                            Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
                         <TextBlock Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
                     </StackPanel>
                     <ListBox

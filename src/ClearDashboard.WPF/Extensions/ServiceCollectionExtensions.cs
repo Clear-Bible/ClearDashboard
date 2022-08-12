@@ -30,6 +30,13 @@ namespace ClearDashboard.Wpf.Extensions
                 .ToList()
                 .ForEach(viewModelType => serviceCollection.AddTransient(viewModelType));
 
+            typeof(Bootstrapper).Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.IsAbstract == false) // ignore any view which are abstract!
+                .Where(type => type.Name.EndsWith("View"))
+                .ToList()
+                .ForEach(viewType => serviceCollection.AddTransient(viewType));
+
             return frameSet;
         }
     }

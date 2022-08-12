@@ -23,9 +23,9 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetUsfmBookByParatextIdBookIdTest()
         {
             var results =
-                await ExecuteParatextAndTestRequest<GetBookUsfmByParatextIdBookIdQuery,
+                await ExecuteParatextAndTestRequest<GetRowsByParatextProjectIdAndBookIdQuery,
                     RequestResult<List<UsfmVerse>>, List<UsfmVerse>>(
-                    new GetBookUsfmByParatextIdBookIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 1));
+                    new GetRowsByParatextProjectIdAndBookIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", "GEN"));
 
             Assert.True(results.Success);
             Assert.NotNull(results.Data);
@@ -35,9 +35,9 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetUsfmBookByParatextIdBookId_zzSUR_Test()
         {
             var results =
-                await ExecuteParatextAndTestRequest<GetBookUsfmByParatextIdBookIdQuery,
+                await ExecuteParatextAndTestRequest<GetRowsByParatextProjectIdAndBookIdQuery,
                     RequestResult<List<UsfmVerse>>, List<UsfmVerse>>(
-                    new GetBookUsfmByParatextIdBookIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 1));
+                    new GetRowsByParatextProjectIdAndBookIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", "GEN"));
 
             Assert.True(results.Success);
             Assert.NotNull(results.Data);

@@ -1,20 +1,16 @@
-﻿using System;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.ViewModels.Project;
+using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Popups;
-using ClearDashboard.Wpf.ViewModels.Project;
-using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
-using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.Forms.MessageBox;
 using NewProjectDialogViewModel = ClearDashboard.Wpf.ViewModels.Project.NewProjectDialogViewModel;
 
@@ -76,6 +72,8 @@ namespace ClearDashboard.Wpf.ViewModels
         public void CreateNewProject()
         {
             Logger.LogInformation("CreateNewProject called.");
+            //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
+
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
@@ -86,7 +84,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
             await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
+            //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
+            //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
             // Define a callback method to create a new project if we
             // have a valid project name
 
@@ -104,7 +103,36 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void ProjectWorkspace(DashboardProject project)
         {
+            ProjectManager.CurrentDashboardProject = project;
+            //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+
+        }
+
+        public void DeleteProject(DashboardProject project)
+        {
+            FileInfo fi = new FileInfo(project.FullFilePath);
+
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(fi.DirectoryName);
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+                DashboardProjects.Remove(project);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
 
         public void Workspace(DashboardProject project)
@@ -129,9 +157,9 @@ namespace ClearDashboard.Wpf.ViewModels
             ProjectManager.CurrentDashboardProject = project;
             
 
-             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+          
 
-             //NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 
         public void Settings()

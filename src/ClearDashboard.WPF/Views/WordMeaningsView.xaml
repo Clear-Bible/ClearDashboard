@@ -39,7 +39,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-            ToolTip="{helpers:Localization expandView}">
+            ToolTip="{helpers:Localization ExpandView}">
             <Button.Style>
                 <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                     <Setter Property="Padding" Value="0" />
@@ -162,7 +162,7 @@
                                     MinWidth="50"
                                     Margin="0,0,0,0"
                                     VerticalAlignment="Center"
-                                    Content="{helpers:Localization WmDomain}"
+                                    Content="{helpers:Localization WordMeaningsView_Domain}"
                                     FontStyle="Italic"
                                     Foreground="{StaticResource BlueLightBrush}" />
                                 <TextBlock
@@ -182,7 +182,7 @@
                                 <Label
                                     MinWidth="70"
                                     VerticalAlignment="Center"
-                                    Content="{helpers:Localization WmSubDomain}"
+                                    Content="{helpers:Localization WordMeaningsView_SubDomain}"
                                     FontStyle="Italic"
                                     Foreground="{StaticResource BlueLightBrush}" />
                                 <TextBlock
@@ -199,7 +199,7 @@
                                 <Label
                                     MinWidth="45"
                                     VerticalAlignment="Center"
-                                    Content="{helpers:Localization WmSense}"
+                                    Content="{helpers:Localization WordMeaningsView_Sense}"
                                     FontStyle="Italic"
                                     Foreground="{StaticResource BlueLightBrush}" />
                                 <TextBlock

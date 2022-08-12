@@ -38,7 +38,7 @@ namespace ClearDashboard.WPF.Tests
             var decryptedJson = LicenseManager.DecryptFromFile(filePath);
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
 
-            Assert.Equal(true, LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
+            Assert.True(LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
         }
     }
 }

@@ -31,7 +31,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-                var response = await client.PostAsJsonAsync<GetBookUsfmByParatextIdBookIdQuery>("bookusfmbyparatextidbookid", new GetBookUsfmByParatextIdBookIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", 1));
+                var response = await client.PostAsJsonAsync<GetRowsByParatextProjectIdAndBookIdQuery>(
+                    "bookusfmbyparatextidbookid",
+                    new GetRowsByParatextProjectIdAndBookIdQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff", "GEN"));
 
                 Assert.True(response.IsSuccessStatusCode);
                 var result = await response.Content.ReadAsAsync<RequestResult<List<UsfmVerse>>>();
@@ -59,9 +61,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-                var response = await client.PostAsJsonAsync<GetBookUsfmByParatextIdBookIdQuery>(
+                var response = await client.PostAsJsonAsync<GetRowsByParatextProjectIdAndBookIdQuery>(
                     "bookusfmbyparatextidbookid",
-                    new GetBookUsfmByParatextIdBookIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 1));
+                    new GetRowsByParatextProjectIdAndBookIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", "GEN"));
 
                 Assert.True(response.IsSuccessStatusCode);
                 var result = await response.Content.ReadAsAsync<RequestResult<List<UsfmVerse>>>();

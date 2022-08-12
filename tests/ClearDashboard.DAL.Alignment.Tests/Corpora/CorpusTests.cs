@@ -22,6 +22,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     public class CorpusTests : TestBase
     {
+        #nullable disable
         public CorpusTests(ITestOutputHelper output) : base(output)
         {
         }
@@ -95,9 +96,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             }
         }
 
-//        [Fact]
+        [Fact]
         [Trait("Category", "Example")]
-        internal async void Corpus__ImportZZ_SURFromParatext_SaveToDb()
+        public async void Corpus__ImportZZ_SURFromParatext_SaveToDb()
         {
             try
             {

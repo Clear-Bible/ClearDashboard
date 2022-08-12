@@ -14,8 +14,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
     {
         private static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<ProjectDbContext>();
-            serviceCollection.AddScoped<ProjectDbContextFactory>();
+            serviceCollection.AddTransient<ProjectDbContext>();
+            serviceCollection.AddTransient<ProjectDbContextFactory>();
         }
 
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
