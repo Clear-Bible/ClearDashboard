@@ -12,6 +12,7 @@ using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,13 +88,20 @@ namespace ClearDashboard.Wpf
 
         private static void SetupLanguage()
         {
-            var selectedLanguage = Settings.Default.language_code;
-            if (string.IsNullOrEmpty(selectedLanguage))
+            var selectedLanguage = CultureInfo.CurrentCulture.Name;
+
+            LanguageTypeValue languageType;
+            try
             {
-                selectedLanguage = "en";
+                languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
+                Settings.Default.language_code = selectedLanguage.Replace("-",string.Empty);
+                Settings.Default.Save();
+            }
+            catch (Exception)
+            {
+                languageType = LanguageTypeValue.enUS;
             }
 
-            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
             var translationSource = Host.Services.GetService<TranslationSource>();
             if (translationSource != null)
             {

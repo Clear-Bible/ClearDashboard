@@ -37,7 +37,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 if (result != null)
                 {
-                    Output.WriteLine($"All Projects Returned: {result.Data.Count.ToString()}");
+                    Output.WriteLine($"All Projects Returned: {result?.Data?.Count.ToString()}");
                 }
             }
             finally

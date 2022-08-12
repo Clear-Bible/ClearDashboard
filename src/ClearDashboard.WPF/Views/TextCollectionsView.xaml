@@ -29,7 +29,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-            ToolTip="{helpers:Localization expandView}">
+            ToolTip="{helpers:Localization ExpandView}">
             <Button.Style>
                 <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                     <Setter Property="Padding" Value="0" />
@@ -64,7 +64,7 @@
                 MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                 Margin="5"
                 VerticalAlignment="Top"
-                ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger= PropertyChanged}">
+                ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
                         <GridView.ColumnHeaderContainerStyle>
