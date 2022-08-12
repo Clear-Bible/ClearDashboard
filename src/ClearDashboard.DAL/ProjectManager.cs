@@ -370,27 +370,15 @@ namespace ClearDashboard.DataAccessLayer
 
                     try
                     {
-                        // this is a horrible hack to force the newly created project database
-                        //  to apply migrations if the first attempt failed.
-                        try
-                        {
-                            var projects = projectAssets.ProjectDbContext.Projects.ToList();
-                        }
-                        catch
-                        {
-                            Logger.LogInformation($"The migrations for the {projectName} database failed -- forcing the migrations again.");
-                           projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-                        }
-
                         await projectAssets.ProjectDbContext.Projects.AddAsync(project);
                         await projectAssets.ProjectDbContext.SaveChangesAsync();
                     }
                     catch (Exception)
                     {
                      
-                        var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
-                        projects.Add(project);
-                        // await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        //var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
+                        //projects.Add(project);
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
                         await projectAssets.ProjectDbContext.SaveChangesAsync();
                     }
 

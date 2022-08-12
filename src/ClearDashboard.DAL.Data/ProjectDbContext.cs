@@ -88,6 +88,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
                 await Database.MigrateAsync();
 
+                await EnsureMigrated();
             }
             catch (Exception ex)
             {
@@ -98,7 +99,19 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
         }
 
-    
+        private async Task EnsureMigrated()
+        {
+            try
+            {
+                var projects = Projects.ToList();
+            }
+            catch
+            {
+                _logger.LogInformation($"The migrations for the {DatabasePath} database failed -- forcing the migrations again.");
+                await Database.MigrateAsync();
+            }
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
