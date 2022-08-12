@@ -26,6 +26,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.ViewModels.Project;
+using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -660,11 +661,26 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Save the layout
         /// </summary>
-        private void OkSave()
+        public void OkSave()
         {
-            // overwrite the current layout
-            string filePath = SelectedLayout.LayoutPath;
+            string filePath = "";
+            if (SelectedLayout == null)
+            {
+                // create a new layout
+                if (SelectedLayoutText != "")
+                {
+                    // get the project layouts
+                    filePath = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+                    filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
+                }
+            }
+            else
+            {
+                // overwrite a layout
+                filePath = SelectedLayout.LayoutPath;
+            }
 
+            
             try
             {
                 // save the layout
@@ -681,6 +697,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 ReBuildMenu();
             }
+
         }
 
         //public void DeleteLayout(LayoutFile layoutFile)
@@ -704,10 +721,10 @@ namespace ClearDashboard.Wpf.ViewModels
         //    ReBuildMenu();
         //}
 
-        //public void CancelSave()
-        //{
-        //    GridIsVisible = Visibility.Collapsed;
-        //}
+        public void CancelSave()
+        {
+            GridIsVisible = Visibility.Collapsed;
+        }
 
         //public void CancelDelete()
         //{

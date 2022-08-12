@@ -278,6 +278,7 @@
                     Margin="0,0,50,0"
                     Padding="0"
                     HorizontalAlignment="Right"
+                    cm:Message.Attach="CancelSave"
                     Style="{StaticResource RedMidButton}">
                     <materialDesign:PackIcon
                         Width="32"
