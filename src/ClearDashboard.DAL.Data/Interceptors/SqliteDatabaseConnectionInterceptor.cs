@@ -1,36 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Data.Common;
+using ClearDashboard.DAL.Interfaces;
+
 namespace ClearDashboard.DataAccessLayer.Data.Interceptors
 {
 
-
-
-
     public class SqliteDatabaseConnectionInterceptor : DbConnectionInterceptor
     {
-        public SqliteDatabaseConnectionInterceptor(string databaseName)
+        private readonly ProjectDbContextFactory _projectDbContextFactory;
+
+        public SqliteDatabaseConnectionInterceptor(ProjectDbContextFactory projectDbContextFactory)
         {
-            database = databaseName;
+            _projectDbContextFactory = projectDbContextFactory;
         }
-
-        readonly string database;
-
-        public override void ConnectionOpened(DbConnection connection, ConnectionEndEventData eventData)
+        
+        public override InterceptionResult ConnectionOpening(DbConnection connection, ConnectionEventData eventData, InterceptionResult result)
         {
-            if (database != null)
-            {
-                connection.ChangeDatabase(database); // The 'magic' code
-            }
-            base.ConnectionOpened(connection, eventData);
-        }
-
-        public override async Task ConnectionOpenedAsync(DbConnection connection, ConnectionEndEventData eventData, CancellationToken cancellationToken = default)
-        {
-            if (database != null)
-            {
-                await connection.ChangeDatabaseAsync(database); // The 'magic' code
-            }
-            await base.ConnectionOpenedAsync(connection, eventData, cancellationToken);
+            // NB:  Adding "DataSource=" to the connection string is required, otherwise we get an unhelpful error:
+            //       "Format of the initialization string does not conform to specification starting at index 0."
+            connection.ConnectionString = $"DataSource={_projectDbContextFactory.ProjectAssets.DataContextPath}";
+            return base.ConnectionOpening(connection, eventData, result);
         }
 
     }

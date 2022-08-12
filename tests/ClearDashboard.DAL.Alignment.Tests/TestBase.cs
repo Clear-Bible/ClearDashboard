@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,6 +39,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         {
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
+            Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
             Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();

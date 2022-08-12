@@ -11,6 +11,7 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 //using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -314,7 +315,7 @@ namespace ClearDashboard.DataAccessLayer
         {
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
-            return projectAssets.ProjectDbContext.Corpa.Include(corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
+            return EntityFrameworkQueryableExtensions.Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
            // return null;
         }
 
@@ -356,6 +357,7 @@ namespace ClearDashboard.DataAccessLayer
             try
             {
                 var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+               
 
                 if (projectAssets.ProjectDbContext != null)
                 {
@@ -364,9 +366,32 @@ namespace ClearDashboard.DataAccessLayer
                         ProjectName = projectName
                     };
 
+                    try
+                    {
+                        // this is a horrible hack to force the newly created project database
+                        //  to apply migrations if the first attempt failed.
+                        try
+                        {
+                            var projects = projectAssets.ProjectDbContext.Projects.ToList();
+                        }
+                        catch
+                        {
+                            Logger.LogInformation($"The migrations for the {projectName} database failed -- forcing the migrations again.");
+                           projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+                        }
 
-                    await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                    await projectAssets.ProjectDbContext.SaveChangesAsync();
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                     
+                        var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
+                        projects.Add(project);
+                        // await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
+
 
                     return project;
                 }
