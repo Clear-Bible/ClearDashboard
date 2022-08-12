@@ -199,7 +199,7 @@ namespace ClearDashboard.Wpf.UserControls
                     settingsStringCollection.Add(groupSettings);
                 }
             }
-            
+
             Properties.Settings.Default.TimeZones = settingsStringCollection;
             Properties.Settings.Default.Save();
         }
@@ -210,7 +210,7 @@ namespace ClearDashboard.Wpf.UserControls
 
             //set display to local time
             _timeDisplayIndex++;
-            if (_timeDisplayIndex>=CheckedList.Count)
+            if (_timeDisplayIndex >= CheckedList.Count)
             {
                 _timeDisplayIndex = -1;
 
@@ -323,22 +323,23 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void SetDisplayClockFromCheckedList()
         {
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                if (_timeDisplayIndex >= 0)
+                this.Dispatcher.Invoke(() =>
                 {
-                    try
+                    if (_timeDisplayIndex >= 0)
                     {
                         MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime;
                         MenuItems[0].TextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
                         MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
+
                     }
-                    catch (Exception)
-                    {
-                        SetClockToLocalTime();
-                    }
-                }
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                SetClockToLocalTime();
+            }
         }
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
@@ -381,7 +382,7 @@ namespace ClearDashboard.Wpf.UserControls
                             UtcStringList = utcComboList,
                             UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                         });
-                        
+
                         sortMenuItemsIndividual(nest);
                         InstantClockRefresh();
                         SaveMenuToSettings();
@@ -449,7 +450,8 @@ namespace ClearDashboard.Wpf.UserControls
                         removeGroupList.Add(group);
                     }
 
-                    if(group.MenuItems!=null){
+                    if (group.MenuItems != null)
+                    {
                         foreach (var individual in group.MenuItems)
                         {
                             if (individual.DeleteButtonVisibility == Visibility.Collapsed)
@@ -466,7 +468,7 @@ namespace ClearDashboard.Wpf.UserControls
                             }
                         }
                     }
-                    
+
                 }
                 foreach (var group in removeGroupList)
                 {
@@ -537,9 +539,9 @@ namespace ClearDashboard.Wpf.UserControls
                 for (int j = 0; j < collection.Count - 1; j++)
                 {
                     if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
-                            collection[j + 1].TimeZoneInfo.BaseUtcOffset) >0)
+                            collection[j + 1].TimeZoneInfo.BaseUtcOffset) > 0)
                     {
-                        collection.Move(j,j+1);
+                        collection.Move(j, j + 1);
                     }
                 }
             }
@@ -554,7 +556,7 @@ namespace ClearDashboard.Wpf.UserControls
                     if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
                     {
                         MenuItems[0].MenuItems.Move(
-                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]), 
+                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]),
                             MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j + 1]));
                     }
                 }

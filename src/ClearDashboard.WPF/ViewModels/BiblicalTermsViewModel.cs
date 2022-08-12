@@ -821,7 +821,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         switch (selectedScope)
                         {
-                            case "BtBcvBook":
+                            case "BiblicalTermsBcv_Book":
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
@@ -835,7 +835,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 }
 
                                 break;
-                            case "BtBcvChapter":
+                            case "BiblicalTermsBcv_Chapter":
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
@@ -850,7 +850,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                 }
 
                                 break;
-                            case "BtBcvVerse":
+                            case "BiblicalTermsBcv_Verse":
                                 foreach (var term in terms.References)
                                 {
                                     if (term == ProjectManager.CurrentVerse)
@@ -875,9 +875,9 @@ namespace ClearDashboard.Wpf.ViewModels
             var bFoundSemanticDomain = false;
             if (obj is BiblicalTermsData bt)
             {
-                if (SelectedDomain is not null)
+                if (SelectedDomain is not null && bt.SemanticDomain is not null)
                 {
-                    bFoundSemanticDomain = SelectedDomain[1].ToString() == "BtDomainsAll" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
+                    bFoundSemanticDomain = SelectedDomain[1].ToString() == "BiblicalTermsDomains_All" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
                 }
 
                 if (! bFoundSemanticDomain)
@@ -891,7 +891,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 if (RenderingFilter is not null)
                 {
-                    if (RenderingFilter[1].ToString() == "BtRenderingMissingRenderings")
+                    if (RenderingFilter[1].ToString() == "BiblicalTermsRendering_MissingRenderings")
                     {
                         if (renderingFilter.RenderingCount > 0)
                         {
