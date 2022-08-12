@@ -352,10 +352,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             Assert.Equal("First Corpus", firstCorpus.Name);
             Assert.Equal("english", firstCorpus.Language);
             Assert.Equal(Models.CorpusType.Standard, firstCorpus.CorpusType);
+            Assert.NotNull(firstCorpus.Metadata);
 
             Assert.Equal("Second Corpus", secondCorpus.Name);
             Assert.Equal("english", secondCorpus.Language);
             Assert.Equal(Models.CorpusType.BackTranslation, secondCorpus.CorpusType);
+            Assert.NotNull(secondCorpus.Metadata);
         }
     }
 }
