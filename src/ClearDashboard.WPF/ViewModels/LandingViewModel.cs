@@ -109,6 +109,32 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
+        public void DeleteProject(DashboardProject project)
+        {
+            FileInfo fi = new FileInfo(project.FullFilePath);
+
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(fi.DirectoryName);
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+                DashboardProjects.Remove(project);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
         public void Workspace(DashboardProject project)
         {
             //if (project is null)
