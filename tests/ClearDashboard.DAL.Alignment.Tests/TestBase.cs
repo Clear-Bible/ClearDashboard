@@ -58,15 +58,6 @@ namespace ClearDashboard.DAL.Alignment.Tests
             var assets = await factory?.Get(ProjectName)!;
             ProjectDbContext= assets.ProjectDbContext;
 
-            //try
-            //{
-            //    var project = ProjectDbContext.Projects.ToList();
-            //}
-            //catch
-            //{
-            //    assets = await factory?.Get(ProjectName)!;
-            //    ProjectDbContext = assets.ProjectDbContext;
-            //}
 
             var testUser = await AddDashboardUser(ProjectDbContext);
             var projectInfo = await AddCurrentProject(ProjectDbContext, ProjectName);
