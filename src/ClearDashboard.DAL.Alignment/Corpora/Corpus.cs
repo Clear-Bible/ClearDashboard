@@ -61,6 +61,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
+        public static async Task<IEnumerable<Corpus>> GetAll(IMediator mediator)
+        {
+            var command = new GetAllCorporaQuery();
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+
+        }
         public static async Task<Corpus> Get(
             IMediator mediator,
             CorpusId corpusId)
