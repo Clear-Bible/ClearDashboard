@@ -18,7 +18,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Interceptors
         {
             // NB:  Adding "DataSource=" to the connection string is required, otherwise we get an unhelpful error:
             //       "Format of the initialization string does not conform to specification starting at index 0."
-            connection.ConnectionString = $"DataSource={_projectDbContextFactory.ProjectAssets.DataContextPath}";
+            connection.ConnectionString = $"DataSource={_projectDbContextFactory.ProjectAssets.DataContextPath};Pooling=false";
             return base.ConnectionOpening(connection, eventData, result);
         }
 
