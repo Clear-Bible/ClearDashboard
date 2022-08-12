@@ -18,6 +18,7 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public void ParatextDetectionTest() 
         { 
+            IsParatextRunning();
         }
 
         public void IsParatextRunning()
