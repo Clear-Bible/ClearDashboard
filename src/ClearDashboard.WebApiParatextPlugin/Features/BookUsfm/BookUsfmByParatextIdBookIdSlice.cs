@@ -11,7 +11,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
 {
     public class GetBookUsfmByParatextIdBookIdQueryHandler : 
-        IRequestHandler<GetBookUsfmByParatextIdBookIdQuery, RequestResult<List<UsfmVerse>>>
+        IRequestHandler<GetRowsByParatextProjectIdAndBookIdQuery, RequestResult<List<UsfmVerse>>>
     {
         private readonly ILogger<GetBookUsfmByParatextIdBookIdQueryHandler> _logger;
         private readonly MainWindow _mainWindow;
@@ -22,10 +22,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
             _logger = logger;
             _mainWindow = mainWindow;
         }
-        public Task<RequestResult<List<UsfmVerse>>> Handle(GetBookUsfmByParatextIdBookIdQuery request,
+        public Task<RequestResult<List<UsfmVerse>>> Handle(GetRowsByParatextProjectIdAndBookIdQuery request,
             CancellationToken cancellationToken)
         {
-            var data = _mainWindow.GetUsfmForBook(request.ParatextId, request.BookNum);
+            var data = _mainWindow.GetUsfmForBook(request.ParatextProjectId, request.BookId);
             
             // update the isSentenceStart field using Machine's parser
             foreach (var d in data)

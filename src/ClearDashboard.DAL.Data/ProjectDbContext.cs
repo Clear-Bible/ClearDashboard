@@ -11,8 +11,9 @@ namespace ClearDashboard.DataAccessLayer.Data
 {
     public class ProjectDbContext : DbContext
     {
-        private readonly ILogger<ProjectDbContext>? _logger;
-        public  IUserProvider? UserProvider { get; set; }
+        #nullable disable
+        private readonly ILogger<ProjectDbContext> _logger;
+        public  IUserProvider UserProvider { get; set; }
         public string DatabasePath { get; set; }
         private readonly SqliteDatabaseConnectionInterceptor _sqliteDatabaseConnectionInterceptor;
         

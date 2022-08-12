@@ -12,6 +12,7 @@ using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,13 +88,20 @@ namespace ClearDashboard.Wpf
 
         private static void SetupLanguage()
         {
-            var selectedLanguage = Settings.Default.language_code;
-            if (string.IsNullOrEmpty(selectedLanguage))
+            var selectedLanguage = CultureInfo.CurrentCulture.Name;
+
+            LanguageTypeValue languageType;
+            try
             {
-                selectedLanguage = "en";
+                languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
+                Settings.Default.language_code = selectedLanguage.Replace("-",string.Empty);
+                Settings.Default.Save();
+            }
+            catch (Exception)
+            {
+                languageType = LanguageTypeValue.enUS;
             }
 
-            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
             var translationSource = Host.Services.GetService<TranslationSource>();
             if (translationSource != null)
             {
@@ -151,8 +159,14 @@ namespace ClearDashboard.Wpf
         #region Logging
         private void SetupLogging()
         {
+            var fullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboard.log");
+            //create if does not exist
+            DirectoryInfo di = new DirectoryInfo(fullPath);
+            if (di.Exists == false)
+            {
+                di.Create();
+            }
 
-            var fullPath = Path.Combine(Environment.CurrentDirectory, "Logs\\ClearDashboard.log");
             var level = LogEventLevel.Information;
 #if DEBUG
             level = LogEventLevel.Verbose;

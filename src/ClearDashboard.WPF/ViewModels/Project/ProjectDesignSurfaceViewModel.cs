@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             WindowManager = windowManager;
             _mediator = mediator;
-            Title = "PROJECT DESIGN SURFACE";
+            Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<Corpus>();

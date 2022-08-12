@@ -25,9 +25,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "CORPUS TOKENS";
+            Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";
-            
         }
 
         public void TokenBubbleLeftClicked(string target)

@@ -31,7 +31,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-            ToolTip="{helpers:Localization expandView}">
+            ToolTip="{helpers:Localization ExpandView}">
             <Button.Style>
                 <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                     <Setter Property="Padding" Value="0" />

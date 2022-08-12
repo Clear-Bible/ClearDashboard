@@ -56,13 +56,13 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
-            BtBcvAll,
+            BiblicalTermsBcv_All,
             // ReSharper disable once UnusedMember.Local
-            BtBcvBook,
+            BiblicalTermsBcv_Book,
             // ReSharper disable once UnusedMember.Local
-            BtBcvChapter,
+            BiblicalTermsBcv_Chapter,
             // ReSharper disable once UnusedMember.Local
-            BtBcvVerse
+            BiblicalTermsBcv_Verse
         }
 
         private enum RenderingFilterEnum
@@ -70,9 +70,9 @@ namespace ClearDashboard.Wpf.ViewModels
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
             // ReSharper disable once UnusedMember.Local            
-            BtRenderingAllTerms,
+            BiblicalTermsRendering_AllTerms,
             // ReSharper disable once UnusedMember.Local
-            BtRenderingMissingRenderings
+            BiblicalTermsRendering_MissingRenderings
         }
 
         private enum SemanticDomainEnum
@@ -80,89 +80,89 @@ namespace ClearDashboard.Wpf.ViewModels
             // DO NOT CHANGE THESE IDENTIFIER NAMES - THEY ARE LINKED TO THE
             // LOCALIZATION SPREADSHEET LOOKUPS
             // ReSharper disable once UnusedMember.Local
-            BtDomainsAll = 0,
+            BiblicalTermsDomains_All = 0,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsAffection = 1,
+            BiblicalTermsDomains_Affection = 1,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsAgriculture = 2,
+            BiblicalTermsDomains_Agriculture = 2,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsAnimals = 3,
+            BtDomaBiblicalTermsDomains_AnimalsinsAnimals = 3,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsArea = 4,
+            BiblicalTermsDomains_Area = 4,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsAreaNature = 5,
+            BiblicalTermsDomains_AreaNature = 5,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsAssociation = 6,
+            BiblicalTermsDomains_Association = 6,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsConstructionReligiousActivities = 7,
+            BiblicalTermsDomains_ConstructionReligiousActivities = 7,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsConstructionsAnimalHusbandry = 8,
+            BiblicalTermsDomains_ConstructionsAnimalHusbandry = 8,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsContainersAnimalHusbandry = 9,
+            BiblicalTermsDomains_ContainersAnimalHusbandry = 9,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsCraftsCloth = 10,
+            BiblicalTermsDomains_CraftsCloth = 10,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsFruits = 11,
+            BiblicalTermsDomains_Fruits = 11,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsGemstones = 12,
+            BiblicalTermsDomains_Gemstones = 12,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsGrasses = 13,
+            BiblicalTermsDomains_Grasses = 13,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsGroup = 14,
+            BiblicalTermsDomains_Group = 14,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsGroupArea = 15,
+            BiblicalTermsDomains_GroupArea = 15,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsHonorRespectStatus = 16,
+            BiblicalTermsDomains_HonorRespectStatus = 16,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsLocale = 17,
+            BiblicalTermsDomains_Locale = 17,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsMammalsDomesticAnimals = 18,
+            BiblicalTermsDomains_MammalsDomesticAnimals = 18,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsMammalsWildAnimals = 19,
+            BiblicalTermsDomains_MammalsWildAnimals = 19,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsMonument = 20,
+            BiblicalTermsDomains_Monument = 20,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsMoralsAndEthics = 21,
+            BiblicalTermsDomains_MoralsAndEthics = 21,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsMourning = 22,
+            BiblicalTermsDomains_Mourning = 22,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsNature = 23,
+            BiblicalTermsDomains_Nature = 23,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPaganism = 24,
+            BiblicalTermsDomains_Paganism = 24,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPeople = 25,
+            BiblicalTermsDomains_People = 25,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPeopleAuthority = 26,
+            BiblicalTermsDomains_PeopleAuthority = 26,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPeopleHonorRespectStatus = 27,
+            BiblicalTermsDomains_PeopleHonorRespectStatus = 27,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPerson = 28,
+            BiblicalTermsDomains_Person = 28,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsPurpose = 29,
+            BiblicalTermsDomains_Purpose = 29,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsReligiousActivities = 30,
+            BiblicalTermsDomains_ReligiousActivities = 30,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsSacrificesAndOfferings = 31,
+            BiblicalTermsDomains_SacrificesAndOfferings = 31,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsSettlement = 32,
+            BiblicalTermsDomains_Settlement = 32,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsSignsAndWonders = 33,
+            BiblicalTermsDomains_SignsAndWonders = 33,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsSupernaturalBeingsAndPowers = 34,
+            BiblicalTermsDomains_SupernaturalBeingsAndPowers = 34,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsSupernaturalBeingsAndPowersTitles = 35,
+            BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles = 35,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsTools = 36,
+            BiblicalTermsDomains_Tools = 36,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsToolsChildbirth = 37,            
+            BiblicalTermsDomains_ToolsChildbirth = 37,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsToolsWeightCommerce = 38,
+            BiblicalTermsDomains_ToolsWeightCommerce = 38,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsTreesFruits = 39,
+            BiblicalTermsDomains_TreesFruits = 39,
             // ReSharper disable once UnusedMember.Local            
-            BtDomainsTreesPerfumesAndSpices = 40,
+            BiblicalTermsDomains_TreesPerfumesAndSpices = 40,
             // ReSharper disable once UnusedMember.Local
-            BtDomainsWisdomUnderstanding = 41,
+            BiblicalTermsDomains_WisdomUnderstanding = 41,
         }
 
         private string _currentVerse = "";
@@ -810,9 +810,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 var selectedScope = rowView[1].ToString();
 
                 // filter down to scope if present
-                if (selectedScope != FilterScopeEnum.BtBcvAll.ToString())
+                if (selectedScope != FilterScopeEnum.BiblicalTermsBcv_All.ToString())
                 {
-                    if (ProjectManager.CurrentVerse.Length != 8)
+                    if (ProjectManager.CurrentVerse.Length != 9)
                     {
                         return false;
                     }
@@ -821,11 +821,11 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         switch (selectedScope)
                         {
-                            case "BtBcvBook":
+                            case "BiblicalTermsBcv_Book":
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
-                                    var book = _currentBcv.BookNum.ToString();
+                                    var book = _currentBcv.Book.ToString();
                                     if (book == ProjectManager.CurrentVerse.Substring(0, 3))
                                     {
                                         // found the book
@@ -835,12 +835,12 @@ namespace ClearDashboard.Wpf.ViewModels
                                 }
 
                                 break;
-                            case "BtBcvChapter":
+                            case "BiblicalTermsBcv_Chapter":
                                 foreach (var term in terms.References)
                                 {
                                     _currentBcv.SetVerseFromId(term);
-                                    var book = _currentBcv.BookNum.ToString();
-                                    var chapter = _currentBcv.ChapterNum.ToString();
+                                    var book = _currentBcv.Book.ToString();
+                                    var chapter = _currentBcv.ChapterIdText.ToString();
                                     if (book+chapter == ProjectManager.CurrentVerse.Substring(0, 6))
                                     {
                                         // found the chapter
@@ -850,10 +850,10 @@ namespace ClearDashboard.Wpf.ViewModels
                                 }
 
                                 break;
-                            case "BtBcvVerse":
+                            case "BiblicalTermsBcv_Verse":
                                 foreach (var term in terms.References)
                                 {
-                                    if (term == ProjectManager.CurrentVerse)
+                                    if (term.PadLeft(9, '0') == ProjectManager.CurrentVerse)
                                     {
                                         // found the verse
                                         isBcvFound = true;
@@ -871,18 +871,22 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }
 
-            // filter based on semantic domain
-            var bFoundSemanticDomain = false;
-            if (obj is BiblicalTermsData bt)
+            // filter based on semantic domain (only in )
+            if (SelectedBiblicalTermsType == SelectedBtEnum.OptionProject)
             {
-                if (SelectedDomain is not null)
+                var bFoundSemanticDomain = false;
+                if (obj is BiblicalTermsData bt)
                 {
-                    bFoundSemanticDomain = SelectedDomain[1].ToString() == "BtDomainsAll" || bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
-                }
+                    if (SelectedDomain is not null && bt.SemanticDomain is not null)
+                    {
+                        bFoundSemanticDomain = SelectedDomain[1].ToString() == "BiblicalTermsDomains_All" ||
+                                               bt.SemanticDomain.Contains(SelectedDomain[0].ToString() ?? string.Empty);
+                    }
 
-                if (! bFoundSemanticDomain)
-                {
-                    return false;
+                    if (bFoundSemanticDomain == false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -891,7 +895,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 if (RenderingFilter is not null)
                 {
-                    if (RenderingFilter[1].ToString() == "BtRenderingMissingRenderings")
+                    if (RenderingFilter[1].ToString() == "BiblicalTermsRendering_MissingRenderings")
                     {
                         if (renderingFilter.RenderingCount > 0)
                         {
