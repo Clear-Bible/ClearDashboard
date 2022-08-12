@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -307,12 +308,22 @@ namespace ClearDashboard.Wpf.UserControls
             }
             else
             {
-                this.Dispatcher.Invoke(() =>
+                try
                 {
-                    MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime.PadLeft(8, '0');
-                    MenuItems[0].ClockTextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
-                    MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
-                });
+                    if (_timeDisplayIndex >= 0)
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime.PadLeft(8, '0');
+                            MenuItems[0].ClockTextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
+                            MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
+                        });
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Debug.WriteLine(exception);
+                }
             }
         }
 

@@ -219,6 +219,9 @@ namespace ClearDashboard.Wpf.ViewModels
                         case "ConcordanceToolID":
                             _windowIdToLoad = "CONCORDANCETOOL";
                             break;
+                        case "CorpusTokensID":
+                            _windowIdToLoad = "CORPUSTOKENS";
+                            break;
                         case "DashboardID":
                             _windowIdToLoad = "DASHBOARD";
                             break;
@@ -227,6 +230,9 @@ namespace ClearDashboard.Wpf.ViewModels
                             break;
                         case "PINSID":
                             _windowIdToLoad = "PINS";
+                            break;
+                        case "ProjectDesignSurfaceID":
+                            _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
                             break;
                         case "WordMeaningsID":
                             _windowIdToLoad = "WORDMEANINGS";
@@ -458,20 +464,22 @@ namespace ClearDashboard.Wpf.ViewModels
 
             Items.Clear();
             // documents
-            await ActivateItemAsync<DashboardViewModel>();
-            await ActivateItemAsync<ConcordanceViewModel>();
-            await ActivateItemAsync<StartPageViewModel>();
             await ActivateItemAsync<AlignmentToolViewModel>();
+            await ActivateItemAsync<ConcordanceViewModel>();
+            await ActivateItemAsync<CorpusTokensViewModel>(); 
+            await ActivateItemAsync<DashboardViewModel>();
+            await ActivateItemAsync<StartPageViewModel>();
             await ActivateItemAsync<TreeDownViewModel>();
+            
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
-            await ActivateItemAsync<WordMeaningsViewModel>();
-            await ActivateItemAsync<SourceContextViewModel>();
-            await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
+            await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
+            await ActivateItemAsync<SourceContextViewModel>();
+            await ActivateItemAsync<TargetContextViewModel>(); 
             await ActivateItemAsync<TextCollectionsViewModel>();
-
+            await ActivateItemAsync<WordMeaningsViewModel>();
 
             // remove all existing windows
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
@@ -632,10 +640,11 @@ namespace ClearDashboard.Wpf.ViewModels
                         new() { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
                         new() { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
                         new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        new() { Header = "🗟 Corpus Tokens", Id = "CorpusTokensID", ViewModel = this, },
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
                         new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "🗂🛠 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
+                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
                         new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
@@ -666,10 +675,12 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 this.Logger.LogError(e.Message);
             }
+            finally
+            {
+                GridIsVisible = Visibility.Collapsed;
 
-            GridIsVisible = Visibility.Collapsed;
-
-            ReBuildMenu();
+                ReBuildMenu();
+            }
         }
 
         //public void DeleteLayout(LayoutFile layoutFile)
@@ -820,23 +831,23 @@ namespace ClearDashboard.Wpf.ViewModels
                         var type = t;
                         switch (type)
                         {
-                            case DashboardViewModel:
-                            case ConcordanceViewModel:
-                            case StartPageViewModel:
                             case AlignmentToolViewModel:
-                            case TreeDownViewModel:
+                            case ConcordanceViewModel:
                             case CorpusTokensViewModel:
+                            case DashboardViewModel:
+                            case StartPageViewModel:
+                            case TreeDownViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
                             case BiblicalTermsViewModel:
-                            case WordMeaningsViewModel:
-                            case SourceContextViewModel:
-                            case TargetContextViewModel:
                             case NotesViewModel:
                             case PinsViewModel:
-                            case TextCollectionsViewModel:
                             case ProjectDesignSurfaceViewModel:
+                            case SourceContextViewModel:
+                            case TargetContextViewModel:
+                            case TextCollectionsViewModel:
+                            case WordMeaningsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
                         }
@@ -870,12 +881,12 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     switch (type)
                     {
-                        case DashboardViewModel:
-                        case ConcordanceViewModel:
-                        case StartPageViewModel:
                         case AlignmentToolViewModel:
-                        case TreeDownViewModel:
+                        case ConcordanceViewModel:
                         case CorpusTokensViewModel:
+                        case DashboardViewModel:
+                        case StartPageViewModel:
+                        case TreeDownViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -899,13 +910,13 @@ namespace ClearDashboard.Wpf.ViewModels
                     switch (type)
                     {
                         case BiblicalTermsViewModel:
-                        case WordMeaningsViewModel:
-                        case SourceContextViewModel:
-                        case TargetContextViewModel:
                         case NotesViewModel:
                         case PinsViewModel:
-                        case TextCollectionsViewModel:
                         case ProjectDesignSurfaceViewModel:
+                        case SourceContextViewModel:
+                        case TargetContextViewModel:
+                        case TextCollectionsViewModel:
+                        case WordMeaningsViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -920,50 +931,51 @@ namespace ClearDashboard.Wpf.ViewModels
             switch (windowTag)
             {
                 // Documents
-                case WorkspaceLayoutNames.Dashboard:
-                    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
-                    return (vm1, vm1.Title, vm1.DockSide);
+                case WorkspaceLayoutNames.AlignmentTool:
+                    var vm10 = GetPaneViewModelFromItems("AlignmentToolViewModel");
+                    return (vm10, vm10.Title, vm10.DockSide);
                 case WorkspaceLayoutNames.ConcordanceTool:
                     var vm2 = GetPaneViewModelFromItems("ConcordanceViewModel");
                     return (vm2, vm2.Title, vm2.DockSide);
+                case WorkspaceLayoutNames.CorpusTokens:
+                    var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
+                    return (vm12, vm12.Title, vm12.DockSide);
+                case WorkspaceLayoutNames.Dashboard:
+                    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
+                    return (vm1, vm1.Title, vm1.DockSide);
                 case WorkspaceLayoutNames.Pins:
                     var vm7 = GetPaneViewModelFromItems("PinsViewModel");
                     return (vm7, vm7.Title, vm7.DockSide);
                 case WorkspaceLayoutNames.StartPage:
                     var vm9 = GetPaneViewModelFromItems("StartPageViewModel");
                     return (vm9, vm9.Title, vm9.DockSide);
-                case WorkspaceLayoutNames.AlignmentTool:
-                    var vm10 = GetPaneViewModelFromItems("AlignmentToolViewModel");
-                    return (vm10, vm10.Title, vm10.DockSide);
                 case WorkspaceLayoutNames.TreeDown:
                     var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
                     return (vm11, vm11.Title, vm11.DockSide);
-                case WorkspaceLayoutNames.CorpusTokens:
-                    var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
-                    return (vm12, vm12.Title, vm12.DockSide);
+
                 
                 // Tools
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
-                case WorkspaceLayoutNames.WordMeanings:
-                    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
-                    return (vm3, vm3.Title, vm3.DockSide);
+                case WorkspaceLayoutNames.Notes:
+                    var vm6 = GetToolViewModelFromItems("NotesViewModel");
+                    return (vm6, vm6.Title, vm6.DockSide);
+                case WorkspaceLayoutNames.ProjectDesignSurface:
+                    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
+                    return (vm13, vm13.Title, vm13.DockSide);
                 case WorkspaceLayoutNames.SourceContext:
                     var vm4 = GetToolViewModelFromItems("SourceContextViewModel");
                     return (vm4, vm4.Title, vm4.DockSide);
                 case WorkspaceLayoutNames.TargetContext:
                     var vm5 = GetToolViewModelFromItems("TargetContextViewModel");
                     return (vm5, vm5.Title, vm5.DockSide);
-                case WorkspaceLayoutNames.Notes:
-                    var vm6 = GetToolViewModelFromItems("NotesViewModel");
-                    return (vm6, vm6.Title, vm6.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
-                case WorkspaceLayoutNames.ProjectDesignSurface:
-                    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                    return (vm13, vm13.Title, vm13.DockSide);
+                case WorkspaceLayoutNames.WordMeanings:
+                    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
+                    return (vm3, vm3.Title, vm3.DockSide);
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
@@ -976,12 +988,15 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             // find the pane in the dockmanager with this contentID
 #pragma warning disable CA1416 // Validate platform compatibility
+
+            // test for tool window
             var windowPane = _dockingManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
                 .SingleOrDefault(a =>
                 {
                     if (a.ContentId is not null)
                     {
+                        Debug.WriteLine(a.ContentId);
                         return a.ContentId.ToUpper() == windowTag.ToUpper();
                     }
                     return false;
@@ -1004,28 +1019,49 @@ namespace ClearDashboard.Wpf.ViewModels
             }
             else
             {
-                // window has been closed so reload it
-                windowPane = new LayoutAnchorable
+                // test for document window
+                var windowDockable = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>()
+                    .SingleOrDefault(a =>
+                    {
+                        if (a.ContentId is not null)
+                        {
+                            Debug.WriteLine(a.ContentId);
+                            return a.ContentId.ToUpper() == windowTag.ToUpper();
+                        }
+                        return false;
+                    });
+
+                if (windowDockable == null)
                 {
-                    ContentId = windowTag
-                };
+                    // window has been closed so reload it
+                    windowPane = new LayoutAnchorable
+                    {
+                        ContentId = windowTag
+                    };
 
-                // setup the right ViewModel for the pane
-                var obj = LoadWindow(windowTag);
-                windowPane.Content = obj.vm;
-                windowPane.Title = obj.title;
-                windowPane.IsActive = true;
+                    // setup the right ViewModel for the pane
+                    var obj = LoadWindow(windowTag);
+                    windowPane.Content = obj.vm;
+                    windowPane.Title = obj.title;
+                    windowPane.IsActive = true;
 
 
-                // set where it will doc on layout
-                if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
-                {
-                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                    // set where it will doc on layout
+                    if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+                    {
+                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                    }
+                    else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                    {
+                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                    }
                 }
-                else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                else
                 {
-                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                    windowDockable.IsActive = true;
                 }
+
             }
 #pragma warning restore CA1416 // Validate platform compatibility
         }
@@ -1223,16 +1259,16 @@ namespace ClearDashboard.Wpf.ViewModels
         public const string AlignmentTool = "ALIGNMENTTOOL";
         public const string BiblicalTerms = "BIBLICALTERMS";
         public const string ConcordanceTool = "CONCORDANCETOOL";
+        public const string CorpusTokens = "CORPUSTOKENS";
         public const string Dashboard = "DASHBOARD";
         public const string Notes = "NOTES";
         public const string Pins = "PINS";
+        public const string ProjectDesignSurface = "PROJECTDESIGNSURFACETOOL";
         public const string SourceContext = "SOURCECONTEXT";
         public const string StartPage = "STARTPAGE";
         public const string TargetContext = "TARGETCONTEXT";
         public const string TextCollection = "TEXTCOLLECTION";
         public const string TreeDown = "TREEDOWN";
         public const string WordMeanings = "WORDMEANINGS";
-        public const string ProjectDesignSurface = "PROJECTDESIGNSURFACE";
-        public const string CorpusTokens = "CONTEXTTOKENS";
     }
 }

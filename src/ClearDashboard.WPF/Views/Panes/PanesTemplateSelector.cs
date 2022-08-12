@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using AvalonDock.Layout;
 using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Views.Panes
 {
@@ -125,6 +126,9 @@ namespace ClearDashboard.Wpf.Views.Panes
             if (item is ConcordanceViewModel)
                 return ConcordanceViewTemplate;
 
+            if (item is CorpusTokensViewModel)
+                return CorpusTokensViewTemplate;
+
             // ====================
             //        TOOLS
             // ====================
@@ -161,6 +165,11 @@ namespace ClearDashboard.Wpf.Views.Panes
             if (item is TextCollectionsViewModel)
             {
                 return TextCollectionViewTemplate;
+            }
+
+            if (item is ProjectDesignSurfaceViewModel)
+            {
+                return ProjectDesignSurfaceViewTemplate;
             }
 
             return base.SelectTemplate(item, container);
