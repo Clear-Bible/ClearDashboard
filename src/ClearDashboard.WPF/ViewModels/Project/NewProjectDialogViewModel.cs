@@ -53,7 +53,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         private string _dialogTitle;
 
-        public string DialogTitle => LocalizationStrings.Get("NewProjectDialog_title", _logger);//string.IsNullOrEmpty(_projectName) ? "Create New Project" : $"Create New Project: {_projectName}";
+        public string DialogTitle => LocalizationStrings.Get("NewProjectDialog_Title", _logger);//string.IsNullOrEmpty(_projectName) ? "Create New Project" : $"Create New Project: {_projectName}";
         //{
         //    get => _dialogTitle;
         //    set => Set(ref _dialogTitle, string.IsNullOrEmpty(value) ? "Create New Project" : $"Create New Project: {_projectName}");

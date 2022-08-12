@@ -30,8 +30,8 @@ namespace ClearDashboard.DAL.Tests
 
             Assert.True(result.HasData);
             Assert.NotNull(result.Data);
-            Assert.NotEmpty(result.Data.UsfmDirectoryPath);
-            Assert.Equal("Biblia Hebraica Stuttgartensia", result.Data.LongName);
+            Assert.NotEmpty(result?.Data?.UsfmDirectoryPath);
+            Assert.Equal("Biblia Hebraica Stuttgartensia", result?.Data?.LongName);
         }
 
     }

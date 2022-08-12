@@ -17,7 +17,7 @@ namespace ClearDashboard.WPF.Tests
     public  class ProjectValidatorTests : TestBase
     {
         private readonly ITestOutputHelper _output;
-        private readonly ILogger<ProjectValidator> _logger;
+        private readonly ILogger<ProjectValidator>? _logger;
 
         public ProjectValidatorTests(ITestOutputHelper output) : base(output)
         {

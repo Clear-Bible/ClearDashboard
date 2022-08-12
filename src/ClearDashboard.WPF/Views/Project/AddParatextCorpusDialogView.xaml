@@ -80,7 +80,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <Label Content="{helpers:Localization AddParatextCorpusDialog_title}" />
+                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
             </StackPanel>
             <ComboBox
                 Grid.Row="1"
@@ -108,11 +108,11 @@
                 <Button
                     x:Name="Ok"
                     Margin="5,5,5,5"
-                    Content="{helpers:Localization ok}" />
+                    Content="{helpers:Localization Ok}" />
                 <Button
                     x:Name="Cancel"
                     Margin="5,5,5,5"
-                    Content="{helpers:Localization cancel}" />
+                    Content="{helpers:Localization Cancel}" />
             </StackPanel>
         </Grid>
     </Border>
