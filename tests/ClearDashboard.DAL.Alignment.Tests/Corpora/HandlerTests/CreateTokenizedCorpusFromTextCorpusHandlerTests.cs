@@ -4,14 +4,11 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -94,6 +91,76 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void TokenizedCorpus__CreateCompositeTokens()
+    {
+        try
+        {
+            var textCorpus = CreateFakeTextCorpusWithComposite();
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, tokenizationFunction);
+
+            Assert.NotNull(tokenizedTextCorpus);
+            Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.CorpusId.Id);
+
+            Assert.NotNull(corpusDB);
+            Assert.True(corpusDB.IsRtl);
+            Assert.Equal("NameX", corpusDB.Name);
+            Assert.Equal("LanguageX", corpusDB.Language);
+            Assert.Equal("Standard", corpusDB.CorpusType.ToString());
+            Assert.Equal(tokenizationFunction, corpusDB.TokenizedCorpora.First().TokenizationFunction);
+
+            foreach (var tokensTextRow in tokenizedTextCorpus?.Cast<TokensTextRow>()!)
+            {
+                // FIXME:  Is it ok if Tokens is empty for a tokensTextRow?
+                //                Assert.NotEmpty(tokensTextRow.Tokens);
+                Assert.All(tokensTextRow.Tokens, t => Assert.NotNull(t.TokenId));
+
+                //display verse info
+                var verseRefStr = tokensTextRow.Ref.ToString();
+                Output.WriteLine(verseRefStr);
+
+                //display legacy segment
+                var segmentText = string.Join(" ", tokensTextRow.Segment);
+                Output.WriteLine($"segmentText: {segmentText}");
+
+                //display tokenIds
+                var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
+                Output.WriteLine($"tokenIds: {tokenIds}");
+
+                //display tokens tokenized
+                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.SurfaceText));
+                Output.WriteLine($"tokensText: {tokensText}");
+
+                //display tokens detokenized
+                var detokenizer = new LatinWordDetokenizer();
+                var tokensTextDetokenized =
+                    detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.SurfaceText).ToList());
+                Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Output.WriteLine(ex.Message);
+        }
+        finally
+        {
+ //           await DeleteDatabaseContext();
+        }
+    }
+
+
 
     [Fact]
     public async void TokenizedCorpus__CreateMultiple()
@@ -347,4 +414,50 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    private static ITextCorpus CreateFakeTextCorpusWithComposite()
+    {
+        var textCorpus = new DictionaryTextCorpus(
+            new MemoryText("GEN", new[]
+            {
+                    //new VerseRef(1,1,1), "Source segment Jacob 1", isSentenceStart: true
+                    new TextRow(new VerseRef(1, 1, 1)) { Segment = "Source segment Test 1". Split(), IsSentenceStart = true,  IsEmpty = false },
+                    new TextRow(new VerseRef(1, 1, 2)) { Segment = "Source segment Test 2.".Split(), IsSentenceStart = false, IsEmpty = false },
+                    new TextRow(new VerseRef(1, 1, 3)) { Segment = "Source segment Test 3.".Split(), IsSentenceStart = true,  IsEmpty = false }
+            }))
+            .Tokenize<LatinWordTokenizer>()
+            .Transform<IntoFakeCompositeTokensTextRowProcessor>()
+            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+
+        return textCorpus;
+    }
+
+    private class IntoFakeCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
+    {
+        public TextRow Process(TextRow textRow)
+        {
+            if (textRow.Text.Contains("Test 1"))
+            {
+                var tr = new TokensTextRow(textRow);
+
+                var tokens = tr.Tokens;
+
+                var tokenIds = tokens
+                    .Select(t => t.TokenId)
+                    .ToList();
+
+                var tokensWithComposite = new List<Token>()
+                 {
+                     new CompositeToken(new List<Token>() { tokens[0], tokens[1], tokens[3] }),
+                     tokens[2]
+                 };
+
+                tr.Tokens = tokensWithComposite;
+                return tr;
+            }
+
+            return new TokensTextRow(textRow);
+        }
+    }
+
 }

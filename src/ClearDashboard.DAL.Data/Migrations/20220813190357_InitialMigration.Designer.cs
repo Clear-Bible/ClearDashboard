@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220803184536_InitialMigration")]
+    [Migration("20220813190357_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -459,6 +459,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("SurfaceText")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("TokenCompositeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TokenCompositePosition")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid>("TokenizationId")
                         .HasColumnType("TEXT");
 
@@ -476,6 +482,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("BookNumber");
 
                     b.HasIndex("ChapterNumber");
+
+                    b.HasIndex("TokenCompositeId");
 
                     b.HasIndex("TokenizationId");
 
@@ -864,7 +872,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", "CorpusHistory")
                         .WithMany("TokenizedCorpora")
                         .HasForeignKey("CorpusHistoryId");
 
@@ -875,6 +883,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Corpus");
+
+                    b.Navigation("CorpusHistory");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>

@@ -80,23 +80,49 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 foreach (var bookId in bookIds)
                 {
-                    var chapterTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
+                    var bookTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
                         .SelectMany(ttr => ttr.Tokens)
-                        .OrderBy(t => t.TokenId.ChapterNumber)
-                        .ThenBy(t => t.TokenId.VerseNumber)
-                        .Select(token => new Models.Token
+                        .SelectMany(token =>
                         {
-                            TokenizationId = tokenizationId,
-                            BookNumber = token.TokenId.BookNumber,
-                            ChapterNumber = token.TokenId.ChapterNumber,
-                            VerseNumber = token.TokenId.VerseNumber,
-                            WordNumber = token.TokenId.WordNumber,
-                            SubwordNumber = token.TokenId.SubWordNumber,
-                            SurfaceText = token.SurfaceText,
-                            TrainingText = token.TrainingText
+                            if (token is CompositeToken compositeToken)
+                            {
+                                var tokenCompositeId = Guid.NewGuid();
+                                return compositeToken.GetPositionalSortedBaseTokens()
+                                    .Select((childToken, tokenCompositePosition) => new Models.Token
+                                    {
+                                        TokenizationId = tokenizationId,
+                                        BookNumber = childToken.TokenId.BookNumber,
+                                        ChapterNumber = childToken.TokenId.ChapterNumber,
+                                        VerseNumber = childToken.TokenId.VerseNumber,
+                                        WordNumber = childToken.TokenId.WordNumber,
+                                        SubwordNumber = childToken.TokenId.SubWordNumber,
+                                        SurfaceText = childToken.SurfaceText,
+                                        TrainingText = childToken.TrainingText,
+                                        TokenCompositeId = tokenCompositeId,
+                                        TokenCompositePosition = tokenCompositePosition
+                                    });
+                            }
+                            else
+                            {
+                                return new List<Models.Token>() {
+                                new Models.Token
+                                {
+                                    TokenizationId = tokenizationId,
+                                    BookNumber = token.TokenId.BookNumber,
+                                    ChapterNumber = token.TokenId.ChapterNumber,
+                                    VerseNumber = token.TokenId.VerseNumber,
+                                    WordNumber = token.TokenId.WordNumber,
+                                    SubwordNumber = token.TokenId.SubWordNumber,
+                                    SurfaceText = token.SurfaceText,
+                                    TrainingText = token.TrainingText,
+                                    TokenCompositeId = null,
+                                    TokenCompositePosition = null
+                                }
+                                };
+                            }
                         });
 
-                    await InsertTokensAsync(chapterTokens, tokenInsertCommand, cancellationToken);
+                    await InsertTokensAsync(bookTokens, tokenInsertCommand, cancellationToken);
                 }
 
                 await transaction.CommitAsync(cancellationToken);
@@ -130,7 +156,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private DbCommand CreateTokenInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "TokenizationId", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TrainingText" };
+            var columns = new string[] { "Id", "TokenizationId", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TrainingText", "TokenCompositeId", "TokenCompositePosition" };
 
             ApplyColumnsToCommand(command, typeof(Models.Token), columns);
 
@@ -150,6 +176,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 command.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
                 command.Parameters["@SurfaceText"].Value = token.SurfaceText;
                 command.Parameters["@TrainingText"].Value = token.TrainingText;
+                command.Parameters["@TokenCompositeId"].Value = (token.TokenCompositeId != null) ? token.TokenCompositeId : DBNull.Value;
+                command.Parameters["@TokenCompositePosition"].Value = (token.TokenCompositePosition != null) ? token.TokenCompositePosition : DBNull.Value;
 
                 _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
             }

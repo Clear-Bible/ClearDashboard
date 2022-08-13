@@ -32,5 +32,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<AlignmentTokenPair> TargetAlignmentTokenPairs { get; set; }
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
 
+        public Guid? TokenCompositeId { get; set; }
+        //public virtual TokenComposite? TokenComposite { get; set; }
+        public int? TokenCompositePosition { get; set; }
     }
 }
