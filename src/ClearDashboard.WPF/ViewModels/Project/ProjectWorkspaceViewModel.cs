@@ -261,8 +261,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Items.Clear();
             //documents
-            await ActivateItemAsync<CorpusViewModel>();
-            await ActivateItemAsync<AlignmentViewModel>();
+            //await ActivateItemAsync<CorpusViewModel>();
+            await ActivateItemAsync<CorpusTokensViewModel>();
            
 
             // tools
@@ -289,7 +289,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 var type = t;
                 switch (type)
                 {
-                    case AlignmentViewModel:
+                    case CorpusTokensViewModel:
                     case CorpusViewModel:
                         _documents.Add((PaneViewModel)t);
                         break;
@@ -314,12 +314,11 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     var item = Items.Cast<IAvalonDockWindow>()
                         .FirstOrDefault(item => item.ContentId == e.Model.ContentId);
 
-                    //if (item is { ContentId: "ALIGNMENTTOOL" })
-                    //{
-                        await ActivateItemAsync((Screen)item);
-                    //}
-
-                    e.Content = item;
+                    if (item != null)
+                    {
+                        //await ActivateItemAsync((Screen)item);
+                        e.Content = item;
+                    }
                 }
             };
 
@@ -349,7 +348,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         public async Task ActiveAlignmentView()
         {
-            await ActivateItemAsync<AlignmentViewModel>();
+            await ActivateItemAsync<CorpusTokensViewModel>();
         }
 
         public static class WorkspaceLayoutNames

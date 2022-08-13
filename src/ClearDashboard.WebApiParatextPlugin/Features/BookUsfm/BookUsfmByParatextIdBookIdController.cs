@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Http;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
 {
@@ -24,7 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         }
 
         [HttpPost]
-        public async Task<RequestResult<List<UsfmVerse>>> GetAsync([FromBody] GetBookUsfmByParatextIdBookIdQuery command)
+        public async Task<RequestResult<List<UsfmVerse>>> GetAsync([FromBody] GetRowsByParatextProjectIdAndBookIdQuery command)
         {
             var result =
                 await ExecuteRequestAsync<RequestResult<List<UsfmVerse>>,

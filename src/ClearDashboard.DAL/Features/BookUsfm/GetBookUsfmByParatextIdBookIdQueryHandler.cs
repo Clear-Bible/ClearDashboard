@@ -12,7 +12,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
 {
     public class GetBookUsfmByParatextIdBookIdQueryHandler 
-        : ParatextRequestHandler<GetBookUsfmByParatextIdBookIdQuery, RequestResult<List<UsfmVerse>>, List<UsfmVerse>>
+        : ParatextRequestHandler<GetRowsByParatextProjectIdAndBookIdQuery, RequestResult<List<UsfmVerse>>, List<UsfmVerse>>
     {
 
         public GetBookUsfmByParatextIdBookIdQueryHandler([NotNull] ILogger<GetBiblicalTermsByTypeQueryHandler> logger) :
@@ -24,7 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
 
         public override async
             Task<RequestResult<List<UsfmVerse>>> Handle(
-                GetBookUsfmByParatextIdBookIdQuery request, CancellationToken cancellationToken)
+                GetRowsByParatextProjectIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("bookusfmbyparatextidbookid", request, cancellationToken);
         }

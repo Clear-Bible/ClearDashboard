@@ -9,11 +9,11 @@ using SIL.Scripture;
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : IRequestHandler<
-        GetVersificationAndBookIdByParatextPluginIdQuery,
+        GetVersificationAndBookIdByParatextProjectIdQuery,
         RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
     {
         public Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
-            Handle(GetVersificationAndBookIdByParatextPluginIdQuery command, CancellationToken cancellationToken)
+            Handle(GetVersificationAndBookIdByParatextProjectIdQuery command, CancellationToken cancellationToken)
         {
             //DB Impl notes: extracts the versification and bookAbbreviations (SIL) from the corpus identified by command.ParatextPluginId
 

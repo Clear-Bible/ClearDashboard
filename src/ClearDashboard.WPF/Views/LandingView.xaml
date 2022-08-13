@@ -72,20 +72,20 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Margin="5">
-            <Button
+            <!--<Button
                 x:Name="CreateNewProject"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_newproject}"
+                Content="{helpers:Localization Landing_NewProject}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
                 </Button.Tag>
-            </Button>
+            </Button>-->
 
             <Button
                 x:Name="NewProject"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_newproject}"
+                Content="{helpers:Localization Landing_NewProject}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/NewProject_Icon_128.png</ImageSource>
@@ -95,7 +95,7 @@
             <Button
                 x:Name="Settings"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_settings}"
+                Content="{helpers:Localization Landing_Settings}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
@@ -112,15 +112,15 @@
                 </Button.Tag>
             </Button>
 
-            <Button
+            <!--<Button
                 x:Name="Workspace"
                 Margin="10,0,10,0"
-                Content="{helpers:Localization Landing_project}"
+                Content="{helpers:Localization Landing_Project}"
                 Style="{StaticResource BigButton}">
                 <Button.Tag>
                     <ImageSource>/Resources/settings_logo_128.png</ImageSource>
                 </Button.Tag>
-            </Button>
+            </Button>-->
 
         </WrapPanel>
 
@@ -138,12 +138,15 @@
                     FontSize="20"
                     Foreground="{StaticResource PrimaryHueDarkBrush}">
                     <Run Text="Dashboard " />
-                    <Run Text="{helpers:Localization Landing_projects}" />
+                    <Run Text="{helpers:Localization Landing_Projects}" />
                 </TextBlock>
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
+                    VerticalContentAlignment="Top"
                     ItemsSource="{Binding DashboardProjects}"
+                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     Style="{StaticResource MaterialDesignListBox}">
 
                     <ListView.ItemTemplate>
@@ -154,6 +157,17 @@
 
                                         <!--  PROJECT TEXT  -->
                                         <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                            <!--  DELETE PROJECT BUTTON  -->
+                                            <Button
+                                                Width="30"
+                                                Height="30"
+                                                cal:Message.Attach="DeleteProject($dataContext)"
+                                                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                                Style="{StaticResource MaterialDesignIconButton}">
+                                                <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
+                                                <materialDesign:PackIcon Foreground="{StaticResource RedDarkBrush}" Kind="DeleteForever" />
+                                            </Button>
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock
                                                     Width="370"
@@ -171,8 +185,10 @@
                                                         <Run Text="Database: " />
                                                         <Run Text="{Binding ShortFilePath}" />
                                                     </TextBlock>
-                                                    <TextBlock Margin="25,0,0,0" FontStyle="Italic"
-                                                               Text="{Binding Modified}" />
+                                                    <TextBlock
+                                                        Margin="25,0,0,0"
+                                                        FontStyle="Italic"
+                                                        Text="{Binding Modified}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -183,7 +199,7 @@
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            x:Name="ProjectWorkspace"
+                                            x:Name="DeleteProject"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"

@@ -12,6 +12,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.ViewModels.Workflows;
 using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
@@ -25,6 +26,7 @@ namespace ClearDashboard.Wpf.ViewModels.Popups;
 
 public class RegistrationDialogViewModel : WorkflowShellViewModel
 {
+    ILogger _logger;
     private RegistrationViewModel _registrationViewModel;
 
     public string LicenseKey => _registrationViewModel.LicenseKey;
@@ -38,6 +40,9 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
     {
         await base.OnInitializeAsync(cancellationToken);
+
+        
+        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_Missing", _logger));
 
         _registrationViewModel = ServiceProvider.GetService<RegistrationViewModel>();
 
@@ -55,7 +60,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
     public bool CanCancel => true /* can always cancel */;
 
-    public async void Cancel()
+    public void Cancel()
     {
         System.Windows.Application.Current.Shutdown();
     }
@@ -90,13 +95,13 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             }
             else
             {
-                MessageBox.Show("The contents of the decrypted license key do not match the information you provided.");
+                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", _logger));
             }
         }
 
-        catch (Exception ex)
+        catch (Exception)
         {
-            MessageBox.Show("The key provided is faulty.  When decrypted, certain json elements could not be found.");
+            MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", _logger));
         }
     }
 }

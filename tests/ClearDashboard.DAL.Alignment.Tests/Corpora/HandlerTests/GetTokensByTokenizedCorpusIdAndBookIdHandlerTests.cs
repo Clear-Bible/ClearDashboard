@@ -16,6 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 {
+    #nullable disable
     public GetTokensByTokenizedCorpusIdAndBookIdHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -36,7 +37,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(createResult.Data);
             var tokenizedTextCorpus = createResult.Data!;
 
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext?.ChangeTracker.Clear();
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");

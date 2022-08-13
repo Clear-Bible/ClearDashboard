@@ -9,16 +9,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class ParatextPluginTextCorpus : ScriptureTextCorpus
     {
-        public string ParatextPluginId { get; set; }
-        internal ParatextPluginTextCorpus(string paratextPluginId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
+        public string ParatextProjectId { get; set; }
+        internal ParatextPluginTextCorpus(string paratextProjectId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
         {
-            ParatextPluginId = paratextPluginId;
+            ParatextProjectId = paratextProjectId;
 
             Versification = versification;
   
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new ParatextPluginText(ParatextPluginId, mediator, Versification, bookAbbreviation));
+                AddText(new ParatextPluginText(ParatextProjectId, mediator, Versification, bookAbbreviation));
             }
         }
         public override ScrVers Versification { get; }
@@ -26,15 +26,15 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public static async Task<ParatextPluginTextCorpus> Get(
             IMediator mediator,
-            string paratextPluginId)
+            string paratextProjectId)
         {
-            var command = new GetVersificationAndBookIdByParatextPluginIdQuery(paratextPluginId);
+            var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
                 return new ParatextPluginTextCorpus(
-                    command.ParatextPluginId, 
+                    command.ParatextProjectId, 
                     mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
                     result.Data.bookAbbreviations);
             }

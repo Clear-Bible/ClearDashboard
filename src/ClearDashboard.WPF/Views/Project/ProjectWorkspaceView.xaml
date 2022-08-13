@@ -59,7 +59,7 @@
                 <panes:ProjectWorkspacePanesTemplateSelector>
                     <panes:ProjectWorkspacePanesTemplateSelector.AlignmentViewDataTemplate>
                         <DataTemplate>
-                            <project:AlignmentView />
+                            <project:CorpusTokensView />
                         </DataTemplate>
                     </panes:ProjectWorkspacePanesTemplateSelector.AlignmentViewDataTemplate>
                     <panes:ProjectWorkspacePanesTemplateSelector.CorpusViewDataTemplate>

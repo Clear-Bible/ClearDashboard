@@ -16,11 +16,13 @@ using SIL.Machine.Tokenization;
 using Xunit;
 using Xunit.Abstractions;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
     public class CorpusTests : TestBase
     {
+        #nullable disable
         public CorpusTests(ITestOutputHelper output) : base(output)
         {
         }
@@ -327,6 +329,35 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             {
                 await DeleteDatabaseContext();
             }
+        }
+
+        [Fact]
+        [Trait("Category", "Test")]
+        public async void Corpus__GetAll()
+        {
+            await Corpus.Create(Mediator!, true, "First Corpus", "english", "Standard");
+            await Corpus.Create(Mediator!, true, "Second Corpus", "english", "BackTranslation");
+
+            ProjectDbContext.ChangeTracker.Clear();
+
+            Assert.Equal(2, ProjectDbContext.Corpa.Count());
+
+            var allCorpora = await Corpus.GetAll(Mediator!);
+
+            Assert.Equal(2, allCorpora.Count());
+
+            var firstCorpus = allCorpora.FirstOrDefault(c => c.Name == "First Corpus");
+            var secondCorpus = allCorpora.FirstOrDefault(c => c.Name == "Second Corpus");
+
+            Assert.Equal("First Corpus", firstCorpus.Name);
+            Assert.Equal("english", firstCorpus.Language);
+            Assert.Equal(Models.CorpusType.Standard, firstCorpus.CorpusType);
+            Assert.NotNull(firstCorpus.Metadata);
+
+            Assert.Equal("Second Corpus", secondCorpus.Name);
+            Assert.Equal("english", secondCorpus.Language);
+            Assert.Equal(Models.CorpusType.BackTranslation, secondCorpus.CorpusType);
+            Assert.NotNull(secondCorpus.Metadata);
         }
     }
 }

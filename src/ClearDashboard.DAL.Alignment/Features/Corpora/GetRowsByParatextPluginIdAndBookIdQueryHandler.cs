@@ -1,37 +1,44 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
 using Microsoft.Extensions.Logging;
-
-
-//USE TO ACCESS Models
-using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetRowsByParatextPluginIdAndBookIdQueryHandler : ProjectDbContextQueryHandler<
-        GetRowsByParatextPluginIdAndBookIdQuery,
+    public class GetRowsByParatextProjectIdAndBookIdQueryHandler : ParatextRequestHandler<
+        GetRowsByParatextProjectIdAndBookIdQuery,
         RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>,
         IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
 
-        public GetRowsByParatextPluginIdAndBookIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetRowsByParatextPluginIdAndBookIdQueryHandler> logger) 
-            : base(projectNameDbContextFactory, projectProvider, logger)
+        public GetRowsByParatextProjectIdAndBookIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextProjectIdQueryHandler> logger) : base(logger)
         {
+            //no-op
         }
 
-        protected override Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>> GetDataAsync(GetRowsByParatextPluginIdAndBookIdQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>> Handle(GetRowsByParatextProjectIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            //Impl notes: look at command.Id (which is a string identifying the paratext plugin corpus to obtain) to get at the plugin corpus data,
-            // then using this data build a TextRow per verse, with its Segment array as a single string containing the entire contents of the verse (don't parse)
-            // and Ref as the VerseRef of the verse then return them through the enumarable.
+            var result = await ExecuteRequest("bookusfmbyparatextidbookid", request, CancellationToken.None).ConfigureAwait(false);
+            
+            if (result.Success == false)
+            {
+                return new RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
+                (result: new List<(string chapter, string verse, string text, bool isSentenceStart)>(),
+                    success: false,
+                    message: result.Message);
+            }
 
-            return Task.FromResult(
-                new RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
-                (result: new List<(string chapter, string verse, string text, bool isSentenceStart)>() { ("3", "4", "fee fi fo fum", true) },
-                    success: true,
-                    message: "successful result from test"));
+            List<(string chapter, string verse, string text, bool isSentenceStart)> list = new();
+            if (result.Data != null)
+            {
+                foreach (var data in result.Data)
+                {
+                    list.Add((data.chapter, data.verse, data.text, data.isSentenceStart));
+                }
+            }
+
+            return new RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
+                    (result: list, success: true, message: "");
         }
     }
 }

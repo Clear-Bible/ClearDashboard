@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DataAccessLayer.Models;
+using SIL.Program;
+using Process = System.Diagnostics.Process;
 
 
 namespace ClearDashboard.DataAccessLayer.Paratext
@@ -64,6 +66,11 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             }
 
             return true;
+        }
+
+        public bool IsParatextRunning()
+        {
+            return Process.GetProcessesByName("Paratext").Length > 0;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]

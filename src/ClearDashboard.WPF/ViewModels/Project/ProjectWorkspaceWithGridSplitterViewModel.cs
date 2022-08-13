@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel { get; set; }
 
-        public AlignmentViewModel AlignmentViewModel { get; set; }
+        public CorpusTokensViewModel AlignmentViewModel { get; set; }
         public CorpusViewModel CorpusViewModel { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
         public ProjectWorkspaceWithGridSplitterViewModel(INavigationService navigationService,
             ILogger<ProjectWorkspaceWithGridSplitterViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, AlignmentViewModel alignmentViewModel, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, CorpusViewModel corpusViewModel)
+            IEventAggregator eventAggregator, CorpusTokensViewModel alignmentViewModel, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, CorpusViewModel corpusViewModel)
 
         {
             EventAggregator = eventAggregator;
