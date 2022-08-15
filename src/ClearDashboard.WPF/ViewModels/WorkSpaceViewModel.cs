@@ -31,8 +31,11 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels
 {
 
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
-        IHandle<ProjectChangedMessage>
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, 
+                    IHandle<VerseChangedMessage>,
+                    IHandle<ProjectChangedMessage>, 
+                    IHandle<ProgressBarVisibilityMessage>, 
+                    IHandle<ProgressBarMessage>
     {
 #nullable disable
         #region Member Variables
@@ -1273,6 +1276,32 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion // Methods
+
+        private bool _showProgressBar;
+        private string _message;
+        public bool ShowProgressBar
+        {
+            get => _showProgressBar;
+            set => Set(ref _showProgressBar, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
+        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => ShowProgressBar = message.Show);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => Message = message.Message);
+            await Task.CompletedTask;
+        }
     }
 
     public static class WorkspaceLayoutNames
