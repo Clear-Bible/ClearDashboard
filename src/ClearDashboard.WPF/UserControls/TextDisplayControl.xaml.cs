@@ -249,57 +249,57 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
 
-        private void RaiseTokenEvent(RoutedEvent routedEvent, string surfaceText)
+        private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                SurfaceText = surfaceText
+                SurfaceText = (e.Source as FrameworkElement)?.DataContext as string
             });
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenClickedEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenClickedEvent, e);
         }        
         
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenDoubleClickedEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenDoubleClickedEvent, e);
         }        
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenLeftButtonDownEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
         }        
         
         private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenRightButtonUpEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }        
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenRightButtonDownEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }        
         
         private void OnTokenRightButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenRightButtonUpEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }        
         
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenMouseEnterEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
         private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenMouseLeaveEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenMouseLeaveEvent, e);
         }
 
         private void OnTokenMouseWheel(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenMouseWheelEvent, (e.Source as FrameworkElement)?.DataContext as string);
+            RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
     }
 }
