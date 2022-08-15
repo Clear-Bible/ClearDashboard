@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
@@ -46,6 +47,8 @@ namespace ClearDashboard.DAL.Tests
         protected virtual void SetupDependencyInjection()
         {
             Services.AddSingleton<IEventAggregator, EventAggregator>();
+            Services.AddSingleton<IWindowManager, WindowManager>();
+            Services.AddSingleton<INavigationService>(sp=> null);
             Services.AddClearDashboardDataAccessLayer();
             Services.AddMediatR(typeof(IMediatorRegistrationMarker));
             Services.AddLogging();

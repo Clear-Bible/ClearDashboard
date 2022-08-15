@@ -31,10 +31,13 @@ using ClearDashboard.Wpf.Helpers;
 namespace ClearDashboard.Wpf.ViewModels
 {
 
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, IHandle<VerseChangedMessage>,
-        IHandle<ProjectChangedMessage>
+    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive, 
+                    IHandle<VerseChangedMessage>,
+                    IHandle<ProjectChangedMessage>, 
+                    IHandle<ProgressBarVisibilityMessage>, 
+                    IHandle<ProgressBarMessage>
     {
-        #nullable disable
+#nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
@@ -65,7 +68,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
         public event EventHandler ActiveDocumentChanged;
-        
+
         private DocumentViewModel _activeDocument;
         public DocumentViewModel ActiveDocument
         {
@@ -467,18 +470,18 @@ namespace ClearDashboard.Wpf.ViewModels
             // documents
             await ActivateItemAsync<AlignmentToolViewModel>();
             await ActivateItemAsync<ConcordanceViewModel>();
-            await ActivateItemAsync<CorpusTokensViewModel>(); 
+            await ActivateItemAsync<CorpusTokensViewModel>();
             await ActivateItemAsync<DashboardViewModel>();
             await ActivateItemAsync<StartPageViewModel>();
             await ActivateItemAsync<TreeDownViewModel>();
-            
+
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
             await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
             await ActivateItemAsync<SourceContextViewModel>();
-            await ActivateItemAsync<TargetContextViewModel>(); 
+            await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
 
@@ -508,7 +511,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 BCVDictionary = new Dictionary<string, string>();
             }
-            
+
 
             InComingChangesStarted = true;
 
@@ -551,7 +554,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 var files = Directory.GetFiles(path, "*.Layout.config");
 
-                foreach (var file in files.Where(f=>!f.StartsWith("Project")))
+                foreach (var file in files.Where(f => !f.StartsWith("Project")))
                 {
                     FileInfo fileInfo = new FileInfo(file);
                     string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
@@ -568,25 +571,29 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
             // get the project layouts
-            path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
-            if (Directory.Exists(path))
+            if (ProjectManager?.CurrentDashboardProject?.TargetProject != null)
             {
-                var files = Directory.GetFiles(path, "*.Layout.config");
-
-                foreach (var file in files)
+                path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
+                if (Directory.Exists(path))
                 {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+                    var files = Directory.GetFiles(path, "*.Layout.config");
 
-                    fileLayouts.Add(new LayoutFile
+                    foreach (var file in files)
                     {
-                        LayoutName = name,
-                        LayoutID = "ProjectLayout:" + id.ToString(),
-                        LayoutPath = file,
-                        LayoutType = LayoutFile.eLayoutType.Project
-                    });
-                    id++;
+                        FileInfo fileInfo = new FileInfo(file);
+                        string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+
+                        fileLayouts.Add(new LayoutFile
+                        {
+                            LayoutName = name,
+                            LayoutID = "ProjectLayout:" + id.ToString(),
+                            LayoutPath = file,
+                            LayoutType = LayoutFile.eLayoutType.Project
+                        });
+                        id++;
+                    }
                 }
+
             }
 
             return fileLayouts;
@@ -680,7 +687,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 filePath = SelectedLayout.LayoutPath;
             }
 
-            
+
             try
             {
                 // save the layout
@@ -792,7 +799,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             e.Content = GetPaneViewModelFromItems("CorpusTokensViewModel");
                             break;
 
-                        
+
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
                             e.Content = GetToolViewModelFromItems("BiblicalTermsViewModel");
@@ -970,7 +977,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
                     return (vm11, vm11.Title, vm11.DockSide);
 
-                
+
                 // Tools
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
@@ -1247,13 +1254,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
                 BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                 InComingChangesStarted = true;
-                
+
                 // add in the books to the dropdown list
                 CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                
+
                 CalculateChapters();
                 CalculateVerses();
 
@@ -1269,6 +1276,32 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion // Methods
+
+        private bool _showProgressBar;
+        private string _message;
+        public bool ShowProgressBar
+        {
+            get => _showProgressBar;
+            set => Set(ref _showProgressBar, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
+        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => ShowProgressBar = message.Show);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => Message = message.Message);
+            await Task.CompletedTask;
+        }
     }
 
     public static class WorkspaceLayoutNames

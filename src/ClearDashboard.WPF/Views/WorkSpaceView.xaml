@@ -99,7 +99,7 @@
                 IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
-
+       
 
         <DockingManager
             x:Name="dockManager"
@@ -383,8 +383,26 @@
                 </Button>
 
             </DockPanel>
-        </Grid>
 
+
+        </Grid>
+        <ProgressBar
+            x:Name="ProgressBarVisibility"
+            Grid.Row="1"
+            Width="100"
+            Height="100"
+            Margin="15,0,5,0"
+            IsIndeterminate="True"
+            
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Value="0" />
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding Message}" 
+                   FontSize="26" 
+                   Foreground="{DynamicResource MaterialDesignBody}" 
+                   Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 120, 0, 0"/>
     </Grid>
 
 </Page>
