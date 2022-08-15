@@ -136,13 +136,14 @@ namespace ClearDashboard.Wpf.ViewModels
                     dir.Delete(true);
                 }
 
+                di.Delete();
+
                 DashboardProjects.Remove(project);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
         }
 
         public void Workspace(DashboardProject project)
