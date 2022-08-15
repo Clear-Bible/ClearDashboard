@@ -17,9 +17,10 @@
 
 
                 <!--  Note: I have intentionally omitted the Light/Dark theme dictionary as that is being set in code  -->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />-->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />-->
                 <ResourceDictionary Source="Style/NewProjectStyles.xaml" />
                 <!--<materialDesign:BundledTheme
                     BaseTheme="Dark"
@@ -28,7 +29,45 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
 
                 <ResourceDictionary>
+                    <!--  primary  -->
+                    <Color x:Key="PrimaryHueLight">#abca42</Color>
+                    <Color x:Key="PrimaryHueLightForeground">#000000</Color>
+                    <Color x:Key="PrimaryHueMid">#799901</Color>
+                    <Color x:Key="PrimaryHueMidForeground">#000000</Color>
+                    <Color x:Key="PrimaryHueDark">#486b00</Color>
+                    <Color x:Key="PrimaryHueDarkForeground">#FFFFFF</Color>
+                    <!--  accent  -->
+                    <Color x:Key="SecondaryHueLight">#42649f</Color>
+                    <Color x:Key="SecondaryHueLightForeground">#FFFFFF</Color>
+                    <Color x:Key="SecondaryHueMid">#003a70</Color>
+                    <Color x:Key="SecondaryHueMidForeground">#FFFFFF</Color>
+                    <Color x:Key="SecondaryHueDark">#001544</Color>
+                    <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
+
+                    <!--  primary  -->
+                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{DynamicResource PrimaryHueLight}" />
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{DynamicResource PrimaryHueLightForeground}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource PrimaryHueMid}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{DynamicResource PrimaryHueMidForeground}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{DynamicResource PrimaryHueDark}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{DynamicResource PrimaryHueDarkForeground}" />
+                    <!--  accent  -->
+                    <SolidColorBrush x:Key="SecondaryHueLightBrush" Color="{DynamicResource SecondaryHueLight}" />
+                    <SolidColorBrush x:Key="SecondaryHueLightForegroundBrush" Color="{DynamicResource SecondaryHueLightForeground}" />
+                    <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
+                    <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="{DynamicResource SecondaryHueMidForeground}" />
+                    <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="{DynamicResource SecondaryHueDark}" />
+                    <SolidColorBrush x:Key="SecondaryHueDarkForegroundBrush" Color="{DynamicResource SecondaryHueDarkForeground}" />
+
+                    <Style x:Key="MaterialDesignRaisedAccentLightButton" BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
+                    </Style>
+
+                </ResourceDictionary>
+
+                <ResourceDictionary>
                     <SolidColorBrush x:Key="BackgroundBrush" Color="#FF225378" />
+
                     <!--  Additional Design Colors - DARK  -->
                     <Brush x:Key="BlueLightBrush">#9DBFF8</Brush>
                     <Brush x:Key="BlueMidBrush">#5B8DEE</Brush>

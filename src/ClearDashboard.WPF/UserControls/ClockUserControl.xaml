@@ -56,10 +56,6 @@
                             <Setter Property="Foreground" Value="Black" />
                             <Setter Property="Background" Value="Gray" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Utc">
-                            <Setter Property="Width" Value="480" />
-                            <Setter Property="Foreground" Value="Black" />
-                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Menu.ItemContainerStyle>
@@ -102,12 +98,12 @@
                                 ToolTip="Include in clock display rotation"
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding CheckBoxVisibility}">
-                                <CheckBox.Resources>
-                                    <!--  Unchecked state  -->
-                                    <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="DodgerBlue" />
-                                    <!--  Checked state  -->
-                                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="DeepSkyBlue" />
-                                </CheckBox.Resources>
+                                <!--<CheckBox.Resources>
+                                    --><!--  Unchecked state  --><!--
+                                    <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="{DynamicResource SecondaryHueMid}" />
+                                    --><!--  Checked state  --><!--
+                                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
+                                </CheckBox.Resources>-->
                             </CheckBox>
                             <TextBlock
                                 x:Name="NameTime"
@@ -123,13 +119,14 @@
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="White"
+                                Background="{DynamicResource SecondaryHueLightBrush}"
                                 LostFocus="TextBox_OnLostFocus"
                                 MouseEnter="TextBox_OnMouseEnter"
                                 MouseLeave="TextBox_OnMouseLeave"
                                 Text="{Binding TextBoxText}"
                                 ToolTip="Name the item"
                                 Visibility="{Binding TextBoxVisibility}" />
+                           
                             <ComboBox
                                 Height="26"
                                 ItemsSource="{Binding UtcStringList}"

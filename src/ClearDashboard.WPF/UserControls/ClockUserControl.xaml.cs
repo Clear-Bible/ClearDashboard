@@ -22,6 +22,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClearDashboard.Wpf.Helpers;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 

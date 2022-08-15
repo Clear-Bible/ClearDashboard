@@ -36,7 +36,7 @@
         </Grid.RowDefinitions>
         <Border
             Grid.Row="0"
-            BorderBrush="{StaticResource BlueDarkBrush}"
+            BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="3">
             <Grid>
