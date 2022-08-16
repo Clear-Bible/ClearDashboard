@@ -162,7 +162,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 Name = "PINS",
                 Description = "Loading PINS data...",
                 StartTime = DateTime.Now,
-                TaskStatus = BackgroundTaskStatus.StatusEnum.Working
+                TaskStatus = StatusEnum.Working
             }));
 
             // ReSharper disable once MethodSupportsCancellation
@@ -207,7 +207,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     Description = "Loading PINS data...",
                     EndTime = DateTime.Now,
                     ErrorMessage = "Paratext is not installed",
-                    TaskStatus = BackgroundTaskStatus.StatusEnum.Error
+                    TaskStatus = StatusEnum.Error
                 }));
 
                 Logger.LogError("Paratext Not Installed in PINS viewmodel");
@@ -471,7 +471,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     Name = "PINS",
                     EndTime = DateTime.Now,
                     Description = "Loading PINS data...Complete",
-                    TaskStatus = BackgroundTaskStatus.StatusEnum.Completed
+                    TaskStatus = StatusEnum.Completed
                 }));
 
             return false;

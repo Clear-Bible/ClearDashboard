@@ -3,15 +3,16 @@ using System.Runtime.CompilerServices;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
+    public enum StatusEnum
+    {
+        Working,
+        Completed,
+        Error
+    }
+
+
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {
-        public enum StatusEnum
-        {
-            Working,
-            Completed,
-            Error
-        }
-
         private StatusEnum _taskStatus;
 
         public StatusEnum TaskStatus
@@ -24,17 +25,6 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
         
-        //private bool _isCompleted = false;
-        //public bool IsCompleted  
-        //{
-        //    get => _isCompleted;
-        //    set
-        //    {
-        //        _isCompleted = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
         private string _name = "";
         public string Name
         {
@@ -89,20 +79,6 @@ namespace ClearDashboard.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        //private bool _isError = false;
-
-        //public bool IsError
-        //{
-        //    get => _isError;
-        //    set
-        //    {
-        //        _isError = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
-
 
 
 

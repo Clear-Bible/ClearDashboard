@@ -13,6 +13,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
+    xmlns:viewModels1="clr-namespace:ClearDashboard.Wpf.ViewModels;assembly=ClearDashboard.DAL.Models"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -202,35 +203,18 @@
                                                 <Setter Property="Padding" Value="0" />
 
                                                 <Style.Triggers>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding IsComplete}" Value="False" />
-                                                            <Condition Binding="{Binding IsError}" Value="False" />
-                                                        </MultiDataTrigger.Conditions>
-                                                        <MultiDataTrigger.Setters>
-                                                            <Setter Property="Foreground" Value="Orange" />
-                                                            <Setter Property="Kind" Value="Autorenew" />
-                                                        </MultiDataTrigger.Setters>
-                                                    </MultiDataTrigger>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding IsComplete}" Value="True" />
-                                                            <Condition Binding="{Binding IsError}" Value="False" />
-                                                        </MultiDataTrigger.Conditions>
-                                                        <MultiDataTrigger.Setters>
-                                                            <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
-                                                            <Setter Property="Kind" Value="CheckboxMarkedCircle" />
-                                                        </MultiDataTrigger.Setters>
-                                                    </MultiDataTrigger>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding IsError}" Value="True" />
-                                                        </MultiDataTrigger.Conditions>
-                                                        <MultiDataTrigger.Setters>
-                                                            <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
-                                                            <Setter Property="Kind" Value="AlertCircle" />
-                                                        </MultiDataTrigger.Setters>
-                                                    </MultiDataTrigger>
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Working}">
+                                                        <Setter Property="Foreground" Value="Orange" />
+                                                        <Setter Property="Kind" Value="Autorenew" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Completed}">
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
+                                                        <Setter Property="Kind" Value="CheckboxMarkedCircle" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                        <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                        <Setter Property="Kind" Value="AlertCircle" />
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </materialDesign:PackIcon.Style>
@@ -259,8 +243,7 @@
                                             <Run Text="{Binding Description}" />
                                         </TextBlock>
 
-                                        <TextBlock FontSize="10" Text="{Binding IsCompleted}" />
-                                        <TextBlock FontSize="10"  Text="{Binding IsError}" />
+                                        <TextBlock FontSize="10" Text="{Binding TaskStatus}" />
 
                                     </StackPanel>
                                 </StackPanel>
