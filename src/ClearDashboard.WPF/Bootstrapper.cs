@@ -138,6 +138,7 @@ namespace ClearDashboard.Wpf
 
             Grid.SetRow(frame, 1);
             Grid.SetColumn(frame, 0);
+            Panel.SetZIndex(frame, 0);
             grid.Children.Add(frame);
         }
 

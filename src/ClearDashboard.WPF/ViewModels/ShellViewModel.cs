@@ -7,8 +7,10 @@ using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -26,6 +29,11 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly TranslationSource _translationSource;
 
         #region Properties
+        TimeSpan startTimeSpan = TimeSpan.Zero;
+        TimeSpan periodTimeSpan = TimeSpan.FromMinutes(1);
+
+        System.Threading.Timer timer;
+        
         private string _paratextUserName;
         public string ParatextUserName
         {
@@ -66,7 +74,29 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region ObservableProps
 
+        private Visibility _showSpinner = Visibility.Visible;
+        public Visibility ShowSpinner
+        {
+            get => _showSpinner;
+            set
+            {
+                _showSpinner = value;
+                NotifyOfPropertyChange(() => ShowSpinner);
+            }
+        }
+        
 
+        private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
+        public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
+        {
+            get => _backgroundTaskStatuses;
+            set
+            {
+                _backgroundTaskStatuses = value;
+                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+            }
+        }
+        
 
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
@@ -87,6 +117,9 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
+        
+
+        
         private static void SaveUserLanguage(string language)
         {
             Settings.Default.language_code = language;
@@ -144,7 +177,12 @@ namespace ClearDashboard.Wpf.ViewModels
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-           
+
+            // setup timer to clean up old background tasks
+            timer = new((e) =>
+            {
+                CleanUpOldBackgroundTasks();
+            }, null, startTimeSpan, periodTimeSpan);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -212,24 +250,20 @@ namespace ClearDashboard.Wpf.ViewModels
             Console.WriteLine();
         }
 
-        private void HandleNamedPipeChanged(object sender, EventArgs args)
+        /// <summary>
+        /// Cleanup Background tasks that are completed and don't have errors
+        /// </summary>
+        private void CleanUpOldBackgroundTasks()
         {
-            //TODO:  Refactor to use EventAggregator
-
-            //if (args == null) return;
-            //var pipeMessage = args.PipeMessage;
-            //switch (pipeMessage.Action)
-            //{
-            //    case ActionType.OnConnected:
-            //        this.Connected = true;
-            //        break;
-            //    case ActionType.OnDisconnected:
-            //        this.Connected = false;
-            //        break;
-            //}
-            //Logger.LogDebug(pipeMessage.Text);
-
+            foreach (var backgroundTask in _backgroundTaskStatuses)
+            {
+                if (backgroundTask.Completed && backgroundTask.IsError == false)
+                {
+                    BackgroundTaskStatuses.Remove(backgroundTask);
+                }
+            }
         }
+
 
         /// <summary>
         /// Show the ColorStyles form
@@ -277,10 +311,26 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
-            Console.WriteLine();
+            var Status = message.Status;
+            
+            // todo check for duplicate entries
+            BackgroundTaskStatuses.Add(Status);
+
+
+            // check to see if all are completed so we can turn off spinner
+            var runningTasks = BackgroundTaskStatuses.Where(p => p.Completed == false).ToList();
+            if (runningTasks.Count > 0)
+            {
+                ShowSpinner = Visibility.Visible;
+            }
+            else
+            {
+                ShowSpinner = Visibility.Collapsed;
+            }
+
             await Task.CompletedTask;
         }
-
+        
         #endregion
     }
 }

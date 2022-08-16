@@ -33,10 +33,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto"/>
+            <RowDefinition x:Name="StatusRowHeight" Height="Auto" />
         </Grid.RowDefinitions>
         <Border
             Grid.Row="0"
+            Grid.ColumnSpan="2"
             BorderBrush="{StaticResource BlueDarkBrush}"
             BorderThickness="2"
             CornerRadius="3">
@@ -162,14 +163,15 @@
             </Grid>
         </Border>
 
-
         <!--
             NB:  The 'Frame' is created in Bootstrapper.OnStartup so that the INavigationService can be
             added to the DI container at the appropriate time.
         -->
         <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
 
+
         <StatusBar
+            x:Name="StatusBar"
             Grid.Row="2"
             Background="{DynamicResource MaterialDesignPaper}"
             Foreground="{DynamicResource MaterialDesignDarkForeground}">
@@ -190,10 +192,7 @@
                 <Button
                     x:Name="BackgroundTasks"
                     Padding="0"
-                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                    Style="{StaticResource TransparentButton}"
-                    ToolTip="Background Tasks">
-                    <!--  materialDesign:DialogHost.DialogClosingAttached="Sample2_DialogHost_OnDialogClosing"  -->
+                    Style="{StaticResource TransparentButton}">
                     <Grid>
                         <materialDesign:PackIcon
                             Width="25"
@@ -209,23 +208,6 @@
                             Style="{StaticResource MaterialDesignCircularProgressBar}"
                             Value="60" />
                     </Grid>
-                    <Button.CommandParameter>
-                        <StackPanel Margin="16">
-                            <ProgressBar
-                                Margin="16"
-                                HorizontalAlignment="Center"
-                                IsIndeterminate="True"
-                                Style="{DynamicResource MaterialDesignCircularProgressBar}"
-                                Value="0" />
-                            <Button
-                                HorizontalAlignment="Center"
-                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                                CommandParameter="Sample2Cancel"
-                                Content="CANCEL"
-                                IsCancel="True"
-                                Style="{StaticResource MaterialDesignFlatButton}" />
-                        </StackPanel>
-                    </Button.CommandParameter>
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
@@ -238,9 +220,10 @@
                     Width="90"
                     Height="16"
                     VerticalAlignment="Center"
+                    Visibility="{Binding ShowSpinner}"
                     Value="40" />
             </StatusBarItem>
         </StatusBar>
-        
+
     </Grid>
 </Window>

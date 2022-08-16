@@ -195,9 +195,31 @@ namespace ClearDashboard.Wpf.ViewModels
                     GetAllBiblicalTerms(paratextInstallPath), 
                     GetSpellingStatus(), 
                     GetLexicon());
+
+                // send to the task started event aggregator for everyone else to hear about a verse change
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    new DataAccessLayer.Models.Common.BackgroundTaskStatus
+                {
+                    Name = "PINS",
+                    Description = "Loading PINS data...",
+                    EndTime = DateTime.Now,
+                    IsError = false
+                }));
             }
             else
             {
+                // send to the task started event aggregator for everyone else to hear about a verse change
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    new DataAccessLayer.Models.Common.BackgroundTaskStatus
+                {
+                    Name = "PINS",
+                    Description = "Loading PINS data...",
+                    EndTime = DateTime.Now,
+                    IsError = false,
+                    ErrorMessage = "Paratext is not installed",
+                    Completed = true
+                }));
+
                 Logger.LogError("Paratext Not Installed in PINS viewmodel");
 
                 // turn off the progress bar
