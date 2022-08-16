@@ -19,7 +19,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Versification
         }
 
         [HttpPost]
-        public async Task<RequestResult<VersificationBookIds>> GetAsync([FromBody] GetVersificationAndBookIdByDalParatextProjectIdQuery command)
+        public async Task<RequestResult<VersificationBookIds>> GetAsync([FromBody] GetVersificationAndBookIdByParatextProjectIdQuery command)
         {
             var result = await ExecuteRequestAsync<RequestResult<VersificationBookIds>, VersificationBookIds>(command, CancellationToken.None);
             return result;
