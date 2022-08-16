@@ -30,7 +30,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath,
+            ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath,
                 "SpellingStatus.xml");
             var queryResult = ValidateResourcePath(new SpellingStatus());
             if (queryResult.Success == false)
