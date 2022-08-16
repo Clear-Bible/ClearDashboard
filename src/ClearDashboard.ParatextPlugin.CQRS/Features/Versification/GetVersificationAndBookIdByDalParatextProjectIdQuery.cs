@@ -8,9 +8,9 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Versification
 {
-    public record GetVersificationAndBookIdByParatextProjectIdQuery : IRequest<RequestResult<VersificationBookIds>>
+    public record GetVersificationAndBookIdByDalParatextProjectIdQuery : IRequest<RequestResult<VersificationBookIds>>
     {        
-        public GetVersificationAndBookIdByParatextProjectIdQuery(string paratextProjectId)
+        public GetVersificationAndBookIdByDalParatextProjectIdQuery(string paratextProjectId)
         {
             ParatextProjectId = paratextProjectId;
         }

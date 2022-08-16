@@ -6,9 +6,9 @@ using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    internal class ParatextPluginText : ScriptureText
+    internal class ParatextProjectText : ScriptureText
     {
-        private readonly string paratextPluginId_;
+        private readonly string paratextProjectId_;
         private readonly IMediator mediator_;
         
         /// <summary>
@@ -25,18 +25,18 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             //IMPLEMENTER'S NOTES:: needs to configure GetVersesInDocOrder() to ONLY return the text parallel related.
         //}
 
-        public ParatextPluginText(string paratextPluginId, IMediator mediator, ScrVers versification, string bookId)
+        public ParatextProjectText(string paratextProjectId, IMediator mediator, ScrVers versification, string bookId)
             : base(bookId, versification)
         {
-            paratextPluginId_ = paratextPluginId;
+            paratextProjectId_ = paratextProjectId;
             mediator_ = mediator;
         }
         protected override IEnumerable<TextRow> GetVersesInDocOrder()
         {
-            var command = new GetRowsByParatextProjectIdAndBookIdQuery(paratextPluginId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
+            var command = new GetRowsByParatextProjectIdAndBookIdQuery(paratextProjectId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
-            if (result.Success)
+            if (result.Success && result.HasData)
             {
                 var verses = result.Data;
 
@@ -49,7 +49,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
             else
             {
-                throw new MediatorErrorEngineException(result.Message);
+                var message = result.HasData
+                    ? $"No verse data returned for Project '{paratextProjectId_}', Book: '{Id}'"
+                    : $"{result.Message}, for Project '{paratextProjectId_}', Book: '{Id}'";
+                throw new MediatorErrorEngineException(message);
             }
         }
     }
