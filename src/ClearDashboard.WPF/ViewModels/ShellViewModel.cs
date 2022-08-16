@@ -20,7 +20,8 @@ using ClearDashboard.Wpf.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+    public class ShellViewModel : ApplicationScreen, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
+        IHandle<BackgroundTaskChangedMessage>
     {
         private readonly TranslationSource _translationSource;
 
@@ -199,9 +200,17 @@ namespace ClearDashboard.Wpf.ViewModels
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
+
+        /// <summary>
+        /// Button click for the background tasks on the status bar
+        /// </summary>
+        public void BackgroundTasks()
+        {
+            Console.WriteLine();
+        }
 
         private void HandleNamedPipeChanged(object sender, EventArgs args)
         {
@@ -230,9 +239,6 @@ namespace ClearDashboard.Wpf.ViewModels
             var frm = new ColorStyles();
             frm.Show();
         }
-
-
-       
 
         public void SetLanguage()
         {
@@ -269,6 +275,12 @@ namespace ClearDashboard.Wpf.ViewModels
             await Task.CompletedTask;
         }
 
-#endregion
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            Console.WriteLine();
+            await Task.CompletedTask;
+        }
+
+        #endregion
     }
 }

@@ -156,6 +156,14 @@ namespace ClearDashboard.Wpf.ViewModels
             // Do not await this....let it run in the background otherwise
             // it freezes the UI
 
+            // send to the task started event aggregator for everyone else to hear about a verse change
+            EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new DataAccessLayer.Models.Common.BackgroundTaskStatus
+            {
+                Name = "PINS",
+                Description = "Loading PINS data...",
+                StartTime = DateTime.Now
+            }));
+
             // ReSharper disable once MethodSupportsCancellation
             Task.Run(() =>
             {
