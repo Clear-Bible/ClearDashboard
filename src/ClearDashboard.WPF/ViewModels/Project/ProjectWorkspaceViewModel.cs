@@ -93,6 +93,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         private void WorkSpaceViewModel_ThemeChanged()
         {
             //GridIsVisible = Visibility.Collapsed;
+            SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark
+                ? Themes[0]
+                : Themes[1];
         }
 
         ObservableCollection<ToolViewModel> _tools = new();
@@ -141,12 +144,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         private List<Tuple<string, Theme>> Themes { get; }
 
-        private readonly Tuple<string, Theme> _selectedTheme;
+        private Tuple<string, Theme> _selectedTheme;
 
         public Tuple<string, Theme> SelectedTheme
         {
             get => _selectedTheme;
-            private init
+            set
             {
                 _selectedTheme = value;
                 NotifyOfPropertyChange(() => SelectedTheme);
