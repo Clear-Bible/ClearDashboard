@@ -100,12 +100,14 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 try
                 {
 
-                    CurrentBook = "GEN";
                    
                     // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
                     await SendProgressBarVisibilityMessage(true, 250);
 
                     var corpus = message.TokenizedTextCorpus;
+
+                    CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
+
                     await SendProgressBarMessage($"Getting book '{CurrentBook}'");
 
                     var tokensTextRows = corpus[CurrentBook].GetRows().Cast<TokensTextRow>()

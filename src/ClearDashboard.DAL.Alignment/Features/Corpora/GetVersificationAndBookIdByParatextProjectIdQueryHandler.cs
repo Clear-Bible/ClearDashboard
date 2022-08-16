@@ -6,6 +6,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 
+using ParatextRequest = ClearDashboard.ParatextPlugin.CQRS.Features.Versification.GetVersificationAndBookIdByParatextProjectIdQuery;
+
 //USE TO ACCESS Models
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -24,19 +26,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         public override async Task<RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>>
             Handle(GetVersificationAndBookIdByParatextProjectIdQuery request, CancellationToken cancellationToken)
         {
-           var paratextRequest = new GetVersificationAndBookIdByDalParatextProjectIdQuery(request.ParatextProjectId);
+           var paratextRequest = new ParatextRequest(request.ParatextProjectId);
 
-            var result2 = await Mediator.Send(paratextRequest, cancellationToken);
+            var result = await Mediator.Send(paratextRequest, cancellationToken);
 
           
-            if (result2.Success == false)
+            if (result.Success == false)
             {
                 return new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-                (result: (ScrVers.Original, new List<string>()), success: false, message: result2.Message);
+                (result: (ScrVers.Original, new List<string>()), success: false, message: result.Message);
             }
 
             return new RequestResult<(ScrVers? versification, IEnumerable<string> bookAbbreviations)>
-                (result: (result2.Data.Versification, result2.Data.BookAbbreviations), success: true, message: "");
+                (result: (result.Data.Versification, result.Data.BookAbbreviations), success: true, message: "");
         }
     }
 }

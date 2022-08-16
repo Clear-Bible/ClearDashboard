@@ -25,9 +25,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-                var response = await client.PostAsJsonAsync<GetVersificationAndBookIdByDalParatextProjectIdQuery>(
+                var response = await client.PostAsJsonAsync<GetVersificationAndBookIdByParatextProjectIdQuery>(
                     "versificationbooksbyparatextid",
-                    new GetVersificationAndBookIdByDalParatextProjectIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f"));
+                    new GetVersificationAndBookIdByParatextProjectIdQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f"));
 
                 Assert.True(response.IsSuccessStatusCode);
                 var result = await response.Content.ReadAsAsync<RequestResult<VersificationBookIds>>();

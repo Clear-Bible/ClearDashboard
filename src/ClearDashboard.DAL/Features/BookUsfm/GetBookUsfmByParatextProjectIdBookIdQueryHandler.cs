@@ -11,11 +11,11 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
 {
-    public class GetBookUsfmByParatextIdBookIdQueryHandler 
+    public class GetBookUsfmByParatextProjectIdBookIdQueryHandler 
         : ParatextRequestHandler<GetRowsByParatextProjectIdAndBookIdQuery, RequestResult<List<UsfmVerse>>, List<UsfmVerse>>
     {
 
-        public GetBookUsfmByParatextIdBookIdQueryHandler([NotNull] ILogger<GetBookUsfmByParatextIdBookIdQueryHandler> logger) :
+        public GetBookUsfmByParatextProjectIdBookIdQueryHandler([NotNull] ILogger<GetBookUsfmByParatextProjectIdBookIdQueryHandler> logger) :
             base(logger)
         {
             //no-op

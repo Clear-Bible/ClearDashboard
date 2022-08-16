@@ -15,10 +15,12 @@ using System.Windows.Threading;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using Brushes = System.Windows.Media.Brushes;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
@@ -26,7 +28,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
     public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
 
-    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus);
+    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel
     {
@@ -170,7 +172,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                                 Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                                 await EventAggregator.PublishOnCurrentThreadAsync(
-                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus));
+                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata));
                             }
                         }
                         catch (Exception ex)
