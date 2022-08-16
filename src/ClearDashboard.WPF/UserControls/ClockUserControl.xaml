@@ -49,12 +49,12 @@
                             <Setter Property="Padding" Value="5,0,0,0" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Background" Value="Gray" />
+                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInteractiveBorder}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Background" Value="Gray" />
+                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInteractiveBorder}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -98,16 +98,16 @@
                                 ToolTip="Include in clock display rotation"
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding CheckBoxVisibility}">
-                                <!--<CheckBox.Resources>
-                                -->
-                                <!--  Unchecked state  -->
-                                <!--
+                                <CheckBox.Resources>
+                                
+                                  <!--Unchecked state-->  
+                                
                                     <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="{DynamicResource SecondaryHueMid}" />
-                                -->
-                                <!--  Checked state  -->
-                                <!--
+                                
+                                  <!--Checked state-->  
+                                
                                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
-                                </CheckBox.Resources>-->
+                                </CheckBox.Resources>
                             </CheckBox>
                             <TextBlock
                                 x:Name="NameTime"
@@ -132,6 +132,7 @@
                                 Visibility="{Binding TextBoxVisibility}" />
 
                             <ComboBox
+                                Foreground="Black"
                                 Height="26"
                                 ItemsSource="{Binding UtcStringList}"
                                 MouseEnter="TextBox_OnMouseEnter"

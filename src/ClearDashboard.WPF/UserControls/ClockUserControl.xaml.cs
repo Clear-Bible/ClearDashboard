@@ -583,7 +583,7 @@ namespace ClearDashboard.Wpf.UserControls
         {
             if (sender is TextBox box)
             {
-                box.Foreground = Brushes.Black;
+                box.Foreground = Brushes.White;
             }
             if (sender is ComboBox cbox)
             {
