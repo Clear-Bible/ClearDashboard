@@ -41,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 var verses = result.Data;
 
                 if (verses == null)
-                    throw new MediatorErrorEngineException("GetTextRowsByParatextPluginIdAndBookIdQuery returned null data");
+                    throw new MediatorErrorEngineException("GetTextRowsByParatextProjectIdAndBookIdQuery returned null data");
 
                 return verses
                     .SelectMany(verse => CreateRows(verse.chapter, verse.verse, verse.text, verse.isSentenceStart));
