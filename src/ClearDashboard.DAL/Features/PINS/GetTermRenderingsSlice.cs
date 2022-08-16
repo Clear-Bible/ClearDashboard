@@ -35,7 +35,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<TermRenderingsList>> Handle(GetTermRenderingsQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath, "TermRenderings.xml");
+            ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "TermRenderings.xml");
             var queryResult = ValidateResourcePath(new TermRenderingsList());
             if (queryResult.Success == false)
             {

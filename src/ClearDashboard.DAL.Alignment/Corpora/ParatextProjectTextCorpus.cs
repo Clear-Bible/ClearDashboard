@@ -1,16 +1,17 @@
 ﻿using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class ParatextPluginTextCorpus : ScriptureTextCorpus
+    public class ParatextProjectTextCorpus : ScriptureTextCorpus
     {
         public string ParatextProjectId { get; set; }
-        internal ParatextPluginTextCorpus(string paratextProjectId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
+        internal ParatextProjectTextCorpus(string paratextProjectId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
         {
             ParatextProjectId = paratextProjectId;
 
@@ -18,13 +19,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
   
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new ParatextPluginText(ParatextProjectId, mediator, Versification, bookAbbreviation));
+                AddText(new ParatextProjectText(ParatextProjectId, mediator, Versification, bookAbbreviation));
             }
         }
         public override ScrVers Versification { get; }
 
 
-        public static async Task<ParatextPluginTextCorpus> Get(
+        public static async Task<ParatextProjectTextCorpus> Get(
             IMediator mediator,
             string paratextProjectId)
         {
@@ -33,7 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command);
             if (result.Success)
             {
-                return new ParatextPluginTextCorpus(
+                return new ParatextProjectTextCorpus(
                     command.ParatextProjectId, 
                     mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
                     result.Data.bookAbbreviations);

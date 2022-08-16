@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Features.BookUsfm
         : ParatextRequestHandler<GetRowsByParatextProjectIdAndBookIdQuery, RequestResult<List<UsfmVerse>>, List<UsfmVerse>>
     {
 
-        public GetBookUsfmByParatextIdBookIdQueryHandler([NotNull] ILogger<GetBiblicalTermsByTypeQueryHandler> logger) :
+        public GetBookUsfmByParatextIdBookIdQueryHandler([NotNull] ILogger<GetBookUsfmByParatextIdBookIdQueryHandler> logger) :
             base(logger)
         {
             //no-op

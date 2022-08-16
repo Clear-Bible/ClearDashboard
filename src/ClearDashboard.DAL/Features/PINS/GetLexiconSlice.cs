@@ -33,7 +33,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<Lexicon>> Handle(GetLexiconQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(_projectManager.CurrentDashboardProject.DirectoryPath, "Lexicon.xml");
+            ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml");
 
             var queryResult = ValidateResourcePath(new Lexicon());
             if (queryResult.Success == false)
