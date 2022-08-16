@@ -121,8 +121,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
 
-            try
-            {
+            //try
+            //{
                 for (int bookNum = 0; bookNum < project.AvailableBooks.Count; bookNum++)
                 {
                     if (BibleBookScope.IsBibleBook(project.AvailableBooks[bookNum].Code))
@@ -202,7 +202,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     else
                                     {
                                         sb.Append($@"\v {marker.Data?.Trim()} ");
-                                        mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter}");
+                                        mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
                                     }
 
                                     lastTokenChapter = false;
@@ -280,11 +280,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
 
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                mainWindow.AppendText(Color.Red, ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    mainWindow.AppendText(Color.Red, ex.Message);
+            //}
 
             return exportPath;
         }
