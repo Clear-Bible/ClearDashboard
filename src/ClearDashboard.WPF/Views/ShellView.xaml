@@ -184,7 +184,6 @@
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
                     VerticalContentAlignment="Top"
-                    d:ItemsSource="{d:SampleData ItemCount=5}"
                     ItemsSource="{Binding BackgroundTaskStatuses}"
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -195,20 +194,43 @@
                             <Border BorderBrush="{DynamicResource PrimaryHueDarkBrush}" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
 
-                                    <!--  COMPLETED ICON  -->
+                                    <!--  ISCOMPLETED ICON  -->
                                     <materialDesign:PackIcon VerticalAlignment="Center">
                                         <materialDesign:PackIcon.Style>
                                             <Style TargetType="materialDesign:PackIcon">
-                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Kind" Value="AirplaneSettings" />
                                                 <Setter Property="Padding" Value="0" />
-                                                <Setter Property="Kind" Value="CheckboxMarkedCircle" />
-                                                <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
 
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="False">
-                                                        <Setter Property="Foreground" Value="Orange" />
-                                                        <Setter Property="Kind" Value="Autorenew" />
-                                                    </DataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsComplete}" Value="False" />
+                                                            <Condition Binding="{Binding IsError}" Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <MultiDataTrigger.Setters>
+                                                            <Setter Property="Foreground" Value="Orange" />
+                                                            <Setter Property="Kind" Value="Autorenew" />
+                                                        </MultiDataTrigger.Setters>
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsComplete}" Value="True" />
+                                                            <Condition Binding="{Binding IsError}" Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <MultiDataTrigger.Setters>
+                                                            <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
+                                                            <Setter Property="Kind" Value="CheckboxMarkedCircle" />
+                                                        </MultiDataTrigger.Setters>
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsError}" Value="True" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <MultiDataTrigger.Setters>
+                                                            <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                            <Setter Property="Kind" Value="AlertCircle" />
+                                                        </MultiDataTrigger.Setters>
+                                                    </MultiDataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </materialDesign:PackIcon.Style>
@@ -236,6 +258,9 @@
                                             TextWrapping="Wrap">
                                             <Run Text="{Binding Description}" />
                                         </TextBlock>
+
+                                        <TextBlock FontSize="10" Text="{Binding IsCompleted}" />
+                                        <TextBlock FontSize="10"  Text="{Binding IsError}" />
 
                                     </StackPanel>
                                 </StackPanel>

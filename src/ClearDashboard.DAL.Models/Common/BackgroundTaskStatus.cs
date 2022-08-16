@@ -5,16 +5,35 @@ namespace ClearDashboard.Wpf.ViewModels
 {
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {
-        private bool _isCompleted = false;
-        public bool IsCompleted  
+        public enum StatusEnum
         {
-            get => _isCompleted;
+            Working,
+            Completed,
+            Error
+        }
+
+        private StatusEnum _taskStatus;
+
+        public StatusEnum TaskStatus
+        {
+            get => _taskStatus;
             set
             {
-                _isCompleted = value;
+                _taskStatus = value;
                 OnPropertyChanged();
             }
         }
+        
+        //private bool _isCompleted = false;
+        //public bool IsCompleted  
+        //{
+        //    get => _isCompleted;
+        //    set
+        //    {
+        //        _isCompleted = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         private string _name = "";
         public string Name
@@ -71,17 +90,17 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private bool _isError = false;
+        //private bool _isError = false;
 
-        public bool IsError
-        {
-            get => _isError;
-            set
-            {
-                _isError = value;
-                OnPropertyChanged();
-            }
-        }
+        //public bool IsError
+        //{
+        //    get => _isError;
+        //    set
+        //    {
+        //        _isError = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
 
 

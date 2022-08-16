@@ -214,36 +214,32 @@ namespace ClearDashboard.Wpf.ViewModels
             // make some bogus task data
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
-                IsCompleted = false,
                 Name = "Background Task 1",
                 Description = "Something longer that goes in here that is pretty darn long",
                 StartTime = DateTime.Now,
-                IsError = false,
+                TaskStatus = BackgroundTaskStatus.StatusEnum.Working
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
-                IsCompleted = false,
                 Name = "Background Task 2",
                 Description = "Something longer that goes in here",
                 StartTime = DateTime.Now,
-                IsError = false,
+                TaskStatus = BackgroundTaskStatus.StatusEnum.Working
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
-                IsCompleted = true,
                 Name = "Background Task 3",
                 Description = "Something longer that goes in here",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                IsError = false,
+                TaskStatus = BackgroundTaskStatus.StatusEnum.Working
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
-                IsCompleted = false,
                 Name = "Background Task 4",
                 Description = "Something longer that goes in here which is also pretty darn long",
                 StartTime = DateTime.Now,
-                IsError = false,
+                TaskStatus = BackgroundTaskStatus.StatusEnum.Working
             });
         }
 
@@ -333,7 +329,8 @@ namespace ClearDashboard.Wpf.ViewModels
             bool bFound = false;
             for (int i = _backgroundTaskStatuses.Count - 1; i >= 0; i--)
             {
-                if (_backgroundTaskStatuses[i].IsCompleted && _backgroundTaskStatuses[i].IsError == false)
+                // if completed task remove it
+                if (_backgroundTaskStatuses[i].TaskStatus == BackgroundTaskStatus.StatusEnum.Completed)
                 {
                     OnUIThread(() =>
                     {
@@ -407,11 +404,9 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     bFound = true;
 
-                    status.IsCompleted = incomingMessage.IsCompleted;
                     status.Description = incomingMessage.Description;
-                    if (incomingMessage.IsError)
+                    if (incomingMessage.TaskStatus == BackgroundTaskStatus.StatusEnum.Error)
                     {
-                        status.IsError = true;
                         status.Description = incomingMessage.ErrorMessage;
                     }
 
@@ -427,7 +422,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
             // check to see if all are completed so we can turn off spinner
-            var runningTasks = BackgroundTaskStatuses.Where(p => p.IsCompleted == false).ToList();
+            var runningTasks = BackgroundTaskStatuses.Where(p => p.TaskStatus ==  BackgroundTaskStatus.StatusEnum.Working).ToList();
             if (runningTasks.Count > 0)
             {
                 ShowSpinner = Visibility.Visible;
