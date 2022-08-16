@@ -344,7 +344,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ShowScripture(IProject project)
         {
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
             if (_project == null)
             {
                 lines.Add("No project to display");
@@ -353,7 +353,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 lines.Add("USFM Tokens:");
                 IEnumerable<IUSFMToken> tokens = null;
-                bool sawException = false;
+                var sawException = false;
                 try
                 {
                     tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
@@ -544,7 +544,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+            var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
 
@@ -722,7 +722,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 foreach (var p in allProjects)
                 {
-                    string text = $"{p.ShortName} is a {p.CorpusType} Project: {p.Guid}";
+                    var text = $"{p.ShortName} is a {p.CorpusType} Project: {p.Guid}";
 
                     switch (p.Type)
                     {
@@ -824,7 +824,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (project.BaseProject != null)
             {
-                CorpusType corpusType = CorpusType.Unknown;
+                var corpusType = CorpusType.Unknown;
 
                 switch (project.BaseProject.Type)
                 {
@@ -956,7 +956,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // creating usfm directory
             try
             {
-                ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+                var paratextExtractUSFM = new ParatextExtractUSFM();
                 var path = paratextExtractUSFM.ExportUSFMScripture(project, this);
 
                 referenceUsfm.UsfmDirectoryPath = path;
@@ -982,7 +982,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
             var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
-            VersificationBookIds versificationBookIds = new VersificationBookIds();
+            var versificationBookIds = new VersificationBookIds();
 
             if (project != null)
             {
@@ -1026,40 +1026,43 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <summary>
         /// Given a projectId and bookId, return the parsed verse text for the book
         /// </summary>
-        /// <param name="ParatextProjectId"></param>
+        /// <param name="paratextProjectId"></param>
         /// <param name="bookId"></param>
         /// <returns></returns>
         public List<UsfmVerse> GetUsfmForBook(
-            string ParatextProjectId, string bookId)
+            string paratextProjectId, string bookId)
         {
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
             // get the right project
-            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
+            var project = projects.FirstOrDefault(p => p.ID == paratextProjectId);
 
+            var verses = new List<UsfmVerse>();
             if (project == null)
             {
-                return null;
+                AppendText(Color.Orange, $"Could not find a projectk with Id = '{paratextProjectId}'. Returning an empty list.");
+                return verses;
             }
 
             // filter down to the book desired
             var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
             if (book == null)
             {
-                return null;
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookId}'. Returning an empty list.");
+                return verses;
             }
             
             // only return information for "bible books" and not the extra material
             // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
             {
-                return null;
+                AppendText(Color.Orange, $"'{book.Code}' is not a bible book. Returning an empty list.");
+                return verses;
             }
 
-            List<UsfmVerse> verses = new List<UsfmVerse>();
             AppendText(Color.Blue, $"Processing {book.Code}");
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
             try
             {
@@ -1072,13 +1075,13 @@ namespace ClearDashboard.WebApiParatextPlugin
                 return null;
             }
 
-            string chapter = "";
-            string verse = "";
-            string verseText = "";
+            var chapter = "";
+            var verse = "";
+            var verseText = "";
 
-            bool lastTokenChapter = false;
-            bool lastTokenText = false;
-            bool lastVerseZero = false;
+            var lastTokenChapter = false;
+            var lastTokenText = false;
+            var lastVerseZero = false;
             foreach (var token in tokens)
             {
                 if (token is IUSFMMarkerToken marker)

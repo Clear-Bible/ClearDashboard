@@ -135,7 +135,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 new ProgressBarVisibilityMessage(true));
                           
 
-                            if (viewModel.SelectedProject.HasProjectPath)
+                           // if (viewModel.SelectedProject.HasProjectPath)
                             {
 
                                 await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
@@ -152,9 +152,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 //    .Tokenize<LatinWordTokenizer>()
                                 //    .Transform<IntoTokensTextRowProcessor>();
 
-                                var textCorpus = await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id);
-                                textCorpus.Tokenize<LatinWordTokenizer>()
-                                          .Transform<IntoTokensTextRowProcessor>();
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id))
+                                            .Tokenize<LatinWordTokenizer>()
+                                            .Transform<IntoTokensTextRowProcessor>();
 
                                 await SendProgressBarMessage(
                                     $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");

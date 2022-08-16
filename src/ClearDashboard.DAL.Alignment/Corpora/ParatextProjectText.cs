@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetRowsByParatextProjectIdAndBookIdQuery(paratextProjectId_, Id);  //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
-            if (result.Success)
+            if (result.Success && result.HasData)
             {
                 var verses = result.Data;
 
@@ -49,7 +49,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
             else
             {
-                throw new MediatorErrorEngineException(result.Message);
+                var message = result.HasData
+                    ? $"No verse data returned for Project '{paratextProjectId_}', Book: '{Id}'"
+                    : $"{result.Message}, for Project '{paratextProjectId_}', Book: '{Id}'";
+                throw new MediatorErrorEngineException(message);
             }
         }
     }

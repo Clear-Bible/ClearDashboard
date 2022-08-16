@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -50,7 +51,7 @@ namespace ClearDashboard.DAL.CQRS.Features
 
                 if (result.Success)
                 {
-                    Logger.LogInformation($"Successfully called {HttpClient.BaseAddress}{requestUri}.");
+                    Logger.LogInformation($"Successfully called {HttpClient.BaseAddress}{requestUri} - {JsonSerializer.Serialize(request)}");
                 }
                 else
                 {
