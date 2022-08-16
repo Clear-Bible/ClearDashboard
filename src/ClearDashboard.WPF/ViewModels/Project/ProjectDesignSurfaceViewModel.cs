@@ -147,9 +147,15 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 OnUIThread(() => Corpora.Add(corpus));
 
                                 await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
-                                var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
-                                    .Tokenize<LatinWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+
+                                //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
+                                //    .Tokenize<LatinWordTokenizer>()
+                                //    .Transform<IntoTokensTextRowProcessor>();
+
+                                var textCorpus = await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id);
+                                textCorpus.Tokenize<LatinWordTokenizer>()
+                                          .Transform<IntoTokensTextRowProcessor>();
+
                                 await SendProgressBarMessage(
                                     $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
 

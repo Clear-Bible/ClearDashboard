@@ -628,7 +628,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                     Name = project.ShortName,
                     LongName = project.LongName,
                     CorpusType = DetermineCorpusType(project.Type),
-                    IsRtl = project.Language.IsRtoL
+                    IsRtl = project.Language.IsRtoL,
+                    AvailableBooks = project.GetAvailableBooks(),
             })
                 .ToList();
 
