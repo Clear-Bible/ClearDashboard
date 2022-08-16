@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 using System.Xml;
 
 namespace ClearDashboard.WebApiParatextPlugin.Helpers
@@ -81,7 +82,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml")))
             {
                 string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
-                
+
                 if (stylePath != "")
                 {
                     if (stylePath != "usfm.sty") // standard stylesheet
@@ -121,6 +122,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
 
+            Dictionary<string, string> verseKey = new();
+
             try
             {
                 for (int bookNum = 0; bookNum < project.AvailableBooks.Count; bookNum++)
@@ -144,7 +147,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                             // normal OT book
                             bookFileNum = project.AvailableBooks[bookNum].Number;
                         }
-                        var fileName = bookFileNum.ToString().PadLeft(3, '0')
+                        var fileName = bookFileNum.ToString().PadLeft(2, '0')
                                        + project.AvailableBooks[bookNum].Code + ".sfm";
 
                         IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
@@ -181,12 +184,32 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         bool foundMatch = false;
                                         try
                                         {
+                                            string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
+
                                             // look for numbers, space, and a dash as being valid
                                             // also match thins like \v 43a
                                             foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");
                                             if (foundMatch)
                                             {
-                                                sb.Append($@"\v {marker.Data.Trim()} ");
+                                                // check to see if the verse ends in '-'
+                                                if (marker.Data.Trim().EndsWith("-"))
+                                                {
+                                                    mainWindow.AppendText(Color.Red, $"Verse {key} ends in '-'");
+                                                }
+                                                else
+                                                {
+                                                    sb.Append($@"\v {marker.Data.Trim()} ");
+
+                                                    // check if this has already been entered and is a duplicate
+                                                    if (verseKey.ContainsKey(key))
+                                                    {
+                                                        mainWindow.AppendText(Color.Red, $"Duplicate verse {key}");
+                                                    }
+                                                    else
+                                                    {
+                                                        verseKey.Add(key, key);
+                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -202,7 +225,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     else
                                     {
                                         sb.Append($@"\v {marker.Data?.Trim()} ");
-                                        mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter}");
+                                        mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
                                     }
 
                                     lastTokenChapter = false;
