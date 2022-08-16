@@ -303,11 +303,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private List<Tuple<string, Theme>> Themes { get; }
 
-        private readonly Tuple<string, Theme> _selectedTheme;
+        //private readonly Tuple<string, Theme> _selectedTheme;
+        private Tuple<string, Theme> _selectedTheme;
         public Tuple<string, Theme> SelectedTheme
         {
             get => _selectedTheme;
-            private init
+            //private init
+            set
             {
                 _selectedTheme = value;
                 NotifyOfPropertyChange(() => SelectedTheme);
@@ -741,6 +743,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private void WorkSpaceViewModel_ThemeChanged()
         {
             GridIsVisible = Visibility.Collapsed;
+            SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
         }
 
         private void LoadLayoutById(string layoutId)

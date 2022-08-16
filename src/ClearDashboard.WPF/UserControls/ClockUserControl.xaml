@@ -99,9 +99,13 @@
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding CheckBoxVisibility}">
                                 <!--<CheckBox.Resources>
-                                    --><!--  Unchecked state  --><!--
+                                -->
+                                <!--  Unchecked state  -->
+                                <!--
                                     <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="{DynamicResource SecondaryHueMid}" />
-                                    --><!--  Checked state  --><!--
+                                -->
+                                <!--  Checked state  -->
+                                <!--
                                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
                                 </CheckBox.Resources>-->
                             </CheckBox>
@@ -126,7 +130,7 @@
                                 Text="{Binding TextBoxText}"
                                 ToolTip="Name the item"
                                 Visibility="{Binding TextBoxVisibility}" />
-                           
+
                             <ComboBox
                                 Height="26"
                                 ItemsSource="{Binding UtcStringList}"

@@ -30,12 +30,12 @@
             <SolidColorBrush
                 x:Key="GridBrush"
                 Opacity="0.25"
-                Color="Gray" />
+                Color="LightGray" />
 
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -97,7 +97,7 @@
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
                 Content="{helpers:Localization Pins_ClearFilter}"
-                Style="{StaticResource BlueMidButton}" />
+                Style="{StaticResource BlueMidButton}"/>
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
@@ -125,7 +125,7 @@
             GridLinesVisibility="All"
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
             ItemsSource="{Binding GridCollectionView}"
-            RowBackground="{DynamicResource MaterialDesignDarkBackground}"
+            RowBackground="{DynamicResource MaterialDesignPaper}"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -156,7 +156,7 @@
                     <Setter Property="Padding" Value="0" />
                     <Style.Triggers>
                         <Trigger Property="AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{StaticResource GridBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource GridBrush}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -202,7 +202,7 @@
                                 Width="auto"
                                 MinWidth="125"
                                 MaxWidth="250"
-                                Margin="0,0,0,5"
+                                Margin="0,0,0,0"
                                 FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
                                 FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
                                 Text="{Binding Path='Source'}" />
@@ -404,11 +404,11 @@
             CloseOnClickAway="True"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}">
+            OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
                     x:Name="LowerBorder"
-                    BorderBrush="{DynamicResource SecondaryHueMidBrush}"
+                    BorderBrush="{DynamicResource SecondaryHueLightBrush}"
                     BorderThickness="2"
                     CornerRadius="3">
                     <StackPanel Margin="16">

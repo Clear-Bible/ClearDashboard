@@ -26,7 +26,7 @@
             <Setter Property="Height" Value="80" />
             <Setter Property="MinWidth" Value="80" />
             <Setter Property="Width" Value="Auto" />
-            <Setter Property="Foreground" Value="{DynamicResource OrangeLightBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
             <!--<Setter Property="FontWeight" Value="Bold" />-->
             <Setter Property="Template">
                 <Setter.Value>
@@ -74,6 +74,7 @@
                 <Label
                     Margin="5,5,0,5"
                     Content="Add Corpora"
+                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                     FontSize="16" />
                 <WrapPanel>
                     <Button
@@ -102,7 +103,7 @@
         </materialDesign:Card>
         <Border
             Grid.Row="1"
-            Background="Transparent"
+            Background="{DynamicResource MaterialDesignPaper}"
             BorderBrush="Black"
             BorderThickness="5">
             <Canvas Name="DesignSurfaceCanvas" Visibility="Visible">
