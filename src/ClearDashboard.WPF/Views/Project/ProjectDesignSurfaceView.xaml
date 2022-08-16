@@ -117,13 +117,14 @@
                                     Width="150"
                                     Height="75"
                                     Margin="10"
-                                    Background="Blue"
+                                    Background="{DynamicResource SecondaryHueLightBrush}"
                                     CornerRadius="5">
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="20"
-                                        Text="{Binding .Name}" />
+                                        Text="{Binding .Name}" 
+                                        Foreground="{DynamicResource SecondaryHueLightForegroundBrush}"/>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
