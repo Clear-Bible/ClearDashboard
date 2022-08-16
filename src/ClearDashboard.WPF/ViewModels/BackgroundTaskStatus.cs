@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.DataAccessLayer.Models.Common
 {
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {

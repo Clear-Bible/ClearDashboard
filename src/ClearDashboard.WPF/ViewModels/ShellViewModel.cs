@@ -29,10 +29,12 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly TranslationSource _translationSource;
 
         #region Properties
-        TimeSpan startTimeSpan = TimeSpan.Zero;
-        TimeSpan periodTimeSpan = TimeSpan.FromMinutes(1);
+        private TimeSpan startTimeSpan = TimeSpan.Zero;
+        private TimeSpan periodTimeSpan = TimeSpan.FromSeconds(30);
 
-        System.Threading.Timer timer;
+        private Timer _timer;
+        private bool _firstRun;
+
         
         private string _paratextUserName;
         public string ParatextUserName
@@ -84,7 +86,17 @@ namespace ClearDashboard.Wpf.ViewModels
                 NotifyOfPropertyChange(() => ShowSpinner);
             }
         }
-        
+
+        private Visibility _showTaskView = Visibility.Visible;
+        public Visibility ShowTaskView
+        {
+            get => _showTaskView;
+            set
+            {
+                _showTaskView = value;
+                NotifyOfPropertyChange(() => ShowTaskView);
+            }
+        }
 
         private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
         public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
@@ -162,10 +174,12 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         public ShellViewModel()
         {
-           
+            // no-op
+
+            BogusData();
+
         }
 
-      
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
             ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager) 
             : base(navigationService, logger, projectManager, eventAggregator)
@@ -178,11 +192,59 @@ namespace ClearDashboard.Wpf.ViewModels
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
+            BogusData();
+
             // setup timer to clean up old background tasks
-            timer = new((e) =>
+            _timer = new((e) =>
             {
-                CleanUpOldBackgroundTasks();
+                if (_firstRun)
+                {
+                    CleanUpOldBackgroundTasks();
+                }
+                else
+                {
+                    _firstRun = true;
+                }
             }, null, startTimeSpan, periodTimeSpan);
+        }
+
+        private void BogusData()
+        {
+            // TODO
+            // make some bogus task data
+            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
+            {
+                IsCompleted = false,
+                Name = "Background Task 1",
+                Description = "Something longer that goes in here that is pretty darn long",
+                StartTime = DateTime.Now,
+                IsError = false,
+            });
+            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
+            {
+                IsCompleted = false,
+                Name = "Background Task 2",
+                Description = "Something longer that goes in here",
+                StartTime = DateTime.Now,
+                IsError = false,
+            });
+            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
+            {
+                IsCompleted = true,
+                Name = "Background Task 3",
+                Description = "Something longer that goes in here",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                IsError = false,
+            });
+            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
+            {
+                IsCompleted = false,
+                Name = "Background Task 4",
+                Description = "Something longer that goes in here which is also pretty darn long",
+                StartTime = DateTime.Now,
+                IsError = false,
+            });
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -247,7 +309,20 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         public void BackgroundTasks()
         {
-            Console.WriteLine();
+            if (ShowTaskView == Visibility.Collapsed)
+            {
+                ShowTaskView = Visibility.Visible;
+            }
+            else
+            {
+                ShowTaskView = Visibility.Collapsed;
+            }
+            
+        }
+
+        public void CloseTaskBox()
+        {
+            ShowTaskView = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -255,12 +330,23 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         private void CleanUpOldBackgroundTasks()
         {
-            foreach (var backgroundTask in _backgroundTaskStatuses)
+            bool bFound = false;
+            for (int i = _backgroundTaskStatuses.Count - 1; i >= 0; i--)
             {
-                if (backgroundTask.Completed && backgroundTask.IsError == false)
+                if (_backgroundTaskStatuses[i].IsCompleted && _backgroundTaskStatuses[i].IsError == false)
                 {
-                    BackgroundTaskStatuses.Remove(backgroundTask);
+                    OnUIThread(() =>
+                    {
+                        _backgroundTaskStatuses.RemoveAt(i);
+                    });
+                    
+                    bFound = true;
                 }
+            }
+
+            if (bFound)
+            {
+                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
             }
         }
 
@@ -311,14 +397,37 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
-            var Status = message.Status;
+            var incomingMessage = message.Status;
             
-            // todo check for duplicate entries
-            BackgroundTaskStatuses.Add(Status);
+            // check for duplicate entries
+            bool bFound = false;
+            foreach (var status in BackgroundTaskStatuses)
+            {
+                if (status.Name == incomingMessage.Name)
+                {
+                    bFound = true;
+
+                    status.IsCompleted = incomingMessage.IsCompleted;
+                    status.Description = incomingMessage.Description;
+                    if (incomingMessage.IsError)
+                    {
+                        status.IsError = true;
+                        status.Description = incomingMessage.ErrorMessage;
+                    }
+
+                    NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+                    break;
+                }
+            }
+
+            if (bFound == false)
+            {
+                BackgroundTaskStatuses.Add(incomingMessage);
+            }
 
 
             // check to see if all are completed so we can turn off spinner
-            var runningTasks = BackgroundTaskStatuses.Where(p => p.Completed == false).ToList();
+            var runningTasks = BackgroundTaskStatuses.Where(p => p.IsCompleted == false).ToList();
             if (runningTasks.Count > 0)
             {
                 ShowSpinner = Visibility.Visible;

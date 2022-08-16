@@ -64,7 +64,7 @@ namespace ClearDashboard.Wpf.Views
             this.Title = "ClearDashboard " + vm.Version;
 
             // force the statusbar to be on top of the bootstraper inserted frame
-            Panel.SetZIndex(this.StatusBar, 10);
+            Panel.SetZIndex(this.TaskView, 10);
         }
 
         private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();

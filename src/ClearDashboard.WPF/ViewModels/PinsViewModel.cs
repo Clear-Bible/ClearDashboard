@@ -157,7 +157,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // it freezes the UI
 
             // send to the task started event aggregator for everyone else to hear about a verse change
-            EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new DataAccessLayer.Models.Common.BackgroundTaskStatus
+            EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
                 Name = "PINS",
                 Description = "Loading PINS data...",
@@ -195,29 +195,19 @@ namespace ClearDashboard.Wpf.ViewModels
                     GetAllBiblicalTerms(paratextInstallPath), 
                     GetSpellingStatus(), 
                     GetLexicon());
-
-                // send to the task started event aggregator for everyone else to hear about a verse change
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    new DataAccessLayer.Models.Common.BackgroundTaskStatus
-                {
-                    Name = "PINS",
-                    Description = "Loading PINS data...",
-                    EndTime = DateTime.Now,
-                    IsError = false
-                }));
             }
             else
             {
                 // send to the task started event aggregator for everyone else to hear about a verse change
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    new DataAccessLayer.Models.Common.BackgroundTaskStatus
+                    new BackgroundTaskStatus
                 {
                     Name = "PINS",
                     Description = "Loading PINS data...",
                     EndTime = DateTime.Now,
                     IsError = false,
                     ErrorMessage = "Paratext is not installed",
-                    Completed = true
+                    IsCompleted = true
                 }));
 
                 Logger.LogError("Paratext Not Installed in PINS viewmodel");
@@ -473,6 +463,18 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // turn off the progress bar
             ProgressBarVisibility = Visibility.Collapsed;
+
+            // send to the task started event aggregator for everyone else to hear about a verse change
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                new BackgroundTaskStatus
+                {
+                    Name = "PINS",
+                    EndTime = DateTime.Now,
+                    Description = "Loading PINS data...Complete",
+                    IsError = false,
+                    IsCompleted = true
+                }));
+
             return false;
         }
 
