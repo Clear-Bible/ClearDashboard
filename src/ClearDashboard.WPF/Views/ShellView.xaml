@@ -354,7 +354,7 @@
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">
-                <TextBlock VerticalAlignment="Center" Text="{Binding ShowTaskView}" />
+                <!--<TextBlock VerticalAlignment="Center" Text="{Binding ShowTaskView}" />-->
             </StatusBarItem>
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
