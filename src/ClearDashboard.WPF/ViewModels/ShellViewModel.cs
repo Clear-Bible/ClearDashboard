@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Properties
         private TimeSpan startTimeSpan = TimeSpan.Zero;
-        private TimeSpan periodTimeSpan = TimeSpan.FromSeconds(30);
+        private TimeSpan periodTimeSpan = TimeSpan.FromSeconds(10);
 
         private Timer _timer;
         private bool _firstRun;
@@ -76,7 +76,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region ObservableProps
 
-        private Visibility _showSpinner = Visibility.Visible;
+        private Visibility _showSpinner = Visibility.Collapsed;
         public Visibility ShowSpinner
         {
             get => _showSpinner;
@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        private Visibility _showTaskView = Visibility.Visible;
+        private Visibility _showTaskView = Visibility.Collapsed;
         public Visibility ShowTaskView
         {
             get => _showTaskView;
@@ -177,7 +177,6 @@ namespace ClearDashboard.Wpf.ViewModels
             // no-op
 
             BogusData();
-
         }
 
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService, 
@@ -191,11 +190,9 @@ namespace ClearDashboard.Wpf.ViewModels
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-
-            BogusData();
-
+            
             // setup timer to clean up old background tasks
-            _timer = new((e) =>
+            _timer = new((_) =>
             {
                 if (_firstRun)
                 {
@@ -210,9 +207,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void BogusData()
         {
-            return;
-
-            // TODO
             // make some bogus task data
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
@@ -330,10 +324,14 @@ namespace ClearDashboard.Wpf.ViewModels
         private void CleanUpOldBackgroundTasks()
         {
             bool bFound = false;
+            DateTime presentTime = DateTime.Now;
+
             for (int i = _backgroundTaskStatuses.Count - 1; i >= 0; i--)
             {
+                TimeSpan ts = presentTime - _backgroundTaskStatuses[i].EndTime;
+
                 // if completed task remove it
-                if (_backgroundTaskStatuses[i].TaskStatus == StatusEnum.Completed)
+                if (_backgroundTaskStatuses[i].TaskStatus == StatusEnum.Completed && ts.TotalSeconds > 45)
                 {
                     OnUIThread(() =>
                     {
@@ -412,6 +410,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         status.Description = incomingMessage.ErrorMessage;
                     }
+                    status.TaskStatus = incomingMessage.TaskStatus;
 
                     NotifyOfPropertyChange(() => BackgroundTaskStatuses);
                     break;

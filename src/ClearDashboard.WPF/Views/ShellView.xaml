@@ -196,7 +196,10 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <!--  ISCOMPLETED ICON  -->
-                                    <materialDesign:PackIcon VerticalAlignment="Center" Height="18" Width="18">
+                                    <materialDesign:PackIcon
+                                        Width="18"
+                                        Height="18"
+                                        VerticalAlignment="Center">
                                         <materialDesign:PackIcon.Style>
                                             <Style TargetType="materialDesign:PackIcon">
                                                 <Setter Property="Kind" Value="AirplaneSettings" />
@@ -242,6 +245,8 @@
                                             TextWrapping="Wrap">
                                             <Run Text="{Binding Description}" />
                                         </TextBlock>
+
+                                        <TextBlock Text="{Binding TaskStatus}" />
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
@@ -305,22 +310,23 @@
                             Foreground="{StaticResource GreenMidBrush}"
                             IsIndeterminate="True"
                             Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Visibility="{Binding ShowSpinner}"
                             Value="60" />
                     </Grid>
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">
-                <TextBlock VerticalAlignment="Center" Text="c:\path\of\current\file.txt" />
+                <!--<TextBlock VerticalAlignment="Center" Text="c:\path\of\current\file.txt" />-->
             </StatusBarItem>
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
-                <ProgressBar
+                <!--<ProgressBar
                     Width="90"
                     Height="16"
                     VerticalAlignment="Center"
                     Visibility="{Binding ShowSpinner}"
-                    Value="40" />
+                    Value="40" />-->
             </StatusBarItem>
         </StatusBar>
 

@@ -14,7 +14,6 @@ namespace ClearDashboard.Wpf.ViewModels
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {
         private StatusEnum _taskStatus;
-
         public StatusEnum TaskStatus
         {
             get => _taskStatus;
@@ -82,9 +81,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
+#pragma warning disable CS8618
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS8618
 
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

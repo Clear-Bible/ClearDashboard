@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Views
             var vm = (ShellViewModel)this.DataContext;
             this.Title = "ClearDashboard " + vm.Version;
 
-            // force the statusbar to be on top of the bootstraper inserted frame
+            // force the background task window to be on top of the bootstraper inserted frame
             Panel.SetZIndex(this.TaskView, 10);
         }
 
