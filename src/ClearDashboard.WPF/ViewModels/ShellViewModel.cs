@@ -333,6 +333,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 if (_firstPass)
                 {
                     ShowTaskView = Visibility.Collapsed;
+                    _firstPass = false;
                 }
 
                 _firstPass = true;
