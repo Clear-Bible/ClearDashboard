@@ -204,7 +204,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
             }, null, startTimeSpan, periodTimeSpan);
 
-            BogusData();
+            //BogusData();
         }
 
         private void BogusData()
