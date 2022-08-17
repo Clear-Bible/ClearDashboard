@@ -165,7 +165,7 @@
             </Grid>
         </Border>
 
-
+        <!--  BackGround Tasks  -->
         <Border
             x:Name="TaskView"
             Grid.Row="1"
@@ -196,7 +196,7 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <!--  ISCOMPLETED ICON  -->
-                                    <materialDesign:PackIcon VerticalAlignment="Center">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Height="18" Width="18">
                                         <materialDesign:PackIcon.Style>
                                             <Style TargetType="materialDesign:PackIcon">
                                                 <Setter Property="Kind" Value="AirplaneSettings" />
@@ -227,7 +227,7 @@
                                             HorizontalAlignment="Left"
                                             FontSize="12"
                                             FontWeight="Bold"
-                                            Foreground="{StaticResource BlueVioletDarkBrush}">
+                                            Foreground="{StaticResource BlueMidBrush}">
                                             <Run Text="TASK: " />
                                             <Run Text="{Binding Name}" />
                                         </TextBlock>
@@ -242,9 +242,6 @@
                                             TextWrapping="Wrap">
                                             <Run Text="{Binding Description}" />
                                         </TextBlock>
-
-                                        <TextBlock FontSize="10" Text="{Binding TaskStatus}" />
-
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

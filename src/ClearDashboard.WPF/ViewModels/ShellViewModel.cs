@@ -210,6 +210,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private void BogusData()
         {
+            return;
+
             // TODO
             // make some bogus task data
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
