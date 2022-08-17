@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220813190357_InitialMigration")]
+    [Migration("20220817022542_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -461,9 +461,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<Guid?>("TokenCompositeId")
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("TokenCompositePosition")
-                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("TokenizationId")
                         .HasColumnType("TEXT");

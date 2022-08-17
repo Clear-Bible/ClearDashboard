@@ -5,6 +5,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -29,50 +30,55 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
 
                 var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
-                var tokens = ProjectDbContext.Tokens.Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
-                                                                    && token.BookNumber == bookNumberForAbbreviation);
+                var tokens = ProjectDbContext.Tokens
+                    .Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
+                           && token.BookNumber == bookNumberForAbbreviation);
 
-                if (tokens.Count() == 0 && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
+                if (!tokens.Any() && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
                 {
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
-                var groupedTokens = tokens
-                    .OrderBy(t => t.BookNumber)
-                    .ThenBy(t => t.ChapterNumber)
-                    .ThenBy(t => t.VerseNumber)
-                    .ThenBy(t => t.WordNumber)
-                    .ThenBy(t => t.SubwordNumber)
-                    .GroupBy(
-                        t => new { t.ChapterNumber, t.VerseNumber },
-                        t => t
-                    );
+                var verseTokens = tokens.ToList()
+                    .GroupBy(t => new { t.ChapterNumber, t.VerseNumber })
+                    .Select(g => new VerseTokens(
+                        g.Key.ChapterNumber.ToString(),
+                        g.Key.VerseNumber.ToString(),
+                        g
+                            .GroupBy(tc => tc.TokenCompositeId)
+                            .SelectMany(gc => gc.Key != null
+                                ? new[] {
+                                    new CompositeToken(gc
+                                        .Select(t => new Token(
+                                            new TokenId(
+                                                t.BookNumber,
+                                                t.ChapterNumber,
+                                                t.VerseNumber,
+                                                t.WordNumber,
+                                                t.SubwordNumber),
+                                            t.SurfaceText ?? string.Empty,
+                                            t.TrainingText ?? string.Empty)))
+                                   }
+                                : gc.Select(t => new Token(
+                                    new TokenId(
+                                        t.BookNumber,
+                                        t.ChapterNumber,
+                                        t.VerseNumber,
+                                        t.WordNumber,
+                                        t.SubwordNumber),
+                                    t.SurfaceText ?? string.Empty,
+                                    t.TrainingText ?? string.Empty))
+                                ),
+                            false)
+                        );
 
                 // need an await to get the compiler to be 'quiet'
                 await Task.CompletedTask;
 
                 return new RequestResult<IEnumerable<VerseTokens>>
                 (
-                    groupedTokens.Select(gt =>
-                        (
-                            new VerseTokens(gt.Key.ChapterNumber.ToString(),
-                                gt.Key.VerseNumber.ToString(),
-                                gt.Select(
-                                    t => new Token(
-                                        new TokenId(
-                                            t.BookNumber,
-                                            t.ChapterNumber,
-                                            t.VerseNumber,
-                                            t.WordNumber,
-                                            t.SubwordNumber),
-                                        t.SurfaceText ?? string.Empty,
-                                        t.TrainingText ?? string.Empty)),
-                                false
-                            )
-                        )
-                    )
+                    verseTokens
                 );
-                
             }
             catch (Exception ex)
             {

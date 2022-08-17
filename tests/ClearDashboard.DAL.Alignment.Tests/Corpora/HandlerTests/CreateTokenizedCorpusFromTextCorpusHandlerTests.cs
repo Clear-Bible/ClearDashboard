@@ -98,7 +98,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
     {
         try
         {
-            var textCorpus = CreateFakeTextCorpusWithComposite();
+            var textCorpus = CreateFakeTextCorpusWithComposite(false);
 
             // Create the corpus in the database:
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
@@ -121,33 +121,44 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal("Standard", corpusDB.CorpusType.ToString());
             Assert.Equal(tokenizationFunction, corpusDB.TokenizedCorpora.First().TokenizationFunction);
 
-            foreach (var tokensTextRow in tokenizedTextCorpus?.Cast<TokensTextRow>()!)
+            var tokenizedTextCorpusDB = await TokenizedTextCorpus.Get(Mediator!, new TokenizedCorpusId(corpusDB.TokenizedCorpora.First().Id));
+            var ct = 0;
+
+            foreach (var tokensTextRow in tokenizedTextCorpusDB?.Cast<TokensTextRow>()!)
             {
                 // FIXME:  Is it ok if Tokens is empty for a tokensTextRow?
                 //                Assert.NotEmpty(tokensTextRow.Tokens);
                 Assert.All(tokensTextRow.Tokens, t => Assert.NotNull(t.TokenId));
 
-                //display verse info
-                var verseRefStr = tokensTextRow.Ref.ToString();
-                Output.WriteLine(verseRefStr);
+                // Verse info
+                Output.WriteLine($"Ref                    : {tokensTextRow.Ref.ToString()}");
 
-                //display legacy segment
-                var segmentText = string.Join(" ", tokensTextRow.Segment);
-                Output.WriteLine($"segmentText: {segmentText}");
+                // Legacy segment
+                Output.WriteLine($"SegmentText            : {string.Join(" ", tokensTextRow.Segment)}");
 
-                //display tokenIds
-                var tokenIds = string.Join(" ", tokensTextRow.Tokens.Select(t => t.TokenId.ToString()));
-                Output.WriteLine($"tokenIds: {tokenIds}");
+                // TokenIds
+                var tokenIds = tokensTextRow.Tokens.Select(t => t.TokenId);
+                ct = tokenIds.Count();
+                Output.WriteLine($"TokenIds               : {string.Join(" ", tokenIds)} (count: {ct})");
 
-                //display tokens tokenized
-                var tokensText = string.Join(" ", tokensTextRow.Tokens.Select(t => t.SurfaceText));
-                Output.WriteLine($"tokensText: {tokensText}");
+                // Component token ids:
+                var componentTokenIds = tokensTextRow.Tokens
+                    .GetPositionalSortedBaseTokens() //pull out the tokens from composite tokens
+                    .Select(t => t.TokenId);
+                ct = componentTokenIds.Count();
+                Output.WriteLine($"Component tokenIds     : {string.Join(" ", componentTokenIds)} (count: {ct})");
 
-                //display tokens detokenized
-                var detokenizer = new LatinWordDetokenizer();
-                var tokensTextDetokenized =
-                    detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.SurfaceText).ToList());
-                Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
+                // Component surface texts:
+                var surfaceTexts = tokensTextRow.Tokens
+                    .GetPositionalSortedBaseTokens()
+                    .Select(t => t.SurfaceText);
+                Output.WriteLine($"SurfaceTexts           : {string.Join(" ", surfaceTexts)}");
+
+                // Tokens detokenized:
+                var tokensWithPadding = new EngineStringDetokenizer(new LatinWordDetokenizer()).Detokenize(tokensTextRow.Tokens);
+                Output.WriteLine($"Detokenized surfaceText: {tokensWithPadding.Aggregate(string.Empty, (constructedString, tokenWithPadding) => $"{constructedString}{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}")}");
+
+                Output.WriteLine("");
             }
         }
         catch (Exception ex)
@@ -156,11 +167,37 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         }
         finally
         {
- //           await DeleteDatabaseContext();
+            await DeleteDatabaseContext();
         }
     }
 
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void TokenizedCorpus__CreateCompositeTokensInvalid()
+    {
+        try
+        {
+            var textCorpus = CreateFakeTextCorpusWithComposite(true);
 
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, tokenizationFunction);
+
+            var result = await Mediator!.Send(command);
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Null(result.Data);
+
+            Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
 
     [Fact]
     public async void TokenizedCorpus__CreateMultiple()
@@ -415,7 +452,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         }
     }
 
-    private static ITextCorpus CreateFakeTextCorpusWithComposite()
+    private static ITextCorpus CreateFakeTextCorpusWithComposite(bool includeBadCompositeToken)
     {
         var textCorpus = new DictionaryTextCorpus(
             new MemoryText("GEN", new[]
@@ -425,11 +462,18 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                     new TextRow(new VerseRef(1, 1, 2)) { Segment = "Source segment Test 2.".Split(), IsSentenceStart = false, IsEmpty = false },
                     new TextRow(new VerseRef(1, 1, 3)) { Segment = "Source segment Test 3.".Split(), IsSentenceStart = true,  IsEmpty = false }
             }))
-            .Tokenize<LatinWordTokenizer>()
-            .Transform<IntoFakeCompositeTokensTextRowProcessor>()
-            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+            .Tokenize<LatinWordTokenizer>();
 
-        return textCorpus;
+        if (includeBadCompositeToken)
+        {
+            textCorpus = textCorpus.Transform<IntoFakeBadCompositeTokensTextRowProcessor>();
+        }
+        else
+        {
+            textCorpus = textCorpus.Transform<IntoFakeCompositeTokensTextRowProcessor>();
+        }
+        
+        return textCorpus.Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
     }
 
     private class IntoFakeCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
@@ -438,26 +482,48 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         {
             if (textRow.Text.Contains("Test 1"))
             {
-                var tr = new TokensTextRow(textRow);
+                return GenerateTokensTextRow(textRow, false);
+            }
 
-                var tokens = tr.Tokens;
-
-                var tokenIds = tokens
-                    .Select(t => t.TokenId)
-                    .ToList();
-
-                var tokensWithComposite = new List<Token>()
-                 {
-                     new CompositeToken(new List<Token>() { tokens[0], tokens[1], tokens[3] }),
-                     tokens[2]
-                 };
-
-                tr.Tokens = tokensWithComposite;
-                return tr;
+            return new TokensTextRow(textRow);
+        }
+    }
+    private class IntoFakeBadCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
+    {
+        public TextRow Process(TextRow textRow)
+        {
+            if (textRow.Text.Contains("Test 1") || textRow.Text.Contains("Test 2"))
+            {
+                return GenerateTokensTextRow(textRow, true);
             }
 
             return new TokensTextRow(textRow);
         }
     }
 
+    private static TokensTextRow GenerateTokensTextRow(TextRow textRow, bool includeBadCompositeToken)
+    {
+        var tr = new TokensTextRow(textRow);
+
+        var tokens = tr.Tokens;
+
+        var tokenIds = tokens
+            .Select(t => t.TokenId)
+            .ToList();
+
+        var compositeTokens = new List<Token>() { tokens[0], tokens[1], tokens[3] };
+        if (includeBadCompositeToken)
+        {
+            compositeTokens.Insert(1, new Token(new TokenId(1, 1, 5, 1, 1), "Bad boy", "Really Bad Boy"));
+        }
+
+        var tokensWithComposite = new List<Token>()
+                 {
+                     new CompositeToken(compositeTokens),
+                     tokens[2]
+                 };
+
+        tr.Tokens = tokensWithComposite;
+        return tr;
+    }
 }

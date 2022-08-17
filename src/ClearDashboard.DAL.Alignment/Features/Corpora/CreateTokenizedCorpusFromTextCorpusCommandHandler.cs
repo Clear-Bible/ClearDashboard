@@ -88,7 +88,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             {
                                 var tokenCompositeId = Guid.NewGuid();
                                 return compositeToken.GetPositionalSortedBaseTokens()
-                                    .Select((childToken, tokenCompositePosition) => new Models.Token
+                                    .Select(childToken => new Models.Token
                                     {
                                         TokenizationId = tokenizationId,
                                         BookNumber = childToken.TokenId.BookNumber,
@@ -98,8 +98,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         SubwordNumber = childToken.TokenId.SubWordNumber,
                                         SurfaceText = childToken.SurfaceText,
                                         TrainingText = childToken.TrainingText,
-                                        TokenCompositeId = tokenCompositeId,
-                                        TokenCompositePosition = tokenCompositePosition
+                                        TokenCompositeId = tokenCompositeId
                                     });
                             }
                             else
@@ -115,12 +114,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     SubwordNumber = token.TokenId.SubWordNumber,
                                     SurfaceText = token.SurfaceText,
                                     TrainingText = token.TrainingText,
-                                    TokenCompositeId = null,
-                                    TokenCompositePosition = null
+                                    TokenCompositeId = null
                                 }
                                 };
                             }
                         });
+
+                    var invalidComposites = bookTokens
+                        .Where(bt => bt.TokenCompositeId != null)
+                        .GroupBy(bt => bt.TokenCompositeId)
+                        .Select(gc => gc
+                            .GroupBy(ct => new { ct.ChapterNumber, ct.VerseNumber }))
+                            .Where(gct => gct.Count() > 1)
+                            .Select(gct => string.Join("-", gct
+                                .SelectMany(gc => gc
+                                    .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber).ToString()))));
+
+                    if (invalidComposites.Any())
+                    {
+                        return new RequestResult<TokenizedTextCorpus>
+                        (
+                            success: false,
+                            message: $"Invalid CompositeToken(s) found in request.  GetTokensByTokenizedCorpusIdAndBookIdHandler requires all Tokens of a Composite to have the same chapter and verse numbers.  {string.Join(", ", invalidComposites)}"
+                        );
+                    }
 
                     await InsertTokensAsync(bookTokens, tokenInsertCommand, cancellationToken);
                 }
@@ -156,7 +173,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private DbCommand CreateTokenInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "TokenizationId", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TrainingText", "TokenCompositeId", "TokenCompositePosition" };
+            var columns = new string[] { "Id", "TokenizationId", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TrainingText", "TokenCompositeId" };
 
             ApplyColumnsToCommand(command, typeof(Models.Token), columns);
 
@@ -177,7 +194,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 command.Parameters["@SurfaceText"].Value = token.SurfaceText;
                 command.Parameters["@TrainingText"].Value = token.TrainingText;
                 command.Parameters["@TokenCompositeId"].Value = (token.TokenCompositeId != null) ? token.TokenCompositeId : DBNull.Value;
-                command.Parameters["@TokenCompositePosition"].Value = (token.TokenCompositePosition != null) ? token.TokenCompositePosition : DBNull.Value;
 
                 _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
             }

@@ -216,8 +216,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
                     TrainingText = table.Column<string>(type: "TEXT", nullable: true),
-                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    TokenCompositePosition = table.Column<int>(type: "INTEGER", nullable: true)
+                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

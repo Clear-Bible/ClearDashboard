@@ -460,9 +460,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("TokenCompositeId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TokenCompositePosition")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("TokenizationId")
                         .HasColumnType("TEXT");
 
