@@ -1,12 +1,10 @@
-﻿using System.Reflection;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
+﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data.Extensions;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-//using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace ClearDashboard.DataAccessLayer.Data
@@ -17,15 +15,19 @@ namespace ClearDashboard.DataAccessLayer.Data
         private readonly ILogger<ProjectDbContext> _logger;
         public  IUserProvider UserProvider { get; set; }
         public string DatabasePath { get; set; }
+        private readonly SqliteDatabaseConnectionInterceptor _sqliteDatabaseConnectionInterceptor;
+        
+        
         public ProjectDbContext() : this(string.Empty)
         {
            
         }
 
-        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider) :  this(string.Empty)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, SqliteDatabaseConnectionInterceptor sqliteDatabaseConnectionInterceptor) : this(string.Empty)
         {
             _logger = logger;
             UserProvider = userProvider;
+            _sqliteDatabaseConnectionInterceptor = sqliteDatabaseConnectionInterceptor;
         }
 
         public ProjectDbContext(DbContextOptions<ProjectDbContext> options)
@@ -71,6 +73,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 optionsBuilder.UseSqlite($"Filename={DatabasePath}");
             }
+
+            optionsBuilder.AddInterceptors(_sqliteDatabaseConnectionInterceptor);
         }
 
         public async Task Migrate()
@@ -83,6 +87,8 @@ namespace ClearDashboard.DataAccessLayer.Data
                 //_logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
                 await Database.MigrateAsync();
+
+                await EnsureMigrated();
             }
             catch (Exception ex)
             {
@@ -93,7 +99,19 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
         }
 
-    
+        private async Task EnsureMigrated()
+        {
+            try
+            {
+                var projects = Projects.ToList();
+            }
+            catch
+            {
+                _logger.LogInformation($"The migrations for the {DatabasePath} database failed -- forcing the migrations again.");
+                await Database.MigrateAsync();
+            }
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

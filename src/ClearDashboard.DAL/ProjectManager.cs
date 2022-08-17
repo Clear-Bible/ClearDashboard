@@ -11,6 +11,7 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 //using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -249,14 +250,14 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(string projectName)
         {
             CreateDashboardProject();
+
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
-
-
-
+            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
+            //CurrentDashboardProject.ParatextProjectPath = 
         }
 
 
@@ -314,7 +315,7 @@ namespace ClearDashboard.DataAccessLayer
         {
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
-            return projectAssets.ProjectDbContext.Corpa.Include(corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
+            return EntityFrameworkQueryableExtensions.Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
            // return null;
         }
 
@@ -356,6 +357,7 @@ namespace ClearDashboard.DataAccessLayer
             try
             {
                 var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+               
 
                 if (projectAssets.ProjectDbContext != null)
                 {
@@ -364,9 +366,20 @@ namespace ClearDashboard.DataAccessLayer
                         ProjectName = projectName
                     };
 
+                    try
+                    {
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                     
+                        //var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
+                        //projects.Add(project);
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
 
-                    await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                    await projectAssets.ProjectDbContext.SaveChangesAsync();
 
                     return project;
                 }

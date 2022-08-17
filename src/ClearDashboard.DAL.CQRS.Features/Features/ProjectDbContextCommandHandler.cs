@@ -32,7 +32,7 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
         {
             if (!ProjectProvider!.HasCurrentProject)
             {
-                throw new InvalidOperationException(nameof(ProjectProvider));
+                throw new InvalidOperationException("The ProjectProvider does not have a current project.");
             }
 
             ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider?.CurrentProject!.ProjectName!).ConfigureAwait(false);

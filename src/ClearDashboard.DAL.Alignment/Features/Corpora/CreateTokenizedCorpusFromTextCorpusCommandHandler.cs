@@ -158,7 +158,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 return new RequestResult<TokenizedTextCorpus>
                 (
                     success: false,
-                    message: $"Error saving tokenized corpus / tokens to database '{ex.Message}'"
+                    message: $"Error saving tokenized corpus / tokens to database '{ex.ToString()}'"
                 );
             }
             finally

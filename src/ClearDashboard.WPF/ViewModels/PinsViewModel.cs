@@ -405,30 +405,33 @@ namespace ClearDashboard.Wpf.ViewModels
             }
 
 
-            // populate the data grid
-            foreach (var entry in _lexicon.Entries.Item)
+            if (_lexicon.Entries != null)
             {
-                foreach (var senseEntry in entry.Entry.Sense)
+                // populate the data grid
+                foreach (var entry in _lexicon.Entries.Item)
                 {
-                    GridData.Add(new PinsDataTable
+                    foreach (var senseEntry in entry.Entry.Sense)
                     {
-                        Id = Guid.NewGuid(),
-                        XmlSource = "LX",
-                        Code = senseEntry.Id,
-                        Gloss = senseEntry.Gloss.Text,
-                        Lang = senseEntry.Gloss.Language,
-                        Lform = entry.Lexeme.Type,
-                        Match = senseEntry.Id + entry.Lexeme.Form,
-                        Notes = "",
-                        Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
-                        Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
-                        Refs = "",
-                        SimpRefs = "0",
-                        Source = entry.Lexeme.Form,
-                        Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
-                        Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
-                        Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
-                    });
+                        GridData.Add(new PinsDataTable
+                        {
+                            Id = Guid.NewGuid(),
+                            XmlSource = "LX",
+                            Code = senseEntry.Id,
+                            Gloss = senseEntry.Gloss.Text,
+                            Lang = senseEntry.Gloss.Language,
+                            Lform = entry.Lexeme.Type,
+                            Match = senseEntry.Id + entry.Lexeme.Form,
+                            Notes = "",
+                            Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                            Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                            Refs = "",
+                            SimpRefs = "0",
+                            Source = entry.Lexeme.Form,
+                            Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                            Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                            Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                        });
+                    }
                 }
             }
 

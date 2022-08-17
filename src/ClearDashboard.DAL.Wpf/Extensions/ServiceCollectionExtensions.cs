@@ -1,12 +1,13 @@
-﻿using ClearDashboard.DAL.Interfaces;
+﻿using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 {
@@ -14,8 +15,10 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
     {
         private static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<ProjectDbContext>();
-            serviceCollection.AddTransient<ProjectDbContextFactory>();
+          
+            serviceCollection.AddScoped<ProjectDbContext>();
+            serviceCollection.AddScoped<ProjectDbContextFactory>();
+            serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
         }
 
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
@@ -26,8 +29,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
-            serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
-            serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddTransient<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddTransient<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
 
 
             serviceCollection.AddScoped<ParatextProxy>();

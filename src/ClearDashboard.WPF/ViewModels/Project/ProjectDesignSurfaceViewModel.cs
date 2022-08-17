@@ -15,10 +15,12 @@ using System.Windows.Threading;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using Brushes = System.Windows.Media.Brushes;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
@@ -26,7 +28,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
     public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
 
-    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus);
+    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel
     {
@@ -135,7 +137,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 new ProgressBarVisibilityMessage(true));
                           
 
-                            if (viewModel.SelectedProject.HasProjectPath)
+                           // if (viewModel.SelectedProject.HasProjectPath)
                             {
 
                                 await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
@@ -147,9 +149,15 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 OnUIThread(() => Corpora.Add(corpus));
 
                                 await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
-                                var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
-                                    .Tokenize<LatinWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+
+                                //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
+                                //    .Tokenize<LatinWordTokenizer>()
+                                //    .Transform<IntoTokensTextRowProcessor>();
+
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id))
+                                            .Tokenize<LatinWordTokenizer>()
+                                            .Transform<IntoTokensTextRowProcessor>();
+
                                 await SendProgressBarMessage(
                                     $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
 
@@ -164,7 +172,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                                 Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                                 await EventAggregator.PublishOnCurrentThreadAsync(
-                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus));
+                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata));
                             }
                         }
                         catch (Exception ex)

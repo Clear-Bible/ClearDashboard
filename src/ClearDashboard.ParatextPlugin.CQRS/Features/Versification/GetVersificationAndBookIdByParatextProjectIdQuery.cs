@@ -1,10 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using MediatR;
-using SIL.Scripture;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Versification
 {

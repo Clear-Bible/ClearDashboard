@@ -1,24 +1,32 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm;
+using MediatR;
 using Microsoft.Extensions.Logging;
+
+using ParatextRequest= ClearDashboard.ParatextPlugin.CQRS.Features.BookUsfm.GetRowsByParatextProjectIdAndBookIdQuery;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class GetRowsByParatextProjectIdAndBookIdQueryHandler : ParatextRequestHandler<
+    public class GetRowsByParatextProjectIdAndBookIdQueryHandler : MediatorPassthroughRequestHandler<
         GetRowsByParatextProjectIdAndBookIdQuery,
         RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>,
         IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>
     {
 
-        public GetRowsByParatextProjectIdAndBookIdQueryHandler(ILogger<GetVersificationAndBookIdByParatextProjectIdQueryHandler> logger) : base(logger)
+        public GetRowsByParatextProjectIdAndBookIdQueryHandler(IMediator mediator, ILogger<GetVersificationAndBookIdByParatextProjectIdQueryHandler> logger) : base(mediator, logger)
         {
             //no-op
         }
 
         public override async Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>> Handle(GetRowsByParatextProjectIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await ExecuteRequest("bookusfmbyparatextidbookid", request, CancellationToken.None).ConfigureAwait(false);
+
+            // TODO:  NEED TO FIX BY CALLING to PARATEXT!
+
+            var paratextRequest = new ParatextRequest(request.ParatextProjectId, request.BookId);
+
+            var result = await Mediator.Send(paratextRequest, CancellationToken.None).ConfigureAwait(false);
             
             if (result.Success == false)
             {
@@ -33,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 foreach (var data in result.Data)
                 {
-                    list.Add((data.chapter, data.verse, data.text, data.isSentenceStart));
+                    list.Add((data.Chapter, data.Verse, data.Text, data.isSentenceStart));
                 }
             }
 

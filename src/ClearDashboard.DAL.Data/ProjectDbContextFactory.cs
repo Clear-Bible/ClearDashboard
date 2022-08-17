@@ -16,6 +16,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ProjectDbContextFactory>? _logger;
 
+        public ProjectAssets? ProjectAssets { get; private set; }
+
         public ProjectDbContextFactory(IServiceProvider serviceProvider, ILogger<ProjectDbContextFactory> logger)
         {
             _serviceProvider = serviceProvider;
@@ -25,14 +27,14 @@ namespace ClearDashboard.DataAccessLayer.Data
         public async Task<ProjectAssets> Get(string projectName)
         {
             projectName = projectName.Replace(" ", "_");
-            var projectAssets = new ProjectAssets
+            ProjectAssets = new ProjectAssets
             {
                 ProjectName = projectName,
                 ProjectDirectory = EnsureProjectDirectory(projectName),
             };
 
-            projectAssets.ProjectDbContext = await GetProjectDbContext(projectAssets.DataContextPath);
-            return projectAssets;
+            ProjectAssets.ProjectDbContext = await GetProjectDbContext(ProjectAssets.DataContextPath);
+            return ProjectAssets;
 
         }
 

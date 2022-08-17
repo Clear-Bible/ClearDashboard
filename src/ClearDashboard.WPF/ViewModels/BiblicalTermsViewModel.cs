@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.ViewModels
             // ReSharper disable once UnusedMember.Local
             BiblicalTermsDomains_Agriculture = 2,
             // ReSharper disable once UnusedMember.Local
-            BtDomaBiblicalTermsDomains_AnimalsinsAnimals = 3,
+            BiblicalTermsDomains_Animals = 3,
             // ReSharper disable once UnusedMember.Local            
             BiblicalTermsDomains_Area = 4,
             // ReSharper disable once UnusedMember.Local

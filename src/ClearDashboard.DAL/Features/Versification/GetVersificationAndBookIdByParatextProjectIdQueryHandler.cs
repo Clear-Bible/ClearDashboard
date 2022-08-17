@@ -11,10 +11,10 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.DataAccessLayer.Features.Versification
 {
-    public class GetVersificationAndBookIdByParatextPluginIdQueryHandler : ParatextRequestHandler<GetVersificationAndBookIdByParatextProjectIdQuery, RequestResult<VersificationBookIds>, VersificationBookIds>
+    public class GetVersificationAndBookIdByDalParatextProjectIdQueryHandler : ParatextRequestHandler<GetVersificationAndBookIdByParatextProjectIdQuery, RequestResult<VersificationBookIds>, VersificationBookIds>
     {
 
-        public GetVersificationAndBookIdByParatextPluginIdQueryHandler([NotNull] ILogger<GetVersificationAndBookIdByParatextPluginIdQueryHandler> logger) :
+        public GetVersificationAndBookIdByDalParatextProjectIdQueryHandler([NotNull] ILogger<GetVersificationAndBookIdByDalParatextProjectIdQueryHandler> logger) :
             base(logger)
         {
             //no-op
