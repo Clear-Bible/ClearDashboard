@@ -32,6 +32,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
         private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
+        private bool _firstPass = false;
 
         private Timer _timer;
         private bool _firstRun;
@@ -329,7 +330,12 @@ namespace ClearDashboard.Wpf.ViewModels
             // auto close task view if nothing is in the queue
             if (_backgroundTaskStatuses.Count == 0)
             {
-                ShowTaskView = Visibility.Collapsed;
+                if (_firstPass)
+                {
+                    ShowTaskView = Visibility.Collapsed;
+                }
+
+                _firstPass = true;
                 return;
             }
 
