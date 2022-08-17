@@ -264,7 +264,7 @@
                                         Margin="4"
                                         Padding="0"
                                         cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
-                                        ToolTip="Cancel Task">
+                                        ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Setter Property="Background" Value="Transparent" />
@@ -378,7 +378,7 @@
                     x:Name="BackgroundTasks"
                     Padding="0"
                     Style="{StaticResource TransparentButton}"
-                    ToolTip="Show Background Tasks">
+                    ToolTip="{helpers:Localization ShellView_ShowBackgroundTasksTooltip}">
                     <Grid>
                         <materialDesign:PackIcon
                             Width="25"
