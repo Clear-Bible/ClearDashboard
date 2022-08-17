@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Properties
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
-        private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
 
         private Timer _timer;
