@@ -54,8 +54,8 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var targetTokenGuidIds = targetTokenizedCorpus.Tokens
                 .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
 
-            Assert.True(sourceTokenGuidIds.Keys.Count > 100);
-            Assert.True(targetTokenGuidIds.Keys.Count > 100);
+            Assert.True(sourceTokenGuidIds.Keys.Count > 50);
+            Assert.True(targetTokenGuidIds.Keys.Count > 50);
             Assert.Empty(sourceTokenGuidIds.Keys.Intersect(targetTokenGuidIds.Keys));
 
             Assert.NotNull(parallelTextCorpus.VerseMappingList);
