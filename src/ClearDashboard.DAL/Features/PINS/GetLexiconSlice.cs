@@ -33,6 +33,14 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<Lexicon>> Handle(GetLexiconQuery request,
             CancellationToken cancellationToken)
         {
+            if (_projectManager.HasCurrentParatextProject == false)
+            {
+                var ret = new RequestResult<Lexicon>();
+                ret.Success = false;
+                ret.Message = "No CurrentParatextProject - Plugin is probably not running";
+                return Task.FromResult(ret);
+            }
+
             ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml");
 
             var queryResult = ValidateResourcePath(new Lexicon());
