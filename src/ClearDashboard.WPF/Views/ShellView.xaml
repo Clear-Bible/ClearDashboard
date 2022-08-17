@@ -296,7 +296,7 @@
                     Margin="5,0,0,0"
                     VerticalAlignment="Center"
                     FontSize="16"
-                    Text="No background tasks running">
+                    Text="{helpers:Localization ShellView_NoBackGroundTasks}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
