@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -395,10 +396,35 @@ namespace ClearDashboard.Wpf.ViewModels
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
-#endregion
+        public async void CancelTask(BackgroundTaskStatus task)
+        {
+            // update the task entry to show cancelling
+            var taskToCancel = _backgroundTaskStatuses.FirstOrDefault(t => t.Name == task.Name);
+            if (taskToCancel != null)
+            {
+                taskToCancel.TaskStatus = StatusEnum.CancelTaskRequested;
+                taskToCancel.EndTime = DateTime.Now;
+                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+            }
+            
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(taskToCancel));
+        }
+
+        public async void StartBackgroundTask()
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = "BOGUS TASK TO CANCEL",
+                Description = "Try cancelling me",
+                StartTime = DateTime.Now,
+                TaskStatus = StatusEnum.Working
+            }));
+        }
+
+        #endregion
 
 
-#region EventAggregator message handling
+        #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
@@ -450,6 +476,19 @@ namespace ClearDashboard.Wpf.ViewModels
             else
             {
                 ShowSpinner = Visibility.Collapsed;
+            }
+
+
+            // check if the message is for the bogus task
+            if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            {
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
+
             }
 
             await Task.CompletedTask;

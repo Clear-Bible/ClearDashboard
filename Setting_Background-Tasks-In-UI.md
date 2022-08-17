@@ -26,7 +26,8 @@ Note: that the enums for `StatusEnum` are:
     {
         Working,
         Completed,
-        Error
+        Error,
+        CancelTaskRequested,
     }
 ```
 The Key used to identify this task is the `Name` field.  Use this same string for all subsequent calls to identify if the task status as it goes through the pipeline till erorring or becoming complete.
@@ -66,6 +67,33 @@ await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
 
 Again, add in a the `EndTime`, a new `Description`, and a `TaskStatus` to being complete.  
 
-4. UI LIFECYCLE
+4. *UI LIFECYCLE*
 
 The UI will automatically purge completed tasks somewhere after 45 seconds.  Items that are currently being worked on or tasks with errors will remain in the queue.
+
+5. *CANCELLING A TASK*
+
+If you have a long running task, from the UI, the user can cancel it.  This will send back through the EventAggragator a message with the same `Name` but with the `TaskStatus` set to `CancelTaskRequested`.  It is up to the developer to watch for this event in their modules.  You can enable the capturing of the messages by defining the `IHandle<BackgroundTaskChangedMessage>` as part of your view module definition.  It will require you to impliment the following handler:
+
+```
+    public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+    {
+        var incomingMessage = message.Status;
+
+        if(incomingMessage.Name == "<PUT IN YOUR TASK NAME HERE>" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+        {
+            // cancel your task here
+
+
+            // return that your task was cancelled
+            incomingMessage.EndTime = DateTime.Now;
+            incomingMessage.TaskStatus = StatusEnum.Completed;
+            incomingMessage.Description = "Task was cancelled";
+
+            await EventAggregator.PublishOnUIThreadAsync((new BackgroundTaskChangedMessage(incomingMessage));
+        }
+        await Task.CompletedTask;
+    }
+```
+
+See the ShellViewModel for an example of this in action.

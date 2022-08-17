@@ -151,6 +151,7 @@
                         Height="25"
                         Margin="8,0,20,0"
                         Style="{StaticResource GreenLightButton}"
+                        ToolTip="This button only shows up in Debug mode"
                         Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
                         ColorStyles
                     </Button>
@@ -248,10 +249,34 @@
                                                         <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
                                                         <Setter Property="Kind" Value="AlertCircle" />
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.CancelTaskRequested}">
+                                                        <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
+                                                        <Setter Property="Kind" Value="CloseCircleOutline" />
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
+
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        Margin="4"
+                                        Padding="0"
+                                        cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                        ToolTip="Cancel Task">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </Style>
+                                        </Button.Style>
+                                        <materialDesign:PackIcon
+                                            Width="18"
+                                            Height="18"
+                                            VerticalAlignment="Center"
+                                            Foreground="{StaticResource RedLightBrush}"
+                                            Kind="Cancel" />
+                                    </Button>
 
                                     <StackPanel Margin="5,0,0,0" Orientation="Vertical">
                                         <!--  TASK NAME  -->
@@ -352,7 +377,8 @@
                 <Button
                     x:Name="BackgroundTasks"
                     Padding="0"
-                    Style="{StaticResource TransparentButton}">
+                    Style="{StaticResource TransparentButton}"
+                    ToolTip="Show Background Tasks">
                     <Grid>
                         <materialDesign:PackIcon
                             Width="25"
@@ -373,7 +399,16 @@
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">
-                <!--<TextBlock VerticalAlignment="Center" Text="{Binding ShowTaskView}" />-->
+                <Button
+                    x:Name="StartBackgroundTask"
+                    Height="25"
+                    Margin="8,0,0,0"
+                    Padding="3"
+                    Style="{StaticResource GreenLightButton}"
+                    ToolTip="This button only shows up in Debug mode"
+                    Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                    Start Background Task
+                </Button>
             </StatusBarItem>
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
