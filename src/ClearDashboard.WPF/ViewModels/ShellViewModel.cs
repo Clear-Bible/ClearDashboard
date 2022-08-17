@@ -326,6 +326,14 @@ namespace ClearDashboard.Wpf.ViewModels
         /// </summary>
         private void CleanUpOldBackgroundTasks()
         {
+            // auto close task view if nothing is in the queue
+            if (_backgroundTaskStatuses.Count == 0)
+            {
+                ShowTaskView = Visibility.Collapsed;
+                return;
+            }
+
+
             bool bFound = false;
             DateTime presentTime = DateTime.Now;
 

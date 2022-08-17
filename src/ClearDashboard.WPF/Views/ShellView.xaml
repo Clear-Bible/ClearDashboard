@@ -177,8 +177,37 @@
             Background="{DynamicResource MaterialDesignPaper}"
             BorderBrush="{DynamicResource SecondaryHueMidBrush}"
             BorderThickness="2"
-            CornerRadius="3"
-            Visibility="{Binding ShowTaskView}">
+            CornerRadius="3">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Opacity" Value="0.0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowTaskView}" Value="Visible">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.0"
+                                            Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid>
                 <!--  BackGround Tasks  -->
                 <ListView
@@ -325,7 +354,7 @@
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">
-                <!--<TextBlock VerticalAlignment="Center" Text="c:\path\of\current\file.txt" />-->
+                <TextBlock VerticalAlignment="Center" Text="{Binding ShowTaskView}" />
             </StatusBarItem>
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
