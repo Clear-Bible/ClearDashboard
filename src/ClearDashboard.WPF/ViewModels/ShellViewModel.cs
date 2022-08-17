@@ -203,6 +203,8 @@ namespace ClearDashboard.Wpf.ViewModels
                     _firstRun = true;
                 }
             }, null, startTimeSpan, periodTimeSpan);
+
+            BogusData();
         }
 
         private void BogusData()

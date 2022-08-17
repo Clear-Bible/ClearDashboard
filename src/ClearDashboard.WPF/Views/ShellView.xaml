@@ -241,12 +241,20 @@
                                             HorizontalAlignment="Left"
                                             FontSize="12"
                                             FontWeight="Bold"
-                                            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                            Text="{Binding Description}"
                                             TextWrapping="Wrap">
-                                            <Run Text="{Binding Description}" />
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                            <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
                                         </TextBlock>
 
-                                        <TextBlock Text="{Binding TaskStatus}" />
+                                        <!--<TextBlock Text="{Binding TaskStatus}" />-->
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
