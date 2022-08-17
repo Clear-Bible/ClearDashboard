@@ -7,7 +7,9 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,6 +40,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         {
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
+            Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
             Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
@@ -54,6 +57,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             Output.WriteLine($"Creating database: {ProjectName}");
             var assets = await factory?.Get(ProjectName)!;
             ProjectDbContext= assets.ProjectDbContext;
+
 
             var testUser = await AddDashboardUser(ProjectDbContext);
             var projectInfo = await AddCurrentProject(ProjectDbContext, ProjectName);

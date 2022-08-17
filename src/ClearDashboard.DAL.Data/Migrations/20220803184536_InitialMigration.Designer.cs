@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220728063018_InitialMigration")]
+    [Migration("20220803184536_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -473,7 +473,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookNumber");
+
+                    b.HasIndex("ChapterNumber");
+
                     b.HasIndex("TokenizationId");
+
+                    b.HasIndex("VerseNumber");
 
                     b.ToTable("Token");
                 });

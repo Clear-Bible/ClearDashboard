@@ -1,25 +1,39 @@
-﻿using AvalonDock.Controls;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using Caliburn.Micro;
+//using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views.Project;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Effects;
-using ClearDashboard.Wpf.Views;
+using System.Windows.Threading;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
 using Brushes = System.Windows.Media.Brushes;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
+
+    public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
+
+    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
+
     public class ProjectDesignSurfaceViewModel : ToolViewModel
     {
+        public IWindowManager WindowManager { get; }
+        private readonly IMediator _mediator;
         private ObservableCollection<Corpus> _corpora;
         public ObservableCollection<Corpus> Corpora
         {
@@ -32,118 +46,64 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         }
 
-        public ProjectDesignSurfaceViewModel(INavigationService navigationService, ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public ProjectDesignSurfaceViewModel(IMediator mediator, IWindowManager windowManager, INavigationService navigationService, ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
-            Title = "PROJECT DESIGN SURFACE";
+            WindowManager = windowManager;
+            _mediator = mediator;
+            Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
+
+            Corpora = new ObservableCollection<Corpus>();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            Corpora = new ObservableCollection<Corpus>();
-
-            var corpus = new Corpus
-            {
-                Name = "zz_SUR",
-                Language = "Blah",
-                CorpusType = CorpusType.Standard,
-
-            };
-
-            Corpora.Add(corpus);
-
-            //View = (ProjectDesignSurfaceView)ViewLocator.LocateForModel(this, null, null);
-            //ViewModelBinder.Bind(this, View, null);
-
-         
-            //DesignSurfaceCanvas = (Canvas)View.FindName("DesignSurfaceCanvas");
-
-            //DrawCopora();
+            //IsBusy = true;
             return base.OnInitializeAsync(cancellationToken);
         }
 
-
-        protected ProjectDesignSurfaceView View { get; set; }
-        public Canvas DesignSurfaceCanvas { get; set; }
-        protected override void OnViewAttached(object view, object context)
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            //if (View == null)
-            //{
-            //    if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
-            //    {
-            //        View = (ProjectDesignSurfaceView)view;
-            //        DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
-            //    }
-            //    base.OnViewAttached(view, context);
-            //}
+            //IsBusy = false;
+            return base.OnActivateAsync(cancellationToken);
         }
 
-        protected override void OnViewLoaded(object view)
+        public ProjectDesignSurfaceView View { get; set; }
+        public Canvas DesignSurfaceCanvas { get; set; }
+        protected override async void OnViewAttached(object view, object context)
         {
-           
-           
+            if (View == null)
+            {
+                if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
+                {
+                    View = (ProjectDesignSurfaceView)view;
+                    DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
+                }
+            }
+
+            await GetCorpora();
+            base.OnViewAttached(view, context);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
             base.OnViewLoaded(view);
         }
 
-        protected override void OnViewReady(object view)
+        protected override async void OnViewReady(object view)
         {
-            if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
-            {
-                View = (ProjectDesignSurfaceView)view;
-
-                var canvases = View.FindVisualChildren<Canvas>();
-                DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
-
-                DesignSurfaceCanvas.Visibility = Visibility.Hidden;
-
-                Panel.SetZIndex(DesignSurfaceCanvas, 1000);
-            }
-            //DrawCopora();
+            await GetCorpora();
             base.OnViewReady(view);
         }
 
-        private void DrawCopora()
+        private async Task GetCorpora()
         {
+            // var corpora = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
+            //await EventAggregator.PublishOnUIThreadAsync(new CorporaLoadedMessage(corpora));
 
-            OnUIThread(() =>
-            {
-                DesignSurfaceCanvas.Children.Clear();
-                foreach (var corpus in Corpora)
-                {
+            // Corpora = new ObservableCollection<Corpus>(corpora);
 
-                    //< Rectangle Canvas.Left = "210" Canvas.Top = "10" Height = "200" Width = "200" Stroke = "Black" StrokeThickness = "10" Fill = "Red" />
-                    var rectangle = new Rectangle()
-                    {
-                        //Content = corpus.Name,
-                        Width = 300,
-                        Height = 100,
-                        Fill = Brushes.Blue,//Application.Current.FindResource("OrangeMidBrush") as Brush,
-                        RadiusX = 3,
-                        RadiusY = 3,
-                        Effect = new DropShadowEffect
-                        {
-                            BlurRadius = 5,
-                            ShadowDepth = 2,
-                            Opacity = 0.75
-                        },
-                        Visibility = Visibility.Visible
-
-
-
-                    };
-                    Canvas.SetTop(rectangle, 10.0);
-                    Canvas.SetLeft(rectangle, 210.0);
-                    //DesignSurfaceCanvas.Children.Add(rectangle);
-                    View.AddControl(rectangle);
-
-                  
-                    //DesignSurfaceCanvas.InvalidateMeasure();
-                    DesignSurfaceCanvas.UpdateLayout();
-
-
-                }
-            });
         }
 
         public void AddManuscriptCorpus()
@@ -163,33 +123,71 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
-            // Define a callback method to create a new project if we
-            // have a valid project name
-
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
+
                 if (viewModel.SelectedProject != null)
                 {
-                    //await ProjectManager.CreateNewProject(viewModel.ProjectName);
-                    //return true;
-
-                    // TODO:
-                    // Add Corpus
-                    // Get Books from Paratext
-                    var corpus = new Corpus
+                    var metadata = viewModel.SelectedProject;
+                    await Task.Factory.StartNew(async () =>
                     {
-                        Name = viewModel.SelectedProject.Name,
-                        Language = viewModel.SelectedProject.LanguageName,
-                        CorpusType = viewModel.SelectedProject.CorpusType,
+                        try
+                        {
+                            await EventAggregator.PublishOnCurrentThreadAsync(
+                                new ProgressBarVisibilityMessage(true));
+                          
 
-                    };
+                           // if (viewModel.SelectedProject.HasProjectPath)
+                            {
 
-                    Corpora.Add(corpus);
-                    DrawCopora();
+                                await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
 
+                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
+                                    metadata.LanguageName, metadata.CorpusTypeDisplay);
+                                await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
+
+                                OnUIThread(() => Corpora.Add(corpus));
+
+                                await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
+
+                                //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
+                                //    .Tokenize<LatinWordTokenizer>()
+                                //    .Transform<IntoTokensTextRowProcessor>();
+
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id))
+                                            .Tokenize<LatinWordTokenizer>()
+                                            .Transform<IntoTokensTextRowProcessor>();
+
+                                await SendProgressBarMessage(
+                                    $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
+
+
+                                await SendProgressBarMessage(
+                                    $"Creating tokenized text corpus for '{metadata.Name}' corpus.");
+                                var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,
+                                    corpus.CorpusId,
+                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                                await SendProgressBarMessage(
+                                    $"Completed creating tokenized text corpus for '{metadata.Name}' corpus.");
+
+                                Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                                await EventAggregator.PublishOnCurrentThreadAsync(
+                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError(ex,$"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                        }
+                        finally
+                        {
+                            await EventAggregator.PublishOnCurrentThreadAsync(
+                                new ProgressBarVisibilityMessage(false));
+                        }
+
+                    });
                 }
-
-                // We don;t want to navigate anywhere.
+                // We don't want to navigate anywhere.
                 return false;
             }
         }

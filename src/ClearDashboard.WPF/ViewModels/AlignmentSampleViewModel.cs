@@ -23,6 +23,7 @@ using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
+using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo

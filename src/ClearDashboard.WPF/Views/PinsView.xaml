@@ -58,7 +58,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                ToolTip="{helpers:Localization expandView}">
+                ToolTip="{helpers:Localization ExpandView}">
                 <Button.Style>
                     <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
                         <Setter Property="Padding" Value="0" />
@@ -84,7 +84,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="{helpers:Localization PinsFilter}"
+                Content="{helpers:Localization Pins_Filter}"
                 Style="{StaticResource MaterialDesignLabel}" />
             <TextBox
                 Width="200"
@@ -96,7 +96,7 @@
                 Margin="10,0,0,0"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
-                Content="{helpers:Localization PinsClearFilter}"
+                Content="{helpers:Localization Pins_ClearFilter}"
                 Style="{StaticResource BlueMidButton}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
@@ -105,7 +105,7 @@
                 Height="25"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                Content="{helpers:Localization PinsLoadReferences}"
+                Content="{helpers:Localization Pins_LoadReferences}"
                 Style="{StaticResource BlueMidButton}"
                 Visibility="Collapsed" />
         </StackPanel>
@@ -138,7 +138,7 @@
                     <MenuItem
                         Command="{Binding ClearFilterCommand}"
                         CommandParameter="{Binding}"
-                        Header="{helpers:Localization PinsClearFilter}" />
+                        Header="{helpers:Localization Pins_ClearFilter}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
@@ -164,7 +164,7 @@
 
             <DataGrid.Columns>
                 <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsVerseReferences}">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_VerseReferences}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -195,7 +195,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Localization PinsLexeme}">
+                    Header="{helpers:Localization Pins_Lexeme}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -214,7 +214,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Localization PinsGloss}">
+                    Header="{helpers:Localization Pins_Gloss}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -232,7 +232,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="250"
-                    Header="{helpers:Localization PinsOrigin}">
+                    Header="{helpers:Localization Pins_Origin}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -246,7 +246,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lform  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsForms}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Forms}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -259,7 +259,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsLanguage}">
+                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Language}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -272,7 +272,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Code  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsCode}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Code}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -285,7 +285,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Match  -->
-                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization PinsMatch}">
+                <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Match}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -298,7 +298,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsPhrase}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Phrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -311,7 +311,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsWord}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Word}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -324,7 +324,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsPrefix}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Prefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -337,7 +337,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsStem}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Stem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -350,7 +350,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization PinsSuffix}">
+                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Suffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -366,7 +366,7 @@
                 <DataGridTemplateColumn
                     MinWidth="125"
                     MaxWidth="1000"
-                    Header="{helpers:Localization PinsNotes}">
+                    Header="{helpers:Localization Pins_Notes}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock

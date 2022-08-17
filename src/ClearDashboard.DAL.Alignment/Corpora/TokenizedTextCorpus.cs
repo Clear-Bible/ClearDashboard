@@ -26,19 +26,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public override ScrVers Versification { get; }
 
-        public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
-        {
-            var result = await mediator.Send(new GetAllCorpusIdsQuery());
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
         public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
@@ -59,28 +46,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             var result = await mediator.Send(command);
             if (result.Success)
-            {                                                      
+            {
                 return new TokenizedTextCorpus(command.TokenizedCorpusId, result.Data.corpusId, mediator, result.Data.bookIds);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
-        public static async Task<CorpusId> CreateCorpus(
-            IMediator mediator,
-            bool IsRtl,
-            string Name,
-            string Language,
-            string CorpusType)
-        {
-            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType);
-
-            var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
             }
             else
             {

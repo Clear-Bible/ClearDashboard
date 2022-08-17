@@ -23,7 +23,8 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    public class ProjectWorkspaceViewModel : Conductor<Screen>.Collection.OneActive
+  
+    public class ProjectWorkspaceViewModel : Conductor<Screen>.Collection.AllActive, IHandle<ProgressBarVisibilityMessage>, IHandle<ProgressBarMessage>
     {
 
         private IEventAggregator EventAggregator { get; }
@@ -170,6 +171,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
+        private bool _showProgressBar;
+        private string _message;
 #pragma warning restore CA1416 // Validate platform compatibility
 
         /// <summary>
@@ -207,6 +210,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             // subscribe to the event aggregator so that we can listen to messages
+            Logger.LogInformation($"Subscribing {this.GetType().Name} to the EventAggregator");
             EventAggregator.SubscribeOnUIThread(this);
 
             return base.OnActivateAsync(cancellationToken);
@@ -220,6 +224,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
 
             // unsubscribe to the event aggregator
+            Logger.LogInformation($"Unsubscribing {this.GetType().Name} from the EventAggregator");
             EventAggregator.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -255,20 +260,21 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         private async Task Initialize()
         {
             Items.Clear();
-            // documents
-            await ActivateItemAsync<AlignmentViewModel>();
-            await ActivateItemAsync<CorpusViewModel>();
+            //documents
+            //await ActivateItemAsync<CorpusViewModel>();
+            await ActivateItemAsync<CorpusTokensViewModel>();
+           
 
             // tools
             await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
-
             LoadWindows();
+
 
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
             var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Project.Layout.config");
             LoadLayout(layoutSerializer, filePath);
 
-            
+
            
         }
 
@@ -283,7 +289,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 var type = t;
                 switch (type)
                 {
-                    case AlignmentViewModel:
+                    case CorpusTokensViewModel:
                     case CorpusViewModel:
                         _documents.Add((PaneViewModel)t);
                         break;
@@ -305,13 +311,14 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 if (e.Model.ContentId is not null)
                 {
-                   
-
                     var item = Items.Cast<IAvalonDockWindow>()
                         .FirstOrDefault(item => item.ContentId == e.Model.ContentId);
 
-                    e.Content = item;
-                  
+                    if (item != null)
+                    {
+                        //await ActivateItemAsync((Screen)item);
+                        e.Content = item;
+                    }
                 }
             };
 
@@ -339,13 +346,40 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             _lastLayout = filePath;
         }
 
-
+        public async Task ActiveAlignmentView()
+        {
+            await ActivateItemAsync<CorpusTokensViewModel>();
+        }
 
         public static class WorkspaceLayoutNames
         {
             public const string AlignmentTool = "ALIGNMENTTOOL";
             public const string CorpusTool = "CORPUSTOOL";
             public const string ProjectDesignSurfaceTool = "PROJECTDESIGNSURFACETOOL";
+        }
+
+        public bool ShowProgressBar
+        {
+            get => _showProgressBar;
+            set => Set(ref _showProgressBar,value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
+        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
+        {
+           OnUIThread(()=>ShowProgressBar = message.Show);
+           await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => Message = message.Message);
+            await Task.CompletedTask;
         }
     }
 }

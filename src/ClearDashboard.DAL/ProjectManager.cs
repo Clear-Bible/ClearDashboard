@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
@@ -11,11 +12,13 @@ using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+//using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -29,7 +32,7 @@ namespace ClearDashboard.DataAccessLayer
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
-        protected IMediator Mediator { get; private set; }
+        public IMediator Mediator { get; private set; }
 
 
 
@@ -202,7 +205,7 @@ namespace ClearDashboard.DataAccessLayer
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
 
-            Logger.LogError(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            Logger.LogInformation(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
 
 
             if (result.Success && result.HasData)
@@ -247,10 +250,14 @@ namespace ClearDashboard.DataAccessLayer
         public async Task CreateNewProject(string projectName)
         {
             CreateDashboardProject();
+
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
-            CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+            CurrentProject = await CreateProject(projectName);
 
+            CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
+            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
+            //CurrentDashboardProject.ParatextProjectPath = 
         }
 
 
@@ -304,9 +311,12 @@ namespace ClearDashboard.DataAccessLayer
             throw new NotImplementedException();
         }
 
-        public Task<Project> LoadProject(string projectName)
+        public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
         {
-            throw new NotImplementedException();
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            return EntityFrameworkQueryableExtensions.Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
+           // return null;
         }
 
         public async Task<Project> DeleteProject(string projectName)
@@ -347,6 +357,7 @@ namespace ClearDashboard.DataAccessLayer
             try
             {
                 var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+               
 
                 if (projectAssets.ProjectDbContext != null)
                 {
@@ -355,9 +366,20 @@ namespace ClearDashboard.DataAccessLayer
                         ProjectName = projectName
                     };
 
+                    try
+                    {
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                     
+                        //var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
+                        //projects.Add(project);
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                    }
 
-                    await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                    await projectAssets.ProjectDbContext.SaveChangesAsync();
 
                     return project;
                 }

@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Xml;
+using System.Xml.Linq;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
@@ -153,6 +156,9 @@ public class DashboardProjectManager : ProjectManager
 
         HubProxy.On<ParatextProject>("sendProject", async (project) =>
         {
+            project = GetParatextProjectDirectoryPath(project);
+
+
             CurrentParatextProject = project;
             await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
         });
@@ -167,6 +173,36 @@ public class DashboardProjectManager : ProjectManager
         await Task.CompletedTask;
     }
 
+    private ParatextProject GetParatextProjectDirectoryPath(ParatextProject project)
+    {
+        string guid = project.Guid;
+
+        ParatextProxy paratextProxy = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+        if (paratextProxy.IsParatextInstalled())
+        {
+            var path = paratextProxy.ParatextProjectPath;
+
+            // iterate through the directories
+            var dirs = Directory.GetDirectories(path);
+            foreach (var dir in dirs)
+            {
+                if (File.Exists(Path.Combine(dir, "settings.xml")))
+                {
+                    var settings = XDocument.Load(Path.Combine(dir, "settings.xml"));
+                    var results = settings.Descendants().First(p => p.Name.LocalName == "Guid");
+
+                    if (results != null && results.Value == guid)
+                    {
+                        project.DirectoryPath = dir;
+                        return project;
+                    }
+                }
+            }
+        }
+
+        return project;
+    }
+
     public void CheckLicense <TViewModel>(TViewModel viewModel)
         {
             if (!_licenseCleared)
@@ -179,7 +215,7 @@ public class DashboardProjectManager : ProjectManager
                     {
                         var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
                         var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        if (decryptedLicenseUser != null)
+                        if (decryptedLicenseUser.Id != null)
                         {
                             CurrentUser = new User
                             {
@@ -192,15 +228,15 @@ public class DashboardProjectManager : ProjectManager
 
                         _licenseCleared = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        MessageBox.Show("There was an issue decrypting your license key.");
+                        //MessageBox.Show("There was an issue decrypting your license key.");
                         PopupRegistration(viewModel);
                     }
                 }
                 else
-                {
-                    MessageBox.Show("Your license key file is missing.");
+                {   
+                    //MessageBox.Show("Your license key file is missing.");
                     PopupRegistration(viewModel);
                 }
             }

@@ -1,40 +1,42 @@
 ﻿using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using GetVersificationAndBookIdByParatextProjectIdQuery = ClearDashboard.DAL.Alignment.Features.Corpora.GetVersificationAndBookIdByParatextProjectIdQuery;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class ParatextPluginTextCorpus : ScriptureTextCorpus
+    public class ParatextProjectTextCorpus : ScriptureTextCorpus
     {
-        public string ParatextPluginId { get; set; }
-        internal ParatextPluginTextCorpus(string paratextPluginId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
+        public string ParatextProjectId { get; set; }
+        internal ParatextProjectTextCorpus(string paratextProjectId, IMediator mediator, ScrVers versification, IEnumerable<string> bookAbbreviations)
         {
-            ParatextPluginId = paratextPluginId;
+            ParatextProjectId = paratextProjectId;
 
             Versification = versification;
   
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new ParatextPluginText(ParatextPluginId, mediator, Versification, bookAbbreviation));
+                AddText(new ParatextProjectText(ParatextProjectId, mediator, Versification, bookAbbreviation));
             }
         }
         public override ScrVers Versification { get; }
 
 
-        public static async Task<ParatextPluginTextCorpus> Get(
+        public static async Task<ParatextProjectTextCorpus> Get(
             IMediator mediator,
-            string paratextPluginId)
+            string paratextProjectId)
         {
-            var command = new GetVersificationAndBookIdByParatextPluginIdQuery(paratextPluginId);
+            var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
-                return new ParatextPluginTextCorpus(
-                    command.ParatextPluginId, 
+                return new ParatextProjectTextCorpus(
+                    command.ParatextProjectId, 
                     mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
                     result.Data.bookAbbreviations);
             }

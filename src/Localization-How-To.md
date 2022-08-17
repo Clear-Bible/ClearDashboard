@@ -12,7 +12,7 @@ Put in the English wording for that control into column B.  Google Sheets will a
 
 We want to use the following format to keep things organized.  If you are creating controls on the `startpageview.xml` file, we want key's that reference not only the control but also the view.  This way we can better organize the localization files.
 
-For instance, in the ShellView.xaml view, we have the TextBlock that has the text of "Paratext User".  For that control's key, we want the format to be the combination of the view's name and the controls name (e.g., `ShellView_user`)
+For instance, in the ShellView.xaml view, we have the TextBlock that has the text of "Paratext User".  For that control's key, we want the format to be the combination of the view's name and the controls name (e.g., `ShellView_User`)
 
 ## Getting Actual Translation Words for a Language
 
@@ -39,7 +39,7 @@ Add the following lines to each XAML header:
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
 ```
 
-For each text element to translate, you pass in the translated text in the following binding manner: `{helpers:Loc Landing_projects}`
+For each text element to translate, you pass in the translated text in the following binding manner: `{helpers:Loc Landing_Projects}`
 
 Example:
 ```
@@ -49,7 +49,7 @@ Example:
         FontSize="20"
         Foreground="{StaticResource PrimaryHueDarkBrush}">
         <Run Text="Dashboard " />
-        <Run Text="{helpers:Localization Landing_projects}" />
+        <Run Text="{helpers:Localization Landing_Projects}" />
     </TextBlock>
 ```
 

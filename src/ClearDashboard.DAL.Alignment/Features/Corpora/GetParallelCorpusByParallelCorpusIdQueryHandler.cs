@@ -40,9 +40,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //1. the result of gathering all the VerseMappings to build an VerseMapping list.
             //2. associated source and target TokenizedCorpusId
 
-#nullable disable
-            // FIXME:  added the #nullable disable to keep studio from complaining - I think - about
-            // how vm.Verses might be null.  Is it really possible for VerseMappings to have null Verses?
             var parallelCorpus =
                 ProjectDbContext.ParallelCorpa
                     .Include(pc => pc.SourceTokenizedCorpus)
@@ -52,7 +49,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .ThenInclude(v => v.TokenVerseAssociations)
                     .ThenInclude(tva => tva.Token)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
-#nullable restore
 
             var invalidArgMsg = "";
             if (parallelCorpus == null)
@@ -90,7 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Where(vm => vm.Verses != null)
                     .Select(vm =>
                     {
-                        var sourceVerses = vm.Verses!
+                        var sourceVerses = vm.Verses
                             .Where(v => v.CorpusId == sourceCorpusId)
                             .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                             .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
@@ -108,7 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                             tva.Token!.WordNumber,
                                             tva.Token!.SubwordNumber))
                             ));
-                        var targetVerses = vm.Verses!
+                        var targetVerses = vm.Verses
                             .Where(v => v.CorpusId == targetCorpusId)
                             .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                             .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))

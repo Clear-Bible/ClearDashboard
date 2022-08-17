@@ -16,6 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 {
+    #nullable disable
     public GetTokensByTokenizedCorpusIdAndBookIdHandlerTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -28,15 +29,15 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             // Load data
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
-            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
+            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
             var tokenizedTextCorpus = createResult.Data!;
 
-            ProjectDbContext.ChangeTracker.Clear();
+            ProjectDbContext?.ChangeTracker.Clear();
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");
@@ -74,8 +75,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             // Load data
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
-            var corpusId = await TokenizedTextCorpus.CreateCorpus(Mediator!, false, "Greek NT", "grc", "Resource");
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId,
+            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             await Mediator.Send(command);
 

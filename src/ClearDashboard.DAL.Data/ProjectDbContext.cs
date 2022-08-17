@@ -1,30 +1,33 @@
-﻿using System.Reflection;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
+﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data.Extensions;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-//using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
     public class ProjectDbContext : DbContext
     {
-        private readonly ILogger<ProjectDbContext>? _logger;
-        public  IUserProvider? UserProvider { get; set; }
+        #nullable disable
+        private readonly ILogger<ProjectDbContext> _logger;
+        public  IUserProvider UserProvider { get; set; }
         public string DatabasePath { get; set; }
+        private readonly SqliteDatabaseConnectionInterceptor _sqliteDatabaseConnectionInterceptor;
+        
+        
         public ProjectDbContext() : this(string.Empty)
         {
            
         }
 
-        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider) :  this(string.Empty)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, SqliteDatabaseConnectionInterceptor sqliteDatabaseConnectionInterceptor) : this(string.Empty)
         {
             _logger = logger;
             UserProvider = userProvider;
+            _sqliteDatabaseConnectionInterceptor = sqliteDatabaseConnectionInterceptor;
         }
 
         public ProjectDbContext(DbContextOptions<ProjectDbContext> options)
@@ -70,6 +73,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 optionsBuilder.UseSqlite($"Filename={DatabasePath}");
             }
+
+            optionsBuilder.AddInterceptors(_sqliteDatabaseConnectionInterceptor);
         }
 
         public async Task Migrate()
@@ -79,9 +84,11 @@ namespace ClearDashboard.DataAccessLayer.Data
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
-                _logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
+                //_logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
                 await Database.MigrateAsync();
+
+                await EnsureMigrated();
             }
             catch (Exception ex)
             {
@@ -92,7 +99,19 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
         }
 
-    
+        private async Task EnsureMigrated()
+        {
+            try
+            {
+                var projects = Projects.ToList();
+            }
+            catch
+            {
+                _logger.LogInformation($"The migrations for the {DatabasePath} database failed -- forcing the migrations again.");
+                await Database.MigrateAsync();
+            }
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -157,7 +176,6 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.TargetTokenizedCorpus)
                 .WithMany(e => e.TargetParallelCorpora);
 
-
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method
             modelBuilder.ConfigureRawContentEntities();
@@ -172,6 +190,13 @@ namespace ClearDashboard.DataAccessLayer.Data
             // This ensures that the User Id for the current Dashboard user is always
             // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
+
+            modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
+            modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
+            modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
+
+            //modelBuilder.Entity<Token>()
+            //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
         }
 

@@ -8,11 +8,11 @@ using MediatR;
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetRowsByParatextPluginIdAndBookIdQueryHandler : IRequestHandler<
-        GetRowsByParatextPluginIdAndBookIdQuery,
+        GetRowsByParatextProjectIdAndBookIdQuery,
         RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>>
     {
         public Task<RequestResult<IEnumerable<(string chapter, string verse, string text, bool isSentenceStart)>>>
-            Handle(GetRowsByParatextPluginIdAndBookIdQuery command, CancellationToken cancellationToken)
+            Handle(GetRowsByParatextProjectIdAndBookIdQuery command, CancellationToken cancellationToken)
         {
             //Impl notes: look at command.Id (which is a string identifying the paratext plugin corpus to obtain) to get at the plugin corpus data,
             // then using this data build a TextRow per verse, with its Segment array as a single string containing the entire contents of the verse (don't parse)

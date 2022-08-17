@@ -267,6 +267,14 @@
                         <Setter Property="BorderBrush" Value="Gray" />
                         <Setter Property="Foreground" Value="White" />
                     </Style>
+                    <Style
+                        x:Key="TransparentButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Gray" />
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Name="ClearLogo" Source="Assets/ClearLogo.xaml" />

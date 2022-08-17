@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -19,7 +20,9 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using Microsoft.Win32;
 using SIL.Linq;
+using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -139,7 +142,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         public override void DoLoad(IProgressInfo progressInfo)
         {
             StartWebHost();
-
 
             // Since DoLoad is done on a different thread than what was used
             // to create the control, we need to use the Invoke method.
@@ -342,7 +344,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void ShowScripture(IProject project)
         {
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
             if (_project == null)
             {
                 lines.Add("No project to display");
@@ -351,7 +353,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 lines.Add("USFM Tokens:");
                 IEnumerable<IUSFMToken> tokens = null;
-                bool sawException = false;
+                var sawException = false;
                 try
                 {
                     tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
@@ -542,7 +544,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+            var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
 
@@ -619,16 +621,48 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
 
 
-            return projects.Select(project => new ParatextProjectMetadata
+            var metadata=  projects.Select(project => new ParatextProjectMetadata
                 {
                     Id = project.ID,
                     LanguageName = project.LanguageName,
                     Name = project.ShortName,
                     LongName = project.LongName,
-                    CorpusType = DetermineCorpusType(project.Type)
-                })
+                    CorpusType = DetermineCorpusType(project.Type),
+                    IsRtl = project.Language.IsRtoL,
+                    AvailableBooks = project.GetAvailableBooks(),
+            })
                 .ToList();
+
+            var projectNames = metadata.Select(project => project.Name).ToList();
+
+            var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
+            var directories = directoryInfo.GetDirectories();
+            foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
+            {
+                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                if (projectMetadatum != null)
+                {
+                    projectMetadatum.ProjectPath = directory.FullName;
+                }
+            }
+
+            foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
+            {
+                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                if (projectMetadatum != null)
+                {
+                    projectMetadatum.CorpusType = CorpusType.Resource;
+                }
+            }
+
+            return metadata;
         }
+
+        private string GetParatextProjectsPath()
+        {
+            return (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
+        }
+
 
         private CorpusType DetermineCorpusType(ProjectType projectType)
         {
@@ -688,7 +722,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 foreach (var p in allProjects)
                 {
-                    string text = $"{p.ShortName} is a {p.CorpusType} Project: {p.Guid}";
+                    var text = $"{p.ShortName} is a {p.CorpusType} Project: {p.Guid}";
 
                     switch (p.Type)
                     {
@@ -790,7 +824,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (project.BaseProject != null)
             {
-                CorpusType corpusType = CorpusType.Unknown;
+                var corpusType = CorpusType.Unknown;
 
                 switch (project.BaseProject.Type)
                 {
@@ -922,7 +956,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             // creating usfm directory
             try
             {
-                ParatextExtractUSFM paratextExtractUSFM = new ParatextExtractUSFM();
+                var paratextExtractUSFM = new ParatextExtractUSFM();
                 var path = paratextExtractUSFM.ExportUSFMScripture(project, this);
 
                 referenceUsfm.UsfmDirectoryPath = path;
@@ -941,54 +975,94 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
-        public List<UsfmVerse> GetUsfmForBook(
-            string ParatextId, int bookNum)
+        public VersificationBookIds GetVersificationAndBooksForProject(string ParatextProjectId)
         {
-
             // get the right project
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
-            var project = projects.FirstOrDefault(p => p.ID == ParatextId);
+            var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
 
+            var versificationBookIds = new VersificationBookIds();
+
+            if (project != null)
+            {
+                switch (project.Versification.Type)
+                {
+    
+                    case StandardScrVersType.English:
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                    case StandardScrVersType.RussianProtestant:
+                        versificationBookIds.Versification = ScrVers.RussianProtestant;
+                        break;
+                    case StandardScrVersType.RussianOrthodox:
+                        versificationBookIds.Versification = ScrVers.RussianOrthodox;
+                        break;
+                    case StandardScrVersType.Original:
+                        versificationBookIds.Versification = ScrVers.Original;
+                        break;
+                    case StandardScrVersType.Vulgate:
+                        versificationBookIds.Versification = ScrVers.Vulgate;
+                        break;
+                    case StandardScrVersType.Unknown:
+                        // there is no "Unknown" ScrVers so set to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+
+                    default:
+                        // default to english
+                        versificationBookIds.Versification = ScrVers.English;
+                        break;
+                }
+
+                var books = project.AvailableBooks.Where(b => b.Code != "");
+                versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+                return versificationBookIds;
+            }
+            return new VersificationBookIds();
+        }
+
+
+        /// <summary>
+        /// Given a projectId and bookId, return the parsed verse text for the book
+        /// </summary>
+        /// <param name="paratextProjectId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        public List<UsfmVerse> GetUsfmForBook(
+            string paratextProjectId, string bookId)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            // get the right project
+            var project = projects.FirstOrDefault(p => p.ID == paratextProjectId);
+
+            var verses = new List<UsfmVerse>();
             if (project == null)
             {
-                return null;
+                AppendText(Color.Orange, $"Could not find a projectk with Id = '{paratextProjectId}'. Returning an empty list.");
+                return verses;
             }
 
-            var book = project.AvailableBooks.FirstOrDefault(b => b.Number == bookNum);
+            // filter down to the book desired
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
             if (book == null)
             {
-                return null;
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookId}'. Returning an empty list.");
+                return verses;
             }
+            
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
             {
-                return null;
+                AppendText(Color.Orange, $"'{book.Code}' is not a bible book. Returning an empty list.");
+                return verses;
             }
-
-            List<UsfmVerse> verses = new List<UsfmVerse>();
-
 
             AppendText(Color.Blue, $"Processing {book.Code}");
 
-            StringBuilder sb = new StringBuilder();
-            //// do the header
-            //sb.AppendLine($@"\id {project.AvailableBooks[bookNum].Code}");
-
-            //int bookFileNum;
-            //if (project.AvailableBooks[bookNum].Number >= 40)
-            //{
-            //    // do that crazy USFM file naming where Matthew starts at 41
-            //    bookFileNum = project.AvailableBooks[bookNum].Number + 1;
-            //}
-            //else
-            //{
-            //    // normal OT book
-            //    bookFileNum = project.AvailableBooks[bookNum].Number;
-            //}
-
-            //var fileName = bookFileNum.ToString().PadLeft(3, '0')
-            //               + project.AvailableBooks[bookNum].Code + ".sfm";
-
+            var sb = new StringBuilder();
             IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
             try
             {
@@ -997,17 +1071,17 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception)
             {
-                AppendText(Color.Orange, $"No Scripture for {bookNum}");
+                AppendText(Color.Orange, $"No Scripture for {bookId}");
                 return null;
             }
 
-            string chapter = "";
-            string verse = "";
-            string verseText = "";
+            var chapter = "";
+            var verse = "";
+            var verseText = "";
 
-            bool lastTokenChapter = false;
-            bool lastTokenText = false;
-            bool lastVerseZero = false;
+            var lastTokenChapter = false;
+            var lastTokenText = false;
+            var lastVerseZero = false;
             foreach (var token in tokens)
             {
                 if (token is IUSFMMarkerToken marker)
@@ -1130,13 +1204,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                 verses.Add(usfm);
             }
 
+            //foreach (var v in verses)
+            //{
+            //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            //}
 
-            foreach (var v in verses)
-            {
-                Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
-            }
-
-            return verses; //TODO
+            return verses;
 
         }
 
