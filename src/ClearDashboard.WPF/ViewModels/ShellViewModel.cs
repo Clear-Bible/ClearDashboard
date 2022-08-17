@@ -29,8 +29,9 @@ namespace ClearDashboard.Wpf.ViewModels
         private readonly TranslationSource _translationSource;
 
         #region Properties
-        private TimeSpan startTimeSpan = TimeSpan.Zero;
-        private TimeSpan periodTimeSpan = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
+        private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(10);
+        private readonly int _completedRemovalSeconds = 45;
 
         private Timer _timer;
         private bool _firstRun;
@@ -202,7 +203,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     _firstRun = true;
                 }
-            }, null, startTimeSpan, periodTimeSpan);
+            }, null, _startTimeSpan, _periodTimeSpan);
 
             //BogusData();
         }
@@ -333,7 +334,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 TimeSpan ts = presentTime - _backgroundTaskStatuses[i].EndTime;
 
                 // if completed task remove it
-                if (_backgroundTaskStatuses[i].TaskStatus == StatusEnum.Completed && ts.TotalSeconds > 45)
+                if (_backgroundTaskStatuses[i].TaskStatus == StatusEnum.Completed && ts.TotalSeconds > _completedRemovalSeconds)
                 {
                     OnUIThread(() =>
                     {
