@@ -25,10 +25,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
-		Localization-How-To.md = Localization-How-To.md
+		..\Localization-How-To.md = ..\Localization-How-To.md
 		..\NuGet-Configuration.md = ..\NuGet-Configuration.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
-		Paratext_SendReceive_Documentation.md = Paratext_SendReceive_Documentation.md
+		..\Paratext_SendReceive_Documentation.md = ..\Paratext_SendReceive_Documentation.md
 		..\Setting_Background-Tasks-In-UI.md = ..\Setting_Background-Tasks-In-UI.md
 	EndProjectSection
 EndProject
