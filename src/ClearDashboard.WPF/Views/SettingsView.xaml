@@ -101,13 +101,6 @@
             Flip
         </Button>
 
-        <Image
-            Grid.Row="1"
-            Width="100"
-            Margin="12"
-            HorizontalAlignment="Left"
-            Source="{StaticResource ClearLogoDrawingImage}" />
-
         <StackPanel Grid.Row="2" AllowDrop="True">
             <ListView
                 x:Name="listview"
