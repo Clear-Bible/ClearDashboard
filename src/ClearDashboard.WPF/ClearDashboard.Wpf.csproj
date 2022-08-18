@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Assets\splash_screen.png" />
 		<None Remove="HelpFiles\NewProjectHelp_us.md" />
 		<None Remove="Resources\BiblicalTerms_logo_32.png" />
 		<None Remove="Resources\ClearDashboard_logo_128.png" />
@@ -148,6 +149,10 @@
 		<ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
 		<ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
 		<ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <SplashScreen Include="Assets\splash_screen.png" />
 	</ItemGroup>
 
 	<ItemGroup>
