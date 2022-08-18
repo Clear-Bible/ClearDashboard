@@ -150,11 +150,20 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
 #pragma warning disable CS4014
             // Do not await this....let it run in the background otherwise
             // it freezes the UI
+
+            // send to the task started event aggregator for everyone else to hear about a background task starting
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = "PINS",
+                Description = "Loading PINS data...",
+                StartTime = DateTime.Now,
+                TaskStatus = StatusEnum.Working
+            }));
 
             // ReSharper disable once MethodSupportsCancellation
             Task.Run(() =>
@@ -164,8 +173,6 @@ namespace ClearDashboard.Wpf.ViewModels
 #pragma warning restore CS4014
 
             _ = base.OnActivateAsync(cancellationToken);
-
-            return Task.CompletedTask;
         }
 
 
@@ -190,6 +197,16 @@ namespace ClearDashboard.Wpf.ViewModels
             }
             else
             {
+                // send to the task started event aggregator for everyone else to hear about a task error
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    new BackgroundTaskStatus
+                {
+                    Name = "PINS",
+                    EndTime = DateTime.Now,
+                    ErrorMessage = "Paratext is not installed",
+                    TaskStatus = StatusEnum.Error
+                }));
+
                 Logger.LogError("Paratext Not Installed in PINS viewmodel");
 
                 // turn off the progress bar
@@ -443,6 +460,17 @@ namespace ClearDashboard.Wpf.ViewModels
 
             // turn off the progress bar
             ProgressBarVisibility = Visibility.Collapsed;
+
+            // send to the task started event aggregator for everyone else to hear about a task completion
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                new BackgroundTaskStatus
+                {
+                    Name = "PINS",
+                    EndTime = DateTime.Now,
+                    Description = "Loading PINS data...Complete",
+                    TaskStatus = StatusEnum.Completed
+                }));
+
             return false;
         }
 
