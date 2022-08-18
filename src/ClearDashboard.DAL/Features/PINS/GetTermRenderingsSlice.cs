@@ -35,7 +35,15 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<TermRenderingsList>> Handle(GetTermRenderingsQuery request,
             CancellationToken cancellationToken)
         {
-            ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "TermRenderings.xml");
+            if (_projectManager.HasCurrentParatextProject == false)
+            {
+                var ret = new RequestResult<TermRenderingsList>();
+                ret.Success = false;
+                ret.Message = "No CurrentParatextProject - Plugin is probably not running";
+                return Task.FromResult(ret);
+            }
+
+            ResourceName = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml");
             var queryResult = ValidateResourcePath(new TermRenderingsList());
             if (queryResult.Success == false)
             {

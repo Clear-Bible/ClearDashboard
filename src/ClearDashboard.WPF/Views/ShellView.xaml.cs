@@ -2,6 +2,7 @@
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Views
 {
@@ -55,10 +56,15 @@ namespace ClearDashboard.Wpf.Views
 
         }
 
+
+        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var vm = (ShellViewModel)this.DataContext;
             this.Title = "ClearDashboard " + vm.Version;
+
+            // force the background task window to be on top of the bootstraper inserted frame
+            Panel.SetZIndex(this.TaskView, 10);
         }
 
         private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();

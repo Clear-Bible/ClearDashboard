@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\NuGet-Configuration.md = ..\NuGet-Configuration.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
 		Paratext_SendReceive_Documentation.md = Paratext_SendReceive_Documentation.md
+		..\Setting_Background-Tasks-In-UI.md = ..\Setting_Background-Tasks-In-UI.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paratext Integration", "Paratext Integration", "{EB6F7E37-7473-4388-8138-97FE4C99B3D1}"
