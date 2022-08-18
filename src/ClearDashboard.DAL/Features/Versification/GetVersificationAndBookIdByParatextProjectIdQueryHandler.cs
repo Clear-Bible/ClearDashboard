@@ -11,7 +11,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.DataAccessLayer.Features.Versification
 {
-    public class GetVersificationAndBookIdByDalParatextProjectIdQueryHandler : ParatextRequestHandler<GetVersificationAndBookIdByDalParatextProjectIdQuery, RequestResult<VersificationBookIds>, VersificationBookIds>
+    public class GetVersificationAndBookIdByDalParatextProjectIdQueryHandler : ParatextRequestHandler<GetVersificationAndBookIdByParatextProjectIdQuery, RequestResult<VersificationBookIds>, VersificationBookIds>
     {
 
         public GetVersificationAndBookIdByDalParatextProjectIdQueryHandler([NotNull] ILogger<GetVersificationAndBookIdByDalParatextProjectIdQueryHandler> logger) :
@@ -22,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Versification
 
 
         public override async
-            Task<RequestResult<VersificationBookIds>> Handle(GetVersificationAndBookIdByDalParatextProjectIdQuery request, CancellationToken cancellationToken)
+            Task<RequestResult<VersificationBookIds>> Handle(GetVersificationAndBookIdByParatextProjectIdQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("versificationbooksbyparatextid", request, cancellationToken);
         }

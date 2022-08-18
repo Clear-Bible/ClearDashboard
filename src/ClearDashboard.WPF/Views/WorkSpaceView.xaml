@@ -42,7 +42,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -406,78 +405,6 @@
             Foreground="{DynamicResource MaterialDesignBody}"
             Text="{Binding Message}"
             Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <StatusBar
-            Grid.Row="2"
-            Background="{DynamicResource MaterialDesignPaper}"
-            Foreground="{DynamicResource MaterialDesignDarkForeground}">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <Button
-                    x:Name="BackgroundTasks"
-                    Padding="0"
-                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                    Style="{StaticResource TransparentButton}"
-                    ToolTip="Background Tasks">
-                    <!--  materialDesign:DialogHost.DialogClosingAttached="Sample2_DialogHost_OnDialogClosing"  -->
-                    <Grid>
-                        <materialDesign:PackIcon
-                            Width="25"
-                            Height="30"
-                            Kind="ApplicationSettingsOutline" />
-                        <ProgressBar
-                            Width="15"
-                            Height="15"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource GreenMidBrush}"
-                            IsIndeterminate="True"
-                            Style="{StaticResource MaterialDesignCircularProgressBar}"
-                            Value="60" />
-                    </Grid>
-                    <Button.CommandParameter>
-                        <StackPanel Margin="16">
-                            <ProgressBar
-                                Margin="16"
-                                HorizontalAlignment="Center"
-                                IsIndeterminate="True"
-                                Style="{DynamicResource MaterialDesignCircularProgressBar}"
-                                Value="0" />
-                            <Button
-                                HorizontalAlignment="Center"
-                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                                CommandParameter="Sample2Cancel"
-                                Content="CANCEL"
-                                IsCancel="True"
-                                Style="{StaticResource MaterialDesignFlatButton}" />
-                        </StackPanel>
-                    </Button.CommandParameter>
-                </Button>
-            </StatusBarItem>
-            <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2">
-                <TextBlock VerticalAlignment="Center" Text="c:\path\of\current\file.txt" />
-            </StatusBarItem>
-            <Separator Grid.Column="3" />
-            <StatusBarItem Grid.Column="4">
-                <ProgressBar
-                    Width="90"
-                    Height="16"
-                    VerticalAlignment="Center"
-                    Value="40" />
-            </StatusBarItem>
-        </StatusBar>
     </Grid>
 
 </Page>

@@ -5,6 +5,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using GetVersificationAndBookIdByParatextProjectIdQuery = ClearDashboard.DAL.Alignment.Features.Corpora.GetVersificationAndBookIdByParatextProjectIdQuery;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {

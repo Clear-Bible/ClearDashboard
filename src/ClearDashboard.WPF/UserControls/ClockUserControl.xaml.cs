@@ -226,24 +226,32 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void SetClockToLocalTime()
         {
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                MenuItems[0].NameTime = DateTime.Now.ToString("HH:mm");
-                MenuItems[0].TextBlockText = GetLocalizedLocalTimeString();
+                this.Dispatcher.Invoke(() =>
+                {
+                    MenuItems[0].NameTime = DateTime.Now.ToString("HH:mm");
+                    MenuItems[0].TextBlockText = GetLocalizedLocalTimeString();
 
-                if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
-                {
-                    MenuItems[0].Foreground = Brushes.LimeGreen;
-                }
-                else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
-                {
-                    MenuItems[0].Foreground = Brushes.DarkOrange;
-                }
-                else
-                {
-                    MenuItems[0].Foreground = Brushes.Red;
-                }
-            });
+                    if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
+                    {
+                        MenuItems[0].Foreground = Brushes.LimeGreen;
+                    }
+                    else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
+                    {
+                        MenuItems[0].Foreground = Brushes.DarkOrange;
+                    }
+                    else
+                    {
+                        MenuItems[0].Foreground = Brushes.Red;
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+
+            }
+
         }
 
         private string GetLocalizedLocalTimeString()

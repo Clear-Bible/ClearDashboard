@@ -79,38 +79,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
         #endregion Please leave these for debugging plug-in start up crashes
 
-        private void DisplayPluginVersion()
-        {
-            // get the version information
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            lblVersion.Text = string.Format($@"Plugin Version: {version}");
-        }
-
-        private static void ConfigureLogging()
-        {
-            // configure Serilog
-            var log = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Debug()
-                .WriteTo.File("d:\\temp\\Plugin.log", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            // set instance to global logger
-            Log.Logger = log;
-        }
-
-        #endregion
-
         private void HandleWindowDisposed(object sender, EventArgs e)
         {
             WebAppProxy?.Dispose();
             WebAppProxy = null;
         }
 
-        private void OnExceptionOccurred(Exception exception)
-        {
-            Log.Error($"OnLoad {exception.Message}");
-            AppendText(Color.Red, $"OnLoad {exception.Message}");
-        }
+        #endregion
 
 
         #region Paratext overrides - standard functions
@@ -129,7 +104,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             AppendText(Color.Green, $"OnAddedToParent called");
 
             UpdateProjectList();
-            ShowScripture(_project);
+            //ShowScripture(_project);
         }
 
         public override string GetState()
@@ -213,12 +188,23 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
         }
 
+        /// <summary>
+        /// Called when the user selects a different project in Paratext from the drop down list
+        /// We are unable to switch the project via the plugin API.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="newProject"></param>
         private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
             SetProject(newProject, reloadWebHost: true);
         }
 
 
+        /// <summary>
+        /// Standard Paratext verse reference has been changed
+        /// </summary>
+        /// <param name="verseRef"></param>
+        /// <param name="reloadWebHost"></param>
         private void SetVerseRef(IVerseRef verseRef, bool reloadWebHost = false)
         {
             _verseRef = verseRef;
@@ -228,6 +214,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
         }
 
+        /// <summary>
+        /// Standard the project has changed
+        /// </summary>
+        /// <param name="newProject"></param>
+        /// <param name="reloadWebHost"></param>
         private void SetProject(IProject newProject, bool reloadWebHost = false)
         {
             _project = newProject;
@@ -245,7 +236,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="newReference"></param>
         private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
         {
-
             // send the new verse & text collections
             try
             {
@@ -296,11 +286,39 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         #region Methods
 
+        private void OnExceptionOccurred(Exception exception)
+        {
+            Log.Error($"OnLoad {exception.Message}");
+            AppendText(Color.Red, $"OnLoad {exception.Message}");
+        }
+
+        private void DisplayPluginVersion()
+        {
+            // get the version information
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            lblVersion.Text = string.Format($@"Plugin Version: {version}");
+        }
+
+        private static void ConfigureLogging()
+        {
+            // configure Serilog
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .WriteTo.File("d:\\temp\\Plugin.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            // set instance to global logger
+            Log.Logger = log;
+        }
+
+        /// <summary>
+        /// Gets the list of all the available Paratext projects
+        /// </summary>
         private void UpdateProjectList()
         {
             _projectList.Clear();
             var windows = _host.AllOpenWindows;
-            ProjectsListBox.Items.Clear();
+            //ProjectsListBox.Items.Clear();
             foreach (var window in windows)
             {
                 if (window is ITextCollectionChildState tc)
@@ -309,118 +327,25 @@ namespace ClearDashboard.WebApiParatextPlugin
                     foreach (var proj in projects)
                     {
                         _projectList.Add(proj);
-                        ProjectsListBox.Items.Add(proj.ShortName);
+                        //ProjectsListBox.Items.Add(proj.ShortName);
                     }
                     _verseRef = tc.VerseRef;
                     break;
                 }
             }
-            if (ProjectsListBox.Items.Count > 0)
-            {
-                ProjectsListBox.SelectedIndex = 0;
-                ProjectListBox_SelectedIndexChanged(null, null);
-            }
+            //if (ProjectsListBox.Items.Count > 0)
+            //{
+            //    ProjectsListBox.SelectedIndex = 0;
+            //    ProjectListBox_SelectedIndexChanged(null, null);
+            //}
         }
 
-        private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var found = false;
-            if (ProjectsListBox.SelectedItem != null)
-            {
-                var name = ProjectsListBox.SelectedItem.ToString();
-                foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
-                {
-                    ShowScripture(proj);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                textBox.Text = "Cannot find project.";
-            }
 
-        }
-
-        private void ShowScripture(IProject project)
-        {
-            var lines = new List<string>();
-            if (_project == null)
-            {
-                lines.Add("No project to display");
-            }
-            else
-            {
-                lines.Add("USFM Tokens:");
-                IEnumerable<IUSFMToken> tokens = null;
-                var sawException = false;
-                try
-                {
-                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
-                }
-                catch (Exception e)
-                {
-                    lines.Add($" Cannot get the USFM Tokens for this project because {e.Message}");
-                    sawException = true;
-                }
-
-                if ((tokens == null) && (sawException == false))
-                {
-                    lines.Add("Cannot get the USFM Tokens for this project");
-                }
-
-                if (tokens != null)
-                {
-                    lines.Add(_project.ShortName);
-
-                    foreach (var token in tokens)
-                    {
-                        if (token is IUSFMMarkerToken marker)
-                        {
-                            if (marker.Type == MarkerType.Verse)
-                            {
-                                //skip
-                            }
-                            else if (marker.Type == MarkerType.Paragraph)
-                            {
-                                lines.Add("/");
-                            }
-                            else
-                            {
-                                //lines.Add($"{marker.Type} Marker: {marker.Data}");
-                            }
-                        }
-                        else if (token is IUSFMTextToken textToken)
-                        {
-                            if (textToken.IsScripture)
-                            {
-                                lines.Add(textToken.Text);
-                            }
-                        }
-                        else if (token is IUSFMAttributeToken)
-                        {
-                            //lines.Add("Attribute Token: " + token.ToString());
-                        }
-                        else
-                        {
-                            //lines.Add("Unexpected token type: " + token.ToString());
-                        }
-                    }
-
-                    // remove the last paragraph tag if at the end
-                    if (lines.Count > 0)
-                    {
-                        if (lines[lines.Count - 1] == "/")
-                        {
-                            lines.RemoveAt(lines.Count - 1);
-                        }
-                    }
-                }
-
-                textBox.Lines = lines.ToArray();
-            }
-        }
-
+        /// <summary>
+        /// Used by a slice to get the USFM data from the currently connected project's
+        /// textcollection panel in Paratext
+        /// </summary>
+        /// <returns></returns>
         public List<TextCollection> GetTextCollectionsData()
         {
             // get the text collections
@@ -542,6 +467,12 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
         }
 
+        /// <summary>
+        /// Used to generate clean USFM files in the \My Documents\ClearDashboard_Projects\Data directory
+        /// Organized by the project's guid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnExportUSFM_Click(object sender, EventArgs e)
         {
             var paratextExtractUSFM = new ParatextExtractUSFM();
@@ -572,13 +503,12 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         /// <summary>
-        /// Force a restart of the named pipes
+        /// Clear the window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnRestart_Click(object sender, EventArgs e)
+        private void btnClearWindow_Click(object sender, EventArgs e)
         {
-
             // clear out the existing data
             if (rtb.InvokeRequired)
             {
@@ -590,8 +520,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             AppendText(Color.Green, DateTime.Now.ToShortTimeString());
-            AppendText(Color.Green, "_PipeServer Pipe Restarted");
-
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -604,9 +532,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             hubProxy.Clients.All.Send(Guid.NewGuid(), @"Can you hear me?");
-
         }
 
+        /// <summary>
+        /// Used to generate data for unit tests
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVersificationTest_Click(object sender, EventArgs e)
         {
             var v = _project.Versification;
@@ -615,6 +547,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             newVerse = v.ChangeVersification(newVerse);
         }
+
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
@@ -658,12 +591,20 @@ namespace ClearDashboard.WebApiParatextPlugin
             return metadata;
         }
 
+        /// <summary>
+        /// Returns the directory path to where the Paratext project resides
+        /// </summary>
+        /// <returns></returns>
         private string GetParatextProjectsPath()
         {
             return (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
         }
 
-
+        /// <summary>
+        /// Returns the Paratext project type
+        /// </summary>
+        /// <param name="projectType"></param>
+        /// <returns></returns>
         private CorpusType DetermineCorpusType(ProjectType projectType)
         {
             try
@@ -674,38 +615,16 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 return CorpusType.Unknown;
             }
-            
-            //switch (projectType)
-            //{
-            //    case ProjectType.Standard:
-            //        return CorpusType.Standard;
-            //    case ProjectType.BackTranslation:
-            //        return CorpusType.BackTranslation;
-            //    case ProjectType.EnhancedResource:
-            //       return CorpusType.MarbleResource;
-            //    case ProjectType.Auxiliary:
-            //       return CorpusType.Auxiliary;
-            //    case ProjectType.Daughter:
-            //        return CorpusType.Daughter;
-            //    case ProjectType.TransliterationManual:
-            //        return CorpusType.TransliterationManual;
-            //    case ProjectType.TransliterationWithEncoder:
-            //        return CorpusType.TransliterationWithEncoder;
-            //    case ProjectType.ConsultantNotes:
-            //        return CorpusType.ConsultantNotes;
-            //    case ProjectType.StudyBible:
-            //        return CorpusType.StudyBible;
-            //    case ProjectType.StudyBibleAdditions:
-            //        return CorpusType.StudyBibleAdditions;
-            //    case ProjectType.Xml:
-            //        return CorpusType.Xml;
-            //    case ProjectType.SourceLanguage:
-            //        return CorpusType.SourceLanguage;
-            //    default:
-            //        return CorpusType.Unknown;
-            //}
         }
 
+
+
+        /// <summary>
+        /// Called by a slice
+        /// ClearDashboard.WebApiParatextPlugin.Features.AllProjects
+        /// </summary>
+        /// <param name="showInConsole"></param>
+        /// <returns></returns>
         public List<ParatextProject> GetAllProjects(bool showInConsole = false)
         {
             List<ParatextProject> allProjects = new();
@@ -776,6 +695,12 @@ namespace ClearDashboard.WebApiParatextPlugin
             return allProjects;
         }
 
+
+        /// <summary>
+        /// takes in a project and builds a model from it
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         private ParatextProject BuildParatextProject(IProject project)
         {
             var paratextProject = new ParatextProject();
@@ -939,14 +864,19 @@ namespace ClearDashboard.WebApiParatextPlugin
             return paratextProject;
         }
 
-        public ReferenceUsfm GetReferenceUSFM(string requestId)
+        /// <summary>
+        /// Gets the USFM for a project with the following project guid
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        public ReferenceUsfm GetReferenceUSFM(string projectId)
         {
             ReferenceUsfm referenceUsfm = new();
-            referenceUsfm.Id = requestId;
+            referenceUsfm.Id = projectId;
 
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
-            var project = projects.FirstOrDefault(p => p.ID == requestId);
+            var project = projects.FirstOrDefault(p => p.ID == projectId);
 
             if (project == null)
             {
@@ -975,6 +905,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
+
+        /// <summary>
+        /// Called by a slice
+        /// returns both the versification and the list of books available
+        /// </summary>
+        /// <param name="ParatextProjectId"></param>
+        /// <returns></returns>
         public VersificationBookIds GetVersificationAndBooksForProject(string ParatextProjectId)
         {
             // get the right project
@@ -1025,12 +962,13 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         /// <summary>
         /// Given a projectId and bookId, return the parsed verse text for the book
+        ///
+        /// called from: ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         /// </summary>
         /// <param name="paratextProjectId"></param>
         /// <param name="bookId"></param>
         /// <returns></returns>
-        public List<UsfmVerse> GetUsfmForBook(
-            string paratextProjectId, string bookId)
+        public List<UsfmVerse> GetUsfmForBook(string paratextProjectId, string bookId)
         {
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
@@ -1214,5 +1152,104 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         #endregion
+
+        private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //var found = false;
+            //if (ProjectsListBox.SelectedItem != null)
+            //{
+            //    var name = ProjectsListBox.SelectedItem.ToString();
+            //    foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
+            //    {
+            //        ShowScripture(proj);
+            //        found = true;
+            //        break;
+            //    }
+            //}
+            //if (!found)
+            //{
+            //    textBox.Text = "Cannot find project.";
+            //}
+
+        }
+
+        //private void ShowScripture(IProject project)
+        //{
+        //    var lines = new List<string>();
+        //    if (_project == null)
+        //    {
+        //        lines.Add("No project to display");
+        //    }
+        //    else
+        //    {
+        //        lines.Add("USFM Tokens:");
+        //        IEnumerable<IUSFMToken> tokens = null;
+        //        var sawException = false;
+        //        try
+        //        {
+        //            tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            lines.Add($" Cannot get the USFM Tokens for this project because {e.Message}");
+        //            sawException = true;
+        //        }
+
+        //        if ((tokens == null) && (sawException == false))
+        //        {
+        //            lines.Add("Cannot get the USFM Tokens for this project");
+        //        }
+
+        //        if (tokens != null)
+        //        {
+        //            lines.Add(_project.ShortName);
+
+        //            foreach (var token in tokens)
+        //            {
+        //                if (token is IUSFMMarkerToken marker)
+        //                {
+        //                    if (marker.Type == MarkerType.Verse)
+        //                    {
+        //                        //skip
+        //                    }
+        //                    else if (marker.Type == MarkerType.Paragraph)
+        //                    {
+        //                        lines.Add("/");
+        //                    }
+        //                    else
+        //                    {
+        //                        //lines.Add($"{marker.Type} Marker: {marker.Data}");
+        //                    }
+        //                }
+        //                else if (token is IUSFMTextToken textToken)
+        //                {
+        //                    if (textToken.IsScripture)
+        //                    {
+        //                        lines.Add(textToken.Text);
+        //                    }
+        //                }
+        //                else if (token is IUSFMAttributeToken)
+        //                {
+        //                    //lines.Add("Attribute Token: " + token.ToString());
+        //                }
+        //                else
+        //                {
+        //                    //lines.Add("Unexpected token type: " + token.ToString());
+        //                }
+        //            }
+
+        //            // remove the last paragraph tag if at the end
+        //            if (lines.Count > 0)
+        //            {
+        //                if (lines[lines.Count - 1] == "/")
+        //                {
+        //                    lines.RemoveAt(lines.Count - 1);
+        //                }
+        //            }
+        //        }
+
+        //        textBox.Lines = lines.ToArray();
+        //    }
+        //}
     }
 }

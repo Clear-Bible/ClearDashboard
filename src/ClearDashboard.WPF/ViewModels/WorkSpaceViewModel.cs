@@ -1306,13 +1306,6 @@ namespace ClearDashboard.Wpf.ViewModels
             await Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Button click for the background tasks on the status bar
-        /// </summary>
-        public void BackgroundTasks()
-        {
-            Console.WriteLine();
-        }
     }
 
     public static class WorkspaceLayoutNames
