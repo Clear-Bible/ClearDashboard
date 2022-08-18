@@ -4,6 +4,9 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Converters
 {
+    /// <summary>
+    /// Used to convert between zero and one based systems used by the dropdowns
+    /// </summary>
     public class BcvBookNumConvertor : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -13,7 +16,7 @@ namespace ClearDashboard.Wpf.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return System.Convert.ToInt32(value) + 1;
         }
     }
 }
