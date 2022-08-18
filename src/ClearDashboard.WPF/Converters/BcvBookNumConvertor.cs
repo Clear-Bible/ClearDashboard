@@ -13,7 +13,7 @@ namespace ClearDashboard.Wpf.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return System.Convert.ToInt32(value) + 1;
         }
     }
 }
