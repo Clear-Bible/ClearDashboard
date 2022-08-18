@@ -457,6 +457,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("SurfaceText")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("TokenCompositeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("TokenizationId")
                         .HasColumnType("TEXT");
 
@@ -474,6 +477,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("BookNumber");
 
                     b.HasIndex("ChapterNumber");
+
+                    b.HasIndex("TokenCompositeId");
 
                     b.HasIndex("TokenizationId");
 
@@ -862,7 +867,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", "CorpusHistory")
                         .WithMany("TokenizedCorpora")
                         .HasForeignKey("CorpusHistoryId");
 
@@ -873,6 +878,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Corpus");
+
+                    b.Navigation("CorpusHistory");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
