@@ -397,6 +397,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("DesignSurfaceLayout")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
@@ -528,6 +531,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Position")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("TokenId")
