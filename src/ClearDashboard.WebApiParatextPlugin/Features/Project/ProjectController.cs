@@ -19,14 +19,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         }
 
         [HttpPost]
-        public async Task<RequestResult<DataAccessLayer.Models.ParatextProject>> GetAsync([FromBody]GetCurrentProjectQuery query)
+        public async Task<RequestResult<DataAccessLayer.Models.ParatextProject>> GetAsync([FromBody] GetCurrentProjectQuery query)
         {
             return await ExecuteRequestAsync<RequestResult<DataAccessLayer.Models.ParatextProject>, DataAccessLayer.Models.ParatextProject>(query, CancellationToken.None);
 
         }
 
         [HttpPost]
-        //[Route("api/projects/metadata}")]
+        //[Route("api/projects/metadata}")] Comment out in order for GetCurrentProjectTest to pass
         [ActionName("metadata")]
         public async Task<RequestResult<List<ParatextProjectMetadata>>> GetProjectMetadataAsync([FromBody] GetProjectMetadataQuery query)
         {

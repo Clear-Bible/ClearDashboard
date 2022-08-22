@@ -30,6 +30,9 @@ namespace ClearDashboard.DAL.Tests
             dashboardProjectManager.CreateDashboardProject();
             dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
 
+            dashboardProjectManager.CurrentParatextProject = new ParatextProject();
+            dashboardProjectManager.CurrentParatextProject.DirectoryPath = path;
+
             var result =
             await ExecuteAndTestRequest<GetTermRenderingsQuery, RequestResult<TermRenderingsList>,
                 TermRenderingsList>(new GetTermRenderingsQuery());
