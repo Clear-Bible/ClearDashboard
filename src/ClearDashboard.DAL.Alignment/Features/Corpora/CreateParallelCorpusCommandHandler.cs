@@ -96,11 +96,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     ChapterNumber = v.ChapterNum,
                                     CorpusId = sourceTokenizedCorpus!.CorpusId
                                 };
-                                if (tokenDatabaseIds.Count() > 0)
+                                if (tokenDatabaseIds.Any())
                                 {
-                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
+                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenId = td
+                                        TokenId = td,
+                                        Position = index
                                     }));
                                 }
                                 return verse;
@@ -134,9 +135,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 };
                                 if (tokenDatabaseIds.Count() > 0)
                                 {
-                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select(td => new Models.TokenVerseAssociation
+                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenId = td
+                                        TokenId = td,
+                                        Position = index
                                     }));
                                 }
                                 return verse;
