@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -100,7 +101,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 try
                 {
 
-                   
+
                     // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
                     await SendProgressBarVisibilityMessage(true, 250);
 
@@ -108,20 +109,47 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                     CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
 
-                    await SendProgressBarMessage($"Getting book '{CurrentBook}'");
+                    //await SendProgressBarMessage($"Getting book '{CurrentBook}'");
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Getting book '{CurrentBook}'...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }));
 
                     var tokensTextRows = corpus[CurrentBook].GetRows().Cast<TokensTextRow>()
-                   .Where(ttr => ttr.Tokens.Count(t => t.TokenId.ChapterNumber == 1) > 0).ToList();
+                        .Where(ttr => ttr.Tokens.Count(t => t.TokenId.ChapterNumber == 1) > 0).ToList();
 
-                    await SendProgressBarMessage($"Found {tokensTextRows.Count} TokensTextRow entities.");
+                    //await SendProgressBarMessage($"Found {tokensTextRows.Count} TokensTextRow entities.");
 
-                    OnUIThread(()=>
+                    OnUIThread(() =>
                     {
                         TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
                     });
-                     
-                    await SendProgressBarMessage("Completed retrieving verse tokens.");
+
+                    //await SendProgressBarMessage("Completed retrieving verse tokens.");
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Completed
+                        }));
+                }
+                catch (Exception ex)
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            EndTime = DateTime.Now,
+                            ErrorMessage = $"{ex}",
+                            TaskStatus = StatusEnum.Error
+                        }));
                 }
                 finally
                 {
