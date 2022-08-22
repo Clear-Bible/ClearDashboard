@@ -17,6 +17,9 @@ using System.Windows.Threading;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -35,6 +38,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
     {
+        protected ProjectDbContextFactory? ProjectNameDbContextFactory { get; init; }
+        protected IProjectProvider? ProjectProvider { get; set; }
+        protected ProjectDbContext ProjectDbContext { get; set; } = null!;
+
         CancellationTokenSource _tokenSource = null;
         public IWindowManager WindowManager { get; }
         private readonly IMediator _mediator;
@@ -155,9 +162,17 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     TaskStatus = StatusEnum.Working
                                 }));
                                 CheckAndThrowCancellationToken(token);
-                                //***HERE IT DOES SOMETHING
-                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
-                            metadata.LanguageName, metadata.CorpusTypeDisplay);
+
+
+
+
+                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name!, metadata.LanguageName!, 
+                                    metadata.CorpusTypeDisplay);
+
+
+
+
+
                                 CheckAndThrowCancellationToken(token);
                                 //await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -168,11 +183,16 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     TaskStatus = StatusEnum.Working
                                 }));
                                 CheckAndThrowCancellationToken(token);
+                                
 
-                                //***HERE IT DOES SOMETHING
+
+
                                 OnUIThread(() => Corpora.Add(corpus));
+                                
+                                
+                                
+                                
                                 CheckAndThrowCancellationToken(token);
-
                                 //await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                                 {
@@ -187,10 +207,16 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 //    .Tokenize<LatinWordTokenizer>()
                                 //    .Transform<IntoTokensTextRowProcessor>();
 
-                                //***HERE IT DOES SOMETHING
-                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id))
+                               
+
+
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
+                                
+                                
+                                
+                                
                                 CheckAndThrowCancellationToken(token);
                                 //await SendProgressBarMessage(
                                 //    $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
@@ -214,11 +240,16 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     TaskStatus = StatusEnum.Working
                                 }));
                                 CheckAndThrowCancellationToken(token);
+                                
 
-                                //***HERE IT DOES SOMETHING
-                                var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,
-                            corpus.CorpusId,
-                            ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+
+                                var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,corpus.CorpusId,
+                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                                
+                                
+                                
+                                
                                 CheckAndThrowCancellationToken(token);
                                 //await SendProgressBarMessage(
                                 //    $"Completed creating tokenized text corpus for '{metadata.Name}' corpus.");
@@ -270,17 +301,20 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
         }
 
-        private void RestoreOriginalDatabase()
+        private async void RestoreOriginalDatabase()
         {
+            //await SaveDataAsync(request, cancellationToken);
             //restore original database
             var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var folderPath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{projectName}");
-            var filePath = Path.Combine(folderPath, $"{projectName}.sqlite");
-            File.Delete(filePath);
+            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+            var projectPath = Path.Combine(dashboardPath, projectName);
+            var filePath = Path.Combine(projectPath, $"{projectName}.sqlite");
+            ProjectManager.ProjectNameDbContextFactory.ProjectAssets.ProjectDbContext.Database.EnsureDeleted();
+            //File.Delete(filePath);
             File.Move(
-                Path.Combine(folderPath, $"{projectName}_original.sqlite"),
-                Path.Combine(folderPath, $"{projectName}.sqlite"));
+                Path.Combine(dashboardPath, $"{projectName}_original.sqlite"),
+                Path.Combine(projectPath, $"{projectName}.sqlite"));
         }
 
         private void CopyOriginalDatabase()
@@ -288,9 +322,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             //make a copy of the database here named original_ProjectName.sqlite
             var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var folderPath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{projectName}");
-            var filePath = Path.Combine(folderPath, $"{projectName}.sqlite");
-            File.Copy(filePath, Path.Combine(folderPath, $"{projectName}_original.sqlite"));
+            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+            var projectPath = Path.Combine(dashboardPath, projectName);
+            var filePath = Path.Combine(projectPath, $"{projectName}.sqlite");
+            File.Copy(filePath, Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
         }
 
         private static void CheckAndThrowCancellationToken(CancellationToken token)

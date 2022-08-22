@@ -18,6 +18,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.DataAccessLayer
@@ -31,8 +32,10 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        public ProjectDbContextFactory ProjectNameDbContextFactory { get; set; }
         public IMediator Mediator { get; private set; }
+
+        public ProjectAssets ProjectAssets { get; set; }
 
 
 
