@@ -96,6 +96,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
                                     .Where(tva => tva.Token != null)
+                                    .OrderBy(tva => tva.Position)
                                     .Select(tva =>
                                         new TokenId(
                                             tva.Token!.BookNumber,
@@ -114,6 +115,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
                                     .Where(tva => tva.Token != null)
+                                    .OrderBy(tva => tva.Position)
                                     .Select(tva =>
                                         new TokenId(
                                             tva.Token!.BookNumber, 

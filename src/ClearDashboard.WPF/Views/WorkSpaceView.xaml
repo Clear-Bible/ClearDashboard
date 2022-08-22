@@ -87,7 +87,7 @@
                         <TextBlock
                             Margin="5,5,0,0"
                             VerticalAlignment="Center"
-                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            Foreground="{DynamicResource PrimaryHueMidBrush}"
                             Text="{Binding Header}" />
                     </HierarchicalDataTemplate>
                 </Menu.ItemTemplate>
@@ -405,7 +405,6 @@
             Foreground="{DynamicResource MaterialDesignBody}"
             Text="{Binding Message}"
             Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
     </Grid>
 
 </Page>

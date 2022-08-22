@@ -62,8 +62,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var verseMappings = new List<VerseMapping>()
             {
                 new VerseMapping(
-                    new List<Verse>() { new Verse("Jas", 1, 1) },
-                    new List<Verse>() { new Verse("Jas", 1, 1) }
+                    new List<Verse>() { new Verse("JAS", 1, 1) },
+                    new List<Verse>() { new Verse("JAS", 1, 1) }
                 )
             };
 
@@ -175,8 +175,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var targetTokenGuidIds = targetTokenizedCorpus.Tokens
                 .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
 
-            Assert.True(sourceTokenGuidIds.Keys.Count > 100);
-            Assert.True(targetTokenGuidIds.Keys.Count > 100);
+            Assert.True(sourceTokenGuidIds.Keys.Count > 50);
+            Assert.True(targetTokenGuidIds.Keys.Count > 50);
             Assert.Empty(sourceTokenGuidIds.Keys.Intersect(targetTokenGuidIds.Keys));
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
@@ -269,8 +269,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var verseMappings = new List<VerseMapping>()
             {
                 new VerseMapping(
-                    new List<Verse>() { new Verse("Jas", 1, 1) },
-                    new List<Verse>() { new Verse("Jas", 1, 1) }
+                    new List<Verse>() { new Verse("JAS", 1, 1) },
+                    new List<Verse>() { new Verse("JAS", 1, 1) }
                 )
             };
 
@@ -298,72 +298,6 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.False(result.Success);
             Assert.Null(result.Data);
             Assert.Contains("targettokenizedcorpus not found", result.Message.ToLower());
-            Output.WriteLine(result.Message);
-        }
-        finally
-        {
-            await DeleteDatabaseContext();
-        }
-    }
-
-    [Fact]
-    [Trait("Category", "Handlers")]
-    public async void ParallelCorpus__InvalidBookId()
-    {
-        try
-        {
-            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
-            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, sourceCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-
-            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
-            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, targetCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-
-            var bogusSourceVerseMappings = new List<VerseMapping>()
-            {
-                new VerseMapping(
-                    new List<Verse>() { new Verse("Bogus", 1, 1) },
-                    new List<Verse>() { new Verse("Jas", 1, 1) }
-                )
-            };
-
-            var bogusTargetVerseMappings = new List<VerseMapping>()
-            {
-                new VerseMapping(
-                    new List<Verse>() { new Verse("Jas", 1, 1) },
-                    new List<Verse>() { new Verse("Bogus", 1, 1) }
-                )
-            };
-
-            // Bogus source book id:
-            var command =
-                new CreateParallelCorpusCommand(
-                    sourceTokenizedTextCorpus.TokenizedCorpusId,
-                    targetTokenizedTextCorpus.TokenizedCorpusId, 
-                    bogusSourceVerseMappings);
-            var result = await Mediator!.Send(command);
-
-            Assert.NotNull(result);
-            Assert.False(result.Success);
-            Assert.Null(result.Data);
-            Assert.Contains("invalid book", result.Message.ToLower());
-            Assert.Contains("source", result.Message.ToLower());
-            Output.WriteLine(result.Message);
-
-            // Bogus target book id:
-            command =
-                new CreateParallelCorpusCommand(
-                    sourceTokenizedTextCorpus.TokenizedCorpusId,
-                    targetTokenizedTextCorpus.TokenizedCorpusId,
-                    bogusTargetVerseMappings);
-            result = await Mediator!.Send(command);
-
-            Assert.NotNull(result);
-            Assert.False(result.Success);
-            Assert.Null(result.Data);
-            Assert.Contains("invalid book", result.Message.ToLower());
-            Assert.Contains("target", result.Message.ToLower());
             Output.WriteLine(result.Message);
         }
         finally

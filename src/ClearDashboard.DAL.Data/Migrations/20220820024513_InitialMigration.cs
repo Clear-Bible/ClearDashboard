@@ -55,6 +55,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
                     LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true),
+                    DesignSurfaceLayout = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -83,9 +84,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     CorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TokenizationFunction = table.Column<string>(type: "TEXT", nullable: true),
                     Metadata = table.Column<string>(type: "jsonb", nullable: false),
-                    CorpusHistoryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -215,7 +216,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
-                    TrainingText = table.Column<string>(type: "TEXT", nullable: true)
+                    TrainingText = table.Column<string>(type: "TEXT", nullable: true),
+                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -481,6 +483,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Position = table.Column<int>(type: "INTEGER", nullable: false),
                     VerseId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
@@ -612,6 +615,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Token_ChapterNumber",
                 table: "Token",
                 column: "ChapterNumber");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_TokenCompositeId",
+                table: "Token",
+                column: "TokenCompositeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Token_TokenizationId",
