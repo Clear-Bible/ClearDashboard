@@ -99,13 +99,13 @@
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding CheckBoxVisibility}">
                                 <CheckBox.Resources>
-                                
-                                  <!--Unchecked state-->  
-                                
+
+                                    <!--  Unchecked state  -->
+
                                     <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="{DynamicResource SecondaryHueMid}" />
-                                
-                                  <!--Checked state-->  
-                                
+
+                                    <!--  Checked state  -->
+
                                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
                                 </CheckBox.Resources>
                             </CheckBox>
@@ -132,8 +132,8 @@
                                 Visibility="{Binding TextBoxVisibility}" />
 
                             <ComboBox
-                                Foreground="Black"
                                 Height="26"
+                                Foreground="Black"
                                 ItemsSource="{Binding UtcStringList}"
                                 MouseEnter="TextBox_OnMouseEnter"
                                 MouseLeave="TextBox_OnMouseLeave"

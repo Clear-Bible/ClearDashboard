@@ -6,11 +6,11 @@
     xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
-    xmlns:resources="clr-namespace:ClearDashboard"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
+    xmlns:resources="clr-namespace:ClearDashboard"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
     d:DataContext="{d:DesignInstance Type=viewModels:StartPageViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -30,7 +30,7 @@
                     Merge in the resource dictionary that is shared between the main window and the overview window.
                 -->
 
-                <ResourceDictionary Source="SharedVisualTemplates.xaml" />
+                <ResourceDictionary Source="/Views/ProjectDesignSurface/SharedVisualTemplates.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -62,7 +62,7 @@
                         Width="32"
                         Height="32"
                         HorizontalAlignment="Right"
-                        Source="Resources/block_16.png" />
+                        Source="/Resources/block_16.png" />
                 </Grid>
             </DataTemplate>
 
@@ -75,7 +75,7 @@
                         Width="32"
                         Height="32"
                         HorizontalAlignment="Right"
-                        Source="Resources/tick_16.png" />
+                        Source="/Resources/tick_16.png" />
                 </Grid>
             </DataTemplate>
 
@@ -126,7 +126,7 @@
                         VerticalAlignment="Stretch"
                         Fill="White"
                         Stroke="Black" />
-                    <Image Margin="2" Source="Resources\scissors.png" />
+                    <Image Margin="2" Source="/Resources/scissors.png" />
                 </Grid>
                 <ControlTemplate.Triggers>
                     <EventTrigger RoutedEvent="Mouse.MouseEnter">
