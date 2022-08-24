@@ -57,9 +57,9 @@
         <TextBox
             x:Name="TimerBox"
             Width="77"
-            HorizontalContentAlignment="Center"
             Margin="34,0,17,0"
             VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Background="Transparent"
             CaretBrush="Transparent"

@@ -46,11 +46,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             bool IsRtl,
             string Name,
             string Language,
-            string CorpusType)
+            string CorpusType, 
+            CancellationToken token)
         {
             var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
