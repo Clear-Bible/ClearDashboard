@@ -13,19 +13,19 @@
     FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Orientation="Vertical">
             <TextBlock
                 Margin="20"
                 VerticalAlignment="Top"
                 Background="Brown"
                 Text="DASHBOARD" />
-            <Button Command="{Binding ClearLogCommand}" >CLEAR LOG</Button>
+            <Button Command="{Binding ClearLogCommand}">CLEAR LOG</Button>
             <ScrollViewer>
-                <ListBox x:Name="Messages" ItemsSource="{Binding Messages}" >
+                <ListBox x:Name="Messages" ItemsSource="{Binding Messages}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
-                            <Setter Property="Height" Value="20"/>
+                            <Setter Property="Height" Value="20" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
