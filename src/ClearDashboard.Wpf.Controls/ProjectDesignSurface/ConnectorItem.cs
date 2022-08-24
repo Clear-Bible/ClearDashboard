@@ -185,7 +185,7 @@ namespace ClearDashboard.Wpf.Controls
             }
             else if (_isLeftMouseDown)
             {
-                if (ParentProjectDesignSurface != null &&
+                if (ParentProjectDesignSurface != null ||
                     ParentProjectDesignSurface.EnableConnectionDragging)
                 {
                     //
