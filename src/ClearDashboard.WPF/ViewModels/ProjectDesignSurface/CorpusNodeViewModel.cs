@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ViewModels.ProjectDesignSurface
 {
@@ -13,7 +15,6 @@ namespace ViewModels.ProjectDesignSurface
     {
 
         #region events
-        public event EventHandler SomethingHappened;
 
         #endregion
 
@@ -24,6 +25,9 @@ namespace ViewModels.ProjectDesignSurface
         /// The name of the node.
         /// </summary>
         private string _name = string.Empty;
+
+        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager _projectManager;
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -72,9 +76,11 @@ namespace ViewModels.ProjectDesignSurface
         {
         }
 
-        public CorpusNodeViewModel(string name)
+        public CorpusNodeViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
         {
             _name = name;
+            _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
         }
 
         /// <summary>
@@ -236,7 +242,14 @@ namespace ViewModels.ProjectDesignSurface
             {
                 Set(ref _isSelected, value);
 
-                SomethingHappened?.Invoke(this, EventArgs.Empty);
+                if (_isSelected)
+                {
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(this));
+                }
+                else
+                {
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(null));
+                }
             }
         }
 

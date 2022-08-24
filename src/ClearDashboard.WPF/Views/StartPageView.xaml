@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dockpanelsplitter="clr-namespace:ClearDashboard.Wpf.Controls.DockPanelSplitter;assembly=ClearDashboard.Wpf.Controls"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
@@ -458,62 +459,54 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <!--<TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Margin="20"
             VerticalAlignment="Top"
             Background="Yellow"
             FontSize="20"
-            Text="STARTUP" />
+            Text="STARTUP" />-->
 
 
 
 
-        <DockPanel>
-            <xctk:PropertyGrid
-                x:Name="_propertyGrid"
-                Width="200"
-                DockPanel.Dock="Right"
-                Filter=""
-                HideInheritedProperties="False"
-                IsCategorized="True"
-                IsMiscCategoryLabelHidden="False"
-                IsReadOnly="False"
-                IsVirtualizing="False"
-                SelectedObject="{Binding SelectedNode}"
-                ShowAdvancedOptions="True"
-                ShowHorizontalScrollBar="False"
-                ShowSummary="True"
-                UpdateTextBoxSourceOnEnterKey="True" />
+
+
             <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
 
-            <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
+            <Grid Margin="5,5,5,5" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
 
                     <!--  empty space  -->
                     <ColumnDefinition Width="*" />
 
                     <!--  the fit content button  -->
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="70" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the fill button  -->
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="70" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the 100% button  -->
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="70" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom percentage label  -->
-                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="35" />
 
                     <!--  the % symbol  -->
                     <ColumnDefinition Width="15" />
@@ -522,19 +515,19 @@
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom out button  -->
-                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="40" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom slider  -->
-                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="150" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom in button  -->
-                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="40" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="10" />
@@ -549,6 +542,7 @@
                 -->
                 <Button
                     Grid.Column="1"
+                    Padding="0"
                     Command="{StaticResource Commands.FitContent}"
                     ToolTip="Fit all nodes to the viewport">
                     Fit
@@ -559,6 +553,7 @@
                 -->
                 <Button
                     Grid.Column="3"
+                    Padding="0"
                     Command="{StaticResource Commands.Fill}"
                     ToolTip="Fit the entire content area to the viewport">
                     Fill
@@ -569,6 +564,7 @@
                 -->
                 <Button
                     Grid.Column="5"
+                    Padding="0"
                     Command="{StaticResource Commands.OneHundredPercent}"
                     ToolTip="Scale the content to 100%">
                     100%
@@ -592,7 +588,9 @@
                 <!--  Button to zoom out.  -->
                 <Button
                     Grid.Column="10"
+                    Padding="0"
                     Command="{StaticResource Commands.ZoomOut}"
+                    FontSize="25"
                     ToolTip="Zoom out from the content">
                     -
                 </Button>
@@ -614,13 +612,15 @@
                 -->
                 <Button
                     Grid.Column="14"
+                    Padding="0"
                     Command="{StaticResource Commands.ZoomIn}"
+                    FontSize="20"
                     ToolTip="Zoom in on the content">
                     +
                 </Button>
 
                 <!--  Stick a resize grip in the bottom right corner of the window.  -->
-                <ResizeGrip Grid.Column="16" />
+                <!--<ResizeGrip Grid.Column="16" />-->
 
             </Grid>
 
@@ -630,6 +630,8 @@
             -->
             <ScrollViewer
                 CanContentScroll="True"
+                Grid.Row="1"
+                Grid.Column="0"
                 Focusable="False"
                 HorizontalScrollBarVisibility="Visible"
                 VerticalScrollBarVisibility="Visible">
@@ -692,6 +694,24 @@
                     </AdornerDecorator>
                 </controls:ZoomAndPanControl>
             </ScrollViewer>
-        </DockPanel>
+
+            <xctk:PropertyGrid
+                x:Name="_propertyGrid"
+                Width="350"
+                Grid.Row="1"
+                Grid.Column="1"
+                Filter=""
+                Foreground="Black"
+                HideInheritedProperties="False"
+                IsCategorized="False"
+                IsMiscCategoryLabelHidden="False"
+                IsReadOnly="False"
+                IsVirtualizing="False"
+                SelectedObject="{Binding SelectedNode}"
+                ShowAdvancedOptions="False"
+                ShowHorizontalScrollBar="True"
+                ShowSummary="False"
+                UpdateTextBoxSourceOnEnterKey="True" />
+
     </Grid>
 </UserControl>

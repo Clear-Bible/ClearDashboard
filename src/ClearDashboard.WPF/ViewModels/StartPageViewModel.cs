@@ -6,14 +6,23 @@ using System.Diagnostics;
 using System;
 using ViewModels.ProjectDesignSurface;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
+using System.Windows.Navigation;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     /// <summary>
     /// 
     /// </summary>
-    public class StartPageViewModel : PaneViewModel
+    public class StartPageViewModel : PaneViewModel, IHandle<NodeSelectedChanagedMessage>
     {
+        private readonly INavigationService _navigationService;
+        private readonly ILogger<StartPageViewModel> _logger;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator _eventAggregator;
+
         #region Member Variables
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -160,6 +169,23 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 return null;
             }
+            set => Set(ref _selectedNode, value);
+        }
+
+        private ConnectionViewModel _selectedConnection;
+        public ConnectionViewModel SelectedConnection
+        {
+            get
+            {
+                foreach (var connection in DesignSurface.Connections)
+                {
+                    if (connection.IsSelected)
+                    {
+                        return connection;
+                    }
+                }
+                return null;
+            }
         }
 
         #endregion //Observable Properties
@@ -174,6 +200,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public StartPageViewModel(INavigationService navigationService, ILogger<StartPageViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator) :base(navigationService, logger, projectManager, eventAggregator)
         {
+            _navigationService = navigationService;
+            _logger = logger;
+            _projectManager = projectManager;
+            _eventAggregator = eventAggregator;
             this.Title = "⌂ START PAGE";
             this.ContentId = "STARTPAGE";
 
@@ -415,9 +445,10 @@ namespace ClearDashboard.Wpf.ViewModels
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
-        public CorpusNodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode, ParatextProjectType projectType, string projectId)
+        public CorpusNodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode,
+            ParatextProjectType projectType, string projectId)
         {
-            var node = new CorpusNodeViewModel(name)
+            var node = new CorpusNodeViewModel(name, _eventAggregator, _projectManager)
             {
                 X = nodeLocation.X,
                 Y = nodeLocation.Y
@@ -492,7 +523,8 @@ namespace ClearDashboard.Wpf.ViewModels
             //
             // Create a network, the root of the view-model.
             //
-            DesignSurface = new DesignSurfaceViewModel();
+            DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
+                _projectManager, _eventAggregator);
 
             //
             // Create some nodes and add them to the view-model.
@@ -524,6 +556,12 @@ namespace ClearDashboard.Wpf.ViewModels
                 DestinationConnector = node3.InputConnectors[0]
             };
             DesignSurface.Connections.Add(connection);
+        }
+
+        public async Task HandleAsync(NodeSelectedChanagedMessage message, CancellationToken cancellationToken)
+        {
+            var node = message.Node as CorpusNodeViewModel;
+            SelectedNode = node;
         }
 
         #endregion // Methods

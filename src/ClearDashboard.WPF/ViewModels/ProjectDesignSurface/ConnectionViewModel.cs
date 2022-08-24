@@ -33,7 +33,25 @@ namespace ViewModels.ProjectDesignSurface
         /// </summary>
         private PointCollection _points;
 
+        /// <summary>
+        /// Set to 'true' when the node is selected.
+        /// </summary>
+        private bool _isSelected = false;
+
         #endregion Internal Data Members
+
+        /// <summary>
+        /// Set to 'true' when the node is selected.
+        /// </summary>
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                Set(ref _isSelected, value);
+            }
+        }
+
 
         /// <summary>
         /// The source connector the connection is attached to.
