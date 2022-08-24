@@ -145,7 +145,7 @@
                     Margin="5"
                     VerticalContentAlignment="Top"
                     ItemsSource="{Binding DashboardProjects}"
-                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.CanContentScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     Style="{StaticResource MaterialDesignListBox}">
 
@@ -282,60 +282,51 @@
                                         </Button>
 
                                         <!--<Button
-                                            Width="165"
-                                            Margin="8"
-                                            IsEnabled="True"
-                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel Margin="-15,0,0,0" Orientation="Horizontal">
-                                                <materialDesign:PackIcon
-                                                    Width="30"
-                                                    Height="30"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
-                                                    Kind="MonitorEye" />
-                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
-                                                    View Alignment
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Button>-->
+                                                Width="165"
+                                                Margin="8"
+                                                IsEnabled="True"
+                                                Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                                <StackPanel Margin="-15,0,0,0" Orientation="Horizontal">
+                                                    <materialDesign:PackIcon
+                                                        Width="30"
+                                                        Height="30"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="{DynamicResource MaterialDesignPaper}"
+                                                        Kind="MonitorEye" />
+                                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
+                                                        View Alignment
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>-->
 
                                         <!--<Button
-                                            Width="165"
-                                            Margin="8"
-                                            IsEnabled="True"
-                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <materialDesign:PackIcon
-                                                    Width="30"
-                                                    Height="30"
-                                                    Margin="-15,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
-                                                    Kind="CallSplit">
-                                                    <materialDesign:PackIcon.RenderTransform>
-                                                        <RotateTransform Angle="180" CenterX="15" CenterY="15" />
-                                                    </materialDesign:PackIcon.RenderTransform>
-                                                </materialDesign:PackIcon>
-                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
-                                                    ClearSuggester
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Button>-->
-
+                                                Width="165"
+                                                Margin="8"
+                                                IsEnabled="True"
+                                                Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon
+                                                        Width="30"
+                                                        Height="30"
+                                                        Margin="-15,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="{DynamicResource MaterialDesignPaper}"
+                                                        Kind="CallSplit">
+                                                        <materialDesign:PackIcon.RenderTransform>
+                                                            <RotateTransform Angle="180" CenterX="15" CenterY="15" />
+                                                        </materialDesign:PackIcon.RenderTransform>
+                                                    </materialDesign:PackIcon>
+                                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
+                                                        ClearSuggester
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>-->
                                     </StackPanel>
-
-
                                 </StackPanel>
-
                             </Border>
-
                         </DataTemplate>
-
                     </ListView.ItemTemplate>
-
                 </ListView>
-
-
             </StackPanel>
         </Border>
     </Grid>

@@ -104,19 +104,13 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 try
                 {
-
-
                     // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
                     //await SendProgressBarVisibilityMessage(true, 250);
 
                     var corpus = message.TokenizedTextCorpus;
 
                     CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
-
-
-
-
-                    //await SendProgressBarMessage($"Getting book '{CurrentBook}'");
+                    
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -126,7 +120,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                             TaskStatus = StatusEnum.Working
                         }));
                     
-
                     var tokensTextRows = 
                         corpus[CurrentBook]
                             .GetRows()
@@ -139,20 +132,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     .ChapterNumber == 1) > 0)
                             .ToList();
 
-                    //await SendProgressBarMessage($"Found {tokensTextRows.Count} TokensTextRow entities.");
-
-
-
                     OnUIThread(() =>
                     {
                         TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
                     });
                     
-
-
-
-                    //await SendProgressBarMessage("Completed retrieving verse tokens.");
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -175,15 +160,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                             TaskStatus = StatusEnum.Error
                         }));
                     }
-                    else
-                    {
-                    }
                 }
-                finally
-                {
-                    await SendProgressBarVisibilityMessage(false);
-                }
-
             }, cancellationToken);
 
         }
