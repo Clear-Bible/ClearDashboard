@@ -7,7 +7,9 @@ using ClearDashboard.Wpf.ViewModels.Workflows.CreateNewProject;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,9 +29,18 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Observable Objects
 
        
+        
+        private ObservableCollection<DashboardProject> _dashboardProjects;
+        public ObservableCollection<DashboardProject> DashboardProjects
+        {
+            get { return _dashboardProjects; }
+            set
+            {
+                _dashboardProjects = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ObservableCollection<DashboardProject> DashboardProjects { get; set; } =
-            new ObservableCollection<DashboardProject>();
 
         #endregion
 
@@ -58,11 +69,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected  override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-           var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
-           if (results.Success)
-           {
-               DashboardProjects = results.Data;
-           }
+            await SetDashboardProjects();
+        }
+
+        private async Task SetDashboardProjects()
+        {
+            var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
+            if (results.Success)
+            {
+                DashboardProjects = results.Data;
+            }
         }
 
         #endregion
@@ -103,12 +119,24 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 if (viewModel.ProjectName != null)
                 {
-                    await ProjectManager.CreateNewProject(viewModel.ProjectName);
+                    try
+                    {
+                        await ProjectManager.CreateNewProject(viewModel.ProjectName);
+                    }
+                    catch
+                    {
+                        //for when another project 
+                    }
+                    finally
+                    {
+                        await SetDashboardProjects();
+                    }
                     return true;
                 }
-
                 return false;
             }
+
+           
         }
 
         public void ProjectWorkspace(DashboardProject project)
@@ -146,6 +174,7 @@ namespace ClearDashboard.Wpf.ViewModels
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                MessageBox.Show($"{project.ProjectName} is being used by a process.  Cancel and wait for all tasks to be complete to be able to delete the project.");
             }
         }
 
@@ -186,6 +215,12 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Logger.LogInformation("AlignmentSample called.");
             NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion // Methods
     }

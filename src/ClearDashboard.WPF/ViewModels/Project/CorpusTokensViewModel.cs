@@ -160,6 +160,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                             TaskStatus = StatusEnum.Error
                         }));
                     }
+                    else
+                    {
+
+                    }
                 }
             }, cancellationToken);
 
@@ -189,7 +193,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             foreach (var item in en)
             {
-                Thread.Sleep(5000);
                 token.ThrowIfCancellationRequested();
                 yield return item;
             }

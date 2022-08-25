@@ -255,7 +255,6 @@ namespace ClearDashboard.DataAccessLayer
             CreateDashboardProject();
 
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;

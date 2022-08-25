@@ -144,7 +144,7 @@
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
                     VerticalContentAlignment="Top"
-                    ItemsSource="{Binding DashboardProjects}"
+                    ItemsSource="{Binding DashboardProjects, NotifyOnSourceUpdated=True}"
                     ScrollViewer.CanContentScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     Style="{StaticResource MaterialDesignListBox}">
