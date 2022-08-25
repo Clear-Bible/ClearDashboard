@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls">
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface">
 
     <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
 
@@ -42,6 +43,7 @@
         <Setter Property="ZIndex" Value="{Binding ZIndex}" />
         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
     </Style>
+
 
     <!--
         A data-template that defines the UI for input connectors.

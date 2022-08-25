@@ -568,23 +568,20 @@ namespace ClearDashboard.Wpf.ViewModels
         public async Task HandleAsync(NodeSelectedChanagedMessage message, CancellationToken cancellationToken)
         {
             var node = message.Node as CorpusNodeViewModel;
-            if (node is null)
-            {
-                return;
-            }
-            //SelectedConnection = node;
-
-            //var nodes = DesignSurface.CorpusNodes.Where(b => b.IsSelected).ToList();
-            //for (int i = 0; i < nodes.Count; i++)
+            //if (node is null)
             //{
-            //    Debug.WriteLine($"{i} {nodes[i].Name}");
+            //    return;
             //}
 
-            var connection = node.AttachedConnections.Where(c => c.IsSelected).ToList();
-            if (connection is not null)
-            {
-                SelectedConnection = connection[0];
-            }
+            //var connection = node.AttachedConnections.Where(c => c.IsSelected).ToList();
+            //if (connection.Count > 0)
+            //{
+            //    SelectedConnection = connection[0];
+            //}
+            //else
+            //{
+            //    SelectedConnection = null;
+            //}
         }
 
         public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
@@ -599,6 +596,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         node.IsSelected = true;
                         connection.IsSelected = true;
+                        SelectedConnection = connection;
                     }
                     else
                     {
@@ -606,6 +604,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                 }
             }
+
 
             //var nodes = DesignSurface.CorpusNodes.Where(b => b.IsSelected).ToList();
             //for (int i = 0; i < nodes.Count; i++)

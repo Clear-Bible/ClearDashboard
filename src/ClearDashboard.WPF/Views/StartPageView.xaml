@@ -203,7 +203,7 @@
                         Fill="{StaticResource connectionBrush}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
-                        StrokeThickness="2" />
+                        StrokeThickness="3" />
 
                     <controls:AdornedControl.AdornerContent>
 
