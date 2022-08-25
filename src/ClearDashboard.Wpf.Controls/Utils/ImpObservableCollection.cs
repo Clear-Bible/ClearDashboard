@@ -207,6 +207,11 @@ namespace ClearDashboard.Wpf.Controls.Utils
         /// </summary>
         public event EventHandler<CollectionItemsChangedEventArgs> ItemsRemoved;
 
+        /// <summary>
+        /// Event raised when items have been selected.
+        /// </summary>
+        public event EventHandler<CollectionItemsChangedEventArgs> ItemsSelected;
+
         public T[] ToArray()
         {
             return _inner.ToArray();

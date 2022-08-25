@@ -1,4 +1,5 @@
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -13,22 +14,21 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using MessageBox = System.Windows.Forms.MessageBox;
 using NewProjectDialogViewModel = ClearDashboard.Wpf.ViewModels.Project.NewProjectDialogViewModel;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class LandingViewModel: ApplicationScreen
+    public class LandingViewModel : ApplicationScreen
     {
         #region   Member Variables
-        
+
         protected IWindowManager _windowManager;
 
         #endregion
 
         #region Observable Objects
-
-       
         
         private ObservableCollection<DashboardProject> _dashboardProjects;
         public ObservableCollection<DashboardProject> DashboardProjects
@@ -38,6 +38,18 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 _dashboardProjects = value;
                 OnPropertyChanged();
+            }
+        }
+        
+        private Visibility _alertVisibility = Visibility.Hidden;
+
+        public Visibility AlertVisibility
+        {
+            get => _alertVisibility;
+            set
+            {
+                _alertVisibility = value;
+                NotifyOfPropertyChange(() => AlertVisibility);
             }
         }
 
@@ -61,13 +73,14 @@ namespace ClearDashboard.Wpf.ViewModels
             _windowManager = windowManager;
         }
 
-        
+
 
         protected override void OnViewAttached(object view, object context)
-        { base.OnViewAttached(view, context);
+        {
+            base.OnViewAttached(view, context);
         }
 
-        protected  override async Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await SetDashboardProjects();
         }
@@ -85,17 +98,33 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #region Methods
 
+        public void AlertClose()
+        {
+            AlertVisibility = Visibility.Collapsed;
+        }
+
+
         public void CreateNewProject()
         {
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
+
             Logger.LogInformation("CreateNewProject called.");
             //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
 
             NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
         }
 
-      
+
         public async void NewProject()
         {
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
+
             Logger.LogInformation("NewProject called.");
 
             if (ProjectManager.HasDashboardProject)
@@ -141,10 +170,25 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void ProjectWorkspace(DashboardProject project)
         {
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
+
             ProjectManager.CurrentDashboardProject = project;
             //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
             NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
 
+        }
+
+        private bool CheckIfConnectedToParatext()
+        {
+            if (ProjectManager.HasCurrentParatextProject ==false)
+            {
+                AlertVisibility = Visibility.Visible;
+                return false;
+            }
+            return true;
         }
 
         public void DeleteProject(DashboardProject project)
@@ -179,10 +223,10 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public void Workspace(DashboardProject project)
         {
-            //if (project is null)
-            //{
-            //    return;
-            //}
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
 
             //// TODO HACK TO READ IN PROJECT AS OBJECT
             string sTempFile = @"c:\temp\project.json";
@@ -197,11 +241,11 @@ namespace ClearDashboard.Wpf.ViewModels
 
             Logger.LogInformation("Workspace called.");
             ProjectManager.CurrentDashboardProject = project;
-            
 
-          
 
-             NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+
+
+            NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
         }
 
         public void Settings()

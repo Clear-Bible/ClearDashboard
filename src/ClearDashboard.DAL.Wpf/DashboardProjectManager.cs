@@ -20,6 +20,10 @@ using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
+
+public record NodeSelectedChanagedMessage(object Node);
+public record ConnectionSelectedChanagedMessage(Guid ConnectorId);
+
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record VerseChangedMessage(string Verse);

@@ -354,7 +354,10 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     OnUIThread(() =>
                     {
-                        _backgroundTaskStatuses.RemoveAt(i);
+                        if (i < _backgroundTaskStatuses.Count)
+                        {
+                            _backgroundTaskStatuses.RemoveAt(i);
+                        }
                     });
                     
                     bFound = true;
