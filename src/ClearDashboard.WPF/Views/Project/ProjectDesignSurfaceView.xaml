@@ -124,7 +124,7 @@
                                         VerticalAlignment="Center"
                                         FontSize="20"
                                         Foreground="{DynamicResource SecondaryHueLightForegroundBrush}"
-                                        Text="{Binding .Name}" />
+                                        Text="{Binding Name}" />
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

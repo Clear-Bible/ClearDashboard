@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Name,
             string Language,
             string CorpusType, 
-            CancellationToken token)
+            CancellationToken token=default)
         {
             var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType);
 

@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns>TokenizedTextCorpus</returns>
         /// <exception cref="InvalidTypeEngineException">textCorpus enumerable is not castable to a TokensTextRow type, or textCorpus is of type TokenizedTextCorpus</exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string tokenizationFunction, CancellationToken token)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string tokenizationFunction, CancellationToken token=default)
         {
             try
             {
