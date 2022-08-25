@@ -18,7 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
     public class CorpusTokensViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
     {
         private CancellationTokenSource _tokenSource = null;
-        private bool _handleAsyncEnded = false;
+        private bool _handleAsyncRunning = false;
 
        public CorpusTokensViewModel()
         {
@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
-            if (!_handleAsyncEnded)
+            if (_handleAsyncRunning)
             {
                 _tokenSource.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
-            _handleAsyncEnded = false;
+            _handleAsyncRunning = true;
             var token = _tokenSource.Token;
 
             await Task.Factory.StartNew(async () =>
@@ -180,7 +180,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         }));
                     }
 
-                    _handleAsyncEnded = true;
+                    _handleAsyncRunning = false;
                 }
             }, cancellationToken);
 
