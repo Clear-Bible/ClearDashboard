@@ -14,6 +14,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {
+
         private bool _cancelTaskRequest = false;
         public bool CancelTaskRequest
         {

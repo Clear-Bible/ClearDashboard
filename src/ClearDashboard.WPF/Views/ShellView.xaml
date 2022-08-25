@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
@@ -14,6 +15,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:viewModels1="clr-namespace:ClearDashboard.Wpf.ViewModels;assembly=ClearDashboard.DAL.Models"
+    xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Converters"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -31,7 +33,10 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid x:Name="ShellViewGrid">
+    <Window.Resources>
+        <converters:TaskStatusCompletedToBoolConverter x:Key="TaskStatusCompletedToBoolConverter" />
+    </Window.Resources>
+            <Grid x:Name="ShellViewGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
@@ -264,6 +269,7 @@
                                         Margin="4"
                                         Padding="0"
                                         cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                        IsEnabled="{Binding TaskStatus, Converter={StaticResource TaskStatusCompletedToBoolConverter}}"
                                         ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
                                         <Button.Style>
                                             <Style TargetType="Button">
