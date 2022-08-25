@@ -174,7 +174,6 @@ namespace ClearDashboard.Wpf.ViewModels
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                MessageBox.Show($"{project.ProjectName} is being used by a process.  Cancel and wait for all tasks to be complete to be able to delete the project.");
             }
         }
 

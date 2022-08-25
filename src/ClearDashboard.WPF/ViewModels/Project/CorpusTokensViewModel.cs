@@ -214,7 +214,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             foreach (var item in en)
             {
-                Thread.Sleep(5000);
                 token.ThrowIfCancellationRequested();
                 yield return item;
             }
