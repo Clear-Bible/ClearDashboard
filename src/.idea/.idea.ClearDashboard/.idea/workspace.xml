@@ -10,6 +10,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/198a6261cebc324728dcc4c178edc5f2894123f711722c80e8557cbfd27651/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5a91db30f58fd3c38afed3d8a755e224ceb184a67a2afe38d3b89dff2dc7e86/EventRoute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6c25a91b8726fea745b2d41cf81816979584a140cb4a6ca48cd7149fc4e969c0/RoutedEventArgs.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b365fa8dcc5fbc273d9cca964d7afad9796ba662727da79a2227d2d6ba65f0/UIElement.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b38019d6dc1fe748618d191a5ed08510b1803e3e47c17ee630c5771ef0ed4c/UIElement.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -24,6 +31,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "settings.editor.selected.configurable": "editor.preferences.tabs",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -66,6 +74,10 @@
       <option name="presentableId" value="Default" />
       <updated>1660234479841</updated>
       <workItem from="1660234488467" duration="1799000" />
+      <workItem from="1661376402006" duration="140000" />
+      <workItem from="1661376558799" duration="93000" />
+      <workItem from="1661376666780" duration="1860000" />
+      <workItem from="1661429831491" duration="3611000" />
     </task>
     <servers />
   </component>
@@ -87,5 +99,37 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ClearDashboard.WPF/ViewModels/ProjectDesignSurface/ConnectionViewModel.cs</url>
+          <line>50</line>
+          <properties documentPath="D:\Projects-GBI\ClearDashboard\src\ClearDashboard.WPF\ViewModels\ProjectDesignSurface\ConnectionViewModel.cs" initialLine="50" containingFunctionPresentation="property 'IsSelected'">
+            <startOffsets>
+              <option value="1475" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1503" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ClearDashboard.WPF/ViewModels/ProjectDesignSurface/ConnectionViewModel.cs</url>
+          <line>177</line>
+          <properties documentPath="D:\Projects-GBI\ClearDashboard\src\ClearDashboard.WPF\ViewModels\ProjectDesignSurface\ConnectionViewModel.cs" initialLine="177" containingFunctionPresentation="method 'OnConnectionChanged'">
+            <startOffsets>
+              <option value="5226" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5267" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

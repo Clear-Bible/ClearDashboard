@@ -17,8 +17,6 @@ public class ProjectInfoConfiguration : IEntityTypeConfiguration<Project>
             .HasColumnType("bit")
             .HasColumnName("IsRTL");
 
-        entityBuilder.Property(e => e.LastContentWordLevel);
-
         entityBuilder.Property(e => e.ProjectName);
     }
 }
