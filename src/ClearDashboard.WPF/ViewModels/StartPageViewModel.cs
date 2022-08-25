@@ -580,7 +580,11 @@ namespace ClearDashboard.Wpf.ViewModels
             //    Debug.WriteLine($"{i} {nodes[i].Name}");
             //}
 
-            
+            var connection = node.AttachedConnections.Where(c => c.IsSelected).ToList();
+            if (connection is not null)
+            {
+                SelectedConnection = connection[0];
+            }
         }
 
         public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
@@ -594,6 +598,11 @@ namespace ClearDashboard.Wpf.ViewModels
                     if (connection.Id == guid)
                     {
                         node.IsSelected = true;
+                        connection.IsSelected = true;
+                    }
+                    else
+                    {
+                        connection.IsSelected = false;
                     }
                 }
             }
