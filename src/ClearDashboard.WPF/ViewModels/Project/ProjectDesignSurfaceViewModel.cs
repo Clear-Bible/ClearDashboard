@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
     {
         CancellationTokenSource _tokenSource = null;
+        private bool _addParatextCorpusEnded = false;
         public IWindowManager WindowManager { get; }
         private readonly IMediator _mediator;
         private ObservableCollection<Corpus> _corpora;
@@ -77,6 +78,24 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             //IsBusy = false;
             return base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            //we need to cancel this process here
+            //check a bool to see if it already cancelled or already completed
+            if (!_addParatextCorpusEnded)
+            {
+                _tokenSource.Cancel();
+                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = "Corpus",
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }));
+            }
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         public ProjectDesignSurfaceView View { get; set; }
@@ -128,10 +147,11 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         public async void AddParatextCorpus()
         {
+            Logger.LogInformation("AddParatextCorpus called.");
+            _addParatextCorpusEnded = false;
             var token = _tokenSource.Token;
 
-            Logger.LogInformation("AddParatextCorpus called.");
-            
+
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
@@ -146,6 +166,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         try
                         {
                             CopyOriginalDatabase();
+                            
                             
                             // if (viewModel.SelectedProject.HasProjectPath)
                             {
@@ -221,6 +242,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         {
                             _tokenSource.Dispose();
                             DeleteOriginalDatabase();
+                            _addParatextCorpusEnded = true;
                         }
                     });
                 }
@@ -291,7 +313,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
                 _tokenSource.Cancel();
-                
+
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
                 incomingMessage.TaskStatus = StatusEnum.Completed;
@@ -299,6 +321,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
             }
+
             await Task.CompletedTask;
         }
     }
