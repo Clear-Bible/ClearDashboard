@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
         private bool _generateDataRunning = false;
-        private CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
         private readonly DashboardProjectManager _projectManager;
@@ -136,7 +136,7 @@ namespace ClearDashboard.Wpf.ViewModels
             this.ContentId = "PINS";
 
             _projectManager = projectManager;
-            _tokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
@@ -185,7 +185,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = _taskName,
@@ -205,7 +205,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private async Task<bool> GenerateData()
         {
             _generateDataRunning = true;
-            var token = _tokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
 
             ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
             if (paratextUtils.IsParatextInstalled())
@@ -239,7 +239,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 return false;
             }
 
-            token.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // fix the greek renderings which are inconsistent
             for (int i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
@@ -254,7 +254,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     _termRenderingsList.TermRendering[i].Id =
                         CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                 }
-                token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
@@ -264,7 +264,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     _biblicalTermsList.Term[i].Id =
                         CorrectUnicode(_biblicalTermsList.Term[i].Id);
                 }
-                token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
@@ -274,7 +274,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     _allBiblicalTermsList.Term[i].Id =
                         CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                 }
-                token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
 
@@ -332,7 +332,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     {
                         biblicalTermsSpelling = "";
                     }
-                    token.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
 
                 // peel off the notes
@@ -349,7 +349,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     }
                 }
 
-                token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 List<string> verseList = new List<string>();
 
@@ -364,7 +364,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     foreach (var verse in bt[0].References.Verse)
                     {
                         verseList.Add(verse);
-                        token.ThrowIfCancellationRequested();
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
 
                     GridData.Add(new PinsDataTable
@@ -401,7 +401,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         foreach (var verse in abt[0].References.Verse)
                         {
                             verseList.Add(verse);
-                            token.ThrowIfCancellationRequested();
+                            cancellationToken.ThrowIfCancellationRequested();
                         }
 
                         GridData.Add(new PinsDataTable
@@ -482,7 +482,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
                             Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
                         });
-                        token.ThrowIfCancellationRequested();
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
                 }
             }
@@ -506,7 +506,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     TaskStatus = StatusEnum.Completed
                 }));
             _generateDataRunning = false;
-            _tokenSource.Dispose();
+            _cancellationTokenSource.Dispose();
             return false;
         }
 
@@ -744,7 +744,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (incomingMessage.Name == _taskName && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;

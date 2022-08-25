@@ -140,7 +140,7 @@
                 </TextBlock>
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
-                    Height="100"
+                    Height="1000"
                     Margin="5"
                     VerticalContentAlignment="Top"
                     ItemsSource="{Binding DashboardProjects, NotifyOnSourceUpdated=True}"

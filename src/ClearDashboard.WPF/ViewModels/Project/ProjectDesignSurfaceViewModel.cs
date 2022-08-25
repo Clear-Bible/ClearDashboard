@@ -40,7 +40,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
     {
-        CancellationTokenSource _tokenSource = null;
+        CancellationTokenSource _cancellationTokenSource = null;
         private bool _addParatextCorpusRunning = false;
         public IWindowManager WindowManager { get; }
         private readonly IMediator _mediator;
@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<Corpus>();
-            _tokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             //check a bool to see if it already cancelled or already completed
             if (_addParatextCorpusRunning)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = "Corpus",
@@ -149,7 +149,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Logger.LogInformation("AddParatextCorpus called.");
             _addParatextCorpusRunning = true;
-            var token = _tokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
 
 
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
@@ -179,7 +179,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 }));
                                 
                                 var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name!, metadata.LanguageName!, 
-                                    metadata.CorpusTypeDisplay, token);
+                                    metadata.CorpusTypeDisplay, cancellationToken);
                                 
                                 OnUIThread(() => Corpora.Add(corpus));
 
@@ -191,7 +191,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     TaskStatus = StatusEnum.Working
                                 }));
                                 
-                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, token))
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 
@@ -204,7 +204,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 }));
                                 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", token);
+                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                                 {
@@ -222,7 +222,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         catch (Exception ex)
                         {
                             Logger.LogError(ex,$"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
-                            if (!token.IsCancellationRequested)
+                            if (!cancellationToken.IsCancellationRequested)
                             {
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                                     new BackgroundTaskStatus
@@ -240,7 +240,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         }
                         finally
                         {
-                            _tokenSource.Dispose();
+                            _cancellationTokenSource.Dispose();
                             DeleteOriginalDatabase();
                             _addParatextCorpusRunning = false;
                         }
@@ -312,7 +312,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
             if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;

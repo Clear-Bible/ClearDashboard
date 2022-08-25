@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Member Variables
 
         BiblicalTermsView _view;
-        CancellationTokenSource _tokenSource = null;
+        CancellationTokenSource _cancellationTokenSource = null;
         private bool _getBiblicalTermsRunning = false;
         private string _taskName = "BiblicalTerms";
 
@@ -499,7 +499,7 @@ namespace ClearDashboard.Wpf.ViewModels
             Title = "🕮 BIBLICAL TERMS";
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
-            _tokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
 
             // populate the combo box for semantic domains
@@ -554,7 +554,7 @@ namespace ClearDashboard.Wpf.ViewModels
             //check a bool to see if it already cancelled or already completed
             if (_getBiblicalTermsRunning)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = _taskName,
@@ -1020,7 +1020,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
             _getBiblicalTermsRunning = true;
-            var token = _tokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
@@ -1044,7 +1044,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 var biblicalTermsList = new List<BiblicalTermsData>();
                 try
                 {
-                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), token)
+                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), cancellationToken)
                         .ConfigureAwait(false);
                     if (result.Success)
                     {
@@ -1079,7 +1079,7 @@ namespace ClearDashboard.Wpf.ViewModels
                             foreach (var rendering in biblicalTermsList[i].Renderings)
                             {
                                 _biblicalTerms[i].RenderingString += rendering + " ";
-                                token.ThrowIfCancellationRequested();
+                                cancellationToken.ThrowIfCancellationRequested();
                             }
                         }
 
@@ -1091,7 +1091,7 @@ namespace ClearDashboard.Wpf.ViewModels
             finally
             {
                 _getBiblicalTermsRunning = false;
-                _tokenSource.Dispose();
+                _cancellationTokenSource.Dispose();
             }
         }
         
@@ -1107,7 +1107,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             if (incomingMessage.Name == _taskName && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;

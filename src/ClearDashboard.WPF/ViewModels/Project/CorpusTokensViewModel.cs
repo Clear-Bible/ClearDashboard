@@ -17,7 +17,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 {
     public class CorpusTokensViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
     {
-        private CancellationTokenSource _tokenSource = null;
+        private CancellationTokenSource _cancellationTokenSource = null;
         private bool _handleAsyncRunning = false;
 
        public CorpusTokensViewModel()
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";
-            _tokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -67,7 +67,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             //check a bool to see if it already cancelled or already completed
             if (_handleAsyncRunning)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = "Fetch Book",
@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
-            var token = _tokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
 
             await Task.Factory.StartNew(async () =>
             {
@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     var tokensTextRows = 
                         corpus[CurrentBook]
                             .GetRows()
-                            .WithCancellation(token)
+                            .WithCancellation(cancellationToken)
                             .Cast<TokensTextRow>()
                             .Where(ttr => ttr
                                 .Tokens
@@ -168,7 +168,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
-                    if (!token.IsCancellationRequested)
+                    if (!cancellationToken.IsCancellationRequested)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 }
                 finally
                 {
-                    _tokenSource.Dispose();
+                    _cancellationTokenSource.Dispose();
                 }
             }, cancellationToken);
 
@@ -195,7 +195,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
             if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _tokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
