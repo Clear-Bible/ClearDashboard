@@ -34,6 +34,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
+        private bool _generateDataEnded = false;
 
         private readonly DashboardProjectManager _projectManager;
 
@@ -174,6 +175,24 @@ namespace ClearDashboard.Wpf.ViewModels
 
             _ = base.OnActivateAsync(cancellationToken);
         }
+
+        //protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        //{
+        //    //we need to cancel this process here
+        //    //check a bool to see if it already cancelled or already completed
+        //    if (!_generateDataEnded)
+        //    {
+        //        _tokenSource.Cancel();
+        //        EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+        //        {
+        //            Name = "Corpus",
+        //            Description = "Task was cancelled",
+        //            EndTime = DateTime.Now,
+        //            TaskStatus = StatusEnum.Completed
+        //        }));
+        //    }
+        //    return base.OnDeactivateAsync(close, cancellationToken);
+        //}
 
 
         /// <summary>

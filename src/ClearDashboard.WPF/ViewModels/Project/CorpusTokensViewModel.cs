@@ -18,6 +18,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
     public class CorpusTokensViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
     {
         private CancellationTokenSource _tokenSource = null;
+        private bool _handleAsyncEnded = false;
 
        public CorpusTokensViewModel()
         {
@@ -60,6 +61,24 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             return base.OnInitializeAsync(cancellationToken);
         }
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            //we need to cancel this process here
+            //check a bool to see if it already cancelled or already completed
+            if (!_handleAsyncEnded)
+            {
+                _tokenSource.Cancel();
+                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = "Fetch Book",
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }));
+            }
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         private ObservableCollection<VerseTokens> _verses;
         public ObservableCollection<VerseTokens> Verses
         {
@@ -97,7 +116,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
-
+            _handleAsyncEnded = false;
             var token = _tokenSource.Token;
 
             await Task.Factory.StartNew(async () =>
@@ -160,10 +179,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                             TaskStatus = StatusEnum.Error
                         }));
                     }
-                    else
-                    {
 
-                    }
+                    _handleAsyncEnded = true;
                 }
             }, cancellationToken);
 
@@ -193,6 +210,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             foreach (var item in en)
             {
+                Thread.Sleep(5000);
                 token.ThrowIfCancellationRequested();
                 yield return item;
             }
