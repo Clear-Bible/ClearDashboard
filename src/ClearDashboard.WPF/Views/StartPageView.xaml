@@ -197,10 +197,10 @@
 
                     <!--  The connection is represented by a curved arrow.  -->
                     <projectDesignSurface:CurvedArrow
-                        ConnectionId ="{Binding Path= Id}"
-                        NodeSource = "{Binding Path=SourceConnector}"
-                        NodeTarget = "{Binding Path=DestinationConnector}"
+                        ConnectionId="{Binding Path=Id}"
                         Fill="{StaticResource connectionBrush}"
+                        NodeSource="{Binding Path=SourceConnector}"
+                        NodeTarget="{Binding Path=DestinationConnector}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
                         StrokeThickness="3" />
@@ -467,7 +467,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        
+
         <!--<TextBlock
             Grid.Row="0"
             Grid.Column="0"
@@ -482,239 +482,239 @@
 
 
 
-            <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
+        <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
 
-            <Grid Margin="5,5,5,5" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
+        <Grid Margin="5,5,5,5" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
 
-                    <!--  empty space  -->
-                    <ColumnDefinition Width="*" />
+                <!--  empty space  -->
+                <ColumnDefinition Width="*" />
 
-                    <!--  the fit content button  -->
-                    <ColumnDefinition Width="70" />
+                <!--  the fit content button  -->
+                <ColumnDefinition Width="70" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the fill button  -->
-                    <ColumnDefinition Width="70" />
+                <!--  the fill button  -->
+                <ColumnDefinition Width="70" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the 100% button  -->
-                    <ColumnDefinition Width="70" />
+                <!--  the 100% button  -->
+                <ColumnDefinition Width="70" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the zoom percentage label  -->
-                    <ColumnDefinition Width="35" />
+                <!--  the zoom percentage label  -->
+                <ColumnDefinition Width="35" />
 
-                    <!--  the % symbol  -->
-                    <ColumnDefinition Width="15" />
+                <!--  the % symbol  -->
+                <ColumnDefinition Width="15" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the zoom out button  -->
-                    <ColumnDefinition Width="40" />
+                <!--  the zoom out button  -->
+                <ColumnDefinition Width="40" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the zoom slider  -->
-                    <ColumnDefinition Width="150" />
+                <!--  the zoom slider  -->
+                <ColumnDefinition Width="150" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="5" />
 
-                    <!--  the zoom in button  -->
-                    <ColumnDefinition Width="40" />
+                <!--  the zoom in button  -->
+                <ColumnDefinition Width="40" />
 
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="10" />
+                <!--  spacer  -->
+                <ColumnDefinition Width="10" />
 
-                    <!--  resize grip  -->
-                    <ColumnDefinition Width="Auto" />
+                <!--  resize grip  -->
+                <ColumnDefinition Width="Auto" />
 
-                </Grid.ColumnDefinitions>
-
-                <!--
-                    The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
-                -->
-                <Button
-                    Grid.Column="1"
-                    Padding="0"
-                    Command="{StaticResource Commands.FitContent}"
-                    ToolTip="Fit all nodes to the viewport">
-                    Fit
-                </Button>
-
-                <!--
-                    The fill button.  Causes the content to be scaled so that it fits in the viewport.
-                -->
-                <Button
-                    Grid.Column="3"
-                    Padding="0"
-                    Command="{StaticResource Commands.Fill}"
-                    ToolTip="Fit the entire content area to the viewport">
-                    Fill
-                </Button>
-
-                <!--
-                    The 100% button.  Causes the content to be scaled to 100 percent.
-                -->
-                <Button
-                    Grid.Column="5"
-                    Padding="0"
-                    Command="{StaticResource Commands.OneHundredPercent}"
-                    ToolTip="Scale the content to 100%">
-                    100%
-                </Button>
-
-                <!--
-                    This is the label that shows what the current zoom level
-                    is while zooming in and out.
-                -->
-                <TextBlock
-                    Grid.Column="7"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
-
-                <TextBlock
-                    Grid.Column="8"
-                    VerticalAlignment="Center"
-                    Text="%" />
-
-                <!--  Button to zoom out.  -->
-                <Button
-                    Grid.Column="10"
-                    Padding="0"
-                    Command="{StaticResource Commands.ZoomOut}"
-                    FontSize="25"
-                    ToolTip="Zoom out from the content">
-                    -
-                </Button>
-
-                <!--  Slider to change the current zoom level.  -->
-                <Slider
-                    Grid.Column="12"
-                    LargeChange="20"
-                    Maximum="200"
-                    Minimum="10"
-                    SmallChange="10"
-                    TickFrequency="10"
-                    TickPlacement="TopLeft"
-                    ToolTip="Change the zoom level of the content"
-                    Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
-
-                <!--
-                    Button to zoom in.
-                -->
-                <Button
-                    Grid.Column="14"
-                    Padding="0"
-                    Command="{StaticResource Commands.ZoomIn}"
-                    FontSize="20"
-                    ToolTip="Zoom in on the content">
-                    +
-                </Button>
-
-                <!--  Stick a resize grip in the bottom right corner of the window.  -->
-                <!--<ResizeGrip Grid.Column="16" />-->
-
-            </Grid>
+            </Grid.ColumnDefinitions>
 
             <!--
-                The ScrollViewer displays scrollbars when the content is too big to fit in the viewport.
-                Focusable is set to False because it is only that NetworkView that I want to be focusable.
+                The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
             -->
-            <ScrollViewer
-                CanContentScroll="True"
-                Grid.Row="1"
-                Grid.Column="0"
-                Focusable="False"
-                HorizontalScrollBarVisibility="Visible"
-                VerticalScrollBarVisibility="Visible">
+            <Button
+                Grid.Column="1"
+                Padding="0"
+                Command="{StaticResource Commands.FitContent}"
+                ToolTip="Fit all nodes to the viewport">
+                Fit
+            </Button>
+
+            <!--
+                The fill button.  Causes the content to be scaled so that it fits in the viewport.
+            -->
+            <Button
+                Grid.Column="3"
+                Padding="0"
+                Command="{StaticResource Commands.Fill}"
+                ToolTip="Fit the entire content area to the viewport">
+                Fill
+            </Button>
+
+            <!--
+                The 100% button.  Causes the content to be scaled to 100 percent.
+            -->
+            <Button
+                Grid.Column="5"
+                Padding="0"
+                Command="{StaticResource Commands.OneHundredPercent}"
+                ToolTip="Scale the content to 100%">
+                100%
+            </Button>
+
+            <!--
+                This is the label that shows what the current zoom level
+                is while zooming in and out.
+            -->
+            <TextBlock
+                Grid.Column="7"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+
+            <TextBlock
+                Grid.Column="8"
+                VerticalAlignment="Center"
+                Text="%" />
+
+            <!--  Button to zoom out.  -->
+            <Button
+                Grid.Column="10"
+                Padding="0"
+                Command="{StaticResource Commands.ZoomOut}"
+                FontSize="25"
+                ToolTip="Zoom out from the content">
+                -
+            </Button>
+
+            <!--  Slider to change the current zoom level.  -->
+            <Slider
+                Grid.Column="12"
+                LargeChange="20"
+                Maximum="200"
+                Minimum="10"
+                SmallChange="10"
+                TickFrequency="10"
+                TickPlacement="TopLeft"
+                ToolTip="Change the zoom level of the content"
+                Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+
+            <!--
+                Button to zoom in.
+            -->
+            <Button
+                Grid.Column="14"
+                Padding="0"
+                Command="{StaticResource Commands.ZoomIn}"
+                FontSize="20"
+                ToolTip="Zoom in on the content">
+                +
+            </Button>
+
+            <!--  Stick a resize grip in the bottom right corner of the window.  -->
+            <!--<ResizeGrip Grid.Column="16" />-->
+
+        </Grid>
+
+        <!--
+            The ScrollViewer displays scrollbars when the content is too big to fit in the viewport.
+            Focusable is set to False because it is only that NetworkView that I want to be focusable.
+        -->
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="0"
+            CanContentScroll="True"
+            Focusable="False"
+            HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible">
+
+            <!--
+                The ZoomAndPanControl displays the NetworkView as its content.
+                We can use the mouse to zoom and pan about the NetworkView.
+            -->
+            <controls:ZoomAndPanControl
+                x:Name="zoomAndPanControl"
+                Background="LightGray"
+                ContentOffsetX="{Binding ContentOffsetX, Mode=TwoWay}"
+                ContentOffsetY="{Binding ContentOffsetY, Mode=TwoWay}"
+                ContentScale="{Binding ContentScale, Mode=TwoWay}"
+                ContentViewportHeight="{Binding ContentViewportHeight, Mode=OneWayToSource}"
+                ContentViewportWidth="{Binding ContentViewportWidth, Mode=OneWayToSource}"
+                Focusable="False">
+
+
 
                 <!--
-                    The ZoomAndPanControl displays the NetworkView as its content.
-                    We can use the mouse to zoom and pan about the NetworkView.
+                    We need to nest our NetworkView in an AdornerDecorator so that adorners work correct when
+                    we zoom in and out using the ZoomAndPanControl
                 -->
-                <controls:ZoomAndPanControl
-                    x:Name="zoomAndPanControl"
-                    Background="LightGray"
-                    ContentOffsetX="{Binding ContentOffsetX, Mode=TwoWay}"
-                    ContentOffsetY="{Binding ContentOffsetY, Mode=TwoWay}"
-                    ContentScale="{Binding ContentScale, Mode=TwoWay}"
-                    ContentViewportHeight="{Binding ContentViewportHeight, Mode=OneWayToSource}"
-                    ContentViewportWidth="{Binding ContentViewportWidth, Mode=OneWayToSource}"
-                    Focusable="False">
-
-
-
+                <AdornerDecorator>
                     <!--
-                        We need to nest our NetworkView in an AdornerDecorator so that adorners work correct when
-                        we zoom in and out using the ZoomAndPanControl
+                        This grid specifies the size of the ZoomAndPanControl's content.
+                        It wraps up both the NetworkView and drag-zooming Canvas.
                     -->
-                    <AdornerDecorator>
+                    <Grid Width="{Binding ContentWidth}" Height="{Binding ContentHeight}">
+
+                        <!--  In this sample the NetworkView is the content displayed by the ZoomAndPanControl.  -->
+                        <controls:ProjectDesignSurface
+                            x:Name="ProjectDesignSurface"
+                            ConnectionDragCompleted="OnProjectDesignSurfaceConnectionDragCompleted"
+                            ConnectionDragStarted="OnProjectDesignSurfaceConnectionDragStarted"
+                            ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                            ConnectionsSource="{Binding Path=DesignSurface.Connections}"
+                            MouseDown="OnDesignSurfaceMouseDown"
+                            MouseMove="networkControl_MouseMove"
+                            MouseUp="OnDesignSurfaceMouseUp"
+                            MouseWheel="networkControl_MouseWheel"
+                            NodesSource="{Binding DesignSurface.CorpusNodes}"
+                            QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback" />
+
                         <!--
-                            This grid specifies the size of the ZoomAndPanControl's content.
-                            It wraps up both the NetworkView and drag-zooming Canvas.
+                            This Canvas and Border are used as a very simple way to render a drag rectangle that the user
+                            uses to specify an area to zoom in on.
                         -->
-                        <Grid Width="{Binding ContentWidth}" Height="{Binding ContentHeight}">
+                        <Canvas x:Name="DragZoomCanvas" Visibility="Collapsed">
+                            <Border
+                                x:Name="DragZoomBorder"
+                                Background="Silver"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                CornerRadius="1"
+                                Opacity="0" />
+                        </Canvas>
+                    </Grid>
+                </AdornerDecorator>
+            </controls:ZoomAndPanControl>
+        </ScrollViewer>
 
-                            <!--  In this sample the NetworkView is the content displayed by the ZoomAndPanControl.  -->
-                            <controls:ProjectDesignSurface
-                                x:Name="ProjectDesignSurface"
-                                ConnectionDragCompleted="OnProjectDesignSurfaceConnectionDragCompleted"
-                                ConnectionDragStarted="OnProjectDesignSurfaceConnectionDragStarted"
-                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
-                                ConnectionsSource="{Binding Path=DesignSurface.Connections}"
-                                MouseDown="OnDesignSurfaceMouseDown"
-                                MouseMove="networkControl_MouseMove"
-                                MouseUp="OnDesignSurfaceMouseUp"
-                                MouseWheel="networkControl_MouseWheel"
-                                NodesSource="{Binding DesignSurface.CorpusNodes}"
-                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback" />
-
-                            <!--
-                                This Canvas and Border are used as a very simple way to render a drag rectangle that the user
-                                uses to specify an area to zoom in on.
-                            -->
-                            <Canvas x:Name="DragZoomCanvas" Visibility="Collapsed">
-                                <Border
-                                    x:Name="DragZoomBorder"
-                                    Background="Silver"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
-                                    CornerRadius="1"
-                                    Opacity="0" />
-                            </Canvas>
-                        </Grid>
-                    </AdornerDecorator>
-                </controls:ZoomAndPanControl>
-            </ScrollViewer>
-
-            <xctk:PropertyGrid
-                x:Name="_propertyGrid"
-                Width="350"
-                Grid.Row="1"
-                Grid.Column="1"
-                Filter=""
-                Foreground="Black"
-                HideInheritedProperties="False"
-                IsCategorized="False"
-                IsMiscCategoryLabelHidden="False"
-                IsReadOnly="False"
-                IsVirtualizing="False"
-                SelectedObject="{Binding SelectedConnection}"
-                ShowAdvancedOptions="False"
-                ShowHorizontalScrollBar="True"
-                ShowSummary="False"
-                UpdateTextBoxSourceOnEnterKey="True" />
+        <xctk:PropertyGrid
+            x:Name="_propertyGrid"
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="350"
+            Filter=""
+            Foreground="Black"
+            HideInheritedProperties="False"
+            IsCategorized="False"
+            IsMiscCategoryLabelHidden="False"
+            IsReadOnly="False"
+            IsVirtualizing="False"
+            SelectedObject="{Binding SelectedConnection}"
+            ShowAdvancedOptions="False"
+            ShowHorizontalScrollBar="True"
+            ShowSummary="False"
+            UpdateTextBoxSourceOnEnterKey="True" />
 
     </Grid>
 </UserControl>
