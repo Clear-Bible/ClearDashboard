@@ -178,7 +178,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     TaskStatus = StatusEnum.Working
                                 }));
                                 
-                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name!, metadata.LanguageName!, 
+                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName, 
                                     metadata.CorpusTypeDisplay, cancellationToken);
                                 
                                 OnUIThread(() => Corpora.Add(corpus));
@@ -259,9 +259,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 File.Delete(Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.Write(ex);
             }
         }
 
@@ -282,9 +282,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     Path.Combine(dashboardPath, $"{projectName}_original.sqlite"),
                     Path.Combine(projectPath, $"{projectName}.sqlite"));
             }
-            catch
+            catch(Exception ex)
             {
-
+                Console.Write(ex);
             }
         }
 
@@ -300,9 +300,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             {
                 File.Copy(filePath, Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.Write(ex);
             }
         }
 

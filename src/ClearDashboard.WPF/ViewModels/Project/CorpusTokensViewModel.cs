@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         {
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
-            var cancellationToken = _cancellationTokenSource.Token;
+            var localCancellationToken = _cancellationTokenSource.Token;
 
             await Task.Factory.StartNew(async () =>
             {
@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                     var tokensTextRows = 
                         corpus[CurrentBook]
                             .GetRows()
-                            .WithCancellation(cancellationToken)
+                            .WithCancellation(localCancellationToken)
                             .Cast<TokensTextRow>()
                             .Where(ttr => ttr
                                 .Tokens
@@ -168,7 +168,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
-                    if (!cancellationToken.IsCancellationRequested)
+                    if (!localCancellationToken.IsCancellationRequested)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
