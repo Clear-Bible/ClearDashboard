@@ -9,8 +9,7 @@
         <Setter Property="MinHeight" Value="5" />
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Cursor"
-                Value="{Binding (DockPanel.Dock), RelativeSource={RelativeSource Self}, Converter={x:Static dockPanelSplitter:DockPanelSplitter+CursorConverter.Instance}}" />
+        <Setter Property="Cursor" Value="{Binding (DockPanel.Dock), RelativeSource={RelativeSource Self}, Converter={x:Static dockPanelSplitter:DockPanelSplitter+CursorConverter.Instance}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type dockPanelSplitter:DockPanelSplitter}">

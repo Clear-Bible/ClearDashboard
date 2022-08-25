@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ViewModels.ProjectDesignSurface
 {
@@ -11,7 +13,7 @@ namespace ViewModels.ProjectDesignSurface
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public sealed class CorpusNodeViewModel : AbstractModelBase
+    public sealed class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChanagedMessage>
     {
 
         #region events
@@ -75,7 +77,7 @@ namespace ViewModels.ProjectDesignSurface
         public CorpusNodeViewModel()
         {
         }
-
+        
         public CorpusNodeViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
         {
             _name = name;
@@ -302,6 +304,15 @@ namespace ViewModels.ProjectDesignSurface
                 connector.Type = ConnectorType.Undefined;
             }
         }
+
+        public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
+        {
+            var connection = message.ConnectorId;
+
+            return Task.CompletedTask;
+        }
+
+
 
         #endregion Private Methods
     }

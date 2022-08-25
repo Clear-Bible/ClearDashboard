@@ -1,4 +1,7 @@
-﻿using ClearDashboard.Wpf.Controls.Utils;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Controls.Utils;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Linq;
 using System.Windows;
@@ -10,6 +13,9 @@ namespace ViewModels.ProjectDesignSurface
     /// </summary>
     public sealed class ConnectorViewModel : AbstractModelBase
     {
+        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager _projectManager;
+
         #region Internal Data Members
 
         /// <summary>
@@ -25,8 +31,10 @@ namespace ViewModels.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ConnectorViewModel(string name)
+        public ConnectorViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
         {
+            _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
             Name = name;
             Type = ConnectorType.Undefined;
         }
@@ -114,21 +122,40 @@ namespace ViewModels.ProjectDesignSurface
         }
 
 
-        /// <summary>
-        /// Set to 'true' when the node is selected.
-        /// </summary>
-        private bool _isSelected = false;
-        /// <summary>
-        /// Set to 'true' when the node is selected.
-        /// </summary>
-        public bool IsSelected
+        ///// <summary>
+        ///// Set to 'true' when the node is selected.
+        ///// </summary>
+        //private bool _isSelected = false;
+        ///// <summary>
+        ///// Set to 'true' when the node is selected.
+        ///// </summary>
+        //public bool IsSelected
+        //{
+        //    get => _isSelected;
+        //    set
+        //    {
+        //        Set(ref _isSelected, value);
+
+        //        if (_isSelected)
+        //        {
+        //            //_eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChanagedMessage(this));
+        //        }
+        //    }
+        //}
+
+
+        private Guid _selectedConnection;
+
+        public Guid SelectedConnection
         {
-            get => _isSelected;
+            get => _selectedConnection;
             set
             {
-                Set(ref _isSelected, value);
+                Set(ref _selectedConnection, value);
+                _eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChanagedMessage(value));
             }
         }
+        
 
 
         /// <summary>

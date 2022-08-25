@@ -1,5 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -10,6 +14,9 @@ namespace ViewModels.ProjectDesignSurface
     /// </summary>
     public class CurvedArrow : Shape
     {
+        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator _eventAggregator;
+
         #region Dependency Property/Event Definitions
 
         public static readonly DependencyProperty ArrowHeadLengthProperty =
@@ -24,7 +31,26 @@ namespace ViewModels.ProjectDesignSurface
             DependencyProperty.Register("Points", typeof(PointCollection), typeof(CurvedArrow),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
+        public static readonly DependencyProperty NodeSourceProperty = DependencyProperty.Register(nameof(NodeSource), typeof(ConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ConnectorViewModel)));
+        public static readonly DependencyProperty NodeTargetProperty = DependencyProperty.Register(nameof(NodeTarget), typeof(ConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ConnectorViewModel)));
+        public static readonly DependencyProperty ConnectionIdProperty = DependencyProperty.Register(nameof(ConnectionId), typeof(Guid), typeof(CurvedArrow), new PropertyMetadata(default(Guid)));
+
         #endregion Dependency Property/Event Definitions
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (NodeSource is not null)
+                {
+                    NodeSource.SelectedConnection = ConnectionId;
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// The angle (in degrees) of the arrow head.
@@ -51,6 +77,17 @@ namespace ViewModels.ProjectDesignSurface
         {
             get => (PointCollection)GetValue(PointsProperty);
             set => SetValue(PointsProperty, value);
+        }
+
+        public CurvedArrow()
+        {
+            
+        }
+        
+        public CurvedArrow(DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        {
+            _projectManager = projectManager;
+            _eventAggregator = eventAggregator;
         }
 
         #region Private Methods
@@ -84,6 +121,25 @@ namespace ViewModels.ProjectDesignSurface
                 return group;
             }
         }
+
+        public ConnectorViewModel NodeSource
+        {
+            get => (ConnectorViewModel)GetValue(NodeSourceProperty);
+            set => SetValue(NodeSourceProperty, value);
+        }
+
+        public ConnectorViewModel NodeTarget
+        {
+            get => (ConnectorViewModel)GetValue(NodeTargetProperty);
+            set => SetValue(NodeTargetProperty, value);
+        }
+
+        public Guid ConnectionId
+        {
+            get => (Guid)GetValue(ConnectionIdProperty);
+            set => SetValue(ConnectionIdProperty, value);
+        }
+
 
         /// <summary>
         /// Generate the geometry for the three optional arrow symbols at the start, middle and end of the arrow.

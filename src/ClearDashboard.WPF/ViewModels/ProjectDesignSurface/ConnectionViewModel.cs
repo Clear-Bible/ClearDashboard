@@ -52,6 +52,7 @@ namespace ViewModels.ProjectDesignSurface
             }
         }
 
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
         /// The source connector the connection is attached to.

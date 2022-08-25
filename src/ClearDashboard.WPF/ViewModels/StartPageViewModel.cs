@@ -10,13 +10,14 @@ using ClearDashboard.DataAccessLayer;
 using System.Windows.Navigation;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Linq;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
     /// <summary>
     /// 
     /// </summary>
-    public class StartPageViewModel : PaneViewModel, IHandle<NodeSelectedChanagedMessage>
+    public class StartPageViewModel : PaneViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
     {
         private readonly INavigationService _navigationService;
         private readonly ILogger<StartPageViewModel> _logger;
@@ -155,24 +156,7 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
 
-        private CorpusNodeViewModel _selectedNode;
-        public CorpusNodeViewModel SelectedNode
-        {
-            get
-            {
-                foreach (var node in DesignSurface.CorpusNodes)
-                {
-                    if (node.IsSelected)
-                    {
-                        return node;
-                    }
-                }
-                return null;
-            }
-            set => Set(ref _selectedNode, value);
-        }
-
-        private ConnectionViewModel _selectedConnection;
+        private ConnectionViewModel _selectedNode;
         public ConnectionViewModel SelectedConnection
         {
             get
@@ -186,7 +170,24 @@ namespace ClearDashboard.Wpf.ViewModels
                 }
                 return null;
             }
+            set => Set(ref _selectedNode, value);
         }
+
+        //private ConnectionViewModel _selectedConnection;
+        //public ConnectionViewModel SelectedConnection
+        //{
+        //    get
+        //    {
+        //        foreach (var connection in DesignSurface.Connections)
+        //        {
+        //            if (connection.IsSelected)
+        //            {
+        //                return connection;
+        //            }
+        //        }
+        //        return null;
+        //    }
+        //}
 
         #endregion //Observable Properties
 
@@ -457,9 +458,15 @@ namespace ClearDashboard.Wpf.ViewModels
             node.ProjectType = projectType;
             node.ParatextProjectId = projectId;
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target"));
+            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
+            {
+                Type = ConnectorType.Input
+            });
             //node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Source"));
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager)
+            {
+                Type = ConnectorType.Output
+            });
             //node.OutputConnectors.Add(new ConnectorViewModel("Out2"));
 
             if (centerNode)
@@ -561,7 +568,44 @@ namespace ClearDashboard.Wpf.ViewModels
         public async Task HandleAsync(NodeSelectedChanagedMessage message, CancellationToken cancellationToken)
         {
             var node = message.Node as CorpusNodeViewModel;
-            SelectedNode = node;
+            if (node is null)
+            {
+                return;
+            }
+            //SelectedConnection = node;
+
+            //var nodes = DesignSurface.CorpusNodes.Where(b => b.IsSelected).ToList();
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    Debug.WriteLine($"{i} {nodes[i].Name}");
+            //}
+
+            
+        }
+
+        public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
+        {
+            var guid = message.ConnectorId;
+
+            foreach (var node in DesignSurface.CorpusNodes)
+            {
+                foreach (var connection in node.AttachedConnections)
+                {
+                    if (connection.Id == guid)
+                    {
+                        node.IsSelected = true;
+                    }
+                }
+            }
+
+            //var nodes = DesignSurface.CorpusNodes.Where(b => b.IsSelected).ToList();
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    Debug.WriteLine($"{i} {nodes[i].Name}");
+            //}
+
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods

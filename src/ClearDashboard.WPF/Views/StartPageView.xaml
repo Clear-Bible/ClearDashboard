@@ -197,6 +197,9 @@
 
                     <!--  The connection is represented by a curved arrow.  -->
                     <projectDesignSurface:CurvedArrow
+                        ConnectionId ="{Binding Path= Id}"
+                        NodeSource = "{Binding Path=SourceConnector}"
+                        NodeTarget = "{Binding Path=DestinationConnector}"
                         Fill="{StaticResource connectionBrush}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
@@ -707,7 +710,7 @@
                 IsMiscCategoryLabelHidden="False"
                 IsReadOnly="False"
                 IsVirtualizing="False"
-                SelectedObject="{Binding SelectedNode}"
+                SelectedObject="{Binding SelectedConnection}"
                 ShowAdvancedOptions="False"
                 ShowHorizontalScrollBar="True"
                 ShowSummary="False"
