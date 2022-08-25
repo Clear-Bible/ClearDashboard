@@ -132,6 +132,18 @@
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="2">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Visible">
+                            <Setter Property="IsEnabled" Value="True" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Collapsed">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <StackPanel Orientation="Vertical">
                 <TextBlock
                     Margin="15,5,5,0"
@@ -199,7 +211,7 @@
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            x:Name="DeleteProject"
+                                            x:Name="NewProject"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"
@@ -337,6 +349,30 @@
 
 
             </StackPanel>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Width="250"
+            Height="150"
+            Visibility="{Binding AlertVisibility}"
+            BorderBrush="{DynamicResource RedMidBrush}"
+            BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Padding="15"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource RedMidBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap">
+                    Please Run the ClearDashboard Plugin in Paratext
+                </TextBlock>
+                <Button x:Name="AlertClose" Grid.Row="1" Margin="50,0,50,5">Close</Button>
+            </Grid>
         </Border>
     </Grid>
 </Page>

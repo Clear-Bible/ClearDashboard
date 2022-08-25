@@ -59,7 +59,10 @@
                     <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="{DynamicResource SecondaryHueDark}" />
                     <SolidColorBrush x:Key="SecondaryHueDarkForegroundBrush" Color="{DynamicResource SecondaryHueDarkForeground}" />
 
-                    <Style x:Key="MaterialDesignRaisedAccentLightButton" BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="{x:Type Button}">
+                    <Style
+                        x:Key="MaterialDesignRaisedAccentLightButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
                     </Style>
 
