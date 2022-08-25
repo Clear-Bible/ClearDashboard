@@ -182,6 +182,10 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
                     _handleAsyncRunning = false;
                 }
+                finally
+                {
+                    _tokenSource.Dispose();
+                }
             }, cancellationToken);
 
         }

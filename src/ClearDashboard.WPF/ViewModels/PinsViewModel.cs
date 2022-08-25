@@ -506,6 +506,7 @@ namespace ClearDashboard.Wpf.ViewModels
                     TaskStatus = StatusEnum.Completed
                 }));
             _generateDataRunning = false;
+            _tokenSource.Dispose();
             return false;
         }
 

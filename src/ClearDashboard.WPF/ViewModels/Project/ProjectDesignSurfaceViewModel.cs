@@ -240,7 +240,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         }
                         finally
                         {
-                            //_tokenSource.Dispose();
+                            _tokenSource.Dispose();
                             DeleteOriginalDatabase();
                             _addParatextCorpusRunning = false;
                         }

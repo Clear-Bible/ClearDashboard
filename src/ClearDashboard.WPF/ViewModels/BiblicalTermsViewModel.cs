@@ -1092,6 +1092,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 //await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
                 _getBiblicalTermsRunning = false;
+                _tokenSource.Dispose();
             }
         }
         
