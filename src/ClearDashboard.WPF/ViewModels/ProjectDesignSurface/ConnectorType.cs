@@ -14,6 +14,7 @@
     {
         Standard,
         BackTranslation,
-        Reference
+        Reference,
+        Other
     }
 }

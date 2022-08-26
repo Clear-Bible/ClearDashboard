@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         #endregion //Member Variables
 
 
-        
+
         #region Public Variables
 
         public ProjectDesignSurfaceView View { get; set; }
@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         #endregion //Public Variables
 
 
-        
+
         #region Observable Properties
 
         public IWindowManager WindowManager { get; }
@@ -226,7 +226,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<Corpus>();
-            
+
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -281,6 +281,13 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         #region Methods
 
 
+        public void ToggleCorpusVisible(string guid)
+        {
+            // CorpusNodeViewModel sender
+            Console.WriteLine();
+        }
+
+
         public void AddManuscriptCorpus()
         {
             Logger.LogInformation("AddParatextCorpus called.");
@@ -310,9 +317,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         {
                             await EventAggregator.PublishOnCurrentThreadAsync(
                                 new ProgressBarVisibilityMessage(true));
-                          
 
-                           // if (viewModel.SelectedProject.HasProjectPath)
+
+                            // if (viewModel.SelectedProject.HasProjectPath)
                             {
 
                                 await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
@@ -329,10 +336,27 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     //
                                     // Create some nodes and add them to the view-model.
                                     //
-                                    CreateNode(corpus.Name, new Point(100, 60), false, ParatextProjectType.Standard,
-                                        corpus.ParatextGuid);
+                                    CorpusType corpusType = CorpusType.Unknown;
+                                    switch (viewModel.SelectedProject.CorpusType)
+                                    {
+                                        case CorpusType.Standard:
+                                            corpusType = CorpusType.Standard;
+                                            break;
+                                        case CorpusType.BackTranslation:
+                                            corpusType = CorpusType.BackTranslation;
+                                            break;
+                                        case CorpusType.Resource:
+                                            corpusType = CorpusType.Resource;
+                                            break;
+
+                                        default:
+                                            corpusType = CorpusType.Unknown;
+                                            break;
+                                    }
+
+                                    CreateNode(corpus.Name, new Point(100, 60), false, corpusType, corpus.ParatextGuid);
                                 });
-                                
+
 
                                 await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
 
@@ -363,7 +387,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogError(ex,$"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                            Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                         }
                         finally
                         {
@@ -528,13 +552,24 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             // Finalize the connection by attaching it to the connector
             // that the user dragged the mouse over.
             //
+            bool added = false;
             if (newConnection.DestinationConnector == null)
             {
                 newConnection.DestinationConnector = connectorDraggedOver;
+                added = true;
             }
             else
             {
                 newConnection.SourceConnector = connectorDraggedOver;
+                added = true;
+            }
+
+            if (added)
+            {
+                EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
+                    sourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
+                    targetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
+                    connectorGuid: newConnection.Id));
             }
         }
 
@@ -604,13 +639,15 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             // Remove the node from the network.
             //
             DesignSurface.CorpusNodes.Remove(node);
+
+            EventAggregator.PublishOnUIThreadAsync(new CorpusDeletedMessage(node.ParatextProjectId));
         }
 
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
         public CorpusNodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode,
-            ParatextProjectType projectType, string projectId)
+            CorpusType corpusType, string projectId)
         {
             var node = new CorpusNodeViewModel(name, _eventAggregator, _projectManager)
             {
@@ -618,7 +655,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 Y = nodeLocation.Y
             };
 
-            node.ProjectType = projectType;
+            node.CorpusType = corpusType;
             node.ParatextProjectId = projectId;
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
@@ -672,6 +709,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             // Add the node to the view-model.
             //
             DesignSurface.CorpusNodes.Add(node);
+            EventAggregator.PublishOnUIThreadAsync(new CorpusAddedMessage(node.ParatextProjectId));
 
             return node;
         }
@@ -699,9 +737,9 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             //
             // Create some nodes and add them to the view-model.
             //
-            var node1 = CreateNode("zz_SUR", new Point(100, 60), false, ParatextProjectType.Standard, Guid.NewGuid().ToString());
-            var node2 = CreateNode("zz_SURBT", new Point(350, 40), false, ParatextProjectType.BackTranslation, Guid.NewGuid().ToString());
-            var node3 = CreateNode("NIV", new Point(350, 120), false, ParatextProjectType.Reference, Guid.NewGuid().ToString());
+            var node1 = CreateNode("zz_SUR", new Point(100, 60), false, CorpusType.Standard, Guid.NewGuid().ToString());
+            var node2 = CreateNode("zz_SURBT", new Point(350, 40), false, CorpusType.BackTranslation, Guid.NewGuid().ToString());
+            var node3 = CreateNode("NIV", new Point(350, 120), false, CorpusType.Resource, Guid.NewGuid().ToString());
 
 
 

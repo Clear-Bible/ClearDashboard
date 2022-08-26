@@ -22,7 +22,10 @@
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="PaleGoldenrod" />
     </LinearGradientBrush>
-
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceUnknown" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="Silver" />
+    </LinearGradientBrush>
     <!--  The brush for connections.  -->
     <SolidColorBrush x:Key="connectionBrush" Color="Black" />
 

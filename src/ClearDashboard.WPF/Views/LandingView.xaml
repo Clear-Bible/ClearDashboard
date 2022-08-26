@@ -217,7 +217,7 @@
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -238,7 +238,7 @@
                                             cal:Message.Attach="Workspace($dataContext)"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -258,7 +258,7 @@
                                             Margin="15,8,12,12"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -277,7 +277,7 @@
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
-                                            Style="{StaticResource MaterialDesignRaisedAccentLightButton}">
+                                            Style="{StaticResource  MaterialDesignRaisedAccentButton}">
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="30"
