@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClearDashboard.Wpf.ViewModels;
+using ClearDashboard.Wpf.ViewModels.Project;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,6 +27,12 @@ namespace ClearDashboard.Wpf.Views.Project
         {
             DesignSurfaceCanvas.Dispatcher.Invoke(() => { DesignSurfaceCanvas.Children.Add(control); });
 
+            
         }
+
+        /// <summary>
+        /// Convenient accessor for the view-model.
+        /// </summary>
+        public ProjectDesignSurfaceViewModel ViewModel => (ProjectDesignSurfaceViewModel)DataContext;
     }
 }

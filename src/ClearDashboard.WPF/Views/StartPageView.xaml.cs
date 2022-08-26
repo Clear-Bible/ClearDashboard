@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.Wpf.Controls;
 using ClearDashboard.Wpf.ViewModels;
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,7 +18,6 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
         }
-
 
         /// <summary>
         /// Convenient accessor for the view-model.
