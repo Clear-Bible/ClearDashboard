@@ -1,55 +1,44 @@
 ﻿using Caliburn.Micro;
-//using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Panes;
-using ClearDashboard.Wpf.Views.Project;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+//using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views.Project;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
-using Brushes = System.Windows.Media.Brushes;
-using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
-using Rectangle = System.Windows.Shapes.Rectangle;
-using ViewModels.ProjectDesignSurface;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using ViewModels.ProjectDesignSurface;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
 
-    public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
-
-    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
-
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
     {
+        #region Member Variables      
+
+        public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
+
         private readonly INavigationService _navigationService;
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
-
-
-        public IWindowManager WindowManager { get; }
         private readonly IMediator _mediator;
         private ObservableCollection<Corpus> _corpora;
-        public ObservableCollection<Corpus> Corpora
-        {
-            get => _corpora;
-            set => _corpora = value;
-        }
 
-        #region Member Variables
         /// <summary>
         /// This is the network that is displayed in the window.
         /// It is the main part of the view-model.
@@ -97,11 +86,26 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         #endregion //Member Variables
 
-        #region Public Properties
 
-        #endregion //Public Properties
+        
+        #region Public Variables
 
+        public ProjectDesignSurfaceView View { get; set; }
+        public Canvas DesignSurfaceCanvas { get; set; }
+
+        #endregion //Public Variables
+
+
+        
         #region Observable Properties
+
+        public IWindowManager WindowManager { get; }
+
+        public ObservableCollection<Corpus> Corpora
+        {
+            get => _corpora;
+            set => _corpora = value;
+        }
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -222,13 +226,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<Corpus>();
-
-            // Add some test data to the view-model.
-            PopulateWithTestData();
+            
         }
-
-
-        #endregion //Constructor
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -242,8 +241,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             return base.OnActivateAsync(cancellationToken);
         }
 
-        public ProjectDesignSurfaceView View { get; set; }
-        public Canvas DesignSurfaceCanvas { get; set; }
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            // todo - save the project
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         protected override async void OnViewAttached(object view, object context)
         {
             if (View == null)
@@ -255,7 +258,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 }
             }
 
-            await GetCorpora();
+            //
+            // Create a network, the root of the view-model.
+            //
+            DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
+                _projectManager, _eventAggregator);
+
             base.OnViewAttached(view, context);
         }
 
@@ -266,18 +274,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         protected override async void OnViewReady(object view)
         {
-            await GetCorpora();
             base.OnViewReady(view);
         }
+        #endregion //Constructor
 
-        private async Task GetCorpora()
-        {
-            // var corpora = await ProjectManager.LoadProject(ProjectManager.CurrentDashboardProject.ProjectName);
-            //await EventAggregator.PublishOnUIThreadAsync(new CorporaLoadedMessage(corpora));
+        #region Methods
 
-            // Corpora = new ObservableCollection<Corpus>(corpora);
-
-        }
 
         public void AddManuscriptCorpus()
         {
@@ -320,6 +322,17 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
 
                                 OnUIThread(() => Corpora.Add(corpus));
+
+
+                                OnUIThread(() =>
+                                {
+                                    //
+                                    // Create some nodes and add them to the view-model.
+                                    //
+                                    CreateNode(corpus.Name, new Point(100, 60), false, ParatextProjectType.Standard,
+                                        corpus.ParatextGuid);
+                                });
+                                
 
                                 await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
 
@@ -365,7 +378,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             }
         }
 
-        #region Methods
 
         /// <summary>
         /// Called when the user has started to drag out a connector, thus creating a new connection.

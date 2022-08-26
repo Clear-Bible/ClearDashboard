@@ -13,7 +13,7 @@ using ClearDashboard.DAL.Alignment.Extensions;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
-    public class CorpusTokensViewModel : PaneViewModel, IHandle<TokenizedTextCorpusLoadedMessage>
+    public class CorpusTokensViewModel : PaneViewModel, IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>
     {
        
 
@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             set => Set( ref _tokensTextRows, value);
         }
 
-        public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
 
