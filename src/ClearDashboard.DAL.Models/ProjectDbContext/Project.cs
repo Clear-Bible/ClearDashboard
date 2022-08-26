@@ -4,7 +4,6 @@
     {
         public string? ProjectName { get; set; }
         public bool IsRtl { get; set; }
-        public int? LastContentWordLevel { get; set; }
         public string? DesignSurfaceLayout { get; set; }
     }
 }

@@ -51,7 +51,7 @@
         </Grid.RowDefinitions>
 
         <!--  ROW 0  -->
-        <StackPanel Orientation="Horizontal" Background="{DynamicResource MaterialDesignPaper}">
+        <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Horizontal">
             <Button
                 Width="20"
                 Height="20"
@@ -149,7 +149,10 @@
         </StackPanel>
 
         <!--  ROW 1  -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{DynamicResource MaterialDesignPaper}">
+        <StackPanel
+            Grid.Row="1"
+            Background="{DynamicResource MaterialDesignPaper}"
+            Orientation="Horizontal">
             <!--  RENDERINGS FILTER  -->
             <Border
                 Margin="30,5,0,2"
