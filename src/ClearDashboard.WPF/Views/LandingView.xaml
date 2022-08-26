@@ -136,10 +136,10 @@
                 <Style TargetType="Border">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding AlertVisibility}" Value="Visible">
-                            <Setter Property="IsEnabled" Value="True" />
+                            <Setter Property="IsEnabled" Value="False" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding AlertVisibility}" Value="Collapsed">
-                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="IsEnabled" Value="True" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

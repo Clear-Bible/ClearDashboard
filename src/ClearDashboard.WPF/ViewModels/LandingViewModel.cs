@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
 
 
-        private Visibility _alertVisibility = Visibility.Hidden;
+        private Visibility _alertVisibility = Visibility.Visible;
 
         public Visibility AlertVisibility
         {
@@ -65,6 +65,9 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             Logger.LogInformation("LandingViewModel constructor called.");
             _windowManager = windowManager;
+
+
+            AlertVisibility = Visibility.Collapsed;
         }
 
 
