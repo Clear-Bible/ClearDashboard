@@ -383,6 +383,7 @@
                         <materialDesign:PackIcon
                             Width="25"
                             Height="30"
+                            Foreground ="{StaticResource BlueMidBrush}"
                             Kind="ApplicationSettingsOutline" />
                         <ProgressBar
                             Width="15"

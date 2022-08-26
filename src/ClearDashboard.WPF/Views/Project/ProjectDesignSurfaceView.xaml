@@ -501,8 +501,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="200" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <materialDesign:Card
             Margin="5"
@@ -543,66 +543,17 @@
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
-        <Border
-            Grid.Row="1"
-            Background="{DynamicResource MaterialDesignPaper}"
-            BorderBrush="Black"
-            BorderThickness="5">
-            <Canvas Name="DesignSurfaceCanvas" Visibility="Visible">
-                <WrapPanel Canvas.Left="10" Canvas.Top="10">
-                    <ItemsControl ItemsSource="{Binding Corpora}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border
-                                    Canvas.Left="10"
-                                    Canvas.Top="10"
-                                    Width="150"
-                                    Height="75"
-                                    Margin="10"
-                                    Background="{DynamicResource SecondaryHueLightBrush}"
-                                    CornerRadius="5">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        Foreground="{DynamicResource SecondaryHueLightForegroundBrush}"
-                                        Text="{Binding Name}" />
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </WrapPanel>
-            </Canvas>
-        </Border>
-        <!--<ProgressBar
-            x:Name="ProgressBarVisibility"
-            Grid.Row="1"
-            Width="100"
-            Height="100"
-            Margin="15,0,5,0"
-            IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
-            Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Value="0" />-->
 
-        <!--<controls:ProjectDesignSurface x:Name="ProjectDesignSurface" Grid.Row="2" />
-
-        <controls:ZoomAndPanControl x:Name="zoomAndPanControl" Grid.Row="2" />
-
-        <Canvas x:Name="DragZoomCanvas" Grid.Row="2" />
-        <Border x:Name="DragZoomBorder" Grid.Row="2" />-->
-
-
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
+            <!--<Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>-->
 
             <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
 
@@ -646,7 +597,7 @@
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom slider  -->
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="120" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
@@ -670,7 +621,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.FitContent}"
                     ToolTip="Fit all nodes to the viewport">
-                    Fit
+                    <materialDesign:PackIcon Kind="FitToScreenOutline" />
                 </Button>
 
                 <!--
@@ -681,7 +632,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.Fill}"
                     ToolTip="Fit the entire content area to the viewport">
-                    Fill
+                    <materialDesign:PackIcon Kind="FitToPageOutline" />
                 </Button>
 
                 <!--
@@ -754,6 +705,7 @@
                 Focusable is set to False because it is only that NetworkView that I want to be focusable.
             -->
             <ScrollViewer
+                Margin="5 5 0 0"
                 Grid.Row="1"
                 Grid.Column="0"
                 CanContentScroll="True"
@@ -819,25 +771,23 @@
                     </AdornerDecorator>
                 </controls:ZoomAndPanControl>
             </ScrollViewer>
-
-            <xctk:PropertyGrid
-                x:Name="_propertyGrid"
-                Grid.Row="1"
-                Grid.Column="1"
-                Width="350"
-                Filter=""
-                Foreground="Black"
-                HideInheritedProperties="False"
-                IsCategorized="False"
-                IsMiscCategoryLabelHidden="False"
-                IsReadOnly="False"
-                IsVirtualizing="False"
-                SelectedObject="{Binding SelectedConnection}"
-                ShowAdvancedOptions="False"
-                ShowHorizontalScrollBar="True"
-                ShowSummary="False"
-                UpdateTextBoxSourceOnEnterKey="True" />
-
         </Grid>
+
+        <xctk:PropertyGrid
+            x:Name="_propertyGrid"
+            Grid.Row="2"
+            Filter=""
+            Margin="5 5 17 5"
+            Foreground="Black"
+            HideInheritedProperties="False"
+            IsCategorized="False"
+            IsMiscCategoryLabelHidden="False"
+            IsReadOnly="False"
+            IsVirtualizing="False"
+            SelectedObject="{Binding SelectedConnection}"
+            ShowAdvancedOptions="False"
+            ShowHorizontalScrollBar="True"
+            ShowSummary="False"
+            UpdateTextBoxSourceOnEnterKey="True" />
     </Grid>
 </UserControl>

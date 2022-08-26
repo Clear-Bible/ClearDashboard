@@ -36,7 +36,7 @@
 		<None Remove="Resources\GentiumPlus-Italic.ttf" />
 		<None Remove="Resources\GentiumPlus-Regular.ttf" />
 		<None Remove="Resources\KadmosU.ttf" />
-		<None Remove="Resources\Layouts\Dashboard.Layout.config" />
+		<None Remove="Resources\Layouts\Dashboard.Layout.config2" />
 		<None Remove="Resources\logos_icon.png" />
 		<None Remove="Resources\NewProject.png" />
 		<None Remove="Resources\NewProject_Icon_128.png" />
@@ -56,7 +56,7 @@
 
 	<ItemGroup>
 		<Content Include="Assets\ClearDashboard_logo.ico" />
-		<Content Include="Resources\Layouts\Dashboard.Layout.config">
+		<Content Include="Resources\Layouts\Dashboard.Layout.config2">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
@@ -250,6 +250,9 @@
 		<None Update="Properties\Settings.settings">
 			<Generator>SettingsSingleFileGenerator</Generator>
 			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+		<None Update="Resources\Layouts\Dashboard.Layout.config">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Layouts\Project.Layout.config">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

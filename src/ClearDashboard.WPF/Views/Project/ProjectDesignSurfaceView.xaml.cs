@@ -25,12 +25,12 @@ namespace ClearDashboard.Wpf.Views.Project
            
         }
 
-        public void AddControl(FrameworkElement control)
-        {
-            DesignSurfaceCanvas.Dispatcher.Invoke(() => { DesignSurfaceCanvas.Children.Add(control); });
+        //public void AddControl(FrameworkElement control)
+        //{
+        //    DesignSurfaceCanvas.Dispatcher.Invoke(() => { DesignSurfaceCanvas.Children.Add(control); });
 
             
-        }
+        //}
 
         /// <summary>
         /// Convenient accessor for the view-model.
