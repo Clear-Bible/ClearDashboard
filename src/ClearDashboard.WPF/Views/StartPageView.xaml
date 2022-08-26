@@ -5,11 +5,8 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dockpanelsplitter="clr-namespace:ClearDashboard.Wpf.Controls.DockPanelSplitter;assembly=ClearDashboard.Wpf.Controls"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
-    xmlns:resources="clr-namespace:ClearDashboard"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DataContext="{d:DesignInstance Type=viewModels:StartPageViewModel,

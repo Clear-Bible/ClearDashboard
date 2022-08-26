@@ -301,11 +301,20 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private static void ConfigureLogging()
         {
+
+            var fullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\Plugin.log");
+            //create if does not exist
+            DirectoryInfo di = new DirectoryInfo(fullPath);
+            if (di.Exists == false)
+            {
+                di.Create();
+            }
+
             // configure Serilog
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
-                .WriteTo.File("d:\\temp\\Plugin.log", rollingInterval: RollingInterval.Day)
+                .WriteTo.File(fullPath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             // set instance to global logger
             Log.Logger = log;
