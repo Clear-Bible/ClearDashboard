@@ -104,14 +104,14 @@
                                             FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                             FontSize="18"
                                             FontWeight="Bold"
-                                            Foreground="{StaticResource RedLightBrush}"
+                                            Foreground="{StaticResource RedDarkBrush}"
                                             Text="{Binding Word}" />
                                         <TextBlock
                                             Width="80"
                                             Margin="5,0,0,0"
                                             HorizontalAlignment="Center"
                                             FontSize="12"
-                                            Foreground="{StaticResource OrangeLightBrush}"
+                                            Foreground="{StaticResource OrangeDarkBrush}"
                                             Text="{Binding WordTransliterated, StringFormat=({0})}" />
                                     </StackPanel>
                                     <TextBlock
@@ -121,7 +121,7 @@
                                         VerticalAlignment="Center"
                                         FontSize="14"
                                         FontWeight="Bold"
-                                        Foreground="{StaticResource OrangeLightBrush}"
+                                        Foreground="{StaticResource OrangeDarkBrush}"
                                         Text="{Binding Glosses}"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -164,7 +164,7 @@
                                     VerticalAlignment="Center"
                                     Content="{helpers:Localization WordMeaningsView_Domain}"
                                     FontStyle="Italic"
-                                    Foreground="{StaticResource BlueLightBrush}" />
+                                    Foreground="{StaticResource BlueDarkBrush}" />
                                 <TextBlock
                                     Width="220"
                                     Margin="3,0,0,5"
@@ -184,7 +184,7 @@
                                     VerticalAlignment="Center"
                                     Content="{helpers:Localization WordMeaningsView_SubDomain}"
                                     FontStyle="Italic"
-                                    Foreground="{StaticResource BlueLightBrush}" />
+                                    Foreground="{StaticResource BlueDarkBrush}" />
                                 <TextBlock
                                     Width="180"
                                     VerticalAlignment="Center"
@@ -201,7 +201,7 @@
                                     VerticalAlignment="Center"
                                     Content="{helpers:Localization WordMeaningsView_Sense}"
                                     FontStyle="Italic"
-                                    Foreground="{StaticResource BlueLightBrush}" />
+                                    Foreground="{StaticResource BlueDarkBrush}" />
                                 <TextBlock
                                     x:Name="ShowSenses"
                                     MinWidth="50"

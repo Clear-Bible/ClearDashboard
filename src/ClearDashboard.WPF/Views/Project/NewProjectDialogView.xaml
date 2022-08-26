@@ -42,7 +42,7 @@
     </Window.Resources>
     <Border
         Padding="6"
-        Background="Black"
+        Background="{DynamicResource MaterialDesignLightBackground}"
         BorderBrush="{DynamicResource MaterialDesignDarkBackground}"
         BorderThickness="2"
         CornerRadius="25">

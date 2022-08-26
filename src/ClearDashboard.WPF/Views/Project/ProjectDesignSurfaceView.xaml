@@ -10,6 +10,7 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.ViewModels.Project"
     xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -47,6 +48,7 @@
             <RoutedUICommand x:Key="Commands.FitContent" />
             <RoutedUICommand x:Key="Commands.Fill" />
             <RoutedUICommand x:Key="Commands.OneHundredPercent" />
+            <RoutedUICommand x:Key="Commands.ToggleCorpusVisibility" />
 
             <!--
                 This converts from a scale value to a percentage value.
@@ -278,7 +280,7 @@
             </DataTemplate>
 
             <!--  Define a data-template for the 'NodeViewModel' class.  -->
-            <DataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeViewModel}">
+            <DataTemplate x:Name="NodeViewModelTemplate" DataType="{x:Type projectDesignSurface:CorpusNodeViewModel}">
 
                 <!--
                     An adorned control is used, to represent the node.
@@ -302,6 +304,7 @@
                         <!--  This rectangle is the main visual for the node.  -->
 
                         <Rectangle
+                            x:Name="nodeRectangle"
                             RadiusX="4"
                             RadiusY="4"
                             Stroke="{StaticResource nodeBorderBrush}"
@@ -309,19 +312,48 @@
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Standard}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Standard}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushStandardProject}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.BackTranslation}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.BackTranslation}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushBacktranslationProject}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Reference}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Resource}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceProject}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Rectangle.Style>
                         </Rectangle>
+
+                        <Button
+                            Width="25"
+                            Height="25"
+                            Margin="5,5,0,0"
+                            Padding="0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Command="{StaticResource Commands.ToggleCorpusVisibility}"
+                            CommandParameter="{Binding Path=DataContext, ElementName=nodeRectangle }"
+                            Style="{StaticResource MaterialDesignFlatButton}">
+                            <materialDesign:PackIcon Width="20" Height="20">
+                                <materialDesign:PackIcon.Style>
+                                    <Style TargetType="materialDesign:PackIcon">
+                                        <Setter Property="Kind" Value="Eye" />
+                                        <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsCorpusVisible}" Value="False">
+                                                <Setter Property="Kind" Value="EyeOff" />
+                                                <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </materialDesign:PackIcon.Style>
+                            </materialDesign:PackIcon>
+                        </Button>
 
                         <!--
                             This grid contains the node's connectors.
@@ -358,7 +390,7 @@
                                 Grid.ColumnSpan="3"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Text="{Binding ProjectType}" />
+                                Text="{Binding CorpusType}" />
 
                             <!--  Displays the node's input connectors.  -->
                             <ItemsControl
@@ -449,6 +481,7 @@
         <CommandBinding Command="{StaticResource Commands.FitContent}" Executed="FitContent_Executed" />
         <CommandBinding Command="{StaticResource Commands.Fill}" Executed="Fill_Executed" />
         <CommandBinding Command="{StaticResource Commands.OneHundredPercent}" Executed="OneHundredPercent_Executed" />
+        <CommandBinding Command="{StaticResource Commands.ToggleCorpusVisibility}" Executed="ToggleCorpusVisibility_Executed" />
 
     </UserControl.CommandBindings>
 
@@ -705,9 +738,9 @@
                 Focusable is set to False because it is only that NetworkView that I want to be focusable.
             -->
             <ScrollViewer
-                Margin="5 5 0 0"
                 Grid.Row="1"
                 Grid.Column="0"
+                Margin="5,5,0,0"
                 CanContentScroll="True"
                 Focusable="False"
                 HorizontalScrollBarVisibility="Visible"
@@ -776,8 +809,8 @@
         <xctk:PropertyGrid
             x:Name="_propertyGrid"
             Grid.Row="2"
+            Margin="5,5,17,5"
             Filter=""
-            Margin="5 5 17 5"
             Foreground="Black"
             HideInheritedProperties="False"
             IsCategorized="False"

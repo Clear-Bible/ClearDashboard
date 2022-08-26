@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ViewModels.ProjectDesignSurface
 {
@@ -106,15 +107,26 @@ namespace ViewModels.ProjectDesignSurface
         }
 
 
-        private ParatextProjectType _projectType = ParatextProjectType.Standard;
+        private CorpusType _corpusType =  CorpusType.Standard;
         /// <summary>
         /// The paratext project type
         /// </summary>
-        public ParatextProjectType ProjectType
+        public CorpusType CorpusType
         {
-            get => _projectType;
-            set => Set(ref _projectType, value);
+            get => _corpusType;
+            set => Set(ref _corpusType, value);
         }
+
+        private bool _isCorpusVisible;
+        /// <summary>
+        /// Determines whether or not the user wants the corpus shown or not
+        /// </summary>
+        public bool IsCorpusVisible
+        {
+            get => _isCorpusVisible;
+            set => Set(ref _isCorpusVisible, value);
+        }
+
 
 
         /// <summary>

@@ -344,6 +344,11 @@ namespace ClearDashboard.Wpf.Views.Project
             zoomAndPanControl.AnimatedZoomTo(1.0);
         }
 
+        private void ToggleCorpusVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModel.ToggleCorpusVisible("");
+        }
+
         /// <summary>
         /// Jump back to the previous zoom level.
         /// </summary>
