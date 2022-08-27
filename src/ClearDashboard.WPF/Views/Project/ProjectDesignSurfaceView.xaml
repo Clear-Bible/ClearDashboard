@@ -48,7 +48,7 @@
             <RoutedUICommand x:Key="Commands.FitContent" />
             <RoutedUICommand x:Key="Commands.Fill" />
             <RoutedUICommand x:Key="Commands.OneHundredPercent" />
-            <RoutedUICommand x:Key="Commands.ToggleCorpusVisibility" />
+            <!--<RoutedUICommand x:Key="Commands.ToggleCorpusVisibility" />-->
 
             <!--
                 This converts from a scale value to a percentage value.
@@ -329,7 +329,7 @@
                             </Rectangle.Style>
                         </Rectangle>
 
-                        <Button
+                        <!--<Button
                             Width="25"
                             Height="25"
                             Margin="5,5,0,0"
@@ -353,7 +353,7 @@
                                     </Style>
                                 </materialDesign:PackIcon.Style>
                             </materialDesign:PackIcon>
-                        </Button>
+                        </Button>-->
 
                         <!--
                             This grid contains the node's connectors.
@@ -481,7 +481,7 @@
         <CommandBinding Command="{StaticResource Commands.FitContent}" Executed="FitContent_Executed" />
         <CommandBinding Command="{StaticResource Commands.Fill}" Executed="Fill_Executed" />
         <CommandBinding Command="{StaticResource Commands.OneHundredPercent}" Executed="OneHundredPercent_Executed" />
-        <CommandBinding Command="{StaticResource Commands.ToggleCorpusVisibility}" Executed="ToggleCorpusVisibility_Executed" />
+        <!--<CommandBinding Command="{StaticResource Commands.ToggleCorpusVisibility}" Executed="ToggleCorpusVisibility_Executed" />-->
 
     </UserControl.CommandBindings>
 

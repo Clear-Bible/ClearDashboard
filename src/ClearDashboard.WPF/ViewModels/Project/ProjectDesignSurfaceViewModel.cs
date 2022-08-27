@@ -27,6 +27,27 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
     {
+        #region Enums
+
+        public enum Tokenizer
+        {
+            LatinSentenceTokenizer,
+            LatinWordDetokenizer,
+            LatinWordTokenizer,
+            LineSegmentTokenizer,
+            NullTokenizer,
+            RegexTokenizer,
+            StringDetokenizer,
+            StringTokenizer,
+            WhitespaceDetokenizer,
+            WhitespaceTokenizer,
+            ZwspWordDetokenizer,
+            ZwspWordTokenizer
+        }
+
+        #endregion //Enums
+
+
         #region Member Variables      
 
         public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
@@ -279,14 +300,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         #endregion //Constructor
 
         #region Methods
-
-
-        public void ToggleCorpusVisible(string guid)
-        {
-            // CorpusNodeViewModel sender
-            Console.WriteLine();
-        }
-
 
         public void AddManuscriptCorpus()
         {
