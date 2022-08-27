@@ -25,27 +25,29 @@ using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
 
+    #region Enums
+
+    public enum Tokenizer
+    {
+        LatinSentenceTokenizer,
+        LatinWordDetokenizer,
+        LatinWordTokenizer,
+        LineSegmentTokenizer,
+        NullTokenizer,
+        RegexTokenizer,
+        StringDetokenizer,
+        StringTokenizer,
+        WhitespaceDetokenizer,
+        WhitespaceTokenizer,
+        ZwspWordDetokenizer,
+        ZwspWordTokenizer
+    }
+
+    #endregion //Enums
+
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
     {
-        #region Enums
 
-        public enum Tokenizer
-        {
-            LatinSentenceTokenizer,
-            LatinWordDetokenizer,
-            LatinWordTokenizer,
-            LineSegmentTokenizer,
-            NullTokenizer,
-            RegexTokenizer,
-            StringDetokenizer,
-            StringTokenizer,
-            WhitespaceDetokenizer,
-            WhitespaceTokenizer,
-            ZwspWordDetokenizer,
-            ZwspWordTokenizer
-        }
-
-        #endregion //Enums
 
 
         #region Member Variables      
