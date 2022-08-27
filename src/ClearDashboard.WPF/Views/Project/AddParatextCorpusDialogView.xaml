@@ -76,14 +76,14 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
                 <ComboBox
-                    Margin="10,0,0,0"
+                    Margin="30,0,0,0"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}">
@@ -102,16 +102,14 @@
             <StackPanel Grid.Row="1" Orientation="Vertical">
                 <Label Content="Select Tokenizer Engine" />
                 <ComboBox
-                    Margin="10,0,0,0"
+                    Margin="30,0,0,0"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type project:Tokenizer}}}"
                     SelectedItem="{Binding SelectedTokenizer}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                <TextBlock FontSize="24" Text="{Binding Name}" />
-                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="18" Text="{Binding .}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
