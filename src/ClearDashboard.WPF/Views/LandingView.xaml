@@ -277,7 +277,7 @@
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
-                                            Style="{StaticResource  MaterialDesignRaisedAccentButton}">
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="30"
@@ -355,9 +355,9 @@
             Grid.Row="1"
             Width="250"
             Height="150"
-            Visibility="{Binding AlertVisibility}"
             BorderBrush="{DynamicResource RedMidBrush}"
-            BorderThickness="2">
+            BorderThickness="2"
+            Visibility="{Binding AlertVisibility}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -371,7 +371,12 @@
                     TextWrapping="Wrap">
                     Please Run the ClearDashboard Plugin in Paratext
                 </TextBlock>
-                <Button x:Name="AlertClose" Grid.Row="1" Margin="50,0,50,5">Close</Button>
+                <Button
+                    x:Name="AlertClose"
+                    Grid.Row="1"
+                    Margin="50,0,50,5">
+                    Close
+                </Button>
             </Grid>
         </Border>
     </Grid>

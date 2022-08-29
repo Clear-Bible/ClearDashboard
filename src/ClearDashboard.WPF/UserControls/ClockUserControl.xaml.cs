@@ -249,7 +249,7 @@ namespace ClearDashboard.Wpf.UserControls
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e);
             }
 
         }
