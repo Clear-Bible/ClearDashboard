@@ -25,7 +25,7 @@ namespace ClearDashboard.Wpf.Converters
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return true;
+            return null;
         }
     }
 }
