@@ -76,15 +76,44 @@
                         BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                         BorderThickness="1"
                         CornerRadius="4">
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="37" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="35" />
                                 </Grid.ColumnDefinitions>
 
                                 <!--  First Line  -->
-                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                <StackPanel
+                                    Grid.Column="0"
+                                    Margin="0,0,0,5"
+                                    Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Button
+                                        x:Name="ShowLogos"
+                                        Grid.Column="1"
+                                        Width="32"
+                                        Height="32"
+                                        Padding="0"
+                                        Margin="5, 0, 0, 0"
+                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
+                                        CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <Image Source="/Resources/logos_icon.png" />
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal"  Grid.Column="1">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
@@ -124,34 +153,6 @@
                                         Foreground="{StaticResource OrangeDarkBrush}"
                                         Text="{Binding Glosses}"
                                         TextWrapping="Wrap" />
-                                </StackPanel>
-
-                                <StackPanel
-                                    Grid.Column="1"
-                                    Margin="0,0,0,5"
-                                    Orientation="Horizontal">
-                                    <StackPanel.Style>
-                                        <Style TargetType="StackPanel">
-                                            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </StackPanel.Style>
-                                    <Button
-                                        x:Name="ShowLogos"
-                                        Grid.Column="1"
-                                        Width="32"
-                                        Height="32"
-                                        Padding="0"
-                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
-                                        CommandParameter="{Binding}">
-                                        <Button.Content>
-                                            <Image Source="/Resources/logos_icon.png" />
-                                        </Button.Content>
-                                    </Button>
                                 </StackPanel>
                             </Grid>
 
@@ -217,11 +218,20 @@
                                     <Run Text="{Binding TotalSenses}" />
                                 </TextBlock>
 
-                                <Button
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Width="297"
                                     Margin="5,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    FontSize="14"
+                                    Text="{Binding DefinitionShort}"
+                                    TextWrapping="Wrap" />
+
+                                <Button
+                                    Margin="5,0,0,5"
                                     Padding="3"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="Center"
                                     BorderThickness="0"
                                     Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
                                     <Button.Style>
@@ -269,14 +279,6 @@
                                 </Button>
                             </StackPanel>
 
-                            <!--  Third Line  -->
-                            <TextBlock
-                                Width="325"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                FontSize="14"
-                                Text="{Binding DefinitionShort}"
-                                TextWrapping="Wrap" />
 
                         </StackPanel>
                     </Border>
