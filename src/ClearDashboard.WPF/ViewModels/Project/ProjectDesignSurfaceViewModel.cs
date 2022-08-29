@@ -56,7 +56,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         #region Member Variables
         CancellationTokenSource _cancellationTokenSource = null;
         private bool _addParatextCorpusRunning = false;
-        public IWindowManager WindowManager { get; }
 
         public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
@@ -290,8 +289,6 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        public ProjectDesignSurfaceView View { get; set; }
-        public Canvas DesignSurfaceCanvas { get; set; }
 
         protected override async void OnViewAttached(object view, object context)
         {
