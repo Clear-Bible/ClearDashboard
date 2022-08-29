@@ -1,4 +1,5 @@
 using Caliburn.Micro;
+using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
@@ -15,14 +16,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-
-public record NodeSelectedChanagedMessage(object Node);
-public record ConnectionSelectedChanagedMessage(Guid ConnectorId);
 
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
@@ -37,6 +36,21 @@ public record ParatextConnectedMessage(bool Connected);
 public record UserMessage(User user);
 
 public record LogActivityMessage(string message);
+
+
+#region ProjectDesignSurfaceMessages
+public record NodeSelectedChanagedMessage(object Node);
+public record ConnectionSelectedChanagedMessage(Guid ConnectorId);
+public record CorpusAddedMessage(string paratextId);
+public record CorpusDeletedMessage(string paratextId);
+public record CorpusSelectedMessage(string paratextId);
+public record CorpusDeselectedMessage(string paratextId);
+public record ParallelCorpusAddedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
+public record ParallelCorpusDeletedMessage(Guid connectorGuid);
+public record ParallelCorpusSelectedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
+public record ParallelCorpusDeselectedMessage(Guid connectorGuid);
+
+#endregion //ProjectDesignSurfaceMessages
 
 public class DashboardProjectManager : ProjectManager
 {

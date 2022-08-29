@@ -1,9 +1,11 @@
 ﻿using ClearDashboard.Wpf.Controls;
 using ClearDashboard.Wpf.ViewModels;
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Models;
 using ViewModels.ProjectDesignSurface;
 
 namespace ClearDashboard.Wpf.Views
@@ -17,7 +19,6 @@ namespace ClearDashboard.Wpf.Views
         {
             InitializeComponent();
         }
-
 
         /// <summary>
         /// Convenient accessor for the view-model.
@@ -154,7 +155,7 @@ namespace ClearDashboard.Wpf.Views
         private void CreateNode()
         {
             var newNodePosition = Mouse.GetPosition(ProjectDesignSurface);
-            this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, ParatextProjectType.Standard,
+            this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, CorpusType.Standard,
                 Guid.NewGuid().ToString());
         }
 

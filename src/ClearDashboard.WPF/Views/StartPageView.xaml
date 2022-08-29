@@ -5,11 +5,8 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dockpanelsplitter="clr-namespace:ClearDashboard.Wpf.Controls.DockPanelSplitter;assembly=ClearDashboard.Wpf.Controls"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:projectDesignSurface="clr-namespace:ViewModels.ProjectDesignSurface"
-    xmlns:resources="clr-namespace:ClearDashboard"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DataContext="{d:DesignInstance Type=viewModels:StartPageViewModel,
@@ -272,13 +269,13 @@
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Standard}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Standard}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushStandardProject}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.BackTranslation}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static projectDesignSurface:ParatextProjectType.BackTranslation}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushBacktranslationProject}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ProjectType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Reference}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static projectDesignSurface:ParatextProjectType.Reference}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceProject}" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -321,7 +318,7 @@
                                 Grid.ColumnSpan="3"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Text="{Binding ProjectType}" />
+                                Text="{Binding CorpusType}" />
 
                             <!--  Displays the node's input connectors.  -->
                             <ItemsControl
