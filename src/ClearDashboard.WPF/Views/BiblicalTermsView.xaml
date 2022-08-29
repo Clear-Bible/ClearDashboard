@@ -43,9 +43,9 @@
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -120,7 +120,7 @@
 
                 <!--  WORD FILTER  -->
                 <Border
-                    Margin="2,5,0,2"
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
@@ -168,14 +168,14 @@
                 Orientation="Vertical">
                 <!--  RENDERINGS FILTER  -->
                 <Border
-                    Margin="30,5,0,2"
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <ComboBox
                             x:Name="RenderingsFilter"
                             MinWidth="50"
-                            Margin="0,0,5,0"
+                            Margin="5"
                             DisplayMemberPath="Display"
                             ItemsSource="{Binding RenderingsFilters}"
                             SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -185,12 +185,12 @@
 
                 <!--  SCOPE  -->
                 <Border
-                    Margin="10,5,0,2"
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <Label
-                            Margin="5,0,5,0"
+                            Margin="0,5,5,5"
                             VerticalAlignment="Center"
                             Content="{helpers:Localization BiblicalTermsForm_Scope}" />
                         <ComboBox
@@ -206,12 +206,12 @@
 
                 <!--  SEMANTIC DOMAINS  -->
                 <Border
-                    Margin="10,5,0,2"
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <Label
-                            Margin="5,0,5,0"
+                            Margin="0,5,5,5"
                             VerticalAlignment="Center"
                             Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
                         <ComboBox
