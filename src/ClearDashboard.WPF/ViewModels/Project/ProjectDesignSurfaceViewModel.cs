@@ -25,8 +25,31 @@ using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
 
+    #region Enums
+
+    public enum Tokenizer
+    {
+        LatinSentenceTokenizer,
+        LatinWordDetokenizer,
+        LatinWordTokenizer,
+        LineSegmentTokenizer,
+        NullTokenizer,
+        RegexTokenizer,
+        StringDetokenizer,
+        StringTokenizer,
+        WhitespaceDetokenizer,
+        WhitespaceTokenizer,
+        ZwspWordDetokenizer,
+        ZwspWordTokenizer
+    }
+
+    #endregion //Enums
+
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
     {
+
+
+
         #region Member Variables      
 
         public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
@@ -280,17 +303,11 @@ namespace ClearDashboard.Wpf.ViewModels.Project
 
         #region Methods
 
-
-        public void ToggleCorpusVisible(string guid)
-        {
-            // CorpusNodeViewModel sender
-            Console.WriteLine();
-        }
-
-
         public void AddManuscriptCorpus()
         {
             Logger.LogInformation("AddParatextCorpus called.");
+            CreateNode("Manuscript", new Point(25, 50), false, CorpusType.Manuscript, Guid.NewGuid().ToString());
+
         }
 
         public void AddUsfmCorpus()
@@ -354,7 +371,14 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                             break;
                                     }
 
-                                    CreateNode(corpus.Name, new Point(100, 60), false, corpusType, corpus.ParatextGuid);
+                                    corpus.ParatextGuid = viewModel.SelectedProject.Id;
+
+                                    // figure out some offset based on the number of nodes already in the network
+                                    // so we don't overlap
+                                    var offset = DesignSurface.CorpusNodes.Count * 50;
+
+
+                                    CreateNode(corpus.Name, new Point(150, 50 + offset), false, corpusType, corpus.ParatextGuid);
                                 });
 
 
@@ -658,12 +682,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             node.CorpusType = corpusType;
             node.ParatextProjectId = projectId;
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
             //node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
             });
@@ -719,6 +743,11 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         /// </summary>
         public void DeleteConnection(ConnectionViewModel connection)
         {
+            EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusDeletedMessage(
+                sourceParatextId: connection.SourceConnector.ParentNode.ParatextProjectId,
+                targetParatextId: connection.DestinationConnector.ParentNode.ParatextProjectId,
+                connectorGuid: connection.Id));
+
             DesignSurface.Connections.Remove(connection);
         }
 

@@ -654,7 +654,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
                         new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
+                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },

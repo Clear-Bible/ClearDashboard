@@ -46,7 +46,7 @@ public record CorpusDeletedMessage(string paratextId);
 public record CorpusSelectedMessage(string paratextId);
 public record CorpusDeselectedMessage(string paratextId);
 public record ParallelCorpusAddedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
-public record ParallelCorpusDeletedMessage(Guid connectorGuid);
+public record ParallelCorpusDeletedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
 public record ParallelCorpusSelectedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
 public record ParallelCorpusDeselectedMessage(Guid connectorGuid);
 

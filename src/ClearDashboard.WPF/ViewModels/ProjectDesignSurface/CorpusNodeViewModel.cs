@@ -117,17 +117,6 @@ namespace ViewModels.ProjectDesignSurface
             set => Set(ref _corpusType, value);
         }
 
-        private bool _isCorpusVisible;
-        /// <summary>
-        /// Determines whether or not the user wants the corpus shown or not
-        /// </summary>
-        public bool IsCorpusVisible
-        {
-            get => _isCorpusVisible;
-            set => Set(ref _isCorpusVisible, value);
-        }
-
-
 
         /// <summary>
         /// The X coordinate for the position of the node.
