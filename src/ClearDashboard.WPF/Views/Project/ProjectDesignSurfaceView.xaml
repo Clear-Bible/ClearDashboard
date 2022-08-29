@@ -337,7 +337,7 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             Command="{StaticResource Commands.ToggleCorpusVisibility}"
-                            CommandParameter="{Binding Path=DataContext, ElementName=nodeRectangle }"
+                            CommandParameter="{Binding Path=DataContext, ElementName=nodeRectangle}"
                             Style="{StaticResource MaterialDesignFlatButton}">
                             <materialDesign:PackIcon Width="20" Height="20">
                                 <materialDesign:PackIcon.Style>
