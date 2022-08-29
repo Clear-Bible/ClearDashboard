@@ -306,6 +306,8 @@ namespace ClearDashboard.Wpf.ViewModels.Project
         public void AddManuscriptCorpus()
         {
             Logger.LogInformation("AddParatextCorpus called.");
+            CreateNode("Manuscript", new Point(50, 50), false, CorpusType.Manuscript, "Manuscript");
+
         }
 
         public void AddUsfmCorpus()
@@ -369,7 +371,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                             break;
                                     }
 
-                                    CreateNode(corpus.Name, new Point(100, 60), false, corpusType, corpus.ParatextGuid);
+                                    CreateNode(corpus.Name, new Point(110, 90), false, corpusType, corpus.ParatextGuid);
                                 });
 
 

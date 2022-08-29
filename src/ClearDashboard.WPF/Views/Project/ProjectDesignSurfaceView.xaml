@@ -324,6 +324,9 @@
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Manuscript}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Rectangle.Style>
@@ -565,7 +568,8 @@
                         cm:Message.Attach="AddUsfmCorpus()"
                         Content="USFM"
                         Style="{StaticResource BigButton}"
-                        Tag="ScriptTextOutline" />
+                        Tag="ScriptTextOutline"
+                        Visibility="Collapsed" />
                     <Button
                         x:Name="AddParatextCorpus"
                         Margin="10,0,10,10"
