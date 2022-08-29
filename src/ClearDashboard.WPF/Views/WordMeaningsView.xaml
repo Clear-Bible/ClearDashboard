@@ -226,7 +226,10 @@
                                 Text="{Binding DefinitionShort}"
                                 TextWrapping="Wrap" />
 
-                            <StackPanel Grid.Column="3" Margin="10,0,0,0" Orientation="Vertical">
+                            <StackPanel
+                                Grid.Column="3"
+                                Margin="10,0,0,0"
+                                Orientation="Vertical">
                                 <!--  Sense  -->
                                 <Label
                                     MinWidth="45"

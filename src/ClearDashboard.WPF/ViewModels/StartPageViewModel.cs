@@ -459,12 +459,12 @@ namespace ClearDashboard.Wpf.ViewModels
             node.CorpusType = projectType;
             node.ParatextProjectId = projectId;
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
             //node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
             });
