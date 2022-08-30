@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Microsoft.Extensions.DependencyInjection;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -35,11 +36,11 @@ namespace ClearDashboard.Wpf.Application
         protected override async Task NavigateToMainWindow()
         {
             EnsureApplicationMainWindowVisible();
-            NavigateToViewModel<MainViewModel>();
+            //NavigateToViewModel<MainViewModel>();
            // await base.NavigateToMainWindow();
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
             // if the dialog result is "true"
-            // await ShowStartupDialog<StartupViewModel, HomeViewModel>();
+            await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
             //await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
         }
 
