@@ -242,7 +242,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
+                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("3A0CC3EA-D7D7-47D7-A85E-3E9316B8DD55")));
                 var book = corpus.Where(row => ((VerseRef) row.Ref).BookNum == 40);
                 var chapter = book.Where(row => ((VerseRef) row.Ref).ChapterNum == 1);
                 var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
