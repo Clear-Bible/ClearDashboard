@@ -22,7 +22,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var projectDbContextFactory = serviceProvider.GetService<ProjectDbContextFactory>();
 
-            projectDbContextFactory.Get("TestDependendcyInjection");
+            projectDbContextFactory.Get("TestDependencyInjection");
         }
     }
 }
