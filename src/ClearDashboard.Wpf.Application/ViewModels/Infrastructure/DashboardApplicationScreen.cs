@@ -13,7 +13,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 
         }
 
-        protected DashboardApplicationScreen(DashboardProjectManager projectManager, INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator, IMediator mediator) : base(navigationService,logger,eventAggregator, mediator)
+        protected DashboardApplicationScreen(DashboardProjectManager projectManager,
+            INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
+            IMediator mediator) : base(navigationService, logger, eventAggregator, mediator)
         {
             ProjectManager = projectManager;
         }
