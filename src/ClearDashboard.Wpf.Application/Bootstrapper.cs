@@ -13,8 +13,8 @@ using Microsoft.Extensions.Logging;
 using System.Windows.Controls;
 using System;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using WorkSpaceViewModel = ClearDashboard.Wpf.Application.ViewModels.Main.WorkSpaceViewModel;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -51,7 +51,7 @@ namespace ClearDashboard.Wpf.Application
         {
             EnsureApplicationMainWindowVisible();
 
-            NavigateToViewModel<WorkSpaceViewModel>();
+            NavigateToViewModel<MainViewModel>();
 
             // await base.NavigateToMainWindow();
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
@@ -59,10 +59,6 @@ namespace ClearDashboard.Wpf.Application
             //await ShowStartupDialog<StartupViewModel, MainViewModel>();
             //await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
             
-
-            
-            // Navigate to the LandingView.
-            //FrameSet.NavigationService.NavigateToViewModel(typeof(WorkSpaceViewModel));
         }
 
 

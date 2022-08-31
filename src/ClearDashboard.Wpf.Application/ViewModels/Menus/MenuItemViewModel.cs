@@ -23,12 +23,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
             _command = new CommandViewModel(Execute);
         }
 
-        private WorkSpaceViewModel _workSpaceViewModel;
+        private MainViewModel _mainViewModel;
 
-        public WorkSpaceViewModel ViewModel
+        public MainViewModel ViewModel
         {
-            get => _workSpaceViewModel;
-            set { _workSpaceViewModel = value; }
+            get => _mainViewModel;
+            set { _mainViewModel = value; }
         }
 
 

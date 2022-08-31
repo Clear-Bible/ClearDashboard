@@ -30,26 +30,7 @@ using ClearDashboard.Wpf.Application.Views.Project;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
-    //public  class WorkSpaceViewModel : DashboardApplicationScreen
-    //{
-    //    public WorkSpaceViewModel()
-    //    {
-
-    //    }
-
-    //    public WorkSpaceViewModel(DashboardProjectManager projectManager, INavigationService? navigationService, ILogger<WorkSpaceViewModel>? logger, IEventAggregator? eventAggregator, IMediator mediator, IServiceProvider serviceProvider) : base(projectManager, navigationService, logger, eventAggregator, mediator)
-    //    {
-
-    //        var projectDbContextFactory = serviceProvider.GetService<ProjectDbContextFactory>();
-
-    //        projectDbContextFactory.Get("TestDependencyInjection");
-
-    //        //navigationService.NavigateToViewModel<WorkSpaceViewModel>();
-
-    //    }
-    //}
-
-    public class WorkSpaceViewModel : Conductor<IScreen>.Collection.AllActive,
+    public class MainViewModel : Conductor<IScreen>.Collection.AllActive,
                 IHandle<VerseChangedMessage>,
                 IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
@@ -59,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
-        private ILogger<WorkSpaceViewModel> Logger { get; }
+        private ILogger<MainViewModel> Logger { get; }
         private INavigationService NavigationService { get; }
         private DashboardProject DashboardProject { get; }
 
@@ -382,15 +363,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// Required for design-time support
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        public WorkSpaceViewModel()
+        public MainViewModel()
         {
 
         }
 
 
         // ReSharper disable once UnusedMember.Global
-        public WorkSpaceViewModel(INavigationService navigationService,
-            ILogger<WorkSpaceViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public MainViewModel(INavigationService navigationService,
+            ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
             EventAggregator = eventAggregator;
@@ -475,7 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             base.OnViewAttached(view, context);
 
             // hook up a reference to the windows dock manager
-            if (view is WorkSpaceView currentView)
+            if (view is MainView currentView)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");

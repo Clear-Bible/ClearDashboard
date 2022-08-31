@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views
+namespace ClearDashboard.Wpf.Application.Views.Project
 {
     /// <summary>
-    /// Interaction logic for AlignmentToolView.xaml
+    /// Interaction logic for AddParatextCorpusDialogView.xaml
     /// </summary>
-    public partial class AlignmentToolView : UserControl
+    public partial class AddParatextCorpusDialogView : Window
     {
-        public AlignmentToolView()
+        public AddParatextCorpusDialogView()
         {
             InitializeComponent();
         }

@@ -1,4 +1,4 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels;
+﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 

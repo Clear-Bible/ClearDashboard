@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,17 +13,140 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AvalonDock.Layout.Serialization;
+using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.Application.Views.Main
 {
+
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// Interaction logic for WorkSpaceView.xaml
     /// </summary>
     public partial class MainView : Page
     {
+        private MainViewModel _vm;
+        private DashboardProject dashboardProject;
+
+        #region Startup
+
         public MainView()
         {
             InitializeComponent();
         }
+
+
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            _vm = this.DataContext as MainViewModel;
+
+            //INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
+            //viewModel.PropertyChanged += (sender, args) =>
+            //{
+            //    // listen for the menu changes
+            //    if (args.PropertyName.Equals("WindowIDToLoad"))
+            //        //UnHideWindow(_vm.WindowIDToLoad);
+            //    return;
+            //};
+
+        }
+
+        #endregion
+
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                switch (menuItem.Tag.ToString()?.ToUpper())
+                {
+                    case "LOAD":
+                        // remove all existing windows
+                        dockManager.AnchorablesSource = null;
+                        dockManager.DocumentsSource = null;
+                        var layoutSerializer = new XmlLayoutSerializer(dockManager);
+
+                        //_vm.LoadLayout(layoutSerializer);
+
+                        break;
+                    case "SAVE":
+                        //TODO
+                        layoutSerializer = new XmlLayoutSerializer(dockManager);
+                        layoutSerializer.Serialize(@".\AvalonDock.Layout.config");
+                        break;
+                    case "BIBLICALTERMS":
+                        //UnHideWindow(menuItem.Tag.ToString().ToUpper());
+                        break;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Unhide window
+        /// </summary>
+        /// <param name="windowTag"></param>
+        //private void UnHideWindow(string windowTag)
+        //{
+        //    // find the pane in the dockmanager with this contentID
+        //    var windowPane = dockManager.Layout.Descendents()
+        //        .OfType<LayoutAnchorable>()
+        //        .SingleOrDefault(a =>
+        //        {
+        //            Debug.WriteLine(a.Title);
+        //            if (a.ContentId is not null)
+        //            {
+        //                return a.ContentId.ToUpper() == windowTag.ToUpper();
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+
+        //        });
+
+        //    if (windowPane != null)
+        //    {
+        //        if (windowPane.IsAutoHidden)
+        //        {
+        //            windowPane.ToggleAutoHide();
+        //        }
+        //        else if (windowPane.IsHidden)
+        //        {
+        //            windowPane.Show();
+        //        }
+        //        else if (windowPane.IsVisible)
+        //        {
+        //            windowPane.IsActive = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // window has been closed so reload it
+        //        windowPane = new LayoutAnchorable
+        //        {
+        //            ContentId = windowTag
+        //        };
+
+        //        // setup the right ViewModel for the pane
+        //        var obj = _vm.LoadWindow(windowTag);
+        //        windowPane.Content = obj.vm;
+        //        windowPane.Title = obj.title;
+        //        windowPane.IsActive = true;
+        //        // set where it will doc on layout
+        //        if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+        //        {
+        //            windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Bottom);
+        //        } 
+        //        else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+        //        {
+        //            windowPane.AddToLayout(dockManager, AnchorableShowStrategy.Left);
+        //        }
+        //    }
+        //}
     }
+
+
 }

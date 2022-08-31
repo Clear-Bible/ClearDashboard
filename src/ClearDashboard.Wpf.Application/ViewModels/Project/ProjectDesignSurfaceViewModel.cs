@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
 using SIL.Machine.Corpora;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;

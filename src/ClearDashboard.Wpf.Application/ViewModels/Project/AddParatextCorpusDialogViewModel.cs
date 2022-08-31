@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
     {
