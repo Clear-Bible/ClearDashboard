@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutRoot>
+    <RootPanel Orientation="Vertical">
+        <LayoutPanel Orientation="Horizontal">
+            <LayoutAnchorablePaneGroup Orientation="Horizontal" DockWidth="376" FloatingWidth="1422" FloatingHeight="160" FloatingLeft="2642" FloatingTop="513">
+                <LayoutAnchorablePane Id="f682966b-c1be-4be6-9758-da8395737496" DockWidth="376" DockHeight="150" FloatingWidth="1422" FloatingHeight="160" FloatingLeft="2642" FloatingTop="513">
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="🖧 PROJECT DESIGN SURFACE" IsSelected="True" ContentId="PROJECTDESIGNSURFACETOOL" FloatingLeft="2341" FloatingTop="565" FloatingWidth="1452" FloatingHeight="39" LastActivationTimeStamp="08/12/2022 13:30:22" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="🕮 BIBLICAL TERMS" ContentId="BIBLICALTERMS" FloatingLeft="2376" FloatingTop="519" FloatingWidth="1422" FloatingHeight="160" CanClose="True" LastActivationTimeStamp="05/06/2022 15:50:33" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="⌺ WORD MEANINGS" ContentId="WORDMEANINGS" FloatingLeft="2375" FloatingTop="520" FloatingWidth="1422" FloatingHeight="160" CanClose="True" LastActivationTimeStamp="05/06/2022 15:50:28" />
+                </LayoutAnchorablePane>
+            </LayoutAnchorablePaneGroup>
+            <LayoutDocumentPaneGroup Orientation="Vertical">
+                <LayoutDocumentPane DockWidth="1.4714285714285715*" DockHeight="1.3781725888324874*">
+                    <LayoutDocument Title="📐 DASHBOARD" IsSelected="True" IsLastFocusedDocument="True" ContentId="DASHBOARD" LastActivationTimeStamp="08/12/2022 13:30:35" />
+                    <LayoutDocument Title="🆎 CONCORDANCE TOOL" ContentId="CONCORDANCETOOL" />
+                    <LayoutDocument Title="⌂ START PAGE" ContentId="STARTPAGE" />
+                    <LayoutDocument Title="⳼ ALIGNMENT TOOL" ContentId="ALIGNMENTTOOL" />
+                    <LayoutDocument Title="⯭ TREEDOWN" ContentId="TREEDOWN" />
+                    <LayoutDocument AutoHideMinWidth="100" AutoHideMinHeight="100" Title="🗟 CORPUS TOKENS" ContentId="CORPUSTOKENS" FloatingLeft="3078" FloatingTop="433" FloatingWidth="1452" FloatingHeight="39" LastActivationTimeStamp="08/12/2022 13:30:24" />
+                </LayoutDocumentPane>
+                <LayoutDocumentPane DockHeight="0.6218274111675127*">
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="⬒ SOURCE CONTEXT" IsSelected="True" ContentId="SOURCECONTEXT" FloatingLeft="2924" FloatingTop="636" FloatingWidth="1422" FloatingHeight="160" CanClose="True" LastActivationTimeStamp="08/12/2022 13:30:31" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="⬓ TARGET CONTEXT" ContentId="TARGETCONTEXT" FloatingLeft="2924" FloatingTop="636" FloatingWidth="1422" FloatingHeight="160" CanClose="True" LastActivationTimeStamp="05/06/2022 15:50:55" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="🖉 NOTES" ContentId="NOTES" FloatingLeft="2924" FloatingTop="636" FloatingWidth="1422" FloatingHeight="160" CanClose="True" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="⍒ PINS" ContentId="PINS" FloatingLeft="2924" FloatingTop="636" FloatingWidth="1422" FloatingHeight="160" CanClose="True" />
+                    <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="🗐 TEXT COLLECTION" ContentId="TEXTCOLLECTION" FloatingLeft="2924" FloatingTop="636" FloatingWidth="1422" FloatingHeight="160" CanClose="True" />
+                </LayoutDocumentPane>
+            </LayoutDocumentPaneGroup>
+        </LayoutPanel>
+    </RootPanel>
+    <TopSide />
+    <RightSide />
+    <LeftSide />
+    <BottomSide />
+    <FloatingWindows />
+    <Hidden />
+</LayoutRoot>

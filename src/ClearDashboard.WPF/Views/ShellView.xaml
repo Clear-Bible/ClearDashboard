@@ -39,8 +39,8 @@
         </Grid.RowDefinitions>
         <Border
             Grid.Row="0"
-            BorderBrush="{StaticResource PrimaryHueMidBrush}"
             Grid.ColumnSpan="2"
+            BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="3">
             <Grid>
@@ -383,6 +383,7 @@
                         <materialDesign:PackIcon
                             Width="25"
                             Height="30"
+                            Foreground="{StaticResource BlueMidBrush}"
                             Kind="ApplicationSettingsOutline" />
                         <ProgressBar
                             Width="15"

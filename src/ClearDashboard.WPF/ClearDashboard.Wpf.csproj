@@ -27,6 +27,7 @@
 		<None Remove="Assets\splash_screen.png" />
 		<None Remove="HelpFiles\NewProjectHelp_us.md" />
 		<None Remove="Resources\BiblicalTerms_logo_32.png" />
+		<None Remove="Resources\block_16.png" />
 		<None Remove="Resources\ClearDashboard_logo_128.png" />
 		<None Remove="Resources\GalSILB.ttf" />
 		<None Remove="Resources\GalSILR.ttf" />
@@ -35,7 +36,7 @@
 		<None Remove="Resources\GentiumPlus-Italic.ttf" />
 		<None Remove="Resources\GentiumPlus-Regular.ttf" />
 		<None Remove="Resources\KadmosU.ttf" />
-		<None Remove="Resources\Layouts\Dashboard.Layout.config" />
+		<None Remove="Resources\Layouts\Dashboard.Layout.config2" />
 		<None Remove="Resources\logos_icon.png" />
 		<None Remove="Resources\NewProject.png" />
 		<None Remove="Resources\NewProject_Icon_128.png" />
@@ -45,15 +46,17 @@
 		<None Remove="Resources\Paratext_Disconnected32.png" />
 		<None Remove="Resources\SBL_grk.ttf" />
 		<None Remove="Resources\SBL_Hbrw.ttf" />
+		<None Remove="Resources\scissors.png" />
 		<None Remove="Resources\Settings.png" />
 		<None Remove="Resources\settings_logo_128.png" />
 		<None Remove="Resources\settings_logo_96.png" />
 		<None Remove="Resources\SILEOTSR.ttf" />
+		<None Remove="Resources\tick_16.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Assets\ClearDashboard_logo.ico" />
-		<Content Include="Resources\Layouts\Dashboard.Layout.config">
+		<Content Include="Resources\Layouts\Dashboard.Layout.config2">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
@@ -61,13 +64,14 @@
 	<ItemGroup>
 		<PackageReference Include="Caliburn.Micro" Version="4.0.210" />
 		<PackageReference Include="ClearBible.Engine" Version="1.0.13" />
-		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.1" />
-		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.1" />
-		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.1" />
-		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.1" />
-		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.1" />
-		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.1" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
+		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.2" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.2" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.2" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.2" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.2" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.2" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.0" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
 		<PackageReference Include="MdXaml" Version="1.15.0" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
@@ -75,7 +79,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1264.42" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1293.44" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Serilog" Version="2.11.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
@@ -92,6 +96,7 @@
 		<Resource Include="Resources\BiblicalTerms_logo_32.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
+		<Resource Include="Resources\block_16.png" />
 		<Resource Include="Resources\ClearDashboard_logo_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
@@ -133,6 +138,7 @@
 		</Resource>
 		<Resource Include="Resources\SBL_grk.ttf" />
 		<Resource Include="Resources\SBL_Hbrw.ttf" />
+		<Resource Include="Resources\scissors.png" />
 		<Resource Include="Resources\settings_logo_128.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
@@ -140,6 +146,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="Resources\SILEOTSR.ttf" />
+		<Resource Include="Resources\tick_16.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -243,6 +250,9 @@
 		<None Update="Properties\Settings.settings">
 			<Generator>SettingsSingleFileGenerator</Generator>
 			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+		<None Update="Resources\Layouts\Dashboard.Layout.config">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Layouts\Project.Layout.config">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

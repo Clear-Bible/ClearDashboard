@@ -42,179 +42,196 @@
     </UserControl.Resources>
 
     <Grid x:Name="MainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="47" />
-            <RowDefinition Height="35" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="12" />
             <RowDefinition Height="230" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
-        <!--  ROW 0  -->
-        <StackPanel Orientation="Horizontal" Background="{DynamicResource MaterialDesignPaper}">
-            <Button
-                Width="20"
-                Height="20"
-                Margin="5,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                ToolTip="{helpers:Localization ExpandView}">
-                <Button.Style>
-                    <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                <Setter Property="RenderTransform">
-                                    <Setter.Value>
-                                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-                <materialDesign:PackIcon
-                    Background="Transparent"
-                    Foreground="{StaticResource TealMidBrush}"
-                    Kind="ArrowExpandAll" />
-            </Button>
+        <StackPanel
+            Grid.Column="0"
+            Background="{DynamicResource MaterialDesignPaper}"
+            Orientation="Vertical">
+            <!--  ROW 0  -->
+            <StackPanel
+                Grid.Column="0"
+                Background="{DynamicResource MaterialDesignPaper}"
+                Orientation="Vertical">
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="5,5,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                    ToolTip="{helpers:Localization ExpandView}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <ScaleTransform ScaleX="2" ScaleY="2" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <materialDesign:PackIcon
+                        Background="Transparent"
+                        Foreground="{StaticResource TealMidBrush}"
+                        Kind="ArrowExpandAll" />
+                </Button>
 
-            <Border
-                Margin="5,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                BorderThickness="1">
-                <StackPanel
-                    Margin="5,0,0,5"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
-                    <RadioButton
-                        Content="{helpers:Localization BiblicalTermsForm_Project}"
-                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                        GroupName="radBTType"
-                        IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
-                        Style="{StaticResource MaterialDesignLightRadioButton}" />
-
-                    <RadioButton
-                        Content="{helpers:Localization BiblicalTermsForm_All}"
-                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                        GroupName="radBTType"
-                        IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
-                        Style="{StaticResource MaterialDesignLightRadioButton}" />
-                </StackPanel>
-            </Border>
-
-            <!--  WORD FILTER  -->
-            <Border
-                Margin="2,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <Label
-                        Margin="5,0,5,0"
-                        VerticalAlignment="Center"
-                        Content="{helpers:Localization BiblicalTermsForm_Word}" />
-                    <TextBox
-                        x:Name="FilterText"
-                        MinWidth="125"
-                        Margin="0,0,5,0"
-                        VerticalAlignment="Center"
-                        AcceptsReturn="False"
-                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+                <Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
                     <StackPanel
                         Margin="5,0,0,5"
                         VerticalAlignment="Center"
                         Orientation="Vertical">
                         <RadioButton
-                            Margin="0,0,5,0"
-                            Content="{helpers:Localization BiblicalTermsForm_Gloss}"
+                            Content="{helpers:Localization BiblicalTermsForm_Project}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            GroupName="radFilterType"
-                            IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
+                            GroupName="radBTType"
+                            IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                         <RadioButton
-                            Margin="0,0,5,0"
-                            Content="{helpers:Localization BiblicalTermsForm_Renderings}"
+                            Content="{helpers:Localization BiblicalTermsForm_All}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                            GroupName="radFilterType"
-                            IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
+                            GroupName="radBTType"
+                            IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                     </StackPanel>
-                </StackPanel>
-            </Border>
+                </Border>
+
+                <!--  WORD FILTER  -->
+                <Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="5,0,5,0"
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization BiblicalTermsForm_Word}" />
+                        <TextBox
+                            x:Name="FilterText"
+                            MinWidth="125"
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            AcceptsReturn="False"
+                            Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <StackPanel
+                            Margin="5,0,0,5"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <RadioButton
+                                Margin="0,0,5,0"
+                                Content="{helpers:Localization BiblicalTermsForm_Gloss}"
+                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                GroupName="radFilterType"
+                                IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
+                                Style="{StaticResource MaterialDesignLightRadioButton}" />
+
+                            <RadioButton
+                                Margin="0,0,5,0"
+                                Content="{helpers:Localization BiblicalTermsForm_Renderings}"
+                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                GroupName="radFilterType"
+                                IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
+                                Style="{StaticResource MaterialDesignLightRadioButton}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!--  ROW 1  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Background="{DynamicResource MaterialDesignPaper}"
+                Orientation="Vertical">
+                <!--  RENDERINGS FILTER  -->
+                <Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            x:Name="RenderingsFilter"
+                            MinWidth="50"
+                            Margin="5"
+                            DisplayMemberPath="Display"
+                            ItemsSource="{Binding RenderingsFilters}"
+                            SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedValuePath="Value" />
+                    </StackPanel>
+                </Border>
+
+                <!--  SCOPE  -->
+                <Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,5,5,5"
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization BiblicalTermsForm_Scope}" />
+                        <ComboBox
+                            x:Name="Scope"
+                            MinWidth="50"
+                            Margin="0,0,5,0"
+                            DisplayMemberPath="Display"
+                            ItemsSource="{Binding Scopes}"
+                            SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedValuePath="Value" />
+                    </StackPanel>
+                </Border>
+
+                <!--  SEMANTIC DOMAINS  -->
+                <Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,5,5,5"
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
+                        <ComboBox
+                            x:Name="Domains"
+                            MinWidth="50"
+                            Margin="0,0,5,0"
+                            DisplayMemberPath="Display"
+                            ItemsSource="{Binding Domains}"
+                            SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
         </StackPanel>
 
-        <!--  ROW 1  -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{DynamicResource MaterialDesignPaper}">
-            <!--  RENDERINGS FILTER  -->
-            <Border
-                Margin="30,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox
-                        x:Name="RenderingsFilter"
-                        MinWidth="50"
-                        Margin="0,0,5,0"
-                        DisplayMemberPath="Display"
-                        ItemsSource="{Binding RenderingsFilters}"
-                        SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedValuePath="Value" />
-                </StackPanel>
-            </Border>
-
-            <!--  SCOPE  -->
-            <Border
-                Margin="10,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <Label
-                        Margin="5,0,5,0"
-                        VerticalAlignment="Center"
-                        Content="{helpers:Localization BiblicalTermsForm_Scope}" />
-                    <ComboBox
-                        x:Name="Scope"
-                        MinWidth="50"
-                        Margin="0,0,5,0"
-                        DisplayMemberPath="Display"
-                        ItemsSource="{Binding Scopes}"
-                        SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedValuePath="Value" />
-                </StackPanel>
-            </Border>
-
-            <!--  SEMANTIC DOMAINS  -->
-            <Border
-                Margin="10,5,0,2"
-                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <Label
-                        Margin="5,0,5,0"
-                        VerticalAlignment="Center"
-                        Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
-                    <ComboBox
-                        x:Name="Domains"
-                        MinWidth="50"
-                        Margin="0,0,5,0"
-                        DisplayMemberPath="Display"
-                        ItemsSource="{Binding Domains}"
-                        SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-            </Border>
-
-
-        </StackPanel>
 
         <!--  ROW 2  -->
         <DataGrid
             x:Name="gridVerses"
             Grid.Row="2"
+            Grid.Column="1"
             Margin="5"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -370,6 +387,7 @@
         <!--  Text="⁞" for vertical splitter  -->
         <GridSplitter
             Grid.Row="3"
+            Grid.Column="2"
             Height="12"
             HorizontalAlignment="Stretch">
             <GridSplitter.Template>
@@ -391,7 +409,9 @@
         </GridSplitter>
 
         <!--  ROW 4  -->
-        <Grid Grid.Row="4" Background="{DynamicResource MaterialDesignPaper}">
+        <Grid
+            Grid.Column="2"
+            Background="{DynamicResource MaterialDesignPaper}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" />
                 <RowDefinition Height="*" />

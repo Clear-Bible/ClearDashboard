@@ -132,6 +132,18 @@
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="2">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Visible">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Collapsed">
+                            <Setter Property="IsEnabled" Value="True" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <StackPanel Orientation="Vertical">
                 <TextBlock
                     Margin="15,5,5,0"
@@ -199,13 +211,13 @@
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            x:Name="DeleteProject"
+                                            x:Name="NewProject"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -226,7 +238,7 @@
                                             cal:Message.Attach="Workspace($dataContext)"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -246,7 +258,7 @@
                                             Margin="15,8,12,12"
                                             IsEnabled="True">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentLightButton}" TargetType="Button">
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                     <Setter Property="Padding" Value="0,3,0,3" />
                                                 </Style>
                                             </Button.Style>
@@ -265,7 +277,7 @@
                                             Width="165"
                                             Margin="8"
                                             IsEnabled="True"
-                                            Style="{StaticResource MaterialDesignRaisedAccentLightButton}">
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon
                                                     Width="30"
@@ -337,6 +349,35 @@
 
 
             </StackPanel>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Width="250"
+            Height="150"
+            BorderBrush="{DynamicResource RedMidBrush}"
+            BorderThickness="2"
+            Visibility="{Binding AlertVisibility}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Padding="15"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource RedMidBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap">
+                    Please Run the ClearDashboard Plugin in Paratext
+                </TextBlock>
+                <Button
+                    x:Name="AlertClose"
+                    Grid.Row="1"
+                    Margin="50,0,50,5">
+                    Close
+                </Button>
+            </Grid>
         </Border>
     </Grid>
 </Page>

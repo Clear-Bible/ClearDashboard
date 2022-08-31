@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.Controls
                     //
                     // A click and release in empty space clears the selection.
                     //
-                    SelectedNodes.Clear();
+                    //SelectedNodes.Clear();
                 }
             }
         }
