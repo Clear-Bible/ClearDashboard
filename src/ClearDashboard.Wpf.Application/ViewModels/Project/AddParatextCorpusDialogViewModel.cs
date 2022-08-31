@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
@@ -29,10 +30,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // used by Caliburn Micro for design time    
         }
 
-        public AddParatextCorpusDialogViewModel(INavigationService navigationService,
-            ILogger<WorkSpaceViewModel> logger,
-            DashboardProjectManager projectManager,
-        IEventAggregator eventAggregator,
+        public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
+            ILogger<AddParatextCorpusDialogViewModel>? logger,
+            DashboardProjectManager? projectManager,
+        IEventAggregator? eventAggregator,
             IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator)
             : base(navigationService, logger, eventAggregator, mediator, validator)
         {

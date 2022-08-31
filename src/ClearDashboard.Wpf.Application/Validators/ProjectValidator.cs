@@ -1,22 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    // TODO:  REVISIT THIS!
-    //public class AddParatextCorpusDialogViewModelValidator: AbstractValidator<AddParatextCorpusDialogViewModel>
-    //{
-    //    public AddParatextCorpusDialogViewModelValidator(ILogger<AddParatextCorpusDialogViewModelValidator> logger)
-    //    {
-    //        RuleFor(x => x.SelectedProject).NotNull();
-    //    }
-
-    //}
 
     public class ProjectValidator : AbstractValidator<Project>
     {

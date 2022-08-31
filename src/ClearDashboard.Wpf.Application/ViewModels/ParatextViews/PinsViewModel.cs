@@ -697,7 +697,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // show the verse in context popup window
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(
-                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger,
+                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
                     projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator,
                     verse: verses[0]));
         }

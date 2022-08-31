@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\ClearDashboard_logo.ico" />
     <None Remove="Assets\splash_screen.png" />
     <None Remove="Resources\BiblicalTerms_logo_32.png" />

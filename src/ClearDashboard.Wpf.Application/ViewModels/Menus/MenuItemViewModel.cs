@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 using System.Diagnostics;
 using System.Drawing;
-
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Menus

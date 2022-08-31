@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // required by design-time binding
         }
 
-        public CorpusTokensViewModel(INavigationService navigationService, ILogger logger,
+        public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) 
             : base(navigationService, logger, projectManager, eventAggregator, mediator)
         {

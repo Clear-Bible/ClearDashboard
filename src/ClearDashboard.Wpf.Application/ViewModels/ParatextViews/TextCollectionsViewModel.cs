@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // no-op this is here for the XAML design time
         }
 
-        public TextCollectionsViewModel(INavigationService navigationService, ILogger logger,
+        public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) : base(
             navigationService, logger, projectManager, eventAggregator, mediator)
         {

@@ -14,9 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AvalonDock.Layout.Serialization;
+using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 
-namespace ClearDashboard.Wpf.Application.Views.Project
+namespace ClearDashboard.Wpf.Application.Views.Main
 {
 
     /// <summary>

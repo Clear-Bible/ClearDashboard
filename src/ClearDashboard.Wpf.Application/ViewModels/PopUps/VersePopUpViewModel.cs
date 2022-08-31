@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
         ///
-        public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
+        public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse)
             : base(projectManager, navigationService, logger, eventAggregator, mediator)
         {
@@ -110,7 +110,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <param name="projectManager"></param>
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
-        public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
+        public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse)
             : base(projectManager, navigationService, logger, eventAggregator, mediator)
         {

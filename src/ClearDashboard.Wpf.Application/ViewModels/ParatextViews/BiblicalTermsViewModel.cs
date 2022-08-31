@@ -24,6 +24,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -493,7 +494,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // used by Caliburn Micro for design time    
         }
 
-        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger,
+        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator)
             : base(navigationService, logger, projectManager, eventAggregator, mediator)
         {
@@ -603,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator, Mediator,
+                    new VersePopUpViewModel(NavigationService, Logger as ILogger<VersePopUpViewModel>, ProjectManager, EventAggregator, Mediator,
                         verses[0]), null, null);
             }
         }
