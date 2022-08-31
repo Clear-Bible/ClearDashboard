@@ -50,6 +50,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
+    <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -228,6 +229,11 @@
     <Page Update="Views\Shell\ShellView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Alpha\" />
+    <Folder Include="Views\DesignSurface\" />
   </ItemGroup>
 
 </Project>

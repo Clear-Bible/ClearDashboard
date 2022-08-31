@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.Application
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
             // if the dialog result is "true"
             //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+
             //await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
         }
     }

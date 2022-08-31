@@ -1,0 +1,320 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.ViewModels.ParatextViews.WordMeaningsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
+    x:Name="WordMeaningsControl"
+    d:DataContext="{d:DesignInstance Type=local:WordMeaningsViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Button
+            Width="20"
+            Height="20"
+            Margin="5,5,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+            ToolTip="{helpers:Localization ExpandView}">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <materialDesign:PackIcon
+                Background="Transparent"
+                Foreground="{StaticResource TealMidBrush}"
+                Kind="ArrowExpandAll" />
+        </Button>
+
+        <helpers:ScrollingToTopListBox
+            x:Name="LVSenses"
+            Grid.Row="1"
+            DockPanel.Dock="Bottom"
+            ItemsSource="{Binding WordData}"
+            Style="{StaticResource MaterialDesignListBox}">
+
+            <helpers:ScrollingToTopListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Padding="0"
+                        BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+
+
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="37" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--  First Column - LOGOS button  -->
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="0,0,0,5"
+                                        Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <Button
+                                            x:Name="ShowLogos"
+                                            Grid.Column="1"
+                                            Width="32"
+                                            Height="32"
+                                            Margin="5,0,0,0"
+                                            Padding="0"
+                                            Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
+                                            CommandParameter="{Binding}">
+                                            <Button.Content>
+                                                <Image Source="/Resources/logos_icon.png" />
+                                            </Button.Content>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="0,0,0,5"
+                                        Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+
+                                        <StackPanel Margin="3" Orientation="Vertical">
+                                            <TextBlock
+                                                Margin="3,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                                FontSize="18"
+                                                FontWeight="Bold"
+                                                Foreground="{StaticResource RedDarkBrush}"
+                                                Text="{Binding Word}" />
+                                            <TextBlock
+                                                Width="80"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontSize="12"
+                                                Foreground="{StaticResource OrangeDarkBrush}"
+                                                Text="{Binding WordTransliterated, StringFormat=({0})}" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            Width="235"
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource OrangeDarkBrush}"
+                                            Text="{Binding Glosses}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+
+
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <!--  Second Column  -->
+                                <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                                    <!--  Domain  -->
+                                    <Label
+                                        MinWidth="50"
+                                        Margin="0,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Content="{helpers:Localization WordMeaningsView_Domain}"
+                                        FontStyle="Italic"
+                                        Foreground="{StaticResource BlueDarkBrush}" />
+                                    <TextBlock
+                                        Width="Auto"
+                                        Margin="3,0,0,5"
+                                        VerticalAlignment="Center"
+                                        FontStyle="Italic"
+                                        Foreground="{StaticResource OrangeDarkBrush}"
+                                        Text="{Binding Domains}"
+                                        TextAlignment="Left"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+                                    <!--  Sub domain  -->
+                                    <Label
+                                        MinWidth="70"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Content="{helpers:Localization WordMeaningsView_SubDomain}"
+                                        FontStyle="Italic"
+                                        Foreground="{StaticResource BlueDarkBrush}" />
+                                    <TextBlock
+                                        Width="Auto"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontStyle="Italic"
+                                        Foreground="{StaticResource OrangeDarkBrush}"
+                                        Text="{Binding SubDomains}"
+                                        TextAlignment="Left"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBlock
+                                Grid.Column="2"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Text="{Binding DefinitionShort}"
+                                TextWrapping="Wrap" />
+
+                            <StackPanel
+                                Grid.Column="3"
+                                Margin="10,0,0,0"
+                                Orientation="Vertical">
+                                <!--  Sense  -->
+                                <Label
+                                    MinWidth="45"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization WordMeaningsView_Sense}"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueDarkBrush}" />
+                                <TextBlock
+                                    x:Name="ShowSenses"
+                                    MinWidth="50"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="{StaticResource MaterialDesignShadowBrush}"
+                                    FontSize="14"
+                                    Foreground="{StaticResource MaterialDesignDarkForeground}"
+                                    TextAlignment="Left">
+                                    <Run Text="{Binding SenseId}" />
+                                    <Run Text="/" />
+                                    <Run Text="{Binding TotalSenses}" />
+                                </TextBlock>
+                            </StackPanel>
+
+
+                            <Button
+                                Grid.Column="4"
+                                Margin="5,0,0,5"
+                                Padding="3"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Button
+                                                        Margin="5,5,0,0"
+                                                        Padding="3"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Top"
+                                                        BorderThickness="0"
+                                                        Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
+                                                        CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="ChevronLeft" />
+                                                    </Button>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Button
+                                                                Margin="5,5,0,0"
+                                                                Padding="3"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Top"
+                                                                BorderThickness="0"
+                                                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
+                                                                CommandParameter="{Binding}">
+                                                                <materialDesign:PackIcon Kind="ChevronRight" />
+                                                            </Button>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                            </Button>
+
+
+
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </helpers:ScrollingToTopListBox.ItemTemplate>
+        </helpers:ScrollingToTopListBox>
+    </Grid>
+
+</UserControl>

@@ -1,12 +1,14 @@
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
-using ClearDashboard.Wpf.Helpers;
-using ClearDashboard.Wpf.Interfaces;
-using ClearDashboard.Wpf.ViewModels.Panes;
-using ClearDashboard.Wpf.Views;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Interfaces;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using ClearDashboard.Wpf.ViewModels;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,7 +26,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Point = System.Windows.Point;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     /// <summary>
     /// 
@@ -34,6 +36,9 @@ namespace ClearDashboard.Wpf.ViewModels
         #region Member Variables
 
         BiblicalTermsView _view;
+
+        ILogger IWorkspace.Logger => throw new NotImplementedException();
+        INavigationService IWorkspace.NavigationService => throw new NotImplementedException();
 
         public enum SelectedBtEnum
         {
@@ -217,7 +222,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private DataTable _scope;
         public DataTable Scopes
         {
-            get => _scope; 
+            get => _scope;
             set
             {
                 _scope = value;
@@ -229,7 +234,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private DataRowView _selectedScope;
         public DataRowView SelectedScope
         {
-            get => _selectedScope; 
+            get => _selectedScope;
             set
             {
                 _selectedScope = value;
@@ -277,7 +282,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private DataTable _domains;
         public DataTable Domains
         {
-            get => _domains; 
+            get => _domains;
             set
             {
                 _domains = value;
@@ -288,7 +293,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private DataRowView _selectedDomain;
         public DataRowView SelectedDomain
         {
-            get => _selectedDomain; 
+            get => _selectedDomain;
             set
             {
                 _selectedDomain = value;
@@ -402,7 +407,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private BiblicalTermsData _selectedBiblicalTermsData;
         public BiblicalTermsData SelectedBiblicalTermsData
         {
-            get => _selectedBiblicalTermsData; 
+            get => _selectedBiblicalTermsData;
             set
             {
                 _selectedBiblicalTermsData = value;
@@ -414,7 +419,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private ObservableCollection<VerseViewModel> _selectedItemVerses = new();
         public ObservableCollection<VerseViewModel> SelectedItemVerses
         {
-            get => _selectedItemVerses; 
+            get => _selectedItemVerses;
             set
             {
                 _selectedItemVerses = value;
@@ -477,6 +482,8 @@ namespace ClearDashboard.Wpf.ViewModels
         public ICommand NotesCommand { get; set; }
         public ICommand VerseClickCommand { get; set; }
 
+
+
         #endregion
 
         #region Constructor
@@ -486,18 +493,17 @@ namespace ClearDashboard.Wpf.ViewModels
             // used by Caliburn Micro for design time    
         }
 
-        public BiblicalTermsViewModel(INavigationService navigationService, 
-                                        ILogger<WorkSpaceViewModel> logger, 
-                                        DashboardProjectManager projectManager, IEventAggregator eventAggregator) 
-            : base(navigationService, logger, projectManager, eventAggregator)
+        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger,
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator)
         {
-         
+
             Title = "🕮 BIBLICAL TERMS";
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
 
-           
-           
+
+
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             // select the first one
@@ -536,12 +542,12 @@ namespace ClearDashboard.Wpf.ViewModels
             }
         }
 
-        protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
 
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
-          
+
         }
         protected override void OnViewAttached(object view, object context)
         {
@@ -597,7 +603,7 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator,
+                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator, Mediator,
                         verses[0]), null, null);
             }
         }
@@ -622,7 +628,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 else
                 {
                     await GetBiblicalTerms(BiblicalTermsType.All).ConfigureAwait(false);
-         
+
                 }
 
                 _lastSelectedBtEnum = _selectedBiblicalTermsType;
@@ -638,7 +644,8 @@ namespace ClearDashboard.Wpf.ViewModels
         private async Task SetProgressBarVisibilityAsync(Visibility visibility)
         {
             await Task.Run(() => { ProgressBarVisibility = visibility; }).ConfigureAwait(false);
-            System.Windows.Forms.Application.DoEvents();
+            // TODO: COMEBACKHERE
+            //System.Windows.Forms.Application.DoEvents();
         }
 
         /// <summary>
@@ -841,7 +848,7 @@ namespace ClearDashboard.Wpf.ViewModels
                                     _currentBcv.SetVerseFromId(term);
                                     var book = _currentBcv.Book.ToString();
                                     var chapter = _currentBcv.ChapterIdText.ToString();
-                                    if (book+chapter == ProjectManager.CurrentVerse.Substring(0, 6))
+                                    if (book + chapter == ProjectManager.CurrentVerse.Substring(0, 6))
                                     {
                                         // found the chapter
                                         isBcvFound = true;
@@ -994,7 +1001,7 @@ namespace ClearDashboard.Wpf.ViewModels
             NotifyOfPropertyChange(() => Domains);
         }
 
-        private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
+        private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
 
             // send to the task started event aggregator for everyone else to hear about a background task starting
@@ -1014,7 +1021,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 {
                     _biblicalTerms.Clear();
                 });
-               
+
 
                 // deserialize the list
                 var biblicalTermsList = new List<BiblicalTermsData>();
@@ -1061,14 +1068,14 @@ namespace ClearDashboard.Wpf.ViewModels
                         NotifyOfPropertyChange(() => BiblicalTerms);
                     }
                 });
-              
+
             }
             finally
             {
                 await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
             }
         }
-        
+
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {

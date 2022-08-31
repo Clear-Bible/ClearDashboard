@@ -1,7 +1,8 @@
-﻿<Application x:Class="ClearDashboard.Wpf.Application.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:application="clr-namespace:ClearDashboard.Wpf.Application">
+﻿<Application
+    x:Class="ClearDashboard.Wpf.Application.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:application="clr-namespace:ClearDashboard.Wpf.Application">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
