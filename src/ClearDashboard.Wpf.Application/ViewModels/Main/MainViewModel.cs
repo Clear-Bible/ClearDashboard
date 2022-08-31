@@ -17,12 +17,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         }
 
-        public MainViewModel(DashboardProjectManager projectManager, INavigationService? navigationService, ILogger<MainViewModel>? logger, IEventAggregator? eventAggregator, IMediator mediator, IServiceProvider serviceProvider) : base(projectManager, navigationService, logger, eventAggregator, mediator)
+        public MainViewModel(DashboardProjectManager projectManager, INavigationService? navigationService, ILogger<MainViewModel>? logger, IEventAggregator? eventAggregator, IMediator mediator) 
+            : base(projectManager, navigationService, logger, eventAggregator, mediator)
         {
-
-            var projectDbContextFactory = serviceProvider.GetService<ProjectDbContextFactory>();
-
-            projectDbContextFactory.Get("TestDependencyInjection");
+            
         }
     }
 }
