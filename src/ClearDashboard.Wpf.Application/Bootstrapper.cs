@@ -22,10 +22,13 @@ namespace ClearDashboard.Wpf.Application
         {
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+            serviceCollection.AddValidatorsFromAssemblyContaining<AddParatextCorpusDialogViewModelValidator>();
 
             base.PopulateServiceCollection(serviceCollection);
         }
 
+
+        
         protected override void LoadModules(ContainerBuilder builder)
         {
             base.LoadModules(builder);
@@ -36,14 +39,17 @@ namespace ClearDashboard.Wpf.Application
         {
             EnsureApplicationMainWindowVisible();
 
-        NavigateToViewModel<MainViewModel>();
+            NavigateToViewModel<MainViewModel>();
 
-           // await base.NavigateToMainWindow();
+            // await base.NavigateToMainWindow();
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
             // if the dialog result is "true"
             //await ShowStartupDialog<StartupViewModel, MainViewModel>();
             //await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
+            
         }
 
+
+      
     }
 }

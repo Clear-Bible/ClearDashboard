@@ -1,8 +1,12 @@
 using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,15 +18,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
-using ClearDashboard.Wpf.Views;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels

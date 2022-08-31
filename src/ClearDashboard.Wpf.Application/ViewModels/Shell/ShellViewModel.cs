@@ -1,15 +1,4 @@
-﻿using AvalonDock.Properties;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Shell;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.ViewModels;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +7,21 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Autofac;
+using AvalonDock.Properties;
+using Caliburn.Micro;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearApplicationFoundation.ViewModels.Shell;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.ViewModels;
+using Dapper;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -180,8 +184,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService,
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager, IMediator mediator)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator)
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             _translationSource = translationSource;
 
