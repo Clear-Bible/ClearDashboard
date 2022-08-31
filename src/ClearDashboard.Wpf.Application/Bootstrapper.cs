@@ -34,6 +34,7 @@ namespace ClearDashboard.Wpf.Application
 
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+            serviceCollection.AddValidatorsFromAssemblyContaining<AddParatextCorpusDialogViewModelValidator>();
 
             base.PopulateServiceCollection(serviceCollection);
         }
