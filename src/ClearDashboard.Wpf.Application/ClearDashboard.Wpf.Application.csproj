@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClearApplicationFoundation" Version="1.0.4" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -233,6 +234,7 @@
   <ItemGroup>
     <Folder Include="Views\Alpha\" />
     <Folder Include="Views\DesignSurface\" />
+    <Folder Include="Views\PopUps\" />
   </ItemGroup>
 
 </Project>

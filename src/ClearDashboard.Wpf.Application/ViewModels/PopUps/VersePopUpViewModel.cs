@@ -10,7 +10,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Panes
+namespace ClearDashboard.Wpf.Application.ViewModels
 {
     public class VersePopUpViewModel : DashboardApplicationScreen
     {
