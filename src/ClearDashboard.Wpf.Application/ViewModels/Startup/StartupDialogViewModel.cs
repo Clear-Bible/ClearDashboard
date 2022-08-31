@@ -11,7 +11,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         public StartupDialogViewModel(INavigationService navigationService)
         {
-
             CanOk = true;
             DisplayName = "Startup Dialog";
         }

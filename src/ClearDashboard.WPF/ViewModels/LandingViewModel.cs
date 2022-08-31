@@ -70,8 +70,6 @@ namespace ClearDashboard.Wpf.ViewModels
             AlertVisibility = Visibility.Collapsed;
         }
 
-
-
         protected override void OnViewAttached(object view, object context)
         {
             base.OnViewAttached(view, context);
@@ -85,7 +83,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 DashboardProjects = results.Data;
             }
         }
-
+        
         #endregion
 
         #region Methods
