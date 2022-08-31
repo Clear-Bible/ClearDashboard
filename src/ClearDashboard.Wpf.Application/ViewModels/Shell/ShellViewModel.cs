@@ -1,4 +1,15 @@
-﻿using System;
+﻿using AvalonDock.Properties;
+using Caliburn.Micro;
+using ClearApplicationFoundation.ViewModels.Shell;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.ViewModels;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -7,20 +18,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using AvalonDock.Properties;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearApplicationFoundation.ViewModels.Shell;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.ViewModels;
-using Dapper;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
