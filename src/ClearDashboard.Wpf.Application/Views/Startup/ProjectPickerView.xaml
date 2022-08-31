@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -29,14 +30,14 @@
 
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel>
@@ -52,12 +53,24 @@
                 materialDesign:HintAssist.Hint="Search" />
         </StackPanel>
 
+        <ComboBox
+            Grid.Row="0"
+            Grid.Column="1"
+            x:Name="SelectedLanguage"
+            MinWidth="120"
+            Margin="0,0,5,0"
+            VerticalContentAlignment="Center"
+            FontSize="12"
+            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+
 
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
             Margin="10,10"
             HorizontalAlignment="Right"
+            VerticalAlignment='Bottom'
             Orientation="Horizontal">
             <!--<Button
             x:Name="MoveBackwards"
@@ -113,6 +126,7 @@
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
                     Height="355"
+                    ItemsSource="{Binding DashboardProjects}"
                     ScrollViewer.CanContentScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     Style="{StaticResource MaterialDesignListBox}">
@@ -253,10 +267,10 @@
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <ListViewItem Content="Project #1" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
+                <!--<ListViewItem Content="Project #1" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
                 <ListViewItem Content="Project #2" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
                 <ListViewItem Content="Project #3" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #4" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
+                <ListViewItem Content="Project #4" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>-->
             </ListView>
         </StackPanel>
     </Grid>

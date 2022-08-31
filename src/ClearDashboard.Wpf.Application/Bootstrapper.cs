@@ -35,14 +35,14 @@ namespace ClearDashboard.Wpf.Application
 
         protected override async Task NavigateToMainWindow()
         {
-            EnsureApplicationMainWindowVisible();
+            //EnsureApplicationMainWindowVisible();
             NavigateToViewModel<ProjectPickerViewModel>();
             // await base.NavigateToMainWindow();
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
             // if the dialog result is "true"
             //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
 
-            //await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
+            await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
         }
     }
 }

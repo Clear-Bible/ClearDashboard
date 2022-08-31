@@ -1,15 +1,22 @@
 ﻿using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         #region Member Variables
         protected IWindowManager _windowManager;
+        private readonly TranslationSource _translationSource;
         #endregion
 
         #region Observable Objects
@@ -36,17 +44,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => AlertVisibility);
             }
         }
+
+        private LanguageTypeValue _selectedLanguage;
+        public LanguageTypeValue SelectedLanguage
+        {
+            get => _selectedLanguage;
+            set
+            {
+                _selectedLanguage = value;
+
+                var language = EnumHelper.GetDescription(_selectedLanguage);
+                SaveUserLanguage(_selectedLanguage.ToString());
+                _translationSource.Language = language;
+
+                Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+
+                NotifyOfPropertyChange(() => SelectedLanguage);
+
+            }
+        }
         #endregion
 
         #region Constructor
         public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService) : base(eventAggregator, navigationService, logger, mediator)
         {
+            Logger.LogInformation("Project Picker constructor called.");
+            //_windowManager = windowManager;
 
+
+            AlertVisibility = Visibility.Collapsed;
         }
 
         protected async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
@@ -73,80 +103,79 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        public void CreateNewProject()
-        {
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
+        //public void CreateNewProject()
+        //{
+        //    if (CheckIfConnectedToParatext() == false)
+        //    {
+        //        return;
+        //    }
 
-            Logger.LogInformation("CreateNewProject called.");
-            //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
+        //    Logger.LogInformation("CreateNewProject called.");
+        //    //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
 
-            NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-        }
-
-
-        public async void NewProject()
-        {
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
-
-            Logger.LogInformation("NewProject called.");
-
-            if (ProjectManager.HasDashboardProject)
-            {
-                ProjectManager.CreateDashboardProject();
-            }
-
-            await ProjectManager.InvokeDialog<NewProjectDialogViewModel, WorkSpaceViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
-            //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
-            //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
+        //    NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
+        //}
 
 
-            //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
-            //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-            // Define a callback method to create a new project if we
-            // have a valid project name
+        //public async void NewProject()
+        //{
+        //    if (CheckIfConnectedToParatext() == false)
+        //    {
+        //        return;
+        //    }
 
-            async Task<bool> Callback(NewProjectDialogViewModel viewModel)
-            {
-                if (viewModel.ProjectName != null)
-                {
-                    await ProjectManager.CreateNewProject(viewModel.ProjectName);
-                    return true;
-                }
+        //    Logger.LogInformation("NewProject called.");
 
-                return false;
-            }
-        }
+        //    if (ProjectManager.HasDashboardProject)
+        //    {
+        //        ProjectManager.CreateDashboardProject();
+        //    }
 
-        public void ProjectWorkspace(DashboardProject project)
-        {
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
+        //    await ProjectManager.InvokeDialog<NewProjectDialogViewModel, WorkSpaceViewModel>(
+        //        DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
 
-            ProjectManager.CurrentDashboardProject = project;
-            //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
-            NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
+        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
 
-        }
 
-        private bool CheckIfConnectedToParatext()
-        {
-            if (ProjectManager.HasCurrentParatextProject == false)
-            {
-                AlertVisibility = Visibility.Visible;
-                return false;
-            }
-            return true;
-        }
+        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
+        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
+        //    // Define a callback method to create a new project if we
+        //    // have a valid project name
+
+        //    async Task<bool> Callback(NewProjectDialogViewModel viewModel)
+        //    {
+        //        if (viewModel.ProjectName != null)
+        //        {
+        //            await ProjectManager.CreateNewProject(viewModel.ProjectName);
+        //            return true;
+        //        }
+
+        //        return false;
+        //    }
+        //}
+
+        //public void ProjectWorkspace(DashboardProject project)
+        //{
+        //    if (CheckIfConnectedToParatext() == false)
+        //    {
+        //        return;
+        //    }
+
+        //    ProjectManager.CurrentDashboardProject = project;
+        //    //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
+        //    NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
+        //}
+
+        //private bool CheckIfConnectedToParatext()
+        //{
+        //    if (ProjectManager.HasCurrentParatextProject == false)
+        //    {
+        //        AlertVisibility = Visibility.Visible;
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         public void DeleteProject(DashboardProject project)
         {
@@ -175,43 +204,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public void Workspace(DashboardProject project)
+        //public void Workspace(DashboardProject project)
+        //{
+        //    if (CheckIfConnectedToParatext() == false)
+        //    {
+        //        return;
+        //    }
+
+        //    //// TODO HACK TO READ IN PROJECT AS OBJECT
+        //    string sTempFile = @"c:\temp\project.json";
+        //    if (File.Exists(sTempFile) == false)
+        //    {
+        //        MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
+        //    }
+
+        //    var jsonString = File.ReadAllText(@"c:\temp\project.json");
+        //    project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
+
+
+        //    Logger.LogInformation("Workspace called.");
+        //    ProjectManager.CurrentDashboardProject = project;
+
+
+
+
+        //    NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
+        //}
+
+        //public void Settings()
+        //{
+        //    Logger.LogInformation("Settings called.");
+        //    NavigationService.NavigateToViewModel<SettingsViewModel>();
+
+        //}
+        //public void AlignmentSample()
+        //{
+        //    Logger.LogInformation("AlignmentSample called.");
+        //    NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
+        //}
+
+        public void SetLanguage()
         {
-            if (CheckIfConnectedToParatext() == false)
+            var culture = Settings.Default.language_code;
+            // strip out any "-" characters so the string can be properly parsed into the target enum
+            SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+
+            var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
+            if (languageFlowDirection.isRTL)
             {
-                return;
+                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+            }
+            else
+            {
+                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
-            //// TODO HACK TO READ IN PROJECT AS OBJECT
-            string sTempFile = @"c:\temp\project.json";
-            if (File.Exists(sTempFile) == false)
-            {
-                MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
-            }
-
-            var jsonString = File.ReadAllText(@"c:\temp\project.json");
-            project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
-
-
-            Logger.LogInformation("Workspace called.");
-            ProjectManager.CurrentDashboardProject = project;
-
-
-
-
-            NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
-        }
-
-        public void Settings()
-        {
-            Logger.LogInformation("Settings called.");
-            NavigationService.NavigateToViewModel<SettingsViewModel>();
-
-        }
-        public void AlignmentSample()
-        {
-            Logger.LogInformation("AlignmentSample called.");
-            NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
+            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
         #endregion  Methods
     }
