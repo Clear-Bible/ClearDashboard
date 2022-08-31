@@ -68,8 +68,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             };
 
             var command =
-                new CreateParallelCorpusCommand(new TokenizedCorpusId(sourceTokenizedCorpusId),
-                    new TokenizedCorpusId(targetTokenizedCorpusId), verseMappings);
+                new CreateParallelCorpusCommand(new TokenizedTextCorpusId(sourceTokenizedCorpusId),
+                    new TokenizedTextCorpusId(targetTokenizedCorpusId), verseMappings);
             var result = await Mediator.Send(command);
 
             ProjectDbContext.ChangeTracker.Clear();
@@ -264,7 +264,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                 .Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var validTokenizedCorpusId = tokenizedTextCorpus.TokenizedCorpusId;
-            var bogusTokenizedCorpusId = new TokenizedCorpusId(new Guid());
+            var bogusTokenizedCorpusId = new TokenizedTextCorpusId(new Guid());
 
             var verseMappings = new List<VerseMapping>()
             {

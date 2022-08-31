@@ -121,7 +121,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal("Standard", corpusDB.CorpusType.ToString());
             Assert.Equal(tokenizationFunction, corpusDB.TokenizedCorpora.First().TokenizationFunction);
 
-            var tokenizedTextCorpusDB = await TokenizedTextCorpus.Get(Mediator!, new TokenizedCorpusId(corpusDB.TokenizedCorpora.First().Id));
+            var tokenizedTextCorpusDB = await TokenizedTextCorpus.Get(Mediator!, new TokenizedTextCorpusId(corpusDB.TokenizedCorpora.First().Id));
             var ct = 0;
 
             foreach (var tokensTextRow in tokenizedTextCorpusDB?.Cast<TokensTextRow>()!)

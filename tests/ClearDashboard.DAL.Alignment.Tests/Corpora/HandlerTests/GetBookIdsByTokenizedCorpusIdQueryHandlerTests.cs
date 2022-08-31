@@ -63,7 +63,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
     {
         try
         {
-            var query = new GetBookIdsByTokenizedCorpusIdQuery(new TokenizedCorpusId(Guid.NewGuid()));
+            var query = new GetBookIdsByTokenizedCorpusIdQuery(new TokenizedTextCorpusId(Guid.NewGuid()));
 
             var result = await Mediator!.Send(query);
             Assert.NotNull(result);

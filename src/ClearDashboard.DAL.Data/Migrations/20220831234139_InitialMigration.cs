@@ -67,7 +67,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LastContentWordLevel = table.Column<int>(type: "INTEGER", nullable: true),
                     DesignSurfaceLayout = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
@@ -117,26 +116,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.CorpusHistoryId,
                         principalTable: "CorpusHistory",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AlignmentVersion",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    IsDirty = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AlignmentVersion", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AlignmentVersion_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -428,40 +407,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Alignment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Score = table.Column<decimal>(type: "TEXT", nullable: false),
-                    AlignmentVersionId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Alignment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Alignment_AlignmentVersion_AlignmentVersionId",
-                        column: x => x.AlignmentVersionId,
-                        principalTable: "AlignmentVersion",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Alignment_Token_SourceTokenId",
-                        column: x => x.SourceTokenId,
-                        principalTable: "Token",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Alignment_Token_TargetTokenId",
-                        column: x => x.TargetTokenId,
-                        principalTable: "Token",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Translation",
                 columns: table => new
                 {
@@ -633,21 +578,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Alignment_AlignmentVersionId",
-                table: "Alignment",
-                column: "AlignmentVersionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Alignment_SourceTokenId",
-                table: "Alignment",
-                column: "SourceTokenId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Alignment_TargetTokenId",
-                table: "Alignment",
-                column: "TargetTokenId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AlignmentSet_EngineWordAlignmentId",
                 table: "AlignmentSet",
                 column: "EngineWordAlignmentId");
@@ -681,11 +611,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_AlignmentTokenPair_TargetTokenId",
                 table: "AlignmentTokenPair",
                 column: "TargetTokenId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AlignmentVersion_UserId",
-                table: "AlignmentVersion",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Note_AuthorId",
@@ -851,9 +776,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Adornment");
 
             migrationBuilder.DropTable(
-                name: "Alignment");
-
-            migrationBuilder.DropTable(
                 name: "AlignmentTokenPair");
 
             migrationBuilder.DropTable(
@@ -876,9 +798,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TranslationModelTargetTextScore");
-
-            migrationBuilder.DropTable(
-                name: "AlignmentVersion");
 
             migrationBuilder.DropTable(
                 name: "AlignmentSet");

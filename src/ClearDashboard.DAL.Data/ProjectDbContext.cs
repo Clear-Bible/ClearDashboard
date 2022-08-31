@@ -42,12 +42,10 @@ namespace ClearDashboard.DataAccessLayer.Data
         }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
-        public virtual DbSet<Alignment> Alignments => Set<Alignment>();
 
         public virtual DbSet<AlignmentSet> AlignmentSets => Set<AlignmentSet>();
         public virtual DbSet<AlignmentTokenPair> AlignmentTokenPairs => Set<AlignmentTokenPair>();
 
-        public virtual DbSet<AlignmentVersion> AlignmentVersions => Set<AlignmentVersion>();
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
         public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
@@ -120,13 +118,6 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             // We want our table names to be singular
             modelBuilder.RemovePluralizingTableNameConvention();
-
-            // NB:  I'm relying on the default naming and relationship conventions from EF Core to set up the database...
-
-            // **** leaving this here in the event we need to override the default conventions ****
-            // NB:  Add the configuration of any newly added 
-            //      entities to the ConfigureEntities extension method
-            //modelBuilder.ConfigureEntities();
 
             modelBuilder.Entity<AlignmentTokenPair>()
                 .HasOne(e => e.SourceToken)

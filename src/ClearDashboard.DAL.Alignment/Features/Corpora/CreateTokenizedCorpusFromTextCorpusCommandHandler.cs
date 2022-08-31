@@ -146,7 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
 //                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
-                    new TokenizedCorpusId(tokenizationId),
+                    new TokenizedTextCorpusId(tokenizationId),
                     request.CorpusId,
                     _mediator,
                     bookIds);

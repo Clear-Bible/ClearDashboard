@@ -12,8 +12,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetAllTokenizedCorpusIdsByCorpusIdQueryHandler : ProjectDbContextQueryHandler<
         GetAllTokenizedCorpusIdsByCorpusIdQuery,
-        RequestResult<IEnumerable<TokenizedCorpusId>>,
-        IEnumerable<TokenizedCorpusId>>
+        RequestResult<IEnumerable<TokenizedTextCorpusId>>,
+        IEnumerable<TokenizedTextCorpusId>>
     {
 
         public GetAllTokenizedCorpusIdsByCorpusIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllTokenizedCorpusIdsByCorpusIdQueryHandler> logger) 
@@ -21,15 +21,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
         }
 
-        protected override Task<RequestResult<IEnumerable<TokenizedCorpusId>>> GetDataAsync(GetAllTokenizedCorpusIdsByCorpusIdQuery request, CancellationToken cancellationToken)
+        protected override Task<RequestResult<IEnumerable<TokenizedTextCorpusId>>> GetDataAsync(GetAllTokenizedCorpusIdsByCorpusIdQuery request, CancellationToken cancellationToken)
         {
             
             var tokenizedCorpusIds = ProjectDbContext.TokenizedCorpora
                 .Where(tc => tc.CorpusId == request.CorpusId.Id)
-                .Select(tc => new TokenizedCorpusId(tc.Id)).AsEnumerable();
+                .Select(tc => new TokenizedTextCorpusId(tc.Id)).AsEnumerable();
             
             return Task.FromResult(
-                new RequestResult<IEnumerable<TokenizedCorpusId>>
+                new RequestResult<IEnumerable<TokenizedTextCorpusId>>
                     (
                         result: tokenizedCorpusIds,
                         success: true

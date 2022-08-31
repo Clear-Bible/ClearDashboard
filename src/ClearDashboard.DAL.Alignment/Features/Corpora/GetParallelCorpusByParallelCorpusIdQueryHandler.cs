@@ -15,12 +15,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetParallelCorpusByParallelCorpusIdQueryHandler : ProjectDbContextQueryHandler<
         GetParallelCorpusByParallelCorpusIdQuery,
-        RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-            TokenizedCorpusId targetTokenizedCorpusId,
+        RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+            TokenizedTextCorpusId targetTokenizedCorpusId,
             IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>,
-        (TokenizedCorpusId sourceTokenizedCorpusId,
-        TokenizedCorpusId targetTokenizedCorpusId,
+        (TokenizedTextCorpusId sourceTokenizedCorpusId,
+        TokenizedTextCorpusId targetTokenizedCorpusId,
         IEnumerable<VerseMapping> verseMappings,
         ParallelCorpusId parallelCorpusId)>
     {
@@ -30,8 +30,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
         }
 
-        protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
-            TokenizedCorpusId targetTokenizedCorpusId, 
+        protected override async Task<RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId, 
+            TokenizedTextCorpusId targetTokenizedCorpusId, 
             IEnumerable<VerseMapping> verseMappings, 
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
 
@@ -64,8 +64,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (!string.IsNullOrEmpty(invalidArgMsg))
             {
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                    TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                    TokenizedTextCorpusId targetTokenizedCorpusId,
                     IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
                 (
@@ -128,21 +128,21 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         return new VerseMapping(sourceVerses, targetVerses);
                     });
 
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                        TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                        TokenizedTextCorpusId targetTokenizedCorpusId,
                         IEnumerable<VerseMapping> verseMappings,
                         ParallelCorpusId parallelCorpusId)>
                     ((
-                        new TokenizedCorpusId(parallelCorpus.SourceTokenizedCorpusId),
-                        new TokenizedCorpusId(parallelCorpus.TargetTokenizedCorpusId),
+                        new TokenizedTextCorpusId(parallelCorpus.SourceTokenizedCorpusId),
+                        new TokenizedTextCorpusId(parallelCorpus.TargetTokenizedCorpusId),
                         verseMappings,
                         new ParallelCorpusId(parallelCorpus.Id)
                     ));
             }
             catch (NullReferenceException e)
             {
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                        TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                        TokenizedTextCorpusId targetTokenizedCorpusId,
                         IEnumerable<VerseMapping> verseMappings,
                         ParallelCorpusId parallelCorpusId)>
                 (

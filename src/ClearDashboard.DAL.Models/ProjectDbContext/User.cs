@@ -7,8 +7,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public User()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            AlignmentVersions = new HashSet<AlignmentVersion>();
             AlignmentSets = new HashSet<AlignmentSet>();
+            TranslationSets = new HashSet<TranslationSet>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
@@ -26,8 +26,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public int? LastAlignmentLevelId { get; set; }
 
-        public virtual ICollection<AlignmentVersion> AlignmentVersions { get; set; }
-
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
+        public virtual ICollection<TranslationSet> TranslationSets { get; set; }
     }
 }

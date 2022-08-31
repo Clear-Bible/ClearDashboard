@@ -5,10 +5,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetBookIdsByTokenizedCorpusIdQuery : ProjectRequestQuery<(IEnumerable<string> bookIds, CorpusId corpusId)>
     {
-        public GetBookIdsByTokenizedCorpusIdQuery(TokenizedCorpusId tokenizedCorpusId)
+        public GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId tokenizedCorpusId)
         {
             TokenizedCorpusId = tokenizedCorpusId;
         }
-        public TokenizedCorpusId TokenizedCorpusId { get; }
+        public TokenizedTextCorpusId TokenizedCorpusId { get; }
     }
 }

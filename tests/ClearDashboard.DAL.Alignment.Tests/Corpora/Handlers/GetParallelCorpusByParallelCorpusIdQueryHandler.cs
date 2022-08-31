@@ -12,13 +12,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetParallelCorpusByParallelCorpusIdQueryHandler : IRequestHandler<
         GetParallelCorpusByParallelCorpusIdQuery,
-        RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-            TokenizedCorpusId targetTokenizedCorpusId,
+        RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+            TokenizedTextCorpusId targetTokenizedCorpusId,
             IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>>
     {
-        public Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-            TokenizedCorpusId targetTokenizedCorpusId,
+        public Task<RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+            TokenizedTextCorpusId targetTokenizedCorpusId,
             IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>>
             Handle(GetParallelCorpusByParallelCorpusIdQuery command, CancellationToken cancellationToken)
@@ -28,12 +28,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             //2. associated source and target TokenizedCorpusId
 
             return Task.FromResult(
-                new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                    TokenizedCorpusId targetTokenizedCorpusId,
+                new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                    TokenizedTextCorpusId targetTokenizedCorpusId,
                     IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
-                (result: (new TokenizedCorpusId(new Guid()),
-                    new TokenizedCorpusId(new Guid()), 
+                (result: (new TokenizedTextCorpusId(new Guid()),
+                    new TokenizedTextCorpusId(new Guid()), 
                     new List<VerseMapping>() { 
                         new VerseMapping(
                             new List<Verse>() {new Verse("MAT", 1, 1)}, 

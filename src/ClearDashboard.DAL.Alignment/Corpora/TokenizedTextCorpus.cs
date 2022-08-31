@@ -9,9 +9,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class TokenizedTextCorpus : ScriptureTextCorpus
     {
-        public TokenizedCorpusId TokenizedCorpusId { get; set; }
+        public TokenizedTextCorpusId TokenizedCorpusId { get; set; }
         public CorpusId CorpusId { get; set; }
-        internal TokenizedTextCorpus(TokenizedCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations)
+        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations)
         {
             TokenizedCorpusId = tokenizedCorpusId;
             CorpusId = corpusId;
@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public override ScrVers Versification { get; }
 
-        public static async Task<IEnumerable<TokenizedCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
+        public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
             if (result.Success && result.Data != null)
@@ -40,7 +40,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public static async Task<TokenizedTextCorpus> Get(
             IMediator mediator,
-            TokenizedCorpusId tokenizedCorpusId)
+            TokenizedTextCorpusId tokenizedCorpusId)
         {
             var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedCorpusId);
 

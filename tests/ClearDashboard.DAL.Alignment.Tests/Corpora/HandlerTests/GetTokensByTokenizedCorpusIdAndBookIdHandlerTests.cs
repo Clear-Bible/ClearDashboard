@@ -85,7 +85,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
+                new Alignment.Corpora.TokenizedTextCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
@@ -112,7 +112,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MRK");
+                new Alignment.Corpora.TokenizedTextCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MRK");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
