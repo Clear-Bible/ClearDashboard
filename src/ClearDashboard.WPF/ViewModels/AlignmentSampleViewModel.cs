@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -24,6 +25,7 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
 using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
+using EngineToken = ClearBible.Engine.Corpora.Token;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -50,7 +52,8 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>();
+                .Transform<IntoTokensTextRowProcessor>()
+                .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
         }
 
         private static ITextCorpus GetSampleGreekTextCorpus()
@@ -121,6 +124,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
 
+        public TokensTextRow TextRow { get; set; }
+        public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)> Tokens { get; set; }
+
         public string DatabaseVerseDetokenized
         {
             get
@@ -146,13 +152,19 @@ namespace ClearDashboard.Wpf.ViewModels
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             _mediator = mediator;
+            //LoadFiles();
         }
 
         public void TokenClicked(TokenEventArgs e)
         {
             Message = $"'{e.SurfaceText}' clicked";
             NotifyOfPropertyChange(nameof(Message));
-        }        
+        }
+
+        public void LoadTokens()
+        {
+            LoadFiles();
+        }
         
         public void TokenDoubleClicked(TokenEventArgs e)
         {
@@ -187,15 +199,26 @@ namespace ClearDashboard.Wpf.ViewModels
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            LoadFiles();
-            await MockProjectAndUser();
+            //LoadFiles();
+            //await MockProjectAndUser();
             //await RetrieveTokensViaQuery(cancellationToken);
-            await RetrieveTokensViaCorpusClass();
+            //await RetrieveTokensViaCorpusClass();
             await base.OnActivateAsync(cancellationToken);
         }
 
         private void LoadFiles()
         {
+            var corpus = GetSampleEnglishTextCorpus();
+            TextRow = corpus.Cast<TokensTextRow>().FirstOrDefault();
+            NotifyOfPropertyChange(nameof(TextRow));
+
+            if (TextRow != null)
+            {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                Tokens = detokenizer.Detokenize(TextRow.Tokens);
+            }
+            NotifyOfPropertyChange(nameof(Tokens));
+
             EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(EnglishFile));
 
