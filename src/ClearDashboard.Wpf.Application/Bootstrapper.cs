@@ -1,12 +1,12 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
-using FluentValidation;
-using System.IO;
-using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -36,7 +36,7 @@ namespace ClearDashboard.Wpf.Application
         {
             EnsureApplicationMainWindowVisible();
 
-            NavigateToViewModel<MainViewModel>();
+        NavigateToViewModel<MainViewModel>();
 
            // await base.NavigateToMainWindow();
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
