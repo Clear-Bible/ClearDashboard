@@ -232,7 +232,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Alpha\" />
     <Folder Include="Views\DesignSurface\" />
     <Folder Include="Views\PopUps\" />
   </ItemGroup>
