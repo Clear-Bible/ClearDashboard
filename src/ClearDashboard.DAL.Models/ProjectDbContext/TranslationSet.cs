@@ -19,6 +19,7 @@ public class TranslationSet : IdentifiableEntity
 
     public virtual TranslationSet? DerivedFrom { get; set; }
 
+    [ForeignKey("ParallelCorpusId")]
     public virtual Guid ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
 

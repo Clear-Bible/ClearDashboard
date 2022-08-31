@@ -1,13 +1,10 @@
-﻿using ClearBible.Engine.Persistence;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -30,17 +27,47 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<TranslationSet>> SaveDataAsync(CreateTranslationSetCommand request,
             CancellationToken cancellationToken)
         {
-            var translationSetModel = new Models.TranslationSet();
-            translationSetModel.ParallelCorpusId = request.ParallelCorpusId.Id;
-            //translationSetModel.DerivedFrom =
-            //translationSetModel.EngineWordAlignmentId =
-            //translationSetModel.TranslationModel =
+            var parallelCorpus = ProjectDbContext!.ParallelCorpa.FirstOrDefault(c => c.Id == request.ParallelCorpusId.Id);
+            if (parallelCorpus == null)
+            {
+                return new RequestResult<TranslationSet>
+                (
+                    success: false,
+                    message: $"Invalid ParallelCorpusId '{request.ParallelCorpusId.Id}' found in request"
+                );
+            }
 
             try
             {
-                  
+                var translationSetModel = new Models.TranslationSet
+                {
+                    ParallelCorpusId = request.ParallelCorpusId.Id,
+                    //DerivedFrom = ,
+                    //EngineWordAlignment = ,
+                    TranslationModel = request.TranslationModel
+                        .Select(tm => new Models.TranslationModelEntry
+                        {
+                            SourceText = tm.Key,
+                            TargetTextScores = tm.Value
+                                .Select(tts => new Models.TranslationModelTargetTextScore
+                                {
+                                    Text = tts.Key,
+                                    Score = tts.Value
+                                }).ToList()
+                        }).ToList()
+                };
+
+                ProjectDbContext.TranslationSets.Add(translationSetModel);
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+                return new RequestResult<TranslationSet>(new TranslationSet(
+                    new TranslationSetId(translationSetModel.Id),
+                    request.ParallelCorpusId,
+                    request.TranslationModel,
+                    _mediator));
+
             }
-            catch (NullReferenceException e)
+            catch (Exception e)
             {
                 return new RequestResult<Alignment.Translation.TranslationSet>
                 (
@@ -48,15 +75,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     message: e.Message
                 );
             }
-
-            //ProjectDbContext.TranslationSets.Add(translationSetModel);
-            //await ProjectDbContext.SaveChangesAsync();
-
-            return new RequestResult<TranslationSet>(new TranslationSet(
-                new TranslationSetId(new Guid()), 
-                request.ParallelCorpusId, 
-                request.TranslationModel, 
-                _mediator));
         }
     }
 }

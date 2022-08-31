@@ -30,10 +30,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<object>> SaveDataAsync(PutTranslationSetTranslationCommand request,
             CancellationToken cancellationToken)
         {
-            // FIXME:  IMPLEMENT!
+            var translationSet = ProjectDbContext!.TranslationSets
+                .Include(ts => ts.Translations
+                    .OrderBy(t => t.Token!.BookNumber)
+                    .OrderBy(t => t.Token!.ChapterNumber)
+                    .OrderBy(t => t.Token!.VerseNumber)
+                    .OrderBy(t => t.Token!.WordNumber)
+                    .OrderBy(t => t.Token!.SubwordNumber))
+                .FirstOrDefault(c => c.Id == request.TranslationSetId.Id);
+            if (translationSet == null)
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Invalid TranslationSetId '{request.TranslationSetId.Id}' found in request"
+                );
+            }
 
             try
             {
+ //               translationSet.Translations.
+
                 // need an await to get the compiler to be 'quiet'
                 await Task.CompletedTask;
 
