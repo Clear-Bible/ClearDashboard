@@ -44,6 +44,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => AlertVisibility);
             }
         }
+        
+        private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+        public string Message
+        {
+            get => _message;
+            set
+            {
+                _message = value;
+                NotifyOfPropertyChange(() => Message);
+            }
+        }
 
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
@@ -252,15 +263,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
             if (languageFlowDirection.isRTL)
             {
-                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+                //TODO ProjectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
             }
             else
             {
-                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
+                //ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
-            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+            //WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
+
+        private static void SaveUserLanguage(string language)
+        {
+            Settings.Default.language_code = language;
+            Settings.Default.Save();
+        }
+
         #endregion  Methods
     }
 }
