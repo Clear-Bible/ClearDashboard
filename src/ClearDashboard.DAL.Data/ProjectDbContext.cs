@@ -59,6 +59,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
+        public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
@@ -198,6 +199,9 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             //modelBuilder.Entity<Token>()
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
+
+            modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
+            modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
         }
 
 

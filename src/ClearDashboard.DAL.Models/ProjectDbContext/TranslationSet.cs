@@ -2,12 +2,13 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class AlignmentSet : IdentifiableEntity
+public class TranslationSet : IdentifiableEntity
 {
-    public AlignmentSet()
+    public TranslationSet()
     {
         // ReSharper disable VirtualMemberCallInConstructor
-        AlignmentTokensPairs = new HashSet<AlignmentTokenPair>();
+        TranslationModel = new HashSet<TranslationModelEntry>();
+        Translations = new HashSet<Translation>();
         var utcNow = DateTimeOffset.UtcNow;
         Created = utcNow;
         // ReSharper restore VirtualMemberCallInConstructor
@@ -15,6 +16,12 @@ public class AlignmentSet : IdentifiableEntity
     [ForeignKey("EngineWordAlignmentId")]
     public Guid? EngineWordAlignmentId { get; set; }
     public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
+
+    public virtual TranslationSet? DerivedFrom { get; set; }
+
+    public virtual Guid ParallelCorpusId { get; set; }
+    public virtual ParallelCorpus? ParallelCorpus { get; set; }
+
     public Guid? UserId { get; set; }
     public virtual User? User { get; set; }
 
@@ -23,5 +30,6 @@ public class AlignmentSet : IdentifiableEntity
     /// </summary>
     public DateTimeOffset Created { get; set; }
 
-    public virtual ICollection<AlignmentTokenPair> AlignmentTokensPairs { get; set; }
+    public virtual ICollection<TranslationModelEntry> TranslationModel { get; set; }
+    public virtual ICollection<Translation> Translations { get; set; }
 }
