@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
@@ -163,8 +164,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger,
             DashboardProjectManager projectManager, TranslationSource translationSource,
-            IEventAggregator eventAggregator, IMediator mediator)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "⌺ WORD MEANINGS";
             ContentId = "WORDMEANINGS";

@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Extensions;
@@ -24,8 +25,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) 
-            : base(navigationService, logger, projectManager, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) 
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";

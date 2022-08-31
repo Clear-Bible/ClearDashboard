@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -58,8 +59,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) : base(
-            navigationService, logger, projectManager, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
+            navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             this.Title = "🗐 TEXT COLLECTION";
             this.ContentId = "TEXTCOLLECTION";

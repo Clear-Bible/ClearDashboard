@@ -15,6 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ValidationResult = FluentValidation.Results.ValidationResult;
+using Autofac.Core.Lifetime;
+using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -25,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private List<ParatextProjectMetadata> _projects;
         private ParatextProjectMetadata _selectedProject;
 
-        public AddParatextCorpusDialogViewModel()
+        public AddParatextCorpusDialogViewModel() 
         {
             // used by Caliburn Micro for design time    
         }
@@ -34,8 +36,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ILogger<AddParatextCorpusDialogViewModel>? logger,
             DashboardProjectManager? projectManager,
         IEventAggregator? eventAggregator,
-            IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator)
-            : base(navigationService, logger, eventAggregator, mediator, validator)
+            IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             _projectManager = projectManager;
         }

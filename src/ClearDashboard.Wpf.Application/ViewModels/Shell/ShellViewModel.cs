@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Autofac;
 using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
@@ -183,8 +184,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public ShellViewModel(TranslationSource translationSource, INavigationService navigationService,
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager, IMediator mediator)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator)
+            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             _translationSource = translationSource;
 

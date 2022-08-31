@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media;
+using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -91,13 +92,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         #endregion //Observable Properties
 
         #region Constructor
-        public PaneViewModel()
+        public PaneViewModel(): base()
         {
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
 
         }

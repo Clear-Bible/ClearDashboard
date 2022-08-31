@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf;
 using MediatR;
@@ -57,8 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         }
 
         public ToolViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) : base(
-            navigationService, logger, projectManager, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator,
+            ILifetimeScope lifetimeScope) : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
 
         }

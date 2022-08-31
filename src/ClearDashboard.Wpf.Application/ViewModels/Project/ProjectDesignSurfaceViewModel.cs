@@ -23,6 +23,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
 using SIL.Machine.Corpora;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -238,8 +239,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public ProjectDesignSurfaceViewModel(IWindowManager windowManager, INavigationService navigationService,
             ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, IMediator mediator) 
-            : base(navigationService, logger, projectManager, eventAggregator, mediator)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) 
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
             _logger = logger;

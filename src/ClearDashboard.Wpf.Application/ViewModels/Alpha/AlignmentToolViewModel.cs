@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
@@ -31,8 +32,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator) :
-            base(navigationService, logger, projectManager, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
+            base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             this.Title = "⳼ ALIGNMENT TOOL";
             this.ContentId = "ALIGNMENTTOOL";
