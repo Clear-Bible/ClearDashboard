@@ -1,9 +1,12 @@
-﻿using System.Windows;
+﻿using System.Runtime.InteropServices;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using DashboardApplication = System.Windows.Application;
+using System.Windows.Interop;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {
@@ -12,6 +15,31 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
     /// </summary>
     public partial class ShellView 
     {
+        // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
+        // Copied from dwmapi.h
+        public enum Dwmwindowattribute
+        {
+            DwmwaWindowCornerPreference = 33
+        }
+
+        // The DWM_WINDOW_CORNER_PREFERENCE enum for DwmSetWindowAttribute's third parameter, which tells the function
+        // what value of the enum to set.
+        // Copied from dwmapi.h
+        public enum DwmWindowCornerPreference
+        {
+            DwmwcpDefault = 0,
+            DwmwcpDoNotRound = 1,
+            DwmwcpRound = 2,
+            DwmwcpRoundSmall = 3
+        }
+
+        // Import dwmapi.dll and define DwmSetWindowAttribute in C# corresponding to the native function.
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+        internal static extern void DwmSetWindowAttribute(IntPtr hwnd,
+            Dwmwindowattribute attribute,
+            ref DwmWindowCornerPreference pvAttribute,
+            uint cbAttribute);
+
         public ShellView()
         {
             InitializeComponent();
@@ -33,6 +61,14 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             {
                 Toggle.IsChecked = false;
             }
+            RoundCorners();
+        }
+
+        private void RoundCorners()
+        {
+            var hWnd = new WindowInteropHelper(GetWindow(this)!).EnsureHandle();
+            var preference = DwmWindowCornerPreference.DwmwcpRound;
+            DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference, sizeof(uint));
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
