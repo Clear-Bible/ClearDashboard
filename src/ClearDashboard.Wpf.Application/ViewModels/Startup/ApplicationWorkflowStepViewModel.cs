@@ -8,13 +8,14 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public abstract class StartupWorkflowStepViewModel: ApplicationScreen, IWorkflowStepViewModel
+    public abstract class ApplicationWorkflowStepViewModel: DashboardApplicationScreen, IWorkflowStepViewModel
     {
         #region Member Variables
         private Direction _direction;
@@ -112,17 +113,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        protected StartupWorkflowStepViewModel()
+        protected ApplicationWorkflowStepViewModel()
         {
         }
-        protected StartupWorkflowStepViewModel
-            (INavigationService navigationService, 
-            ILogger logger, 
-            IEventAggregator eventAggregator, 
-            IMediator mediator, 
-            ILifetimeScope? lifetimeScope, 
-            DashboardProjectManager projectManager)
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, projectManager)
+
+        public ApplicationWorkflowStepViewModel (DashboardProjectManager projectManager,
+            INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
 
         }

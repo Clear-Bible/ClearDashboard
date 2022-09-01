@@ -25,7 +25,7 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : StartupWorkflowStepViewModel
+    public class ProjectPickerViewModel : ApplicationWorkflowStepViewModel
     {
         #region Member Variables
         protected IWindowManager _windowManager;
@@ -79,9 +79,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, 
-            IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager, TranslationSource translationSource) 
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, projectManager)
+        public ProjectPickerViewModel(DashboardProjectManager projectManager,
+            INavigationService? navigationService, ILogger<MainViewModel> logger, IEventAggregator? eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
