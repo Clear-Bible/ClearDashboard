@@ -19,6 +19,7 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
+    xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -50,12 +51,11 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="32" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button
+            <!--<Button
                 Grid.Column="0"
                 Margin="5,5,0,0"
                 Padding="3"
@@ -64,7 +64,7 @@
                 BorderThickness="0"
                 Command="NavigationCommands.BrowseBack">
                 <materialDesign:PackIcon Kind="ChevronLeft" />
-            </Button>
+            </Button>-->
 
             <!--
             <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -76,7 +76,7 @@
             </StackPanel>
             -->
 
-            <Menu Grid.Column="1" ItemsSource="{Binding MenuItems}">
+            <Menu Grid.Column="0" ItemsSource="{Binding MenuItems}">
                 <Menu.ItemContainerStyle>
                     <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
                         <Setter Property="Icon" Value="{Binding Icon}" />
@@ -98,7 +98,7 @@
             </Menu>
 
             <userControls:BcvUserControl
-                Grid.Column="3"
+                Grid.Column="2"
                 CurrentBcv="{Binding CurrentBcv}"
                 IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -128,17 +128,17 @@
                         </DataTemplate>
                     </panes:PanesTemplateSelector.CorpusTokensViewTemplate>
 
-                    <!--<panes:PanesTemplateSelector.DashboardViewTemplate>
+                    <panes:PanesTemplateSelector.DashboardViewTemplate>
                         <DataTemplate>
-                            <local:DashboardView />
+                            <views:DashboardView />
                         </DataTemplate>
-                    </panes:PanesTemplateSelector.DashboardViewTemplate>-->
+                    </panes:PanesTemplateSelector.DashboardViewTemplate>
 
-                    <!--<panes:PanesTemplateSelector.AlignmentToolViewTemplate>
+                    <panes:PanesTemplateSelector.AlignmentToolViewTemplate>
                         <DataTemplate>
-                            <local:AlignmentTool />
+                            <views:AlignmentToolView />
                         </DataTemplate>
-                    </panes:PanesTemplateSelector.AlignmentToolViewTemplate>-->
+                    </panes:PanesTemplateSelector.AlignmentToolViewTemplate>
 
                     <!--<panes:PanesTemplateSelector.TreeDownViewTemplate>
                         <DataTemplate>

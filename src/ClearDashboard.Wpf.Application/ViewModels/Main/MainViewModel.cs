@@ -475,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<AlignmentToolViewModel>();
             //await ActivateItemAsync<ConcordanceViewModel>();
             await ActivateItemAsync<CorpusTokensViewModel>();
-            //await ActivateItemAsync<DashboardViewModel>();
+            await ActivateItemAsync<DashboardViewModel>();
             //await ActivateItemAsync<StartPageViewModel>();
             //await ActivateItemAsync<TreeDownViewModel>();
 
@@ -863,7 +863,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case AlignmentToolViewModel:
                             //case ConcordanceViewModel:
                             case CorpusTokensViewModel:
-                                //case DashboardViewModel:
+                            case DashboardViewModel:
                                 //case StartPageViewModel:
                                 //case TreeDownViewModel:
                                 _documents.Add((PaneViewModel)t);
@@ -913,7 +913,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case AlignmentToolViewModel:
                         //case ConcordanceViewModel:
                         case CorpusTokensViewModel:
-                            //case DashboardViewModel:
+                        case DashboardViewModel:
                             //case StartPageViewModel:
                             //case TreeDownViewModel:
                             return (PaneViewModel)t;
@@ -969,9 +969,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.CorpusTokens:
                     var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
                     return (vm12, vm12.Title, vm12.DockSide);
-                //case WorkspaceLayoutNames.Dashboard:
-                //    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
-                //    return (vm1, vm1.Title, vm1.DockSide);
+                case WorkspaceLayoutNames.Dashboard:
+                    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
+                    return (vm1, vm1.Title, vm1.DockSide);
                 case WorkspaceLayoutNames.Pins:
                     var vm7 = GetPaneViewModelFromItems("PinsViewModel");
                     return (vm7, vm7.Title, vm7.DockSide);

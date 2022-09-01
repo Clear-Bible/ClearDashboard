@@ -125,8 +125,8 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             //if (item is TreeDownViewModel)
             //    return TreeDownViewTemplate;
 
-            //if (item is DashboardViewModel)
-            //    return DashboardViewTemplate;
+            if (item is DashboardViewModel)
+                return DashboardViewTemplate;
 
             //if (item is ConcordanceViewModel)
             //    return ConcordanceViewTemplate;

@@ -48,13 +48,15 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
             userPrefs.Save();
 
-            var language = this.SelectedLanguage.SelectedItem.ToString();
-            if (language != "")
+            if (SelectedLanguage.SelectedItem != null)
             {
-                Settings.Default.language_code = language.ToString();
-                Settings.Default.Save();
+                var language = this.SelectedLanguage.SelectedItem.ToString();
+                if (language != "")
+                {
+                    Settings.Default.language_code = language.ToString();
+                    Settings.Default.Save();
+                }
             }
-
         }
 
 
