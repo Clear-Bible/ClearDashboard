@@ -60,7 +60,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(IWindowManager windowManager, DashboardProjectManager projectManager, INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
+        public LandingViewModel(IWindowManager windowManager, DashboardProjectManager projectManager, 
+            INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             Logger.LogInformation("LandingViewModel constructor called.");

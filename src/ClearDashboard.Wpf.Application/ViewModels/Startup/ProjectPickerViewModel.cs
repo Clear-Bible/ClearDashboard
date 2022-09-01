@@ -4,6 +4,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
@@ -24,7 +25,7 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    internal class ProjectPickerViewModel : WorkflowStepViewModel
+    public class ProjectPickerViewModel : StartupWorkflowStepViewModel
     {
         #region Member Variables
         protected IWindowManager _windowManager;
@@ -79,11 +80,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Constructor
         public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, 
-            IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) 
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager, TranslationSource translationSource) 
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, projectManager)
         {
             Logger.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
+            _translationSource = translationSource;
             AlertVisibility = Visibility.Collapsed;
         }
 

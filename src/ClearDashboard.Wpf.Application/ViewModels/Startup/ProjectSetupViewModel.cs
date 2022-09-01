@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    internal class ProjectSetupViewModel : WorkflowStepViewModel
+    public class ProjectSetupViewModel : WorkflowStepViewModel
     {
 
         public ProjectSetupViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
