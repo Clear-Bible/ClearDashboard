@@ -162,7 +162,7 @@
                                         x:Name="Workspace"
                                         Height="45"
                                         Margin="15,8,12,12"
-                                        cal:Message.Attach="Workspace($dataContext)"
+                                        cal:Message.Attach="NavigateToMainViewModel($dataContext)"
                                         Background="AliceBlue"
                                         IsEnabled="True">
                                         <!--<Button.Style>

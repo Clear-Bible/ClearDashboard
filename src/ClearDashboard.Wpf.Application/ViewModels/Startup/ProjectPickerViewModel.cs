@@ -28,8 +28,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     public class ProjectPickerViewModel : ApplicationWorkflowStepViewModel
     {
         #region Member Variables
-        protected IWindowManager _windowManager;
-        private readonly TranslationSource _translationSource;
+        protected IWindowManager? _windowManager;
+        private readonly TranslationSource? _translationSource;
         #endregion
 
         #region Observable Objects
@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Constructor
         public ProjectPickerViewModel(DashboardProjectManager projectManager,
-            INavigationService? navigationService, ILogger<MainViewModel> logger, IEventAggregator? eventAggregator,
+            INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
@@ -101,24 +101,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             AlertVisibility = Visibility.Collapsed;
         }
 
-        protected async Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            CanMoveForwards = true;
-            CanMoveBackwards = true;
-            EnableControls = true;
-        }
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-        }
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
-            if (results.Success)
+            if (results.Success && results.HasData)
             {
                 DashboardProjects = results.Data;
             }
+
+            await base.OnActivateAsync(cancellationToken);
         }
         #endregion Constructor
 
@@ -181,21 +172,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         //    }
         //}
 
-        public void ProjectWorkspace(DashboardProject project)
+        public void NavigateToMainViewModel(DashboardProject project)
         {
             if (CheckIfConnectedToParatext() == false)
             {
                 return;
             }
 
-            ProjectManager.CurrentDashboardProject = project;
-            //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
-            NavigationService.NavigateToViewModel<MainViewModel>();
+            ProjectManager!.CurrentDashboardProject = project;
+            var startupDialogViewModel = Parent as StartupDialogViewModel;
+            startupDialogViewModel!.ExtraData = project;
+            startupDialogViewModel?.Ok();
         }
 
         private bool CheckIfConnectedToParatext()
         {
-            if (ProjectManager.HasCurrentParatextProject == false)
+            if (ProjectManager?.HasCurrentParatextProject == false)
             {
                 AlertVisibility = Visibility.Visible;
                 return false;
@@ -205,17 +197,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public void DeleteProject(DashboardProject project)
         {
-            FileInfo fi = new FileInfo(project.FullFilePath);
+            if (!project.HasFullFilePath)
+            {
+                return;
+            }
+            var fi = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
 
             try
             {
-                DirectoryInfo di = new DirectoryInfo(fi.DirectoryName);
+                var di = new DirectoryInfo(fi.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
 
-                foreach (FileInfo file in di.GetFiles())
+                foreach (var file in di.GetFiles())
                 {
                     file.Delete();
                 }
-                foreach (DirectoryInfo dir in di.GetDirectories())
+                foreach (var dir in di.GetDirectories())
                 {
                     dir.Delete(true);
                 }
@@ -226,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
 

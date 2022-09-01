@@ -12,11 +12,23 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : ApplicationWorkflowStepViewModel
+    public class ProjectSetupViewModel : ApplicationWorkflowStepViewModel, IStartupDialog
     {
+        private Visibility _alertVisibility = Visibility.Visible;
+        public Visibility AlertVisibility
+        {
+            get => _alertVisibility;
+            set
+            {
+                _alertVisibility = value;
+                NotifyOfPropertyChange(() => AlertVisibility);
+            }
+        }
 
         public ProjectSetupViewModel(DashboardProjectManager projectManager,
             INavigationService? navigationService, ILogger<MainViewModel> logger, IEventAggregator? eventAggregator,
@@ -34,11 +46,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EnableControls = true;
         }
 
-        public async Task Create()
+        public async Task Create(DashboardProject project)
         {
-            var startupViewModel = Parent as StartupDialogViewModel;
-            startupViewModel.Ok();
-            //await TryCloseAsync(true);
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
+
+            ProjectManager!.CurrentDashboardProject = project;
+            var startupDialogViewModel = Parent as StartupDialogViewModel;
+            startupDialogViewModel!.ExtraData = project;
+            startupDialogViewModel?.Ok();
         }
+
+        private bool CheckIfConnectedToParatext()
+        {
+            if (ProjectManager?.HasCurrentParatextProject == false)
+            {
+                AlertVisibility = Visibility.Visible;
+                return false;
+            }
+            return true;
+        }
+
+        public object ExtraData { get; set; }
     }
 }

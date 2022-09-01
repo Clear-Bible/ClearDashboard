@@ -317,6 +317,13 @@ namespace ClearDashboard.DataAccessLayer
            // return null;
         }
 
+        public async Task LoadProjectFromDatabase(string projectName)
+        {
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            CurrentProject = projectAssets.ProjectDbContext.Projects.First();
+        }
+
         public async Task<Project> DeleteProject(string projectName)
         {
             try

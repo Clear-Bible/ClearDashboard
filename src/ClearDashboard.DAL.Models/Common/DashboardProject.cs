@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             BaseTargetFullName = TargetProject?.LongName;
         }
 
-       
+        public bool IsNew { get; set; }
         public string? ProjectName { get; set; }
 
         public string ParatextProjectPath { get; set; } 
@@ -93,5 +93,9 @@ namespace ClearDashboard.DataAccessLayer.Models
             // check to see if we have at least a target project
             return TargetProject is not null;
         }
+
+        public bool HasProjectPath => !string.IsNullOrEmpty(ProjectName);
+
+        public bool HasFullFilePath => !string.IsNullOrEmpty(FullFilePath);
     }
 }
