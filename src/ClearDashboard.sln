@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.Wpf\ClearDashboard.Wpf.csproj", "{769DFDD2-30E1-4E28-904C-ECB2F2D2B284}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf", "ClearDashboard.Wpf\ClearDashboard.Wpf.csproj", "{769DFDD2-30E1-4E28-904C-ECB2F2D2B284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj", "{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "ClearDashboard.DAL\ClearDashboard.DAL.csproj", "{7CF26008-1AA9-4F86-B394-C7FDDE99E07A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "\Mac\Home\Documents\GitHub\ClearDashboard\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Wpf", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj", "{755B768F-DAD9-4FB9-87B1-C03CECEF3590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Wpf", "ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj", "{755B768F-DAD9-4FB9-87B1-C03CECEF3590}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Data", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj", "{50004CCE-532A-495F-87BD-47FA7BF7E77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Data", "ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj", "{50004CCE-532A-495F-87BD-47FA7BF7E77F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Models", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj", "{B8550DF3-2520-4A9E-8232-61B94B407B8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Models", "ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj", "{B8550DF3-2520-4A9E-8232-61B94B407B8B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{365F13B4-F041-4552-B41E-EC2346F31509}"
 	ProjectSection(SolutionItems) = preProject
@@ -34,23 +34,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paratext Integration", "Paratext Integration", "{EB6F7E37-7473-4388-8138-97FE4C99B3D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj", "{D28D3111-F622-4730-AAAA-BE1051CC262F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin", "ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj", "{D28D3111-F622-4730-AAAA-BE1051CC262F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin.Tests", "\Mac\Home\Documents\GitHub\ClearDashboard\tests\ClearDashboard.WebApiParatextPlugin.Tests\ClearDashboard.WebApiParatextPlugin.Tests.csproj", "{2A7D7E67-8964-4782-922B-CE3F6C065A05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin.Tests", "ClearDashboard.WebApiParatextPlugin.Tests\ClearDashboard.WebApiParatextPlugin.Tests.csproj", "{2A7D7E67-8964-4782-922B-CE3F6C065A05}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj", "{CE9F875A-E21E-47CB-8F62-A1567D65BAD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS", "ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj", "{CE9F875A-E21E-47CB-8F62-A1567D65BAD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.ViewModels", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj", "{7A071F89-943B-4283-8977-080B5C3A1A1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.ViewModels", "ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj", "{7A071F89-943B-4283-8977-080B5C3A1A1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin.CQRS", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj", "{9862DCCB-E85D-4A95-86E2-311FC987E4C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.ParatextPlugin.CQRS", "ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj", "{9862DCCB-E85D-4A95-86E2-311FC987E4C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WPF.Tests", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.WPF.Tests\ClearDashboard.WPF.Tests.csproj", "{9C3D2FA6-92EB-4184-9429-DD5898E5B565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WPF.Tests", "ClearDashboard.WPF.Tests\ClearDashboard.WPF.Tests.csproj", "{9C3D2FA6-92EB-4184-9429-DD5898E5B565}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Interfaces", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj", "{E6CC1FEA-86BC-4434-B714-33A2A1976515}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Interfaces", "ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj", "{E6CC1FEA-86BC-4434-B714-33A2A1976515}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Features", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj", "{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Features", "ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj", "{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}"
 EndProject
-Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "\Mac\Home\Documents\Program Files\Paratext 9\Paratext.exe", "{E4D5365F-CD10-4BC1-9320-56E5589F68A5}"
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "Program Files\Paratext 9\Paratext.exe", "{E4D5365F-CD10-4BC1-9320-56E5589F68A5}"
 	ProjectSection(DebuggerProjectSystem) = preProject
 		PortSupplier = 00000000-0000-0000-0000-000000000000
 		Executable = %ParatextInstallDir%\Paratext.exe
@@ -64,13 +64,13 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "\Mac\Home\Docum
 		IORedirection = Auto
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj", "{22ED230D-3389-4F02-89DF-46969E10B91B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment", "ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj", "{22ED230D-3389-4F02-89DF-46969E10B91B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment.Tests", "\Mac\Home\Documents\GitHub\ClearDashboard\tests\ClearDashboard.DAL.Alignment.Tests\ClearDashboard.DAL.Alignment.Tests.csproj", "{92072CB0-2980-4223-89D0-2EFE38D87079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment.Tests", "ClearDashboard.DAL.Alignment.Tests\ClearDashboard.DAL.Alignment.Tests.csproj", "{92072CB0-2980-4223-89D0-2EFE38D87079}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Controls", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj", "{38F13563-C9B0-4EA2-BD13-BF24F4D83BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Controls", "ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj", "{38F13563-C9B0-4EA2-BD13-BF24F4D83BE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Application", "\Mac\Home\Documents\GitHub\ClearDashboard\src\ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj", "{F9E277D9-B2EF-44B0-A824-4AFA605369A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Application", "ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj", "{F9E277D9-B2EF-44B0-A824-4AFA605369A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
