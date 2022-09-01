@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "Clear
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "..\tests\ClearDashboard.DAL.Tests", "ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}"
 EndProject
@@ -36,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paratext Integration", "Par
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin", "ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj", "{D28D3111-F622-4730-AAAA-BE1051CC262F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin.Tests", "ClearDashboard.WebApiParatextPlugin.Tests\ClearDashboard.WebApiParatextPlugin.Tests.csproj", "{2A7D7E67-8964-4782-922B-CE3F6C065A05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WebApiParatextPlugin.Tests", "..\tests\ClearDashboard.WebApiParatextPlugin.Tests\ClearDashboard.WebApiParatextPlugin.Tests.csproj", "{2A7D7E67-8964-4782-922B-CE3F6C065A05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS", "ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj", "{CE9F875A-E21E-47CB-8F62-A1567D65BAD2}"
 EndProject
@@ -50,7 +50,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Interfac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.CQRS.Features", "ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj", "{43D0746E-6B55-427E-A209-CD7D4AFF4CE1}"
 EndProject
-Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "Program Files\Paratext 9\Paratext.exe", "{E4D5365F-CD10-4BC1-9320-56E5589F68A5}"
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Program Files\Paratext 9\Paratext.exe", "{E4D5365F-CD10-4BC1-9320-56E5589F68A5}"
 	ProjectSection(DebuggerProjectSystem) = preProject
 		PortSupplier = 00000000-0000-0000-0000-000000000000
 		Executable = %ParatextInstallDir%\Paratext.exe
