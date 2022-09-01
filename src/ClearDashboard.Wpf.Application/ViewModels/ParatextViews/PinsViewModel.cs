@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.PINS;
@@ -130,8 +131,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         // ReSharper disable once UnusedMember.Global
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             this.Title = "⍒ PINS";
             this.ContentId = "PINS";
@@ -697,8 +698,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // show the verse in context popup window
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(
-                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger,
-                    projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator,
+                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
+                    projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator, lifetimeScope: LifetimeScope,
                     verse: verses[0]));
         }
 

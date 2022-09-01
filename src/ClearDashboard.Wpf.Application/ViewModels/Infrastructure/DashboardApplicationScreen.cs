@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Wpf;
 using MediatR;
@@ -8,14 +9,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 {
     public abstract class DashboardApplicationScreen : ApplicationScreen
     {
-        protected DashboardApplicationScreen()
+        protected DashboardApplicationScreen() : base()
         {
-
         }
 
         protected DashboardApplicationScreen(DashboardProjectManager projectManager,
             INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
-            IMediator mediator) : base(navigationService, logger, eventAggregator, mediator)
+            IMediator mediator, ILifetimeScope? lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
         }

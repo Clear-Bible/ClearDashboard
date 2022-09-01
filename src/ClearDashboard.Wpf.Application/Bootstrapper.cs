@@ -5,14 +5,24 @@ using FluentValidation;
 using System.IO;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Validators;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using ClearApplicationFoundation.Framework;
+using ClearApplicationFoundation.ViewModels.Shell;
+using Microsoft.Extensions.Logging;
+using System.Windows.Controls;
+using System;
+using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
 
 namespace ClearDashboard.Wpf.Application
 {
     internal class Bootstrapper : FoundationBootstrapper
     {
+
+        protected FrameSet FrameSet { get; private set; }
 
         protected override void SetupLogging()
         {
@@ -21,12 +31,17 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
+            FrameSet = serviceCollection.AddCaliburnMicro();
+
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+            serviceCollection.AddValidatorsFromAssemblyContaining<AddParatextCorpusDialogViewModelValidator>();
 
             base.PopulateServiceCollection(serviceCollection);
         }
 
+
+        
         protected override void LoadModules(ContainerBuilder builder)
         {
             base.LoadModules(builder);
@@ -41,8 +56,35 @@ namespace ClearDashboard.Wpf.Application
             // Show the StartupViewModel as a dialog, then navigate to HomeViewModel
             // if the dialog result is "true"
             //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+            await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();            
+        }
 
-            await ShowStartupDialog<ProjectPickerViewModel, ProjectSetupViewModel>();
+
+        /// <summary>
+        /// Adds the Frame to the Grid control on the ShellView
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <exception cref="NullReferenceException"></exception>
+        private void AddFrameToMainWindow(Frame frame)
+        {
+            Logger.LogInformation("Adding Frame to ShellView grid control.");
+
+            var mainWindow = Application.MainWindow;
+            if (mainWindow == null)
+            {
+                throw new NullReferenceException("'Application.MainWindow' is null.");
+            }
+
+
+            if (mainWindow.Content is not Grid grid)
+            {
+                throw new NullReferenceException("The grid on 'Application.MainWindow' is null.");
+            }
+
+            Grid.SetRow(frame, 1);
+            Grid.SetColumn(frame, 0);
+            Panel.SetZIndex(frame, 0);
+            grid.Children.Add(frame);
         }
     }
 }

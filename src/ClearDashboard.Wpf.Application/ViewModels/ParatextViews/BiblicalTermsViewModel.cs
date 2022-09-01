@@ -24,7 +24,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Point = System.Windows.Point;
+using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -493,9 +495,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // used by Caliburn Micro for design time    
         }
 
-        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<WorkSpaceViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator)
+        public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
 
             Title = "🕮 BIBLICAL TERMS";
@@ -603,8 +605,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(NavigationService, Logger, ProjectManager, EventAggregator, Mediator,
-                        verses[0]), null, null);
+                    new VersePopUpViewModel(NavigationService, Logger as ILogger<VersePopUpViewModel>, ProjectManager, EventAggregator, Mediator,
+                        verses[0], LifetimeScope) ,null, null);
             }
         }
 

@@ -9,8 +9,9 @@ using System.Windows.Controls;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
+using Autofac;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Panes
+namespace ClearDashboard.Wpf.Application.ViewModels
 {
     public class VersePopUpViewModel : DashboardApplicationScreen
     {
@@ -91,9 +92,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
         ///
-        public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator)
+        public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse, ILifetimeScope? lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             _verse = verse;
 
@@ -110,9 +111,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         /// <param name="projectManager"></param>
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
-        public VersePopUpViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator)
+        public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             VerseViewModel verseViewModel = new VerseViewModel();
             _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.BBBCCCVVV);
