@@ -411,7 +411,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TokenId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TargetText = table.Column<string>(type: "TEXT", nullable: true),
                     TranslationState = table.Column<int>(type: "INTEGER", nullable: false),
                     TranslationSetId = table.Column<Guid>(type: "TEXT", nullable: true),
@@ -422,8 +422,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     table.PrimaryKey("PK_Translation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Translation_Token_TokenId",
-                        column: x => x.TokenId,
+                        name: "FK_Translation_Token_SourceTokenId",
+                        column: x => x.SourceTokenId,
                         principalTable: "Token",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -668,6 +668,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "ChapterNumber");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Token_SubwordNumber",
+                table: "Token",
+                column: "SubwordNumber");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Token_TokenCompositeId",
                 table: "Token",
                 column: "TokenCompositeId");
@@ -681,6 +686,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Token_VerseNumber",
                 table: "Token",
                 column: "VerseNumber");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_WordNumber",
+                table: "Token",
+                column: "WordNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TokenizedCorpus_CorpusHistoryId",
@@ -703,9 +713,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "VerseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Translation_TokenId",
+                name: "IX_Translation_SourceTokenId",
                 table: "Translation",
-                column: "TokenId");
+                column: "SourceTokenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Translation_TranslationSetId",

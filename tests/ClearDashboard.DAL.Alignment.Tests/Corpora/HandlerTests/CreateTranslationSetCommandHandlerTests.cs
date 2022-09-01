@@ -29,6 +29,51 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+    public async Task TranslationSet__CreateGetAllIds()
+    {
+        try
+        {
+            var parallelTextCorpus1 = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus1 = await parallelTextCorpus1.Create(Mediator!);
+
+            var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
+
+            var translationSet1 = await translationModel1.Create(parallelCorpus1.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet1);
+
+            var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus2 = await parallelTextCorpus2.Create(Mediator!);
+
+            var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
+
+            var translationSet2 = await translationModel2.Create(parallelCorpus2.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet2);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+            var user = ProjectDbContext!.Users.First();
+
+            var allTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
+            Assert.Equal(2, allTranslationSetIds.Count());
+
+            var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
+            Assert.Single(someTranslationSetIds);
+            Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First().translationSetId);
+            Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().parallelCorpusId);
+
+            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id));
+            Assert.Equal(2, allTranslationSetIdsForUser.Count());
+
+            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid()));
+            Assert.Empty(allTranslationSetIdsForBogusUser);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
     public async Task TranslationSet__Create()
     {
         try
@@ -83,6 +128,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 iteration++;
 
                 exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"));
+                Output.WriteLine($"Token for adding Translation: {sourceToken.TokenId}");
 
                 if (iteration > 5)
                 {
@@ -105,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSetDb);
             Assert.Equal(5, translationSetDb!.Translations.Count);
 
-            var tokenDb = translationSetDb!.Translations.First().Token;
+            var tokenDb = translationSetDb!.Translations.First().SourceToken;
             var tokenIdDb = new TokenId(
                 tokenDb!.BookNumber, 
                 tokenDb!.ChapterNumber, 
@@ -167,8 +213,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
                 parallelTextCorpus,
-                new DelegateProgress(status =>
-                    Output.WriteLine($"Training symmetrized Fastalign model: {status.PercentCompleted:P}")),
+                null,
                 SymmetrizationHeuristic.GrowDiagFinalAnd);
 
             return smtWordAlignmentModel.GetTranslationTable();

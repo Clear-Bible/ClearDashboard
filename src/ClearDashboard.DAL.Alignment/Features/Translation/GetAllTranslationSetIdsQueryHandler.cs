@@ -6,6 +6,9 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Extensions.Logging;
 
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetAllTranslationSetIdsQueryHandler : ProjectDbContextQueryHandler<
@@ -21,12 +24,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>> GetDataAsync(GetAllTranslationSetIdsQuery request, CancellationToken cancellationToken)
         {
-            var translationSetIds = (request.ParallelCorpusId == null)
-                ? ProjectDbContext.TranslationSets.AsEnumerable()
-                    .Select(ts => (new TranslationSetId(ts.Id), new ParallelCorpusId(ts.ParallelCorpusId)))
-                : ProjectDbContext.TranslationSets
-                    .Where(ts => ts.ParallelCorpusId == request.ParallelCorpusId.Id).AsEnumerable()
-                    .Select(ts => (new TranslationSetId(ts.Id), new ParallelCorpusId(ts.ParallelCorpusId)));
+            IQueryable<Models.TranslationSet> translationSets = ProjectDbContext.TranslationSets;
+            if (request.ParallelCorpusId != null)
+            {
+                translationSets = translationSets.Where(ts => ts.ParallelCorpusId == request.ParallelCorpusId.Id);
+            }
+            if (request.UserId != null)
+            {
+                translationSets = translationSets.Where(ts => ts.UserId == request.UserId.Id);
+            }
+
+            var translationSetIds = translationSets
+                .AsEnumerable()   // To avoid error CS8143:  An expression tree may not contain a tuple literal
+                .Select(ts => (new TranslationSetId(ts.Id), new ParallelCorpusId(ts.ParallelCorpusId)));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;

@@ -62,9 +62,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
 
         public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>> 
-            GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null)
+            GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
-            var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId));
+            var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));
             if (result.Success && result.Data != null)
             {
                 return result.Data;

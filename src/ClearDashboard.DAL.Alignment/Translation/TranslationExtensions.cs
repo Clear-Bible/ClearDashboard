@@ -2,7 +2,6 @@
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using MediatR;
-using System.Collections;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {

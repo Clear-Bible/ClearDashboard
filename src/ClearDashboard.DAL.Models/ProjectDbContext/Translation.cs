@@ -4,10 +4,10 @@ namespace ClearDashboard.DataAccessLayer.Models;
 
 public class Translation : SynchronizableTimestampedEntity
 {
-    public Guid TokenId { get; set; }
+    public Guid SourceTokenId { get; set; }
     public string? TargetText { get; set; }
     public virtual TranslationState TranslationState { get; set; }
 
-    [ForeignKey("TokenId")]
-    public virtual Token? Token { get; set; }
+    [ForeignKey("SourceTokenId")]
+    public virtual Token? SourceToken { get; set; }
 }

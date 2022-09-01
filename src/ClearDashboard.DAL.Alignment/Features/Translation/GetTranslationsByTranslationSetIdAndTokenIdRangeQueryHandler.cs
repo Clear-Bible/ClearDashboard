@@ -58,13 +58,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Select(t => new Alignment.Translation.Translation(
                     new Token(
                         new TokenId(
-                            t.Token!.BookNumber,
-                            t.Token.ChapterNumber,
-                            t.Token.VerseNumber,
-                            t.Token.WordNumber,
-                            t.Token.SubwordNumber),
-                        t.Token.SurfaceText ?? string.Empty,
-                        t.Token.TrainingText ?? string.Empty), 
+                            t.SourceToken!.BookNumber,
+                            t.SourceToken.ChapterNumber,
+                            t.SourceToken.VerseNumber,
+                            t.SourceToken.WordNumber,
+                            t.SourceToken.SubwordNumber),
+                        t.SourceToken.SurfaceText ?? string.Empty,
+                        t.SourceToken.TrainingText ?? string.Empty), 
                     t.TargetText ?? string.Empty, 
                     t.TranslationState.ToString()));
 

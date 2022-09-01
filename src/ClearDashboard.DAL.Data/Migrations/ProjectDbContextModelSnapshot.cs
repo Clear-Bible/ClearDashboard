@@ -443,11 +443,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("ChapterNumber");
 
+                    b.HasIndex("SubwordNumber");
+
                     b.HasIndex("TokenCompositeId");
 
                     b.HasIndex("TokenizationId");
 
                     b.HasIndex("VerseNumber");
+
+                    b.HasIndex("WordNumber");
 
                     b.ToTable("Token");
                 });
@@ -525,10 +529,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TargetText")
+                    b.Property<Guid>("SourceTokenId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("TokenId")
+                    b.Property<string>("TargetText")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("TranslationSetId")
@@ -542,7 +546,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TokenId");
+                    b.HasIndex("SourceTokenId");
 
                     b.HasIndex("TranslationSetId");
 
@@ -951,9 +955,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "SourceToken")
                         .WithMany()
-                        .HasForeignKey("TokenId")
+                        .HasForeignKey("SourceTokenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -961,7 +965,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("Translations")
                         .HasForeignKey("TranslationSetId");
 
-                    b.Navigation("Token");
+                    b.Navigation("SourceToken");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
