@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
@@ -77,7 +78,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService) : base(eventAggregator, navigationService, logger, mediator)
+        public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;

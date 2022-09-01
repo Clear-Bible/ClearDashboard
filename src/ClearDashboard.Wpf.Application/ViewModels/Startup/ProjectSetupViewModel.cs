@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using MediatR;
@@ -15,7 +16,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     internal class ProjectSetupViewModel : WorkflowStepViewModel
     {
 
-        public ProjectSetupViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService) : base(eventAggregator, navigationService, logger, mediator)
+        public ProjectSetupViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
 
         }
