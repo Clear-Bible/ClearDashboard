@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\ClearDashboard_logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\ClearDashboard_logo.ico" />
+    <Content Include="Assets\ClearDashboard_logo.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Layouts\Dashboard.Layout.config2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
