@@ -65,17 +65,11 @@
                 VerticalAlignment="Center"
                 Text="Type:" 
                  HorizontalAlignment="Right"/>
-            <ComboBox
-                Grid.Row="1"
-                Grid.Column="1"
-                BorderBrush="Black"
-                BorderThickness="1" 
-                Margin="5"
-                Padding="5" 
-                materialDesign:HintAssist.Hint="what type of project is this?">
-                <ComboBoxItem Content="Type 1"/>
-                <ComboBoxItem Content="Type 2"/>
-            </ComboBox>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                <RadioButton Grid.Row="1" Grid.Column="1" GroupName="Type" Content="Manuscript"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" GroupName="Type" Content="USFM"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" GroupName="Type" Content="Paratext"/>
+            </StackPanel>
             <TextBlock
                 Grid.Row="2"
                 Grid.Column="0"

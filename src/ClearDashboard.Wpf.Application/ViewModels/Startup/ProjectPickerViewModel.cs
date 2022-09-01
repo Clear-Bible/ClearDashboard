@@ -78,12 +78,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        public ProjectPickerViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, 
+            IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) 
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
-
-
             AlertVisibility = Visibility.Collapsed;
         }
 
