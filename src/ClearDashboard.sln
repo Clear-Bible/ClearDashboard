@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "Clear
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".ClearDashboard.DAL.Tests", ".\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", "..\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}"
 EndProject
