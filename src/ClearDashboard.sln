@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL", "Clear
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "..\tests\ClearDashboard.DAL.Tests", "ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".ClearDashboard.DAL.Tests", ".\tests\ClearDashboard.DAL.Tests\ClearDashboard.DAL.Tests.csproj", "{77B820B3-4C53-4D40-A23B-9568828A0EC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}"
 EndProject
@@ -66,7 +66,7 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Paratext", "..\..\..\Progra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment", "ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj", "{22ED230D-3389-4F02-89DF-46969E10B91B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment.Tests", "ClearDashboard.DAL.Alignment.Tests\ClearDashboard.DAL.Alignment.Tests.csproj", "{92072CB0-2980-4223-89D0-2EFE38D87079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Alignment.Tests", "..\tests\ClearDashboard.DAL.Alignment.Tests\ClearDashboard.DAL.Alignment.Tests.csproj", "{92072CB0-2980-4223-89D0-2EFE38D87079}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Controls", "ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj", "{38F13563-C9B0-4EA2-BD13-BF24F4D83BE7}"
 EndProject
