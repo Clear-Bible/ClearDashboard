@@ -368,7 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        private float _fontSize;
+        private float _fontSize = 12;
 
         public float FontSize
         {

@@ -9,13 +9,12 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Width="800"
-    Height="450"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings" xmlns:paratextviews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews" d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -174,17 +173,9 @@
                             ItemsSource="{Binding RenderingsFilters}"
                             SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             SelectedValuePath="Value" />
-                    </StackPanel>
-                </Border>
 
-                <!--  SCOPE  -->
-                <Border
-                    Margin="5,5,0,2"
-                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                    BorderThickness="1">
-                    <StackPanel Orientation="Horizontal">
                         <Label
-                            Margin="0,5,5,5"
+                            Margin="15,5,5,5"
                             VerticalAlignment="Center"
                             Content="{helpers:Localization BiblicalTermsForm_Scope}" />
                         <ComboBox
@@ -197,6 +188,16 @@
                             SelectedValuePath="Value" />
                     </StackPanel>
                 </Border>
+
+                <!--  SCOPE  -->
+                <!--<Border
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+
+                    </StackPanel>
+                </Border>-->
 
                 <!--  SEMANTIC DOMAINS  -->
                 <Border
@@ -349,8 +350,8 @@
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
-                                        <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
+                                        <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                        <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
                                         <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
@@ -368,11 +369,10 @@
 
         <ProgressBar
             x:Name="ProgressBarVisibility"
-            Grid.Row="1"
             Width="50"
             Height="50"
-            VerticalAlignment="Top"
             Margin="15,50,5,0"
+            VerticalAlignment="Top"
             IsIndeterminate="True"
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
@@ -431,8 +431,8 @@
                         ItemsSource="{Binding Renderings}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
-                                <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
+                                <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -506,8 +506,8 @@
                                     <DataTemplate>
                                         <helpers:BindableTextBlock
                                             Width="Auto"
-                                            FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
-                                            FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                            FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                            FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap" />
                                     </DataTemplate>
