@@ -76,6 +76,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             }
         }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
         #endregion
 
         #region Constructor
@@ -170,27 +181,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         //    }
         //}
 
-        //public void ProjectWorkspace(DashboardProject project)
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
+        public void ProjectWorkspace(DashboardProject project)
+        {
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
 
-        //    ProjectManager.CurrentDashboardProject = project;
-        //    //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
-        //    NavigationService.NavigateToViewModel<ProjectWorkspaceViewModel>();
-        //}
+            ProjectManager.CurrentDashboardProject = project;
+            //NavigationService.NavigateToViewModel<ProjectWorkspaceWithGridSplitterViewModel>();
+            NavigationService.NavigateToViewModel<MainViewModel>();
+        }
 
-        //private bool CheckIfConnectedToParatext()
-        //{
-        //    if (ProjectManager.HasCurrentParatextProject == false)
-        //    {
-        //        AlertVisibility = Visibility.Visible;
-        //        return false;
-        //    }
-        //    return true;
-        //}
+        private bool CheckIfConnectedToParatext()
+        {
+            if (ProjectManager.HasCurrentParatextProject == false)
+            {
+                AlertVisibility = Visibility.Visible;
+                return false;
+            }
+            return true;
+        }
 
         public void DeleteProject(DashboardProject project)
         {

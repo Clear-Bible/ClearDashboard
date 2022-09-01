@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,10 +15,13 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : WorkflowStepViewModel
+    public class ProjectSetupViewModel : ApplicationWorkflowStepViewModel
     {
 
-        public ProjectSetupViewModel(IEventAggregator eventAggregator, ILogger<MainViewModel> logger, IMediator mediator, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        public ProjectSetupViewModel(DashboardProjectManager projectManager,
+            INavigationService? navigationService, ILogger<MainViewModel> logger, IEventAggregator? eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
 
         }

@@ -1,17 +1,17 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectPickerView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
-             xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectPickerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
-             
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
         <Style x:Key="WorkflowButtonStyle" TargetType="Button">
@@ -37,27 +37,32 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" MinWidth="550" />
+            <ColumnDefinition Width="*" MinWidth="250" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock
                 Margin="10"
                 FontSize="20"
-                Text="Title of Application" />
+                Text="Clear Dashboard" />
+            <!--<TextBlock
+                Margin="10"
+                FontSize="20"
+                Text="{helpers:Localization ShellView_User}" />-->
             <TextBox
                 Width="155"
                 Height="25"
+                materialDesign:HintAssist.Hint="Search"
                 BorderBrush="Black"
                 BorderThickness="1"
-                materialDesign:HintAssist.Hint="Search" />
+                Text="{Binding SearchText, Mode=TwoWay}" />
         </StackPanel>
 
         <ComboBox
+            x:Name="SelectedLanguage"
             Grid.Row="0"
             Grid.Column="1"
-            x:Name="SelectedLanguage"
             MinWidth="120"
             Margin="0,0,5,0"
             VerticalContentAlignment="Center"
@@ -71,7 +76,7 @@
             Grid.Column="1"
             Margin="10,10"
             HorizontalAlignment="Right"
-            VerticalAlignment='Bottom'
+            VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <!--<Button
             x:Name="MoveBackwards"
@@ -80,7 +85,7 @@
             Visibility="{Binding ShowBackButton, Converter={StaticResource VisibilityConverter}}"
             IsEnabled="{Binding EnableControls}">
                 <StackPanel Orientation="Horizontal">
-                    -->
+            -->
             <!--<SymbolIcon Symbol="Previous"  ></SymbolIcon>-->
             <!--
                     <Viewbox MaxWidth="50" MaxHeight="50">
@@ -96,23 +101,22 @@
                 </StackPanel>
             </Button>-->
 
-            <!--Visibility="{Binding ShowForwardButton, Converter={StaticResource VisibilityConverter}}"-->
+            <!--  Visibility="{Binding ShowForwardButton, Converter={StaticResource VisibilityConverter}}"  -->
             <Button
-            x:Name="MoveForwards"
-            Margin="5,5,5,5"
-            cal:Message.Attach="MoveForwards"
-            
-            IsEnabled="{Binding EnableControls}">
+                x:Name="MoveForwards"
+                Margin="5,5,5,5"
+                cal:Message.Attach="MoveForwards"
+                IsEnabled="{Binding EnableControls}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Create New Project" />
                     <Viewbox MaxWidth="50" MaxHeight="50">
                         <materialDesign:PackIcon
-                        x:Name="ForwardIcon"
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
-                        Kind="ChevronRight"
-                        Visibility="Visible" />
+                            x:Name="ForwardIcon"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Right"
+                            Kind="ChevronRight"
+                            Visibility="Visible" />
                     </Viewbox>
                 </StackPanel>
             </Button>
@@ -122,71 +126,92 @@
         <!--  PROJECT'S GRID  -->
         <!--  ==========================  -->
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Orientation="Vertical">
             <ListView
-                    x:Name="RadioButtonGroupChoiceChipOutline"
-                    Margin="5"
-                    Height="355"
-                    ItemsSource="{Binding DashboardProjects}"
-                    ScrollViewer.CanContentScroll="True"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible"
-                    Style="{StaticResource MaterialDesignListBox}">
+                x:Name="RadioButtonGroupChoiceChipOutline"
+                Height="355"
+                Margin="5"
+                ItemsSource="{Binding DashboardProjects}"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                Style="{StaticResource MaterialDesignListBox}">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
+                        <!--<Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">-->
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
 
-                                    <!--  PROJECT TEXT  -->
-                                    <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
-                                        <!--  DELETE PROJECT BUTTON  -->
-                                        <Button
-                                                Width="30"
-                                                Height="30"
-                                                cal:Message.Attach="DeleteProject($dataContext)"
-                                                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                                Style="{StaticResource MaterialDesignIconButton}">
-                                            <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
-                                            <materialDesign:PackIcon Kind="DeleteForever" />
-                                        </Button>
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock
-                                                    Width="370"
-                                                    Margin="10,15,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    FontSize="16"
-                                                    FontWeight="Bold"
-                                                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                <!--  PROJECT TEXT  -->
+                                <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                                    <!--  DELETE PROJECT BUTTON  -->
+                                    <Button
+                                        Width="30"
+                                        Height="30"
+                                        cal:Message.Attach="DeleteProject($dataContext)"
+                                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignIconButton}">
+                                        <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
+                                        <materialDesign:PackIcon Kind="DeleteForever" />
+                                    </Button>
+                                    <Button
+                                        x:Name="Workspace"
+                                        Height="45"
+                                        Margin="15,8,12,12"
+                                        cal:Message.Attach="Workspace($dataContext)"
+                                        Background="AliceBlue"
+                                        IsEnabled="True">
+                                        <!--<Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
+                                                    <Setter Property="Padding" Value="0,3,0,3" />
+                                                </Style>
+                                            </Button.Style>-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--<materialDesign:PackIcon
+                                                    Width="36"
+                                                    Height="36"
+                                                    Margin="-15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="MonitorDashboard" />-->
+
+                                            <StackPanel Width="200" Orientation="Vertical">
+                                                <TextBlock HorizontalAlignment="Left">
                                                     <Run Text="PROJECT: " />
                                                     <Run Text="{Binding ProjectName}" />
-                                            </TextBlock>
-
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Width="217" Margin="10,0,0,0">
-                                                        <Run Text="Database: " />
-                                                        <Run Text="{Binding ShortFilePath}" />
                                                 </TextBlock>
-                                                <TextBlock
-                                                        Margin="25,0,0,0"
-                                                        FontStyle="Italic"
-                                                        Text="{Binding Modified}" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
+                                                <TextBlock>
+                                                    <Run Text="Database: " />
+                                                    <Run Text="{Binding ShortFilePath}" />
+                                                </TextBlock>
 
-                                <!--  ==========================  -->
-                                <!--  TOOL BUTTONS  -->
-                                <!--  ==========================  -->
-                                <StackPanel Orientation="Horizontal">
-                                    <Button
-                                            x:Name="NewProject"
-                                            Width="165"
-                                            Margin="15,8,12,12"
-                                            cal:Message.Attach="ProjectWorkspace($dataContext)"
-                                            IsEnabled="True">
+                                            </StackPanel>
+                                            <TextBlock
+                                                Width="180"
+                                                Margin="25,0,0,0"
+                                                FontStyle="Italic"
+                                                Text="{Binding Modified}" />
+                                        </StackPanel>
+
+
+                                    </Button>
+
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!--  ==========================  -->
+                            <!--  TOOL BUTTONS  -->
+                            <!--  ==========================  -->
+                            <StackPanel Orientation="Horizontal">
+                                <!--<Button
+                                        x:Name="NewProject"
+                                        Width="165"
+                                        Margin="15,8,12,12"
+                                        cal:Message.Attach="ProjectWorkspace($dataContext)"
+                                        IsEnabled="True">
                                         <Button.Style>
                                             <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                 <Setter Property="Padding" Value="0,3,0,3" />
@@ -194,40 +219,20 @@
                                         </Button.Style>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon
-                                                    Width="36"
-                                                    Height="36"
-                                                    Margin="-15,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Kind="MonitorDashboard" />
+                                                Width="36"
+                                                Height="36"
+                                                Margin="-15,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Kind="MonitorDashboard" />
                                             <TextBlock VerticalAlignment="Center">Project</TextBlock>
                                         </StackPanel>
-                                    </Button>
-                                    <Button
-                                            x:Name="Workspace"
-                                            Width="165"
-                                            Margin="15,8,12,12"
-                                            cal:Message.Attach="Workspace($dataContext)"
-                                            IsEnabled="True">
-                                        <Button.Style>
-                                            <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
-                                                <Setter Property="Padding" Value="0,3,0,3" />
-                                            </Style>
-                                        </Button.Style>
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon
-                                                    Width="36"
-                                                    Height="36"
-                                                    Margin="-15,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Kind="MonitorDashboard" />
-                                            <TextBlock VerticalAlignment="Center">ClearDashboard</TextBlock>
-                                        </StackPanel>
-                                    </Button>
+                                    </Button>-->
 
-                                    <Button
-                                            Width="165"
-                                            Margin="15,8,12,12"
-                                            IsEnabled="True">
+
+                                <!--<Button
+                                        Width="165"
+                                        Margin="15,8,12,12"
+                                        IsEnabled="True">
                                         <Button.Style>
                                             <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                                 <Setter Property="Padding" Value="0,3,0,3" />
@@ -235,37 +240,37 @@
                                         </Button.Style>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon
-                                                    Width="36"
-                                                    Height="36"
-                                                    Margin="-15,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Kind="Dictionary" />
+                                                Width="36"
+                                                Height="36"
+                                                Margin="-15,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Kind="Dictionary" />
                                             <TextBlock VerticalAlignment="Center">ClearConcordance</TextBlock>
                                         </StackPanel>
                                     </Button>
 
                                     <Button
-                                            Width="165"
-                                            Margin="8"
-                                            IsEnabled="True"
-                                            Style="{StaticResource MaterialDesignRaisedAccentButton}">
+                                        Width="165"
+                                        Margin="8"
+                                        IsEnabled="True"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon
-                                                    Width="30"
-                                                    Height="30"
-                                                    Margin="-15,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Kind="ChartSankeyVariant">
+                                                Width="30"
+                                                Height="30"
+                                                Margin="-15,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Kind="ChartSankeyVariant">
                                                 <materialDesign:PackIcon.RenderTransform>
                                                     <RotateTransform Angle="270" CenterX="15" CenterY="15" />
                                                 </materialDesign:PackIcon.RenderTransform>
                                             </materialDesign:PackIcon>
                                             <TextBlock VerticalAlignment="Center">ClearAligner</TextBlock>
                                         </StackPanel>
-                                    </Button>
-                                </StackPanel>
+                                    </Button>-->
                             </StackPanel>
-                        </Border>
+                        </StackPanel>
+                        <!--</Border>-->
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <!--<ListViewItem Content="Project #1" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
