@@ -22,6 +22,7 @@ using System.Windows;
 using AvalonDock;
 using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
+using ClearApplicationFoundation.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -432,14 +433,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            // subscribe to the event aggregator so that we can listen to messages
             EventAggregator.SubscribeOnUIThread(this);
-
+            Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
             return base.OnActivateAsync(cancellationToken);
         }
 
+      
+
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+            Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+
             if (_lastLayout == "")
             {
                 SelectedLayoutText = "Last Saved";
@@ -447,6 +451,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // unsubscribe to the event aggregator
+            Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }

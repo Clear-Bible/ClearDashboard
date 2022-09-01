@@ -7,6 +7,9 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using DashboardApplication = System.Windows.Application;
 using System.Windows.Interop;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {
@@ -15,6 +18,8 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
     /// </summary>
     public partial class ShellView 
     {
+        private readonly ILogger<ShellView> _logger;
+
         // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
         // Copied from dwmapi.h
         public enum Dwmwindowattribute
@@ -40,8 +45,9 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             ref DwmWindowCornerPreference pvAttribute,
             uint cbAttribute);
 
-        public ShellView()
+        public ShellView(ILogger<ShellView> logger)
         {
+            _logger = logger;
             InitializeComponent();
 
 
@@ -71,8 +77,13 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference, sizeof(uint));
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async  void OnWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+
+            this.Closing -= OnWindowClosing;
+
+            _logger.LogInformation("ShellView closing.");
+
             var userPrefs = new UserPreferences
             {
                 WindowHeight = this.Height,
@@ -95,10 +106,13 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
 
         
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
+          
             var vm = (ShellViewModel)this.DataContext;
             this.Title = "ClearDashboard " + vm.Version;
+
+            _logger.LogInformation("ShellView loaded.");
 
             // force the background task window to be on top of the bootstraper inserted frame
             Panel.SetZIndex(this.TaskView, 10);
@@ -127,6 +141,12 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             //((App)DashboardApplication.Current).SetTheme(Settings.Default.Theme);
             //(DashboardApplication.Current as ClearDashboard.Wpf.Application.App).Theme = Settings.Default.Theme;
         }
-        
+
+        private void OnWindowInitialized(object? sender, EventArgs e)
+        {
+            _logger.LogInformation("ShellView initialized.");
+
+            this.Closing += OnWindowClosing;
+        }
     }
 }

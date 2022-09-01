@@ -29,6 +29,7 @@
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Loaded="Page_Loaded"
+    Unloaded="OnPageUnloaded"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"

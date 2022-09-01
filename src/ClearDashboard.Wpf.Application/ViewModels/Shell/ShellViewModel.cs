@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.ViewModels;
 using Dapper;
 using MediatR;
@@ -296,7 +297,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            ProjectManager.Dispose();
+
+            Logger.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
+
+            // HACK:  Force the MainViewModel singleton to properly deactivate
+            var mainViewModel = IoC.Get<MainViewModel>();
+            mainViewModel?.DeactivateAsync(true);
+            
+            ProjectManager?.Dispose();
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
