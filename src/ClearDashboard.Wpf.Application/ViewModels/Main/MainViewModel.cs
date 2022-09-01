@@ -396,6 +396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
 #pragma warning restore CA1416 // Validate platform compatibility
 
+            this.SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
 
             // TODO - UNREMARK THIS FOR THEME SWITCHING
 
