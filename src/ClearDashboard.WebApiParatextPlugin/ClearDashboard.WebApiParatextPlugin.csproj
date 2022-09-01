@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
 	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-	<PlatformTarget>x64</PlatformTarget>
+	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
