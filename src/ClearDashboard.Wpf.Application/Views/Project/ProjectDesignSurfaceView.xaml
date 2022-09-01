@@ -590,32 +590,32 @@
 
             <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
 
-            <Grid Margin="5,5,5,5">
+            <Grid Margin="5,5,5,5" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
 
                     <!--  empty space  -->
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
 
                     <!--  the fit content button  -->
-                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="40" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the fill button  -->
-                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="40" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the 100% button  -->
-                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="40" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom percentage label  -->
-                    <ColumnDefinition Width="35" />
+                    <ColumnDefinition Width="30" />
 
                     <!--  the % symbol  -->
                     <ColumnDefinition Width="15" />
@@ -624,7 +624,7 @@
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom out button  -->
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="35" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="5" />
@@ -636,7 +636,7 @@
                     <ColumnDefinition Width="5" />
 
                     <!--  the zoom in button  -->
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="35" />
 
                     <!--  spacer  -->
                     <ColumnDefinition Width="10" />

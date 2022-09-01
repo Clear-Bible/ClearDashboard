@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
+    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
@@ -18,7 +19,6 @@
     xmlns:resx="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
     xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,

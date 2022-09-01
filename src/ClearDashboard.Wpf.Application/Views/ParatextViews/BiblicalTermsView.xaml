@@ -84,7 +84,7 @@
                     </Button.Style>
                     <materialDesign:PackIcon
                         Background="Transparent"
-                        Foreground="{StaticResource TealMidBrush}"
+                        Foreground="{StaticResource SecondaryHueDarkBrush}"
                         Kind="ArrowExpandAll" />
                 </Button>
 
