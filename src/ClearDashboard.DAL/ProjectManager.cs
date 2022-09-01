@@ -97,7 +97,6 @@ namespace ClearDashboard.DataAccessLayer
 
         public virtual async Task Initialize()
         {
-            CurrentUser = await GetUser();
             EnsureDashboardProjectDirectory();
         }
 

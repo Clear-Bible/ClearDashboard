@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AvalonDock.Layout.Serialization;
+using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -26,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.Views.Main
     /// </summary>
     public partial class MainView : Page
     {
-        private MainViewModel _vm;
+        private MainViewModel _mainViewModel;
         private DashboardProject dashboardProject;
 
         #region Startup
@@ -40,7 +41,7 @@ namespace ClearDashboard.Wpf.Application.Views.Main
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            _vm = this.DataContext as MainViewModel;
+            _mainViewModel = this.DataContext as MainViewModel;
 
             //INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
             //viewModel.PropertyChanged += (sender, args) =>
@@ -146,6 +147,13 @@ namespace ClearDashboard.Wpf.Application.Views.Main
         //        }
         //    }
         //}
+
+
+        private async void OnPageUnloaded(object sender, RoutedEventArgs e)
+        {
+            //await _mainViewModel.DeactivateAsync(true);
+
+        }
     }
 
 

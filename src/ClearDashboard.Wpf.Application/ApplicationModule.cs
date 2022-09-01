@@ -6,6 +6,7 @@ using MediatR.Extensions.Autofac.DependencyInjection;
 using System.Linq;
 using System.Reflection;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
@@ -19,15 +20,15 @@ namespace ClearDashboard.Wpf.Application
         protected override void Load(ContainerBuilder builder)
         {
            
-
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
-            builder.RegisterType<ShellViewModel>().As<IShellViewModel>();
+            builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
+            builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
 
             // Register validators from this assembly.
             builder.RegisterValidators(Assembly.GetExecutingAssembly());
 
             // Register Mediator requests and handlers.
-            builder.RegisterMediatR(typeof(App).Assembly);
+            //builder.RegisterMediatR(typeof(App).Assembly);
 
             builder.RegisterType<TranslationSource>().AsSelf();
 
