@@ -130,7 +130,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                 try
                 {
                     // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
-                    await SendProgressBarVisibilityMessage(true, 250);
 
                     var corpus = message.TokenizedTextCorpus;
 

@@ -349,8 +349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         try
                         {
                             CopyOriginalDatabase();
-                            await EventAggregator.PublishOnCurrentThreadAsync(
-                                new ProgressBarVisibilityMessage(true));
+                            //await EventAggregator.PublishOnCurrentThreadAsync(
+                            //    new ProgressBarVisibilityMessage(true));
 
 
                             // if (viewModel.SelectedProject.HasProjectPath)
@@ -410,9 +410,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     StartTime = DateTime.Now,
                                     TaskStatus = StatusEnum.Working
                                 }));
-
-
-                                await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
 
                                 //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
                                 //    .Tokenize<LatinWordTokenizer>()
