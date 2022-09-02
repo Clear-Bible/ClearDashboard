@@ -4,7 +4,6 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.Wpf.ViewModels;
 using MediatR;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -26,6 +25,8 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record VerseChangedMessage(string Verse);
+
+public record ProjectLoadCompleteMessage(bool Loaded);
 
 public record ProjectChangedMessage(ParatextProject Project);
 

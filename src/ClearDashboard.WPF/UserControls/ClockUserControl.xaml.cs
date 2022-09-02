@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         public ClockUserControl()
         {
-            InitializeComponent();
+            //InitializeComponent();
             DataContext = this;
 
             //Construct MenuItemNest of TimeZones

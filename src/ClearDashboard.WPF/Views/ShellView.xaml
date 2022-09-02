@@ -10,10 +10,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Models"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.ViewModels"
-    xmlns:viewModels1="clr-namespace:ClearDashboard.Wpf.ViewModels;assembly=ClearDashboard.DAL.Models"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -237,19 +237,19 @@
                                                 <Setter Property="Padding" Value="0" />
 
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Working}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Working}">
                                                         <Setter Property="Foreground" Value="Orange" />
                                                         <Setter Property="Kind" Value="Autorenew" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Completed}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Completed}">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
                                                         <Setter Property="Kind" Value="CheckboxMarkedCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
                                                         <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
                                                         <Setter Property="Kind" Value="AlertCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.CancelTaskRequested}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.CancelTaskRequested}">
                                                         <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
                                                         <Setter Property="Kind" Value="CloseCircleOutline" />
                                                     </DataTrigger>
@@ -301,7 +301,7 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
                                                             <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>

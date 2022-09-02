@@ -1,0 +1,287 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.UserControls.BcvUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="50"
+    d:DesignWidth="450"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BcvBookNumConvertor x:Key="BcvBookNumConvertor" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Name="LayoutRoot" HorizontalAlignment="Stretch">
+        <!--  DataContext="{Binding ElementName=parent}"  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!--  sync [0]  -->
+            <ColumnDefinition Width="75" />
+            <!--  left book arrow [1]  -->
+            <ColumnDefinition Width="25" />
+            <!--  book combo [2]  -->
+            <ColumnDefinition Width="90" />
+            <!--  right book arrow [3]  -->
+            <ColumnDefinition Width="30" />
+            <!--  left chapter arrow [4]  -->
+            <ColumnDefinition Width="30" />
+            <!--  chapter combo [5]  -->
+            <ColumnDefinition Width="60" />
+            <!--  right chapter arrow [6]  -->
+            <ColumnDefinition Width="30" />
+            <!--  left Verse arrow [7]  -->
+            <ColumnDefinition Width="30" />
+            <!--  book Verse [8]  -->
+            <ColumnDefinition Width="50" />
+            <!--  right Verse arrow [9]  -->
+            <ColumnDefinition Width="25" />
+        </Grid.ColumnDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="10"
+            Margin="-1,-1,-1,0"
+            BorderBrush="{StaticResource MaterialDesignLightSeparatorBackground}"
+            BorderThickness="2" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Text="SYNC" />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Text="BOOK" />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Text="CHAPTER" />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="8"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Text="VERSE" />
+
+        <ComboBox
+            x:Name="CboBook"
+            Grid.Row="1"
+            Grid.Column="2"
+            MinWidth="60"
+            Margin="5,0,5,3"
+            ItemsSource="{Binding CurrentBcv.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+
+        <!--  SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor} , UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"  -->
+        <ComboBox
+            x:Name="CboChapter"
+            Grid.Row="1"
+            Grid.Column="5"
+            MinWidth="30"
+            Margin="5,0,5,3"
+            ItemsSource="{Binding CurrentBcv.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+        <ComboBox
+            x:Name="CboVerse"
+            Grid.Row="1"
+            Grid.Column="8"
+            MinWidth="30"
+            Margin="5,0,5,3"
+            ItemsSource="{Binding CurrentBcv.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+            SelectedValue="{Binding CurrentBcv.Verse, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+
+        <!--  SYNC BUTTON  -->
+        <ToggleButton
+            x:Name="Toogle"
+            Grid.Row="1"
+            Grid.Column="0"
+            IsChecked="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+
+        <!--  BOOK LEFT ARROW  -->
+        <Button
+            x:Name="BtnBookLeft"
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="BookUpArrow_Click"
+            IsEnabled="False"
+            ToolTip="Previous Book">
+            <TextBlock
+                Name="PreviousBookArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+
+        </Button>
+        <!--  BOOK RIGHT ARROW  -->
+        <Button
+            x:Name="BtnBookRight"
+            Grid.Row="1"
+            Grid.Column="3"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="BookDownArrow_Click"
+            IsEnabled="False"
+            ToolTip="Next Book">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <TextBlock
+                Name="NextBookArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+
+        </Button>
+
+        <!--  CHAPTER LEFT ARROW  -->
+        <Button
+            x:Name="BtnChapterLeft"
+            Grid.Row="1"
+            Grid.Column="4"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="ChapterUpArrow_Click"
+            IsEnabled="False"
+            ToolTip="Previous Chapter">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <TextBlock
+                Name="PreviousChapterArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+
+        </Button>
+        <!--  CHAPTER RIGHT ARROW  -->
+        <Button
+            x:Name="BtnChapterRight"
+            Grid.Row="1"
+            Grid.Column="6"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="ChapterDownArrow_Click"
+            IsEnabled="False"
+            ToolTip="Next Chapter">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <TextBlock
+                Name="NextChapterArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+
+        </Button>
+
+
+        <!--  VERSE LEFT ARROW  -->
+        <Button
+            x:Name="BtnVerseLeft"
+            Grid.Row="1"
+            Grid.Column="7"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="VerseUpArrow_Click"
+            IsEnabled="False"
+            ToolTip="Previous Verse">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <TextBlock
+                Name="PreviousVerseArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+
+        </Button>
+        <!--  VERSE RIGHT ARROW  -->
+        <Button
+            x:Name="BtnVerseRight"
+            Grid.Row="1"
+            Grid.Column="9"
+            Width="15"
+            Height="18"
+            MinWidth="20"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            materialDesign:RippleAssist.Feedback="#DD000000"
+            Click="VerseDownArrow_Click"
+            IsEnabled="False"
+            ToolTip="Next Verse">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </Button.Style>
+            <TextBlock
+                Name="NextVerseArrow"
+                FontWeight="ExtraBold"
+                Text="⏵" />
+        </Button>
+    </Grid>
+</UserControl>

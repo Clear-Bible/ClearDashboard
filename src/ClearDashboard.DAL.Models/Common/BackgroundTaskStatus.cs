@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ClearDashboard.Wpf.ViewModels
+namespace ClearDashboard.DataAccessLayer.Models
 {
     public enum StatusEnum
     {
