@@ -16,6 +16,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -222,6 +223,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
+
 
         //public void Workspace(DashboardProject project)
         //{
