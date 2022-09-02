@@ -28,8 +28,6 @@ namespace ClearDashboard.Wpf.Application
             // Register validators from this assembly.
             builder.RegisterValidators(Assembly.GetExecutingAssembly());
 
-            // Register Mediator requests and handlers.
-            //builder.RegisterMediatR(typeof(App).Assembly);
 
             builder.RegisterType<TranslationSource>().AsSelf();
 
@@ -41,19 +39,7 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
 
-            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-            //    .Where(type => type.Name.EndsWith("ViewModel"))
-            //    .AsSelf()
-            //    .InstancePerDependency();
-
-            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-            //    .Where(type => type.Name.EndsWith("View"))
-            //    .AsSelf()
-            //    .InstancePerDependency();
-
-            //builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>();
-
-            //builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
+      
         }
     }
 }

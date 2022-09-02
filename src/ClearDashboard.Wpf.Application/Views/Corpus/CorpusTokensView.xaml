@@ -30,12 +30,12 @@
             Grid.Row="0"
             Grid.Column="0"
             Orientation="Horizontal">
-            <TextBlock
+            <!--<TextBlock
                 Margin="20,0"
                 VerticalAlignment="Top"
                 FontSize="24"
                 Foreground="Orange"
-                Text="CORPUSPANEL" />
+                Text="CORPUSPANEL" />-->
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
