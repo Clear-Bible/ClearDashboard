@@ -122,8 +122,7 @@
             MaxHeight="450">
             <ListView
                 x:Name="RadioButtonGroupChoiceChipOutline"
-                MaxHeight="460"
-                Margin="5"
+                MaxHeight="440"
                 ItemsSource="{Binding DashboardProjects}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -143,11 +142,12 @@
                                 Height="45"
                                 cal:Message.Attach="NavigateToMainViewModel($dataContext)"
                                 Background="Transparent" 
-                                BorderThickness="0">
+                                BorderThickness="0"
+                                Margin="5">
 
                                 <Grid
                                     Width="450"
-                                    Height="45"
+                                  
                                     Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
