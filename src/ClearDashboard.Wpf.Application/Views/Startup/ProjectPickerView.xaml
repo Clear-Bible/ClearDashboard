@@ -11,9 +11,12 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     Width="1010"
     Height="635"
+    MinWidth="886"
+    MinHeight="594"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+
     <!--<UserControl.Resources>
         <RoutedUICommand x:Key="Commands.DeleteProject" />
     </UserControl.Resources>
@@ -28,30 +31,31 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="550" />
+            <ColumnDefinition Width="575" MinWidth="550" />
             <ColumnDefinition Width="*" MinWidth="250" />
         </Grid.ColumnDefinitions>
 
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="35,0,0,0">
+            Margin="0,0,0,0">
             <TextBlock
-                Margin="0,0,0,50"
+                Margin="47,10,0,30"
                 FontSize="32"
                 Text="Clear Dashboard" />
-            <!--<TextBlock
-                Margin="10"
-                FontSize="20"
-                Text="{helpers:Localization ShellView_User}" />-->
+            <TextBlock
+                Margin="52,0,0,21"
+                FontSize="19"
+                Text="Open recent" />
             <TextBox
-                Width="160"
-                Height="30"
-                Margin="10,0,0,0"
+                Width="320"
+                Height="35"
+                Margin="55,0,0,0"
+                Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Search"
-                BorderBrush="Black"
+                materialDesign:HintAssist.Hint="Search recent"
+                BorderBrush="DarkGray"
                 BorderThickness="1"
                 Text="{Binding SearchText, Mode=TwoWay}" />
         </StackPanel>
@@ -63,11 +67,11 @@
             Width="200"
             Margin="0,0,5,0"
             HorizontalAlignment="Right"
+            VerticalAlignment="Top"
             VerticalContentAlignment="Top"
             FontSize="12"
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
             SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
-
 
         <StackPanel
             Grid.Row="1"
@@ -75,36 +79,20 @@
             Margin="10,10"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Orientation="Horizontal">
-            <!--<Button
-            x:Name="MoveBackwards"
-            Margin="5,5,5,5"
-            cal:Message.Attach="MoveBackwards"
-            Visibility="{Binding ShowBackButton, Converter={StaticResource VisibilityConverter}}"
-            IsEnabled="{Binding EnableControls}">
-                <StackPanel Orientation="Horizontal">
-            -->
-            <!--<SymbolIcon Symbol="Previous"  ></SymbolIcon>-->
-            <!--
-                    <Viewbox MaxWidth="50" MaxHeight="50">
-                        <materialDesign:PackIcon
-                        x:Name="BackIcon"
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
-                        Kind="ChevronLeft"
-                        Visibility="Visible" />
-                    </Viewbox>
-                    <TextBlock VerticalAlignment="Center" Text="Back" />
-                </StackPanel>
-            </Button>-->
+            Orientation="Vertical">
 
-            <!--  Visibility="{Binding ShowForwardButton, Converter={StaticResource VisibilityConverter}}"  -->
+            <TextBlock FontSize="19" Text="Get started" />
+
             <Button
                 x:Name="MoveForwards"
-                Margin="5,5,5,5"
+                Margin="0,5,5,5"
                 cal:Message.Attach="MoveForwards"
-                IsEnabled="{Binding EnableControls}">
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="LightGray"
+                BorderThickness="0"
+                IsEnabled="{Binding EnableControls}"
+                MouseEnter="MoveForwards_OnMouseEnter"
+                MouseLeave="MoveForwards_OnMouseLeave">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Create New Project" />
                     <Viewbox MaxWidth="50" MaxHeight="50">
@@ -118,6 +106,28 @@
                     </Viewbox>
                 </StackPanel>
             </Button>
+
+            <!--  cal:Message.Attach="MouseDown"  -->
+            <!--<materialDesign:Card
+                x:Name="MoveForwards"
+                Width="475"
+                Margin="5,5,5,5"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                IsEnabled="{Binding EnableControls}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Create New Project" />
+                    <Viewbox MaxWidth="50" MaxHeight="50">
+                        <materialDesign:PackIcon
+                            x:Name="ForwardIcon"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Right"
+                            Kind="ChevronRight"
+                            Visibility="Visible" />
+                    </Viewbox>
+                </StackPanel>
+            </materialDesign:Card>-->
+
         </StackPanel>
 
         <!--  ==========================  -->
@@ -128,10 +138,11 @@
             Name="GridLayout"
             Grid.Row="1"
             Grid.Column="0"
+            Margin="57,0,0,0"
             Orientation="Vertical">
             <ListView
                 x:Name="RadioButtonGroupChoiceChipOutline"
-                Height="355"
+                Height="460"
                 Margin="5"
                 ItemsSource="{Binding DashboardProjects}"
                 ScrollViewer.CanContentScroll="True"
@@ -140,40 +151,32 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}">
-                            <!--<Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">-->
-                            <!--  PROJECT TEXT  -->
+                        <materialDesign:Card
+                            Width="475"
+                            cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext)]"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Tag="{Binding DataContext, ElementName=GridLayout}">
+
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel
+                                MouseEnter="UIElement_OnMouseEnter"
+                                MouseLeave="UIElement_OnMouseLeave"
+                                Orientation="Horizontal">
 
-                                <Grid
-                                    Width="450"
-                                    Height="45"
-                                    Background="AntiqueWhite">
+                                <Grid Width="450" Height="45">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-
-                                    <Button
-                                        x:Name="Workspace"
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="3"
-                                        Width="450"
-                                        Height="45"
-                                        cal:Message.Attach="NavigateToMainViewModel($dataContext)"
-                                        Background="AliceBlue" />
 
                                     <Image
                                         Grid.RowSpan="2"
@@ -184,8 +187,11 @@
                                         VerticalAlignment="Center"
                                         Source="../../Resources/ClearDashboard_logo_128.png" />
 
-                                    <TextBlock Grid.Column="1">
-                                        <Run FontSize="14" Text="Project: " />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        FontSize="14"
+                                        FontWeight="DemiBold">
+                                        <Run Text="Project: " />
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
@@ -204,18 +210,7 @@
                                         <Run FontSize="11" Text="{Binding FullFilePath}" />
                                     </TextBlock>
                                 </Grid>
-                                <!--  DELETE PROJECT BUTTON  -->
 
-                                <!--<Button
-                                    Width="30"
-                                    Height="30"
-                                    cal:Message.Attach="DeleteProject($dataContext)"
-                                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                    Style="{StaticResource MaterialDesignIconButton}">
-                                    <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
-                                    <materialDesign:PackIcon Kind="DeleteForever" />
-                                </Button>-->
                             </StackPanel>
                             <!--</Border>-->
                         </materialDesign:Card>
