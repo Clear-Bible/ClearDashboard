@@ -4,18 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    Width="1010"
+    Height="635"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
     helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
 
@@ -57,9 +59,9 @@
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-               Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
 
-               
+
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -115,7 +117,7 @@
                 VerticalAlignment="Center"
                 Content="Create" />
         </StackPanel>
-       
+
     </Grid>
     <!--<Grid Background="White">
         <Grid.RowDefinitions>
@@ -182,8 +184,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-           
-         
+
+
             <StackPanel
                 Grid.Row="3"
                 Grid.Column="1"

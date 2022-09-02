@@ -18,8 +18,6 @@
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
-    Visibility="Hidden"
-    WindowState="Minimized"
     d:DesignHeight="800"
     d:DesignWidth="1200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -32,6 +30,7 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    Visibility="Hidden"
     WindowState="Minimized"
     mc:Ignorable="d">
     <Window.Resources>
