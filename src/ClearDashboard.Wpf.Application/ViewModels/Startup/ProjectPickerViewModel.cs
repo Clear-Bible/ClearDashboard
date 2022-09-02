@@ -115,57 +115,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        //public void CreateNewProject()
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
-
-        //    Logger.LogInformation("CreateNewProject called.");
-        //    //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-
-        //    NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-        //}
-
-
-        //public async void NewProject()
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
-
-        //    Logger.LogInformation("NewProject called.");
-
-        //    if (ProjectManager.HasDashboardProject)
-        //    {
-        //        ProjectManager.CreateDashboardProject();
-        //    }
-
-        //    await ProjectManager.InvokeDialog<NewProjectDialogViewModel, WorkSpaceViewModel>(
-        //        DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
-        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
-        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
-
-        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
-        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-        //    // Define a callback method to create a new project if we
-        //    // have a valid project name
-
-        //    async Task<bool> Callback(NewProjectDialogViewModel viewModel)
-        //    {
-        //        if (viewModel.ProjectName != null)
-        //        {
-        //            await ProjectManager.CreateNewProject(viewModel.ProjectName);
-        //            return true;
-        //        }
-
-        //        return false;
-        //    }
-        //}
 
         public void NavigateToMainViewModel(DashboardProject project)
         {
