@@ -475,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        protected override void OnViewAttached(object view, object context)
+        protected override async void OnViewAttached(object view, object context)
         {
             base.OnViewAttached(view, context);
 
@@ -486,7 +486,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");
             }
 
+            await Task.Delay(250);
             Init();
+            //await Task.Run(() =>
+            //{
+            //    OnUIThread(Init);
+            //});
+           
         }
 
         private async void Init()
