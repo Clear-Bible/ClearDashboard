@@ -90,7 +90,7 @@ If you have a long running task, from the UI, the user can cancel it.  This will
             incomingMessage.TaskStatus = StatusEnum.Completed;
             incomingMessage.Description = "Task was cancelled";
 
-            await EventAggregator.PublishOnUIThreadAsync((new BackgroundTaskChangedMessage(incomingMessage));
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
         }
         await Task.CompletedTask;
     }

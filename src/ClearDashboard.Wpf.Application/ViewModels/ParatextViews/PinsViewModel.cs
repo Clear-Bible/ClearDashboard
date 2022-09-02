@@ -28,7 +28,7 @@ using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
-    public class PinsViewModel : ToolViewModel
+    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
     {
 
         #region Member Variables
@@ -38,6 +38,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
+
+        private bool _generateDataRunning = false;
+        private CancellationTokenSource _cancellationTokenSource;
+        private string _taskName = "PINS";
 
         private readonly DashboardProjectManager _projectManager;
         private readonly IMediator _mediator;
@@ -139,6 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
             _projectManager = projectManager;
             _mediator = mediator;
+            _cancellationTokenSource = new CancellationTokenSource();
 
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
@@ -165,7 +170,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = "PINS",
+                Name = _taskName,
                 Description = "Loading PINS data...",
                 StartTime = DateTime.Now,
                 TaskStatus = StatusEnum.Working
@@ -181,6 +186,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _ = base.OnActivateAsync(cancellationToken);
         }
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            //we need to cancel this process here
+            //check a bool to see if it already cancelled or already completed
+            if (_generateDataRunning)
+            {
+                _cancellationTokenSource.Cancel();
+                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = _taskName,
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }));
+            }
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
 
         /// <summary>
         /// Main logic for building the data
@@ -188,6 +211,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <returns></returns>
         private async Task<bool> GenerateData()
         {
+            _generateDataRunning = true;
+            var cancellationToken = _cancellationTokenSource.Token;
+
             ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
             if (paratextUtils.IsParatextInstalled())
             {
@@ -207,7 +233,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                     new BackgroundTaskStatus
                     {
-                        Name = "PINS",
+                        Name = _taskName,
                         EndTime = DateTime.Now,
                         ErrorMessage = "Paratext is not installed",
                         TaskStatus = StatusEnum.Error
@@ -234,6 +260,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     _termRenderingsList.TermRendering[i].Id =
                         CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
@@ -243,6 +270,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     _biblicalTermsList.Term[i].Id =
                         CorrectUnicode(_biblicalTermsList.Term[i].Id);
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
@@ -252,6 +280,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     _allBiblicalTermsList.Term[i].Id =
                         CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
 
@@ -323,6 +352,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         // append all the notes together and clean up the formatting
                         noteList += note.Value.Replace("\n", "").Replace("\r", "") + "; ";
                     }
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
 
                 List<string> verseList = new List<string>();
@@ -338,6 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     foreach (var verse in bt[0].References.Verse)
                     {
                         verseList.Add(verse);
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
 
                     GridData.Add(new PinsDataTable
@@ -374,6 +405,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         foreach (var verse in abt[0].References.Verse)
                         {
                             verseList.Add(verse);
+                            cancellationToken.ThrowIfCancellationRequested();
                         }
 
                         GridData.Add(new PinsDataTable
@@ -425,6 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         });
                     }
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
 
@@ -454,6 +487,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                             Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
                             Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
                         });
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
                 }
             }
@@ -471,11 +505,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                 new BackgroundTaskStatus
                 {
-                    Name = "PINS",
+                    Name = _taskName,
                     EndTime = DateTime.Now,
                     Description = "Loading PINS data...Complete",
                     TaskStatus = StatusEnum.Completed
                 }));
+
+            _generateDataRunning = false;
+            _cancellationTokenSource.Dispose();
 
             return false;
         }
@@ -706,6 +743,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+        }
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingMessage = message.Status;
+
+            if (incomingMessage.Name == _taskName && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            {
+                _cancellationTokenSource.Cancel();
+
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
+            }
+
+            await Task.CompletedTask;
         }
 
         #endregion // Methods

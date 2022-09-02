@@ -1,32 +1,14 @@
 ﻿using Caliburn.Micro;
-//using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.ViewModels.Panes;
-using ClearDashboard.Wpf.Views.Project;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Reflection.Metadata;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms.Design;
-using System.Windows.Threading;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 //using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.ViewModels.Panes;
 using ClearDashboard.Wpf.Views.Project;
+//using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
@@ -35,15 +17,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ViewModels.ProjectDesignSurface;
+using BackgroundTaskStatus = ClearDashboard.DataAccessLayer.Models.BackgroundTaskStatus;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
-using Rectangle = System.Windows.Shapes.Rectangle;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.ViewModels.Project
 {
@@ -359,17 +340,13 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                             CopyOriginalDatabase();
                             // if (viewModel.SelectedProject.HasProjectPath)
                             {
-                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                                {
-                                    Name = "Corpus",
-                                    Description = $"Creating corpus '{metadata.Name}'...",
-                                    StartTime = DateTime.Now,
-                                    TaskStatus = StatusEnum.Working
-                                }));
-                                
-                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName, 
-                                    metadata.CorpusTypeDisplay, cancellationToken);
-                                
+
+                                await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
+
+                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
+                                    metadata.LanguageName, metadata.CorpusTypeDisplay);
+                                await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
+
                                 OnUIThread(() => Corpora.Add(corpus));
 
                                 OnUIThread(() =>
@@ -801,12 +778,12 @@ namespace ClearDashboard.Wpf.ViewModels.Project
             node.CorpusType = corpusType;
             node.ParatextProjectId = projectId;
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, projectId)
             {
                 Type = ConnectorType.Input
             });
             //node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, projectId)
             {
                 Type = ConnectorType.Output
             });

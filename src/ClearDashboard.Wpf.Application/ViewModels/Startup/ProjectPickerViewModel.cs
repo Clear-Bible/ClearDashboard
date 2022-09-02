@@ -219,6 +219,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 di.Delete();
 
                 DashboardProjects.Remove(project);
+
+                var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
+                File.Delete(Path.Combine(di.Parent.ToString(), originalDatabaseCopyName));
             }
             catch (Exception e)
             {
