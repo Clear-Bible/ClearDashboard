@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : ApplicationWorkflowStepViewModel
+    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel
     {
         #region Member Variables
         //protected IWindowManager? _windowManager;
