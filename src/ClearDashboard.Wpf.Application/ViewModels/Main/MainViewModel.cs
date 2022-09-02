@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set => Set(ref _isBusy, value, nameof(IsBusy));
         }
 
-
+        public DashboardProject Parameter { get; set; }
         #endregion //Public Properties
 
         #region Commands
@@ -443,7 +443,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return base.OnActivateAsync(cancellationToken);
         }
 
-      
+        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            if (Parameter != null)
+            {
+               
+                Logger.LogInformation($"Received {Parameter.ProjectName}.");
+                if (Parameter.IsNew)
+                {
+                    await ProjectManager.CreateNewProject(Parameter.ProjectName);
+                }
+                else
+                {
+                    await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
+                }
+
+            }
+            await base.OnInitializeAsync(cancellationToken);
+        }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {

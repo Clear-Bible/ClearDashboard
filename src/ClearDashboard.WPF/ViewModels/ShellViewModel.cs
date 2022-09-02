@@ -168,7 +168,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-      
         #region Startup
 
 
@@ -425,7 +424,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion
-
 
         #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)

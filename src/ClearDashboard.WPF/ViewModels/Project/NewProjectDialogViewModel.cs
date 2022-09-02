@@ -43,6 +43,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                 ProjectManager.CreateDashboardProject();
             }
 
+           
             //Title = "Create New Project";
             DisplayName = "**** Create New Project";
             //DialogTitle = string.Empty; ;
