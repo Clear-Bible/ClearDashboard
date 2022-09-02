@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -34,7 +36,11 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    WindowState="Minimized"
     mc:Ignorable="d">
+    <Window.Resources>
+        <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
+    </Window.Resources>
     <Grid x:Name="ShellViewGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -44,10 +50,10 @@
         <Border
             Grid.Row="0"
             Grid.ColumnSpan="2"
+            Background="{DynamicResource MaterialDesignPaper}"
             BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="1"
-            CornerRadius="1"
-            Background="{DynamicResource MaterialDesignPaper}">
+            CornerRadius="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -96,8 +102,8 @@
                 <StackPanel
                     Grid.Column="1"
                     HorizontalAlignment="Right"
-                    Orientation="Horizontal"
-                    Background="{DynamicResource MaterialDesignPaper}">
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    Orientation="Horizontal">
 
                     <ComboBox
                         x:Name="SelectedLanguage"
@@ -168,12 +174,13 @@
                         VerticalAlignment="Top"
                         VerticalContentAlignment="Center"
                         BorderBrush="Gray"
-                        BorderThickness="0"/>
-                    <userControls:ClockUserControl 
-                        BorderBrush="Gray"
-                        BorderThickness="0"
+                        BorderThickness="0" />
+                    <userControls:ClockUserControl
+                        x:Name="ClockControl"
+                        Height="34"
                         Margin="0"
-                        x:Name="ClockControl" Height="34" />
+                        BorderBrush="Gray"
+                        BorderThickness="0" />
 
                 </StackPanel>
             </Grid>
@@ -250,19 +257,19 @@
                                                 <Setter Property="Padding" Value="0" />
 
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Working}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Working}">
                                                         <Setter Property="Foreground" Value="Orange" />
                                                         <Setter Property="Kind" Value="Autorenew" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Completed}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Completed}">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
                                                         <Setter Property="Kind" Value="CheckboxMarkedCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
                                                         <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
                                                         <Setter Property="Kind" Value="AlertCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.CancelTaskRequested}">
+                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.CancelTaskRequested}">
                                                         <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
                                                         <Setter Property="Kind" Value="CloseCircleOutline" />
                                                     </DataTrigger>
@@ -271,12 +278,14 @@
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
 
+
                                     <Button
                                         Width="20"
                                         Height="20"
                                         Margin="4"
                                         Padding="0"
                                         cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                        IsEnabled="{Binding TaskStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
                                         ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -314,7 +323,7 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static viewModels1:StatusEnum.Error}">
+                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
                                                             <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
