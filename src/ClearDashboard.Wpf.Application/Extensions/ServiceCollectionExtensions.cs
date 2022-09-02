@@ -32,14 +32,14 @@ namespace ClearDashboard.Wpf.Application.Extensions
             typeof(Bootstrapper).Assembly.GetTypes()
                 .Where(type => type.IsClass)
                 .Where(type => type.IsAbstract == false) // ignore any view models which are abstract!
-                .Where(type => type.Name.EndsWith("ViewModel"))
+                .Where(type => type.Name != "ShellViewModel" && type.Name != "MainViewModel" && type.Name.EndsWith("ViewModel"))
                 .ToList()
                 .ForEach(viewModelType => serviceCollection.AddTransient(viewModelType));
 
             typeof(Bootstrapper).Assembly.GetTypes()
                 .Where(type => type.IsClass)
                 .Where(type => type.IsAbstract == false) // ignore any view which are abstract!
-                .Where(type => type.Name.EndsWith("View"))
+                .Where(type => type.Name != "ShellView" && type.Name != "MainView" && type.Name.EndsWith("View"))
                 .ToList()
                 .ForEach(viewType => serviceCollection.AddTransient(viewType));
 

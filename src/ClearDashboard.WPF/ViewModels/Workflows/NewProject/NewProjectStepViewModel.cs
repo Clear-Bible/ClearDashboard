@@ -45,7 +45,7 @@ namespace ClearDashboard.Wpf.ViewModels.Workflows.NewProject
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            if (ProjectManager.HasDashboardProject)
+            if (!ProjectManager.HasDashboardProject)
             {
                 ProjectManager.CreateDashboardProject();
             }
