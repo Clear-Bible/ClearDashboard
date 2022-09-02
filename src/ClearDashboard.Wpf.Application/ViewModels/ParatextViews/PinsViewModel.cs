@@ -21,7 +21,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using ClearDashboard.Wpf.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;

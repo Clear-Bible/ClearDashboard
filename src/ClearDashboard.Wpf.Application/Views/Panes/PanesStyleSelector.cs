@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {

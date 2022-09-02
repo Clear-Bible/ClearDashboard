@@ -34,7 +34,7 @@
     WindowState="Minimized"
     mc:Ignorable="d">
     <Window.Resources>
-        <converters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
+        <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
     </Window.Resources>
     <Grid x:Name="ShellViewGrid">
         <Grid.RowDefinitions>
@@ -273,13 +273,14 @@
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
 
+
                                     <Button
-                                        IsEnabled="{Binding TaskStatus, Converter={StaticResource EnumMatchToBooleanConverter},ConverterParameter=Completed}"
                                         Width="20"
                                         Height="20"
                                         Margin="4"
                                         Padding="0"
                                         cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                        IsEnabled="{Binding TaskStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
                                         ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
                                         <Button.Style>
                                             <Style TargetType="Button">

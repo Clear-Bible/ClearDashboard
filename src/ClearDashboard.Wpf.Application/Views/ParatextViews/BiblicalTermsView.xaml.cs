@@ -1,5 +1,4 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.ViewModels;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;

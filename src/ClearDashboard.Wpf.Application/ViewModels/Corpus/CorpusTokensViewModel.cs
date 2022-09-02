@@ -17,7 +17,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels;
 
 
-namespace ClearDashboard.Wpf.ViewModels.Project
+namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
     public class CorpusTokensViewModel : PaneViewModel, IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
     {

@@ -47,15 +47,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
     #endregion //Enums
 
-    public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);//NotSure
-    public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);//NotSure
+    //public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);//NotSure
+    //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);//NotSure
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>, IHandle<BackgroundTaskChangedMessage>
     {
         #region Member Variables
         CancellationTokenSource _cancellationTokenSource = null;
         private bool _addParatextCorpusRunning = false;
 
-        public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
+        public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
 
         private readonly INavigationService _navigationService;
@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
-        private ObservableCollection<Corpus> _corpora;
+        private ObservableCollection<DAL.Alignment.Corpora.Corpus> _corpora;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -123,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public IWindowManager WindowManager { get; }
 
-        public ObservableCollection<Corpus> Corpora
+        public ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora
         {
             get => _corpora;
             set => _corpora = value;
@@ -248,7 +248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
-            Corpora = new ObservableCollection<Corpus>();
+            Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
 
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -364,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     TaskStatus = StatusEnum.Working
                                 }));
 
-                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName,
+                                var corpus = await DAL.Alignment.Corpora.Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName,
                                     metadata.CorpusTypeDisplay, cancellationToken);
                                 
                                 OnUIThread(() => Corpora.Add(corpus));
