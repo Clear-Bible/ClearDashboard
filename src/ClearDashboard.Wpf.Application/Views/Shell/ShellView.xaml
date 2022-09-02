@@ -26,7 +26,8 @@
     Initialized="OnWindowInitialized"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-  
+    ShowIconOnTitleBar="True"
+    Icon="..\..\Assets/ClearDashboard_Icon.ico"
     Loaded="OnWindowLoaded"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
