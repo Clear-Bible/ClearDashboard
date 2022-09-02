@@ -24,6 +24,13 @@ using ClearDashboard.Wpf.Application.Views.Project;
 using SIL.Machine.Corpora;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Autofac;
+using ClearDashboard.Wpf.Application.Models;
+using System.IO;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Reflection.Emit;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -270,7 +277,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            // todo - save the project
+            SaveCanvas();
+            
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -291,6 +299,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
                 _projectManager, _eventAggregator);
 
+            if (File.Exists("C:\\temp\\test.json"))
+            {
+                LoadCanvas();
+            }
+
+            
             base.OnViewAttached(view, context);
         }
 
@@ -306,6 +320,82 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         #endregion //Constructor
 
         #region Methods
+
+        
+        private void SaveCanvas()
+        {
+            var surface = new ProjectDesignSurfaceSerializationModel();
+
+            // save all the nodes
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                surface.CorpusNodes.Add(new SerializedNodes
+                {
+                    ParatextProjectId = corpusNode.ParatextProjectId,
+                    CorpusType = corpusNode.CorpusType,
+                    Name = corpusNode.Name,
+                    X = corpusNode.X,
+                    Y = corpusNode.Y,
+                });
+            }
+            
+            // save all the connections
+            foreach (var connection in DesignSurface.Connections)
+            {
+                surface.Connections.Add(new SerializedConnections
+                {
+                    SourceConnectorId = connection.SourceConnector.ParatextID,
+                    TargetConnectorId = connection.DestinationConnector.ParatextID
+                });
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            string jsonString = JsonSerializer.Serialize(surface, options);
+            File.WriteAllText("C:\\temp\\test.json", jsonString);
+        }
+
+        private void LoadCanvas()
+        {
+            var json = File.ReadAllText("C:\\temp\\test.json");
+
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            ProjectDesignSurfaceSerializationModel deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
+
+
+            foreach (var corpusNode in deserialized.CorpusNodes)
+            {
+                CreateNode(corpusNode.Name, new Point(corpusNode.X, corpusNode.Y), false, corpusNode.CorpusType,
+                    corpusNode.ParatextProjectId);
+            }
+
+            foreach (var deserializedConnection in deserialized.Connections)
+            {
+                var sourceNode = DesignSurface.CorpusNodes.FirstOrDefault(p =>
+                    p.ParatextProjectId == deserializedConnection.SourceConnectorId);
+                var targetNode = DesignSurface.CorpusNodes.FirstOrDefault(p =>
+                    p.ParatextProjectId == deserializedConnection.TargetConnectorId);
+
+                if (sourceNode is not null && targetNode is not null)
+                {
+                    var connection = new ConnectionViewModel();
+                    connection.SourceConnector = sourceNode.OutputConnectors[0];
+                    connection.DestinationConnector = targetNode.InputConnectors[0];
+                    DesignSurface.Connections.Add(connection);
+                }
+
+            }
+
+        }
+
 
         public void AddManuscriptCorpus()
         {
