@@ -14,13 +14,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <!--<UserControl.Resources>
-        <RoutedUICommand x:Key="Commands.DeleteProject" />
-    </UserControl.Resources>
-
-    <UserControl.CommandBindings>
-        <CommandBinding Command="{StaticResource Commands.DeleteProject}" Executed="OnDeleteProject" />
-    </UserControl.CommandBindings>-->
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -40,10 +33,6 @@
                 Margin="0,0,0,50"
                 FontSize="32"
                 Text="Clear Dashboard" />
-            <!--<TextBlock
-                Margin="10"
-                FontSize="20"
-                Text="{helpers:Localization ShellView_User}" />-->
             <TextBox
                 Width="160"
                 Height="30"
@@ -128,10 +117,12 @@
             Name="GridLayout"
             Grid.Row="1"
             Grid.Column="0"
-            Orientation="Vertical">
+            Orientation="Vertical"
+            Margin="20, 0"
+            MaxHeight="450">
             <ListView
                 x:Name="RadioButtonGroupChoiceChipOutline"
-                Height="355"
+                MaxHeight="460"
                 Margin="5"
                 ItemsSource="{Binding DashboardProjects}"
                 ScrollViewer.CanContentScroll="True"
@@ -140,20 +131,24 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}">
-                            <!--<Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">-->
-                            <!--  PROJECT TEXT  -->
+                        <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}" >
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
-                            <StackPanel Orientation="Horizontal">
+                            <Button
+                                x:Name="Workspace"
+                               
+                                Height="45"
+                                cal:Message.Attach="NavigateToMainViewModel($dataContext)"
+                                Background="Transparent" 
+                                BorderThickness="0">
 
                                 <Grid
                                     Width="450"
                                     Height="45"
-                                    Background="AntiqueWhite">
+                                    Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -164,37 +159,28 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <Button
-                                        x:Name="Workspace"
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="3"
-                                        Width="450"
-                                        Height="45"
-                                        cal:Message.Attach="NavigateToMainViewModel($dataContext)"
-                                        Background="AliceBlue" />
 
-                                    <Image
+
+                                    <!--<Image Grid.Row="0"
                                         Grid.RowSpan="2"
                                         Grid.Column="0"
                                         Height="30"
                                         Margin="5"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Source="../../Resources/ClearDashboard_logo_128.png" />
+                                        Source="../../Resources/ClearDashboard_logo_128.png" />-->
 
-                                    <TextBlock Grid.Column="1">
+                                    <TextBlock Grid.Row="0" Grid.Column="1">
                                         <Run FontSize="14" Text="Project: " />
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
-                                    <TextBlock
-                                        Grid.Column="2"
-                                        Width="145"
-                                        HorizontalAlignment="Right"
-                                        FontSize="12"
-                                        Text="{Binding Modified}" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="2"
+                                               Width="145"
+                                               HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               Text="{Binding Modified}" />
 
                                     <TextBlock
                                         Grid.Row="1"
@@ -204,27 +190,10 @@
                                         <Run FontSize="11" Text="{Binding FullFilePath}" />
                                     </TextBlock>
                                 </Grid>
-                                <!--  DELETE PROJECT BUTTON  -->
-
-                                <!--<Button
-                                    Width="30"
-                                    Height="30"
-                                    cal:Message.Attach="DeleteProject($dataContext)"
-                                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                    Style="{StaticResource MaterialDesignIconButton}">
-                                    <Button.ToolTip>MaterialDesignIconButton</Button.ToolTip>
-                                    <materialDesign:PackIcon Kind="DeleteForever" />
-                                </Button>-->
-                            </StackPanel>
-                            <!--</Border>-->
+                            </Button>
                         </materialDesign:Card>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <!--<ListViewItem Content="Project #1" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #2" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #3" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #4" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>-->
             </ListView>
         </StackPanel>
     </Grid>
