@@ -21,6 +21,8 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using System.Xml.Linq;
+using ClearDashboard.DataAccessLayer.Models;
+using BackgroundTaskStatus = ClearDashboard.DataAccessLayer.Models.BackgroundTaskStatus;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

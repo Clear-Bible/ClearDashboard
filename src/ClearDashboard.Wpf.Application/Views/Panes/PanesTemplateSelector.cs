@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows;
 using AvalonDock.Layout;
 using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 

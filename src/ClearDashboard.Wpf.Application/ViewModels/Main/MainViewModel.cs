@@ -24,6 +24,7 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using ClearApplicationFoundation.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project;

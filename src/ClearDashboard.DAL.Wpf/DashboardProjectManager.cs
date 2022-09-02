@@ -4,7 +4,6 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.Wpf.ViewModels;
 using MediatR;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;

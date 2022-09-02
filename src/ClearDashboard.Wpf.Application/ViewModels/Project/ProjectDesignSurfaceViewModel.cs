@@ -1,36 +1,33 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Views.Project;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearBible.Engine.Tokenization;
-using ClearDashboard.DataAccessLayer.Models;
-using MediatR;
-using SIL.Machine.Tokenization;
 using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.Views.Project;
-using SIL.Machine.Corpora;
-using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
-using Autofac;
-using ClearDashboard.Wpf.Application.Models;
 using System.IO;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Reflection.Emit;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -57,12 +54,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>,
         IHandle<ConnectionSelectedChanagedMessage>, IHandle<ProjectLoadCompleteMessage>
     {
+        #region Member Variables
+        CancellationTokenSource _cancellationTokenSource = null;
+        private bool _addParatextCorpusRunning = false;
 
-
-
-        #region Member Variables      
-
-        public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);
+        public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
 
         private readonly INavigationService _navigationService;
@@ -70,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
-        private ObservableCollection<Corpus> _corpora;
+        private ObservableCollection<DAL.Alignment.Corpora.Corpus> _corpora;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -118,23 +114,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private double _contentViewportHeight;
 
         #endregion //Member Variables
-
-
-
+        
         #region Public Variables
 
         public ProjectDesignSurfaceView View { get; set; }
         public Canvas DesignSurfaceCanvas { get; set; }
 
         #endregion //Public Variables
-
-
-
+        
         #region Observable Properties
 
         public IWindowManager WindowManager { get; }
 
-        public ObservableCollection<Corpus> Corpora
+        public ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora
         {
             get => _corpora;
             set => _corpora = value;
@@ -236,8 +228,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         #endregion //Observable Properties
-
-
+        
         #region Constructor
         public ProjectDesignSurfaceViewModel()
         {
@@ -260,9 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
-            Corpora = new ObservableCollection<Corpus>();
-
-
+            Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -282,8 +271,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             SaveCanvas();
-
-            EventAggregator?.Unsubscribe(this);
+            
+            //we need to cancel this process here
+            //check a bool to see if it already cancelled or already completed
+            if (_addParatextCorpusRunning)
+            {
+                _cancellationTokenSource.Cancel();
+                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = "Corpus",
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }));
+            }
+            // todo - save the project
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -422,6 +424,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         public async void AddParatextCorpus()
         {
             Logger.LogInformation("AddParatextCorpus called.");
+            _addParatextCorpusRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
 
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
@@ -436,19 +441,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     {
                         try
                         {
-                            await EventAggregator.PublishOnCurrentThreadAsync(
-                                new ProgressBarVisibilityMessage(true));
+                            CopyOriginalDatabase();
+                            //await EventAggregator.PublishOnCurrentThreadAsync(
+                            //    new ProgressBarVisibilityMessage(true));
 
 
                             // if (viewModel.SelectedProject.HasProjectPath)
                             {
 
-                                await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
+                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                                {
+                                    Name = "Corpus",
+                                    Description = $"Creating corpus '{metadata.Name}'...",
+                                    StartTime = DateTime.Now,
+                                    TaskStatus = StatusEnum.Working
+                                }));
 
-                                var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
-                                    metadata.LanguageName, metadata.CorpusTypeDisplay);
-                                await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
-
+                                var corpus = await DAL.Alignment.Corpora.Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName,
+                                    metadata.CorpusTypeDisplay, cancellationToken);
+                                
                                 OnUIThread(() => Corpora.Add(corpus));
 
 
@@ -485,28 +496,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     CreateNode(corpus.Name, new Point(150, 50 + offset), false, corpusType, corpus.ParatextGuid);
                                 });
 
-
-                                await SendProgressBarMessage($"Tokenizing and transforming '{metadata.Name}' corpus.");
+                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                                {
+                                    Name = "Corpus",
+                                    Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
+                                    StartTime = DateTime.Now,
+                                    TaskStatus = StatusEnum.Working
+                                }));
 
                                 //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
                                 //    .Tokenize<LatinWordTokenizer>()
                                 //    .Transform<IntoTokensTextRowProcessor>();
 
-                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id))
+                                var textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                             .Tokenize<LatinWordTokenizer>()
                                             .Transform<IntoTokensTextRowProcessor>();
 
-                                await SendProgressBarMessage(
-                                    $"Completed Tokenizing and Transforming '{metadata.Name}' corpus.");
+                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                                {
+                                    Name = "Corpus",
+                                    Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                                    StartTime = DateTime.Now,
+                                    TaskStatus = StatusEnum.Working
+                                }));
+
+                                var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
 
-                                await SendProgressBarMessage(
-                                    $"Creating tokenized text corpus for '{metadata.Name}' corpus.");
-                                var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,
-                                    corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-                                await SendProgressBarMessage(
-                                    $"Completed creating tokenized text corpus for '{metadata.Name}' corpus.");
+                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                                {
+                                    Name = "Corpus",
+                                    Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                                    StartTime = DateTime.Now,
+                                    TaskStatus = StatusEnum.Completed
+                                }));
 
                                 Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                                 await EventAggregator.PublishOnCurrentThreadAsync(
@@ -516,11 +540,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         catch (Exception ex)
                         {
                             Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                            if (!cancellationToken.IsCancellationRequested)
+                            {
+                                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                    new BackgroundTaskStatus
+                                    {
+                                        Name = "Corpus",
+                                        EndTime = DateTime.Now,
+                                        ErrorMessage = $"{ex}",
+                                        TaskStatus = StatusEnum.Error
+                                    }));
+                            }
+                            else
+                            {
+                                RestoreOriginalDatabase();
+                            }
                         }
                         finally
                         {
-                            await EventAggregator.PublishOnCurrentThreadAsync(
-                                new ProgressBarVisibilityMessage(false));
+                            _cancellationTokenSource.Dispose();
+                            DeleteOriginalDatabase();
+                            _addParatextCorpusRunning = false;
                         }
 
                     });
@@ -530,6 +570,80 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
+        private void DeleteOriginalDatabase()
+        {
+            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+            try
+            {
+                File.Delete(Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        private void RestoreOriginalDatabase()
+        {
+            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+            var projectPath = Path.Combine(dashboardPath, projectName);
+            try
+            {
+                if (ProjectManager != null)
+                {
+                    ProjectManager.ProjectNameDbContextFactory.ProjectAssets.ProjectDbContext.Database.EnsureDeleted();
+                }
+
+                File.Move(
+                    Path.Combine(dashboardPath, $"{projectName}_original.sqlite"),
+                    Path.Combine(projectPath, $"{projectName}.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        private void CopyOriginalDatabase()
+        {
+            //make a copy of the database here named original_ProjectName.sqlite
+            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+            var projectPath = Path.Combine(dashboardPath, projectName);
+            var filePath = Path.Combine(projectPath, $"{projectName}.sqlite");
+            try
+            {
+                File.Copy(filePath, Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingMessage = message.Status;
+
+            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            {
+                _cancellationTokenSource.Cancel();
+
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
+            }
+
+            await Task.CompletedTask;
+        }
 
         /// <summary>
         /// Called when the user has started to drag out a connector, thus creating a new connection.
