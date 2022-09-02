@@ -118,7 +118,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             Logger.LogInformation("NewProject called.");
 
-            if (ProjectManager.HasDashboardProject)
+            if (!ProjectManager.HasDashboardProject)
             {
                 ProjectManager.CreateDashboardProject();
             }

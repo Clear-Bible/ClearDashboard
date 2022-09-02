@@ -255,7 +255,7 @@ namespace ClearDashboard.DataAccessLayer
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
             CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
-            //CurrentDashboardProject.ParatextProjectPath = 
+           
         }
 
 
