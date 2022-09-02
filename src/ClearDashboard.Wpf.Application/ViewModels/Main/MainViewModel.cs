@@ -440,6 +440,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
+
+
+            // send out a notice that the project is loaded up
+            EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             return base.OnActivateAsync(cancellationToken);
         }
 
@@ -457,8 +461,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
                 }
-
             }
+
             await base.OnInitializeAsync(cancellationToken);
         }
 

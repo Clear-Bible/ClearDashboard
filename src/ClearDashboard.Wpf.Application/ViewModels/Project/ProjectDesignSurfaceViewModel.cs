@@ -54,7 +54,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
     #endregion //Enums
 
-    public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>
+    public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>,
+        IHandle<ConnectionSelectedChanagedMessage>, IHandle<ProjectLoadCompleteMessage>
     {
 
 
@@ -261,6 +262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
             Corpora = new ObservableCollection<Corpus>();
 
+
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -271,6 +273,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            EventAggregator.SubscribeOnUIThread(this);
+
             //IsBusy = false;
             return base.OnActivateAsync(cancellationToken);
         }
@@ -278,7 +282,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             SaveCanvas();
-            
+
+            EventAggregator?.Unsubscribe(this);
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -298,12 +303,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             //
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
                 _projectManager, _eventAggregator);
-
-            if (File.Exists("C:\\temp\\test.json"))
-            {
-                LoadCanvas();
-            }
-
             
             base.OnViewAttached(view, context);
         }
@@ -322,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         #region Methods
 
         
-        private void SaveCanvas()
+        private async void SaveCanvas()
         {
             var surface = new ProjectDesignSurfaceSerializationModel();
 
@@ -355,13 +354,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 WriteIndented = true
             };
             string jsonString = JsonSerializer.Serialize(surface, options);
-            File.WriteAllText("C:\\temp\\test.json", jsonString);
+            //File.WriteAllText("C:\\temp\\test.json", jsonString);
+
+            _projectManager.CurrentProject.DesignSurfaceLayout = jsonString;
+
+            await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
         }
 
         private void LoadCanvas()
         {
-            var json = File.ReadAllText("C:\\temp\\test.json");
+            if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
+            {
+                return;
+            }
 
+            
+            //var json = File.ReadAllText("C:\\temp\\test.json");
+            var json = _projectManager.CurrentProject.DesignSurfaceLayout;
+            
             JsonSerializerOptions options = new()
             {
                 ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -940,7 +950,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             return Task.CompletedTask;
         }
 
+        public Task HandleAsync(ProjectLoadCompleteMessage message, CancellationToken cancellationToken)
+        {
+            if (_projectManager.CurrentProject is not null)
+            {
+                LoadCanvas();
+            }
+            return Task.CompletedTask;
+        }
+
         #endregion // Methods
+
 
     }
 }
