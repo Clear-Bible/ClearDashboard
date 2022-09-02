@@ -213,195 +213,168 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _generateDataRunning = true;
             var cancellationToken = _cancellationTokenSource.Token;
 
-            ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
-            if (paratextUtils.IsParatextInstalled())
+            try
             {
-                var paratextInstallPath = paratextUtils.ParatextInstallPath;
-
-                // run getting and deserializing all of these resources in parallel
-                await Task.WhenAll(
-                    GetTermRenderings(),
-                    GetBiblicalTerms(paratextInstallPath),
-                    GetAllBiblicalTerms(paratextInstallPath),
-                    GetSpellingStatus(),
-                    GetLexicon());
-            }
-            else
-            {
-                // send to the task started event aggregator for everyone else to hear about a task error
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    new BackgroundTaskStatus
-                    {
-                        Name = _taskName,
-                        EndTime = DateTime.Now,
-                        ErrorMessage = "Paratext is not installed",
-                        TaskStatus = StatusEnum.Error
-                    }));
-
-                Logger.LogError("Paratext Not Installed in PINS viewmodel");
-
-                // turn off the progress bar
-                ProgressBarVisibility = Visibility.Collapsed;
-                return false;
-            }
-
-
-            // fix the greek renderings which are inconsistent
-            for (int i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
-            {
-                if (_termRenderingsList.TermRendering[i].Renderings == "")
+                ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+                if (paratextUtils.IsParatextInstalled())
                 {
-                    // remove any records without rendering data
-                    _termRenderingsList.TermRendering.RemoveAt(i);
+                    var paratextInstallPath = paratextUtils.ParatextInstallPath;
+
+                    // run getting and deserializing all of these resources in parallel
+                    await Task.WhenAll(
+                        GetTermRenderings(),
+                        GetBiblicalTerms(paratextInstallPath),
+                        GetAllBiblicalTerms(paratextInstallPath),
+                        GetSpellingStatus(),
+                        GetLexicon());
                 }
                 else
                 {
-                    _termRenderingsList.TermRendering[i].Id =
-                        CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
-                }
-                cancellationToken.ThrowIfCancellationRequested();
-            }
+                    // send to the task started event aggregator for everyone else to hear about a task error
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = _taskName,
+                            EndTime = DateTime.Now,
+                            ErrorMessage = "Paratext is not installed",
+                            TaskStatus = StatusEnum.Error
+                        }));
 
-            for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
-            {
-                if (_biblicalTermsList.Term[i].Id != "")
-                {
-                    _biblicalTermsList.Term[i].Id =
-                        CorrectUnicode(_biblicalTermsList.Term[i].Id);
-                }
-                cancellationToken.ThrowIfCancellationRequested();
-            }
+                    Logger.LogError("Paratext Not Installed in PINS viewmodel");
 
-            for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
-            {
-                if (_allBiblicalTermsList.Term[i].Id != "")
-                {
-                    _allBiblicalTermsList.Term[i].Id =
-                        CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
-                }
-                cancellationToken.ThrowIfCancellationRequested();
-            }
-
-
-            // build the data for display
-            foreach (var terms in _termRenderingsList.TermRendering)
-            {
-                string targetRendering = terms.Renderings;
-                targetRendering = targetRendering.Replace("||", "; ");
-
-                string sourceWord = terms.Id;
-
-                string biblicalTermsSense;
-                string biblicalTermsSpelling;
-                if (sourceWord.Contains("."))
-                {
-                    // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
-                    // place Sense in braces  
-                    biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" + sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] + "}";
-
-                    // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
-                    biblicalTermsSpelling = sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
-                }
-                else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
-                {
-                    // place Sense in braces
-                    biblicalTermsSense = sourceWord.Trim().Replace("-", " {") + "}";
-
-                    // remove the Sense number from word/phrase for correct matching with Spelling
-                    biblicalTermsSpelling = sourceWord[..sourceWord.IndexOf("-", StringComparison.Ordinal)];
-                }
-                else
-                {
-                    biblicalTermsSpelling = biblicalTermsSense = sourceWord;
+                    // turn off the progress bar
+                    ProgressBarVisibility = Visibility.Collapsed;
+                    return false;
                 }
 
-                // CHECK AGAINST SPELLING
-                var spellingRecords = _spellingStatus.Status.FindAll(s => s.Word.ToLower() == biblicalTermsSpelling.ToLower());
-                if (spellingRecords.Count == 0)
+
+                // fix the greek renderings which are inconsistent
+                for (int i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
                 {
-                    biblicalTermsSpelling = "";
-                }
-                else
-                {
-                    if (spellingRecords[0].State == "W") // apparently a "W" means misspelled
+                    if (_termRenderingsList.TermRendering[i].Renderings == "")
                     {
-                        // misspelled
-                        biblicalTermsSpelling = " [misspelled]";
-                    }
-                    else if (spellingRecords[0].SpecificCase != biblicalTermsSpelling)
-                    {
-                        // has wrong upper/lower case
-                        biblicalTermsSpelling = " [" + spellingRecords[0].SpecificCase + "] wrong case";
+                        // remove any records without rendering data
+                        _termRenderingsList.TermRendering.RemoveAt(i);
                     }
                     else
                     {
-                        biblicalTermsSpelling = "";
+                        _termRenderingsList.TermRendering[i].Id =
+                            CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                     }
-                }
 
-                // peel off the notes
-                var notes = terms.Notes;
-                string noteList = "";
-                if (notes.GetType() == typeof(XmlNode[]))
-                {
-                    // convert a list of xmlnodes to at List<>
-                    var listNotes = ((IEnumerable)notes).Cast<XmlNode>().ToList();
-                    foreach (var note in listNotes)
-                    {
-                        // append all the notes together and clean up the formatting
-                        noteList += note.Value.Replace("\n", "").Replace("\r", "") + "; ";
-                    }
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                List<string> verseList = new List<string>();
-
-                // check against the BiblicalTermsList
-                var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
-                var gloss = "";
-                if (bt.Count > 0)
+                for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
                 {
-                    gloss = bt[0].Gloss;
-
-                    // BiblicalTerms contains the verses associated with the TermRenderings
-                    foreach (var verse in bt[0].References.Verse)
+                    if (_biblicalTermsList.Term[i].Id != "")
                     {
-                        verseList.Add(verse);
+                        _biblicalTermsList.Term[i].Id =
+                            CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                    }
+
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
+                for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
+                {
+                    if (_allBiblicalTermsList.Term[i].Id != "")
+                    {
+                        _allBiblicalTermsList.Term[i].Id =
+                            CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                    }
+
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
+
+                // build the data for display
+                foreach (var terms in _termRenderingsList.TermRendering)
+                {
+                    string targetRendering = terms.Renderings;
+                    targetRendering = targetRendering.Replace("||", "; ");
+
+                    string sourceWord = terms.Id;
+
+                    string biblicalTermsSense;
+                    string biblicalTermsSpelling;
+                    if (sourceWord.Contains("."))
+                    {
+                        // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
+                        // place Sense in braces  
+                        biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" +
+                                             sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
+                                             "}";
+
+                        // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
+                        biblicalTermsSpelling =
+                            sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
+                    }
+                    else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
+                    {
+                        // place Sense in braces
+                        biblicalTermsSense = sourceWord.Trim().Replace("-", " {") + "}";
+
+                        // remove the Sense number from word/phrase for correct matching with Spelling
+                        biblicalTermsSpelling = sourceWord[..sourceWord.IndexOf("-", StringComparison.Ordinal)];
+                    }
+                    else
+                    {
+                        biblicalTermsSpelling = biblicalTermsSense = sourceWord;
+                    }
+
+                    // CHECK AGAINST SPELLING
+                    var spellingRecords =
+                        _spellingStatus.Status.FindAll(s => s.Word.ToLower() == biblicalTermsSpelling.ToLower());
+                    if (spellingRecords.Count == 0)
+                    {
+                        biblicalTermsSpelling = "";
+                    }
+                    else
+                    {
+                        if (spellingRecords[0].State == "W") // apparently a "W" means misspelled
+                        {
+                            // misspelled
+                            biblicalTermsSpelling = " [misspelled]";
+                        }
+                        else if (spellingRecords[0].SpecificCase != biblicalTermsSpelling)
+                        {
+                            // has wrong upper/lower case
+                            biblicalTermsSpelling = " [" + spellingRecords[0].SpecificCase + "] wrong case";
+                        }
+                        else
+                        {
+                            biblicalTermsSpelling = "";
+                        }
+                    }
+
+                    // peel off the notes
+                    var notes = terms.Notes;
+                    string noteList = "";
+                    if (notes.GetType() == typeof(XmlNode[]))
+                    {
+                        // convert a list of xmlnodes to at List<>
+                        var listNotes = ((IEnumerable)notes).Cast<XmlNode>().ToList();
+                        foreach (var note in listNotes)
+                        {
+                            // append all the notes together and clean up the formatting
+                            noteList += note.Value.Replace("\n", "").Replace("\r", "") + "; ";
+                        }
+
                         cancellationToken.ThrowIfCancellationRequested();
                     }
 
-                    GridData.Add(new PinsDataTable
-                    {
-                        Id = Guid.NewGuid(),
-                        XmlSource = "BT",
-                        Code = "KeyTerm",
-                        OriginID = terms.Id,
-                        Gloss = gloss,
-                        Lang = "",
-                        Lform = "",
-                        Match = "KeyTerm" + targetRendering,
-                        Notes = noteList,
-                        Phrase = "",
-                        Prefix = "",
-                        Refs = "",
-                        SimpRefs = verseList.Count.ToString(),
-                        Source = targetRendering + biblicalTermsSpelling,
-                        Stem = "",
-                        Suffix = "",
-                        Word = "",
-                        VerseList = verseList
-                    });
-                }
-                else
-                {
-                    // if not found in the Biblical Terms list, now check AllBiblicalTerms second
-                    var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
-                    if (abt.Count > 0)
-                    {
-                        gloss = abt[0].Gloss;
+                    List<string> verseList = new List<string>();
 
-                        // AllBiblicalTerms contains the verses associated with the TermRenderings
-                        foreach (var verse in abt[0].References.Verse)
+                    // check against the BiblicalTermsList
+                    var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                    var gloss = "";
+                    if (bt.Count > 0)
+                    {
+                        gloss = bt[0].Gloss;
+
+                        // BiblicalTerms contains the verses associated with the TermRenderings
+                        foreach (var verse in bt[0].References.Verse)
                         {
                             verseList.Add(verse);
                             cancellationToken.ThrowIfCancellationRequested();
@@ -410,7 +383,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         GridData.Add(new PinsDataTable
                         {
                             Id = Guid.NewGuid(),
-                            XmlSource = "ABT",
+                            XmlSource = "BT",
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -431,88 +404,142 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     }
                     else
                     {
-                        // not found in either the BiblicalTerms or AllBiblicalTerms.xml lists
-                        gloss = biblicalTermsSense == "" ? sourceWord : biblicalTermsSense;
-
-                        GridData.Add(new PinsDataTable
+                        // if not found in the Biblical Terms list, now check AllBiblicalTerms second
+                        var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                        if (abt.Count > 0)
                         {
-                            Id = Guid.NewGuid(),
-                            XmlSource = "TR",
-                            Code = "KeyTerm",
-                            OriginID = terms.Id,
-                            Gloss = gloss,
-                            Lang = "",
-                            Lform = "",
-                            Match = "KeyTerm" + targetRendering,
-                            Notes = noteList,
-                            Phrase = "",
-                            Prefix = "",
-                            Refs = "",
-                            SimpRefs = "0",
-                            Source = targetRendering + biblicalTermsSpelling,
-                            Stem = "",
-                            Suffix = "",
-                            Word = "",
-                        });
+                            gloss = abt[0].Gloss;
+
+                            // AllBiblicalTerms contains the verses associated with the TermRenderings
+                            foreach (var verse in abt[0].References.Verse)
+                            {
+                                verseList.Add(verse);
+                                cancellationToken.ThrowIfCancellationRequested();
+                            }
+
+                            GridData.Add(new PinsDataTable
+                            {
+                                Id = Guid.NewGuid(),
+                                XmlSource = "ABT",
+                                Code = "KeyTerm",
+                                OriginID = terms.Id,
+                                Gloss = gloss,
+                                Lang = "",
+                                Lform = "",
+                                Match = "KeyTerm" + targetRendering,
+                                Notes = noteList,
+                                Phrase = "",
+                                Prefix = "",
+                                Refs = "",
+                                SimpRefs = verseList.Count.ToString(),
+                                Source = targetRendering + biblicalTermsSpelling,
+                                Stem = "",
+                                Suffix = "",
+                                Word = "",
+                                VerseList = verseList
+                            });
+                        }
+                        else
+                        {
+                            // not found in either the BiblicalTerms or AllBiblicalTerms.xml lists
+                            gloss = biblicalTermsSense == "" ? sourceWord : biblicalTermsSense;
+
+                            GridData.Add(new PinsDataTable
+                            {
+                                Id = Guid.NewGuid(),
+                                XmlSource = "TR",
+                                Code = "KeyTerm",
+                                OriginID = terms.Id,
+                                Gloss = gloss,
+                                Lang = "",
+                                Lform = "",
+                                Match = "KeyTerm" + targetRendering,
+                                Notes = noteList,
+                                Phrase = "",
+                                Prefix = "",
+                                Refs = "",
+                                SimpRefs = "0",
+                                Source = targetRendering + biblicalTermsSpelling,
+                                Stem = "",
+                                Suffix = "",
+                                Word = "",
+                            });
+                        }
                     }
+
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
-                cancellationToken.ThrowIfCancellationRequested();
-            }
 
 
-            if (_lexicon.Entries != null)
-            {
-                // populate the data grid
-                foreach (var entry in _lexicon.Entries.Item)
+                if (_lexicon.Entries != null)
                 {
-                    foreach (var senseEntry in entry.Entry.Sense)
+                    // populate the data grid
+                    foreach (var entry in _lexicon.Entries.Item)
                     {
-                        GridData.Add(new PinsDataTable
+                        foreach (var senseEntry in entry.Entry.Sense)
                         {
-                            Id = Guid.NewGuid(),
-                            XmlSource = "LX",
-                            Code = senseEntry.Id,
-                            Gloss = senseEntry.Gloss.Text,
-                            Lang = senseEntry.Gloss.Language,
-                            Lform = entry.Lexeme.Type,
-                            Match = senseEntry.Id + entry.Lexeme.Form,
-                            Notes = "",
-                            Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
-                            Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
-                            Refs = "",
-                            SimpRefs = "0",
-                            Source = entry.Lexeme.Form,
-                            Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
-                            Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
-                            Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
-                        });
-                        cancellationToken.ThrowIfCancellationRequested();
+                            GridData.Add(new PinsDataTable
+                            {
+                                Id = Guid.NewGuid(),
+                                XmlSource = "LX",
+                                Code = senseEntry.Id,
+                                Gloss = senseEntry.Gloss.Text,
+                                Lang = senseEntry.Gloss.Language,
+                                Lform = entry.Lexeme.Type,
+                                Match = senseEntry.Id + entry.Lexeme.Form,
+                                Notes = "",
+                                Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                                Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                                Refs = "",
+                                SimpRefs = "0",
+                                Source = entry.Lexeme.Form,
+                                Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                                Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                                Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                            });
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
                     }
                 }
+
+                // bind the data grid to the collection view
+                GridCollectionView = CollectionViewSource.GetDefaultView(GridData);
+                // setup the filtering routine to determine what gets displayed
+                GridCollectionView.Filter = new Predicate<object>(FiterTerms);
+                NotifyOfPropertyChange(() => GridCollectionView);
+
+                // turn off the progress bar
+                ProgressBarVisibility = Visibility.Collapsed;
+
+                // send to the task started event aggregator for everyone else to hear about a task completion
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    new BackgroundTaskStatus
+                    {
+                        Name = _taskName,
+                        EndTime = DateTime.Now,
+                        Description = "Loading PINS data...Complete",
+                        TaskStatus = StatusEnum.Completed
+                    }));
             }
-
-            // bind the data grid to the collection view
-            GridCollectionView = CollectionViewSource.GetDefaultView(GridData);
-            // setup the filtering routine to determine what gets displayed
-            GridCollectionView.Filter = new Predicate<object>(FiterTerms);
-            NotifyOfPropertyChange(() => GridCollectionView);
-
-            // turn off the progress bar
-            ProgressBarVisibility = Visibility.Collapsed;
-
-            // send to the task started event aggregator for everyone else to hear about a task completion
-            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                new BackgroundTaskStatus
+            catch (Exception ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
                 {
-                    Name = _taskName,
-                    EndTime = DateTime.Now,
-                    Description = "Loading PINS data...Complete",
-                    TaskStatus = StatusEnum.Completed
-                }));
-
-            _generateDataRunning = false;
-            _cancellationTokenSource.Dispose();
-
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = _taskName,
+                            EndTime = DateTime.Now,
+                            ErrorMessage = $"{ex}",
+                            TaskStatus = StatusEnum.Error
+                        }));
+                }
+            }
+            finally
+            {
+                _generateDataRunning = false;
+                _cancellationTokenSource.Dispose();
+            }
             return false;
         }
 
