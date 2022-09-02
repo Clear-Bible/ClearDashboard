@@ -32,7 +32,6 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    WindowState="Minimized"
     mc:Ignorable="d">
     <Window.Resources>
         <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
