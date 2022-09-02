@@ -27,6 +27,7 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
 
@@ -229,6 +230,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             break;
                         case "DashboardID":
                             _windowIdToLoad = "DASHBOARD";
+                            break;
+                        case "EnhancedCorpusID":
+                            _windowIdToLoad = "ENHANCEDCORPUS";
                             break;
                         case "NotesID":
                             _windowIdToLoad = "NOTES";
@@ -433,11 +437,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync(viewModel, cancellationToken);
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
-            return base.OnActivateAsync(cancellationToken);
+
+
+            await base.OnActivateAsync(cancellationToken);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -454,9 +460,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
                 }
-
             }
+
+
+
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            // send out a notice that the project is loaded up
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+            
+            base.OnViewLoaded(view);
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            base.OnViewReady(view);
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -502,6 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<DashboardViewModel>();
             //await ActivateItemAsync<StartPageViewModel>();
             //await ActivateItemAsync<TreeDownViewModel>();
+            await ActivateItemAsync<EnhancedCorpusViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
@@ -678,6 +700,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
                         new() { Header = "🗟 Corpus Tokens", Id = "CorpusTokensID", ViewModel = this, },
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
+                        new() { Header = "⳼ Enhanced Corpus", Id = "EnhancedCorpusID", ViewModel = this, },
                         //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
                         new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
@@ -704,6 +727,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // create a new layout
                 if (SelectedLayoutText != "")
                 {
+                    // TODO this isn't working right as CurrentDashboardProject isn't always filled in
+
+
                     // get the project layouts
                     filePath = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
@@ -823,11 +849,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.TreeDown:
                             e.Content = GetPaneViewModelFromItems("TreeDownViewModel");
                             break;
-
                         case WorkspaceLayoutNames.CorpusTokens:
                             e.Content = GetPaneViewModelFromItems("CorpusTokensViewModel");
                             break;
-
+                        case WorkspaceLayoutNames.EnhancedCorpus:
+                            e.Content = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                            break;
 
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
@@ -888,6 +915,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             //case ConcordanceViewModel:
                             case CorpusTokensViewModel:
                             case DashboardViewModel:
+                            case EnhancedCorpusViewModel:
                                 //case StartPageViewModel:
                                 //case TreeDownViewModel:
                                 _documents.Add((PaneViewModel)t);
@@ -938,6 +966,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         //case ConcordanceViewModel:
                         case CorpusTokensViewModel:
                         case DashboardViewModel:
+                        case EnhancedCorpusViewModel:
                             //case StartPageViewModel:
                             //case TreeDownViewModel:
                             return (PaneViewModel)t;
@@ -996,6 +1025,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.Dashboard:
                     var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
                     return (vm1, vm1.Title, vm1.DockSide);
+                case WorkspaceLayoutNames.EnhancedCorpus:
+                    var vm14 = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                    return (vm14, vm14.Title, vm14.DockSide);
                 case WorkspaceLayoutNames.Pins:
                     var vm7 = GetPaneViewModelFromItems("PinsViewModel");
                     return (vm7, vm7.Title, vm7.DockSide);
@@ -1350,5 +1382,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public const string TextCollection = "TEXTCOLLECTION";
         public const string TreeDown = "TREEDOWN";
         public const string WordMeanings = "WORDMEANINGS";
+        public const string EnhancedCorpus = "ENHANCEDCORPUS";
     }
 }

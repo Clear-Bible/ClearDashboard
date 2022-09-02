@@ -9,6 +9,7 @@ using AvalonDock.Layout;
 using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -41,6 +42,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
         }
 
         public DataTemplate DashboardViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate EnhancedCorpusViewTemplate
         {
             get;
             set;
@@ -134,6 +141,9 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
 
             if (item is CorpusTokensViewModel)
                 return CorpusTokensViewTemplate;
+
+            if(item is EnhancedCorpusViewModel)
+                return EnhancedCorpusViewTemplate;
 
             // ====================
             //        TOOLS
