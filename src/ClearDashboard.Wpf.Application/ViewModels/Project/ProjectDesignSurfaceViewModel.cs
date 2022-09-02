@@ -249,8 +249,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
-
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -333,6 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         {
             Logger.LogInformation("AddParatextCorpus called.");
             _addParatextCorpusRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
 
             await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(

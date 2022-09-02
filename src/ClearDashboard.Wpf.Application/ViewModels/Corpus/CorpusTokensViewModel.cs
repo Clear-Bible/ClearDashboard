@@ -35,7 +35,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         {
             Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -123,6 +122,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             Logger.LogInformation("Received TokenizedTextCorpusMessage.");
 
             _handleAsyncRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
 
             await Task.Factory.StartNew(async () =>
