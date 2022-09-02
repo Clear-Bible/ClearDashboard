@@ -28,11 +28,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public static async Task<ParatextProjectTextCorpus> Get(
             IMediator mediator,
-            string paratextProjectId)
+            string paratextProjectId, CancellationToken token)
         {
             var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return new ParatextProjectTextCorpus(
