@@ -36,19 +36,23 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<ProjectSetupView>().AsSelf();
 
-            builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-                .Where(type => type.Name.EndsWith("ViewModel"))
-                .AsSelf()
-                .InstancePerDependency();
-
-            builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-                .Where(type => type.Name.EndsWith("View"))
-                .AsSelf()
-                .InstancePerDependency();
-
             builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>();
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
+
+            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
+            //    .Where(type => type.Name.EndsWith("ViewModel"))
+            //    .AsSelf()
+            //    .InstancePerDependency();
+
+            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
+            //    .Where(type => type.Name.EndsWith("View"))
+            //    .AsSelf()
+            //    .InstancePerDependency();
+
+            //builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>();
+
+            //builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
         }
     }
 }

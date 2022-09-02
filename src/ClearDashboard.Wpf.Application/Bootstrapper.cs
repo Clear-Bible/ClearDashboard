@@ -37,6 +37,12 @@ namespace ClearDashboard.Wpf.Application
             base.PreInitialize();
         }
 
+        protected override void PostInitialize()
+        {
+            var r = Container!.ComponentRegistry.Registrations;
+            base.PostInitialize();
+        }
+
         protected override void SetupLogging()
         {
             SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboard.log"));
@@ -46,7 +52,7 @@ namespace ClearDashboard.Wpf.Application
         {
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
-            serviceCollection.AddValidatorsFromAssemblyContaining<AddParatextCorpusDialogViewModelValidator>();
+            //serviceCollection.AddValidatorsFromAssemblyContaining<AddParatextCorpusDialogViewModelValidator>();
 
             base.PopulateServiceCollection(serviceCollection);
         }
