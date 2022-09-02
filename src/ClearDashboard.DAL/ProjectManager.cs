@@ -397,5 +397,15 @@ namespace ClearDashboard.DataAccessLayer
                 throw;
             }
         }
+
+
+        public async Task UpdateProject(Project project)
+        {
+            var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+            projectAssets.ProjectDbContext.Attach(project);
+
+            await projectAssets.ProjectDbContext.SaveChangesAsync();
+            return;
+        }
     }
 }

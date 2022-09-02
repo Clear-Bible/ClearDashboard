@@ -26,6 +26,8 @@ public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record VerseChangedMessage(string Verse);
 
+public record ProjectLoadCompleteMessage(bool Loaded);
+
 public record ProjectChangedMessage(ParatextProject Project);
 
 public record TextCollectionChangedMessage(List<TextCollection> TextCollections);

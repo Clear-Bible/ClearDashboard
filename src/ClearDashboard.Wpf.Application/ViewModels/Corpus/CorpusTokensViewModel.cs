@@ -184,11 +184,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 TaskStatus = StatusEnum.Error
                             }));
                     }
-
-                    _handleAsyncRunning = false;
                 }
                 finally
                 {
+                    _handleAsyncRunning = false;
+
                     _cancellationTokenSource.Dispose();
                 }
 

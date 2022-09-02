@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public sealed class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChanagedMessage>
+    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChanagedMessage>
     {
 
         #region events

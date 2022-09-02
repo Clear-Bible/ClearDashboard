@@ -135,6 +135,12 @@
                         </DataTemplate>
                     </panes:PanesTemplateSelector.DashboardViewTemplate>
 
+                    <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
+                        <DataTemplate>
+                            <local:EnhancedCorpusView />
+                        </DataTemplate>
+                    </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
+
                     <panes:PanesTemplateSelector.AlignmentToolViewTemplate>
                         <DataTemplate>
                             <views:AlignmentToolView />
