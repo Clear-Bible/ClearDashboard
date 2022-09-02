@@ -26,7 +26,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             
             var tokenizedCorpusIds = ProjectDbContext.TokenizedCorpora
                 .Where(tc => tc.CorpusId == request.CorpusId.Id)
-                .Select(tc => new TokenizedTextCorpusId(tc.Id)).AsEnumerable();
+                .Select(tc => ModelHelper.BuildTokenizedTextCorpusId(tc))
+                .AsEnumerable();
             
             return Task.FromResult(
                 new RequestResult<IEnumerable<TokenizedTextCorpusId>>

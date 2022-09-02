@@ -34,12 +34,12 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation");
 
             // Create the TokenizedCorpus + Tokens in the database:
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty);
             var commandResult = await Mediator!.Send(command);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var query = new GetBookIdsByTokenizedCorpusIdQuery(commandResult.Data?.TokenizedCorpusId!);
+            var query = new GetBookIdsByTokenizedCorpusIdQuery(commandResult.Data?.TokenizedTextCorpusId!);
             var queryResult = await Mediator.Send(query);
 
             Assert.NotNull(queryResult);
@@ -85,9 +85,9 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
         {
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
             var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, corpus.CorpusId, ".a.function()");
+                .Create(Mediator!, corpus.CorpusId, "Unit Test", ".a.function()");
 
-            var tokenizedCorpus = ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == tokenizedTextCorpus.TokenizedCorpusId.Id);
+            var tokenizedCorpus = ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == tokenizedTextCorpus.TokenizedTextCorpusId.Id);
             Assert.NotNull(tokenizedCorpus);
 
             // Add token with bogus book number:
@@ -106,7 +106,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             await ProjectDbContext.SaveChangesAsync();
 
             // Run the query:
-            var query = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpus.TokenizedCorpusId);
+            var query = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpus.TokenizedTextCorpusId);
 
             var result = await Mediator!.Send(query);
             Assert.NotNull(result);

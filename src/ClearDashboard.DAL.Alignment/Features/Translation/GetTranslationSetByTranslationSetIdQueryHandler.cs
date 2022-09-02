@@ -23,8 +23,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext.TranslationSets
+                .Include(ts => ts.ParallelCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                .Include(ts => ts.ParallelCorpus)
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
                 .Include(ts => ts.TranslationModel)
-                .ThenInclude(tme => tme.TargetTextScores)
+                    .ThenInclude(tme => tme.TargetTextScores)
                 .Where(ts => ts.Id == request.TranslationSetId.Id)
                 .FirstOrDefault();
             if (translationSet == null)
@@ -46,8 +50,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>
             ((
-                new TranslationSetId(translationSet.Id),
-                new ParallelCorpusId(translationSet.ParallelCorpusId),
+                ModelHelper.BuildTranslationSetId(translationSet),
+                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!),
                 translationModelData
             ));
         }

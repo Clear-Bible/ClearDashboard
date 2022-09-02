@@ -97,13 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 v.TokenVerseAssociations
                                     .Where(tva => tva.Token != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva =>
-                                        new TokenId(
-                                            tva.Token!.BookNumber,
-                                            tva.Token!.ChapterNumber,
-                                            tva.Token!.VerseNumber,
-                                            tva.Token!.WordNumber,
-                                            tva.Token!.SubwordNumber))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.Token!))
                             ));
                         var targetVerses = vm.Verses
                             .Where(v => v.CorpusId == targetCorpusId)
@@ -116,13 +110,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 v.TokenVerseAssociations
                                     .Where(tva => tva.Token != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva =>
-                                        new TokenId(
-                                            tva.Token!.BookNumber, 
-                                            tva.Token!.ChapterNumber, 
-                                            tva.Token!.VerseNumber, 
-                                            tva.Token!.WordNumber, 
-                                            tva.Token!.SubwordNumber))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.Token!))
                             ));
 
                         return new VerseMapping(sourceVerses, targetVerses);
@@ -133,10 +121,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         IEnumerable<VerseMapping> verseMappings,
                         ParallelCorpusId parallelCorpusId)>
                     ((
-                        new TokenizedTextCorpusId(parallelCorpus.SourceTokenizedCorpusId),
-                        new TokenizedTextCorpusId(parallelCorpus.TargetTokenizedCorpusId),
+                        ModelHelper.BuildTokenizedTextCorpusId(parallelCorpus.SourceTokenizedCorpus),
+                        ModelHelper.BuildTokenizedTextCorpusId(parallelCorpus.TargetTokenizedCorpus),
                         verseMappings,
-                        new ParallelCorpusId(parallelCorpus.Id)
+                        ModelHelper.BuildParallelCorpusId(parallelCorpus)
                     ));
             }
             catch (NullReferenceException e)

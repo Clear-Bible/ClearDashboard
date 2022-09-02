@@ -31,6 +31,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
+                "Unit Test",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
@@ -40,7 +41,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             ProjectDbContext?.ChangeTracker.Clear();
 
             // Retrieve Tokens
-            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedTextCorpusId, "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -77,6 +78,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
+                "Unit Test",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             await Mediator.Send(command);
 

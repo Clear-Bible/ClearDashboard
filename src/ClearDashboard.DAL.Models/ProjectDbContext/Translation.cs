@@ -8,6 +8,10 @@ public class Translation : SynchronizableTimestampedEntity
     public string? TargetText { get; set; }
     public virtual TranslationState TranslationState { get; set; }
 
+    [ForeignKey("TranslationSetId")]
+    public Guid TranslationSetId { get; set; }
+    public virtual TranslationSet? TranslationSet { get; set; }
+
     [ForeignKey("SourceTokenId")]
     public virtual Token? SourceToken { get; set; }
 }

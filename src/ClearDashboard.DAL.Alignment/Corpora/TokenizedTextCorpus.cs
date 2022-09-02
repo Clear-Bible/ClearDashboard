@@ -1,6 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
@@ -9,18 +8,18 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class TokenizedTextCorpus : ScriptureTextCorpus
     {
-        public TokenizedTextCorpusId TokenizedCorpusId { get; set; }
+        public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
         public CorpusId CorpusId { get; set; }
         internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations)
         {
-            TokenizedCorpusId = tokenizedCorpusId;
+            TokenizedTextCorpusId = tokenizedCorpusId;
             CorpusId = corpusId;
 
             Versification = ScrVers.Original;
 
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new TokenizedText(TokenizedCorpusId, mediator, Versification, bookAbbreviation));
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation));
             }
 
         }
@@ -40,14 +39,14 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public static async Task<TokenizedTextCorpus> Get(
             IMediator mediator,
-            TokenizedTextCorpusId tokenizedCorpusId)
+            TokenizedTextCorpusId tokenizedTextCorpusId)
         {
-            var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedCorpusId);
+            var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
-                return new TokenizedTextCorpus(command.TokenizedCorpusId, result.Data.corpusId, mediator, result.Data.bookIds);
+                return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, result.Data.corpusId, mediator, result.Data.bookIds);
             }
             else
             {

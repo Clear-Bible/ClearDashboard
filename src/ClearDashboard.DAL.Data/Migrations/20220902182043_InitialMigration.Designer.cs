@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220901041310_InitialMigration")]
+    [Migration("20220902182043_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,10 +69,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("ParallelCorpusHistoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ParallelCorpusId")
+                    b.Property<Guid>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -473,6 +473,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Metadata")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -537,7 +540,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("TargetText")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("TranslationSetId")
+                    b.Property<Guid>("TranslationSetId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TranslationState")
@@ -616,7 +619,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -794,15 +797,21 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("AlignmentSets")
                         .HasForeignKey("ParallelCorpusHistoryId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("AlignmentSets")
-                        .HasForeignKey("ParallelCorpusId");
+                        .HasForeignKey("ParallelCorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany("AlignmentSets")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("EngineWordAlignment");
+
+                    b.Navigation("ParallelCorpus");
 
                     b.Navigation("User");
                 });
@@ -958,16 +967,20 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "SourceToken")
-                        .WithMany()
+                        .WithMany("Translations")
                         .HasForeignKey("SourceTokenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "TranslationSet")
                         .WithMany("Translations")
-                        .HasForeignKey("TranslationSetId");
+                        .HasForeignKey("TranslationSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SourceToken");
+
+                    b.Navigation("TranslationSet");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
@@ -1006,7 +1019,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany("TranslationSets")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DerivedFrom");
 
@@ -1102,6 +1117,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("TargetAlignmentTokenPairs");
 
                     b.Navigation("TokenVerseAssociations");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>

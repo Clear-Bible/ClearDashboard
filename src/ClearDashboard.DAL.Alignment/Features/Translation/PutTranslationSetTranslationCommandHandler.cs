@@ -32,31 +32,33 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             CancellationToken cancellationToken)
         {
             var rTokenId = request.Translation.SourceToken.TokenId;
+            var translationSet = ProjectDbContext!.TranslationSets
+                .Include(ts => ts.ParallelCorpus)
+                .FirstOrDefault(ts => ts.Id == request.TranslationSetId.Id);
+
+            if (translationSet == null)
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Invalid TranslationSetId '{request.TranslationSetId.Id}' found in request"
+                );
+            }
 
             if (request.TranslationActionType == "PutPropagate")
             {
-                var ts = ProjectDbContext!.TranslationSets
-                    .Include(ts => ts.Translations
-                        .Where(tr => tr.SourceToken!.TrainingText == request.Translation.SourceToken.TrainingText))
-                    .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
-                    .ThenInclude(s => s!.Tokens.Where(t => t.TrainingText == request.Translation.SourceToken.TrainingText))
-                    .FirstOrDefault(c => c.Id == request.TranslationSetId.Id);
-
-                if (ts == null)
-                {
-                    return new RequestResult<object>
-                    (
-                        success: false,
-                        message: $"Invalid TranslationSetId '{request.TranslationSetId.Id}' found in request"
-                    );
-                }
+                var translations = ProjectDbContext!.Translations
+                    .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
+                    .Where(tr => tr.SourceToken!.TrainingText == request.Translation.SourceToken.TrainingText);
+                var tokens = ProjectDbContext!.Tokens
+                    .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                    .Where(t => t.TrainingText == request.Translation.SourceToken.TrainingText);
 
                 var exactMatchFound = false;
                 var tokenGuidsUpdated = new List<Guid>();
-                foreach (var tr in ts!.Translations)
+                foreach (var tr in translations)
                 {
-                    var exactMatch = IsTokenIdMatch(rTokenId, tr.SourceToken!);
+                    var exactMatch = ModelHelper.IsTokenIdMatch(rTokenId, tr.SourceToken!);
 
                     // Don't propagate to a non-exact match that has already been assigned:
                     if (exactMatch || tr.TranslationState != Models.TranslationState.Assigned)
@@ -72,12 +74,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     if (exactMatch) exactMatchFound = true;
                 }
 
-                foreach (var t in ts!.ParallelCorpus!.SourceTokenizedCorpus!.Tokens)
+                foreach (var t in tokens)
                 {
                     if (!tokenGuidsUpdated.Contains(t.Id))
                     {
-                        var exactMatch = IsTokenIdMatch(rTokenId, t);
-                        ts!.Translations.Add(new Models.Translation
+                        var exactMatch = ModelHelper.IsTokenIdMatch(rTokenId, t);
+                        translationSet.Translations.Add(new Models.Translation
                         {
                             SourceToken = t,
                             TargetText = request.Translation.TargetTranslationText,
@@ -95,51 +97,44 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     return new RequestResult<object>
                     (
                         success: false,
-                        message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {ts.ParallelCorpus.SourceTokenizedCorpusId}"
+                        message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId}"
                     );
                 }
 
             }
             else
             {
-                var ts = ProjectDbContext!.TranslationSets
-                    .Include(ts => ts.Translations
-                        .Where(t => t.SourceToken!.BookNumber == rTokenId.BookNumber)
-                        .Where(t => t.SourceToken!.ChapterNumber == rTokenId.ChapterNumber)
-                        .Where(t => t.SourceToken!.VerseNumber == rTokenId.VerseNumber)
-                        .Where(t => t.SourceToken!.WordNumber == rTokenId.WordNumber)
-                        .Where(t => t.SourceToken!.SubwordNumber == rTokenId.SubWordNumber))
-                    .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
-                    .ThenInclude(s => s!.Tokens
-                        .Where(t => t.BookNumber == rTokenId.BookNumber)
-                        .Where(t => t.ChapterNumber == rTokenId.ChapterNumber)
-                        .Where(t => t.VerseNumber == rTokenId.VerseNumber)
-                        .Where(t => t.WordNumber == rTokenId.WordNumber)
-                        .Where(t => t.SubwordNumber == rTokenId.SubWordNumber))
-                    .FirstOrDefault(c => c.Id == request.TranslationSetId.Id);
+                var translation = ProjectDbContext!.Translations
+                    .Where(tr => tr.TranslationSetId == translationSet.Id)
+                    .Where(tr => tr.SourceToken!.BookNumber == rTokenId.BookNumber)
+                    .Where(tr => tr.SourceToken!.ChapterNumber == rTokenId.ChapterNumber)
+                    .Where(tr => tr.SourceToken!.VerseNumber == rTokenId.VerseNumber)
+                    .Where(tr => tr.SourceToken!.WordNumber == rTokenId.WordNumber)
+                    .Where(tr => tr.SourceToken!.SubwordNumber == rTokenId.SubWordNumber)
+                    .FirstOrDefault();
 
-                if (ts == null)
+                if (translation != null)
                 {
-                    return new RequestResult<object>
-                    (
-                        success: false,
-                        message: $"Invalid TranslationSetId '{request.TranslationSetId.Id}' found in request"
-                    );
-                }
-
-                if (ts.Translations.Any())
-                {
-                    var translation = ts.Translations.First();
                     translation.TargetText = request.Translation.TargetTranslationText;
                     translation.TranslationState = Models.TranslationState.Assigned;
                 }
                 else
                 {
-                    var token = ts.ParallelCorpus!.SourceTokenizedCorpus!.Tokens.FirstOrDefault();
+                    var token = ProjectDbContext!.Tokens
+                        .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                        .Where(t => t.BookNumber == rTokenId.BookNumber)
+                        .Where(t => t.ChapterNumber == rTokenId.ChapterNumber)
+                        .Where(t => t.VerseNumber == rTokenId.VerseNumber)
+                        .Where(t => t.WordNumber == rTokenId.WordNumber)
+                        .Where(t => t.SubwordNumber == rTokenId.SubWordNumber)
+                        //.Where(t => t.Tokenization!.SourceParallelCorpora
+                        //    .Any(spc => spc.TranslationSets
+                        //        .Any(ts => ts.Id == request.TranslationSetId.Id)))
+                        .FirstOrDefault();
+
                     if (token != null)
                     {
-                        ts.Translations.Add(new Models.Translation
+                        translationSet.Translations.Add(new Models.Translation
                         {
                             SourceToken = token,
                             TargetText = request.Translation.TargetTranslationText,
@@ -151,7 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         return new RequestResult<object>
                         (
                             success: false,
-                            message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {ts.ParallelCorpus.SourceTokenizedCorpusId}"
+                            message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId}"
                         );
                     }
                 }
@@ -162,15 +157,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             return new RequestResult<object>(null);
-        }
-
-        private static bool IsTokenIdMatch(TokenId tokenId, Models.Token dbToken)
-        {
-            return (dbToken.BookNumber == tokenId.BookNumber &&
-                    dbToken.ChapterNumber == tokenId.ChapterNumber &&
-                    dbToken.VerseNumber == tokenId.VerseNumber &&
-                    dbToken.WordNumber == tokenId.WordNumber &&
-                    dbToken.SubwordNumber == tokenId.SubWordNumber);
         }
     }
 }

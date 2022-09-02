@@ -61,8 +61,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
                 return new RequestResult<TranslationSet>(new TranslationSet(
-                    new TranslationSetId(translationSetModel.Id),
-                    request.ParallelCorpusId,
+                    ModelHelper.BuildTranslationSetId(translationSetModel),
+                    ModelHelper.BuildParallelCorpusId(translationSetModel.ParallelCorpus!),
                     request.TranslationModel,
                     _mediator));
 

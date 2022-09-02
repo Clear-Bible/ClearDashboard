@@ -130,7 +130,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"));
                 Output.WriteLine($"Token for adding Translation: {sourceToken.TokenId}");
 
-                if (iteration > 5)
+                if (iteration >= 5)
                 {
                     break;
                 }
@@ -149,16 +149,38 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .Include(ts => ts.Translations)
                 .FirstOrDefault(ts => ts.Id == translationSet.TranslationSetId.Id);
             Assert.NotNull(translationSetDb);
-            Assert.Equal(5, translationSetDb!.Translations.Count);
+            Assert.Equal(exampleTranslations.Count, translationSetDb!.Translations.Count);
 
-            var tokenDb = translationSetDb!.Translations.First().SourceToken;
-            var tokenIdDb = new TokenId(
-                tokenDb!.BookNumber, 
-                tokenDb!.ChapterNumber, 
-                tokenDb!.VerseNumber, 
-                tokenDb!.WordNumber, 
-                tokenDb!.SubwordNumber);
-            Assert.Equal(exampleTranslations[0].SourceToken.TokenId, tokenIdDb);
+            var tokensInDb = translationSetDb!.Translations.Select(t => new TokenId(
+                t.SourceToken!.BookNumber,
+                t.SourceToken!.ChapterNumber,
+                t.SourceToken!.VerseNumber,
+                t.SourceToken!.WordNumber,
+                t.SourceToken!.SubwordNumber));
+
+            foreach (var exampleTranslation in exampleTranslations)
+            {
+                Assert.Contains<TokenId>(exampleTranslation.SourceToken.TokenId, tokensInDb);
+            }
+
+            // FIXME:  quick test of PutPropagate.  Need better tests of this
+            translationSet.PutTranslation(
+                    new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
+                    TranslationActionType.PutNoPropagate.ToString());
+
+            var to = new Token(
+                new TokenId(
+                    exampleTranslations[1].SourceToken!.TokenId.BookNumber,
+                    exampleTranslations[1].SourceToken!.TokenId.ChapterNumber,
+                    exampleTranslations[1].SourceToken!.TokenId.VerseNumber,
+                    5,
+                    exampleTranslations[1].SourceToken!.TokenId.SubWordNumber),
+                exampleTranslations[1].SourceToken!.SurfaceText,
+                exampleTranslations[1].SourceToken!.TrainingText);
+
+            translationSet.PutTranslation(
+                    new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
+                    TranslationActionType.PutPropagate.ToString());
         }
         finally
         {
@@ -188,11 +210,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
         var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-            .Create(Mediator!, sourceCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+            .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
         var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-            .Create(Mediator!, targetCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+            .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
         var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 

@@ -400,6 +400,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                     $"Creating tokenized text corpus for '{metadata.Name}' corpus.");
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,
                                     corpus.CorpusId,
+                                    metadata.Name,
                                     ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
                                 await SendProgressBarMessage(
                                     $"Completed creating tokenized text corpus for '{metadata.Name}' corpus.");

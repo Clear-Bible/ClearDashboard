@@ -4,6 +4,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
@@ -24,7 +25,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>> GetDataAsync(GetAllTranslationSetIdsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Models.TranslationSet> translationSets = ProjectDbContext.TranslationSets;
+            IQueryable<Models.TranslationSet> translationSets = ProjectDbContext.TranslationSets
+                .Include(ts => ts.ParallelCorpus)
+                    .ThenInclude(pc => pc.SourceTokenizedCorpus)
+                .Include(ts => ts.ParallelCorpus)
+                    .ThenInclude(pc => pc.TargetTokenizedCorpus);
             if (request.ParallelCorpusId != null)
             {
                 translationSets = translationSets.Where(ts => ts.ParallelCorpusId == request.ParallelCorpusId.Id);
@@ -36,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var translationSetIds = translationSets
                 .AsEnumerable()   // To avoid error CS8143:  An expression tree may not contain a tuple literal
-                .Select(ts => (new TranslationSetId(ts.Id), new ParallelCorpusId(ts.ParallelCorpusId)));
+                .Select(ts => (ModelHelper.BuildTranslationSetId(ts), ModelHelper.BuildParallelCorpusId(ts.ParallelCorpus!)));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;

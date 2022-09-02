@@ -56,15 +56,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var translations = translationsDB
                 .Select(t => new Alignment.Translation.Translation(
-                    new Token(
-                        new TokenId(
-                            t.SourceToken!.BookNumber,
-                            t.SourceToken.ChapterNumber,
-                            t.SourceToken.VerseNumber,
-                            t.SourceToken.WordNumber,
-                            t.SourceToken.SubwordNumber),
-                        t.SourceToken.SurfaceText ?? string.Empty,
-                        t.SourceToken.TrainingText ?? string.Empty), 
+                    ModelHelper.BuildToken(t.SourceToken),
                     t.TargetText ?? string.Empty, 
                     t.TranslationState.ToString()));
 
