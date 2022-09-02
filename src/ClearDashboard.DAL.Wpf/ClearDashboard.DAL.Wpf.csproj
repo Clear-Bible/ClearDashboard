@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <RootNamespace>ClearDashboard.DataAccessLayer.Wpf</RootNamespace>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.210" />
+    <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.6" />
   </ItemGroup>

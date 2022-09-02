@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.Views;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,8 +26,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.ViewModels.Project;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {

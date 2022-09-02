@@ -93,7 +93,7 @@
                                 <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
                                 <TextBlock FontSize="24" Text="{Binding Name}" />
                                 <TextBlock FontSize="12" Text="{Binding LongName}" />
-                                <TextBlock FontSize="10" Text="{Binding  Id}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

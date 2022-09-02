@@ -60,7 +60,8 @@ namespace ClearDashboard.Wpf.ViewModels
 
         }
 
-        public LandingViewModel(IWindowManager windowManager, DashboardProjectManager projectManager, INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
+        public LandingViewModel(IWindowManager windowManager, DashboardProjectManager projectManager, 
+            INavigationService navigationService, IEventAggregator eventAggregator, ILogger<LandingViewModel> logger)
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             Logger.LogInformation("LandingViewModel constructor called.");
@@ -69,8 +70,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
             AlertVisibility = Visibility.Collapsed;
         }
-
-
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -85,7 +84,7 @@ namespace ClearDashboard.Wpf.ViewModels
                 DashboardProjects = results.Data;
             }
         }
-
+        
         #endregion
 
         #region Methods
@@ -119,7 +118,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             Logger.LogInformation("NewProject called.");
 
-            if (ProjectManager.HasDashboardProject)
+            if (!ProjectManager.HasDashboardProject)
             {
                 ProjectManager.CreateDashboardProject();
             }
