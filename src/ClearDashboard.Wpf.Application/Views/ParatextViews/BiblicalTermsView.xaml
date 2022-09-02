@@ -9,13 +9,14 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:paratextviews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Width="800"
-    Height="450"
+    d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -84,7 +85,7 @@
                     </Button.Style>
                     <materialDesign:PackIcon
                         Background="Transparent"
-                        Foreground="{StaticResource TealMidBrush}"
+                        Foreground="{StaticResource SecondaryHueDarkBrush}"
                         Kind="ArrowExpandAll" />
                 </Button>
 
@@ -95,7 +96,7 @@
                     <StackPanel
                         Margin="5,0,0,5"
                         VerticalAlignment="Center"
-                        Orientation="Vertical">
+                        Orientation="Horizontal">
                         <RadioButton
                             Content="{helpers:Localization BiblicalTermsForm_Project}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -104,6 +105,7 @@
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                         <RadioButton
+                            Margin="20,0,0,0"
                             Content="{helpers:Localization BiblicalTermsForm_All}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radBTType"
@@ -165,56 +167,62 @@
                     Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox
-                            x:Name="RenderingsFilter"
-                            MinWidth="50"
-                            Margin="5"
-                            DisplayMemberPath="Display"
-                            ItemsSource="{Binding RenderingsFilters}"
-                            SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedValuePath="Value" />
-                    </StackPanel>
-                </Border>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox
+                                x:Name="RenderingsFilter"
+                                MinWidth="50"
+                                Margin="5"
+                                DisplayMemberPath="Display"
+                                ItemsSource="{Binding RenderingsFilters}"
+                                SelectedItem="{Binding RenderingFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedValuePath="Value" />
 
-                <!--  SCOPE  -->
-                <Border
+                            <Label
+                                Margin="15,5,5,5"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization BiblicalTermsForm_Scope}" />
+                            <ComboBox
+                                x:Name="Scope"
+                                MinWidth="50"
+                                Margin="0,0,5,0"
+                                DisplayMemberPath="Display"
+                                ItemsSource="{Binding Scopes}"
+                                SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedValuePath="Value" />
+                        </StackPanel>
+                        <!--</Border>
+
+                        -->
+                        <!--  SCOPE  -->
+                        <!--<Border
                     Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
-                        <Label
-                            Margin="0,5,5,5"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization BiblicalTermsForm_Scope}" />
-                        <ComboBox
-                            x:Name="Scope"
-                            MinWidth="50"
-                            Margin="0,0,5,0"
-                            DisplayMemberPath="Display"
-                            ItemsSource="{Binding Scopes}"
-                            SelectedItem="{Binding SelectedScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedValuePath="Value" />
-                    </StackPanel>
-                </Border>
 
-                <!--  SEMANTIC DOMAINS  -->
+                    </StackPanel>
+                </Border>-->
+
+                        <!--  SEMANTIC DOMAINS  -->
+                        <!--
                 <Border
                     Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                    BorderThickness="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Label
-                            Margin="0,5,5,5"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
-                        <ComboBox
-                            x:Name="Domains"
-                            MinWidth="50"
-                            Margin="0,0,5,0"
-                            DisplayMemberPath="Display"
-                            ItemsSource="{Binding Domains}"
-                            SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    BorderThickness="1">-->
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                                Margin="0,5,5,5"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization BiblicalTermsForm_SemanticDomain}" />
+                            <ComboBox
+                                x:Name="Domains"
+                                MinWidth="50"
+                                Margin="0,0,5,0"
+                                DisplayMemberPath="Display"
+                                ItemsSource="{Binding Domains}"
+                                SelectedItem="{Binding SelectedDomain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -349,8 +357,8 @@
                                 Text="{Binding RenderingString}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
-                                        <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
+                                        <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                        <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
                                         <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
@@ -368,10 +376,11 @@
 
         <ProgressBar
             x:Name="ProgressBarVisibility"
-            Grid.Row="2"
             Width="100"
             Height="100"
-            Margin="15,0,5,0"
+            Margin="15,50,5,0"
+            VerticalAlignment="Top"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
@@ -430,8 +439,8 @@
                         ItemsSource="{Binding Renderings}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="FontFamily" Value="{Binding ElementName=UserControl, Path=DataContext.FontFamily}" />
-                                <Setter Property="FontSize" Value="{Binding ElementName=UserControl, Path=DataContext.FontSize}" />
+                                <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -505,8 +514,8 @@
                                     <DataTemplate>
                                         <helpers:BindableTextBlock
                                             Width="Auto"
-                                            FontFamily="{Binding ElementName=UserControl, Path=DataContext.FontFamily}"
-                                            FontSize="{Binding ElementName=UserControl, Path=DataContext.FontSize}"
+                                            FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                            FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap" />
                                     </DataTemplate>

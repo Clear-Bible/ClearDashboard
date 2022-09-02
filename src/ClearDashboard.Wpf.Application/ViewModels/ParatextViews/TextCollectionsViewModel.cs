@@ -101,7 +101,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                             var startPart = textCollection.ReferenceShort;
 
                             tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                            tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = Brushes.Cyan });
+                            SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
+
+                            tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
 
                             TextCollectionLists.Add(tc);
                         }

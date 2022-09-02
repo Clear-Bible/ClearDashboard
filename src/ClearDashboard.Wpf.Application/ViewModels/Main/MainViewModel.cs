@@ -397,6 +397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
 #pragma warning restore CA1416 // Validate platform compatibility
 
+            this.SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
 
             // TODO - UNREMARK THIS FOR THEME SWITCHING
 
@@ -443,6 +444,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (Parameter != null)
             {
+               
                 Logger.LogInformation($"Received {Parameter.ProjectName}.");
                 if (Parameter.IsNew)
                 {
@@ -673,17 +675,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         new() { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
                         new() { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
-                        new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
+                        //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
                         new() { Header = "🗟 Corpus Tokens", Id = "CorpusTokensID", ViewModel = this, },
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
+                        //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
                         new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
-                        new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
-                        new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
-                        new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
+                        //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
+                        //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
+                        //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
                         new() { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
-                        new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
+                        //new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
                         new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
                     }
                 },

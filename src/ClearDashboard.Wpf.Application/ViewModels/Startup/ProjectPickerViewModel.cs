@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -9,16 +7,12 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,12 +22,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     public class ProjectPickerViewModel : ApplicationWorkflowStepViewModel
     {
         #region Member Variables
-        protected IWindowManager? _windowManager;
+        //protected IWindowManager? _windowManager;
         private readonly TranslationSource? _translationSource;
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject> DashboardProjects { get; set; } =
+        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } =
             new ObservableCollection<DashboardProject>();
 
         private Visibility _alertVisibility = Visibility.Visible;
@@ -47,8 +41,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
         
-        private string _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
-        public string Message
+        private string? _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+        public string? Message
         {
             get => _message;
             set
@@ -95,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-            Logger.LogInformation("Project Picker constructor called.");
+            Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _translationSource = translationSource;
             AlertVisibility = Visibility.Collapsed;
@@ -182,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ProjectManager!.CurrentDashboardProject = project;
             var startupDialogViewModel = Parent as StartupDialogViewModel;
             startupDialogViewModel!.ExtraData = project;
-            startupDialogViewModel?.Ok();
+            startupDialogViewModel.Ok();
         }
 
         private bool CheckIfConnectedToParatext()

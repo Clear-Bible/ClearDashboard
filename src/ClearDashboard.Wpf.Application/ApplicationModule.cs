@@ -5,6 +5,7 @@ using ClearApplicationFoundation.ViewModels.Shell;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using System.Linq;
 using System.Reflection;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Module = Autofac.Module;
@@ -36,19 +37,23 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<ProjectSetupView>().AsSelf();
 
-            builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-                .Where(type => type.Name.EndsWith("ViewModel"))
-                .AsSelf()
-                .InstancePerDependency();
-
-            builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-                .Where(type => type.Name.EndsWith("View"))
-                .AsSelf()
-                .InstancePerDependency();
-
             builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>();
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
+
+            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
+            //    .Where(type => type.Name.EndsWith("ViewModel"))
+            //    .AsSelf()
+            //    .InstancePerDependency();
+
+            //builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
+            //    .Where(type => type.Name.EndsWith("View"))
+            //    .AsSelf()
+            //    .InstancePerDependency();
+
+            //builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>();
+
+            //builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>();
         }
     }
 }

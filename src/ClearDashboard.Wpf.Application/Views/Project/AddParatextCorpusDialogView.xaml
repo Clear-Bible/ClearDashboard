@@ -7,9 +7,9 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
-    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     Width="600"
     Height="300"
     d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
