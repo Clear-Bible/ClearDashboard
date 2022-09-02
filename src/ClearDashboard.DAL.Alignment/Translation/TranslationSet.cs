@@ -13,12 +13,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
-        public Dictionary<string, Dictionary<string, double>> TranslationModel { get; }
+        private Dictionary<string, Dictionary<string, double>> TranslationModel { get; }
 
-        //public Dictionary<string, Dictionary<string, double>> GetTranslationModel()
-        //{
-        //    return TranslationModel;
-        //}
+        public Dictionary<string, Dictionary<string, double>> GetTranslationModel()
+        {
+            return TranslationModel;
+        }
 
         public async void PutTranslationModelEntry(string sourceText, Dictionary<string, double> targetTranslationTextScores)
         {
@@ -61,7 +61,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>> 
+        public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
             GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
             var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));

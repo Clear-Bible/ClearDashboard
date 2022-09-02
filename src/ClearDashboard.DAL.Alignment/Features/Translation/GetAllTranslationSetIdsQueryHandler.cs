@@ -14,8 +14,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetAllTranslationSetIdsQueryHandler : ProjectDbContextQueryHandler<
         GetAllTranslationSetIdsQuery,
-        RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>,
-        IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>
+        RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>,
+        IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>
     {
 
         public GetAllTranslationSetIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAllTranslationSetIdsQueryHandler> logger) 
@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>> GetDataAsync(GetAllTranslationSetIdsQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>> GetDataAsync(GetAllTranslationSetIdsQuery request, CancellationToken cancellationToken)
         {
             IQueryable<Models.TranslationSet> translationSets = ProjectDbContext.TranslationSets
                 .Include(ts => ts.ParallelCorpus)
@@ -41,12 +41,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var translationSetIds = translationSets
                 .AsEnumerable()   // To avoid error CS8143:  An expression tree may not contain a tuple literal
-                .Select(ts => (ModelHelper.BuildTranslationSetId(ts), ModelHelper.BuildParallelCorpusId(ts.ParallelCorpus!)));
+                .Select(ts => (
+                    ModelHelper.BuildTranslationSetId(ts), 
+                    ModelHelper.BuildParallelCorpusId(ts.ParallelCorpus!),
+                    ModelHelper.BuildUserId(ts)));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>>( translationSetIds );
+            return new RequestResult<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>( translationSetIds );
         }
     }
 

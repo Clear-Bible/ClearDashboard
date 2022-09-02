@@ -95,7 +95,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSetDb);
 
             Assert.Equal(translationSet.ParallelCorpusId.Id, translationSetDb!.ParallelCorpusId);
-            Assert.Equal(translationSet.TranslationModel.Count, translationSetDb!.TranslationModel.Count);
+            Assert.Equal(translationSet.GetTranslationModel().Count, translationSetDb!.TranslationModel.Count);
             Assert.Empty(translationSetDb!.Translations);
         }
         finally
@@ -181,10 +181,26 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             translationSet.PutTranslation(
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
                     TranslationActionType.PutPropagate.ToString());
+
+            translationSet.PutTranslationModelEntry("one", new Dictionary<string, double>()
+            {
+                { "boo", 0.98 },
+                { "baa", 0.53 },
+                { "doo", 0.11 },
+                { "daa", 0.001 }
+            });
+
+            translationSet.PutTranslationModelEntry("newone", new Dictionary<string, double>()
+            {
+                { "noo", 0.98 },
+                { "naa", 0.53 },
+                { "moo", 0.11 },
+                { "maa", 0.001 }
+            });
         }
         finally
         {
-            await DeleteDatabaseContext();
+//            await DeleteDatabaseContext();
         }
     }
 

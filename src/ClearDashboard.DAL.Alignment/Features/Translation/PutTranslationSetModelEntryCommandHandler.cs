@@ -30,24 +30,49 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<object>> SaveDataAsync(PutTranslationSetModelEntryCommand request,
             CancellationToken cancellationToken)
         {
-            // FIXME:  IMPLEMENT!
+            var translationSet = ProjectDbContext!.TranslationSets
+                .Include(ts => ts.TranslationModel)
+                    .ThenInclude(tm => tm.TargetTextScores)
+                .FirstOrDefault(ts => ts.Id == request.TranslationSetId.Id);
 
-            try
-            {
-                // need an await to get the compiler to be 'quiet'
-                await Task.CompletedTask;
-
-                return new RequestResult<object>(null);
-            }
-            catch (NullReferenceException e)
+            if (translationSet == null)
             {
                 return new RequestResult<object>
                 (
                     success: false,
-                    message: e.Message
+                    message: $"Invalid TranslationSetId '{request.TranslationSetId.Id}' found in request"
                 );
             }
 
+            var modelEntry = translationSet.TranslationModel
+                .Where(tm => tm.SourceText == request.sourceText)
+                .FirstOrDefault();
+
+            if (modelEntry == null)
+            {
+                modelEntry = new Models.TranslationModelEntry
+                {
+                    SourceText = request.sourceText,
+                    TargetTextScores = new List<Models.TranslationModelTargetTextScore>()
+                };
+
+                translationSet.TranslationModel.Add(modelEntry);
+            }
+            else
+            {
+                ProjectDbContext!.RemoveRange(modelEntry.TargetTextScores);
+                modelEntry.TargetTextScores.Clear();
+            }
+
+            modelEntry.TargetTextScores.AddRange(request.targetTranslationTextScores
+                .Select(ttts => new Models.TranslationModelTargetTextScore
+                {
+                    Text = ttts.Key,
+                    Score = ttts.Value
+                }));
+
+            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            return new RequestResult<object>(null);
         }
     }
 }
