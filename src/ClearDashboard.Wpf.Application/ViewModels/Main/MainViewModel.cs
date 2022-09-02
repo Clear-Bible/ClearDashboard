@@ -437,15 +437,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync(viewModel, cancellationToken);
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
 
 
-            // send out a notice that the project is loaded up
-            EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            return base.OnActivateAsync(cancellationToken);
+            await base.OnActivateAsync(cancellationToken);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -464,7 +462,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
+
+
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            // send out a notice that the project is loaded up
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+            
+            base.OnViewLoaded(view);
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            base.OnViewReady(view);
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)

@@ -17,6 +17,22 @@ namespace ClearDashboard.Wpf.ViewModels.Project;
 
 public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
 {
+    public enum Tokenizer
+    {
+        LatinSentenceTokenizer,
+        LatinWordDetokenizer,
+        LatinWordTokenizer,
+        LineSegmentTokenizer,
+        NullTokenizer,
+        RegexTokenizer,
+        StringDetokenizer,
+        StringTokenizer,
+        WhitespaceDetokenizer,
+        WhitespaceTokenizer,
+        ZwspWordDetokenizer,
+        ZwspWordTokenizer
+    }
+
     private CorpusSourceType _corpusSourceType;
     private List<ParatextProjectMetadata> _projects;
     private ParatextProjectMetadata _selectedProject;

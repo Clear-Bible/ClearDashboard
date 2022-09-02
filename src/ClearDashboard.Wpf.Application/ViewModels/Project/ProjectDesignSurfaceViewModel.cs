@@ -356,7 +356,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 WriteIndented = true
             };
             string jsonString = JsonSerializer.Serialize(surface, options);
-            //File.WriteAllText("C:\\temp\\test.json", jsonString);
 
             _projectManager.CurrentProject.DesignSurfaceLayout = jsonString;
 
@@ -370,10 +369,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 return;
             }
 
-            
-            //var json = File.ReadAllText("C:\\temp\\test.json");
             var json = _projectManager.CurrentProject.DesignSurfaceLayout;
-            
+
+            if (json == null)
+            {
+                return;
+            }
+
             JsonSerializerOptions options = new()
             {
                 ReferenceHandler = ReferenceHandler.IgnoreCycles,
