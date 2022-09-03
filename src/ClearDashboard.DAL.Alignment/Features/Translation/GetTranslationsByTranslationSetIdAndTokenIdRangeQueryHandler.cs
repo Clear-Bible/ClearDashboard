@@ -1,10 +1,7 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Persistence;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
@@ -22,43 +19,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdRangeQuery request, CancellationToken cancellationToken)
         {
-            var translationSet = ProjectDbContext.TranslationSets
-                .Include(ts => ts.Translations)
-                .Where(ts => ts.Id == request.TranslationSetId.Id)
-                .FirstOrDefault();
-            if (translationSet == null)
-            {
-                return new RequestResult<IEnumerable<Alignment.Translation.Translation>>
-                (
-                    success: false,
-                    message: $"TranslationSet not found for TranslationSetId '{request.TranslationSetId.Id}'"
-                );
-            }
+            var translations = ProjectDbContext!.Translations
+                .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
+                .Where(tr =>
+                    tr.SourceToken!.BookNumber >= request.FirstTokenId.BookNumber &&
+                    tr.SourceToken!.BookNumber <= request.LastTokenId.BookNumber)
+                .Select(tr => new {
+                    tr.SourceToken,
+                    tr.TargetText,
+                    tr.TranslationState,
+                    TokenLocationRef = double.Parse(ModelHelper.BuildTokenLocationRef(tr.SourceToken!))
+                }).AsEnumerable()
+                .Where(tref => 
+                    tref.TokenLocationRef >= double.Parse(request.FirstTokenId.ToString()) && 
+                    tref.TokenLocationRef <= double.Parse(request.LastTokenId.ToString()))
+                .Select(t => new Alignment.Translation.Translation(
+                    ModelHelper.BuildToken(t.SourceToken!),
+                    t.TargetText ?? string.Empty,
+                    t.TranslationState.ToString()));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
-
-            var translationsDB = translationSet.Translations.AsEnumerable();
-
-            // FIXME:  change this to filter by firstTokenId / lastTokenId range
-            // instead of bookId
-
-            //if (request.bookId != null)
-            //{
-            //    int? bookNumber = FileGetBookIds.BookIds
-            //        .Where(x => x.silCannonBookAbbrev == request.bookId)
-            //        .Select(x => int.Parse(x.silCannonBookNum))
-            //        .FirstOrDefault();
-            //    if (bookNumber != null) {
-            //        translationsDB = translationsDB.Where(t => t.Token!.BookNumber == bookNumber);
-            //    }
-            //}
-
-            var translations = translationsDB
-                .Select(t => new Alignment.Translation.Translation(
-                    ModelHelper.BuildToken(t.SourceToken),
-                    t.TargetText ?? string.Empty, 
-                    t.TranslationState.ToString()));
 
             return new RequestResult<IEnumerable<Alignment.Translation.Translation>>( translations );
         }

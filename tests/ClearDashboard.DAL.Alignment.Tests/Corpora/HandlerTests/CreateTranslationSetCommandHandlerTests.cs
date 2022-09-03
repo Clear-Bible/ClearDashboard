@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.SyntaxTree.Aligner.Persistence;
-using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
-using ClearBible.Engine.Translation;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore;
 using SIL.Machine.Translation;
-using SIL.Machine.Utils;
 using Xunit;
 using Xunit.Abstractions;
-using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
-using Verse = ClearBible.Engine.Corpora.Verse;
 using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 using System.Threading.Tasks;
 
@@ -200,7 +194,67 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
         finally
         {
-//            await DeleteDatabaseContext();
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task TranslationSet__GetTranslationRange()
+    {
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+
+            var translationSet = await translationModel.Create(parallelCorpus.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet);
+
+            Output.WriteLine("");
+
+            var iteration = 1;
+            foreach (var bookId in parallelCorpus.SourceCorpus.Texts.Select(t => t.Id))
+            {
+//                Output.WriteLine($"Book: {bookId}");
+                var row = 1;
+                foreach (var ttr in parallelCorpus.SourceCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>())
+                {
+//                    Output.WriteLine($"\tVerse (row): {row++}");
+                    foreach (var sourceToken in ttr.Tokens)
+                    {
+//                        Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
+                        translationSet.PutTranslation(
+                            new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
+                            TranslationActionType.PutPropagate.ToString());
+
+                        iteration++;
+                    }
+                }
+            }
+
+            ProjectDbContext!.ChangeTracker.Clear();
+            // First:  040002006004001
+            // Last:   041001001005001
+            // Should yield about 15 translations...
+
+            var firstTokenId = new TokenId(40, 2, 6, 4, 1);
+            var lastTokenId = new TokenId(41, 1, 1, 5, 1);
+            var translations = await translationSet.GetTranslations(firstTokenId, lastTokenId);
+            Assert.Equal(15, translations.Count());
+
+            Output.WriteLine($"Translation count: {translations.Count()}");
+            Output.WriteLine("");
+            foreach (var translation in translations)
+            {
+                Assert.InRange<TokenId>(translation.SourceToken.TokenId, firstTokenId, lastTokenId, Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
+                Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationState}");
+            }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
         }
     }
 

@@ -6,7 +6,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
-    internal static class ModelHelper
+    public static class ModelHelper
     {
         public static Token BuildToken(Models.Token token)
         {
@@ -31,6 +31,11 @@ namespace ClearDashboard.DAL.Alignment.Features
                     dbToken.VerseNumber == tokenId.VerseNumber &&
                     dbToken.WordNumber == tokenId.WordNumber &&
                     dbToken.SubwordNumber == tokenId.SubWordNumber);
+        }
+
+        public static string BuildTokenLocationRef(Models.Token token)
+        {
+            return $"{token.BookNumber:000}{token.ChapterNumber:000}{token.VerseNumber:000}{token.WordNumber:000}{token.SubwordNumber:000}";
         }
 
         public static CorpusId BuildCorpusId(Models.Corpus corpus)
