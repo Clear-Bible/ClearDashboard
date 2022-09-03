@@ -9,7 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-    Width="1010"
+    Width="Auto"
     Height="635"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -21,14 +21,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="550" />
-            <ColumnDefinition Width="*" MinWidth="250" />
+            <!--<ColumnDefinition Width="*" MinWidth="550" />
+            <ColumnDefinition Width="*" MinWidth="250" />-->
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"  />
         </Grid.ColumnDefinitions>
 
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="35,0,0,0">
+            Margin="20,0,0,0">
             <TextBlock
                 Margin="0,0,0,50"
                 FontSize="32"
@@ -40,6 +42,7 @@
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="Search"
+                Style="{DynamicResource MaterialDesignTextBox}"
                 BorderBrush="Black"
                 BorderThickness="1"
                 Text="{Binding SearchText, Mode=TwoWay}" />
@@ -49,21 +52,21 @@
             x:Name="SelectedLanguage"
             Grid.Row="0"
             Grid.Column="1"
-            Width="200"
-            Margin="0,0,5,0"
+            Width="250"
+            Margin="0,0,20,0"
             HorizontalAlignment="Right"
             VerticalContentAlignment="Top"
             FontSize="12"
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"  />
 
 
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
             Margin="10,10"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
             Orientation="Horizontal">
             <!--<Button
             x:Name="MoveBackwards"
@@ -89,24 +92,30 @@
             </Button>-->
 
             <!--  Visibility="{Binding ShowForwardButton, Converter={StaticResource VisibilityConverter}}"  -->
-            <Button
+            <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}" >
+
+
+                <Button
                 x:Name="MoveForwards"
                 Margin="5,5,5,5"
+                Background="Transparent" 
+                BorderThickness="0"
                 cal:Message.Attach="MoveForwards"
                 IsEnabled="{Binding EnableControls}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Create New Project" />
-                    <Viewbox MaxWidth="50" MaxHeight="50">
-                        <materialDesign:PackIcon
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Create New Project" />
+                        <Viewbox MaxWidth="50" MaxHeight="50">
+                            <materialDesign:PackIcon
                             x:Name="ForwardIcon"
                             Width="20"
                             Height="20"
                             HorizontalAlignment="Right"
                             Kind="ChevronRight"
                             Visibility="Visible" />
-                    </Viewbox>
-                </StackPanel>
-            </Button>
+                        </Viewbox>
+                    </StackPanel>
+                </Button>
+            </materialDesign:Card>
         </StackPanel>
 
         <!--  ==========================  -->

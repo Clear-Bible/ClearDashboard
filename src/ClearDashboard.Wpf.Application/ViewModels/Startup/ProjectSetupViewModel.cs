@@ -44,14 +44,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             Project = new DataAccessLayer.Models.Project();
         }
 
-        protected async Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
 
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
-
+           
             ProjectName = string.Empty;
+
+            return base.OnInitializeAsync(cancellationToken);
         }
 
         public void Create()
