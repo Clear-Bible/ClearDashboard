@@ -523,7 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 }));
 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                                    metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus

@@ -35,5 +35,5 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }
-   
+    public string? FriendlyName { get; set; }
 }

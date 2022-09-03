@@ -34,20 +34,20 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
         {
             var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
             var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, sourceCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                .Create(Mediator!, sourceCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, targetCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                .Create(Mediator!, targetCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
             var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
                 .Include(tc => tc.Tokens)
-                .First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedCorpusId.Id);
+                .First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id);
             var targetTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
                 .Include(tc => tc.Tokens)
-                .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedCorpusId.Id);
+                .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id);
 
             var sourceTokenGuidIds = sourceTokenizedCorpus.Tokens.Take(10)
                 .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
@@ -99,8 +99,8 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             // Validate:
             Assert.NotNull(queryResult);
             Assert.True(queryResult.Success);
-            Assert.Equal(sourceTokenizedTextCorpus.TokenizedCorpusId, queryResult.Data.sourceTokenizedCorpusId);
-            Assert.Equal(targetTokenizedTextCorpus.TokenizedCorpusId, queryResult.Data.targetTokenizedCorpusId);
+            Assert.Equal(sourceTokenizedTextCorpus.TokenizedTextCorpusId, queryResult.Data.sourceTokenizedCorpusId);
+            Assert.Equal(targetTokenizedTextCorpus.TokenizedTextCorpusId, queryResult.Data.targetTokenizedCorpusId);
             Assert.Equal(5, queryResult.Data.verseMappings.Count());
 
             Assert.Empty(queryResult.Data.verseMappings
@@ -169,11 +169,11 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
         {
             var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
             var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, sourceCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                .Create(Mediator!, sourceCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, targetCorpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                .Create(Mediator!, targetCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 

@@ -1,5 +1,4 @@
-﻿using ClearDashboard.DataAccessLayer.Data.EntityConfiguration;
-using ClearDashboard.DataAccessLayer.Data.ValueGenerators;
+﻿using ClearDashboard.DataAccessLayer.Data.ValueGenerators;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -63,26 +62,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
             {
                 entityType.SetTableName(entityType.DisplayName());
             }
-        }
-
-        public static void ConfigureEntities(this ModelBuilder modelBuilder)
-        {
-            new AdornmentConfiguration().Configure(modelBuilder.Entity<Adornment>());
-            new AlignmentConfiguration().Configure(modelBuilder.Entity<Alignment>());
-            new AlignmentVersionConfiguration().Configure(modelBuilder.Entity<AlignmentVersion>());
-            new CorpusConfiguration().Configure(modelBuilder.Entity<Corpus>());
-            //new DataAssociationConfiguration().Configure(modelBuilder.Entity<DataAssociation>());
-            //new InterlinearNoteConfiguration().Configure(modelBuilder.Entity<InterlinearNote>());
-            //new NoteConfiguration().Configure(modelBuilder.Entity<Note>());
-            new ParallelCorpusConfiguration().Configure(modelBuilder.Entity<ParallelCorpus>());
-            //new ParallelVersesLinkConfiguration().Configure(modelBuilder.Entity<ParallelVersesLink>());
-            new ProjectInfoConfiguration().Configure(modelBuilder.Entity<Project>());
-            //new QuestionGroupConfiguration().Configure(modelBuilder.Entity<QuestionGroup>());
-            //new RawContentConfiguration().Configure(modelBuilder.Entity<RawContent>());
-            new TokenConfiguration().Configure(modelBuilder.Entity<Token>());
-            new UserConfiguration().Configure(modelBuilder.Entity<User>());
-            new VerseConfiguration().Configure(modelBuilder.Entity<Verse>());
-            //new VerseLinkConfiguration().Configure(modelBuilder.Entity<VerseLink>());
         }
 
         public static void ConfigureRawContentEntities(this ModelBuilder modelBuilder)
