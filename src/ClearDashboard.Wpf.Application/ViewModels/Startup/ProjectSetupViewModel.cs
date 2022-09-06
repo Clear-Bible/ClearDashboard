@@ -42,10 +42,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             Project = new DataAccessLayer.Models.Project();
-        }
-
-        protected async Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
 
             CanMoveForwards = true;
             CanMoveBackwards = true;
@@ -53,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             ProjectName = string.Empty;
         }
-
+        
         public void Create()
         {
             if (CheckIfConnectedToParatext() == false)

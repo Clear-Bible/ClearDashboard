@@ -90,7 +90,7 @@
                 x:Name="MoveForwards"
                 Width="340"
                 Height="75"
-                Margin="0,5,53,5"
+                Margin="0,5,53,50"
                 VerticalContentAlignment="Top"
                 cal:Message.Attach="MoveForwards"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"

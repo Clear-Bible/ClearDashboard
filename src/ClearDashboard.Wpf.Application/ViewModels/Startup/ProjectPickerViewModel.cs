@@ -114,59 +114,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             AlertVisibility = Visibility.Collapsed;
         }
 
-
-        //public void CreateNewProject()
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
-
-        //    Logger.LogInformation("CreateNewProject called.");
-        //    //NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-
-        //    NavigationService.NavigateToViewModel<CreateNewProjectWorkflowShellViewModel>();
-        //}
-
-
-        //public async void NewProject()
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
-
-        //    Logger.LogInformation("NewProject called.");
-
-        //    if (ProjectManager.HasDashboardProject)
-        //    {
-        //        ProjectManager.CreateDashboardProject();
-        //    }
-
-        //    await ProjectManager.InvokeDialog<NewProjectDialogViewModel, WorkSpaceViewModel>(
-        //        DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
-        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceViewModel>(
-        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-
-
-        //    //await ProjectManager.InvokeDialog<NewProjectDialogViewModel, ProjectWorkspaceWithGridSplitterViewModel>(
-        //    //    DashboardProjectManager.NewProjectDialogSettings, (Func<NewProjectDialogViewModel, Task<bool>>)Callback);
-        //    // Define a callback method to create a new project if we
-        //    // have a valid project name
-
-        //    async Task<bool> Callback(NewProjectDialogViewModel viewModel)
-        //    {
-        //        if (viewModel.ProjectName != null)
-        //        {
-        //            await ProjectManager.CreateNewProject(viewModel.ProjectName);
-        //            return true;
-        //        }
-
-        //        return false;
-        //    }
-        //}
-
         public void NavigateToMainViewModel(DashboardProject project)
         {
             if (CheckIfConnectedToParatext() == false)
@@ -223,46 +170,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
-
-
-        //public void Workspace(DashboardProject project)
-        //{
-        //    if (CheckIfConnectedToParatext() == false)
-        //    {
-        //        return;
-        //    }
-
-        //    //// TODO HACK TO READ IN PROJECT AS OBJECT
-        //    string sTempFile = @"c:\temp\project.json";
-        //    if (File.Exists(sTempFile) == false)
-        //    {
-        //        MessageBox.Show($"MISSING TEMP PROJECT FILE : {sTempFile}");
-        //    }
-
-        //    var jsonString = File.ReadAllText(@"c:\temp\project.json");
-        //    project = JsonSerializer.Deserialize<DashboardProject>(jsonString);
-
-
-        //    Logger.LogInformation("Workspace called.");
-        //    ProjectManager.CurrentDashboardProject = project;
-
-
-
-
-        //    NavigationService.NavigateToViewModel<WorkSpaceViewModel>();
-        //}
-
-        //public void Settings()
-        //{
-        //    Logger.LogInformation("Settings called.");
-        //    NavigationService.NavigateToViewModel<SettingsViewModel>();
-
-        //}
-        //public void AlignmentSample()
-        //{
-        //    Logger.LogInformation("AlignmentSample called.");
-        //    NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
-        //}
 
         public void SetLanguage()
         {

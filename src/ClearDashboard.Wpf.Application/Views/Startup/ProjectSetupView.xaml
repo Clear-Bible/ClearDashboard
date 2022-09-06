@@ -62,6 +62,23 @@
             FontSize="20"
             FontWeight="Light" />
 
+        <ListView
+            Name="TemplateListView"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="51,15,51,0">
+            <ListViewItem
+                Height="40"
+                Content="a list of recent project templates goes here?"
+                MouseEnter="TemplateListView_OnMouseEnter"
+                MouseLeave="TemplateListView_OnMouseLeave" />
+            <ListViewItem
+                Height="40"
+                Content="a list of recent project templates goes here?"
+                MouseEnter="TemplateListView_OnMouseEnter"
+                MouseLeave="TemplateListView_OnMouseLeave" />
+        </ListView>
+
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
@@ -80,6 +97,18 @@
             Grid.Row="1"
             Grid.Column="1"
             Orientation="Horizontal">
+
+            <ComboBox
+                Width="160"
+                Margin="10,0"
+                Padding="5"
+                materialDesign:HintAssist.Hint="Tokenization"
+                Background="White">
+                <ComboBoxItem Content="tokenization 1" />
+                <ComboBoxItem Content="tokenization 2" />
+                <ComboBoxItem Content="tokenization 3" />
+            </ComboBox>
+
             <ComboBox
                 Width="160"
                 Margin="10,0"
@@ -100,35 +129,49 @@
                 <ComboBoxItem Content="option 2" />
             </ComboBox>
 
-            <ComboBox
-                Width="160"
-                Margin="10,0"
-                Padding="5"
-                materialDesign:HintAssist.Hint="kinds"
-                Background="White">
-                <ComboBoxItem Content="option 1" />
-                <ComboBoxItem Content="option 2" />
-            </ComboBox>
+
         </StackPanel>
 
 
         <StackPanel
             Grid.Row="2"
             Grid.Column="1"
-            Margin="0,40"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
+            Margin="0,15"
             Orientation="Vertical">
+
+            <ListView Margin="0,0,0,0" HorizontalAlignment="Left">
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="USFM"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="Paratext"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="Manuscript"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+            </ListView>
+
             <TextBox
                 x:Name="ProjectName"
                 MinWidth="400"
+                Margin="0,0,50,0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
@@ -151,8 +194,8 @@
                         </StackPanel>
                     </ControlTemplate>
                 </Validation.ErrorTemplate>
-
             </TextBox>
+
 
         </StackPanel>
 
@@ -171,124 +214,23 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cal:Message.Attach="MoveBackwards"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="LightGray"
                 BorderThickness="0"
+                Content="Back"
                 FontWeight="Light"
-                IsEnabled="True"
-                Content="Back">
-            </Button>
+                IsEnabled="True" />
             <Button
                 x:Name="Create"
                 Width="85"
                 Height="25"
                 Margin="6,0,6,15"
                 VerticalAlignment="Top"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="LightGray"
                 BorderThickness="0"
                 Content="Create"
                 FontWeight="Light" />
         </StackPanel>
-
     </Grid>
-    <!--<Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Label
-            Margin="10"
-            FontSize="25"
-            Content="Create a new project" />
-
-        <TextBox
-            x:Name="ProjectName"
-            MinWidth="400"
-            Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            VerticalAlignment="Center"
-            materialDesign:HintAssist.FloatingScale="0.75"
-            materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
-            materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
-            materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-            FontSize="26"
-            Foreground="{DynamicResource PrimaryHueDarkBrush}"
-            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-            <TextBox.Text>
-                <Binding
-                    Mode="TwoWay"
-                    Path="ProjectName"
-                    UpdateSourceTrigger="PropertyChanged"
-                    ValidatesOnDataErrors="True" />
-            </TextBox.Text>
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <AdornedElementPlaceholder />
-                        <TextBlock
-                            MaxWidth="400"
-                            Margin="10"
-                            FontSize="16"
-                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                            Text="{Binding [0].ErrorContent}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
-
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-
-
-            <StackPanel
-                Grid.Row="3"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-
-                <Button
-                    x:Name="MoveBackwards"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Width="100"
-                    Margin="5,5,5,5"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    cal:Message.Attach="MoveBackwards"
-                    IsEnabled="{Binding EnableControls}">
-                    <StackPanel Orientation="Horizontal">
-                        <Viewbox MaxWidth="50" MaxHeight="50" />
-                        <TextBlock VerticalAlignment="Center" Text="Back" />
-                    </StackPanel>
-                </Button>
-                <Button
-                    x:Name="Create"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Width="100"
-                    VerticalAlignment="Center"
-                    Content="Create" />
-            </StackPanel>
-
-        </Grid>
-
-
-    </Grid>-->
 </UserControl>
