@@ -13,10 +13,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -80,6 +83,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 _searchText = value;
                 NotifyOfPropertyChange(() => SearchText);
+
+                if (SearchText == string.Empty)
+                {
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                }
+                else
+                {
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower()));
+                }
+            }
+        }
+
+        private ObservableCollection<DashboardProject> _dashboardProjectsDisplay;
+        public ObservableCollection<DashboardProject> DashboardProjectsDisplay
+        {
+            get => _dashboardProjectsDisplay;
+            set
+            {
+                _dashboardProjectsDisplay = value;
+                NotifyOfPropertyChange(() => SearchText);
             }
         }
         #endregion
@@ -102,6 +126,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (results.Success && results.HasData)
             {
                 DashboardProjects = results.Data;
+                _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
             }
 
             await base.OnActivateAsync(cancellationToken);
@@ -109,6 +135,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+        public ObservableCollection<DashboardProject> CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject> copy)
+        {
+            copy.Clear();
+            foreach (var project in original)
+            {
+                copy.Add(project);
+            }
+            return copy;
+        }
         public void AlertClose()
         {
             AlertVisibility = Visibility.Collapsed;

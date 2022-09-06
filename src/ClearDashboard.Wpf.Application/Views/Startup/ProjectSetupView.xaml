@@ -90,8 +90,15 @@
             materialDesign:HintAssist.Hint="Search recent"
             Background="White"
             BorderBrush="DarkGray"
-            BorderThickness="1"
-            Text="{Binding SearchText, Mode=TwoWay}" />
+            BorderThickness="1">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="SearchText"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+        </TextBox>
 
         <StackPanel
             Grid.Row="1"

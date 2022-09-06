@@ -48,6 +48,7 @@
                 FontSize="19"
                 Text="Open recent" />
             <TextBox
+                x:Name="SearchText"
                 Width="320"
                 Height="30"
                 Margin="55,0,0,0"
@@ -56,8 +57,15 @@
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="Search recent"
                 BorderBrush="DarkGray"
-                BorderThickness="1"
-                Text="{Binding SearchText, Mode=TwoWay}" />
+                BorderThickness="1">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="SearchText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
 
         <ComboBox
@@ -150,7 +158,7 @@
                 x:Name="RadioButtonGroupChoiceChipOutline"
                 Height="460"
                 Margin="5"
-                ItemsSource="{Binding DashboardProjects}"
+                ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Style="{StaticResource MaterialDesignListBox}">
