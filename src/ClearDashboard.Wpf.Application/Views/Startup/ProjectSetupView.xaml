@@ -50,7 +50,8 @@
             Grid.Column="0"
             Margin="44,0,0,25"
             Content="Create a new project"
-            FontSize="34" />
+            FontSize="35"
+            FontWeight="Light" />
 
         <Label
             Grid.Row="1"
@@ -58,7 +59,8 @@
             Margin="51,0,0,0"
             VerticalAlignment="Top"
             Content="Recent project templates"
-            FontSize="19" />
+            FontSize="20"
+            FontWeight="Light" />
 
         <TextBox
             Grid.Row="0"
@@ -69,6 +71,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             materialDesign:HintAssist.Hint="Search recent"
+            Background="White"
             BorderBrush="DarkGray"
             BorderThickness="1"
             Text="{Binding SearchText, Mode=TwoWay}" />
@@ -80,7 +83,9 @@
             <ComboBox
                 Width="160"
                 Margin="10,0"
-                materialDesign:HintAssist.Hint="options">
+                Padding="5"
+                materialDesign:HintAssist.Hint="options"
+                Background="White">
                 <ComboBoxItem Content="option 1" />
                 <ComboBoxItem Content="option 2" />
             </ComboBox>
@@ -88,7 +93,9 @@
             <ComboBox
                 Width="160"
                 Margin="10,0"
-                materialDesign:HintAssist.Hint="more options">
+                Padding="5"
+                materialDesign:HintAssist.Hint="more options"
+                Background="White">
                 <ComboBoxItem Content="option 1" />
                 <ComboBoxItem Content="option 2" />
             </ComboBox>
@@ -96,7 +103,9 @@
             <ComboBox
                 Width="160"
                 Margin="10,0"
-                materialDesign:HintAssist.Hint="kinds">
+                Padding="5"
+                materialDesign:HintAssist.Hint="kinds"
+                Background="White">
                 <ComboBoxItem Content="option 1" />
                 <ComboBoxItem Content="option 2" />
             </ComboBox>
@@ -121,8 +130,6 @@
                 FontSize="20"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-
-
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -152,33 +159,34 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="1"
-            Margin="50,50,50,30"
+            Margin="50,50,45,30"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button
                 x:Name="MoveBackwards"
-                Width="90"
-                Margin="7"
+                Width="85"
+                Height="25"
+                Margin="6,0,6,15"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 cal:Message.Attach="MoveBackwards"
                 Background="LightGray"
                 BorderThickness="0"
-                IsEnabled="True">
-                <StackPanel Orientation="Horizontal">
-                    <Viewbox MaxWidth="50" MaxHeight="50" />
-                    <TextBlock VerticalAlignment="Center" Text="Back" />
-                </StackPanel>
+                FontWeight="Light"
+                IsEnabled="True"
+                Content="Back">
             </Button>
             <Button
                 x:Name="Create"
-                Width="90"
-                Margin="7"
-                VerticalAlignment="Center"
+                Width="85"
+                Height="25"
+                Margin="6,0,6,15"
+                VerticalAlignment="Top"
                 Background="LightGray"
                 BorderThickness="0"
-                Content="Create" />
+                Content="Create"
+                FontWeight="Light" />
         </StackPanel>
 
     </Grid>

@@ -49,7 +49,7 @@
                 Text="Open recent" />
             <TextBox
                 Width="320"
-                Height="35"
+                Height="30"
                 Margin="55,0,0,0"
                 Padding="3"
                 HorizontalAlignment="Left"
@@ -81,11 +81,17 @@
             VerticalAlignment="Bottom"
             Orientation="Vertical">
 
-            <TextBlock FontSize="19" Text="Get started" />
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="19"
+                Text="Get started" />
 
             <Button
                 x:Name="MoveForwards"
-                Margin="0,5,5,5"
+                Width="340"
+                Height="75"
+                Margin="0,5,53,5"
+                VerticalContentAlignment="Top"
                 cal:Message.Attach="MoveForwards"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="LightGray"
@@ -93,17 +99,17 @@
                 IsEnabled="{Binding EnableControls}"
                 MouseEnter="MoveForwards_OnMouseEnter"
                 MouseLeave="MoveForwards_OnMouseLeave">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Create New Project" />
-                    <Viewbox MaxWidth="50" MaxHeight="50">
-                        <materialDesign:PackIcon
-                            x:Name="ForwardIcon"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Right"
-                            Kind="ChevronRight"
-                            Visibility="Visible" />
-                    </Viewbox>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="19"
+                        FontWeight="Normal"
+                        Text="Create New Project" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="Light"
+                        Text="Choose a project template and tokenization scheme to get started"
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </Button>
 
