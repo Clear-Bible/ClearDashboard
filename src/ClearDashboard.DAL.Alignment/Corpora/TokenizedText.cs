@@ -9,10 +9,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     internal class TokenizedText : ScriptureText
     {
-        private readonly TokenizedCorpusId tokenizedCorpusId_;
+        private readonly TokenizedTextCorpusId tokenizedCorpusId_;
         private readonly IMediator mediator_;
 
-        public TokenizedText(TokenizedCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId)
+        public TokenizedText(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId)
             : base(bookId, versification)
         {
             tokenizedCorpusId_ = tokenizedCorpusId;

@@ -6,8 +6,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record GetParallelCorpusByParallelCorpusIdQuery(ParallelCorpusId  ParallelCorpusId)
         : ProjectRequestQuery<
-            (TokenizedCorpusId sourceTokenizedCorpusId, 
-            TokenizedCorpusId targetTokenizedCorpusId, 
+            (TokenizedTextCorpusId sourceTokenizedCorpusId, 
+            TokenizedTextCorpusId targetTokenizedCorpusId, 
             IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>;
 }

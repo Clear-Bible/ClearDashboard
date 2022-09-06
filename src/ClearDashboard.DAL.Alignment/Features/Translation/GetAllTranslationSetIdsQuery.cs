@@ -1,0 +1,9 @@
+﻿using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS.Features;
+
+namespace ClearDashboard.DAL.Alignment.Features.Translation
+{
+    public record GetAllTranslationSetIdsQuery(ParallelCorpusId? ParallelCorpusId, UserId? UserId) : 
+        ProjectRequestQuery<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>;
+}

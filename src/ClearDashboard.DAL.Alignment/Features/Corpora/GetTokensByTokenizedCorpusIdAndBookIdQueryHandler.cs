@@ -49,25 +49,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             .SelectMany(gc => gc.Key != null
                                 ? new[] {
                                     new CompositeToken(gc
-                                        .Select(t => new Token(
-                                            new TokenId(
-                                                t.BookNumber,
-                                                t.ChapterNumber,
-                                                t.VerseNumber,
-                                                t.WordNumber,
-                                                t.SubwordNumber),
-                                            t.SurfaceText ?? string.Empty,
-                                            t.TrainingText ?? string.Empty)))
+                                        .Select(t => ModelHelper.BuildToken(t)))
                                    }
-                                : gc.Select(t => new Token(
-                                    new TokenId(
-                                        t.BookNumber,
-                                        t.ChapterNumber,
-                                        t.VerseNumber,
-                                        t.WordNumber,
-                                        t.SubwordNumber),
-                                    t.SurfaceText ?? string.Empty,
-                                    t.TrainingText ?? string.Empty))
+                                : gc.Select(t => ModelHelper.BuildToken(t))
                                 ),
                             false)
                         );

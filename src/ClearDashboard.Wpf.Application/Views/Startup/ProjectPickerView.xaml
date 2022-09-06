@@ -9,21 +9,13 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-    Width="1010"
+    Width="Auto"
     Height="635"
     MinWidth="886"
     MinHeight="594"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-
-    <!--<UserControl.Resources>
-        <RoutedUICommand x:Key="Commands.DeleteProject" />
-    </UserControl.Resources>
-
-    <UserControl.CommandBindings>
-        <CommandBinding Command="{StaticResource Commands.DeleteProject}" Executed="OnDeleteProject" />
-    </UserControl.CommandBindings>-->
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -79,7 +71,7 @@
             VerticalContentAlignment="Top"
             FontSize="12"
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"  />
 
         <StackPanel
             Grid.Row="1"
@@ -128,10 +120,10 @@
                 Margin="5,5,5,5"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 IsEnabled="{Binding EnableControls}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Create New Project" />
-                    <Viewbox MaxWidth="50" MaxHeight="50">
-                        <materialDesign:PackIcon
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Create New Project" />
+                        <Viewbox MaxWidth="50" MaxHeight="50">
+                            <materialDesign:PackIcon
                             x:Name="ForwardIcon"
                             Width="20"
                             Height="20"
@@ -141,7 +133,6 @@
                     </Viewbox>
                 </StackPanel>
             </materialDesign:Card>-->
-
         </StackPanel>
 
         <!--  ==========================  -->
@@ -170,6 +161,7 @@
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
+
 
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
@@ -209,12 +201,12 @@
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
-                                    <TextBlock
-                                        Grid.Column="2"
-                                        Width="145"
-                                        HorizontalAlignment="Right"
-                                        FontSize="12"
-                                        Text="{Binding Modified}" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="2"
+                                               Width="145"
+                                               HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               Text="{Binding Modified}" />
 
                                     <TextBlock
                                         Grid.Row="1"
@@ -230,10 +222,6 @@
                         </materialDesign:Card>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <!--<ListViewItem Content="Project #1" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #2" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #3" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>
-                <ListViewItem Content="Project #4" BorderBrush="Gray" BorderThickness="1" Margin="5,5,0,0"/>-->
             </ListView>
         </StackPanel>
     </Grid>

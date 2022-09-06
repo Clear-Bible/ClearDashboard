@@ -401,7 +401,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 }));
 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator,corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                                    metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                                 {

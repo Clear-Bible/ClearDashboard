@@ -19,8 +19,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
 public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHandler<
     GetBookIdsByTokenizedCorpusIdQuery,
-    RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>,
-    (IEnumerable<string> bookId, CorpusId corpusId)>
+    RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>,
+    (IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
 {
     private readonly IMediator _mediator;
 
@@ -32,23 +32,23 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         _mediator = mediator;
     }
 
-    protected override async Task<RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>> GetDataAsync(
+    protected override async Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>> GetDataAsync(
         GetBookIdsByTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
     {
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
         var tokenizedCorpus =
-            ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).Include(tc => tc.Corpus).FirstOrDefault(i => i.Id == request.TokenizedCorpusId.Id);
+            ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).Include(tc => tc.Corpus).FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
 
         if (tokenizedCorpus == null)
         {
-            return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
+            return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
             (
                 // NB:  better to return default(T) which is the default on the constructor.
                 //result: (new List<string>(), new CorpusId(new Guid())),
                 success: false,
-                message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedCorpusId.Id}"
+                message: $"TokenizedCorpus not found for TokenizedCorpusId {request.TokenizedTextCorpusId.Id}"
             );
         }
 
@@ -62,9 +62,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
-                return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
+                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
                 (
-                    result: (new List<string>(), new CorpusId(new Guid())),
                     success: false,
                     message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
                 );
@@ -73,7 +72,11 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             bookAbbreviations.Add(bookAbbreviation);
         }
 
-        return new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-            ((bookAbbreviations, new CorpusId(tokenizedCorpus.Corpus.Id)));
+        return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
+            ((
+                bookAbbreviations, 
+                ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpus),
+                ModelHelper.BuildCorpusId(tokenizedCorpus)
+            ));
     }
 }

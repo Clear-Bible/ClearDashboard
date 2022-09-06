@@ -18,10 +18,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 
@@ -47,9 +51,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
     #endregion //Enums
 
-    //public record CorporaLoadedMessage(IEnumerable<Corpus> Copora);//NotSure
-    //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);//NotSure
-    public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>, IHandle<ConnectionSelectedChanagedMessage>, IHandle<BackgroundTaskChangedMessage>
+    public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>,
+        IHandle<ConnectionSelectedChanagedMessage>, IHandle<ProjectLoadCompleteMessage>
     {
         #region Member Variables
         CancellationTokenSource _cancellationTokenSource = null;
@@ -259,12 +262,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            EventAggregator.SubscribeOnUIThread(this);
+
             //IsBusy = false;
             return base.OnActivateAsync(cancellationToken);
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+            SaveCanvas();
+            
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_addParatextCorpusRunning)
@@ -299,21 +306,123 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
                 _projectManager, _eventAggregator);
 
+            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+            {
+                LoadCanvas();
+            }
+
             base.OnViewAttached(view, context);
         }
 
         protected override async void OnViewLoaded(object view)
         {
+            Console.WriteLine();
             base.OnViewLoaded(view);
         }
 
         protected override async void OnViewReady(object view)
         {
+            Console.WriteLine();
             base.OnViewReady(view);
         }
         #endregion //Constructor
 
         #region Methods
+
+        
+        private async void SaveCanvas()
+        {
+            var surface = new ProjectDesignSurfaceSerializationModel();
+
+            // save all the nodes
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                surface.CorpusNodes.Add(new SerializedNodes
+                {
+                    ParatextProjectId = corpusNode.ParatextProjectId,
+                    CorpusType = corpusNode.CorpusType,
+                    Name = corpusNode.Name,
+                    X = corpusNode.X,
+                    Y = corpusNode.Y,
+                });
+            }
+            
+            // save all the connections
+            foreach (var connection in DesignSurface.Connections)
+            {
+                surface.Connections.Add(new SerializedConnections
+                {
+                    SourceConnectorId = connection.SourceConnector.ParatextID,
+                    TargetConnectorId = connection.DestinationConnector.ParatextID
+                });
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            string jsonString = JsonSerializer.Serialize(surface, options);
+
+            _projectManager.CurrentProject.DesignSurfaceLayout = jsonString;
+
+            await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
+        }
+
+        private void LoadCanvas()
+        {
+            // we have already loaded once
+            if (DesignSurface.CorpusNodes.Count > 0)
+            {
+                return;
+            }
+            
+            if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
+            {
+                return;
+            }
+
+            var json = _projectManager.CurrentProject.DesignSurfaceLayout;
+
+            if (json == null)
+            {
+                return;
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            ProjectDesignSurfaceSerializationModel deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
+
+
+            foreach (var corpusNode in deserialized.CorpusNodes)
+            {
+                CreateNode(corpusNode.Name, new Point(corpusNode.X, corpusNode.Y), false, corpusNode.CorpusType,
+                    corpusNode.ParatextProjectId);
+            }
+
+            foreach (var deserializedConnection in deserialized.Connections)
+            {
+                var sourceNode = DesignSurface.CorpusNodes.FirstOrDefault(p =>
+                    p.ParatextProjectId == deserializedConnection.SourceConnectorId);
+                var targetNode = DesignSurface.CorpusNodes.FirstOrDefault(p =>
+                    p.ParatextProjectId == deserializedConnection.TargetConnectorId);
+
+                if (sourceNode is not null && targetNode is not null)
+                {
+                    var connection = new ConnectionViewModel();
+                    connection.SourceConnector = sourceNode.OutputConnectors[0];
+                    connection.DestinationConnector = targetNode.InputConnectors[0];
+                    DesignSurface.Connections.Add(connection);
+                }
+
+            }
+
+        }
+
 
         public void AddManuscriptCorpus()
         {
@@ -427,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 }));
 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                                    metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -970,6 +1079,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             return Task.CompletedTask;
         }
 
+        public Task HandleAsync(ProjectLoadCompleteMessage message, CancellationToken cancellationToken)
+        {
+            if (_projectManager.CurrentProject is not null)
+            {
+                LoadCanvas();
+            }
+            return Task.CompletedTask;
+        }
+
         #endregion // Methods
+
+
     }
 }

@@ -53,6 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var tokenizedCorpus = new TokenizedCorpus
             {
                 Corpus = corpus,
+                FriendlyName = request.FriendlyName,
                 TokenizationFunction = request.TokenizationFunction
             };
 
@@ -128,7 +129,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             .Where(gct => gct.Count() > 1)
                             .Select(gct => string.Join("-", gct
                                 .SelectMany(gc => gc
-                                    .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber).ToString()))));
+                                    .Select(t => ModelHelper.BuildTokenId(t).ToString()))));
 
                     if (invalidComposites.Any())
                     {
@@ -144,12 +145,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 await transaction.CommitAsync(cancellationToken);
 
-//                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
+                var tokenizedCorpusDb = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == tokenizationId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
-                    new TokenizedCorpusId(tokenizationId),
+                    ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
                     request.CorpusId,
                     _mediator,
                     bookIds);
+
+ //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
 
                 return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
             }
@@ -202,7 +205,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private DbCommand CreateTokenizedCorpusInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "CorpusId", "TokenizationFunction", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "CorpusId", "FriendlyName", "TokenizationFunction", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
 
@@ -215,6 +218,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             command.Parameters["@Id"].Value = (Guid.Empty != tokenizedCorpus.Id) ? tokenizedCorpus.Id : Guid.NewGuid();
             command.Parameters["@CorpusId"].Value = tokenizedCorpus.Corpus?.Id ?? tokenizedCorpus.CorpusId;
+            command.Parameters["@FriendlyName"].Value = tokenizedCorpus.FriendlyName;
             command.Parameters["@TokenizationFunction"].Value = tokenizedCorpus.TokenizationFunction;
             command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
             command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
@@ -223,7 +227,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
         {
             command.CommandText =
             $@"

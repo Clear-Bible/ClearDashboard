@@ -18,7 +18,7 @@ using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : ApplicationValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>, IStartupDialog
+    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>, IStartupDialog
     {
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -57,8 +57,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
-
+           
             ProjectName = string.Empty;
+
+            return base.OnInitializeAsync(cancellationToken);
         }
         
         public void Create()

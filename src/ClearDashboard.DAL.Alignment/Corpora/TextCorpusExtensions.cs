@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns>TokenizedTextCorpus</returns>
         /// <exception cref="InvalidTypeEngineException">textCorpus enumerable is not castable to a TokensTextRow type, or textCorpus is of type TokenizedTextCorpus</exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string tokenizationFunction, CancellationToken token = default)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string friendlyName, string tokenizationFunction, CancellationToken token = default)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(message: $"Corpus must be tokenized and transformed into TokensTextRows, e.g. corpus.Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             }
 
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, tokenizationFunction);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, friendlyName, tokenizationFunction);
 
             var result = await mediator.Send(command, token);
             if (result.Success)

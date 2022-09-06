@@ -26,48 +26,6 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
-
-        //public void DeleteProject(DashboardProject project)
-        //{
-        //    if (!project.HasFullFilePath)
-        //    {
-        //        return;
-        //    }
-        //    var fi = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
-
-        //    try
-        //    {
-        //        var di = new DirectoryInfo(fi.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
-
-        //        foreach (var file in di.GetFiles())
-        //        {
-        //            file.Delete();
-        //        }
-        //        foreach (var dir in di.GetDirectories())
-        //        {
-        //            dir.Delete(true);
-        //        }
-
-        //        di.Delete();
-
-        //        DashboardProjects.Remove(project);
-
-        //        var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
-        //        File.Delete(System.IO.Path.Combine(di.Parent.ToString(), originalDatabaseCopyName));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Event raised to delete the project files.
-        ///// </summary>
-        //private void OnDeleteProject(object sender, ExecutedRoutedEventArgs e)
-        //{
-        //    DeleteProject(sender as DashboardProject);
-        //}
         private void MoveForwards_OnMouseEnter(object sender, MouseEventArgs e)
         {
             if (sender is Button button)

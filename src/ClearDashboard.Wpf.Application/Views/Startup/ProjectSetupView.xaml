@@ -213,6 +213,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
+
             <Button
                 x:Name="MoveBackwards"
                 Width="85"

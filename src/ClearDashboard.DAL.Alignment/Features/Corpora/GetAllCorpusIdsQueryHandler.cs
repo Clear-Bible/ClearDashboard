@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override Task<RequestResult<IEnumerable<CorpusId>>> GetDataAsync(GetAllCorpusIdsQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: query Corpus table and return all ids
-            var corpusIds = ProjectDbContext.Corpa.Select(c => new CorpusId(c.Id));
+            var corpusIds = ProjectDbContext.Corpa.Select(c => ModelHelper.BuildCorpusId(c));
 
             return Task.FromResult(new RequestResult<IEnumerable<CorpusId>>(corpusIds));
         }
