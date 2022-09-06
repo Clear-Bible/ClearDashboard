@@ -14,9 +14,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetBookIdsByTokenizedCorpusIdQueryHandler : IRequestHandler<
         GetBookIdsByTokenizedCorpusIdQuery,
-        RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>>
+        RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>>
     {
-        public Task<RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>>
+        public Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>>
             Handle(GetBookIdsByTokenizedCorpusIdQuery command, CancellationToken cancellationToken)
         {
 
@@ -27,8 +27,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath);
             
             return Task.FromResult(
-                new RequestResult<(IEnumerable<string> bookId, CorpusId corpusId)>
-                (result: (corpus.Texts.Select(t => t.Id), new CorpusId(new Guid())),
+                new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
+                (result: (corpus.Texts.Select(t => t.Id), new TokenizedTextCorpusId(new Guid()), new CorpusId(new Guid())),
                 success: true,
                 message: "successful result from test"));
         }

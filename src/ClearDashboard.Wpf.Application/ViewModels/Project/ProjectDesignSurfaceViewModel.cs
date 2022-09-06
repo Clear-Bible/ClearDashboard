@@ -305,17 +305,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             //
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
                 _projectManager, _eventAggregator);
-            
+
+            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+            {
+                LoadCanvas();
+            }
+
             base.OnViewAttached(view, context);
         }
 
         protected override async void OnViewLoaded(object view)
         {
+            Console.WriteLine();
             base.OnViewLoaded(view);
         }
 
         protected override async void OnViewReady(object view)
         {
+            Console.WriteLine();
             base.OnViewReady(view);
         }
         #endregion //Constructor
@@ -364,6 +371,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private void LoadCanvas()
         {
+            // we have already loaded once
+            if (DesignSurface.CorpusNodes.Count > 0)
+            {
+                return;
+            }
+            
             if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
@@ -523,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 }));
 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                                    ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                                    metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus

@@ -10,6 +10,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             VerseMappings = new HashSet<VerseMapping>();
             //ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
             AlignmentSets = new HashSet<AlignmentSet>();
+            TranslationSets = new HashSet<TranslationSet>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
@@ -28,5 +29,6 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual ICollection<VerseMapping> VerseMappings { get; set; }
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
+        public virtual ICollection<TranslationSet> TranslationSets { get; set; }
     }
 }

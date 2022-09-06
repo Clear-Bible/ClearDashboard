@@ -13,5 +13,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     public record CreateTokenizedCorpusFromTextCorpusCommand(
         ITextCorpus TextCorpus, 
         CorpusId CorpusId,
-        string TokenizationFunction) : ProjectRequestCommand<TokenizedTextCorpus>;
+        string? FriendlyName,
+        string? TokenizationFunction) : ProjectRequestCommand<TokenizedTextCorpus>;
 }

@@ -5,7 +5,7 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record CreateParallelCorpusCommand(
-        TokenizedCorpusId SourceTokenizedCorpusId,
-        TokenizedCorpusId TargetTokenizedCorpusId,
+        TokenizedTextCorpusId SourceTokenizedCorpusId,
+        TokenizedTextCorpusId TargetTokenizedCorpusId,
         IEnumerable<VerseMapping> VerseMappings) : ProjectRequestCommand<ParallelCorpus>;
 }

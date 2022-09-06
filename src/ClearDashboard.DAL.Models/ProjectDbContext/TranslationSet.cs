@@ -1,0 +1,28 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models;
+
+public class TranslationSet :  SynchronizableTimestampedEntity
+{
+    public TranslationSet()
+    {
+        // ReSharper disable VirtualMemberCallInConstructor
+        TranslationModel = new HashSet<TranslationModelEntry>();
+        Translations = new HashSet<Translation>();
+        // ReSharper restore VirtualMemberCallInConstructor
+    }
+    [ForeignKey("EngineWordAlignmentId")]
+    public Guid? EngineWordAlignmentId { get; set; }
+    public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
+
+    public virtual TranslationSet? DerivedFrom { get; set; }
+
+    [ForeignKey("ParallelCorpusId")]
+    public virtual Guid ParallelCorpusId { get; set; }
+    public virtual ParallelCorpus? ParallelCorpus { get; set; }
+
+    public virtual User? User { get; set; }
+
+    public virtual ICollection<TranslationModelEntry> TranslationModel { get; set; }
+    public virtual ICollection<Translation> Translations { get; set; }
+}
