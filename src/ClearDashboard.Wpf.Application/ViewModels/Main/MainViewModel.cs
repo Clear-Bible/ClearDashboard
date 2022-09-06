@@ -86,18 +86,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private Visibility _showProgressCircle = Visibility.Visible;
-        public Visibility ShowProgressCircle
-        {
-            get => _showProgressCircle;
-            set
-            {
-                _showProgressCircle = value; 
-                NotifyOfPropertyChange(() => ShowProgressCircle);
-            }
-        }
-
-
         public bool IsRtl { get; set; }
 
         private bool InComingChangesStarted { get; set; }
@@ -484,7 +472,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
 
-            ShowProgressCircle = Visibility.Collapsed;
             base.OnViewLoaded(view);
         }
 

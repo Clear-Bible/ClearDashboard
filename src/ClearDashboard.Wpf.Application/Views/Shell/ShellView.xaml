@@ -374,16 +374,6 @@
         <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
 
 
-        <ProgressBar
-            x:Name="ProgressIndicator"
-            Grid.Row="0"
-            Width="30"
-            Height="30"
-            IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
-            Visibility="Visible"
-            Value="0" />
-
         <StatusBar
             x:Name="StatusBar"
             Grid.Row="2"

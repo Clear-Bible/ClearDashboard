@@ -119,8 +119,6 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
             // force the background task window to be on top of the bootstraper inserted frame
             Panel.SetZIndex(this.TaskView, 10);
-
-            Panel.SetZIndex(this.ProgressIndicator, 11);
         }
 
         private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();
