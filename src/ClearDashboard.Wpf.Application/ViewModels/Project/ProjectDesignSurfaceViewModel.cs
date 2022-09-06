@@ -243,6 +243,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             set => Set(ref _selectedConnection, value);
         }
 
+        private bool _addManuscriptEnabled = true;
+        public bool AddManuscriptEnabled
+        {
+            get => _addManuscriptEnabled;
+            set
+            {
+                _addManuscriptEnabled = value;
+                NotifyOfPropertyChange(() => AddManuscriptEnabled);
+            }
+        }
+
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -418,6 +430,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 CreateNode(corpusNode.Name, new Point(corpusNode.X, corpusNode.Y), false, corpusNode.CorpusType,
                     corpusNode.ParatextProjectId);
+
+                if (corpusNode.CorpusType == CorpusType.Manuscript)
+                {
+                    AddManuscriptEnabled = false;
+                }
             }
 
             foreach (var deserializedConnection in deserialized.Connections)
@@ -444,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         {
             Logger.LogInformation("AddParatextCorpus called.");
             CreateNode("Manuscript", new Point(25, 50), false, CorpusType.Manuscript, Guid.NewGuid().ToString());
-
+            AddManuscriptEnabled = false;
         }
 
         public void AddUsfmCorpus()

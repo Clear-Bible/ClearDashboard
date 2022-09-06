@@ -599,6 +599,7 @@
                 <WrapPanel>
                     <Button
                         x:Name="AddManuscriptCorpus"
+                        IsEnabled="{Binding AddManuscriptEnabled}"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddManuscriptCorpus()"
                         Content="Manuscript"
