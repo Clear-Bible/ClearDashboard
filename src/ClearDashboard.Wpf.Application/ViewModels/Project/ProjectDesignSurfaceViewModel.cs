@@ -371,6 +371,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private void LoadCanvas()
         {
+            // we have already loaded once
+            if (DesignSurface.CorpusNodes.Count > 0)
+            {
+                return;
+            }
+            
             if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
