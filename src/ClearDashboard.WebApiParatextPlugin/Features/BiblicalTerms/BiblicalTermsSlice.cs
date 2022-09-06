@@ -36,7 +36,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
             var queryResult = new RequestResult<List<BiblicalTermsData>>(new List<BiblicalTermsData>());
             try
             {
-                queryResult.Data = ProcessBiblicalTerms(_project, biblicalTermList);
+                queryResult.Data = ProcessBiblicalTerms(_project, biblicalTermList, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
             return Task.FromResult(queryResult);
         }
 
-        public List<BiblicalTermsData> ProcessBiblicalTerms(IProject project, IBiblicalTermList biblicalTermList)
+        public List<BiblicalTermsData> ProcessBiblicalTerms(IProject project, IBiblicalTermList biblicalTermList, CancellationToken cancellationToken)
         {
             var biblicalTerms = new List<BiblicalTermsData>();
             foreach (var biblicalTerm in biblicalTermList)
@@ -63,6 +63,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
 
                     foreach (var termProperty in property)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         switch (termProperty.Name)
                         {
                             case "Id":
@@ -117,6 +118,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                 foreach (var biblicalTermRendering in renderingArray)
                 {
                     biblicalTermsData.Renderings.Add(biblicalTermRendering);
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
 
 
@@ -128,7 +130,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                     verseRefs.Add(occurrence.BBBCCCVVV.ToString());
                     longVerseRefs.Add($"{occurrence.BookCode} {occurrence.ChapterNum}:{occurrence.VerseNum}");
 
-                    verseRefTexts.Add(LookupVerseText(project, occurrence.BookNum, occurrence.ChapterNum, occurrence.VerseNum));
+                    verseRefTexts.Add(LookupVerseText(project, occurrence.BookNum, occurrence.ChapterNum, occurrence.VerseNum, cancellationToken));
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
 
                 biblicalTermsData.References = verseRefs;
@@ -145,6 +148,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                         VerseID = verseRef,
                         Found = false
                     });
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
                 // loop through each text testing to see if any rendering matches
                 for (var i = 0; i < verseRefTexts.Count; i++)
@@ -156,6 +160,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
                             counts[i].Found = true;
                         }
                     }
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
                 var count = counts.Where(c => c.Found);
                 biblicalTermsData.RenderingCount = count.Count();
@@ -166,7 +171,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
             return biblicalTerms;
         }
 
-        private string LookupVerseText(IProject mProject, int bookNum, int chapterNum, int verseNum)
+        private string LookupVerseText(IProject mProject, int bookNum, int chapterNum, int verseNum, CancellationToken cancellationToken)
         {
             var tokens = mProject.GetUSFMTokens(bookNum, chapterNum);
             if (tokens is null)
@@ -177,6 +182,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BiblicalTerms
             var lines = new List<string>();
             foreach (var token in tokens)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 if (token is IUSFMMarkerToken marker)
                 {
                     var i = 0;

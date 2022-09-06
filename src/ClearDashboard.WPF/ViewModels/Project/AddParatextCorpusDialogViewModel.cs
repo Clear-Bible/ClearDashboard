@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,11 +11,28 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
+using static ClearDashboard.Wpf.ViewModels.Project.ProjectDesignSurfaceViewModel;
 
 namespace ClearDashboard.Wpf.ViewModels.Project;
 
 public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
 {
+    public enum Tokenizer
+    {
+        LatinSentenceTokenizer,
+        LatinWordDetokenizer,
+        LatinWordTokenizer,
+        LineSegmentTokenizer,
+        NullTokenizer,
+        RegexTokenizer,
+        StringDetokenizer,
+        StringTokenizer,
+        WhitespaceDetokenizer,
+        WhitespaceTokenizer,
+        ZwspWordDetokenizer,
+        ZwspWordTokenizer
+    }
+
     private CorpusSourceType _corpusSourceType;
     private List<ParatextProjectMetadata> _projects;
     private ParatextProjectMetadata _selectedProject;
@@ -42,6 +61,13 @@ public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddP
     {
         get => _projects;
         set => Set(ref _projects, value);
+    }
+
+    private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
+    public Tokenizer SelectedTokenizer
+    {
+        get => _selectedTokenizer;
+        set => Set(ref _selectedTokenizer, value);
     }
 
     public ParatextProjectMetadata SelectedProject

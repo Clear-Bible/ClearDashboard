@@ -33,14 +33,14 @@
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Height" Value="80" />
             <Setter Property="Width" Value="Auto" />
-            <Setter Property="Foreground" Value="{DynamicResource OrangeLightBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
             <!--<Setter Property="FontWeight" Value="Bold" />-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border
                             x:Name="border"
-                            Background="{DynamicResource PrimaryHueDarkBrush}"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
                             CornerRadius="5">
                             <StackPanel>
                                 <Image
@@ -130,13 +130,25 @@
         <Border
             Grid.Row="1"
             Margin="5"
-            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+            BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="2">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Visible">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AlertVisibility}" Value="Collapsed">
+                            <Setter Property="IsEnabled" Value="True" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <StackPanel Orientation="Vertical">
                 <TextBlock
                     Margin="15,5,5,0"
                     FontSize="20"
-                    Foreground="{StaticResource PrimaryHueDarkBrush}">
+                    Foreground="{StaticResource PrimaryHueMidBrush}">
                     <Run Text="Dashboard " />
                     <Run Text="{helpers:Localization Landing_Projects}" />
                 </TextBlock>
@@ -199,7 +211,7 @@
                                     <!--  ==========================  -->
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            x:Name="DeleteProject"
+                                            x:Name="NewProject"
                                             Width="165"
                                             Margin="15,8,12,12"
                                             cal:Message.Attach="ProjectWorkspace($dataContext)"
@@ -215,7 +227,6 @@
                                                     Height="36"
                                                     Margin="-15,0,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="MonitorDashboard" />
                                                 <TextBlock VerticalAlignment="Center">Project</TextBlock>
                                             </StackPanel>
@@ -237,7 +248,6 @@
                                                     Height="36"
                                                     Margin="-15,0,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="MonitorDashboard" />
                                                 <TextBlock VerticalAlignment="Center">ClearDashboard</TextBlock>
                                             </StackPanel>
@@ -258,7 +268,6 @@
                                                     Height="36"
                                                     Margin="-15,0,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="Dictionary" />
                                                 <TextBlock VerticalAlignment="Center">ClearConcordance</TextBlock>
                                             </StackPanel>
@@ -275,7 +284,6 @@
                                                     Height="30"
                                                     Margin="-15,0,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MaterialDesignPaper}"
                                                     Kind="ChartSankeyVariant">
                                                     <materialDesign:PackIcon.RenderTransform>
                                                         <RotateTransform Angle="270" CenterX="15" CenterY="15" />
@@ -341,6 +349,35 @@
 
 
             </StackPanel>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Width="250"
+            Height="150"
+            BorderBrush="{DynamicResource RedMidBrush}"
+            BorderThickness="2"
+            Visibility="{Binding AlertVisibility}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Padding="15"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource RedMidBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap">
+                    Please Run the ClearDashboard Plugin in Paratext
+                </TextBlock>
+                <Button
+                    x:Name="AlertClose"
+                    Grid.Row="1"
+                    Margin="50,0,50,5">
+                    Close
+                </Button>
+            </Grid>
         </Border>
     </Grid>
 </Page>

@@ -13,7 +13,8 @@ using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
-    public class DashboardViewModel : PaneViewModel, IHandle<LogActivityMessage>
+    public class DashboardViewModel : PaneViewModel, IHandle<LogActivityMessage>, IHandle<CorpusAddedMessage>,
+        IHandle<CorpusDeletedMessage>, IHandle<ParallelCorpusAddedMessage>, IHandle<ParallelCorpusDeletedMessage>
     {
         #region Member Variables
       
@@ -112,6 +113,40 @@ namespace ClearDashboard.Wpf.ViewModels
         private void ClearLog(object obj)
         {
             Messages.Clear();
+        }
+
+        public Task HandleAsync(CorpusAddedMessage message, CancellationToken cancellationToken)
+        {
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusAdded: {message.paratextId}");
+            _currentMessage++;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CorpusDeletedMessage message, CancellationToken cancellationToken)
+        {
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusDeleted: {message.paratextId}");
+            _currentMessage++;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ParallelCorpusAddedMessage message, CancellationToken cancellationToken)
+        {
+            Messages.Insert(0, $"     --> target: {message.targetParatextId}");
+            Messages.Insert(0, $"     --> source: {message.sourceParatextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionAdded: ({message.connectorGuid})");
+            
+            _currentMessage++;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
+        {
+            Messages.Insert(0, $"     --> target: {message.targetParatextId}");
+            Messages.Insert(0, $"     --> source: {message.sourceParatextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionDeleted: ({message.connectorGuid})");
+
+            _currentMessage++;
+            return Task.CompletedTask;
         }
         #endregion // Methods
     }

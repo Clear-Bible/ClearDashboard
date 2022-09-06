@@ -10,9 +10,10 @@ namespace ClearDashboard.DataAccessLayer.Models
             SourceAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
             TargetAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
             TokenVerseAssociations = new HashSet<TokenVerseAssociation>();
+            Translations = new HashSet<Translation>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
- 
+
         public int BookNumber { get; set; }
         public int ChapterNumber { get; set; }
         public int VerseNumber { get; set; }
@@ -31,6 +32,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<AlignmentTokenPair> SourceAlignmentTokenPairs { get; set; }
         public virtual ICollection<AlignmentTokenPair> TargetAlignmentTokenPairs { get; set; }
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
+        public virtual ICollection<Translation> Translations { get; set; }
 
+        public Guid? TokenCompositeId { get; set; }
     }
 }

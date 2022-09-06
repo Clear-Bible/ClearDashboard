@@ -22,6 +22,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClearDashboard.Wpf.Helpers;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 
@@ -56,7 +58,7 @@ namespace ClearDashboard.Wpf.UserControls
 
         public ClockUserControl()
         {
-            InitializeComponent();
+            //InitializeComponent();
             DataContext = this;
 
             //Construct MenuItemNest of TimeZones
@@ -224,24 +226,32 @@ namespace ClearDashboard.Wpf.UserControls
 
         private void SetClockToLocalTime()
         {
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                MenuItems[0].NameTime = DateTime.Now.ToString("HH:mm");
-                MenuItems[0].TextBlockText = GetLocalizedLocalTimeString();
+                this.Dispatcher.Invoke(() =>
+                {
+                    MenuItems[0].NameTime = DateTime.Now.ToString("HH:mm");
+                    MenuItems[0].TextBlockText = GetLocalizedLocalTimeString();
 
-                if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
-                {
-                    MenuItems[0].Foreground = Brushes.LimeGreen;
-                }
-                else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
-                {
-                    MenuItems[0].Foreground = Brushes.DarkOrange;
-                }
-                else
-                {
-                    MenuItems[0].Foreground = Brushes.Red;
-                }
-            });
+                    if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 17)
+                    {
+                        MenuItems[0].Foreground = Brushes.LimeGreen;
+                    }
+                    else if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 22)
+                    {
+                        MenuItems[0].Foreground = Brushes.DarkOrange;
+                    }
+                    else
+                    {
+                        MenuItems[0].Foreground = Brushes.Red;
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
 
         private string GetLocalizedLocalTimeString()
@@ -581,7 +591,7 @@ namespace ClearDashboard.Wpf.UserControls
         {
             if (sender is TextBox box)
             {
-                box.Foreground = Brushes.Black;
+                box.Foreground = Brushes.White;
             }
             if (sender is ComboBox cbox)
             {

@@ -1,8 +1,12 @@
 using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Helpers;
 using ClearDashboard.Wpf.Interfaces;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.Views;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,15 +18,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
-using ClearDashboard.Wpf.Views;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.ViewModels
@@ -540,6 +539,7 @@ namespace ClearDashboard.Wpf.ViewModels
         protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
+
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
           
         }
@@ -996,6 +996,16 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project )
         {
+
+            // send to the task started event aggregator for everyone else to hear about a background task starting
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = "BibilicalTerms",
+                Description = "Requesting BiblicalTerms data...",
+                StartTime = DateTime.Now,
+                TaskStatus = StatusEnum.Working
+            }));
+
             try
             {
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
@@ -1017,6 +1027,15 @@ namespace ClearDashboard.Wpf.ViewModels
                         biblicalTermsList = result.Data;
 
                         await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
+
+                        // send to the task started event aggregator for everyone else to hear about a background task starting
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                        {
+                            Name = "BibilicalTerms",
+                            Description = "BiblicalTerms Loaded",
+                            EndTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Completed
+                        }));
                     }
 
                 }
@@ -1048,8 +1067,6 @@ namespace ClearDashboard.Wpf.ViewModels
             {
                 await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
             }
-
-            
         }
         
 

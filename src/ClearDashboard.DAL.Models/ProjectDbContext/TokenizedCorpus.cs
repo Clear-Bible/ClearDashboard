@@ -28,9 +28,12 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public virtual Guid CorpusId { get; set; }
     public virtual Corpus? Corpus { get; set; }
 
+    public virtual Guid? CorpusHistoryId { get; set; }
+    public virtual CorpusHistory? CorpusHistory { get; set; }
+
     public string? TokenizationFunction { get; set; }
 
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }
-   
+    public string? FriendlyName { get; set; }
 }

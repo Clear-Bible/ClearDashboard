@@ -24,11 +24,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
 {
     public class TranslationTests
     {
-        public static readonly string CorpusProjectPath = Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "Translation", "data", "WEB-PT");
-        public static readonly string HyperparametersFiles = Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "hyperparametersfiles");
-
+        public static readonly string CorpusProjectPath = Path.Combine(AppContext.BaseDirectory, "Translation", "data", "WEB-PT");
+        public static readonly string HyperparametersFiles = Path.Combine(AppContext.BaseDirectory, "hyperparametersfiles");
 
         private readonly ITestOutputHelper output_;
         protected readonly IMediator mediator_;

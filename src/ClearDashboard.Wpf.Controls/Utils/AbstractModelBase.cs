@@ -1,7 +1,9 @@
-﻿using Caliburn.Micro;
+﻿using System.ComponentModel;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Controls.Utils
 {
+
     public abstract class AbstractModelBase : PropertyChangedBase
     {
         //#if DEBUG
@@ -11,4 +13,6 @@ namespace ClearDashboard.Wpf.Controls.Utils
         //        public int ObjectDebugId => _objectDebugId;
         //#endif //  DEBUG
     }
+
+
 }

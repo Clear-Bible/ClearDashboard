@@ -1,0 +1,155 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.UserControls.ClockUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    mc:Ignorable="d">
+    <Grid
+        Height="36"
+        Margin="-1"
+        VerticalAlignment="Center">
+
+        <Border
+            x:Name="TimerBorder"
+            Width="157"
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="10" />
+        <Menu
+            x:Name="Menu"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            ItemsSource="{Binding MenuItems}">
+
+            <Menu.ItemContainerStyle>
+                <Style x:Name="ItemTemp" TargetType="{x:Type MenuItem}">
+
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="-30,0,-5,0" />
+
+                    <!--<EventSetter Event="Click" Handler="Utc_OnClick" />-->
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Display">
+                            <Setter Property="Width" Value="157" />
+                            <Setter Property="Height" Value="44" />
+                            <Setter Property="Padding" Value="5,0,0,0" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
+                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInteractiveBorder}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
+                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInteractiveBorder}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Menu.ItemContainerStyle>
+            <Menu.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:ClockUserControl}" ItemsSource="{Binding Path=MenuItems}">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <StackPanel
+                            Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <Button
+                                x:Name="AddButton"
+                                Width="40"
+                                Height="22"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Click="AddButton_OnClick"
+                                Content="+"
+                                Tag="{Binding MenuItems, Mode=TwoWay}"
+                                ToolTip="Add"
+                                Visibility="{Binding AddButtonVisibility}" />
+                            <Button
+                                x:Name="DeleteButton"
+                                Width="40"
+                                Height="22"
+                                Margin="2,0,0,0"
+                                Padding="-1"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Click="DeleteButton_OnClick"
+                                ToolTip="Delete"
+                                Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}">
+                                <materialDesign:PackIcon Kind="TrashCanOutline" />
+                            </Button>
+                            <CheckBox
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Checked="CheckBoxChanged"
+                                IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
+                                ToolTip="Include in clock display rotation"
+                                Unchecked="CheckBoxChanged"
+                                Visibility="{Binding CheckBoxVisibility}">
+                                <CheckBox.Resources>
+
+                                    <!--  Unchecked state  -->
+
+                                    <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="{DynamicResource SecondaryHueMid}" />
+
+                                    <!--  Checked state  -->
+
+                                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource SecondaryHueMid}" />
+                                </CheckBox.Resources>
+                            </CheckBox>
+                            <TextBlock
+                                x:Name="NameTime"
+                                Width="48"
+                                Padding="0,0,5,0"
+                                VerticalAlignment="Center"
+                                Foreground="{Binding Foreground}"
+                                Text="{Binding NameTime}"
+                                TextAlignment="Right"
+                                Visibility="{Binding NameTimeVisibility}" />
+                            <TextBox
+                                Width="200"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{DynamicResource SecondaryHueLightBrush}"
+                                LostFocus="TextBox_OnLostFocus"
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"
+                                Text="{Binding TextBoxText}"
+                                ToolTip="Name the item"
+                                Visibility="{Binding TextBoxVisibility}" />
+
+                            <ComboBox
+                                Height="26"
+                                Foreground="Black"
+                                ItemsSource="{Binding UtcStringList}"
+                                MouseEnter="TextBox_OnMouseEnter"
+                                MouseLeave="TextBox_OnMouseLeave"
+                                SelectedItem="{Binding TextBlockText, Mode=TwoWay}"
+                                SelectionChanged="UtcComboSelected"
+                                Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
+                                ToolTip="Select timezone"
+                                Visibility="{Binding UtcComboVisibility}" />
+                            <TextBlock
+                                x:Name="ClockUserControl_nameTime"
+                                Width="{Binding (FrameworkElement.Width), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                                VerticalAlignment="Center"
+                                Text="{Binding TextBlockText, Mode=TwoWay}"
+                                Visibility="{Binding TextBlockVisibility}" />
+                        </StackPanel>
+                    </Grid>
+                </HierarchicalDataTemplate>
+            </Menu.ItemTemplate>
+        </Menu>
+    </Grid>
+</UserControl>

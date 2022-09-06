@@ -30,6 +30,14 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
         public override Task<RequestResult<SpellingStatus>> Handle(GetSpellingStatusQuery request,
             CancellationToken cancellationToken)
         {
+            if (_projectManager.HasCurrentParatextProject == false)
+            {
+                var ret = new RequestResult<SpellingStatus>();
+                ret.Success = false;
+                ret.Message = "No CurrentParatextProject - Plugin is probably not running";
+                return Task.FromResult(ret);
+            }
+
             ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath,
                 "SpellingStatus.xml");
             var queryResult = ValidateResourcePath(new SpellingStatus());

@@ -3,12 +3,12 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetBookIdsByTokenizedCorpusIdQuery : ProjectRequestQuery<(IEnumerable<string> bookIds, CorpusId corpusId)>
+    public record GetBookIdsByTokenizedCorpusIdQuery : ProjectRequestQuery<(IEnumerable<string> bookIds, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
     {
-        public GetBookIdsByTokenizedCorpusIdQuery(TokenizedCorpusId tokenizedCorpusId)
+        public GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId tokenizedTextCorpusId)
         {
-            TokenizedCorpusId = tokenizedCorpusId;
+            TokenizedTextCorpusId = tokenizedTextCorpusId;
         }
-        public TokenizedCorpusId TokenizedCorpusId { get; }
+        public TokenizedTextCorpusId TokenizedTextCorpusId { get; }
     }
 }

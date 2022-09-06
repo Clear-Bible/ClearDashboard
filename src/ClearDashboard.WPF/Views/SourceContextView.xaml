@@ -17,7 +17,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
@@ -74,7 +74,7 @@
                                     <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightBrush}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -93,7 +93,7 @@
                                     <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightBrush}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

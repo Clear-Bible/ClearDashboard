@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.Views;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,8 +26,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.ViewModels.Project;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -303,11 +302,13 @@ namespace ClearDashboard.Wpf.ViewModels
 
         private List<Tuple<string, Theme>> Themes { get; }
 
-        private readonly Tuple<string, Theme> _selectedTheme;
+        //private readonly Tuple<string, Theme> _selectedTheme;
+        private Tuple<string, Theme> _selectedTheme;
         public Tuple<string, Theme> SelectedTheme
         {
             get => _selectedTheme;
-            private init
+            //private init
+            set
             {
                 _selectedTheme = value;
                 NotifyOfPropertyChange(() => SelectedTheme);
@@ -652,7 +653,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
                         new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
+                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
@@ -741,6 +742,7 @@ namespace ClearDashboard.Wpf.ViewModels
         private void WorkSpaceViewModel_ThemeChanged()
         {
             GridIsVisible = Visibility.Collapsed;
+            SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
         }
 
         private void LoadLayoutById(string layoutId)
@@ -1303,13 +1305,6 @@ namespace ClearDashboard.Wpf.ViewModels
             await Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Button click for the background tasks on the status bar
-        /// </summary>
-        public void BackgroundTasks()
-        {
-            Console.WriteLine();
-        }
     }
 
     public static class WorkspaceLayoutNames

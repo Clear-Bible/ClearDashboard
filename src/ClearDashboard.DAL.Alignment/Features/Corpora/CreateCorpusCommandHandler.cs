@@ -52,7 +52,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // NB:  passing in the cancellation token to SaveChangesAsync.
             await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
-            var corpus = await Corpus.Get(_mediator, new CorpusId(modelCorpus.Id));
+            var corpus = await Corpus.Get(_mediator, ModelHelper.BuildCorpusId(modelCorpus));
 
             return new RequestResult<Corpus>(corpus);
         }

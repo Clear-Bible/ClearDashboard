@@ -18,7 +18,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using ClearDashboard.DataAccessLayer.Data.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -31,9 +31,9 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        protected ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
+        public ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
         public IMediator Mediator { get; private set; }
-
+        public ProjectAssets ProjectAssets { get; set; }
 
 
         public User CurrentUser { get; set; }
@@ -98,7 +98,6 @@ namespace ClearDashboard.DataAccessLayer
 
         public virtual async Task Initialize()
         {
-            CurrentUser = await GetUser();
             EnsureDashboardProjectDirectory();
         }
 
@@ -257,7 +256,7 @@ namespace ClearDashboard.DataAccessLayer
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
             CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
-            //CurrentDashboardProject.ParatextProjectPath = 
+           
         }
 
 
@@ -317,6 +316,13 @@ namespace ClearDashboard.DataAccessLayer
 
             return EntityFrameworkQueryableExtensions.Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
            // return null;
+        }
+
+        public async Task LoadProjectFromDatabase(string projectName)
+        {
+            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+
+            CurrentProject = projectAssets.ProjectDbContext.Projects.First();
         }
 
         public async Task<Project> DeleteProject(string projectName)
@@ -390,6 +396,16 @@ namespace ClearDashboard.DataAccessLayer
                 Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{projectName}'");
                 throw;
             }
+        }
+
+
+        public async Task UpdateProject(Project project)
+        {
+            var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+            projectAssets.ProjectDbContext.Attach(project);
+
+            await projectAssets.ProjectDbContext.SaveChangesAsync();
+            return;
         }
     }
 }
