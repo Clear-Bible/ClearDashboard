@@ -512,8 +512,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             await base.OnActivateAsync(cancellationToken);
 
-            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
-
+            // await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
         }
         protected override void OnViewAttached(object view, object context)
         {
@@ -529,8 +528,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             base.OnViewLoaded(view);
         }
 
-        protected override void OnViewReady(object view)
+        protected override async void OnViewReady(object view)
         {
+            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
+
+
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             // select the first one
