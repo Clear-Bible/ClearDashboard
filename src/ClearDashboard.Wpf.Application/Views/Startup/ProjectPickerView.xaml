@@ -60,29 +60,31 @@
             </TextBox>
         </StackPanel>
 
-        <ComboBox
-            x:Name="SelectedLanguage"
-            Grid.Row="0"
-            Grid.Column="1"
-            Width="200"
-            Margin="0,15,15,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            VerticalContentAlignment="Top"
-            FontSize="12"
-            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="1"
-            Margin="10,10"
+            Margin="10,10,10,10"
             HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
+            VerticalAlignment="Top"
             Orientation="Vertical">
 
+            <ComboBox
+                x:Name="SelectedLanguage"
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="200"
+                Margin="0,15,15,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                VerticalContentAlignment="Top"
+                FontSize="12"
+                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
+                SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+
             <TextBlock
-                Margin="0,0,0,10"
+                Margin="0,33,0,10"
                 FontSize="19"
                 Text="Get started" />
 
@@ -90,8 +92,9 @@
                 x:Name="MoveForwards"
                 Width="340"
                 Height="75"
-                Margin="0,5,53,50"
+                Margin="0,15,0,0"
                 VerticalContentAlignment="Top"
+                HorizontalContentAlignment="Left"
                 cal:Message.Attach="MoveForwards"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="LightGray"
@@ -107,8 +110,9 @@
                         Text="Create New Project" />
                     <TextBlock
                         VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
                         FontWeight="Light"
-                        Text="Choose a project template and tokenization scheme to get started"
+                        Text="Create your project to get started."
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Button>
@@ -168,11 +172,11 @@
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
-                            <StackPanel
-                                MouseEnter="UIElement_OnMouseEnter"
-                                MouseLeave="UIElement_OnMouseLeave"
-                                Orientation="Horizontal">
-
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                <!--
+                                    MouseEnter="UIElement_OnMouseEnter"
+                                    MouseLeave="UIElement_OnMouseLeave"
+                                -->
                                 <Grid Width="450" Height="45">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
