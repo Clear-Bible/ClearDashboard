@@ -31,6 +31,10 @@ namespace ClearDashboard.DAL.Tests
             var dashboardProjectManager = ServiceProvider.GetService<DashboardProjectManager>();
             dashboardProjectManager.CreateDashboardProject();
             dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
+
+            dashboardProjectManager.CurrentParatextProject = new ParatextProject();
+            dashboardProjectManager.CurrentParatextProject.DirectoryPath = path;
+
             var result = await ExecuteAndTestRequest<GetSpellingStatusQuery, RequestResult<SpellingStatus>, SpellingStatus>(new GetSpellingStatusQuery());
 
             Output.WriteLine($"Returned {result.Data.Status.Count} records.");
