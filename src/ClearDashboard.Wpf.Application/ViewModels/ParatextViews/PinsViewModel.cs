@@ -176,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }));
 
             // ReSharper disable once MethodSupportsCancellation
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 GenerateData().ConfigureAwait(false);
             }).ConfigureAwait(true);
