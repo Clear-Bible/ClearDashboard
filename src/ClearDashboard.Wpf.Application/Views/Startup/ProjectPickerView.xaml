@@ -93,8 +93,9 @@
                 x:Name="MoveForwards"
                 Width="340"
                 Height="75"
-                Margin="0,5,53,50"
+                Margin="0,15,0,0"
                 VerticalContentAlignment="Top"
+                HorizontalContentAlignment="Left"
                 cal:Message.Attach="MoveForwards"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="LightGray"
@@ -110,8 +111,9 @@
                         Text="Create New Project" />
                     <TextBlock
                         VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
                         FontWeight="Light"
-                        Text="Choose a project template and tokenization scheme to get started"
+                        Text="Create your project to get started."
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Button>
