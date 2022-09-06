@@ -483,5 +483,18 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         {
             _prevZoomRectSet = false;
         }
+
+        private void OnCorpusNodeProperties(object sender, ExecutedRoutedEventArgs e)
+        {
+            var corpus = (CorpusNodeViewModel)e.Parameter;
+            this.ViewModel.ShowCorpusProperties(corpus);
+
+        }
+
+        private void OnConnectionProperties(object sender, ExecutedRoutedEventArgs e)
+        {
+            var connection = (ConnectionViewModel)e.Parameter;
+            this.ViewModel.ShowConnectionProperties(connection);
+        }
     }
 }

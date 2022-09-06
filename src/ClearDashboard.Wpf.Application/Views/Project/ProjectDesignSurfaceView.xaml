@@ -34,6 +34,8 @@
 
             <RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />
             <RoutedUICommand x:Key="Commands.CreateNode" />
+            <RoutedUICommand x:Key="Commands.NodeProperties" />
+            <RoutedUICommand x:Key="Commands.ConnectionProperties" />
             <RoutedUICommand x:Key="Commands.DeleteNode" />
             <RoutedUICommand x:Key="Commands.DeleteConnection" />
             <RoutedUICommand x:Key="Commands.ZoomOut" />
@@ -236,7 +238,23 @@
                         NodeTarget="{Binding Path=DestinationConnector}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
-                        StrokeThickness="3" />
+                        StrokeThickness="3" >
+                        <viewModels:CurvedArrow.ContextMenu>
+                            <ContextMenu Name="ContextMenu">
+                                <MenuItem
+                                    Command="{StaticResource Commands.ConnectionProperties}"
+                                    CommandParameter="{Binding}"
+                                    Header="Properties"
+                                    ToolTip="View the corpus properties" />
+                                <!--
+                                        Command="{StaticResource Commands.Properties}"
+                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
+                                        CommandParameter="{Binding ElementName=nodeRectangle}"
+                                    -->
+
+                            </ContextMenu>
+                        </viewModels:CurvedArrow.ContextMenu>
+                    </viewModels:CurvedArrow>
 
                     <controls:AdornedControl.AdornerContent>
 
@@ -324,7 +342,33 @@
                                     </Style.Triggers>
                                 </Style>
                             </Rectangle.Style>
+                            <Rectangle.ContextMenu>
+                                <ContextMenu Name="ContextMenu">
+                                    <MenuItem
+                                        Command="{StaticResource Commands.CreateNode}"
+                                        Header="View Verse Text"
+                                        ToolTip="View the verse text for the corpus" />
+                                    <MenuItem
+                                        Command="{StaticResource Commands.CreateNode}"
+                                        Header="Edit Tokenizer"
+                                        ToolTip="Edit the corpus tokenizer" />
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{StaticResource Commands.NodeProperties}"
+                                        CommandParameter="{Binding}"
+                                        Header="Properties"
+                                        ToolTip="View the corpus properties" />
+                                    <!--
+                                        Command="{StaticResource Commands.Properties}"
+                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
+                                        CommandParameter="{Binding ElementName=nodeRectangle}"
+                                    -->
+
+                                </ContextMenu>
+                            </Rectangle.ContextMenu>
                         </Rectangle>
+
+
 
                         <!--<Button
                             Width="25"
@@ -467,6 +511,8 @@
 
         <CommandBinding Command="{StaticResource Commands.DeleteSelectedNodes}" Executed="OnDeleteSelectedNodesExecuted" />
         <CommandBinding Command="{StaticResource Commands.CreateNode}" Executed="OnCreateCorpusNodeExecuted" />
+        <CommandBinding Command="{StaticResource Commands.NodeProperties}" Executed="OnCorpusNodeProperties" />
+        <CommandBinding Command="{StaticResource Commands.ConnectionProperties}" Executed="OnConnectionProperties" />
         <CommandBinding Command="{StaticResource Commands.DeleteNode}" Executed="OnDeleteCorpusNodeExecuted" />
         <CommandBinding Command="{StaticResource Commands.DeleteConnection}" Executed="OnDeleteConnectionExecuted" />
         <CommandBinding Command="{StaticResource Commands.ZoomOut}" Executed="ZoomOut_Executed" />
@@ -482,11 +528,13 @@
 
     </UserControl.CommandBindings>
 
-    <UserControl.ContextMenu>
+    <!--<UserControl.ContextMenu>
 
         <ContextMenu>
 
-            <!--  Clicking this menu item creates a new node.  -->
+    -->
+    <!--  Clicking this menu item creates a new node.  -->
+    <!--
 
             <MenuItem
                 Command="{StaticResource Commands.CreateNode}"
@@ -524,7 +572,7 @@
                 ToolTip="Zooms in on the canvas" />
 
         </ContextMenu>
-    </UserControl.ContextMenu>
+    </UserControl.ContextMenu>-->
 
 
 

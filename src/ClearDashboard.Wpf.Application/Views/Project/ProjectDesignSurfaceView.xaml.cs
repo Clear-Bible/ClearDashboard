@@ -162,5 +162,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             node.Size = new Size(element.ActualWidth, element.ActualHeight);
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var node = e.Source as CorpusNodeViewModel;
+        }
     }
 }

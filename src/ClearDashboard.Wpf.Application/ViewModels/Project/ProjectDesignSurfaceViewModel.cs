@@ -114,14 +114,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private double _contentViewportHeight;
 
         #endregion //Member Variables
-        
+
         #region Public Variables
 
         public ProjectDesignSurfaceView View { get; set; }
         public Canvas DesignSurfaceCanvas { get; set; }
 
         #endregion //Public Variables
-        
+
         #region Observable Properties
 
         public IWindowManager WindowManager { get; }
@@ -210,25 +210,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
 
-        private ConnectionViewModel _selectedNode;
-        public ConnectionViewModel SelectedConnection
+        private object _selectedConnection;
+        public object SelectedConnection
         {
             get
             {
-                foreach (var connection in DesignSurface.Connections)
+                if (_selectedConnection is CorpusNodeViewModel)
                 {
-                    if (connection.IsSelected)
+                    var node = (CorpusNodeViewModel)_selectedConnection;
+                    foreach (var corpusNode in DesignSurface.CorpusNodes)
                     {
-                        return connection;
+                        if (corpusNode.ParatextProjectId == node.ParatextProjectId)
+                        {
+                            return corpusNode;
+                        }
                     }
                 }
+                else if (_selectedConnection is ConnectionViewModel)
+                {
+                    var conn = (ConnectionViewModel)_selectedConnection;
+                    foreach (var connection in DesignSurface.Connections)
+                    {
+                        if (connection.Id == conn.Id)
+                        {
+                            return connection;
+                        }
+                    }
+                }
+
                 return null;
             }
-            set => Set(ref _selectedNode, value);
+            set => Set(ref _selectedConnection, value);
         }
 
         #endregion //Observable Properties
-        
+
         #region Constructor
         public ProjectDesignSurfaceViewModel()
         {
@@ -238,7 +254,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public ProjectDesignSurfaceViewModel(IWindowManager windowManager, INavigationService navigationService,
             ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) 
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
@@ -271,7 +287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             SaveCanvas();
-            
+
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_addParatextCorpusRunning)
@@ -329,7 +345,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         #region Methods
 
-        
+
         private async void SaveCanvas()
         {
             var surface = new ProjectDesignSurfaceSerializationModel();
@@ -346,7 +362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     Y = corpusNode.Y,
                 });
             }
-            
+
             // save all the connections
             foreach (var connection in DesignSurface.Connections)
             {
@@ -376,7 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 return;
             }
-            
+
             if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
@@ -474,7 +490,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                                 var corpus = await DAL.Alignment.Corpora.Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName,
                                     metadata.CorpusTypeDisplay, cancellationToken);
-                                
+
                                 OnUIThread(() => Corpora.Add(corpus));
 
 
@@ -1028,6 +1044,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DesignSurface.Connections.Add(connection);
         }
 
+        public void ShowCorpusProperties(object corpus)
+        {
+            SelectedConnection = corpus;
+        }
+
+        public void ShowConnectionProperties(ConnectionViewModel connection)
+        {
+            SelectedConnection = connection;
+        }
+
         public async Task HandleAsync(NodeSelectedChanagedMessage message, CancellationToken cancellationToken)
         {
             var node = message.Node as CorpusNodeViewModel;
@@ -1089,7 +1115,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         #endregion // Methods
-
-
     }
 }
