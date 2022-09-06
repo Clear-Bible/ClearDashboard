@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
            
             ProjectName = string.Empty;
 
-            return base.OnInitializeAsync(cancellationToken);
+            //return base.OnInitializeAsync(cancellationToken);
         }
         
         public void Create()
