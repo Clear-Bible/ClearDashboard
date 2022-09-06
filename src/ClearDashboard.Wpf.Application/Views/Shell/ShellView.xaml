@@ -15,24 +15,25 @@
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="ClearDashboard"
-    d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,IsDesignTimeCreatable=True}"
-    Visibility="Hidden"
-    WindowState="Minimized"
+    d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="800"
     d:DesignWidth="1200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
-    Initialized="OnWindowInitialized"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    ShowIconOnTitleBar="True"
     Icon="..\..\Assets/ClearDashboard_Icon.ico"
+    Initialized="OnWindowInitialized"
     Loaded="OnWindowLoaded"
+    ShowIconOnTitleBar="True"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    Visibility="Hidden"
+    WindowState="Minimized"
     mc:Ignorable="d">
     <Window.Resources>
         <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
@@ -372,6 +373,16 @@
         -->
         <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
 
+
+        <ProgressBar
+            x:Name="ProgressIndicator"
+            Grid.Row="0"
+            Width="30"
+            Height="30"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="Visible"
+            Value="0" />
 
         <StatusBar
             x:Name="StatusBar"

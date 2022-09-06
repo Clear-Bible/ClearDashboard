@@ -24,7 +24,7 @@
             <!--<ColumnDefinition Width="*" MinWidth="550" />
             <ColumnDefinition Width="*" MinWidth="250" />-->
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*"  />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel
@@ -42,9 +42,9 @@
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="Search"
-                Style="{DynamicResource MaterialDesignTextBox}"
                 BorderBrush="Black"
                 BorderThickness="1"
+                Style="{DynamicResource MaterialDesignTextBox}"
                 Text="{Binding SearchText, Mode=TwoWay}" />
         </StackPanel>
 
@@ -58,7 +58,7 @@
             VerticalContentAlignment="Top"
             FontSize="12"
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"  />
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
 
         <StackPanel
@@ -92,26 +92,26 @@
             </Button>-->
 
             <!--  Visibility="{Binding ShowForwardButton, Converter={StaticResource VisibilityConverter}}"  -->
-            <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}" >
+            <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}">
 
 
                 <Button
-                x:Name="MoveForwards"
-                Margin="5,5,5,5"
-                Background="Transparent" 
-                BorderThickness="0"
-                cal:Message.Attach="MoveForwards"
-                IsEnabled="{Binding EnableControls}">
+                    x:Name="MoveForwards"
+                    Margin="5,5,5,5"
+                    cal:Message.Attach="MoveForwards"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    IsEnabled="{Binding EnableControls}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="Create New Project" />
                         <Viewbox MaxWidth="50" MaxHeight="50">
                             <materialDesign:PackIcon
-                            x:Name="ForwardIcon"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Right"
-                            Kind="ChevronRight"
-                            Visibility="Visible" />
+                                x:Name="ForwardIcon"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Right"
+                                Kind="ChevronRight"
+                                Visibility="Visible" />
                         </Viewbox>
                     </StackPanel>
                 </Button>
@@ -126,9 +126,9 @@
             Name="GridLayout"
             Grid.Row="1"
             Grid.Column="0"
-            Orientation="Vertical"
-            Margin="20, 0"
-            MaxHeight="450">
+            MaxHeight="450"
+            Margin="20,0"
+            Orientation="Vertical">
             <ListView
                 x:Name="RadioButtonGroupChoiceChipOutline"
                 MaxHeight="440"
@@ -139,7 +139,7 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}" >
+                        <materialDesign:Card Tag="{Binding DataContext, ElementName=GridLayout}">
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
@@ -147,17 +147,13 @@
                             </materialDesign:Card.ContextMenu>
                             <Button
                                 x:Name="Workspace"
-                               
                                 Height="45"
+                                Margin="5"
                                 cal:Message.Attach="NavigateToMainViewModel($dataContext)"
-                                Background="Transparent" 
-                                BorderThickness="0"
-                                Margin="5">
+                                Background="Transparent"
+                                BorderThickness="0">
 
-                                <Grid
-                                    Width="450"
-                                  
-                                    Background="Transparent">
+                                <Grid Width="450" Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -184,12 +180,13 @@
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
-                                    <TextBlock Grid.Row="0"
-                                               Grid.Column="2"
-                                               Width="145"
-                                               HorizontalAlignment="Center"
-                                               FontSize="12"
-                                               Text="{Binding Modified}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Width="145"
+                                        HorizontalAlignment="Center"
+                                        FontSize="12"
+                                        Text="{Binding Modified}" />
 
                                     <TextBlock
                                         Grid.Row="1"
