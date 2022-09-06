@@ -394,7 +394,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public ICollectionView BiblicalTermsCollectionView { get; }
+        public ICollectionView BiblicalTermsCollectionView { get; set; }
 
 
         private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
@@ -506,8 +506,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
             _cancellationTokenSource = new CancellationTokenSource();
+        }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            await base.OnActivateAsync(cancellationToken);
 
+            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
+
+        }
+        protected override void OnViewAttached(object view, object context)
+        {
+
+            _view = (BiblicalTermsView)view;
+            Logger.LogInformation("OnViewAttached");
+            base.OnViewAttached(view, context);
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            Logger.LogInformation("OnViewLoaded");
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
             // populate the combo box for semantic domains
             SetupSemanticDomains();
             // select the first one
@@ -527,7 +550,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             RenderingFilter = drv;
 
             // setup the collectionview that binds to the data grid
-            BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(this._biblicalTerms);
+            BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
 
             // setup the method that we go to for filtering
             BiblicalTermsCollectionView.Filter = FilterGridItems;
@@ -544,34 +567,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _fontSize = paratextProject.Language.Size;
                 IsRtl = paratextProject.Language.IsRtol;
             }
+
+
+            Logger.LogInformation("OnViewReady");
+            base.OnViewReady(view);
         }
-
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            await base.OnActivateAsync(cancellationToken);
-
-            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
-
-        }
-        protected override void OnViewAttached(object view, object context)
-        {
-
-            _view = (BiblicalTermsView)view;
-            Logger.LogInformation("OnViewAttached");
-            base.OnViewAttached(view, context);
-        }
-
-        //protected override void OnViewLoaded(object view)
-        //{
-        //    Logger.LogInformation("OnViewLoaded");
-        //    base.OnViewLoaded(view);
-        //}
-
-        //protected override void OnViewReady(object view)
-        //{
-        //    Logger.LogInformation("OnViewReady");
-        //    base.OnViewReady(view);
-        //}
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
