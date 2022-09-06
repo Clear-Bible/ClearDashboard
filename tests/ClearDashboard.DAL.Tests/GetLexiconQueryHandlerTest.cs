@@ -31,6 +31,9 @@ namespace ClearDashboard.DAL.Tests
 
             dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
 
+            dashboardProjectManager.CurrentParatextProject = new ParatextProject();
+            dashboardProjectManager.CurrentParatextProject.DirectoryPath = path;
+
             var result = await ExecuteAndTestRequest<GetLexiconQuery, RequestResult<Lexicon>, Lexicon>(new GetLexiconQuery());
 
             Output.WriteLine($"Returned {result.Data.Entries.Item.Count} records.");

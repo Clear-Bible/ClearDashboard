@@ -62,7 +62,7 @@ namespace ClearDashboard.WPF.Tests
                 Assert.False(results.IsValid);
                 Assert.NotEmpty(results.Errors);
 
-                Assert.Collection(results.Errors, error => Assert.Equal($"The project directory {projectDirectory} already exists.", error.ErrorMessage));
+                Assert.Collection(results.Errors, error => Assert.Equal($"A project with the same name already exists. Please choose a unique name.", error.ErrorMessage));
 
                 _output.WriteLine("The following validation errors occurred:");
 
@@ -93,7 +93,7 @@ namespace ClearDashboard.WPF.Tests
 
             Assert.False(results.IsValid);
             Assert.NotEmpty(results.Errors);
-            Assert.Collection(results.Errors, error=> Assert.Equal($"The project name '{project.ProjectName}' contains illegal characters.  Valid characters include 'A-Z' (lowercase and uppercase), numbers '0-9' and the characters '-' and '_'.",error.ErrorMessage));
+            Assert.Collection(results.Errors, error=> Assert.Equal($"The given project name contains illegal characters.  Valid characters include 'A-Z' (lowercase and uppercase), numbers '0-9' and the characters '-' and '_'.",error.ErrorMessage));
 
             _output.WriteLine("The following validation errors occurred:");
 
