@@ -30,7 +30,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class AlignmentSampleViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
-        private readonly IMediator _mediator;
         public List<string> EnglishWords { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
         public List<string> GreekLowercase { get; set; } = "α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω".Split(' ').ToList();
         public List<string> GreekUppercase { get; set; } = "Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω".Split(' ').ToList();
@@ -63,60 +62,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             var corpus = await CorpusClass.Create(Mediator!, true, "NameX", "LanguageX", "LanguageType");
             var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "boo", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-
-            //var corpus = new Corpus
-            //{
-            //    IsRtl = false,
-            //    Name = "Sample",
-            //    Language = language,
-            //    CorpusType = CorpusType.Standard,
-            //    Metadata =
-            //    {
-            //        ["TokenizationQueryString"] = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()"
-            //    }
-            //};
-
-            //var tokenizedCorpus = new TokenizedCorpus();
-            //textCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
-            //    tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
-            //    {
-            //        BookNumber = engineToken.TokenId.BookNumber,
-            //        ChapterNumber = engineToken.TokenId.ChapterNumber,
-            //        VerseNumber = engineToken.TokenId.VerseNumber,
-            //        WordNumber = engineToken.TokenId.WordNumber,
-            //        SubwordNumber = engineToken.TokenId.SubWordNumber,
-            //        SurfaceText = engineToken.SurfaceText,
-            //        TrainingText = engineToken.TrainingText
-            //    }))
-            //);
-            //corpus.TokenizedCorpora.Add(tokenizedCorpus);
             return corpus;
         }
 
-        //private static IEnumerable<string> GetBookAbbreviations(TokenizedCorpus tokenizedCorpus)
-        //{
-        //    var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
-        //    var bookIdsToAbbreviations = FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
-
-        //    var bookAbbreviations = new List<string>();
-        //    foreach (var bookNumber in bookNumbers)
-        //    {
-        //        if (bookIdsToAbbreviations.TryGetValue(bookNumber != null ? bookNumber : -1, out string bookAbbreviation))
-        //        {
-        //            bookAbbreviations.Add(bookAbbreviation);
-        //        }
-        //    }
-
-        //    return bookAbbreviations;
-        //}
-
-        //private CorpusClass _englishCorpus;
-        //private CorpusClass EnglishCorpus => _englishCorpus ??= awaitGetSampleCorpusAsync(GetSampleEnglishTextCorpus(), "English");
-        //private TokenizedCorpus EnglishTokenizedCorpus => EnglishCorpus.TokenizedCorpora.First();
-        //public List<string> EnglishFile { get; set; } = new();
-        //private Corpus _greekCorpus;
-        //private Corpus GreekCorpus => _greekCorpus ??= GetSampleCorpusAsync(GetSampleGreekTextCorpus(), "Greek");
-        //private TokenizedCorpus GreekTokenizedCorpus => GreekCorpus.TokenizedCorpora.First();
         public List<string> GreekVerse1 { get; set; } = new();
         public string Message { get; set; }
         private VerseTokens DatabaseVerseTokens { get; set; }
@@ -145,12 +93,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService,
-            ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope)
+        public AlignmentSampleViewModel(INavigationService navigationService, ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-            _mediator = mediator;
             //LoadFiles();
         }
 
