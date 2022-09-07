@@ -17,9 +17,59 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="ListView"
+                   BasedOn="{StaticResource MaterialDesignListView}"
+                   x:Key="EmptyMaterialDesignListView">
+                <Style.Triggers>
+                    <!-- Use ListBox.HasItems instead of Binding -->
+                    <Trigger Property="HasItems" Value="False">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Label>It's lonely here.  Please create a new project.</Label>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border>
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="LightGray"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Background" Value="#EEEBEB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid Background="Transparent">
+                                    <ContentPresenter></ContentPresenter>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="White" x:Name="GridLayout">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -32,18 +82,20 @@
             Grid.Column="0"
             Margin="0,0,0,0">
             <TextBlock
-                Margin="47,10,0,30"
+                Margin="47,10,0,0"
                 FontSize="32"
                 Text="Clear Dashboard" />
-            <TextBlock
-                Margin="52,0,0,21"
-                FontSize="19"
-                Text="Open recent" />
+
+        </StackPanel>
+        <StackPanel  Grid.Row="1"
+                     Grid.Column="0" 
+                     VerticalAlignment="Center">
+
             <TextBox
                 x:Name="SearchText"
                 Width="320"
                 Height="30"
-                Margin="55,0,0,0"
+                Margin="30,0,0,0"
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
@@ -59,113 +111,105 @@
                 </TextBox.Text>
             </TextBox>
         </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" >
+            <TextBlock
+                Margin="40,0"
+                FontSize="19"
+                Text="Open recent" />
+        </StackPanel>
 
-
-
-        <StackPanel
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="1"
-            Margin="10,10,10,10"
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+        <ComboBox
+            x:Name="SelectedLanguage"
+            Width="200"
+            Height="30"
+            Margin="0,15,15,10"
             HorizontalAlignment="Right"
+            VerticalContentAlignment="Top"
+            FontSize="12"
+            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
 
-            <ComboBox
-                x:Name="SelectedLanguage"
-                Grid.Row="0"
-                Grid.Column="1"
-                Width="200"
-                Margin="0,15,15,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                VerticalContentAlignment="Top"
-                FontSize="12"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-                SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
-
             <TextBlock
-                Margin="0,33,0,10"
+                Margin="30, 0"
                 FontSize="19"
                 Text="Get started" />
 
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="1">
             <Button
                 x:Name="MoveForwards"
                 Width="340"
-                Height="75"
-                Margin="0,15,0,0"
+                Height="80"
+                Margin="10, 5, 40, 10"
                 VerticalContentAlignment="Top"
                 HorizontalContentAlignment="Left"
                 cal:Message.Attach="MoveForwards"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                Background="LightGray"
+                Style="{StaticResource TransparentStyle}"
+                Background="DarkGray"
                 BorderThickness="0"
-                IsEnabled="{Binding EnableControls}"
-                MouseEnter="MoveForwards_OnMouseEnter"
-                MouseLeave="MoveForwards_OnMouseLeave">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="19"
-                        FontWeight="Normal"
-                        Text="Create New Project" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        FontWeight="Light"
-                        Text="Create your project to get started."
-                        TextWrapping="Wrap" />
+                IsEnabled="{Binding EnableControls}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image
+                       Height="30"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Source="../../Assets/newproject.png" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="19"
+                            FontWeight="Normal"
+                            Text="Create a new project" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            FontWeight="Light"
+                            Margin="0,2"
+                            Text="Create your project to get started."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
                 </StackPanel>
+              
             </Button>
 
-            <!--  cal:Message.Attach="MouseDown"  -->
-            <!--<materialDesign:Card
-                x:Name="MoveForwards"
-                Width="475"
-                Margin="5,5,5,5"
-                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                IsEnabled="{Binding EnableControls}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Create New Project" />
-                        <Viewbox MaxWidth="50" MaxHeight="50">
-                            <materialDesign:PackIcon
-                            x:Name="ForwardIcon"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Right"
-                            Kind="ChevronRight"
-                            Visibility="Visible" />
-                    </Viewbox>
-                </StackPanel>
-            </materialDesign:Card>-->
         </StackPanel>
 
-        <!--  ==========================  -->
-        <!--  PROJECT'S GRID  -->
-        <!--  ==========================  -->
 
         <StackPanel
-            Name="GridLayout"
-            Grid.Row="1"
+            Grid.Row="3"
             Grid.Column="0"
-            Margin="57,0,0,0"
+            Margin="10,0,0,0"
             Orientation="Vertical">
-            <ListView
-                x:Name="RadioButtonGroupChoiceChipOutline"
+            <ListView x:Name="ProjectListView"
+              
                 Height="460"
                 Margin="5"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Style="{StaticResource MaterialDesignListBox}">
+                Style="{StaticResource EmptyMaterialDesignListView}"
+                >
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card
                             Width="475"
+                            Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            Tag="{Binding DataContext, ElementName=GridLayout}">
+                            Background="Transparent">
 
 
                             <materialDesign:Card.ContextMenu>
