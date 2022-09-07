@@ -24,21 +24,5 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
-
-        private void TemplateListView_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is ListViewItem item)
-            {
-                item.Background = Brushes.LightBlue;
-            }
-        }
-
-        private void TemplateListView_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is ListViewItem item)
-            {
-                item.Background = Brushes.Transparent;
-            }
-        }
     }
 }

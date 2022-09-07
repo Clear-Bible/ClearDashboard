@@ -5,7 +5,6 @@
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
@@ -210,18 +209,12 @@
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent">
-
-
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
                             <StackPanel Margin="0" Orientation="Horizontal">
-                                <!--
-                                    MouseEnter="UIElement_OnMouseEnter"
-                                    MouseLeave="UIElement_OnMouseLeave"
-                                -->
                                 <Grid Width="450" Height="45">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -242,7 +235,7 @@
                                         VerticalAlignment="Center"
                                         Source="../../Assets/ClearDashboard_logo_50.png" />
 
-                                    <TextBlock
+                                    <TextBlock Grid.Row="0"
                                         Grid.Column="1"
                                         FontSize="14"
                                         FontWeight="DemiBold">
@@ -268,7 +261,6 @@
                                 </Grid>
 
                             </StackPanel>
-                            <!--</Border>-->
                         </materialDesign:Card>
                     </DataTemplate>
                 </ListView.ItemTemplate>
