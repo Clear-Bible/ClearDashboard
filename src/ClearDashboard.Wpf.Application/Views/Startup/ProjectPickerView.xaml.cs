@@ -26,36 +26,6 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
-        private void MoveForwards_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Background = Brushes.LightBlue;
-            }
-        }
-
-        private void MoveForwards_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Background = Brushes.LightGray;
-            }
-        }
-
-        private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is StackPanel element)
-            {
-                element.Background = Brushes.LightBlue;
-            }
-        }
-
-        private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is StackPanel element)
-            {
-                element.Background = Brushes.White;
-            }
-        }
+       
     }
 }
