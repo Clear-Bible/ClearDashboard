@@ -256,7 +256,7 @@
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
                                         <Run FontSize="11" Text="Database: " />
-                                        <Run FontSize="11" Text="{Binding FullFilePath}" />
+                                        <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
                                     </TextBlock>
                                 </Grid>
 
