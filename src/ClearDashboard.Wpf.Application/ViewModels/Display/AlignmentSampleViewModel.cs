@@ -63,10 +63,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        public void LoadTokens()
-        {
-            LoadFiles();
-        }
+        //public void LoadTokens()
+        //{
+        //    LoadFiles();
+        //}
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -107,10 +107,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            //LoadFiles();
+            await base.OnActivateAsync(cancellationToken);
+            LoadFiles();
             //await MockProjectAndUser();
             //await RetrieveTokensViaCorpusClass();
-            await base.OnActivateAsync(cancellationToken);
         }
 
         private void LoadFiles()

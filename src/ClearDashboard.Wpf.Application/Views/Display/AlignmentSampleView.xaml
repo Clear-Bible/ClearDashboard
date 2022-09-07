@@ -42,6 +42,7 @@
             <RowDefinition Height="100" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
         <Button
             Margin="5,5,0,0"
             Padding="3"
@@ -51,22 +52,12 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
         <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="TokensTextRow"></Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" Tokens="{Binding Tokens}"/>
 
-        <!--<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Greek lowercase, no wrap"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="1" Wrap="False"  ItemsSource="{Binding GreekLowercase}"/>-->
-
-    <Button x:Name="LoadTokens" Grid.Row="2">Load Data</Button>
-
-        <!--<Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Greek uppercase with wrap"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="2" Wrap="True"  ItemsSource="{Binding GreekUppercase}" VerticalAlignment="Center"/>-->
-
-        <!--<Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Hebrew"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding HebrewPsalm}" VerticalAlignment="Center"/>-->
+    <!--<Button x:Name="LoadTokens" Grid.Row="2">Load Data</Button>-->
 
         <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek"></Label>
         <userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
@@ -76,18 +67,6 @@
                                                          [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
                                                          [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
                                                          [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />
-
-        <!--<Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Tokens from database"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="5" ItemsSource="{Binding DatabaseVerseTokensText}" VerticalAlignment="Center"/>-->
-
-        <!--<Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="Tokens from database, detokenized"></Label>-->
-        <!--<TextBlock Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Text="{Binding DatabaseVerseDetokenized}"></TextBlock>-->
-
-        <!--<Label Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" Content="Paragraph mode"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="7" ParagraphMode="True" ItemsSource="{Binding Paragraph}" Width="500" HorizontalAlignment="Left"/>-->
-
-        <!--<Label Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" Content="Vertical orientation"></Label>-->
-        <!--<controls:TextDisplayControl Grid.Column="1" Grid.Row="8" Orientation="Vertical" ItemsSource="{Binding HebrewPsalm}" HorizontalAlignment="Left"/>-->
 
         <Label Grid.ColumnSpan="2" Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
     </Grid>
