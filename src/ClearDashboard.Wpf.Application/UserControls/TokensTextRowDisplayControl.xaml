@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.TokensTextRowDisplayControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="TextDisplay">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TokenBubble">
+            <local:TokenDisplayControl DataContext="{Binding}"></local:TokenDisplayControl>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="WrapPanelTemplate">
+            <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+        </ItemsPanelTemplate>        
+        <ItemsPanelTemplate x:Key="StackPanelTemplate">
+            <StackPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
+    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" 
+                  ItemTemplate="{StaticResource TokenBubble}" 
+                  ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}" />
+</UserControl>
