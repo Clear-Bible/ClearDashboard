@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Validators;
+using ClearDashboard.Wpf.Application.Validators;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;

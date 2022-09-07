@@ -27,7 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Wpf\ClearDashboard.Wpf.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+    <ProjectReference Include="..\ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj" />
   </ItemGroup>
 
 </Project>
