@@ -8,6 +8,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Width="Auto"
     Height="635"
     MinWidth="886"
@@ -17,7 +21,12 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+       
+
         <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
 
             <Style TargetType="ListView"
                    BasedOn="{StaticResource MaterialDesignListView}"
@@ -37,6 +46,12 @@
             </Style>
 
             <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Height" Value="50"></Setter>
+                <Setter Property="Width" Value="100"></Setter>
+                <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -64,7 +79,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="White" x:Name="GridLayout">
+    <Grid Background="White" x:Name="GridLayout" ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -86,6 +101,106 @@
                 Text="Clear Dashboard" />
 
         </StackPanel>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="15,0,0,0"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal"
+            Visibility="{Binding IsParatextInstalled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
+            <Image >
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Connected}" Value="True">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Connected}" Value="False">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <TextBlock Margin="15" Width="400" FontWeight="Bold" Text="Paratext is not installed.  Please install Paratext and rerun the Clear Dashboard application." TextWrapping="Wrap" ></TextBlock>
+            </StackPanel>
+            <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="15,0,0,0"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal"
+            Visibility="{Binding IsParatextInstalled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+            <Image  Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Connected}" Value="True">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Connected}" Value="False">
+                                <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+                <TextBlock
+                    Margin="5,0,5,0"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                    <Run Text="Paratext" />
+                    <Run Text="{helpers:Localization ShellView_User}" />
+                </TextBlock>
+                <TextBlock
+                    x:Name="ParatextUserName"
+                    Margin="0,0,5,0"
+                    VerticalAlignment="Center"
+                    d:Text="Joe Schmoe" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
+                <!--<TextBlock
+                    Margin="5,0,5,0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                    <Run Text="Paratext is not running" />
+                 </TextBlock>-->
+                   <Button x:Name="StartParatext" 
+                           Style="{StaticResource TransparentStyle}" 
+                           Width="340"
+                           Height="80"
+                           VerticalContentAlignment="Bottom"
+                           VerticalAlignment="Bottom"
+                           cal:Message.Attach="StartParatext">
+                       <StackPanel Orientation="Horizontal">
+                           <Image Width="30" Height="30" Margin="10">
+                               <Image.Style>
+                                   <Style>
+                                       <Style.Triggers>
+                                           <DataTrigger Binding="{Binding Connected}" Value="True">
+                                               <Setter Property="Image.Source" Value="/Resources/Paratext_Connected32.png" />
+                                           </DataTrigger>
+                                           <DataTrigger Binding="{Binding Connected}" Value="False">
+                                               <Setter Property="Image.Source" Value="/Resources/Paratext_Disconnected32.png" />
+                                           </DataTrigger>
+                                       </Style.Triggers>
+                                   </Style>
+                               </Image.Style>
+                           </Image>
+                           <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15">
+                               <TextBlock FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"  Text="Paratext is not running"></TextBlock>
+                               <TextBlock HorizontalAlignment="Center" Text="Click here to start Paratext"></TextBlock>
+                           </StackPanel>
+                    </StackPanel>
+                     
+                   </Button>
+               
+
+            </StackPanel>
+
+            </StackPanel>
         <StackPanel  Grid.Row="1"
                      Grid.Column="0" 
                      VerticalAlignment="Center">
@@ -100,7 +215,8 @@
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="Search recent"
                 BorderBrush="DarkGray"
-                BorderThickness="1">
+                BorderThickness="1"
+                IsEnabled="{Binding Connected}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -127,7 +243,8 @@
             VerticalContentAlignment="Top"
             FontSize="12"
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" 
+            IsEnabled="{Binding Connected}"/>
         </StackPanel>
         <StackPanel
             Grid.Row="2"
@@ -157,7 +274,7 @@
                 Style="{StaticResource TransparentStyle}"
                 Background="DarkGray"
                 BorderThickness="0"
-                IsEnabled="{Binding EnableControls}">
+                IsEnabled="{Binding Connected}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Image
                        Height="30"
@@ -199,6 +316,7 @@
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Style="{StaticResource EmptyMaterialDesignListView}"
+                IsEnabled="{Binding Connected}"
                 >
 
                 <ListView.ItemTemplate>
@@ -206,7 +324,7 @@
                         <materialDesign:Card
                             Width="475"
                             Height="64"
-                            cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext)]"
+                            cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent">
                             <materialDesign:Card.ContextMenu>
@@ -256,7 +374,7 @@
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
                                         <Run FontSize="11" Text="Database: " />
-                                        <Run FontSize="11" Text="{Binding FullFilePath}" />
+                                        <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
                                     </TextBlock>
                                 </Grid>
 

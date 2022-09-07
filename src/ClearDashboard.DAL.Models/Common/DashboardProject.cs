@@ -31,11 +31,34 @@ namespace ClearDashboard.DataAccessLayer.Models
        
         public string? FullFilePath { get; set; }
 
+        public string? CompactFilePath =>
+            string.IsNullOrEmpty(FullFilePath) ? string.Empty : ShrinkPath(FullFilePath, 76);
+
+        private string ShrinkPath(string path, int maxLength = 64)
+        {
+            var parts = path.Split('\\');
+            var output = String.Join("\\", parts, 0, parts.Length);
+            var endIndex = (parts.Length - 1);
+            var startIndex = endIndex / 2;
+            var index = startIndex;
+            var step = 0;
+
+            while (output.Length >= maxLength && index != 0 && index != endIndex)
+            {
+                parts[index] = "...";
+                output = String.Join("\\", parts, 0, parts.Length);
+                if (step >= 0) step++;
+                step = (step * -1);
+                index = startIndex + step;
+            }
+            return output;
+        }
+
 
         /// <summary>
         /// the target project
         /// </summary>
-        
+
         public ParatextProject? TargetProject { get; set; }
 
         public ParatextProject? InterlinearizerProject { get; set; }
