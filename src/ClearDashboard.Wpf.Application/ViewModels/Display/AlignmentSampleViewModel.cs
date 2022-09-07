@@ -30,15 +30,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class AlignmentSampleViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
-        public List<string> EnglishWords { get; set; } = new() { "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike" };
-        public List<string> GreekLowercase { get; set; } = "α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω".Split(' ').ToList();
-        public List<string> GreekUppercase { get; set; } = "Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω".Split(' ').ToList();
-        public List<string> HebrewPsalm { get; set; } = "כִּֽי־אַ֭תָּה תָּאִ֣יר נֵרִ֑י יְהוָ֥ה אֱ֝לֹהַ֗י יַגִּ֥יהַּ חָשְׁכִּֽי׃".Split(' ').ToList();
-        public List<string> GreekPsalm { get; set; } = "χι αθθα θαειρ νηρι YHWH ελωαι αγι οσχι".Split(' ').ToList();
-
-        public List<string> Paragraph { get; set; } =
-            "In the beginning God created the heavens and the earth. Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.".Split(' ').ToList();
-
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
         private static readonly string _greekNtUsfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "nestle1904");
@@ -58,35 +49,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 .Transform<IntoTokensTextRowProcessor>();
         }
 
-        private async Task<CorpusClass> GetSampleCorpusAsync(ITextCorpus textCorpus, string language)
-        {
-            var corpus = await CorpusClass.Create(Mediator!, true, "NameX", "LanguageX", "LanguageType");
-            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "boo", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
-            return corpus;
-        }
-
-        public List<string> GreekVerse1 { get; set; } = new();
-        public string Message { get; set; }
-        private VerseTokens DatabaseVerseTokens { get; set; }
-
-        public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
-
-        public TokensTextRow TextRow { get; set; }
-        public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)> Tokens { get; set; }
-
-        public string DatabaseVerseDetokenized
-        {
-            get
-            {
-                if (DatabaseVerseTokens != null)
-                {
-                    var detokenizer = new LatinWordDetokenizer();
-                    return detokenizer.Detokenize(DatabaseVerseTokensText);
-                }
-                return string.Empty;
-            }
-        }
-        public List<string> DatabaseVerseWords => DatabaseVerseDetokenized.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        public string? Message { get; set; }
+        public TokensTextRow? TextRow { get; set; }
+        public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
@@ -96,18 +61,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public AlignmentSampleViewModel(INavigationService navigationService, ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-            //LoadFiles();
+        }
+
+        public void LoadTokens()
+        {
+            LoadFiles();
         }
 
         public void TokenClicked(TokenEventArgs e)
         {
             Message = $"'{e.SurfaceText}' clicked";
             NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void LoadTokens()
-        {
-            LoadFiles();
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
@@ -145,7 +109,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             //LoadFiles();
             //await MockProjectAndUser();
-            //await RetrieveTokensViaQuery(cancellationToken);
             //await RetrieveTokensViaCorpusClass();
             await base.OnActivateAsync(cancellationToken);
         }
@@ -162,12 +125,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 Tokens = detokenizer.Detokenize(TextRow.Tokens);
             }
             NotifyOfPropertyChange(nameof(Tokens));
-
-            //EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
-            //NotifyOfPropertyChange(nameof(EnglishFile));
-
-            //GreekVerse1 = GreekTokenizedCorpus.Tokens.Where(t => t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
-            //NotifyOfPropertyChange(nameof(GreekVerse1));
         }
 
         private async Task MockProjectAndUser()
@@ -184,25 +141,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 LastName = "User"
             };
             await ProjectManager.CreateNewProject("Alignment");
-        }
-
-        public async Task RetrieveTokensViaQuery(CancellationToken cancellationToken)
-        {
-            try
-            {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedTextCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
-                var result = await ExecuteRequest(query, cancellationToken);
-
-                if (result.Success && result.Data != null)
-                {
-                    DatabaseVerseTokens = result.Data.FirstOrDefault(v => v.Chapter == "1" && v.Verse == "1");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
         public async Task RetrieveTokensViaCorpusClass()
