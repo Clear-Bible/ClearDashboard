@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var tokenizedCorpus = new TokenizedCorpus
             {
                 Corpus = corpus,
-                FriendlyName = request.FriendlyName,
+                DisplayName = request.DisplayName,
                 TokenizationFunction = request.TokenizationFunction
             };
 
@@ -205,7 +205,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private DbCommand CreateTokenizedCorpusInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "CorpusId", "FriendlyName", "TokenizationFunction", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
 
@@ -218,7 +218,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             command.Parameters["@Id"].Value = (Guid.Empty != tokenizedCorpus.Id) ? tokenizedCorpus.Id : Guid.NewGuid();
             command.Parameters["@CorpusId"].Value = tokenizedCorpus.Corpus?.Id ?? tokenizedCorpus.CorpusId;
-            command.Parameters["@FriendlyName"].Value = tokenizedCorpus.FriendlyName;
+            command.Parameters["@DisplayName"].Value = tokenizedCorpus.DisplayName;
             command.Parameters["@TokenizationFunction"].Value = tokenizedCorpus.TokenizationFunction;
             command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
             command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;

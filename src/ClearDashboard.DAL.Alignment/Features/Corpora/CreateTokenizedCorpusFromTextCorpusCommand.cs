@@ -9,10 +9,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     /// </summary>
     /// <param name="TextCorpus"></param>
     /// <param name="CorpusId"></param>
+    /// <param name="DisplayName"></param>
     /// <param name="TokenizationFunction"></param>
     public record CreateTokenizedCorpusFromTextCorpusCommand(
         ITextCorpus TextCorpus, 
         CorpusId CorpusId,
-        string? FriendlyName,
+        string? DisplayName,
         string? TokenizationFunction) : ProjectRequestCommand<TokenizedTextCorpus>;
 }

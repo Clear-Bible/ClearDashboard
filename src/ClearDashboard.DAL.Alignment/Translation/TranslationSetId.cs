@@ -7,14 +7,20 @@ namespace ClearDashboard.DAL.Alignment.Translation
     {
         public TranslationSetId(Guid id) : base(id)
         {
+            Metadata = new Dictionary<string, object>();
         }
-        public TranslationSetId(Guid id, ParallelCorpusId parallelCorpusId, DateTimeOffset created, UserId userId) : base(id)
+        public TranslationSetId(Guid id, ParallelCorpusId parallelCorpusId, string? displayName, string? smtModel, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId) : base(id)
         {
             ParallelCorpusId = parallelCorpusId;
+            DisplayName = displayName;
+            SmtModel = smtModel;
+            Metadata = metadata;
             Created = created;
             UserId = userId;
         }
-
+        public string? DisplayName { get; set; }
+        public string? SmtModel { get; }
+        public Dictionary<string, object> Metadata { get; set; }
         public ParallelCorpusId? ParallelCorpusId { get; }
         public DateTimeOffset? Created { get; }
         public UserId? UserId { get; }

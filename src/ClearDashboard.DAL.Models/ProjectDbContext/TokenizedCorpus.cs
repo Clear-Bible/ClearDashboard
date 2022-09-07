@@ -12,9 +12,9 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
         //SourceParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
         //TargetParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
 
-        Metadata = new Dictionary<string, object>();
         SourceParallelCorpora = new HashSet<ParallelCorpus>();
         TargetParallelCorpora = new HashSet<ParallelCorpus>();
+        Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
     public virtual ICollection<Token> Tokens { get; set; }
@@ -30,10 +30,12 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
     public virtual Guid? CorpusHistoryId { get; set; }
     public virtual CorpusHistory? CorpusHistory { get; set; }
+    public string? DisplayName { get; set; }
 
     public string? TokenizationFunction { get; set; }
+    public int ScrVersType { get; set; }
+    public string? CustomVersData { get; set; }
 
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }
-    public string? FriendlyName { get; set; }
 }

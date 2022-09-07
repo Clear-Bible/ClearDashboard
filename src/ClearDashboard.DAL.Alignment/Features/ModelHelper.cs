@@ -60,8 +60,9 @@ namespace ClearDashboard.DAL.Alignment.Features
         {
             return new TokenizedTextCorpusId(
                 tokenizedCorpus.Id,
-                tokenizedCorpus.FriendlyName,
+                tokenizedCorpus.DisplayName,
                 tokenizedCorpus.TokenizationFunction,
+                tokenizedCorpus.Metadata,
                 tokenizedCorpus.Created,
                 BuildUserId(tokenizedCorpus));
         }
@@ -86,6 +87,8 @@ namespace ClearDashboard.DAL.Alignment.Features
                 parallelCorpus.Id,
                 BuildTokenizedTextCorpusId(sourceTokenizedCorpus),
                 BuildTokenizedTextCorpusId(targetTokenizedCorpus),
+                parallelCorpus.DisplayName,
+                parallelCorpus.Metadata,
                 parallelCorpus.Created,
                 BuildUserId(parallelCorpus));
         }
@@ -113,6 +116,10 @@ namespace ClearDashboard.DAL.Alignment.Features
             return new AlignmentSetId(
                 alignmentSet.Id,
                 BuildParallelCorpusId(parallelCorpus, sourceTokenizedCorpus, targetTokenizedCorpus),
+                alignmentSet.DisplayName,
+                alignmentSet.SmtModel,
+                alignmentSet.IsSyntaxTreeAlignerRefined,
+                alignmentSet.Metadata,
                 alignmentSet.Created,
                 BuildUserId(alignmentSet));
         }
@@ -140,6 +147,9 @@ namespace ClearDashboard.DAL.Alignment.Features
             return new TranslationSetId(
                 translationSet.Id,
                 BuildParallelCorpusId(parallelCorpus, sourceTokenizedCorpus, targetTokenizedCorpus),
+                translationSet.DisplayName,
+                translationSet.SmtModel,
+                translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(translationSet));
         }

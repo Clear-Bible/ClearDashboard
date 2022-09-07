@@ -44,7 +44,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
 
         public virtual DbSet<AlignmentSet> AlignmentSets => Set<AlignmentSet>();
-        public virtual DbSet<AlignmentTokenPair> AlignmentTokenPairs => Set<AlignmentTokenPair>();
+        public virtual DbSet<Alignment> AlignmentTokenPairs => Set<Alignment>();
 
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
@@ -120,14 +120,24 @@ namespace ClearDashboard.DataAccessLayer.Data
             // We want our table names to be singular
             modelBuilder.RemovePluralizingTableNameConvention();
 
-            modelBuilder.Entity<AlignmentTokenPair>()
+            modelBuilder.Entity<Alignment>()
                 .HasOne(e => e.SourceToken)
                 .WithMany(e=>e.SourceAlignmentTokenPairs);
               
 
-            modelBuilder.Entity<AlignmentTokenPair>()
+            modelBuilder.Entity<Alignment>()
                 .HasOne(e => e.TargetToken)
                 .WithMany(e=>e.TargetAlignmentTokenPairs);
+
+            modelBuilder.Entity<AlignmentSet>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2!),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
 
             modelBuilder.Entity<Corpus>()
                 .Property(e=>e.Metadata)
@@ -148,9 +158,38 @@ namespace ClearDashboard.DataAccessLayer.Data
                         (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
-              
+
+            modelBuilder.Entity<ParallelCorpus>()
+               .Property(e => e.Metadata)
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                   v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                   new ValueComparer<Dictionary<string, object>>(
+                       (c1, c2) => c1.SequenceEqual(c2!),
+                       c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                       c => c));
+
+            modelBuilder.Entity<ParallelCorpusHistory>()
+               .Property(e => e.Metadata)
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                   v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                   new ValueComparer<Dictionary<string, object>>(
+                       (c1, c2) => c1.SequenceEqual(c2!),
+                       c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                       c => c));
 
             modelBuilder.Entity<TokenizedCorpus>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2!),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
+
+            modelBuilder.Entity<TranslationSet>()
                 .Property(e => e.Metadata)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),

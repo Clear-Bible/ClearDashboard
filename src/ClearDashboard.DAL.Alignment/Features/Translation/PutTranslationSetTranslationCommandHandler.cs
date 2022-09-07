@@ -61,12 +61,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     var exactMatch = ModelHelper.IsTokenIdMatch(rTokenId, tr.SourceToken!);
 
                     // Don't propagate to a non-exact match that has already been assigned:
-                    if (exactMatch || tr.TranslationState != Models.TranslationState.Assigned)
+                    if (exactMatch || tr.TranslationState != Models.TranslationOriginatedFrom.Assigned)
                     {
                         tr.TargetText = request.Translation.TargetTranslationText;
                         tr.TranslationState = exactMatch
-                            ? Models.TranslationState.Assigned
-                            : Models.TranslationState.FromOther;
+                            ? Models.TranslationOriginatedFrom.Assigned
+                            : Models.TranslationOriginatedFrom.FromOther;
                     }
 
                     tokenGuidsUpdated.Add(tr.SourceToken!.Id);
@@ -84,8 +84,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             SourceToken = t,
                             TargetText = request.Translation.TargetTranslationText,
                             TranslationState = exactMatch
-                                ? Models.TranslationState.Assigned
-                                : Models.TranslationState.FromOther
+                                ? Models.TranslationOriginatedFrom.Assigned
+                                : Models.TranslationOriginatedFrom.FromOther
                         });
 
                         if (exactMatch) exactMatchFound = true;
@@ -116,7 +116,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 if (translation != null)
                 {
                     translation.TargetText = request.Translation.TargetTranslationText;
-                    translation.TranslationState = Models.TranslationState.Assigned;
+                    translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
                 }
                 else
                 {
@@ -138,7 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         {
                             SourceToken = token,
                             TargetText = request.Translation.TargetTranslationText,
-                            TranslationState = Models.TranslationState.Assigned
+                            TranslationState = Models.TranslationOriginatedFrom.Assigned
                         });
                     }
                     else

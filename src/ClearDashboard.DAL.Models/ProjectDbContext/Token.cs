@@ -7,8 +7,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Token()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            SourceAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
-            TargetAlignmentTokenPairs = new HashSet<AlignmentTokenPair>();
+            SourceAlignmentTokenPairs = new HashSet<Alignment>();
+            TargetAlignmentTokenPairs = new HashSet<Alignment>();
             TokenVerseAssociations = new HashSet<TokenVerseAssociation>();
             Translations = new HashSet<Translation>();
             // ReSharper restore VirtualMemberCallInConstructor
@@ -29,8 +29,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual Adornment? Adornment { get; set; }
 
-        public virtual ICollection<AlignmentTokenPair> SourceAlignmentTokenPairs { get; set; }
-        public virtual ICollection<AlignmentTokenPair> TargetAlignmentTokenPairs { get; set; }
+        public virtual ICollection<Alignment> SourceAlignmentTokenPairs { get; set; }
+        public virtual ICollection<Alignment> TargetAlignmentTokenPairs { get; set; }
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
         public virtual ICollection<Translation> Translations { get; set; }
 

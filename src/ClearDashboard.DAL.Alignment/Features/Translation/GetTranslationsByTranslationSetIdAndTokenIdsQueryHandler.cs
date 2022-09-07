@@ -6,33 +6,34 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public class GetTranslationsByTranslationSetIdAndTokenIdRangeQueryHandler : ProjectDbContextQueryHandler<
-        GetTranslationsByTranslationSetIdAndTokenIdRangeQuery,
+    public class GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler : ProjectDbContextQueryHandler<
+        GetTranslationsByTranslationSetIdAndTokenIdsQuery,
         RequestResult<IEnumerable<Alignment.Translation.Translation>>,
         IEnumerable<Alignment.Translation.Translation>>
     {
 
-        public GetTranslationsByTranslationSetIdAndTokenIdRangeQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdRangeQueryHandler> logger) 
+        public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdRangeQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
         {
+            var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
+            var tokenLocationRefs = request.TokenIds.Select(t => double.Parse(t.ToString())).ToList();
             var translations = ProjectDbContext!.Translations
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
-                .Where(tr =>
-                    tr.SourceToken!.BookNumber >= request.FirstTokenId.BookNumber &&
-                    tr.SourceToken!.BookNumber <= request.LastTokenId.BookNumber)
+                .Where(tr => bookNumbers.Contains(tr.SourceToken!.BookNumber))
+                .Where(tr => tokenLocationRefs.Contains(
+                    double.Parse(ModelHelper.BuildTokenLocationRef(tr.SourceToken!)))
+                )
                 .Select(tr => new {
                     tr.SourceToken,
                     tr.TargetText,
                     tr.TranslationState,
                     TokenLocationRef = double.Parse(ModelHelper.BuildTokenLocationRef(tr.SourceToken!))
-                }).AsEnumerable()
-                .Where(tref => 
-                    tref.TokenLocationRef >= double.Parse(request.FirstTokenId.ToString()) && 
-                    tref.TokenLocationRef <= double.Parse(request.LastTokenId.ToString()))
+                }) //.AsEnumerable()
+//                .Where(tref => tokenLocationRefs.Contains(tref.TokenLocationRef))
                 .Select(t => new Alignment.Translation.Translation(
                     ModelHelper.BuildToken(t.SourceToken!),
                     t.TargetText ?? string.Empty,

@@ -1,9 +1,8 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public enum TranslationState
+    public enum TranslationOriginatedFrom
     {
-        FromTranslationModel,
         FromOther,
         Assigned
     }
