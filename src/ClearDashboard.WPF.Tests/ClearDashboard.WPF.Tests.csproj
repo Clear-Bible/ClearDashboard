@@ -26,8 +26,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Wpf\ClearDashboard.Wpf.csproj" />
-  </ItemGroup>
-
 </Project>

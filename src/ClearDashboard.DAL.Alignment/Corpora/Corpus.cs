@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public Dictionary<string, object> Metadata { get; set; }
         
         // FIXME:  Should this be a string?  A different (higher level) enum?
-        internal Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? language, string paratextGuid, CorpusType corpusType, Dictionary<string, object> metadata)
+        public Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? language, string paratextGuid, CorpusType corpusType, Dictionary<string, object> metadata)
         {
             CorpusId = corpusId;
             IsRtl = isRtl;

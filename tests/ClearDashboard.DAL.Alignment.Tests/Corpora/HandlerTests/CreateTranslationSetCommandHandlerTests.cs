@@ -278,11 +278,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpus()
     {
-        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
         var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 

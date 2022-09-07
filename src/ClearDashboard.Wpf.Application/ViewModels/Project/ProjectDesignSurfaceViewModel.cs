@@ -28,6 +28,7 @@ using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using System.ComponentModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -35,17 +36,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
     public enum Tokenizer
     {
-        LatinSentenceTokenizer,
+        [Description("Latin Sentence Tokenizer")]
+        LatinSentenceTokenizer = 0,
+        [Description("Latin Word Detokenizer")]
         LatinWordDetokenizer,
+        [Description("Latin Word Tokenizer")]
         LatinWordTokenizer,
+        [Description("Line Segment Tokenizer")]
         LineSegmentTokenizer,
+        [Description("Null Tokenizer")]
         NullTokenizer,
+        [Description("Regex Tokenizer")]
         RegexTokenizer,
+        [Description("String Detokenizer")]
         StringDetokenizer,
+        [Description("String Tokenizer")]
         StringTokenizer,
+        [Description("Whitespace Detokenizer")]
         WhitespaceDetokenizer,
+        [Description("Whitespace Tokenizer")]
         WhitespaceTokenizer,
+        [Description("Zwsp Word Detokenizer")]
         ZwspWordDetokenizer,
+        [Description("Zwsp Word Tokenizer")]
         ZwspWordTokenizer
     }
 
@@ -372,6 +385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     Name = corpusNode.Name,
                     X = corpusNode.X,
                     Y = corpusNode.Y,
+                    NodeTokenizations = corpusNode.NodeTokenization,
                 });
             }
 
@@ -428,8 +442,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
             foreach (var corpusNode in deserialized.CorpusNodes)
             {
-                CreateNode(corpusNode.Name, new Point(corpusNode.X, corpusNode.Y), false, corpusNode.CorpusType,
-                    corpusNode.ParatextProjectId);
+                var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
+                    isRtl: false, name: corpusNode.Name, language: "", paratextGuid: corpusNode.ParatextProjectId,
+                    corpusNode.CorpusType, new Dictionary<string, object>());
+                
+                CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), false);
 
                 if (corpusNode.CorpusType == CorpusType.Manuscript)
                 {
@@ -460,7 +477,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         public void AddManuscriptCorpus()
         {
             Logger.LogInformation("AddParatextCorpus called.");
-            CreateNode("Manuscript", new Point(25, 50), false, CorpusType.Manuscript, Guid.NewGuid().ToString());
+
+            var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
+                isRtl: false, name: "Manuscript", language: "Manuscript", paratextGuid: "Manuscript",
+                CorpusType.Manuscript, new Dictionary<string, object>());
+            
+            CreateNode(corpus, new Point(25, 50), false);
             AddManuscriptEnabled = false;
         }
 
@@ -489,7 +511,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     {
                         try
                         {
-                            CopyOriginalDatabase();
+                            //CopyOriginalDatabase();
                             //await EventAggregator.PublishOnCurrentThreadAsync(
                             //    new ProgressBarVisibilityMessage(true));
 
@@ -528,7 +550,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                         case CorpusType.Resource:
                                             corpusType = CorpusType.Resource;
                                             break;
-
+                                        case CorpusType.Manuscript:
+                                            corpusType = CorpusType.Manuscript;
+                                            break;
                                         default:
                                             corpusType = CorpusType.Unknown;
                                             break;
@@ -538,10 +562,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                                     // figure out some offset based on the number of nodes already in the network
                                     // so we don't overlap
-                                    var offset = DesignSurface.CorpusNodes.Count * 50;
-
-
-                                    CreateNode(corpus.Name, new Point(150, 50 + offset), false, corpusType, corpus.ParatextGuid);
+                                    var point = GetFreeSpot();
+                                    CreateNode(corpus, point, false);
                                 });
 
                                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -616,6 +638,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 // We don't want to navigate anywhere.
                 return false;
             }
+        }
+
+        private Point GetFreeSpot()
+        {
+            double x = 0;
+            double y = 0;
+            double yOffset = 0;
+
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                var positionX = corpusNode.X;
+                var positionY = corpusNode.Y + corpusNode.Size.Height;
+                yOffset = corpusNode.Size.Height;
+                
+                if (positionX > x)
+                {
+                    x = positionX;
+                }
+                if (positionY > y)
+                {
+                    y = positionY;
+                }
+            }
+
+            return new Point(x, y + (yOffset * 1.5));
         }
 
         private void DeleteOriginalDatabase()
@@ -936,17 +983,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
-        public CorpusNodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode,
-            CorpusType corpusType, string projectId)
+        public CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus,  Point nodeLocation, bool centerNode)
         {
-            var node = new CorpusNodeViewModel(name, _eventAggregator, _projectManager)
+            var node = new CorpusNodeViewModel(corpus.Name, _eventAggregator, _projectManager)
             {
                 X = nodeLocation.X,
                 Y = nodeLocation.Y
             };
 
-            node.CorpusType = corpusType;
-            node.ParatextProjectId = projectId;
+            node.CorpusType = corpus.CorpusType;
+            node.ParatextProjectId = corpus.ParatextGuid;
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
@@ -957,7 +1003,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 Type = ConnectorType.Output
             });
-            //node.OutputConnectors.Add(new ConnectorViewModel("Out2"));
+
+
+            // TODO we need to get something standard for this
+            if (node.CorpusType == CorpusType.Manuscript)
+            {
+                node.NodeTokenization.Add(new NodeTokenization
+                {
+                    CorpusId = "Manuscript",
+                    FriendlyName = "Manuscript",
+                    IsSelected = false,
+                    MetaData = "",
+                    Name = "Manuscript",
+                    UserId = ""
+                });
+            }
+            else
+            {
+                node.NodeTokenization.Add(new NodeTokenization
+                {
+                    CorpusId = corpus.CorpusId.ToString(),
+                    FriendlyName = corpus.Name,
+                    IsSelected = true,
+                    MetaData = "",
+                    Name = corpus.Name,
+                    UserId = ""
+                });
+            }
 
             if (centerNode)
             {
@@ -1023,6 +1095,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// </summary>
         private void PopulateWithTestData()
         {
+            /*
+            
             //
             // Create a network, the root of the view-model.
             //
@@ -1059,6 +1133,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 DestinationConnector = node3.InputConnectors[0]
             };
             DesignSurface.Connections.Add(connection);
+
+            */
         }
 
         public void ShowCorpusProperties(object corpus)

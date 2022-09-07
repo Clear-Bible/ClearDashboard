@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _eventAggregator = eventAggregator;
             _projectManager = projectManager;
         }
+
+
+        private List<NodeTokenization> _nodeTokenization = new();
+
+        public List<NodeTokenization> NodeTokenization
+        {
+            get => _nodeTokenization;
+            set
+            {
+                _nodeTokenization = value;
+                NotifyOfPropertyChange(() => NodeTokenization);
+            }
+        }
+
 
         /// <summary>
         /// The name of the node.

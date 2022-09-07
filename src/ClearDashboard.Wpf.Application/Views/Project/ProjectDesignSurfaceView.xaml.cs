@@ -144,8 +144,8 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void CreateNode()
         {
             var newNodePosition = Mouse.GetPosition(ProjectDesignSurface);
-            this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, CorpusType.Standard,
-                Guid.NewGuid().ToString());
+            //this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, CorpusType.Standard,
+            //    Guid.NewGuid().ToString());
         }
 
         /// <summary>

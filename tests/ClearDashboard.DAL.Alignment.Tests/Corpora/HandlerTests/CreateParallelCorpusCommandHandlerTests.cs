@@ -37,7 +37,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
                 "grc",
-                "Resource");
+                "Resource", Guid.NewGuid().ToString());
             var sourceCommand = new CreateTokenizedCorpusFromTextCorpusCommand(sourceTextCorpus, sourceCorpus.CorpusId,
                 "Greek Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -48,7 +48,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var targetCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 2",
                 "grc",
-                "Resource");
+                "Resource", Guid.NewGuid().ToString());
             var targetCommand = new CreateTokenizedCorpusFromTextCorpusCommand(targetTextCorpus, targetCorpus.CorpusId,
                 "Greek Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -126,11 +126,11 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
     {
         try
         {
-            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
             var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, sourceCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -155,11 +155,11 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
     {
         try
         {
-            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
             var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, sourceCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -259,7 +259,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
     {
         try
         {
-            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
             var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 

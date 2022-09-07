@@ -28,7 +28,6 @@
     Icon="..\..\Assets/ClearDashboard_Icon.ico"
     Initialized="OnWindowInitialized"
     Loaded="OnWindowLoaded"
-    ShowIconOnTitleBar="True"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"

@@ -20,7 +20,8 @@ using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
-    public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
+
+    public class AddManuscriptCorpusDialogViewModel : ValidatingApplicationScreen<AddManuscriptCorpusDialogViewModel>
     {
         public enum CorpusType
         {
@@ -35,16 +36,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-        public AddParatextCorpusDialogViewModel() 
+        public AddManuscriptCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time    
         }
 
-        public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
-            ILogger<AddParatextCorpusDialogViewModel>? logger,
+        public AddManuscriptCorpusDialogViewModel(INavigationService? navigationService,
+            ILogger<AddManuscriptCorpusDialogViewModel>? logger,
             DashboardProjectManager? projectManager,
         IEventAggregator? eventAggregator,
-            IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
+            IValidator<AddManuscriptCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             _projectManager = projectManager;
