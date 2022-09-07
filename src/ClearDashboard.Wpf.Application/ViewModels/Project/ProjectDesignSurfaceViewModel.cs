@@ -506,7 +506,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 }));
 
                                 var corpus = await DAL.Alignment.Corpora.Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name, metadata.LanguageName,
-                                    metadata.CorpusTypeDisplay, cancellationToken);
+                                    metadata.CorpusTypeDisplay, metadata.Id, cancellationToken);
 
                                 OnUIThread(() => Corpora.Add(corpus));
 

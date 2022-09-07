@@ -47,9 +47,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Name,
             string Language,
             string CorpusType,
+            string ParatextId,
             CancellationToken token = default)
         {
-            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType);
+            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
             if (result.Success)
