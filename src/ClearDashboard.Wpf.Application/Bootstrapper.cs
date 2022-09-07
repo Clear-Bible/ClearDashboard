@@ -12,8 +12,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 using DashboardApplication = System.Windows.Application;
-
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -52,11 +53,14 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
+            builder.RegisterType<AlignmentSampleViewModel>().As<IMainWindowViewModel>();
         }
 
         protected override async Task NavigateToMainWindow()
         {
-           await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+            NavigateToViewModel<AlignmentSampleViewModel>();
+            EnsureApplicationMainWindowVisible();
+            //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 
         #region Application exit
