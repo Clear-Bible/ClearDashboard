@@ -20,6 +20,7 @@
     <None Remove="Assets\ClearDashboard_logo_200.png" />
     <None Remove="Assets\ClearDashboard_logo_250.png" />
     <None Remove="Assets\ClearDashboard_logo_50.png" />
+    <None Remove="Assets\newproject.png" />
     <None Remove="Assets\splash_screen.png" />
     <None Remove="Resources\BiblicalTerms_logo_32.png" />
     <None Remove="Resources\block_16.png" />
@@ -68,13 +69,16 @@
     <Content Include="Assets\ClearDashboard_logo_50.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\newproject.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Layouts\Dashboard.Layout.config2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.9" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.13" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>

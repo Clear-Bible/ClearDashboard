@@ -30,8 +30,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             try
             {
                 await StartParatextAsync();
-                var client = new HttpClient();
-                client.BaseAddress = new Uri("http://localhost:9000/api/");
+                var client = CreateHttpClient();
 
                 var response = await client.PostAsJsonAsync<GetCurrentProjectQuery>("project", new GetCurrentProjectQuery());
 

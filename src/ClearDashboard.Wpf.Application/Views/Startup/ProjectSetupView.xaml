@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
@@ -24,13 +23,56 @@
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,8" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
         </Style>
 
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="10,10" />
+            <Setter Property="Margin" Value="20,10" />
             <Setter Property="FontSize" Value="24" />
+        </Style>
+
+        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Height" Value="50"></Setter>
+            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border >
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightGray"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#EEEBEB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter></ContentPresenter>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
     </UserControl.Resources>
@@ -41,27 +83,25 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Create New Project" />
+        <Label Content="Create your new project" />
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
-            Margin="0,40"
-            HorizontalAlignment="Center"
+            Margin="24,10"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
             <TextBox
                 x:Name="ProjectName"
                 MinWidth="400"
                 VerticalAlignment="Center"
-                materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:HintAssist.FloatingScale="0.60"
+                materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                 materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Foreground="{DynamicResource MaterialDesignBody}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-
-
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -97,28 +137,265 @@
 
             <Button
                 x:Name="MoveBackwards"
-                Grid.Row="2"
-                Grid.Column="0"
-                Width="100"
                 Margin="5,5,5,5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                Style="{StaticResource TransparentStyle}"
                 cal:Message.Attach="MoveBackwards"
-                IsEnabled="{Binding EnableControls}">
-                <StackPanel Orientation="Horizontal">
-                    <Viewbox MaxWidth="50" MaxHeight="50" />
-                    <TextBlock VerticalAlignment="Center" Text="Back" />
-                </StackPanel>
-            </Button>
+                IsEnabled="{Binding EnableControls}"
+                Content="Back">
+                </Button>
             <Button
                 x:Name="Create"
-                Grid.Row="3"
-                Grid.Column="1"
-                Width="100"
-                VerticalAlignment="Center"
-                Content="Create" />
+                Content="Create" 
+                Style="{StaticResource TransparentStyle}"/>
         </StackPanel>
 
     </Grid>
-   
+
 </UserControl>
+
+
+
+<!--<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectSetupView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    Width="1010"
+    Height="635"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="Label">
+            --><!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />--><!--
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="10,10" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="425" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="44,0,0,25"
+            Content="Create a new project"
+            FontSize="35"
+            FontWeight="Light" />
+
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="51,0,0,0"
+            VerticalAlignment="Top"
+            Content="Recent project templates"
+            FontSize="20"
+            FontWeight="Light" />
+
+        <ListView
+            Name="TemplateListView"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="51,15,51,0">
+            <ListViewItem
+                Height="40"
+                Content="a list of recent project templates goes here?"
+                MouseEnter="TemplateListView_OnMouseEnter"
+                MouseLeave="TemplateListView_OnMouseLeave" />
+            <ListViewItem
+                Height="40"
+                Content="a list of recent project templates goes here?"
+                MouseEnter="TemplateListView_OnMouseEnter"
+                MouseLeave="TemplateListView_OnMouseLeave" />
+        </ListView>
+
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Width="354"
+            Height="33"
+            Padding="3"
+            HorizontalAlignment="Left"
+            VerticalContentAlignment="Center"
+            materialDesign:HintAssist.Hint="Search recent"
+            Background="White"
+            BorderBrush="DarkGray"
+            BorderThickness="1">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="SearchText"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+        </TextBox>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Horizontal">
+
+            <ComboBox
+                Width="160"
+                Margin="10,0"
+                Padding="5"
+                materialDesign:HintAssist.Hint="Tokenization"
+                Background="White">
+                <ComboBoxItem Content="tokenization 1" />
+                <ComboBoxItem Content="tokenization 2" />
+                <ComboBoxItem Content="tokenization 3" />
+            </ComboBox>
+
+            <ComboBox
+                Width="160"
+                Margin="10,0"
+                Padding="5"
+                materialDesign:HintAssist.Hint="options"
+                Background="White">
+                <ComboBoxItem Content="option 1" />
+                <ComboBoxItem Content="option 2" />
+            </ComboBox>
+
+            <ComboBox
+                Width="160"
+                Margin="10,0"
+                Padding="5"
+                materialDesign:HintAssist.Hint="more options"
+                Background="White">
+                <ComboBoxItem Content="option 1" />
+                <ComboBoxItem Content="option 2" />
+            </ComboBox>
+
+
+        </StackPanel>
+
+
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="0,15"
+            Orientation="Vertical">
+
+            <ListView Margin="0,0,0,0" HorizontalAlignment="Left">
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="USFM"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="Paratext"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+                <ListViewItem
+                    Width="515"
+                    Height="90"
+                    VerticalContentAlignment="Top"
+                    Content="Manuscript"
+                    MouseEnter="TemplateListView_OnMouseEnter"
+                    MouseLeave="TemplateListView_OnMouseLeave" />
+            </ListView>
+
+            <TextBox
+                x:Name="ProjectName"
+                MinWidth="400"
+                Margin="0,0,50,0"
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.FloatingScale="0.50"
+                materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="20"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="ProjectName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <AdornedElementPlaceholder />
+                            <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
+            </TextBox>
+
+
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="50,50,45,30"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+
+            <Button
+                x:Name="MoveBackwards"
+                Width="85"
+                Height="25"
+                Margin="6,0,6,15"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                cal:Message.Attach="MoveBackwards"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="LightGray"
+                BorderThickness="0"
+                Content="Back"
+                FontWeight="Light"
+                IsEnabled="True" />
+            <Button
+                x:Name="Create"
+                Width="85"
+                Height="25"
+                Margin="6,0,6,15"
+                VerticalAlignment="Top"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="LightGray"
+                BorderThickness="0"
+                Content="Create"
+                FontWeight="Light" />
+        </StackPanel>
+    </Grid>
+</UserControl>-->
