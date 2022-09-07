@@ -19,14 +19,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Paratext;
 using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel
+    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
     {
         #region Member Variables
         //protected IWindowManager? _windowManager;
+        private readonly ParatextProxy _paratextProxy;
         private readonly TranslationSource? _translationSource;
         #endregion
 
@@ -75,8 +77,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private string _searchText;
-        public string SearchText
+        private bool _isParatextInstalled;
+        public bool IsParatextInstalled
+        {
+            get => _isParatextInstalled;
+            set => Set(ref _isParatextInstalled, value);
+        }
+
+        private bool _isParatextRunning;
+        public bool IsParatextRunning
+        {
+            get => _isParatextRunning;
+            set => Set(ref _isParatextRunning, value);
+        }
+
+        private string? _searchText;
+        public string? SearchText
         {
             get => _searchText;
             set
@@ -96,8 +112,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject> _dashboardProjectsDisplay;
-        public ObservableCollection<DashboardProject> DashboardProjectsDisplay
+        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay;
+       
+        public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
             set
@@ -106,22 +123,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => SearchText);
             }
         }
+
+        private bool _connected;
+        public bool Connected
+        {
+            get => _connected;
+            set
+            {
+                _connected = value;
+                NotifyOfPropertyChange(() => Connected);
+            }
+        }
+
+        private string? _paratextUserName;
+        public string? ParatextUserName
+        {
+            get => _paratextUserName;
+
+            set
+            {
+                _paratextUserName = value;
+                NotifyOfPropertyChange(() => ParatextUserName);
+            }
+        }
+
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(DashboardProjectManager projectManager,
+        public ProjectPickerViewModel(DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
+            _paratextProxy = paratextProxy;
             _translationSource = translationSource;
             AlertVisibility = Visibility.Collapsed;
         }
 
+        public async Task StartParatext()
+        {
+            await _paratextProxy.StartParatextAsync();
+
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+        }
+
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+
+            if (!IsParatextInstalled)
+            {
+               // await this.ShowMessageAsync("This is the title", "Some message");
+            }
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
             if (results.Success && results.HasData)
             {
@@ -135,7 +193,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
-        public ObservableCollection<DashboardProject> CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject> copy)
+        public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
         {
             copy.Clear();
             foreach (var project in original)
@@ -149,8 +207,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             AlertVisibility = Visibility.Collapsed;
         }
 
-        public void NavigateToMainViewModel(DashboardProject project)
+        public void NavigateToMainViewModel(DashboardProject project, MouseButtonEventArgs args)
         {
+
+            // Only respond to a Left button click otherwise,
+            // the context menu will not be shown on a right click.
+            if (args.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
+      
             if (CheckIfConnectedToParatext() == false)
             {
                 return;
@@ -232,5 +298,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
         #endregion  Methods
+
+        public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
+        {
+            Connected = message.Connected;
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
+        {
+            ParatextUserName = message.user.FullName;
+            await Task.CompletedTask;
+        }
     }
 }

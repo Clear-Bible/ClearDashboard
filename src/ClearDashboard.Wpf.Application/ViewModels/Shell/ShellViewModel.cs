@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
        IHandle<BackgroundTaskChangedMessage>
     {
-        private readonly TranslationSource _translationSource;
+        private readonly TranslationSource? _translationSource;
 
         #region Properties
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
@@ -37,12 +37,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly int _completedRemovalSeconds = 45;
         private bool _firstPass = false;
 
-        private Timer _timer;
+        private Timer? _timer;
         private bool _firstRun;
 
 
-        private string _paratextUserName;
-        public string ParatextUserName
+        private string? _paratextUserName;
+        public string? ParatextUserName
         {
             get => _paratextUserName;
 
@@ -54,8 +54,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
 
-        private string _version;
-        public string Version
+        private string? _version;
+        public string? Version
         {
             get => _version;
             set
@@ -158,8 +158,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Commands
 
-        private ICommand _colorStylesCommand;
-        public ICommand ColorStylesCommand
+        private ICommand? _colorStylesCommand;
+        public ICommand? ColorStylesCommand
         {
             get => _colorStylesCommand;
             set
@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             BogusData();
         }
 
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService,
+        public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
