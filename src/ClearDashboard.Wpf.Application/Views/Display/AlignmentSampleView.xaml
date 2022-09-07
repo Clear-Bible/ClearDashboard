@@ -31,16 +31,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="100" />
-            <RowDefinition Height="100" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="150" />
-            <RowDefinition Height="250" />
-            <RowDefinition Height="100" />
-            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Button
@@ -54,20 +46,16 @@
         </Button>
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
-        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="TokensTextRow"></Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" Tokens="{Binding Tokens}"/>
 
-    <!--<Button x:Name="LoadTokens" Grid.Row="2">Load Data</Button>-->
-
-        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Greek"></Label>
-        <userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
+        <!--<userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
                                      cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
                                                          [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
                                                          [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
                                                          [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
                                                          [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                         [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />
+                                                         [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />-->
 
-        <Label Grid.ColumnSpan="2" Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
     </Grid>
 </Page>
