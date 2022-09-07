@@ -26,6 +26,7 @@
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     ShowIconOnTitleBar="True"
+    TitleCharacterCasing="Normal"
     Icon="..\..\Assets/ClearDashboard_Icon.ico"
     Loaded="OnWindowLoaded"
     TextElement.FontSize="13"
@@ -34,8 +35,71 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
+   
     <Window.Resources>
         <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
+        <Style x:Key="CustomLightMetroWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Light}" >
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignToolBackground}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid Background="Transparent">
+                                <ContentPresenter></ContentPresenter>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomDarkMetroWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Dark}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignToolBackground}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid Background="Transparent">
+                                <ContentPresenter></ContentPresenter>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type mah:WindowButtonCommands}" BasedOn="{StaticResource {x:Type mah:WindowButtonCommands}}">
+            <Setter Property="LightMinButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+            <Setter Property="LightMaxButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+            <Setter Property="LightCloseButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+            <Setter Property="DarkMinButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+            <Setter Property="DarkMaxButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+            <Setter Property="DarkCloseButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+        </Style>
     </Window.Resources>
     <Grid x:Name="ShellViewGrid">
         <Grid.RowDefinitions>
