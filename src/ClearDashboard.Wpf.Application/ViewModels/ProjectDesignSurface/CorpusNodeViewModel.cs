@@ -88,17 +88,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
 
-        private List<NodeTokenization> _nodeTokenization = new();
+        private List<NodeTokenization> _nodeTokenizations = new();
 
-        public List<NodeTokenization> NodeTokenization
+        public List<NodeTokenization> NodeTokenizations
         {
-            get => _nodeTokenization;
+            get => _nodeTokenizations;
             set
             {
-                _nodeTokenization = value;
-                NotifyOfPropertyChange(() => NodeTokenization);
+                _nodeTokenizations = value;
+                NotifyOfPropertyChange(() => NodeTokenizations);
             }
         }
+
+
+        private Guid _id = Guid.NewGuid();
+        public Guid Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
+        }
+
 
 
         /// <summary>

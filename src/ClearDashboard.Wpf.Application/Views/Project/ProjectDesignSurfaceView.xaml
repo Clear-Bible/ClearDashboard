@@ -238,7 +238,7 @@
                         NodeTarget="{Binding Path=DestinationConnector}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
-                        StrokeThickness="3" >
+                        StrokeThickness="3">
                         <viewModels:CurvedArrow.ContextMenu>
                             <ContextMenu Name="ContextMenu">
                                 <MenuItem
@@ -247,10 +247,10 @@
                                     Header="Properties"
                                     ToolTip="View the corpus properties" />
                                 <!--
-                                        Command="{StaticResource Commands.Properties}"
-                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
-                                        CommandParameter="{Binding ElementName=nodeRectangle}"
-                                    -->
+                                    Command="{StaticResource Commands.Properties}"
+                                    cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
+                                    CommandParameter="{Binding ElementName=nodeRectangle}"
+                                -->
 
                             </ContextMenu>
                         </viewModels:CurvedArrow.ContextMenu>
@@ -589,6 +589,7 @@
             BorderBrush="Black"
             BorderThickness="5"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+            IsEnabled="{Binding AddCorpusEnabled}"
             UniformCornerRadius="5">
             <StackPanel Grid.Row="0" MinWidth="400">
                 <Label
@@ -599,10 +600,10 @@
                 <WrapPanel>
                     <Button
                         x:Name="AddManuscriptCorpus"
-                        IsEnabled="{Binding AddManuscriptEnabled}"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddManuscriptCorpus()"
                         Content="Manuscript"
+                        IsEnabled="{Binding AddManuscriptEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
                     <Button
@@ -623,6 +624,28 @@
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
+
+        <ProgressBar
+            Width="50"
+            Height="50"
+            Margin="0,0,50,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Value="0">
+            <ProgressBar.Style>
+                <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AddCorpusEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
+
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
