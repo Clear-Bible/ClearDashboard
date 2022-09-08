@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using Autofac;
 using AvalonDock.Properties;
@@ -210,10 +211,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 }
             }, null, _startTimeSpan, _periodTimeSpan);
 
-            //BogusData();
-        }
+            LoadingApplication = true;
+            NavigationService.Navigated += NavigationServiceOnNavigated;
+   
 
-        private void BogusData()
+        //BogusData();
+    }
+
+       
+
+
+
+    private bool _loadingApplication;
+    public bool LoadingApplication
+    {
+        get => _loadingApplication;
+        set => Set(ref _loadingApplication, value);
+    }
+
+
+    
+
+    private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
+    {
+        var uri = e.Uri;
+
+        if (uri.OriginalString.Contains("HomeView.xaml"))
+        {
+            LoadingApplication = false;
+        }
+    }
+
+    private void BogusData()
         {
             // make some bogus task data
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
@@ -297,7 +326,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
+            NavigationService.Navigated -= NavigationServiceOnNavigated;
             Logger.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
 
             // HACK:  Force the MainViewModel singleton to properly deactivate
