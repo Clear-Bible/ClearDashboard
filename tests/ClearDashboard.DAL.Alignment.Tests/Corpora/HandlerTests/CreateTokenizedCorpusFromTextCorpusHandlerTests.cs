@@ -307,7 +307,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
             var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
 
-            var corpus = await Corpus.Create(Mediator!, false, "New Testament", "grc", "Resource");
+            var corpus = await Corpus.Create(Mediator!, false, "New Testament", "grc", "Resource", Guid.NewGuid().ToString());
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, "Unit Test", tokenizationFunction, ScrVers.Original);
 
             var result = await Mediator.Send(command);

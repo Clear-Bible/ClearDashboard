@@ -459,9 +459,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
             foreach (var corpusNode in deserialized.CorpusNodes)
             {
-                var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
-                    isRtl: false, name: corpusNode.Name, language: "", paratextGuid: corpusNode.ParatextProjectId,
-                    corpusNode.CorpusType, new Dictionary<string, object>());
+                var corpus = new DAL.Alignment.Corpora.Corpus(
+                    corpusId: new CorpusId(Guid.NewGuid()), 
+                    mediator: null,
+                    isRtl: false, 
+                    name: corpusNode.Name, 
+                    displayName: "",
+                    language: "", 
+                    paratextGuid: corpusNode.ParatextProjectId,
+                    corpusType: corpusNode.CorpusType.ToString(),
+                    metadata: new Dictionary<string, object>(), 
+                    created: new DateTimeOffset(), 
+                    userId: new UserId(Guid.NewGuid()));
 
                 var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                 var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -1167,14 +1176,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 Y = nodeLocation.Y
             };
 
-            node.CorpusType = corpus.CorpusType;
+            node.CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType);
             node.ParatextProjectId = corpus.ParatextGuid;
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
-            //node.InputConnectors.Add(new ConnectorViewModel("In2"));
+
             node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
