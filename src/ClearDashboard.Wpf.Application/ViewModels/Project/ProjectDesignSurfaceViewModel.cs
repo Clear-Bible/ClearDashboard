@@ -497,7 +497,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
 
-                    CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), false, tokenizer);
+                    CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
 
                     if (corpusNode.CorpusType == CorpusType.Manuscript)
                     {
@@ -567,8 +567,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                 try
                 {
-                    var corpus = await DAL.Alignment.Corpora.Corpus.Create(_projectManager.Mediator, false, "Manuscript", "Manuscript",
-                        CorpusType.Manuscript.ToString(), _projectManager.ManuscriptGuid.ToString(), cancellationToken);
+                    var corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                        mediator: _projectManager.Mediator, 
+                        IsRtl: false, 
+                        Name: "Manuscript", 
+                        Language: "Manuscript",
+                        CorpusType: CorpusType.Manuscript.ToString(), 
+                        ParatextId: _projectManager.ManuscriptGuid.ToString(), 
+                        token: cancellationToken);
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -579,7 +585,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, false, Tokenizer.LatinWordTokenizer);
+                        node = CreateNode(corpus, point, Tokenizer.LatinWordTokenizer);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -700,9 +706,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
 
 #pragma warning disable CS8604
-                            corpus = await DAL.Alignment.Corpora.Corpus.Create(_projectManager.Mediator,
-                                metadata.IsRtl, metadata.Name, metadata.LanguageName,
-                                metadata.CorpusTypeDisplay, metadata.Id, cancellationToken);
+                            corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                                mediator: _projectManager.Mediator,
+                                IsRtl: metadata.IsRtl, 
+                                Name: metadata.Name, 
+                                Language: metadata.LanguageName,
+                                CorpusType: metadata.CorpusTypeDisplay, 
+                                ParatextId: metadata.Id, 
+                                token: cancellationToken);
 #pragma warning restore CS8604
                             OnUIThread(() => Corpora.Add(corpus));
 
@@ -712,11 +723,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 // figure out some offset based on the number of nodes already in the network
                                 // so we don't overlap
                                 var point = GetFreeSpot();
-                                node = CreateNode(corpus, point, false, viewModel.SelectedTokenizer);
+                                node = CreateNode(corpus, point, viewModel.SelectedTokenizer);
                             });
                         }
-
-
 
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
@@ -1109,7 +1118,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
-        private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation, bool centerNode,
+        private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation, 
             Tokenizer tokenizer)
         {
             var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, _eventAggregator, _projectManager)
@@ -1140,45 +1149,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             });
 
 
-            if (centerNode)
-            {
-                // 
-                // We want to center the node.
-                //
-                // For this to happen we need to wait until the UI has determined the 
-                // size based on the node's data-template.
-                //
-                // So we define an anonymous method to handle the SizeChanged event for a node.
-                //
-                // Note: If you don't declare sizeChangedEventHandler before initializing it you will get
-                //       an error when you try and unsubscribe the event from within the event handler.
-                //
-                void SizeChangedEventHandler(object sender, EventArgs e)
-                {
-                    //
-                    // This event handler will be called after the size of the node has been determined.
-                    // So we can now use the size of the node to modify its position.
-                    //
-                    node.X -= node.Size.Width / 2;
-                    node.Y -= node.Size.Height / 2;
+//            if (centerNode)
+//            {
+//                // 
+//                // We want to center the node.
+//                //
+//                // For this to happen we need to wait until the UI has determined the 
+//                // size based on the node's data-template.
+//                //
+//                // So we define an anonymous method to handle the SizeChanged event for a node.
+//                //
+//                // Note: If you don't declare sizeChangedEventHandler before initializing it you will get
+//                //       an error when you try and unsubscribe the event from within the event handler.
+//                //
+//                void SizeChangedEventHandler(object sender, EventArgs e)
+//                {
+//                    //
+//                    // This event handler will be called after the size of the node has been determined.
+//                    // So we can now use the size of the node to modify its position.
+//                    //
+//                    node.X -= node.Size.Width / 2;
+//                    node.Y -= node.Size.Height / 2;
 
-                    //
-                    // Don't forget to unhook the event, after the initial centering of the node
-                    // we don't need to be notified again of any size changes.
-                    //
-#pragma warning disable CS8622
-                    node.SizeChanged -= SizeChangedEventHandler;
-#pragma warning restore CS8622
-                }
+//                    //
+//                    // Don't forget to unhook the event, after the initial centering of the node
+//                    // we don't need to be notified again of any size changes.
+//                    //
+//#pragma warning disable CS8622
+//                    node.SizeChanged -= SizeChangedEventHandler;
+//#pragma warning restore CS8622
+//                }
 
-                //
-                // Now we hook the SizeChanged event so the anonymous method is called later
-                // when the size of the node has actually been determined.
-                //
-#pragma warning disable CS8622
-                node.SizeChanged += SizeChangedEventHandler;
-#pragma warning restore CS8622
-            }
+//                //
+//                // Now we hook the SizeChanged event so the anonymous method is called later
+//                // when the size of the node has actually been determined.
+//                //
+//#pragma warning disable CS8622
+//                node.SizeChanged += SizeChangedEventHandler;
+//#pragma warning restore CS8622
+//            }
 
             //
             // Add the node to the view-model.
