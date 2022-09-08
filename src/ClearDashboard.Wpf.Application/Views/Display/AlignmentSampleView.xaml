@@ -50,7 +50,7 @@
 
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
                                                   Wrap="True"
-                                                  Tokens="{Binding Tokens}" 
+                                                  Tokens="{Binding PaddedTokenTranslations}" 
                                                   Translations="{Binding Translations}"
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

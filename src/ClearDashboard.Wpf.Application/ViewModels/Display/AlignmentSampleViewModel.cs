@@ -55,6 +55,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public TokensTextRow? TextRow { get; set; }
         public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
         public IEnumerable<Translation>? Translations { get; set; }
+        public IEnumerable<PaddedTokenTranslation>? PaddedTokenTranslations { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
@@ -150,6 +151,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             if (Tokens != null)
             {
                 var translations = new List<Translation>();
+                var paddedTokenTranslations = new List<PaddedTokenTranslation>();
                 var i = 0;
                 foreach (var token in Tokens)
                 {
@@ -157,12 +159,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                         ? MockOogaWords[i++]
                         : String.Empty;
                     var translation = new Translation(SourceToken: token.token, TargetTranslationText: translationText, TranslationState: RandomTranslationOriginatedFrom());
+                    var paddedTokenTranslation = new PaddedTokenTranslation
+                    {
+                        Token = token.token,
+                        PaddingBefore = token.paddingBefore,
+                        PaddingAfter = token.paddingAfter,
+                        Translation = translation
+                    };
                     if (i == MockOogaWords.Count) i = 0;
                     translations.Add(translation);
+                    paddedTokenTranslations.Add(paddedTokenTranslation);
                 }
                 Translations = translations;
+                PaddedTokenTranslations = paddedTokenTranslations;
             }
             NotifyOfPropertyChange(nameof(Translations));
+            NotifyOfPropertyChange(nameof(PaddedTokenTranslations));
         }
 
         private async Task MockProjectAndUser()

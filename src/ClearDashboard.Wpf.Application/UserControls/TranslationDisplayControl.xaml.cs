@@ -6,6 +6,7 @@ using System.Windows.Media;
 
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 //using Token = ClearDashboard.DataAccessLayer.Models.Token;
 
@@ -128,13 +129,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationHeightProperty, value);
         }
 
-        private Translation Translation => (Translation) DataContext;
+        //private Translation Translation => (Translation) DataContext;
+
+        private PaddedTokenTranslation PaddedTokenTranslation => (PaddedTokenTranslation) DataContext;
 
         public Brush TranslationColor
         {
             get
             {
-                return Translation.TranslationState switch
+                return PaddedTokenTranslation.Translation.TranslationState switch
                 {
                     "FromTranslationModel" => Brushes.Red,
                     "FromOther" => Brushes.Blue,
@@ -147,7 +150,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return Translation.SourceToken.SurfaceText;
+                return PaddedTokenTranslation.Token.SurfaceText;
             }
         }
 
@@ -155,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return Translation.TargetTranslationText;
+                return PaddedTokenTranslation.Translation.TargetTranslationText;
             }
         }
 
@@ -163,7 +166,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return new Thickness(Translation.SourceToken.SurfaceTextPrefix.Length * 10, 0, Translation.SourceToken.SurfaceTextSuffix.Length * 10, 0);
+                return new Thickness(PaddedTokenTranslation.PaddingBefore.Length * 10, 
+                    0,
+                    PaddedTokenTranslation.PaddingBefore.Length * 10, 
+                    0);
             }
         }
 
