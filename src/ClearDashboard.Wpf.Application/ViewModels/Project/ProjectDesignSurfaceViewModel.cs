@@ -34,6 +34,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using ClearDashboard.Wpf.Application.Helpers;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -462,7 +463,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     isRtl: false, name: corpusNode.Name, language: "", paratextGuid: corpusNode.ParatextProjectId,
                     corpusNode.CorpusType, new Dictionary<string, object>());
 
-                //CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), false);
+                var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
+                var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
+
+                CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), false, tokenizer);
 
                 if (corpusNode.CorpusType == CorpusType.Manuscript)
                 {
@@ -526,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                 try
                 {
-                    CopyOriginalDatabase();
+                    
                     {
 
                         //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -602,15 +606,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                 TaskStatus = StatusEnum.Error
                             }));
                     }
-                    else
-                    {
-                        RestoreOriginalDatabase();
-                    }
+
                 }
                 finally
                 {
                     _cancellationTokenSource.Dispose();
-                    DeleteOriginalDatabase();
                     _addParatextCorpusRunning = false;
                 }
                 AddCorpusEnabled = true;
@@ -640,7 +640,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     {
                         try
                         {
-                            CopyOriginalDatabase();
 
 
                             DAL.Alignment.Corpora.Corpus? corpus = null;
@@ -773,15 +772,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                         TaskStatus = StatusEnum.Error
                                     }));
                             }
-                            else
-                            {
-                                RestoreOriginalDatabase();
-                            }
+
                         }
                         finally
                         {
                             _cancellationTokenSource.Dispose();
-                            DeleteOriginalDatabase();
                             _addParatextCorpusRunning = false;
                         }
 
@@ -846,61 +841,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             return new Point(x, y + (yOffset * 0.5));
         }
 
-        private void DeleteOriginalDatabase()
-        {
-            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
-            try
-            {
-                File.Delete(Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }
-        }
+        //private void DeleteOriginalDatabase()
+        //{
+        //    var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+        //    var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        //    var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+        //    try
+        //    {
+        //        File.Delete(Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.Write(ex);
+        //    }
+        //}
 
-        private void RestoreOriginalDatabase()
-        {
-            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
-            var projectPath = Path.Combine(dashboardPath, projectName);
-            try
-            {
-                if (ProjectManager != null)
-                {
-                    ProjectManager.ProjectNameDbContextFactory.ProjectAssets.ProjectDbContext.Database.EnsureDeleted();
-                }
+        //private void RestoreOriginalDatabase()
+        //{
+        //    var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+        //    var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        //    var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+        //    var projectPath = Path.Combine(dashboardPath, projectName);
+        //    try
+        //    {
+        //        if (ProjectManager != null)
+        //        {
+        //            ProjectManager.ProjectNameDbContextFactory.ProjectAssets.ProjectDbContext.Database.EnsureDeleted();
+        //        }
 
-                File.Move(
-                    Path.Combine(dashboardPath, $"{projectName}_original.sqlite"),
-                    Path.Combine(projectPath, $"{projectName}.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }
-        }
+        //        File.Move(
+        //            Path.Combine(dashboardPath, $"{projectName}_original.sqlite"),
+        //            Path.Combine(projectPath, $"{projectName}.sqlite"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.Write(ex);
+        //    }
+        //}
 
-        private void CopyOriginalDatabase()
-        {
-            //make a copy of the database here named original_ProjectName.sqlite
-            var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
-            var projectPath = Path.Combine(dashboardPath, projectName);
-            var filePath = Path.Combine(projectPath, $"{projectName}.sqlite");
-            try
-            {
-                File.Copy(filePath, Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }
-        }
+        //private void CopyOriginalDatabase()
+        //{
+        //    //make a copy of the database here named original_ProjectName.sqlite
+        //    var projectName = ProjectManager.CurrentDashboardProject.ProjectName;
+        //    var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        //    var dashboardPath = Path.Combine(documentsPath, $"ClearDashboard_Projects");
+        //    var projectPath = Path.Combine(dashboardPath, projectName);
+        //    var filePath = Path.Combine(projectPath, $"{projectName}.sqlite");
+        //    try
+        //    {
+        //        File.Copy(filePath, Path.Combine(dashboardPath, $"{projectName}_original.sqlite"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.Write(ex);
+        //    }
+        //}
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
