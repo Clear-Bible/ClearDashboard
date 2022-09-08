@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels;
 using System.Collections.ObjectModel;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -15,7 +16,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public ImpObservableCollection<SerializedConnections> Connections { get; set; } = new();
         public ImpObservableCollection<SerializedNodes> CorpusNodes { get; set; } = new();
 
-        public ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora = new();
+        public ObservableCollection<SerializedCopora> Corpora = new();
     }
 
     public class SerializedNodes
@@ -33,4 +34,18 @@ namespace ClearDashboard.Wpf.Application.Models
         public string SourceConnectorId { get; set; }
         public string TargetConnectorId { get; set; }
     }
+
+    public class SerializedCopora
+    {
+        public string CorpusId { get; set; }
+        public bool IsRtl { get; set; }
+        public string? Name { get; set; }
+        public string? DisplayName { get; set; }
+        public string? Language { get; set; }
+        public string? ParatextGuid { get; set; }
+        public string CorpusType { get; set; }
+        public DateTimeOffset? Created { get; set; }
+        public string? UserId { get; set; }
+    }
+
 }

@@ -406,11 +406,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private async void SaveCanvas()
         {
-            var surface = new ProjectDesignSurfaceSerializationModel
-            {
-                // save the corpora
-                Corpora = Corpora
-            };
+            var surface = new ProjectDesignSurfaceSerializationModel();
 
             // save all the nodes
             foreach (var corpusNode in DesignSurface.CorpusNodes)
@@ -433,6 +429,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 {
                     SourceConnectorId = connection.SourceConnector.ParatextID,
                     TargetConnectorId = connection.DestinationConnector.ParatextID
+                });
+            }
+
+            // save out the corpora
+            foreach (var corpus in this.Corpora)
+            {
+                surface.Corpora.Add(new SerializedCopora
+                {
+                    CorpusId = corpus.CorpusId.ToString(),
+                    CorpusType = corpus.CorpusType,
+                    Created = corpus.Created,
+                    DisplayName = corpus.DisplayName,
+                    IsRtl = corpus.IsRtl,
+                    Language = corpus.Language,
+                    Name = corpus.Name,
+                    ParatextGuid = corpus.ParatextGuid,
+                    UserId = corpus.UserId.ToString()
                 });
             }
 
@@ -492,7 +505,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         corpusType: corpusNode.CorpusType.ToString(),
                         metadata: new Dictionary<string, object>(),
                         created: new DateTimeOffset(),
-                        userId: new UserId(Guid.NewGuid()));
+                        userId: new UserId(_projectManager.CurrentUser.Id));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -525,7 +538,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 }
 
                 // restore the copora
-                Corpora = deserialized.Corpora;
+                var corpora = deserialized.Corpora;
+                foreach (var corpus in corpora)
+                {
+                    
+                }
             }
         }
 
