@@ -43,10 +43,10 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
             var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
-                .Include(tc => tc.Tokens)
+                .Include(tc => tc.TokenComponents)
                 .First(tc => tc.Id == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id);
             var targetTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
-                .Include(tc => tc.Tokens)
+                .Include(tc => tc.TokenComponents)
                 .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id);
 
             var sourceTokenGuidIds = sourceTokenizedCorpus.Tokens.Take(10)

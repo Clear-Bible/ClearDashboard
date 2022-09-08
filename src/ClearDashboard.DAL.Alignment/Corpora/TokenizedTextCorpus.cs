@@ -25,6 +25,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public override ScrVers Versification { get; }
 
+        public async void Update()
+        {
+            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+        }
+
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));

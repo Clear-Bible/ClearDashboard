@@ -7,11 +7,14 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore;
+using SIL.Machine.Corpora;
 using SIL.Machine.Translation;
 using Xunit;
 using Xunit.Abstractions;
 using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 using System.Threading.Tasks;
+using System.Text;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -32,7 +35,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
 
-            var translationSet1 = await translationModel1.Create(parallelCorpus1.ParallelCorpusId, Mediator!);
+            var translationSet1 = await translationModel1.Create("display name 1", "smt model 1", new(), parallelCorpus1.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet1);
 
             var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
@@ -40,7 +43,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
 
-            var translationSet2 = await translationModel2.Create(parallelCorpus2.ParallelCorpusId, Mediator!);
+            var translationSet2 = await translationModel2.Create("display name 2", "smt model 2", new(), parallelCorpus2.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet2);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -77,7 +80,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create(parallelCorpus.ParallelCorpusId, Mediator!);
+            var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -109,7 +112,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create(parallelCorpus.ParallelCorpusId, Mediator!);
+            var translationSet = await translationModel.Create("display name", "smt model", new() { { "boo", "baa"} }, parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
 
             var bookId = parallelCorpus.SourceCorpus.Texts.Select(t => t.Id).ToList().First();
@@ -145,16 +148,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSetDb);
             Assert.Equal(exampleTranslations.Count, translationSetDb!.Translations.Count);
 
-            var tokensInDb = translationSetDb!.Translations.Select(t => new TokenId(
-                t.SourceToken!.BookNumber,
-                t.SourceToken!.ChapterNumber,
-                t.SourceToken!.VerseNumber,
-                t.SourceToken!.WordNumber,
-                t.SourceToken!.SubwordNumber));
+            var tokensInDb = translationSetDb!.Translations.Select(t => t.SourceTokenComponent!.EngineTokenId!);
 
             foreach (var exampleTranslation in exampleTranslations)
             {
-                Assert.Contains<TokenId>(exampleTranslation.SourceToken.TokenId, tokensInDb);
+                Assert.Contains<string>(exampleTranslation.SourceToken.TokenId.ToString(), tokensInDb);
             }
 
             // FIXME:  quick test of PutPropagate.  Need better tests of this
@@ -204,52 +202,65 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         try
         {
-            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
             var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create(parallelCorpus.ParallelCorpusId, Mediator!);
+            var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
 
             Output.WriteLine("");
 
             var iteration = 1;
+            var putTranslationTokenIds = new List<TokenId>();
             foreach (var bookId in parallelCorpus.SourceCorpus.Texts.Select(t => t.Id))
             {
-//                Output.WriteLine($"Book: {bookId}");
+                Output.WriteLine($"Book: {bookId}");
                 var row = 1;
                 foreach (var ttr in parallelCorpus.SourceCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>())
                 {
-//                    Output.WriteLine($"\tVerse (row): {row++}");
+                    Output.WriteLine($"\tVerse (row): {row++}");
                     foreach (var sourceToken in ttr.Tokens)
                     {
-//                        Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
-                        translationSet.PutTranslation(
-                            new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
-                            TranslationActionType.PutPropagate.ToString());
+//                        if (double.Parse(sourceToken.TokenId.ToString()) is >= 040001004004001 and <= 040002002004001)
+//                        {
+                            Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
+                            translationSet.PutTranslation(
+                                new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
+                                TranslationActionType.PutNoPropagate.ToString());
 
-                        iteration++;
+                            iteration++;
+                            putTranslationTokenIds.Add(sourceToken.TokenId);
+//                        }
                     }
                 }
             }
 
-            ProjectDbContext!.ChangeTracker.Clear();
-            // First:  040002006004001
-            // Last:   041001001005001
-            // Should yield about 15 translations...
+            Output.WriteLine($"\nPutTranslations (no propagate) for {putTranslationTokenIds.Count} token ids: ");
+            foreach (var tokenId in putTranslationTokenIds)
+            {
+                Output.WriteLine($"\t{tokenId}");
+            }
 
-            var firstTokenId = new TokenId(40, 2, 6, 4, 1);
-            var lastTokenId = new TokenId(41, 1, 1, 5, 1);
-            var translations = await translationSet.GetTranslations(firstTokenId, lastTokenId);
-            Assert.Equal(15, translations.Count());
+            ProjectDbContext!.ChangeTracker.Clear();
+            return;
+
+            Output.WriteLine("");
+
+            var filteredEngineParallelTextRows = parallelTextCorpus.Cast<EngineParallelTextRow>()
+                .Where(e => e.SourceTokens!
+                    .Any(t => double.Parse(t.TokenId.ToString()) is >= 040001002004001 and <= 040001005005001));
+
+            var translations = await translationSet.GetTranslations(filteredEngineParallelTextRows);
+            Assert.Equal(9, translations.Count());
 
             Output.WriteLine($"Translation count: {translations.Count()}");
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                Assert.InRange<TokenId>(translation.SourceToken.TokenId, firstTokenId, lastTokenId, Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
-                Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationState}");
+                Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
+                Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
             }
         }
         finally
@@ -268,7 +279,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             // Should throw an exception because of the bogus ParallelCorpusId:
-            await Assert.ThrowsAnyAsync<Exception>(() => translationModel.Create(new ParallelCorpusId(new Guid()), Mediator!));
+            await Assert.ThrowsAnyAsync<Exception>(() => translationModel.Create(null, string.Empty, new(), new ParallelCorpusId(new Guid()), Mediator!));
        }
         finally
         {
@@ -283,6 +294,24 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
         var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
+        var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+            .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+        var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+        return parallelTextCorpus;
+    }
+
+    private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpusWithComposite()
+    {
+        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+        var sourceTextCorpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath)
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoFakeCompositeTokensTextRowProcessor>();
+        var sourceTokenizedTextCorpus = await sourceTextCorpus
+            .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoFakeCompositeTokensTextRowProcessor>()");
+
+        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -314,6 +343,36 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         {
             Output.WriteLine(eex.ToString());
             throw eex;
+        }
+    }
+    private class IntoFakeCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
+    {
+        public TextRow Process(TextRow textRow)
+        {
+            if (textRow.Text.Contains("verse three"))
+            {
+                var tr = new TokensTextRow(textRow);
+
+                var tokens = tr.Tokens;
+
+                var tokenIds = tokens
+                    .Select(t => t.TokenId)
+                    .ToList();
+
+                var compositeTokens = new List<Token>() { tokens[1], tokens[3], tokens[4] };
+                var tokensWithComposite = new List<Token>()
+                 {
+                     tokens[0],
+                     tokens[2],
+                     new CompositeToken(compositeTokens),
+                     tokens[5]
+                 };
+
+                tr.Tokens = tokensWithComposite;
+                return tr;
+            }
+
+            return new TokensTextRow(textRow);
         }
     }
 }

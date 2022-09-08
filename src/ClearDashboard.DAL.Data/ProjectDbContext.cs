@@ -44,7 +44,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
 
         public virtual DbSet<AlignmentSet> AlignmentSets => Set<AlignmentSet>();
-        public virtual DbSet<AlignmentTokenPair> AlignmentTokenPairs => Set<AlignmentTokenPair>();
+        public virtual DbSet<Alignment> Alignments => Set<Alignment>();
 
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
@@ -56,6 +56,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         //public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
+        public virtual DbSet<TokenComponent> TokenComponents => Set<TokenComponent>();
+        public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
@@ -123,14 +125,24 @@ namespace ClearDashboard.DataAccessLayer.Data
             // We want our table names to be singular
             modelBuilder.RemovePluralizingTableNameConvention();
 
-            modelBuilder.Entity<AlignmentTokenPair>()
-                .HasOne(e => e.SourceToken)
-                .WithMany(e=>e.SourceAlignmentTokenPairs);
+            modelBuilder.Entity<Alignment>()
+                .HasOne(e => e.SourceTokenComponent)
+                .WithMany(e=>e.SourceAlignments);
               
 
-            modelBuilder.Entity<AlignmentTokenPair>()
-                .HasOne(e => e.TargetToken)
-                .WithMany(e=>e.TargetAlignmentTokenPairs);
+            modelBuilder.Entity<Alignment>()
+                .HasOne(e => e.TargetTokenComponent)
+                .WithMany(e=>e.TargetAlignments);
+
+            modelBuilder.Entity<AlignmentSet>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2!),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
 
             modelBuilder.Entity<Corpus>()
                 .Property(e=>e.Metadata)
@@ -151,9 +163,38 @@ namespace ClearDashboard.DataAccessLayer.Data
                         (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
-              
+
+            modelBuilder.Entity<ParallelCorpus>()
+               .Property(e => e.Metadata)
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                   v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                   new ValueComparer<Dictionary<string, object>>(
+                       (c1, c2) => c1.SequenceEqual(c2!),
+                       c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                       c => c));
+
+            modelBuilder.Entity<ParallelCorpusHistory>()
+               .Property(e => e.Metadata)
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                   v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                   new ValueComparer<Dictionary<string, object>>(
+                       (c1, c2) => c1.SequenceEqual(c2!),
+                       c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                       c => c));
 
             modelBuilder.Entity<TokenizedCorpus>()
+                .Property(e => e.Metadata)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, default(JsonSerializerOptions)) ?? new Dictionary<string, object>(),
+                    new ValueComparer<Dictionary<string, object>>(
+                        (c1, c2) => c1.SequenceEqual(c2!),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c));
+
+            modelBuilder.Entity<TranslationSet>()
                 .Property(e => e.Metadata)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
@@ -187,6 +228,11 @@ namespace ClearDashboard.DataAccessLayer.Data
             // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
 
+            modelBuilder.Entity<Token>().ToTable("TokenComponent");
+            modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
+
             modelBuilder.Entity<Token>().HasIndex(e => e.TokenizationId);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
@@ -198,7 +244,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             //modelBuilder.Entity<Token>()
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
-            modelBuilder.Entity<Translation>().Navigation(e => e.SourceToken).AutoInclude();
+            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
         }

@@ -708,7 +708,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                             break;
                                     }
 
-                                    corpus.ParatextGuid = viewModel.SelectedProject.Id;
+                                    //corpus.ParatextGuid = viewModel.SelectedProject.Id;
 
                                     // figure out some offset based on the number of nodes already in the network
                                     // so we don't overlap
