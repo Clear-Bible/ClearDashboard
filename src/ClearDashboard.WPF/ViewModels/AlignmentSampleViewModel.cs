@@ -75,7 +75,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             var tokenizedCorpus = new TokenizedCorpus();
             textCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
-                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
+                tokenizedCorpus.TokenComponents.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
                 {
                     BookNumber = engineToken.TokenId.BookNumber,
                     ChapterNumber = engineToken.TokenId.ChapterNumber,
@@ -210,7 +210,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedTextCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
                 var result = await ExecuteRequest(query, cancellationToken);
 
                 if (result.Success && result.Data != null)
@@ -229,7 +229,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
+                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
                 var book = corpus.Where(row => ((VerseRef) row.Ref).BookNum == 40);
                 var chapter = book.Where(row => ((VerseRef) row.Ref).ChapterNum == 1);
                 var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;

@@ -58,19 +58,31 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("AlignmentVersionId")
+                    b.Property<int>("AlignmentOriginatedFrom")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("AlignmentSetId")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("AlignmentVerification")
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Score")
+                    b.Property<double>("Score")
+                        .HasColumnType("REAL");
+
+                    b.Property<Guid>("SourceTokenComponentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("SourceTokenId")
+                    b.Property<Guid?>("SourceTokenId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("TargetTokenId")
+                    b.Property<Guid>("TargetTokenComponentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TargetTokenId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -78,7 +90,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlignmentVersionId");
+                    b.HasIndex("AlignmentSetId");
 
                     b.HasIndex("SourceTokenId");
 
@@ -96,16 +108,34 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EngineWordAlignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSyntaxTreeAlignerRefined")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Metadata")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.Property<Guid?>("ParallelCorpusHistoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ParallelCorpusId")
+                    b.Property<Guid>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<string>("SmtModel")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EngineWordAlignmentId");
 
                     b.HasIndex("ParallelCorpusHistoryId");
 
@@ -114,69 +144,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AlignmentSet");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTokenPair", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("AlignmentSetId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AlignmentState")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AlignmentType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("Probability")
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("SourceTokenId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("TargetTokenId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlignmentSetId");
-
-                    b.HasIndex("SourceTokenId");
-
-                    b.HasIndex("TargetTokenId");
-
-                    b.ToTable("AlignmentTokenPair");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsDirty")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AlignmentVersion");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
@@ -190,6 +157,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
@@ -249,6 +219,23 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CorpusHistory");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsClearAligner")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SmtWordAlignerType")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EngineWordAlignment");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
@@ -328,14 +315,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AlignmentType")
-                        .HasColumnType("INTEGER");
-
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("LastGenerated")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Metadata")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
 
                     b.Property<Guid>("SourceTokenizedCorpusId")
                         .HasColumnType("TEXT");
@@ -361,14 +349,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AlignmentType")
-                        .HasColumnType("INTEGER");
-
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("LastGenerated")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Metadata")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
 
                     b.Property<Guid>("SourceTokenizedCorpusId")
                         .HasColumnType("TEXT");
@@ -401,9 +390,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsRtl")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("LastContentWordLevel")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ProjectName")
@@ -442,25 +428,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasDiscriminator<string>("ContentType").HasValue("RawContent");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComponent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("BookNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ChapterNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SubwordNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SurfaceText")
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("TokenCompositeId")
+                    b.Property<string>("EngineTokenId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TokenizationId")
@@ -469,25 +447,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("TrainingText")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VerseNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("WordNumber")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("BookNumber");
-
-                    b.HasIndex("ChapterNumber");
-
-                    b.HasIndex("TokenCompositeId");
+                    b.HasIndex("EngineTokenId");
 
                     b.HasIndex("TokenizationId");
 
-                    b.HasIndex("VerseNumber");
+                    b.ToTable("TokenComponent");
 
-                    b.ToTable("Token");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TokenComponent");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
@@ -505,9 +473,18 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CustomVersData")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Metadata")
                         .IsRequired()
                         .HasColumnType("jsonb");
+
+                    b.Property<int>("ScrVersType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("TokenizationFunction")
                         .HasColumnType("TEXT");
@@ -536,7 +513,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("TokenId")
+                    b.Property<Guid>("TokenComponentId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -547,11 +524,139 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TokenId");
+                    b.HasIndex("TokenComponentId");
 
                     b.HasIndex("VerseId");
 
                     b.ToTable("TokenVerseAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("SourceTokenComponentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SourceTokenId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TargetText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TranslationSetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TranslationState")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourceTokenId");
+
+                    b.HasIndex("TranslationSetId");
+
+                    b.ToTable("Translation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TranslationSetId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TranslationSetId", "SourceText")
+                        .IsUnique();
+
+                    b.ToTable("TranslationModelEntry");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelTargetTextScore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TranslationModelEntryId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TranslationModelEntryId", "Text")
+                        .IsUnique();
+
+                    b.ToTable("TranslationModelTargetTextScore");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("DerivedFromId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EngineWordAlignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Metadata")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid?>("ParallelCorpusHistoryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ParallelCorpusId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SmtModel")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DerivedFromId");
+
+                    b.HasIndex("EngineWordAlignmentId");
+
+                    b.HasIndex("ParallelCorpusHistoryId");
+
+                    b.HasIndex("ParallelCorpusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TranslationSet");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
@@ -683,11 +788,62 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasDiscriminator().HasValue("StringContent");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.TokenComponent");
+
+                    b.Property<int>("BookNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChapterNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubwordNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SurfaceText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TokenCompositeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VerseNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WordNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("BookNumber");
+
+                    b.HasIndex("ChapterNumber");
+
+                    b.HasIndex("SubwordNumber");
+
+                    b.HasIndex("TokenCompositeId");
+
+                    b.HasIndex("VerseNumber");
+
+                    b.HasIndex("WordNumber");
+
+                    b.ToTable("TokenComponent", (string)null);
+
+                    b.HasDiscriminator().HasValue("Token");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenAssociation", b =>
                 {
                     b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
 
                     b.HasDiscriminator().HasValue("TokenAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComposite", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.TokenComponent");
+
+                    b.ToTable("TokenComponent", (string)null);
+
+                    b.HasDiscriminator().HasValue("TokenComposite");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseAssociation", b =>
@@ -708,76 +864,48 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", "AlignmentVersion")
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", null)
                         .WithMany("Alignments")
-                        .HasForeignKey("AlignmentVersionId");
+                        .HasForeignKey("AlignmentSetId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "SourceToken")
-                        .WithMany()
-                        .HasForeignKey("SourceTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
+                        .WithMany("SourceAlignments")
+                        .HasForeignKey("SourceTokenId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "TargetToken")
-                        .WithMany()
-                        .HasForeignKey("TargetTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "TargetTokenComponent")
+                        .WithMany("TargetAlignments")
+                        .HasForeignKey("TargetTokenId");
 
-                    b.Navigation("AlignmentVersion");
+                    b.Navigation("SourceTokenComponent");
 
-                    b.Navigation("SourceToken");
-
-                    b.Navigation("TargetToken");
+                    b.Navigation("TargetTokenComponent");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
                 {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", "EngineWordAlignment")
+                        .WithMany()
+                        .HasForeignKey("EngineWordAlignmentId");
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", null)
                         .WithMany("AlignmentSets")
                         .HasForeignKey("ParallelCorpusHistoryId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
                         .WithMany("AlignmentSets")
-                        .HasForeignKey("ParallelCorpusId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany("AlignmentSets")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTokenPair", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", null)
-                        .WithMany("AlignmentTokensPairs")
-                        .HasForeignKey("AlignmentSetId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "SourceToken")
-                        .WithMany("SourceAlignmentTokenPairs")
-                        .HasForeignKey("SourceTokenId")
+                        .HasForeignKey("ParallelCorpusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "TargetToken")
-                        .WithMany("TargetAlignmentTokenPairs")
-                        .HasForeignKey("TargetTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SourceToken");
-
-                    b.Navigation("TargetToken");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
-                {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany("AlignmentVersions")
+                        .WithMany("AlignmentSets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EngineWordAlignment");
+
+                    b.Navigation("ParallelCorpus");
 
                     b.Navigation("User");
                 });
@@ -860,10 +988,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("NoteId");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComponent", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", "Tokenization")
-                        .WithMany("Tokens")
+                        .WithMany("TokenComponents")
                         .HasForeignKey("TokenizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -890,9 +1018,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "TokenComponent")
                         .WithMany("TokenVerseAssociations")
-                        .HasForeignKey("TokenId")
+                        .HasForeignKey("TokenComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -902,9 +1030,79 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Token");
+                    b.Navigation("TokenComponent");
 
                     b.Navigation("Verse");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
+                        .WithMany("Translations")
+                        .HasForeignKey("SourceTokenId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "TranslationSet")
+                        .WithMany("Translations")
+                        .HasForeignKey("TranslationSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourceTokenComponent");
+
+                    b.Navigation("TranslationSet");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "TranslationSet")
+                        .WithMany("TranslationModel")
+                        .HasForeignKey("TranslationSetId");
+
+                    b.Navigation("TranslationSet");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelTargetTextScore", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", "TranslationModelEntry")
+                        .WithMany("TargetTextScores")
+                        .HasForeignKey("TranslationModelEntryId");
+
+                    b.Navigation("TranslationModelEntry");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "DerivedFrom")
+                        .WithMany()
+                        .HasForeignKey("DerivedFromId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", "EngineWordAlignment")
+                        .WithMany()
+                        .HasForeignKey("EngineWordAlignmentId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", null)
+                        .WithMany("TranslationSets")
+                        .HasForeignKey("ParallelCorpusHistoryId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
+                        .WithMany("TranslationSets")
+                        .HasForeignKey("ParallelCorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany("TranslationSets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DerivedFrom");
+
+                    b.Navigation("EngineWordAlignment");
+
+                    b.Navigation("ParallelCorpus");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
@@ -939,12 +1137,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("ParallelCorpus");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
-                    b.Navigation("AlignmentTokensPairs");
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComposite", "TokenComposite")
+                        .WithMany("Tokens")
+                        .HasForeignKey("TokenCompositeId");
+
+                    b.Navigation("TokenComposite");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentVersion", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
                 {
                     b.Navigation("Alignments");
                 });
@@ -976,6 +1178,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Navigation("AlignmentSets");
 
+                    b.Navigation("TranslationSets");
+
                     b.Navigation("VerseMappings");
                 });
 
@@ -983,18 +1187,20 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Navigation("AlignmentSets");
 
+                    b.Navigation("TranslationSets");
+
                     b.Navigation("VerseMappings");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComponent", b =>
                 {
-                    b.Navigation("Adornment");
+                    b.Navigation("SourceAlignments");
 
-                    b.Navigation("SourceAlignmentTokenPairs");
-
-                    b.Navigation("TargetAlignmentTokenPairs");
+                    b.Navigation("TargetAlignments");
 
                     b.Navigation("TokenVerseAssociations");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
@@ -1003,14 +1209,26 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Navigation("TargetParallelCorpora");
 
-                    b.Navigation("Tokens");
+                    b.Navigation("TokenComponents");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
+                {
+                    b.Navigation("TargetTextScores");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
+                {
+                    b.Navigation("TranslationModel");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
                 {
                     b.Navigation("AlignmentSets");
 
-                    b.Navigation("AlignmentVersions");
+                    b.Navigation("TranslationSets");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
@@ -1021,6 +1239,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
                 {
                     b.Navigation("Verses");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
+                {
+                    b.Navigation("Adornment");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComposite", b =>
+                {
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

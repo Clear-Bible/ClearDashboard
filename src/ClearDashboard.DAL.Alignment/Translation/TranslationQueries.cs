@@ -15,7 +15,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             mediator_ = mediator;
         }
 
-        public async Task<IEnumerable<(Token, Token, double)>?> GetAlignemnts(ParallelCorpusId parallelCorpusId)
+        public async Task<IEnumerable<(Token, Token, double)>?> GetAlignments(ParallelCorpusId parallelCorpusId)
         {
             var result = await mediator_.Send(new GetAlignmentsByParallelCorpusIdQuery(parallelCorpusId));
             if (result.Success && result.Data != null)

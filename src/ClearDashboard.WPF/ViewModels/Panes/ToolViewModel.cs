@@ -11,6 +11,7 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
     {
         #region Member Variables
         private bool _isVisible = true;
+        private bool _canClose = true;
         #endregion //Member Variables
 
         #region Public Properties
@@ -29,6 +30,18 @@ namespace ClearDashboard.Wpf.ViewModels.Panes
                 }
             }
         }
+
+        public bool CanClose
+        {
+            get => _canClose;
+            set
+            {
+                _canClose = value;
+                NotifyOfPropertyChange(() => CanClose);
+            }
+        }
+
+
         #endregion //Public Properties
 
         #region Observable Properties

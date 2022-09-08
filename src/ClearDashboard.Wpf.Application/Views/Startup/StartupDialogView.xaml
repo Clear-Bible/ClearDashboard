@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.StartupDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="StartupDialogView"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Grid>
+        <!--<Button x:Name="GoToMain" cm:Message.Attach="GoToMain"  Background="{DynamicResource BlueDarkBrush}" Width="120">Go to Main</Button>-->
+        <ContentControl cm:View.Model="{Binding ActiveItem}" />
+    </Grid>
+</Page>

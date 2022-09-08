@@ -75,9 +75,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus__Create()
         {
-			var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get( mediator_, new TokenizedCorpusId(new Guid()));
+			var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get( mediator_, new TokenizedTextCorpusId(new Guid()));
 
-			var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedCorpusId(new Guid()));
+			var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedTextCorpusId(new Guid()));
 
 			var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 

@@ -8,13 +8,14 @@
     xmlns:local="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="clr-namespace:ClearDashboard.Wpf.ViewModels.Project;assembly=ClearDashboard.Wpf"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
     Width="600"
     Height="300"
     d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="150"
+    d:DesignHeight="300"
     d:DesignWidth="400"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     AllowsTransparency="True"
@@ -68,36 +69,53 @@
 
     <Border
         Padding="6"
-        Background="Black"
+        Background="{DynamicResource MaterialDesignLightBackground}"
         BorderBrush="{DynamicResource MaterialDesignDarkBackground}"
         BorderThickness="2"
         CornerRadius="25">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
+                <ComboBox
+                    Margin="30,0,0,0"
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding Projects}"
+                    SelectedItem="{Binding SelectedProject}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
-            <ComboBox
-                Grid.Row="1"
-                Margin="10,0"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding SelectedProject}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                            <TextBlock FontSize="24" Text="{Binding Name}" />
-                            <TextBlock FontSize="12" Text="{Binding LongName}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical">
+                <Label Content="Select Tokenizer Engine" />
+                <ComboBox
+                    Margin="30,0,0,0"
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type project:Tokenizer}}}"
+                    SelectedItem="{Binding SelectedTokenizer}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="18" Text="{Binding .}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
 
             <StackPanel
                 Grid.Row="2"

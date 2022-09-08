@@ -33,7 +33,8 @@ public enum CorpusType
 
     // NB:  CODE REVIEW:  Do we still need this WRT to ParatextProxy lines 264 & 439, CreateNewProjectWorkflowStepViewModel line 315?
     Resource,
-    Unknown
+    Unknown,
+    Manuscript,
 }
 
 public enum CorpusSourceType

@@ -15,12 +15,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class GetParallelCorpusByParallelCorpusIdQueryHandler : ProjectDbContextQueryHandler<
         GetParallelCorpusByParallelCorpusIdQuery,
-        RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-            TokenizedCorpusId targetTokenizedCorpusId,
+        RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+            TokenizedTextCorpusId targetTokenizedCorpusId,
             IEnumerable<VerseMapping> verseMappings,
             ParallelCorpusId parallelCorpusId)>,
-        (TokenizedCorpusId sourceTokenizedCorpusId,
-        TokenizedCorpusId targetTokenizedCorpusId,
+        (TokenizedTextCorpusId sourceTokenizedCorpusId,
+        TokenizedTextCorpusId targetTokenizedCorpusId,
         IEnumerable<VerseMapping> verseMappings,
         ParallelCorpusId parallelCorpusId)>
     {
@@ -30,8 +30,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
         }
 
-        protected override async Task<RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId, 
-            TokenizedCorpusId targetTokenizedCorpusId, 
+        protected override async Task<RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId, 
+            TokenizedTextCorpusId targetTokenizedCorpusId, 
             IEnumerable<VerseMapping> verseMappings, 
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
 
@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Include(pc => pc.VerseMappings)
                     .ThenInclude(vm => vm.Verses)
                     .ThenInclude(v => v.TokenVerseAssociations)
-                    .ThenInclude(tva => tva.Token)
+                    .ThenInclude(tva => tva.TokenComponent)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -64,8 +64,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (!string.IsNullOrEmpty(invalidArgMsg))
             {
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                    TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                    TokenizedTextCorpusId targetTokenizedCorpusId,
                     IEnumerable<VerseMapping> verseMappings,
                     ParallelCorpusId parallelCorpusId)>
                 (
@@ -95,15 +95,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
-                                    .Where(tva => tva.Token != null)
+                                    .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva =>
-                                        new TokenId(
-                                            tva.Token!.BookNumber,
-                                            tva.Token!.ChapterNumber,
-                                            tva.Token!.VerseNumber,
-                                            tva.Token!.WordNumber,
-                                            tva.Token!.SubwordNumber))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
                             ));
                         var targetVerses = vm.Verses
                             .Where(v => v.CorpusId == targetCorpusId)
@@ -114,35 +108,29 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
-                                    .Where(tva => tva.Token != null)
+                                    .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva =>
-                                        new TokenId(
-                                            tva.Token!.BookNumber, 
-                                            tva.Token!.ChapterNumber, 
-                                            tva.Token!.VerseNumber, 
-                                            tva.Token!.WordNumber, 
-                                            tva.Token!.SubwordNumber))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
                             ));
 
                         return new VerseMapping(sourceVerses, targetVerses);
                     });
 
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                        TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                        TokenizedTextCorpusId targetTokenizedCorpusId,
                         IEnumerable<VerseMapping> verseMappings,
                         ParallelCorpusId parallelCorpusId)>
                     ((
-                        new TokenizedCorpusId(parallelCorpus.SourceTokenizedCorpusId),
-                        new TokenizedCorpusId(parallelCorpus.TargetTokenizedCorpusId),
+                        ModelHelper.BuildTokenizedTextCorpusId(parallelCorpus.SourceTokenizedCorpus),
+                        ModelHelper.BuildTokenizedTextCorpusId(parallelCorpus.TargetTokenizedCorpus),
                         verseMappings,
-                        new ParallelCorpusId(parallelCorpus.Id)
+                        ModelHelper.BuildParallelCorpusId(parallelCorpus)
                     ));
             }
             catch (NullReferenceException e)
             {
-                return new RequestResult<(TokenizedCorpusId sourceTokenizedCorpusId,
-                        TokenizedCorpusId targetTokenizedCorpusId,
+                return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
+                        TokenizedTextCorpusId targetTokenizedCorpusId,
                         IEnumerable<VerseMapping> verseMappings,
                         ParallelCorpusId parallelCorpusId)>
                 (

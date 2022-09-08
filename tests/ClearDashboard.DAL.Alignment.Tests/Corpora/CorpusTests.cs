@@ -63,7 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
                 // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "LanguageType");
-                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "boo", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
                 foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
                 {
@@ -110,7 +110,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
                 // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "LanguageType");
-                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
                 foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>().Take(10))
                 {
@@ -180,7 +180,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     .Transform<IntoTokensTextRowProcessor>();
 
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
-                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
                 var corpusIds = await Corpus.GetAllCorpusIds(Mediator!);
                 Assert.Single(corpusIds);
@@ -189,7 +189,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator!, corpusIds.First());
                 Assert.Single(tokenizedCorpusIds);
                 Assert.Equal(tokenizedTextCorpus.CorpusId, corpusIds.First());
-                Assert.Equal(tokenizedTextCorpus.TokenizedCorpusId, tokenizedCorpusIds.First());
+                Assert.Equal(tokenizedTextCorpus.TokenizedTextCorpusId, tokenizedCorpusIds.First());
             }
             finally
             {
@@ -218,9 +218,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     .Transform<IntoTokensTextRowProcessor>();
 
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
-                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedCorpusId);
+                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedTextCorpusId);
 
                 foreach (var tokensTextRow in tokenizedTextCorpus.Cast<TokensTextRow>())
                 {
@@ -263,9 +263,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     .Transform<IntoTokensTextRowProcessor>();
 
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
-                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedCorpusId);
+                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedTextCorpusId);
 
                 Assert.True(tokenizedTextCorpus.Count() > 0);
 
@@ -293,9 +293,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     .Transform<IntoTokensTextRowProcessor>();
 
                 var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
-                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                var createdTokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedCorpusId);
+                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedTextCorpusId);
 
                 Assert.True(tokenizedTextCorpus.Count() > 0);
                 Assert.True(tokenizedTextCorpus.GetRows(new List<string>() { "MRK" }).Count() > 0);
@@ -351,12 +351,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
             Assert.Equal("First Corpus", firstCorpus.Name);
             Assert.Equal("english", firstCorpus.Language);
-            Assert.Equal(Models.CorpusType.Standard, firstCorpus.CorpusType);
+            Assert.Equal(Models.CorpusType.Standard.ToString(), firstCorpus.CorpusType);
             Assert.NotNull(firstCorpus.Metadata);
 
             Assert.Equal("Second Corpus", secondCorpus.Name);
             Assert.Equal("english", secondCorpus.Language);
-            Assert.Equal(Models.CorpusType.BackTranslation, secondCorpus.CorpusType);
+            Assert.Equal(Models.CorpusType.BackTranslation.ToString(), secondCorpus.CorpusType);
             Assert.NotNull(secondCorpus.Metadata);
         }
     }

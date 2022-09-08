@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Models;
 using ClearDashboard.Wpf.Properties;
 using ClearDashboard.Wpf.ViewModels.Menus;
 using ClearDashboard.Wpf.ViewModels.Panes;
+using ClearDashboard.Wpf.ViewModels.Project;
 using ClearDashboard.Wpf.Views;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,8 +26,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.ViewModels.Project;
-using ClearDashboard.Wpf.Helpers;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -654,7 +653,7 @@ namespace ClearDashboard.Wpf.ViewModels
                         new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
                         new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this, },
+                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },

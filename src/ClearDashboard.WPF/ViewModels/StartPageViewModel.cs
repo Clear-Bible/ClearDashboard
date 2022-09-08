@@ -11,6 +11,7 @@ using System.Windows.Navigation;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -447,7 +448,7 @@ namespace ClearDashboard.Wpf.ViewModels
         /// Create a node and add it to the view-model.
         /// </summary>
         public CorpusNodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode,
-            ParatextProjectType projectType, string projectId)
+            CorpusType projectType, string projectId)
         {
             var node = new CorpusNodeViewModel(name, _eventAggregator, _projectManager)
             {
@@ -455,15 +456,15 @@ namespace ClearDashboard.Wpf.ViewModels
                 Y = nodeLocation.Y
             };
 
-            node.ProjectType = projectType;
+            node.CorpusType = projectType;
             node.ParatextProjectId = projectId;
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
             //node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
             });
@@ -536,9 +537,9 @@ namespace ClearDashboard.Wpf.ViewModels
             //
             // Create some nodes and add them to the view-model.
             //
-            var node1 = CreateNode("zz_SUR", new Point(100, 60), false, ParatextProjectType.Standard, Guid.NewGuid().ToString());
-            var node2 = CreateNode("zz_SURBT", new Point(350, 40), false, ParatextProjectType.BackTranslation, Guid.NewGuid().ToString());
-            var node3 = CreateNode("NIV", new Point(350, 120), false, ParatextProjectType.Reference, Guid.NewGuid().ToString());
+            var node1 = CreateNode("zz_SUR", new Point(100, 60), false, CorpusType.Standard, Guid.NewGuid().ToString());
+            var node2 = CreateNode("zz_SURBT", new Point(350, 40), false, CorpusType.BackTranslation, Guid.NewGuid().ToString());
+            var node3 = CreateNode("NIV", new Point(350, 120), false, CorpusType.Resource, Guid.NewGuid().ToString());
 
 
 

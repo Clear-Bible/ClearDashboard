@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,9 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
-                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                "Unit Test",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                ScrVers.Original);
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
@@ -40,7 +43,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             ProjectDbContext?.ChangeTracker.Clear();
 
             // Retrieve Tokens
-            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedCorpusId, "MAT");
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpus.TokenizedTextCorpusId, "MAT");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.True(result.Success);
@@ -77,7 +80,9 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
-                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                "Unit Test",
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                ScrVers.Original);
             await Mediator.Send(command);
 
 
@@ -85,7 +90,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
+                new Alignment.Corpora.TokenizedTextCorpusId(ProjectDbContext.TokenizedCorpora.First().Id), "BARF");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);
@@ -112,7 +117,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             // Retrieve Tokens
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
-                new Alignment.Corpora.TokenizedCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MRK");
+                new Alignment.Corpora.TokenizedTextCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MRK");
             var result = await Mediator.Send(query);
             Assert.NotNull(result);
             Assert.False(result.Success);

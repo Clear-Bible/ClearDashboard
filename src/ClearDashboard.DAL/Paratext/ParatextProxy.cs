@@ -73,6 +73,56 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return Process.GetProcessesByName("Paratext").Length > 0;
         }
 
+        public  async Task<Process> StartParatextAsync(int secondsToWait = 10)
+        {
+            var paratext = Process.GetProcessesByName("Paratext");
+            Process process = null;
+            if (paratext.Length == 0)
+            {
+                _logger.LogInformation("Starting Paratext.");
+                process = await InternalStartParatextAsync();
+              
+                
+                _logger.LogInformation($"Waiting {secondsToWait} seconds for Paratext to completely start");
+                await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
+            }
+            else
+            {
+                _logger.LogInformation("Paratext is already running.");
+                process =  paratext[0];
+               
+            }
+
+            return process;
+
+
+        }
+
+        //protected async Task StopParatextAsync()
+        //{
+        //    if (StopParatextOnTestConclusion)
+        //    {
+        //        Output.WriteLine("Stopping Paratext.");
+        //        Process.Kill(true);
+
+        //        Process = null;
+
+        //        var seconds = 2;
+        //        Output.WriteLine($"Waiting for {seconds} seconds for Paratext to stop.");
+        //        await Task.Delay(TimeSpan.FromSeconds(seconds));
+        //    }
+        //}
+
+        private  async Task<Process> InternalStartParatextAsync()
+        {
+            var paratextInstallDirectory = Environment.GetEnvironmentVariable("ParatextInstallDir");
+            var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");
+
+            return await Task.FromResult(process);
+        }
+
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]
         private void GetParatextInstallPath()
         {

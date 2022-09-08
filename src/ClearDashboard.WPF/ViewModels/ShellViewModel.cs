@@ -21,6 +21,8 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.ViewModels.Popups;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using System.Xml.Linq;
+using ClearDashboard.DataAccessLayer.Models;
+using BackgroundTaskStatus = ClearDashboard.DataAccessLayer.Models.BackgroundTaskStatus;
 
 namespace ClearDashboard.Wpf.ViewModels
 {
@@ -168,7 +170,6 @@ namespace ClearDashboard.Wpf.ViewModels
 
         #endregion
 
-      
         #region Startup
 
 
@@ -425,7 +426,6 @@ namespace ClearDashboard.Wpf.ViewModels
         }
 
         #endregion
-
 
         #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)

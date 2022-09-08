@@ -31,12 +31,19 @@ namespace ViewModels.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ConnectorViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
+        public ConnectorViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager, string paratextProjectId)
         {
             _eventAggregator = eventAggregator;
             _projectManager = projectManager;
             Name = name;
             Type = ConnectorType.Undefined;
+            ParatextID = paratextProjectId;
+        }
+
+        public string ParatextID
+        {
+            get;
+            private set;
         }
 
         /// <summary>

@@ -97,7 +97,7 @@
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
                 Content="{helpers:Localization Pins_ClearFilter}"
-                Style="{StaticResource BlueMidButton}"/>
+                Style="{StaticResource BlueMidButton}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 

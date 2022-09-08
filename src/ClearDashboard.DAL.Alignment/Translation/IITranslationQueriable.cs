@@ -10,6 +10,6 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// </summary>
         /// <param name="engineParallelTextCorpusId"></param>
         /// <returns></returns>
-        Task<IEnumerable<(Token, Token, double)>?> GetAlignemnts(ParallelCorpusId parallelCorpusId);
+        Task<IEnumerable<(Token, Token, double)>?> GetAlignments(ParallelCorpusId parallelCorpusId);
     }
 }

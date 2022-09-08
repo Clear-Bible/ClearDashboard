@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Text.Json;
 
 //USE TO ACCESS Models
@@ -39,7 +40,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //DB Impl notes:
             // 1. creates a new associated TokenizedCorpus (associated with the parent CorpusId provided in the request),
             // 2. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
-
             var corpus = ProjectDbContext!.Corpa.FirstOrDefault(c => c.Id == request.CorpusId.Id);
             if (corpus == null)
             {
@@ -53,8 +53,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var tokenizedCorpus = new TokenizedCorpus
             {
                 Corpus = corpus,
-                TokenizationFunction = request.TokenizationFunction
+                DisplayName = request.DisplayName,
+                TokenizationFunction = request.TokenizationFunction,
+                ScrVersType = (int)request.Versification.Type
             };
+
+            if (request.Versification.IsCustomized)
+            {
+                var writer = new StringWriter();
+                request.Versification.Save(writer);
+
+                tokenizedCorpus.CustomVersData = writer.ToString();
+            }
 
             // ITextCorpus Text ids always book ids/abbreviations:  
             var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
@@ -73,7 +83,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
                 using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand();
-                using var tokenInsertCommand = CreateTokenInsertCommand();
+                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(); 
 
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
                 tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
@@ -82,74 +92,63 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 {
                     var bookTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
                         .SelectMany(ttr => ttr.Tokens)
-                        .SelectMany(token =>
+                        .Select(token =>
                         {
                             if (token is CompositeToken compositeToken)
                             {
-                                var tokenCompositeId = Guid.NewGuid();
-                                return compositeToken.GetPositionalSortedBaseTokens()
-                                    .Select(childToken => new Models.Token
-                                    {
-                                        TokenizationId = tokenizationId,
-                                        BookNumber = childToken.TokenId.BookNumber,
-                                        ChapterNumber = childToken.TokenId.ChapterNumber,
-                                        VerseNumber = childToken.TokenId.VerseNumber,
-                                        WordNumber = childToken.TokenId.WordNumber,
-                                        SubwordNumber = childToken.TokenId.SubWordNumber,
-                                        SurfaceText = childToken.SurfaceText,
-                                        TrainingText = childToken.TrainingText,
-                                        TokenCompositeId = tokenCompositeId
-                                    });
+                                return new TokenComposite
+                                {
+                                    TokenizationId = tokenizationId,
+                                    TrainingText = compositeToken.TrainingText,
+                                    EngineTokenId = compositeToken.TokenId.ToString(),
+                                    Tokens = compositeToken.GetPositionalSortedBaseTokens()
+                                        .Select(childToken => new Models.Token
+                                        {
+                                            TokenizationId = tokenizationId,
+                                            TrainingText = childToken.TrainingText,
+                                            EngineTokenId = childToken.TokenId.ToString(),
+                                            BookNumber = childToken.TokenId.BookNumber,
+                                            ChapterNumber = childToken.TokenId.ChapterNumber,
+                                            VerseNumber = childToken.TokenId.VerseNumber,
+                                            WordNumber = childToken.TokenId.WordNumber,
+                                            SubwordNumber = childToken.TokenId.SubWordNumber,
+                                            SurfaceText = childToken.SurfaceText
+                                        }).ToList()
+                                };
                             }
                             else
                             {
-                                return new List<Models.Token>() {
-                                new Models.Token
+                                return new Models.Token
                                 {
                                     TokenizationId = tokenizationId,
+                                    TrainingText = token.TrainingText,
+                                    EngineTokenId = token.TokenId.ToString(),
                                     BookNumber = token.TokenId.BookNumber,
                                     ChapterNumber = token.TokenId.ChapterNumber,
                                     VerseNumber = token.TokenId.VerseNumber,
                                     WordNumber = token.TokenId.WordNumber,
                                     SubwordNumber = token.TokenId.SubWordNumber,
-                                    SurfaceText = token.SurfaceText,
-                                    TrainingText = token.TrainingText,
-                                    TokenCompositeId = null
-                                }
-                                };
+                                    SurfaceText = token.SurfaceText
+                                } as TokenComponent;
                             }
                         });
 
-                    var invalidComposites = bookTokens
-                        .Where(bt => bt.TokenCompositeId != null)
-                        .GroupBy(bt => bt.TokenCompositeId)
-                        .Select(gc => gc
-                            .GroupBy(ct => new { ct.ChapterNumber, ct.VerseNumber }))
-                            .Where(gct => gct.Count() > 1)
-                            .Select(gct => string.Join("-", gct
-                                .SelectMany(gc => gc
-                                    .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber).ToString()))));
-
-                    if (invalidComposites.Any())
-                    {
-                        return new RequestResult<TokenizedTextCorpus>
-                        (
-                            success: false,
-                            message: $"Invalid CompositeToken(s) found in request.  GetTokensByTokenizedCorpusIdAndBookIdHandler requires all Tokens of a Composite to have the same chapter and verse numbers.  {string.Join(", ", invalidComposites)}"
-                        );
-                    }
-
-                    await InsertTokensAsync(bookTokens, tokenInsertCommand, cancellationToken);
+                        await InsertTokenComponentsAsync(
+                            bookTokens, 
+                            tokenComponentInsertCommand, 
+                            cancellationToken);
                 }
 
                 await transaction.CommitAsync(cancellationToken);
 
-//                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(tokenizedCorpus.Id));
+                var tokenizedCorpusDb = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == tokenizationId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
-                    new TokenizedCorpusId(tokenizationId),
+                    ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
                     request.CorpusId,
                     _mediator,
                     bookIds);
+
+ //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
 
                 return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
             }
@@ -170,39 +169,80 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
         }
 
-        private DbCommand CreateTokenInsertCommand()
+        private DbCommand CreateTokenComponentInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "TokenizationId", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TrainingText", "TokenCompositeId" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TokenCompositeId" };
 
-            ApplyColumnsToCommand(command, typeof(Models.Token), columns);
+            ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
 
             return command;
         }
 
-        private static async Task InsertTokensAsync(IEnumerable<Models.Token> tokens, DbCommand command, CancellationToken cancellationToken)
+        private static async Task InsertTokenComponentsAsync(IEnumerable<TokenComponent> tokenComponents, DbCommand componentCmd, CancellationToken cancellationToken)
         {
-            foreach (var token in tokens)
+            foreach (var tokenComponent in tokenComponents)
             {
-                command.Parameters["@Id"].Value = (Guid.Empty != token.Id) ? token.Id : Guid.NewGuid();
-                command.Parameters["@TokenizationId"].Value = token.Tokenization?.Id ?? token.TokenizationId;
-                command.Parameters["@BookNumber"].Value = token.BookNumber;
-                command.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
-                command.Parameters["@VerseNumber"].Value = token.VerseNumber;
-                command.Parameters["@WordNumber"].Value = token.WordNumber;
-                command.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
-                command.Parameters["@SurfaceText"].Value = token.SurfaceText;
-                command.Parameters["@TrainingText"].Value = token.TrainingText;
-                command.Parameters["@TokenCompositeId"].Value = (token.TokenCompositeId != null) ? token.TokenCompositeId : DBNull.Value;
+                if (tokenComponent is TokenComposite)
+                {
+                    var tokenComposite = (tokenComponent as TokenComposite)!;
+                    var tokenCompositeId = await InsertTokenCompositeAsync(tokenComposite, componentCmd, cancellationToken);
 
-                _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+                    foreach (var token in tokenComposite.Tokens)
+                    {
+                        await InsertTokenAsync(token, tokenCompositeId, componentCmd, cancellationToken);
+                    }
+                }
+                else
+                {
+                    await InsertTokenAsync((tokenComponent as Models.Token)!, null, componentCmd, cancellationToken);
+                }
+
             }
+        }
+        private static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand componentCmd, CancellationToken cancellationToken)
+        {
+            var id = (Guid.Empty != token.Id) ? token.Id : Guid.NewGuid();
+
+            componentCmd.Parameters["@Id"].Value = id;
+            componentCmd.Parameters["@EngineTokenId"].Value = token.EngineTokenId;
+            componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
+            componentCmd.Parameters["@TokenizationId"].Value = token.TokenizationId;
+            componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
+            componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
+            componentCmd.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
+            componentCmd.Parameters["@VerseNumber"].Value = token.VerseNumber;
+            componentCmd.Parameters["@WordNumber"].Value = token.WordNumber;
+            componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
+            componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
+            componentCmd.Parameters["@TokenCompositeId"].Value = (tokenCompositeId != null) ? tokenCompositeId : DBNull.Value;
+            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+        private static async Task<Guid> InsertTokenCompositeAsync(TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
+        {
+            var id = (Guid.Empty != tokenComposite.Id) ? tokenComposite.Id : Guid.NewGuid();
+
+            componentCmd.Parameters["@Id"].Value = id;
+            componentCmd.Parameters["@EngineTokenId"].Value = tokenComposite.EngineTokenId;
+            componentCmd.Parameters["@TrainingText"].Value = tokenComposite.TrainingText;
+            componentCmd.Parameters["@TokenizationId"].Value = tokenComposite.TokenizationId;
+            componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
+            componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
+            componentCmd.Parameters["@ChapterNumber"].Value = DBNull.Value;
+            componentCmd.Parameters["@VerseNumber"].Value = DBNull.Value;
+            componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
+            componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
+            componentCmd.Parameters["@SurfaceText"].Value = DBNull.Value;
+            componentCmd.Parameters["@TokenCompositeId"].Value = DBNull.Value;
+            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            return id;
         }
 
         private DbCommand CreateTokenizedCorpusInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "CorpusId", "TokenizationFunction", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
 
@@ -215,7 +255,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             command.Parameters["@Id"].Value = (Guid.Empty != tokenizedCorpus.Id) ? tokenizedCorpus.Id : Guid.NewGuid();
             command.Parameters["@CorpusId"].Value = tokenizedCorpus.Corpus?.Id ?? tokenizedCorpus.CorpusId;
+            command.Parameters["@DisplayName"].Value = tokenizedCorpus.DisplayName;
             command.Parameters["@TokenizationFunction"].Value = tokenizedCorpus.TokenizationFunction;
+            command.Parameters["@ScrVersType"].Value = tokenizedCorpus.ScrVersType;
+            command.Parameters["@CustomVersData"].Value = tokenizedCorpus.CustomVersData != null ? tokenizedCorpus.CustomVersData : DBNull.Value;
             command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
             command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
             command.Parameters["@Created"].Value = converter.ConvertToProvider(tokenizedCorpus.Created);
@@ -223,7 +266,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
         {
             command.CommandText =
             $@"

@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ViewModels.ProjectDesignSurface
 {
@@ -106,14 +107,14 @@ namespace ViewModels.ProjectDesignSurface
         }
 
 
-        private ParatextProjectType _projectType = ParatextProjectType.Standard;
+        private CorpusType _corpusType =  CorpusType.Standard;
         /// <summary>
         /// The paratext project type
         /// </summary>
-        public ParatextProjectType ProjectType
+        public CorpusType CorpusType
         {
-            get => _projectType;
-            set => Set(ref _projectType, value);
+            get => _corpusType;
+            set => Set(ref _corpusType, value);
         }
 
 

@@ -1,18 +1,19 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClearDashboard.DataAccessLayer.Models
+namespace ClearDashboard.DataAccessLayer.Models;
+
+public class Alignment : SynchronizableTimestampedEntity
 {
-    public class Alignment : SynchronizableTimestampedEntity
-    {
-        public Guid SourceTokenId { get; set; }
-        public Guid TargetTokenId { get; set; }
-        public decimal Score { get; set; }
-        public Guid? AlignmentVersionId { get; set; }
-        //public virtual AlignmentType AlignmentType { get; set; }
-        public virtual AlignmentVersion? AlignmentVersion { get; set; }
-        public virtual Token? SourceToken { get; set; }
-        public virtual Token? TargetToken { get; set; }
+    public Guid SourceTokenComponentId { get; set; }
+    public Guid TargetTokenComponentId { get; set; }
+      
+    public virtual AlignmentVerification AlignmentVerification { get; set; }
+    public virtual AlignmentOriginatedFrom AlignmentOriginatedFrom { get; set; }
 
-    }
+    public virtual double Score { get; set; }
+
+    [ForeignKey("SourceTokenId")]
+    public virtual TokenComponent? SourceTokenComponent { get; set; }
+    [ForeignKey("TargetTokenId")]
+    public virtual TokenComponent? TargetTokenComponent { get; set; }
 }

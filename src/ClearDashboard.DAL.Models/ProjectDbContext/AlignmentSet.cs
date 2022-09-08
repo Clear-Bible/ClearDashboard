@@ -1,22 +1,29 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class AlignmentSet : IdentifiableEntity
+namespace ClearDashboard.DataAccessLayer.Models;
+
+public class AlignmentSet : SynchronizableTimestampedEntity
 {
     public AlignmentSet()
     {
         // ReSharper disable VirtualMemberCallInConstructor
-        AlignmentTokensPairs = new HashSet<AlignmentTokenPair>();
-        var utcNow = DateTimeOffset.UtcNow;
-        Created = utcNow;
+        Alignments = new HashSet<Alignment>();
+        Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
-    public Guid? UserId { get; set; }
+    [ForeignKey("EngineWordAlignmentId")]
+    public Guid? EngineWordAlignmentId { get; set; }
+    public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
+    [ForeignKey("ParallelCorpusId")]
+    public virtual Guid ParallelCorpusId { get; set; }
+    public virtual ParallelCorpus? ParallelCorpus { get; set; }
+    public string? DisplayName { get; set; }
+    public string? SmtModel { get; set; }
+    public bool IsSyntaxTreeAlignerRefined { get; set; }
     public virtual User? User { get; set; }
 
-    /// <summary>
-    /// Gets or sets the time and date that the entity was created (in UTC).
-    /// </summary>
-    public DateTimeOffset Created { get; set; }
+    public virtual ICollection<Alignment> Alignments { get; set; }
 
-    public virtual ICollection<AlignmentTokenPair> AlignmentTokensPairs { get; set; }
+    [Column(TypeName = "jsonb")]
+    public Dictionary<string, object> Metadata { get; set; }
 }
