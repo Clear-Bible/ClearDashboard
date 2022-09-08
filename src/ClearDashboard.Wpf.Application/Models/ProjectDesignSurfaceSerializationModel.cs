@@ -1,13 +1,8 @@
-﻿using ClearDashboard.Wpf.Controls.Utils;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels;
 using System.Collections.ObjectModel;
-using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -31,13 +26,13 @@ namespace ClearDashboard.Wpf.Application.Models
 
     public class SerializedConnections
     {
-        public string SourceConnectorId { get; set; }
-        public string TargetConnectorId { get; set; }
+        public string SourceConnectorId { get; set; } = string.Empty;
+        public string TargetConnectorId { get; set; } = string.Empty;
     }
 
     public class SerializedCopora
     {
-        public string CorpusId { get; set; }
+        public string? CorpusId { get; set; }
         public bool IsRtl { get; set; }
         public string? Name { get; set; }
         public string? DisplayName { get; set; }

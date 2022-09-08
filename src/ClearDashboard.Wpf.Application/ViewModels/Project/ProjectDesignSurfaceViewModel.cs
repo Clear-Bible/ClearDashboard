@@ -93,6 +93,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IMediator _mediator;
+        private readonly ILifetimeScope _lifetimeScope;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -314,6 +316,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _logger = logger;
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
+            _mediator = mediator;
+            _lifetimeScope = lifetimeScope;
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
@@ -437,7 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 surface.Corpora.Add(new SerializedCopora
                 {
-                    CorpusId = corpus.CorpusId.ToString(),
+                    CorpusId = corpus.CorpusId.Id.ToString(),
                     CorpusType = corpus.CorpusType,
                     Created = corpus.Created,
                     DisplayName = corpus.DisplayName,
@@ -445,7 +449,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     Language = corpus.Language,
                     Name = corpus.Name,
                     ParatextGuid = corpus.ParatextGuid,
-                    UserId = corpus.UserId.ToString()
+                    UserId = corpus.UserId.Id.ToString()
                 });
             }
 
@@ -541,7 +545,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 var corpora = deserialized.Corpora;
                 foreach (var corpus in corpora)
                 {
-                    
+                    this.Corpora.Add(new DAL.Alignment.Corpora.Corpus(
+                        corpusId: new CorpusId(corpus.CorpusId ?? Guid.NewGuid().ToString()),
+                        mediator: _mediator,
+                        isRtl: corpus.IsRtl,
+                        name: corpus.Name,
+                        displayName: corpus.DisplayName,
+                        language: corpus.Language,
+                        paratextGuid: corpus.ParatextGuid,
+                        corpusType: corpus.CorpusType,
+                        metadata: new Dictionary<string, object>(),
+                        created: corpus.Created,
+                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString())
+                    ));
                 }
             }
         }
