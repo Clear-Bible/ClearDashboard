@@ -25,9 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj" />
   </ItemGroup>
-
 </Project>

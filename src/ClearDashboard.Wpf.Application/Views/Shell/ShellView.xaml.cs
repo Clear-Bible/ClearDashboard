@@ -10,6 +10,7 @@ using System.Windows.Interop;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Microsoft.Extensions.Logging;
+using SIL.Progress;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {
