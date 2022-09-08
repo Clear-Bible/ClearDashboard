@@ -33,6 +33,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
         <Button
@@ -49,7 +50,8 @@
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
                                                   Tokens="{Binding Tokens}" 
                                                   Translations="{Binding Translations}"
-                                                  FontSize="18"/>
+                                                  FontSize="{Binding ElementName=fontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  />
 
         <!--<userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
                                      cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
@@ -59,6 +61,12 @@
                                                          [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
                                                          [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />-->
 
-        <Label Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.Row="2">Font Size</Label>
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+            <Slider Minimum="8" Maximum="48" Name="fontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <TextBox Text="{Binding ElementName=fontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+        </StackPanel>
+
+        <Label Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
     </Grid>
 </Page>
