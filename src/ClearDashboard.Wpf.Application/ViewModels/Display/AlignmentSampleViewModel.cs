@@ -22,6 +22,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 
@@ -52,10 +53,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public string? Message { get; set; }
-        public TokensTextRow? TextRow { get; set; }
-        public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
-        public IEnumerable<Translation>? Translations { get; set; }
-        public IEnumerable<TokenDisplay>? PaddedTokenTranslations { get; set; }
+        //public TokensTextRow? TextRow { get; set; }
+        //public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
+        //public IEnumerable<Translation>? Translations { get; set; }
+        public IEnumerable<TokenDisplay>? Verse1 { get; set; }
+        public IEnumerable<TokenDisplay>? Verse2 { get; set; }
+        public IEnumerable<TokenDisplay>? Verse3 { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
@@ -122,6 +125,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             //await RetrieveTokensViaCorpusClass();
         }
 
+
         private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foo", "foodie", "fingle", "boing", "la" };
 
         private string RandomTranslationOriginatedFrom()
@@ -134,47 +138,56 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        private async Task LoadFiles()
+        private static int mockOogaWordsIndexer_;
+        private Translation GetTranslation(Token token)
         {
-            var corpus = GetSampleEnglishTextCorpus();
-
-            TextRow = corpus.Cast<TokensTextRow>().FirstOrDefault();
-            NotifyOfPropertyChange(nameof(TextRow));
-
-            if (TextRow != null)
+            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
+                ? MockOogaWords[mockOogaWordsIndexer_++]
+                : String.Empty;
+            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationState: RandomTranslationOriginatedFrom());
+            
+            return translation;
+        }
+        
+        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
+        {
+            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
+            if (textRow != null)
             {
                 var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                Tokens = detokenizer.Detokenize(TextRow.Tokens);
+                return detokenizer.Detokenize(textRow.Tokens);
             }
-            NotifyOfPropertyChange(nameof(Tokens));
 
-            if (Tokens != null)
+            return null;
+        }
+
+        private List<TokenDisplay> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
+        {
+            var tokenDisplays = new List<TokenDisplay>();
+
+            var tokens = GetTokens(corpus, BBBCCCVVV);
+            if (tokens != null)
             {
-                var translations = new List<Translation>();
-                var paddedTokenTranslations = new List<TokenDisplay>();
-                var i = 0;
-                foreach (var token in Tokens)
-                {
-                    var translationText = (token.token.SurfaceText != "." && token.token.SurfaceText != ",")
-                        ? MockOogaWords[i++]
-                        : String.Empty;
-                    var translation = new Translation(SourceToken: token.token, TargetTranslationText: translationText, TranslationState: RandomTranslationOriginatedFrom());
-                    var paddedTokenTranslation = new TokenDisplay
-                    {
-                        Token = token.token,
-                        PaddingBefore = token.paddingBefore,
-                        PaddingAfter = token.paddingAfter,
-                        Translation = translation
-                    };
-                    if (i == MockOogaWords.Count) i = 0;
-                    translations.Add(translation);
-                    paddedTokenTranslations.Add(paddedTokenTranslation);
-                }
-                Translations = translations;
-                PaddedTokenTranslations = paddedTokenTranslations;
+                tokenDisplays.AddRange(from token in tokens 
+                    let translation = GetTranslation(token.token) 
+                    select new TokenDisplay { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
             }
-            NotifyOfPropertyChange(nameof(Translations));
-            NotifyOfPropertyChange(nameof(PaddedTokenTranslations));
+
+            return tokenDisplays;
+        }
+
+        private async Task LoadFiles()
+        {
+            var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
+
+            Verse1 = GetTokenDisplays(corpus, 40001001);
+            Verse2 = GetTokenDisplays(corpus, 40001002);
+            Verse3 = GetTokenDisplays(corpus, 40001003);
+            
+            NotifyOfPropertyChange(nameof(Verse1));
+            NotifyOfPropertyChange(nameof(Verse2));
+            NotifyOfPropertyChange(nameof(Verse3));
         }
 
         private async Task MockProjectAndUser()
