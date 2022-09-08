@@ -10,13 +10,12 @@ public class ParallelCorpusHistory : SynchronizableTimestampedEntity
         VerseMappings = new HashSet<VerseMapping>();
         //ParallelTokenizedCopora = new HashSet<ParallelTokenizedCorpus>();
         AlignmentSets = new HashSet<AlignmentSet>();
+        TranslationSets = new HashSet<TranslationSet>();
+        Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
-
-    public AlignmentType AlignmentType { get; set; }
-
-    public DateTimeOffset LastGenerated { get; set; }
+    public string? DisplayName { get; set; }
 
     public Guid SourceTokenizedCorpusId { get; set; }
     [ForeignKey(nameof(SourceTokenizedCorpusId))]
@@ -28,4 +27,8 @@ public class ParallelCorpusHistory : SynchronizableTimestampedEntity
 
     public virtual ICollection<VerseMapping> VerseMappings { get; set; }
     public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
+    public virtual ICollection<TranslationSet> TranslationSets { get; set; }
+
+    [Column(TypeName = "jsonb")]
+    public Dictionary<string, object> Metadata { get; set; }
 }

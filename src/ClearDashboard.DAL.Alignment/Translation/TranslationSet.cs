@@ -13,11 +13,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
-        private Dictionary<string, Dictionary<string, double>> TranslationModel { get; }
+        private Dictionary<string, Dictionary<string, double>> TranslationModel { get; set; }
 
         public Dictionary<string, Dictionary<string, double>> GetTranslationModel()
         {
             return TranslationModel;
+        }
+
+        public async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
+        {
+            // Put the model (save to db and set the TranslationModel property)
+            // Put the smtModel property on the ID and update
         }
 
         public async void PutTranslationModelEntry(string sourceText, Dictionary<string, double> targetTranslationTextScores)
@@ -35,9 +41,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async Task<IEnumerable<Translation>> GetTranslations(TokenId firstTokenId, TokenId lastTokenId)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
         {
-            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdRangeQuery(TranslationSetId, firstTokenId, lastTokenId));
+//            var sourceCompositeTokenIds = engineParallelTextRow.Select(e => e.SourceTokens.Where(st => st.GetType() == typeof(CompositeToken)).SelectMany(t => t.TokenId));
+            var sourceTokenIds = engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId));
+            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -59,6 +67,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
             {
                 throw new MediatorErrorEngineException(result.Message);
             }
+        }
+
+        public async void Update()
+        {
+            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
         }
 
         public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 

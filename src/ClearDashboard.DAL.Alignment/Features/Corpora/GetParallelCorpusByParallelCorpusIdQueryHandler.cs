@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Include(pc => pc.VerseMappings)
                     .ThenInclude(vm => vm.Verses)
                     .ThenInclude(v => v.TokenVerseAssociations)
-                    .ThenInclude(tva => tva.Token)
+                    .ThenInclude(tva => tva.TokenComponent)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -95,9 +95,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
-                                    .Where(tva => tva.Token != null)
+                                    .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva => ModelHelper.BuildTokenId(tva.Token!))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
                             ));
                         var targetVerses = vm.Verses
                             .Where(v => v.CorpusId == targetCorpusId)
@@ -108,9 +108,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 v.TokenVerseAssociations
-                                    .Where(tva => tva.Token != null)
+                                    .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
-                                    .Select(tva => ModelHelper.BuildTokenId(tva.Token!))
+                                    .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
                             ));
 
                         return new VerseMapping(sourceVerses, targetVerses);

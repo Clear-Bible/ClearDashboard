@@ -49,8 +49,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 var translations = ProjectDbContext!.Translations
                     .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
-                    .Where(tr => tr.SourceToken!.TrainingText == request.Translation.SourceToken.TrainingText);
-                var tokens = ProjectDbContext!.Tokens
+                    .Where(tr => tr.SourceTokenComponent!.TrainingText == request.Translation.SourceToken.TrainingText);
+                var tokenComponents = ProjectDbContext!.TokenComponents
                     .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                     .Where(t => t.TrainingText == request.Translation.SourceToken.TrainingText);
 
@@ -58,34 +58,34 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 var tokenGuidsUpdated = new List<Guid>();
                 foreach (var tr in translations)
                 {
-                    var exactMatch = ModelHelper.IsTokenIdMatch(rTokenId, tr.SourceToken!);
+                    var exactMatch = rTokenId.ToString() == tr.SourceTokenComponent!.EngineTokenId;
 
                     // Don't propagate to a non-exact match that has already been assigned:
-                    if (exactMatch || tr.TranslationState != Models.TranslationState.Assigned)
+                    if (exactMatch || tr.TranslationState != Models.TranslationOriginatedFrom.Assigned)
                     {
                         tr.TargetText = request.Translation.TargetTranslationText;
                         tr.TranslationState = exactMatch
-                            ? Models.TranslationState.Assigned
-                            : Models.TranslationState.FromOther;
+                            ? Models.TranslationOriginatedFrom.Assigned
+                            : Models.TranslationOriginatedFrom.FromOther;
                     }
 
-                    tokenGuidsUpdated.Add(tr.SourceToken!.Id);
+                    tokenGuidsUpdated.Add(tr.SourceTokenComponent!.Id);
 
                     if (exactMatch) exactMatchFound = true;
                 }
 
-                foreach (var t in tokens)
+                foreach (var t in tokenComponents)
                 {
                     if (!tokenGuidsUpdated.Contains(t.Id))
                     {
-                        var exactMatch = ModelHelper.IsTokenIdMatch(rTokenId, t);
+                        var exactMatch = rTokenId.ToString() == t.EngineTokenId;
                         translationSet.Translations.Add(new Models.Translation
                         {
-                            SourceToken = t,
+                            SourceTokenComponent = t,
                             TargetText = request.Translation.TargetTranslationText,
                             TranslationState = exactMatch
-                                ? Models.TranslationState.Assigned
-                                : Models.TranslationState.FromOther
+                                ? Models.TranslationOriginatedFrom.Assigned
+                                : Models.TranslationOriginatedFrom.FromOther
                         });
 
                         if (exactMatch) exactMatchFound = true;
@@ -106,39 +106,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 var translation = ProjectDbContext!.Translations
                     .Where(tr => tr.TranslationSetId == translationSet.Id)
-                    .Where(tr => tr.SourceToken!.BookNumber == rTokenId.BookNumber)
-                    .Where(tr => tr.SourceToken!.ChapterNumber == rTokenId.ChapterNumber)
-                    .Where(tr => tr.SourceToken!.VerseNumber == rTokenId.VerseNumber)
-                    .Where(tr => tr.SourceToken!.WordNumber == rTokenId.WordNumber)
-                    .Where(tr => tr.SourceToken!.SubwordNumber == rTokenId.SubWordNumber)
+                    .Where(tr => tr.SourceTokenComponent!.EngineTokenId == rTokenId.ToString())
                     .FirstOrDefault();
 
                 if (translation != null)
                 {
                     translation.TargetText = request.Translation.TargetTranslationText;
-                    translation.TranslationState = Models.TranslationState.Assigned;
+                    translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
                 }
                 else
                 {
-                    var token = ProjectDbContext!.Tokens
+                    var tokenComponent = ProjectDbContext!.TokenComponents
                         .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                        .Where(t => t.BookNumber == rTokenId.BookNumber)
-                        .Where(t => t.ChapterNumber == rTokenId.ChapterNumber)
-                        .Where(t => t.VerseNumber == rTokenId.VerseNumber)
-                        .Where(t => t.WordNumber == rTokenId.WordNumber)
-                        .Where(t => t.SubwordNumber == rTokenId.SubWordNumber)
+                        .Where(t => t.EngineTokenId == rTokenId.ToString())
                         //.Where(t => t.Tokenization!.SourceParallelCorpora
                         //    .Any(spc => spc.TranslationSets
                         //        .Any(ts => ts.Id == request.TranslationSetId.Id)))
                         .FirstOrDefault();
 
-                    if (token != null)
+                    if (tokenComponent != null)
                     {
                         translationSet.Translations.Add(new Models.Translation
                         {
-                            SourceToken = token,
+                            SourceTokenComponent = tokenComponent,
                             TargetText = request.Translation.TargetTranslationText,
-                            TranslationState = Models.TranslationState.Assigned
+                            TranslationState = Models.TranslationOriginatedFrom.Assigned
                         });
                     }
                     else

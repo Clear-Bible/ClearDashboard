@@ -5,15 +5,20 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         public ParallelCorpusId(Guid id) : base(id)
         {
+            Metadata = new Dictionary<string, object>();
         }
 
-        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId, TokenizedTextCorpusId targetTokenizedCorpusId, DateTimeOffset created, UserId userId) : base(id)
+        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId, TokenizedTextCorpusId targetTokenizedCorpusId, string? displayName, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId) : base(id)
         {
             SourceTokenizedCorpusId = sourceTokenizedCorpusId;
             TargetTokenizedCorpusId = targetTokenizedCorpusId;
+            DisplayName = displayName;
+            Metadata = metadata;
             Created = created;
             UserId = userId;
         }
+        public string? DisplayName { get; set; }
+        public Dictionary<string, object> Metadata { get; set; }
 
         public TokenizedTextCorpusId? SourceTokenizedCorpusId { get; }
         public TokenizedTextCorpusId? TargetTokenizedCorpusId { get; }

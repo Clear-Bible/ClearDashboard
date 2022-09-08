@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 "Unit Test",
-                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                ScrVers.Original);
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
@@ -79,7 +81,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 "Unit Test",
-                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+                ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                ScrVers.Original);
             await Mediator.Send(command);
 
 

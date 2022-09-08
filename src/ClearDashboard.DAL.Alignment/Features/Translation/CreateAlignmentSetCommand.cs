@@ -4,10 +4,11 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record CreateTranslationSetCommand(
-        Dictionary<string, Dictionary<string, double>> TranslationModel,
+    public record CreateAlignmentSetCommand(
+        IEnumerable<Alignment.Translation.Alignment> Alignments,
         string? DisplayName,
         string SmtModel,
+        bool IsSyntaxTreeAlignerRefined,
         Dictionary<string, object> Metadata,
-        ParallelCorpusId ParallelCorpusId) : ProjectRequestCommand<TranslationSet>;
+        ParallelCorpusId ParallelCorpusId) : ProjectRequestCommand<AlignmentSet>;
 }
