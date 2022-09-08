@@ -77,14 +77,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the InnerMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(TranslationDisplayControl),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-            //new PropertyMetadata(new Thickness(6, 2, 6, 2)));
 
-        //public static readonly DependencyProperty PaddedTokenProperty = DependencyProperty.Register("PaddedToken", typeof((Token token, string paddingBefore, string paddingAfter)), typeof(TokenDisplayControl),
-        //    new PropertyMetadata(new Thickness(6, 2, 6, 2)));
-
-
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TranslationDisplayControl),
+            new PropertyMetadata(16d));
+        public static readonly DependencyProperty TranslationHeightProperty = DependencyProperty.Register("TranslationHeight", typeof(double), typeof(TranslationDisplayControl),
+            new PropertyMetadata(30d));
+        public static readonly DependencyProperty SourceHeightProperty = DependencyProperty.Register("SourceHeight", typeof(double), typeof(TranslationDisplayControl),
+            new PropertyMetadata(30d));
         #endregion Static DependencyProperties
 
         /// <summary>
@@ -98,6 +99,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 return (Thickness) result;
             }
             set => SetValue(InnerMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the translation.
+        /// </summary>
+        public double TranslationFontSize
+        {
+            get => (double) GetValue(TranslationFontSizeProperty);
+            set => SetValue(TranslationFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height for the translation.
+        /// </summary>
+        public double SourceHeight
+        {
+            get => (double) GetValue(SourceHeightProperty);
+            set => SetValue(SourceHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height for the translation.
+        /// </summary>
+        public double TranslationHeight
+        {
+            get => (double) GetValue(TranslationHeightProperty);
+            set => SetValue(TranslationHeightProperty, value);
         }
 
         private Translation Translation => (Translation) DataContext;
