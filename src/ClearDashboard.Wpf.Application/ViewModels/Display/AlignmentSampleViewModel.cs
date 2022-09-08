@@ -14,10 +14,12 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Alignment.Translation;
+//using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -52,6 +54,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string? Message { get; set; }
         public TokensTextRow? TextRow { get; set; }
         public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
+        public IEnumerable<Translation>? Translations { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public AlignmentSampleViewModel()
@@ -67,6 +70,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         //{
         //    LoadFiles();
         //}
+
+        #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -105,12 +110,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
         // ReSharper restore UnusedMember.Global
 
+        #endregion
+
+
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
             LoadFiles();
             //await MockProjectAndUser();
             //await RetrieveTokensViaCorpusClass();
+        }
+
+        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foo", "foodie", "fingle", "boing", "la" };
+
+        private string RandomTranslationOriginatedFrom()
+        {
+            switch (new Random().Next(3))
+            {
+                case 0: return "FromTranslationModel";
+                case 1: return "FromOther";
+                default: return "Assigned";
+            }
         }
 
         private void LoadFiles()
@@ -125,22 +145,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 Tokens = detokenizer.Detokenize(TextRow.Tokens);
             }
             NotifyOfPropertyChange(nameof(Tokens));
+
+            if (Tokens != null)
+            {
+                var translations = new List<Translation>();
+                var i = 0;
+                foreach (var token in Tokens)
+                {
+                    var translationText = (token.token.SurfaceText != "." && token.token.SurfaceText != ",")
+                        ? MockOogaWords[i++]
+                        : String.Empty;
+                    var translation = new Translation(SourceToken: token.token, TargetTranslationText: translationText, TranslationState: RandomTranslationOriginatedFrom());
+                    if (i == MockOogaWords.Count) i = 0;
+                    translations.Add(translation);
+                }
+                Translations = translations;
+            }
+            NotifyOfPropertyChange(nameof(Translations));
         }
 
         private async Task MockProjectAndUser()
         {
-            ProjectManager.CurrentProject = new DataAccessLayer.Models.Project
-            {
-                Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
-                ProjectName = "Alignment"
-            };
-            ProjectManager.CurrentUser = new User
-            {
-                Id = Guid.Parse("75413790-4A32-482B-9A11-36BFBBC0AF9C"),
-                FirstName = "Test",
-                LastName = "User"
-            };
-            await ProjectManager.CreateNewProject("Alignment");
+            //ProjectManager.CurrentProject = new DataAccessLayer.Models.Project
+            //{
+            //    Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
+            //    ProjectName = "Alignment"
+            //};
+            //ProjectManager.CurrentUser = new User
+            //{
+            //    Id = Guid.Parse("75413790-4A32-482B-9A11-36BFBBC0AF9C"),
+            //    FirstName = "Test",
+            //    LastName = "User"
+            //};
+            //await ProjectManager.CreateNewProject("Alignment");
         }
 
         public async Task RetrieveTokensViaCorpusClass()

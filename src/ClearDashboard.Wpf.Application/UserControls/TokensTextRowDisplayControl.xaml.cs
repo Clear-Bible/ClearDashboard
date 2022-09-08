@@ -28,10 +28,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(TokensTextRowDisplayControl));
 
         /// <summary>
-        /// Identifies the ItemsSource dependency property.
+        /// Identifies the Tokens dependency property.
         /// </summary>
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
 
         #endregion Static DependencyProperties
 
@@ -160,15 +160,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets a collection to display in the control.
         /// </summary>
-        public IEnumerable ItemsSource
-        {
-            get => (IEnumerable)GetValue(ItemsSourceProperty);
-            set
-            {
-                SetValue(ItemsSourceProperty, value);
-                Tokens = Detokenize(value);
-            }
-        }
+        //public IEnumerable ItemsSource
+        //{
+        //    get => (IEnumerable)GetValue(ItemsSourceProperty);
+        //    set
+        //    {
+        //        SetValue(ItemsSourceProperty, value);
+        //        Tokens = Detokenize(value);
+        //    }
+        //}
 
         /// <summary>
         /// Gets or sets a collection to display in the control.
@@ -177,6 +177,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (IEnumerable)GetValue(TokensProperty);
             set => SetValue(TokensProperty, value);
+        }
+        /// <summary>
+        /// Gets or sets a collection to display in the control.
+        /// </summary>
+        public IEnumerable Translations
+        {
+            get => (IEnumerable)GetValue(TranslationsProperty);
+            set => SetValue(TranslationsProperty, value);
         }
 
         public IEnumerable Detokenize(IEnumerable row)

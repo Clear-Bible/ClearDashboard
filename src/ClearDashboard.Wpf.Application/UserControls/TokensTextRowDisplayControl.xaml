@@ -12,7 +12,9 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TokenBubble">
-            <local:TokenDisplayControl DataContext="{Binding}"></local:TokenDisplayControl>
+            <local:TranslationDisplayControl 
+                DataContext="{Binding}" 
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"/>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="WrapPanelTemplate">
             <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
@@ -21,7 +23,7 @@
             <StackPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
         </ItemsPanelTemplate>
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" 
+    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Translations}" 
                   ItemTemplate="{StaticResource TokenBubble}" 
                   ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}" />
 </UserControl>

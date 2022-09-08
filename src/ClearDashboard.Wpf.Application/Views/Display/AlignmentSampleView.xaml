@@ -46,7 +46,10 @@
         </Button>
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" Tokens="{Binding Tokens}"/>
+        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
+                                                  Tokens="{Binding Tokens}" 
+                                                  Translations="{Binding Translations}"
+                                                  FontSize="18"/>
 
         <!--<userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
                                      cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
