@@ -1,5 +1,4 @@
-﻿using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Properties;
+﻿using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using SIL.Progress;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {
@@ -76,17 +74,7 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
             _logger.LogInformation("ShellView closing.");
 
-            //var applicationWindowState = new ApplicationWindowState()
-            //{
-            //    WindowHeight = Height,
-            //    WindowWidth =  Width,
-            //    WindowTop =    Top,
-            //    WindowLeft =   Left,
-            //    WindowState =  WindowState
-            //};
-            //applicationWindowState.Save();
-
-
+        
             if (SelectedLanguage.SelectedItem != null)
             {
                 var language = SelectedLanguage.SelectedItem.ToString();
