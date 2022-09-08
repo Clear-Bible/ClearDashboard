@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -13,6 +14,8 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         public ImpObservableCollection<SerializedConnections> Connections { get; set; } = new();
         public ImpObservableCollection<SerializedNodes> CorpusNodes { get; set; } = new();
+
+        public ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora = new();
     }
 
     public class SerializedNodes
