@@ -770,9 +770,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                         EndTime = DateTime.Now,
                                         ErrorMessage = $"{ex}",
                                         TaskStatus = StatusEnum.Error
-                                    }));
+                                    }), cancellationToken);
                             }
-
                         }
                         finally
                         {
