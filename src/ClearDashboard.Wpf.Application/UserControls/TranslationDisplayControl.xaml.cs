@@ -81,12 +81,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(TranslationDisplayControl),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
+        public static readonly DependencyProperty TranslationInnerPaddingProperty = DependencyProperty.Register("TranslationInnerPadding", typeof(Thickness), typeof(TranslationDisplayControl),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TranslationDisplayControl),
             new PropertyMetadata(16d));
-        public static readonly DependencyProperty TranslationHeightProperty = DependencyProperty.Register("TranslationHeight", typeof(double), typeof(TranslationDisplayControl),
-            new PropertyMetadata(30d));
-        public static readonly DependencyProperty SourceHeightProperty = DependencyProperty.Register("SourceHeight", typeof(double), typeof(TranslationDisplayControl),
-            new PropertyMetadata(30d));
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TranslationDisplayControl),
+            new PropertyMetadata(10d, new PropertyChangedCallback(OnTransactionVerticalSpacingChanged)));
+
+        private static void OnTransactionVerticalSpacingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (TranslationDisplayControl)d;
+            control.CalculateTranslationInnerPadding((double) e.NewValue);
+        }
+
         #endregion Static DependencyProperties
 
         /// <summary>
@@ -112,24 +120,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the height for the translation.
+        /// Gets or sets the vertical spacing between the token and its translation.
         /// </summary>
-        public double SourceHeight
+        public double TranslationVerticalSpacing
         {
-            get => (double) GetValue(SourceHeightProperty);
-            set => SetValue(SourceHeightProperty, value);
+            get => (double) GetValue(TranslationVerticalSpacingProperty);
+            set => SetValue(TranslationVerticalSpacingProperty, value);
         }
-
         /// <summary>
-        /// Gets or sets the height for the translation.
+        /// Gets or sets the vertical spacing between the token and its translation.
         /// </summary>
-        public double TranslationHeight
+        public Thickness TranslationInnerPadding
         {
-            get => (double) GetValue(TranslationHeightProperty);
-            set => SetValue(TranslationHeightProperty, value);
+            get => (Thickness) GetValue(TranslationInnerPaddingProperty);
+            set => SetValue(TranslationInnerPaddingProperty, value);
         }
-
-        //private Translation Translation => (Translation) DataContext;
 
         private TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
 
@@ -179,14 +184,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     TokenDisplay.PaddingAfter.Length * 10, 
                     0);
             }
-        }
-
-
-
-        //public (Token token, string paddingBefore, string paddingAfter) PaddedToken
+        }        
+        
+        //public Thickness TranslationInnerPadding
         //{
-        //    get => ((Token token, string paddingBefore, string paddingAfter)) GetValue(PaddedTokenProperty);
-        //    set => SetValue(PaddedTokenProperty, value);
+        //    get
+        //    {
+        //        return new Thickness(TokenDisplay.PaddingBefore.Length * 10, 
+        //            TranslationVerticalSpacing,
+        //            0,
+        //            TranslationVerticalSpacing);
+        //    }
         //}
 
         /// <summary>
@@ -270,11 +278,26 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(TokenMouseWheelEvent, value);
         }
 
+        private void CalculateTranslationInnerPadding(double spacing)
+        {
+            TranslationInnerPadding = new Thickness(TokenDisplay.PaddingBefore.Length * 10,
+                spacing,
+                0,
+                spacing * 2);
+        }
+
+
         public TranslationDisplayControl()
         {
             InitializeComponent();
+
+            this.Loaded += TranslationDisplayControl_Loaded;
         }
 
+        private void TranslationDisplayControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            CalculateTranslationInnerPadding(TranslationVerticalSpacing);
+        }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {

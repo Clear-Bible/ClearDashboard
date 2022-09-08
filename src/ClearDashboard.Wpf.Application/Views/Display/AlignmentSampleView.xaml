@@ -38,7 +38,6 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
         <Button
@@ -58,6 +57,7 @@
                                                   Tokens="{Binding Verse1}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   />
 
         <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
@@ -66,6 +66,7 @@
                                                   Tokens="{Binding Verse1NoTranslations}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   />
 
         <Label Grid.Row="3">Verse 1 with translations, no wrapping</Label>
@@ -74,6 +75,7 @@
                                                   Tokens="{Binding Verse1}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   />
 
         <Label Grid.Row="4">Verse 2</Label>
@@ -82,6 +84,7 @@
                                                   Tokens="{Binding Verse2}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
         />
         <Label Grid.Row="5">Verse 3 without translations</Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="5" 
@@ -89,6 +92,7 @@
                                                   Tokens="{Binding Verse3}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
         />
 
         <!--<userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
@@ -99,15 +103,18 @@
                                                          [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
                                                          [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />-->
 
-        <Label Grid.Row="6">Source font size</Label>
-        <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
+        <StackPanel Grid.Column="1" Grid.Row="6"  Orientation="Horizontal">
+            <Label>Source font size:</Label>
             <Slider Minimum="8" Maximum="48" Name="SourceFontSizeSlider" Width="100" Value="18" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
-        </StackPanel>
-        <Label Grid.Row="7">Translation font size</Label>
-        <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal">
+
+            <Label>Translation font size:</Label>
             <Slider Minimum="8" Maximum="48" Name="TranslationFontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+
+            <Label>Vertical spacing:</Label>
+            <Slider Minimum="0" Maximum="20" Name="VerticalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <Label Content="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
         </StackPanel>
 
         <Label Grid.ColumnSpan="2" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />

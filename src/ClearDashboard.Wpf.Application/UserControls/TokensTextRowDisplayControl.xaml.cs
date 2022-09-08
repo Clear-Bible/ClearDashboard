@@ -36,6 +36,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokensTextRowDisplayControl),
             new PropertyMetadata(16d));
 
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokensTextRowDisplayControl),
+            new PropertyMetadata(10d));
+
         #endregion Static DependencyProperties
 
         /// <summary>
@@ -198,6 +201,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (double)GetValue(TranslationFontSizeProperty);
             set => SetValue(TranslationFontSizeProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing between the token and its translation.
+        /// </summary>
+        public double TranslationVerticalSpacing
+        {
+            get => (double)GetValue(TranslationVerticalSpacingProperty);
+            set => SetValue(TranslationVerticalSpacingProperty, value);
+        }
+
         public IEnumerable Detokenize(IEnumerable row)
         {
             var tokensTextRow = row as TokensTextRow;
