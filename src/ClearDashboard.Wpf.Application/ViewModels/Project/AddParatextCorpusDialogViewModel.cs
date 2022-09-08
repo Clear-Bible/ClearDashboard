@@ -22,10 +22,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
     {
+        public enum CorpusType
+        {
+            Manuscript,
+            Other
+        }
+
         private readonly DashboardProjectManager _projectManager;
         private CorpusSourceType _corpusSourceType;
         private List<ParatextProjectMetadata> _projects;
         private ParatextProjectMetadata _selectedProject;
+
+
 
         public AddParatextCorpusDialogViewModel() 
         {

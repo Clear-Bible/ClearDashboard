@@ -53,8 +53,11 @@ public record ParallelCorpusDeselectedMessage(Guid connectorGuid);
 
 #endregion //ProjectDesignSurfaceMessages
 
+
 public class DashboardProjectManager : ProjectManager
 {
+    
+
     #nullable disable
 
     private IEventAggregator EventAggregator { get; set; }

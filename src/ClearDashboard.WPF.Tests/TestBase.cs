@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
-using ClearDashboard.Wpf.Extensions;
+using ClearDashboard.Wpf.Application.Extensions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;

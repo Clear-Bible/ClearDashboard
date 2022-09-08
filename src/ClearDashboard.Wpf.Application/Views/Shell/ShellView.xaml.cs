@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using SIL.Progress;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {

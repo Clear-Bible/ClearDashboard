@@ -32,7 +32,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
             // Create the corpus in the database:
-            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation", Guid.NewGuid().ToString());
 
             // Create the TokenizedCorpus + Tokens in the database:
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty, ScrVers.Original);
@@ -84,7 +84,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
     {
         try
         {
-            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
             var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, corpus.CorpusId, "Unit Test", ".a.function()");
 

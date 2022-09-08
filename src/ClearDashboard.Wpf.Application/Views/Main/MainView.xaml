@@ -249,6 +249,7 @@
             </LayoutRoot>
         </DockingManager>
 
+
         <Grid
             x:Name="GridIsVisible"
             Grid.Row="0"
