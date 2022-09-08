@@ -456,7 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     {
                         try
                         {
-                            CopyOriginalDatabase();
+                            //CopyOriginalDatabase();
                             //await EventAggregator.PublishOnCurrentThreadAsync(
                             //    new ProgressBarVisibilityMessage(true));
 
@@ -517,7 +517,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
                                     StartTime = DateTime.Now,
                                     TaskStatus = StatusEnum.Working
-                                }));
+                                }), cancellationToken);
 
                                 //var textCorpus = new ParatextTextCorpus(metadata.ProjectPath)
                                 //    .Tokenize<LatinWordTokenizer>()
@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
                                     StartTime = DateTime.Now,
                                     TaskStatus = StatusEnum.Working
-                                }));
+                                }), cancellationToken);
 
                                 var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
                                     metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
@@ -545,11 +545,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                     Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
                                     StartTime = DateTime.Now,
                                     TaskStatus = StatusEnum.Completed
-                                }));
+                                }), cancellationToken);
 
                                 Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                                 await EventAggregator.PublishOnCurrentThreadAsync(
-                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata));
+                                    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
                             }
                         }
                         catch (Exception ex)
@@ -564,17 +564,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                                         EndTime = DateTime.Now,
                                         ErrorMessage = $"{ex}",
                                         TaskStatus = StatusEnum.Error
-                                    }));
+                                    }), cancellationToken);
                             }
                             else
                             {
-                                RestoreOriginalDatabase();
+                                //RestoreOriginalDatabase();
                             }
                         }
                         finally
                         {
                             _cancellationTokenSource.Dispose();
-                            DeleteOriginalDatabase();
+                            //DeleteOriginalDatabase();
                             _addParatextCorpusRunning = false;
                         }
 

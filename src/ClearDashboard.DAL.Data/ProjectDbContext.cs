@@ -88,13 +88,16 @@ namespace ClearDashboard.DataAccessLayer.Data
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
                 //_logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
-                await Database.MigrateAsync();
+                if ( (await Database.GetPendingMigrationsAsync()).Any())
+                {
+                    await Database.MigrateAsync();
 
-                await EnsureMigrated();
+                    await EnsureMigrated();
+                }
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, $"Could not apply database migrations");
+                _logger?.LogError(ex, "Could not apply database migrations");
 
                 // This is useful when applying migrations via the EF core plumbing, please leave in place.
                 Console.WriteLine($"Could not apply database migrations: {ex.Message}");
@@ -105,7 +108,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         {
             try
             {
-                var projects = Projects.ToList();
+                _ = Projects.ToList();
             }
             catch
             {
