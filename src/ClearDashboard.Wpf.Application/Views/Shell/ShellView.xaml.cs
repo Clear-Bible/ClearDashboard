@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             this.Width = userPrefs.WindowWidth;
             this.Top = userPrefs.WindowTop;
             this.Left = userPrefs.WindowLeft;
-            this.WindowState = userPrefs.WindowState;
+            //this.WindowState = userPrefs.WindowState;
 
             if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
