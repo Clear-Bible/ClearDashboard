@@ -162,6 +162,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        public Visibility TranslationVisibility
+        {
+            get
+            {
+                return TokenDisplay.Translation != null ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public Thickness InnerPadding
         {
             get
