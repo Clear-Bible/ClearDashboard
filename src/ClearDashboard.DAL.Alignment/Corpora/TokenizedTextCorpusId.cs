@@ -5,18 +5,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         public TokenizedTextCorpusId(Guid id) : base(id)
         {
+            Metadata = new Dictionary<string, object>();
         }
 
-        public TokenizedTextCorpusId(Guid id, string? friendlyName, string? tokenizationFunction, DateTimeOffset created, UserId userId) : base(id)
+        public TokenizedTextCorpusId(Guid id, string? displayName, string? tokenizationFunction, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId) : base(id)
         {
-            FriendlyName = friendlyName;
+            DisplayName = displayName;
             TokenizationFunction = tokenizationFunction;
+            Metadata = metadata;
             Created = created;
             UserId = userId;
         }
 
-        public string? FriendlyName { get; }
+        public string? DisplayName { get; set; }
         public string? TokenizationFunction { get; }
+        public Dictionary<string, object> Metadata { get; set; }
         public DateTimeOffset? Created { get; }
         public UserId? UserId { get; }
         public virtual bool Equals(TokenizedTextCorpusId? other)
