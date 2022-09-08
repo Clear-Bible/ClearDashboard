@@ -131,13 +131,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         //private Translation Translation => (Translation) DataContext;
 
-        private PaddedTokenTranslation PaddedTokenTranslation => (PaddedTokenTranslation) DataContext;
+        private TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
 
         public Brush TranslationColor
         {
             get
             {
-                return PaddedTokenTranslation.Translation.TranslationState switch
+                return TokenDisplay.TranslationState switch
                 {
                     "FromTranslationModel" => Brushes.Red,
                     "FromOther" => Brushes.Blue,
@@ -150,7 +150,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return PaddedTokenTranslation.Token.SurfaceText;
+                return TokenDisplay.SurfaceText;
             }
         }
 
@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return PaddedTokenTranslation.Translation.TargetTranslationText;
+                return TokenDisplay.TargetTranslationText;
             }
         }
 
@@ -166,9 +166,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get
             {
-                return new Thickness(PaddedTokenTranslation.PaddingBefore.Length * 10, 
+                return new Thickness(TokenDisplay.PaddingBefore.Length * 10, 
                     0,
-                    PaddedTokenTranslation.PaddingAfter.Length * 10, 
+                    TokenDisplay.PaddingAfter.Length * 10, 
                     0);
             }
         }

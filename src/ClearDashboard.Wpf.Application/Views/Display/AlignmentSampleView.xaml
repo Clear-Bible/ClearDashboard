@@ -48,6 +48,7 @@
         </Button>
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
+        <Label Grid.Row="1">MAT 1:1 with translations</Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
                                                   Wrap="True"
                                                   Tokens="{Binding PaddedTokenTranslations}" 
@@ -66,7 +67,7 @@
 
         <Label Grid.Row="2">Source font size</Label>
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
-            <Slider Minimum="8" Maximum="48" Name="SourceFontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <Slider Minimum="8" Maximum="48" Name="SourceFontSizeSlider" Width="100" Value="18" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
         </StackPanel>
         <Label Grid.Row="3">Translation font size</Label>
