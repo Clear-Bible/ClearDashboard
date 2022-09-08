@@ -22,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public double X { get; set; }
         public double Y { get; set; }
         public CorpusType CorpusType = CorpusType.Standard;
+        public List<NodeTokenization> NodeTokenizations = new();
     }
 
     public class SerializedConnections

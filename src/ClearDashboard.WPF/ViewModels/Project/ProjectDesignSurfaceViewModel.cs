@@ -344,7 +344,7 @@ namespace ClearDashboard.Wpf.ViewModels.Project
                                 await SendProgressBarMessage($"Creating corpus '{metadata.Name}'");
 
                                 var corpus = await Corpus.Create(ProjectManager.Mediator, metadata.IsRtl, metadata.Name,
-                                    metadata.LanguageName, metadata.CorpusTypeDisplay);
+                                    metadata.LanguageName, metadata.CorpusTypeDisplay, metadata.Id);
                                 await SendProgressBarMessage($"Created corpus '{metadata.Name}'");
 
                                 OnUIThread(() => Corpora.Add(corpus));

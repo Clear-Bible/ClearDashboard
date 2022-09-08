@@ -30,7 +30,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             // Load data
             var textCorpus = TestDataHelpers.GetSampleGreekCorpus();
-            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
+            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource", Guid.NewGuid().ToString());
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 "Unit Test",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
@@ -78,7 +78,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             // Load data
             var textCorpus = TestDataHelpers.GetFullGreekNTCorpus();
-            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource");
+            var corpus = await Corpus.Create(Mediator!, false, "Greek NT", "grc", "Resource", Guid.NewGuid().ToString());
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId,
                 "Unit Test",
                 ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",

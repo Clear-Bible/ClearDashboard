@@ -28,6 +28,7 @@ namespace ClearDashboard.DataAccessLayer
     {
 #nullable disable
         #region Properties
+        public Guid ManuscriptGuid = Guid.Parse("5db213425b714efc9dd23794525058a4");
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }

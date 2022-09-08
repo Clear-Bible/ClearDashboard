@@ -1022,7 +1022,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _domains.Rows.Add(localizedString, loc);
             }
 
-            NotifyOfPropertyChange(() => Domains);
+            try
+            {
+                // will throw an error when the user shuts down the program
+                // shortly after it appears
+                NotifyOfPropertyChange(() => Domains);
+            }
+            catch (Exception)
+            {
+                // no-op
+            }
         }
 
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
