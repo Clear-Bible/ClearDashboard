@@ -93,6 +93,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IMediator _mediator;
+        private readonly ILifetimeScope _lifetimeScope;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -314,6 +316,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _logger = logger;
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
+            _mediator = mediator;
+            _lifetimeScope = lifetimeScope;
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
@@ -406,11 +410,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private async void SaveCanvas()
         {
-            var surface = new ProjectDesignSurfaceSerializationModel
-            {
-                // save the corpora
-                Corpora = Corpora
-            };
+            var surface = new ProjectDesignSurfaceSerializationModel();
 
             // save all the nodes
             foreach (var corpusNode in DesignSurface.CorpusNodes)
@@ -433,6 +433,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 {
                     SourceConnectorId = connection.SourceConnector.ParatextID,
                     TargetConnectorId = connection.DestinationConnector.ParatextID
+                });
+            }
+
+            // save out the corpora
+            foreach (var corpus in this.Corpora)
+            {
+                surface.Corpora.Add(new SerializedCopora
+                {
+                    CorpusId = corpus.CorpusId.Id.ToString(),
+                    CorpusType = corpus.CorpusType,
+                    Created = corpus.Created,
+                    DisplayName = corpus.DisplayName,
+                    IsRtl = corpus.IsRtl,
+                    Language = corpus.Language,
+                    Name = corpus.Name,
+                    ParatextGuid = corpus.ParatextGuid,
+                    UserId = corpus.UserId.Id.ToString()
                 });
             }
 
@@ -492,7 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         corpusType: corpusNode.CorpusType.ToString(),
                         metadata: new Dictionary<string, object>(),
                         created: new DateTimeOffset(),
-                        userId: new UserId(Guid.NewGuid()));
+                        userId: new UserId(_projectManager.CurrentUser.Id));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -525,7 +542,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 }
 
                 // restore the copora
-                Corpora = deserialized.Corpora;
+                var corpora = deserialized.Corpora;
+                foreach (var corpus in corpora)
+                {
+                    this.Corpora.Add(new DAL.Alignment.Corpora.Corpus(
+                        corpusId: new CorpusId(corpus.CorpusId ?? Guid.NewGuid().ToString()),
+                        mediator: _mediator,
+                        isRtl: corpus.IsRtl,
+                        name: corpus.Name,
+                        displayName: corpus.DisplayName,
+                        language: corpus.Language,
+                        paratextGuid: corpus.ParatextGuid,
+                        corpusType: corpus.CorpusType,
+                        metadata: new Dictionary<string, object>(),
+                        created: corpus.Created,
+                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString())
+                    ));
+                }
             }
         }
 

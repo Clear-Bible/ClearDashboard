@@ -6,21 +6,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
-        public CorpusId CorpusId { get; }
+        public CorpusId CorpusId { get; set; }
         public bool IsRtl { get; set; }
         public string? Name { get; set; }
         public string? DisplayName { get; set; }
         public string? Language { get; set; }
-        public string? ParatextGuid { get; }
+        public string? ParatextGuid { get; set; }
         public string CorpusType { get; set; }
         public Dictionary<string, object> Metadata { get; set; }
         public DateTimeOffset? Created { get; }
-        public UserId? UserId { get; }
+        public UserId? UserId { get; set; }
 
         // FIXME:  Should this be a string?  A different (higher level) enum?
         public Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? displayName,
             string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
-            DateTimeOffset created, UserId userId)
+            DateTimeOffset? created, UserId userId)
         {
             CorpusId = corpusId;
             IsRtl = isRtl;
