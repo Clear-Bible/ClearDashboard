@@ -1,16 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
-using DashboardApplication = System.Windows.Application;
 using System.Windows.Interop;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
-using Microsoft.Extensions.Logging;
-using SIL.Progress;
 
 namespace ClearDashboard.Wpf.Application.Views.Shell
 {
@@ -52,13 +47,7 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             InitializeComponent();
 
 
-            var userPrefs = new UserPreferences();
-
-            this.Height = userPrefs.WindowHeight;
-            this.Width = userPrefs.WindowWidth;
-            this.Top = userPrefs.WindowTop;
-            this.Left = userPrefs.WindowLeft;
-            this.WindowState = userPrefs.WindowState;
+           
 
             if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
             {
@@ -78,30 +67,20 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference, sizeof(uint));
         }
 
-        private async  void OnWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+        private void OnWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
 
             this.Closing -= OnWindowClosing;
 
             _logger.LogInformation("ShellView closing.");
 
-            var userPrefs = new UserPreferences
-            {
-                WindowHeight = this.Height,
-                WindowWidth = this.Width,
-                WindowTop = this.Top,
-                WindowLeft = this.Left,
-                WindowState = this.WindowState
-            };
-
-            userPrefs.Save();
-
+        
             if (SelectedLanguage.SelectedItem != null)
             {
-                var language = this.SelectedLanguage.SelectedItem.ToString();
-                if (language != "")
+                var language = SelectedLanguage.SelectedItem.ToString();
+                if (!string.IsNullOrEmpty(language))
                 {
-                    Settings.Default.language_code = language.ToString();
+                    Settings.Default.language_code = language;
                     Settings.Default.Save();
                 }
             }
@@ -129,8 +108,7 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
         {
 
             //TODO:  Complete theme integration
-
-
+            
             //if (Toggle.IsChecked == true)
             //{
             //    Settings.Default.Theme = MaterialDesignThemes.Wpf.BaseTheme.Dark;

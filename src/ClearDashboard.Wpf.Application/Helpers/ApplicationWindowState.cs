@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
-    public class UserPreferences
+    public class ApplicationWindowState
     {
         #region Member Variables
 
@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         #region Constructor
 
-        public UserPreferences()
+        public ApplicationWindowState()
         {
             //Load the settings
             Load();
