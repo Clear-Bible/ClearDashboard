@@ -14,6 +14,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:converters1="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,IsDesignTimeCreatable=True}"
     Visibility="Hidden"
@@ -37,6 +39,9 @@
     mc:Ignorable="d">
    
     <Window.Resources>
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+        <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></BoolToVisibilityConverter>
         <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
         <Style x:Key="CustomLightMetroWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Light}" >
             <Setter Property="Foreground" Value="Black" />
@@ -435,7 +440,9 @@
             added to the DI container at the appropriate time.
         -->
         <!--<Frame x:Name="mainFrame"  cm:Message.Attach="RegisterFrame($source)" Grid.Row="1" NavigationUIVisibility="Hidden" />-->
-
+        <Label Grid.Row="1"  Content="Loading application.  Please wait." VerticalAlignment="Center" HorizontalAlignment="Center" 
+               FontSize="40" 
+               Visibility="{Binding LoadingApplication, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}"></Label>
 
         <StatusBar
             x:Name="StatusBar"
