@@ -53,10 +53,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public string? Message { get; set; }
-        //public TokensTextRow? TextRow { get; set; }
-        //public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? Tokens { get; set; }
-        //public IEnumerable<Translation>? Translations { get; set; }
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
+        public IEnumerable<TokenDisplay>? Verse1NoTranslations { get; set; }
         public IEnumerable<TokenDisplay>? Verse2 { get; set; }
         public IEnumerable<TokenDisplay>? Verse3 { get; set; }
 
@@ -182,8 +180,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
+            Verse1NoTranslations = GetTokenDisplays(corpus, 40001001);
             Verse2 = GetTokenDisplays(corpus, 40001002);
             Verse3 = GetTokenDisplays(corpus, 40001003);
+            
+            // Show some without translations
+            foreach (var tokenDisplay in Verse1NoTranslations)
+            {
+                tokenDisplay.Translation = null;
+            }            
+            foreach (var tokenDisplay in Verse3)
+            {
+                tokenDisplay.Translation = null;
+            }
             
             NotifyOfPropertyChange(nameof(Verse1));
             NotifyOfPropertyChange(nameof(Verse2));

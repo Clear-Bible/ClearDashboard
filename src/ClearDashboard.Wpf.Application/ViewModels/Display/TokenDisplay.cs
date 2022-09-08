@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// The <see cref="Translation"/> associated with the token.
         /// </summary>
-        public Translation Translation { get; set; }
+        public Translation? Translation { get; set; }
 
         /// <summary>
         /// The surface text of the token to be displayed.
@@ -37,11 +37,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// The target translation text of the token.
         /// </summary>
-        public string TargetTranslationText => Translation.TargetTranslationText;
+        public string TargetTranslationText => Translation?.TargetTranslationText;
 
         /// <summary>
         /// The <see cref="TranslationState"/> of the translation.
         /// </summary>
-        public string TranslationState => Translation.TranslationState;
+        public string TranslationState => Translation?.TranslationState;
     }
 }

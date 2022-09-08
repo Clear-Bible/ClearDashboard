@@ -26,17 +26,18 @@
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="245"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="160" />
+            <RowDefinition Height="160" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
@@ -51,7 +52,7 @@
         </Button>
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Text Token Display" FontSize="20" />
 
-        <Label Grid.Row="1">Verse 1 with translations</Label>
+        <Label Grid.Row="1">Verse 1 with translations, wrapped</Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
                                                   Wrap="True"
                                                   Tokens="{Binding Verse1}" 
@@ -59,23 +60,31 @@
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   />
 
-        <Label Grid.Row="2">Verse 1 no wrapping</Label>
+        <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
         <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="2" 
+                                                  Wrap="True"
+                                                  Tokens="{Binding Verse1NoTranslations}" 
+                                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                  />
+
+        <Label Grid.Row="3">Verse 1 with translations, no wrapping</Label>
+        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="3" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse1}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   />
 
-        <Label Grid.Row="3">Verse 2</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="3" 
+        <Label Grid.Row="4">Verse 2</Label>
+        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="4" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse2}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
         />
-        <Label Grid.Row="4">Verse 3</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="4" 
+        <Label Grid.Row="5">Verse 3 without translations</Label>
+        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="5" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse3}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -90,13 +99,13 @@
                                                          [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
                                                          [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />-->
 
-        <Label Grid.Row="5">Source font size</Label>
-        <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal">
+        <Label Grid.Row="6">Source font size</Label>
+        <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
             <Slider Minimum="8" Maximum="48" Name="SourceFontSizeSlider" Width="100" Value="18" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
         </StackPanel>
-        <Label Grid.Row="6">Translation font size</Label>
-        <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
+        <Label Grid.Row="7">Translation font size</Label>
+        <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal">
             <Slider Minimum="8" Maximum="48" Name="TranslationFontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
         </StackPanel>
