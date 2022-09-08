@@ -33,6 +33,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
         public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
 
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokensTextRowDisplayControl),
+            new PropertyMetadata(16d));
+
         #endregion Static DependencyProperties
 
         /// <summary>
@@ -187,6 +190,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationsProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the font size for the translation.
+        /// </summary>
+        public double TranslationFontSize
+        {
+            get => (double)GetValue(TranslationFontSizeProperty);
+            set => SetValue(TranslationFontSizeProperty, value);
+        }
         public IEnumerable Detokenize(IEnumerable row)
         {
             var tokensTextRow = row as TokensTextRow;

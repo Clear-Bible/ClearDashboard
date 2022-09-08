@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
-            LoadFiles();
+            await LoadFiles();
             //await MockProjectAndUser();
             //await RetrieveTokensViaCorpusClass();
         }
@@ -133,9 +133,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        private void LoadFiles()
+        private async Task LoadFiles()
         {
             var corpus = GetSampleEnglishTextCorpus();
+
             TextRow = corpus.Cast<TokensTextRow>().FirstOrDefault();
             NotifyOfPropertyChange(nameof(TextRow));
 

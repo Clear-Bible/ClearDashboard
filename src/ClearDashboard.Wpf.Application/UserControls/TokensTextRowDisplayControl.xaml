@@ -14,7 +14,8 @@
         <DataTemplate x:Key="TokenBubble">
             <local:TranslationDisplayControl 
                 DataContext="{Binding}" 
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"/>
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
+                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"/>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="WrapPanelTemplate">
             <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
