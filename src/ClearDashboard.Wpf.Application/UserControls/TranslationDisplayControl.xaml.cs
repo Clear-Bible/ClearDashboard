@@ -168,7 +168,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 return new Thickness(PaddedTokenTranslation.PaddingBefore.Length * 10, 
                     0,
-                    PaddedTokenTranslation.PaddingBefore.Length * 10, 
+                    PaddedTokenTranslation.PaddingAfter.Length * 10, 
                     0);
             }
         }
