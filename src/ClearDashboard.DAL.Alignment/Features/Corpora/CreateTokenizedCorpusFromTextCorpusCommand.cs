@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS.Features;
 using SIL.Machine.Corpora;
+using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -11,9 +12,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     /// <param name="CorpusId"></param>
     /// <param name="DisplayName"></param>
     /// <param name="TokenizationFunction"></param>
+    /// <param name="Versification"></param>
     public record CreateTokenizedCorpusFromTextCorpusCommand(
         ITextCorpus TextCorpus, 
         CorpusId CorpusId,
         string? DisplayName,
-        string? TokenizationFunction) : ProjectRequestCommand<TokenizedTextCorpus>;
+        string? TokenizationFunction,
+        ScrVers Versification) : ProjectRequestCommand<TokenizedTextCorpus>;
 }

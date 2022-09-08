@@ -2,38 +2,19 @@
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public  class Token : IdentifiableEntity
+    public  class Token : TokenComponent
     {
-        public Token()
-        {
-            // ReSharper disable VirtualMemberCallInConstructor
-            SourceAlignmentTokenPairs = new HashSet<Alignment>();
-            TargetAlignmentTokenPairs = new HashSet<Alignment>();
-            TokenVerseAssociations = new HashSet<TokenVerseAssociation>();
-            Translations = new HashSet<Translation>();
-            // ReSharper restore VirtualMemberCallInConstructor
-        }
-
         public int BookNumber { get; set; }
         public int ChapterNumber { get; set; }
         public int VerseNumber { get; set; }
         public int WordNumber { get; set; }
         public int SubwordNumber { get; set; }
 
-        public Guid TokenizationId { get; set; }
-        public virtual TokenizedCorpus? Tokenization { get; set; }
-
         public string? SurfaceText { get; set; }
-
-        public string? TrainingText { get; set; }
 
         public virtual Adornment? Adornment { get; set; }
 
-        public virtual ICollection<Alignment> SourceAlignmentTokenPairs { get; set; }
-        public virtual ICollection<Alignment> TargetAlignmentTokenPairs { get; set; }
-        public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
-        public virtual ICollection<Translation> Translations { get; set; }
-
         public Guid? TokenCompositeId { get; set; }
+        public virtual TokenComposite? TokenComposite { get; set; }
     }
 }

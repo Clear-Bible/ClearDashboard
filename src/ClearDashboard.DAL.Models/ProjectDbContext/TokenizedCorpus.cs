@@ -8,7 +8,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public TokenizedCorpus()
     {
         // ReSharper disable VirtualMemberCallInConstructor
-        Tokens = new HashSet<Token>();
+        TokenComponents = new HashSet<TokenComponent>();
         //SourceParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
         //TargetParallelTokenizedCorpus = new HashSet<ParallelTokenizedCorpus>();
 
@@ -17,7 +17,25 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
         Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
-    public virtual ICollection<Token> Tokens { get; set; }
+    public virtual ICollection<TokenComponent> TokenComponents { get; set; }
+
+    [NotMapped]
+    public IEnumerable<Token> Tokens
+    {
+        get
+        {
+            return TokenComponents.Where(tc => tc.GetType() == typeof(Token)).Select(tc => (tc as Token)!);
+        }
+    }
+
+    [NotMapped]
+    public IEnumerable<TokenComposite> TokenComposites
+    {
+        get
+        {
+            return TokenComponents.Where(tc => tc.GetType() == typeof(TokenComposite)).Select(tc => (tc as TokenComposite)!);
+        }
+    }
 
     //public virtual ICollection<ParallelTokenizedCorpus> SourceParallelTokenizedCorpus { get; set; }
     //public virtual ICollection<ParallelTokenizedCorpus> TargetParallelTokenizedCorpus { get; set; }

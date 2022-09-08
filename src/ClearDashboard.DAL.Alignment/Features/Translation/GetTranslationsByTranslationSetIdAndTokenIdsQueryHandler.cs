@@ -19,23 +19,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
         {
-            var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
-            var tokenLocationRefs = request.TokenIds.Select(t => double.Parse(t.ToString())).ToList();
+            //var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
+            var engineTokenIds = request.TokenIds.Select(t => t.ToString()).ToList();
             var translations = ProjectDbContext!.Translations
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
-                .Where(tr => bookNumbers.Contains(tr.SourceToken!.BookNumber))
-                .Where(tr => tokenLocationRefs.Contains(
-                    double.Parse(ModelHelper.BuildTokenLocationRef(tr.SourceToken!)))
-                )
-                .Select(tr => new {
-                    tr.SourceToken,
-                    tr.TargetText,
-                    tr.TranslationState,
-                    TokenLocationRef = double.Parse(ModelHelper.BuildTokenLocationRef(tr.SourceToken!))
-                }) //.AsEnumerable()
-//                .Where(tref => tokenLocationRefs.Contains(tref.TokenLocationRef))
+                .Where(tr => engineTokenIds.Contains(tr.SourceTokenComponent!.EngineTokenId!))
                 .Select(t => new Alignment.Translation.Translation(
-                    ModelHelper.BuildToken(t.SourceToken!),
+                    ModelHelper.BuildToken(t.SourceTokenComponent!),
                     t.TargetText ?? string.Empty,
                     t.TranslationState.ToString()));
 
@@ -44,7 +34,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             return new RequestResult<IEnumerable<Alignment.Translation.Translation>>( translations );
         }
-    }
-
-
+     }
 }

@@ -44,7 +44,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
 
         public virtual DbSet<AlignmentSet> AlignmentSets => Set<AlignmentSet>();
-        public virtual DbSet<Alignment> AlignmentTokenPairs => Set<Alignment>();
+        public virtual DbSet<Alignment> Alignments => Set<Alignment>();
 
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
@@ -56,6 +56,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         //public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
         public virtual DbSet<Token> Tokens => Set<Token>();
+        public virtual DbSet<TokenComponent> TokenComponents => Set<TokenComponent>();
+        public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
@@ -121,13 +123,13 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.RemovePluralizingTableNameConvention();
 
             modelBuilder.Entity<Alignment>()
-                .HasOne(e => e.SourceToken)
-                .WithMany(e=>e.SourceAlignmentTokenPairs);
+                .HasOne(e => e.SourceTokenComponent)
+                .WithMany(e=>e.SourceAlignments);
               
 
             modelBuilder.Entity<Alignment>()
-                .HasOne(e => e.TargetToken)
-                .WithMany(e=>e.TargetAlignmentTokenPairs);
+                .HasOne(e => e.TargetTokenComponent)
+                .WithMany(e=>e.TargetAlignments);
 
             modelBuilder.Entity<AlignmentSet>()
                 .Property(e => e.Metadata)
@@ -223,6 +225,11 @@ namespace ClearDashboard.DataAccessLayer.Data
             // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
 
+            modelBuilder.Entity<Token>().ToTable("TokenComponent");
+            modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
+
             modelBuilder.Entity<Token>().HasIndex(e => e.TokenizationId);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
@@ -234,7 +241,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             //modelBuilder.Entity<Token>()
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
-            modelBuilder.Entity<Translation>().Navigation(e => e.SourceToken).AutoInclude();
+            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
         }

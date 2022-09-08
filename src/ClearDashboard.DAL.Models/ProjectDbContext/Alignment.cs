@@ -4,8 +4,8 @@ namespace ClearDashboard.DataAccessLayer.Models;
 
 public class Alignment : SynchronizableTimestampedEntity
 {
-    public Guid SourceTokenId { get; set; }
-    public Guid TargetTokenId { get; set; }
+    public Guid SourceTokenComponentId { get; set; }
+    public Guid TargetTokenComponentId { get; set; }
       
     public virtual AlignmentVerification AlignmentVerification { get; set; }
     public virtual AlignmentOriginatedFrom AlignmentOriginatedFrom { get; set; }
@@ -13,7 +13,7 @@ public class Alignment : SynchronizableTimestampedEntity
     public virtual double Score { get; set; }
 
     [ForeignKey("SourceTokenId")]
-    public virtual Token? SourceToken { get; set; }
+    public virtual TokenComponent? SourceTokenComponent { get; set; }
     [ForeignKey("TargetTokenId")]
-    public virtual Token? TargetToken { get; set; }
+    public virtual TokenComponent? TargetTokenComponent { get; set; }
 }

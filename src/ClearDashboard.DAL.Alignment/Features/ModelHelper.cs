@@ -8,21 +8,39 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class ModelHelper
     {
-        public static Token BuildToken(Models.Token token)
+        public static Token BuildToken(Models.TokenComponent tokenComponent)
         {
-            return new Token(
-                ModelHelper.BuildTokenId(token),
-                token.SurfaceText ?? string.Empty,
-                token.TrainingText ?? string.Empty);
+            if (tokenComponent is Models.TokenComposite)
+            {
+                var tokenComposite = (tokenComponent as Models.TokenComposite)!;
+                return new CompositeToken(tokenComposite.Tokens.Select(t => BuildToken(t)));
+            }
+            else
+            {
+                var token = (tokenComponent as Models.Token)!;
+                return new Token(
+                    ModelHelper.BuildTokenId(token),
+                    token.SurfaceText ?? string.Empty,
+                    token.TrainingText ?? string.Empty);
+            }
         }
-        public static TokenId BuildTokenId(Models.Token token)
+        public static TokenId BuildTokenId(Models.TokenComponent tokenComponent)
         {
-            return new TokenId(
-                token.BookNumber,
-                token.ChapterNumber,
-                token.VerseNumber,
-                token.WordNumber,
-                token.SubwordNumber);
+            if (tokenComponent is Models.TokenComposite)
+            {
+                var tokenComposite = (tokenComponent as Models.TokenComposite)!;
+                return new CompositeTokenId(tokenComposite.Tokens.Select(t => BuildToken(t)));
+            }
+            else
+            {
+                var token = (tokenComponent as Models.Token)!;
+                return new TokenId(
+                    token.BookNumber,
+                    token.ChapterNumber,
+                    token.VerseNumber,
+                    token.WordNumber,
+                    token.SubwordNumber);
+            }
         }
         public static bool IsTokenIdMatch(TokenId tokenId, Models.Token dbToken)
         {

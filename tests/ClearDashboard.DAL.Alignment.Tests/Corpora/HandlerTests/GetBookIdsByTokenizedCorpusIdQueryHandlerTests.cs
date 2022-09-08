@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation");
 
             // Create the TokenizedCorpus + Tokens in the database:
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty, ScrVers.Original);
             var commandResult = await Mediator!.Send(command);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -91,7 +92,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(tokenizedCorpus);
 
             // Add token with bogus book number:
-            tokenizedCorpus!.Tokens.Add(
+            tokenizedCorpus!.TokenComponents.Add(
                 new Models.Token
                 {
                     BookNumber = 9999,
