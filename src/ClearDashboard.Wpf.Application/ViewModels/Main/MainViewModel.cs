@@ -30,6 +30,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
+using Xceed.Wpf.AvalonDock;
+using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -359,6 +361,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             get => _windowFlowDirection;
             init => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
+        }
+
+        private bool _showProgressBar;
+        private string _message;
+        public bool ShowProgressBar
+        {
+            get => _showProgressBar;
+            set => Set(ref _showProgressBar, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
         }
 
         #endregion //Observable Properties
@@ -941,7 +957,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
 
                     NotifyOfPropertyChange(() => Documents);
-                    //NotifyOfPropertyChange(() => BookNames);
                 }
             }
 
@@ -1125,28 +1140,68 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 if (windowDockable == null)
                 {
-                    // window has been closed so reload it
-                    windowPane = new LayoutAnchorable
+                    switch (windowTag.ToUpper())
                     {
-                        ContentId = windowTag
-                    };
+                        // Documents
+                        case WorkspaceLayoutNames.Dashboard:
+                        case WorkspaceLayoutNames.ConcordanceTool:
+                        case WorkspaceLayoutNames.StartPage:
+                        case WorkspaceLayoutNames.AlignmentTool:
+                        case WorkspaceLayoutNames.TreeDown:
+                        case WorkspaceLayoutNames.CorpusTokens:
+                        case WorkspaceLayoutNames.EnhancedCorpus:
+                            windowDockable = new LayoutDocument
+                            {
+                                ContentId = windowTag
+                            };
+                            // setup the right ViewModel for the pane
+                            var obj = LoadWindow(windowTag);
+                            windowDockable.Content = obj.vm;
+                            windowDockable.Title = obj.title;
+                            windowDockable.IsActive = true;
 
-                    // setup the right ViewModel for the pane
-                    var obj = LoadWindow(windowTag);
-                    windowPane.Content = obj.vm;
-                    windowPane.Title = obj.title;
-                    windowPane.IsActive = true;
+                            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
 
+                            if (documentPane != null)
+                            {
+                                documentPane.Children.Add(windowDockable);
+                            }
+                            break;
 
-                    // set where it will doc on layout
-                    if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
-                    {
-                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                        // Tools
+                        case WorkspaceLayoutNames.BiblicalTerms:
+                        case WorkspaceLayoutNames.WordMeanings:
+                        case WorkspaceLayoutNames.SourceContext:
+                        case WorkspaceLayoutNames.TargetContext:
+                        case WorkspaceLayoutNames.Notes:
+                        case WorkspaceLayoutNames.Pins:
+                        case WorkspaceLayoutNames.TextCollection:
+                        case WorkspaceLayoutNames.ProjectDesignSurface:
+                            // window has been closed so reload it
+                            windowPane = new LayoutAnchorable
+                            {
+                                ContentId = windowTag
+                            };
+
+                            // setup the right ViewModel for the pane
+                            obj = LoadWindow(windowTag);
+                            windowPane.Content = obj.vm;
+                            windowPane.Title = obj.title;
+                            windowPane.IsActive = true;
+                            
+                            // set where it will doc on layout
+                            if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+                            {
+                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                            }
+                            else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                            {
+                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                            }
+                            break;
+
                     }
-                    else if (obj.dockSide == PaneViewModel.EDockSide.Left)
-                    {
-                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
-                    }
+
                 }
                 else
                 {
@@ -1342,22 +1397,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return;
         }
 
-        #endregion // Methods
-
-        private bool _showProgressBar;
-        private string _message;
-        public bool ShowProgressBar
-        {
-            get => _showProgressBar;
-            set => Set(ref _showProgressBar, value);
-        }
-
-        public string Message
-        {
-            get => _message;
-            set => Set(ref _message, value);
-        }
-
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {
             OnUIThread(() => ShowProgressBar = message.Show);
@@ -1370,6 +1409,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
+        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames
