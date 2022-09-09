@@ -211,7 +211,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 ? MockOogaWords[mockOogaWordsIndexer_++]
                 : String.Empty;
             if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationState: RandomTranslationOriginatedFrom());
+            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
             
             return translation;
         }
