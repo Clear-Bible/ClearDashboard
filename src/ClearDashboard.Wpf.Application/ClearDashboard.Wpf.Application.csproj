@@ -80,6 +80,8 @@
   <ItemGroup>
     <PackageReference Include="ClearApplicationFoundation" Version="1.0.17" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
@@ -228,7 +230,7 @@
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Layouts\Project.Layout.config">
+    <None Update="Resources\Layouts\Project.Layout.config2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\usx.xslt">
@@ -264,6 +266,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Styles\" />
     <Folder Include="Views\DesignSurface\" />
     <Folder Include="Views\PopUps\" />
   </ItemGroup>
