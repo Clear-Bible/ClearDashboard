@@ -608,14 +608,11 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <materialDesign:Card
-            Margin="5"
+            Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
-            BorderBrush="Black"
-            BorderThickness="5"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            IsEnabled="{Binding AddCorpusEnabled}"
-            UniformCornerRadius="5">
+            IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
                 <Label
                     Margin="5,5,0,5"

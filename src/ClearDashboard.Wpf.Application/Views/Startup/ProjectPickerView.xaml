@@ -11,6 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Width="Auto"
     Height="635"
@@ -37,7 +38,17 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Label>It's lonely here.  Please create a new project.</Label>
+                                    <materialDesign:Card
+                                        Width="475"
+                                        Height="82"
+                                        VerticalAlignment="Top"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="#EEEBEB">
+                                        <StackPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Label FontSize="21" Margin="15">It's lonely here.  Please create a new project.</Label>
+                                            <iconPacks:PackIconMaterial  Margin="0, 0, 20, 00" Kind="ArrowRight" VerticalAlignment="Center" Width="24" Height="24"  />
+                                        </StackPanel>
+                                        </materialDesign:Card>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
