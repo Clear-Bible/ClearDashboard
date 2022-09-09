@@ -22,7 +22,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new MediatorErrorEngineException(result.Message);
             }
         }
-        
+
+        public async void Update()
+        {
+            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+        }
+
         public static async Task<ParallelCorpus> Get(
             IMediator mediator,
             ParallelCorpusId parallelCorpusId)

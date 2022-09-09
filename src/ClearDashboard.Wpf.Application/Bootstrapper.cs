@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
@@ -11,10 +12,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
 using DashboardApplication = System.Windows.Application;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -22,10 +21,11 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void PreInitialize()
         {
-
             DashboardApplication.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             base.PreInitialize();
         }
+
+     
 
         protected override void PostInitialize()
         {
@@ -53,14 +53,46 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
-            //builder.RegisterType<TranslationDemoViewModel>().As<IMainWindowViewModel>();
         }
 
         protected override async Task NavigateToMainWindow()
         {
-            //NavigateToViewModel<TranslationDemoViewModel>();
-            //EnsureApplicationMainWindowVisible();
-            await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+           await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+        }
+
+        protected override void RestoreMainWindowState()
+        {
+            var applicationWindowState = new ApplicationWindowState();
+            var mainWindow = DashboardApplication.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                // NB:  Do not restore the WindowState here -- it will cause the window 
+                // to not be displayed until AvalonDock has restored the dockable window
+                // layout for the MainView.
+                mainWindow.Height = applicationWindowState.WindowHeight;
+                mainWindow.Width = applicationWindowState.WindowWidth;
+                mainWindow.Top = applicationWindowState.WindowTop;
+                mainWindow.Left = applicationWindowState.WindowLeft;
+            }
+            base.RestoreMainWindowState();
+        }
+
+        protected override void SaveMainWindowState()
+        {
+            var mainWindow = DashboardApplication.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                var applicationWindowState = new ApplicationWindowState
+                {
+                    WindowHeight = mainWindow.Height,
+                    WindowWidth = mainWindow.Width,
+                    WindowTop = mainWindow.Top,
+                    WindowLeft = mainWindow.Left,
+                    WindowState = mainWindow.WindowState
+                };
+                applicationWindowState.Save();
+            }
+            base.SaveMainWindowState();
         }
 
         #region Application exit

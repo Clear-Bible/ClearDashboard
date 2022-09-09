@@ -17,11 +17,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<TranslationSet> Create(
             this Dictionary<string, Dictionary<string, double>> translationModel, 
+                string? displayName,
+                string smtModel,
+                Dictionary<string, object> metadata,
                 ParallelCorpusId parallelCorpusId, 
                 IMediator mediator)
         {
             var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
                 translationModel,
+                displayName,
+                smtModel,
+                metadata,
                 parallelCorpusId));
 
             if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)

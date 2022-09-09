@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,10 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
             // Create the corpus in the database:
-            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "BackTranslation", Guid.NewGuid().ToString());
 
             // Create the TokenizedCorpus + Tokens in the database:
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpus.CorpusId, string.Empty, string.Empty, ScrVers.Original);
             var commandResult = await Mediator!.Send(command);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -83,7 +84,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
     {
         try
         {
-            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
             var tokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, corpus.CorpusId, "Unit Test", ".a.function()");
 
@@ -91,7 +92,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(tokenizedCorpus);
 
             // Add token with bogus book number:
-            tokenizedCorpus!.Tokens.Add(
+            tokenizedCorpus!.TokenComponents.Add(
                 new Models.Token
                 {
                     BookNumber = 9999,

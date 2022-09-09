@@ -79,7 +79,7 @@ namespace ClearDashboard.Wpf.ViewModels
 
             var tokenizedCorpus = new TokenizedCorpus();
             textCorpus.Cast<TokensTextRow>().ToList().ForEach(tokensTextRow =>
-                tokenizedCorpus.Tokens.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
+                tokenizedCorpus.TokenComponents.AddRange(tokensTextRow.Tokens.Select(engineToken => new Token
                 {
                     BookNumber = engineToken.TokenId.BookNumber,
                     ChapterNumber = engineToken.TokenId.ChapterNumber,

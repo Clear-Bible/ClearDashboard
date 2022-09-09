@@ -39,7 +39,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
         var tokenizedCorpus =
-            ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).Include(tc => tc.Corpus).FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
+            ProjectDbContext.TokenizedCorpora.Include(tc => tc.TokenComponents).Include(tc => tc.Corpus).FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
 
         if (tokenizedCorpus == null)
         {
@@ -52,7 +52,10 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             );
         }
 
-        var bookNumbers = tokenizedCorpus.Tokens.GroupBy(token => token.BookNumber).Select(g => g.Key);
+        var bookNumbers = tokenizedCorpus.Tokens
+            .GroupBy(token => token.BookNumber)
+            .Select(g => g.Key);
+
         var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);

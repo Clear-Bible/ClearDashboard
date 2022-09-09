@@ -42,6 +42,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 var translationSetModel = new Models.TranslationSet
                 {
                     ParallelCorpusId = request.ParallelCorpusId.Id,
+                    DisplayName = request.DisplayName,
+                    SmtModel = request.SmtModel,
+                    Metadata = request.Metadata,
                     //DerivedFrom = ,
                     //EngineWordAlignment = ,
                     TranslationModel = request.TranslationModel

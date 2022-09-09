@@ -4,6 +4,7 @@ using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,8 +30,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                         new GetAllProjectsQuery());
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<List<IProject>>>();
-
+                var result = await response.Content.ReadAsAsync<RequestResult<List<ParatextProject>>>();
                 Assert.NotNull(result);
                 Assert.True(result.Success);
                 Assert.NotNull(result.Data);

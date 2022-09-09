@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace ClearDashboard.Wpf.Application.Validators
 {
 
-    public class ProjectValidator : AbstractValidator<Project>
+    public class ProjectValidator : AbstractValidator<DataAccessLayer.Models.Project>
     {
         private ILogger _logger;
         public ProjectValidator(ILogger<ProjectValidator> logger)

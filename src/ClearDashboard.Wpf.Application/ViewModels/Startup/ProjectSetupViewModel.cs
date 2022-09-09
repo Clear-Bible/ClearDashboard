@@ -31,6 +31,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
+
         public ProjectSetupViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<MainViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<DataAccessLayer.Models.Project> validator)
@@ -42,10 +53,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             Project = new DataAccessLayer.Models.Project();
-        }
-
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
 
             CanMoveForwards = true;
             CanMoveBackwards = true;
@@ -53,9 +60,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
            
             ProjectName = string.Empty;
 
-            return base.OnInitializeAsync(cancellationToken);
+            //return base.OnInitializeAsync(cancellationToken);
         }
-
+        
         public void Create()
         {
             if (CheckIfConnectedToParatext() == false)

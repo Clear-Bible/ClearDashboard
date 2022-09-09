@@ -26,6 +26,6 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
-
+       
     }
 }

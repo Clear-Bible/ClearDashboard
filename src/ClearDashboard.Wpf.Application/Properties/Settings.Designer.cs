@@ -141,5 +141,29 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["LastProjectLayout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public string SidebarExpandedWidth {
+            get {
+                return ((string)(this["SidebarExpandedWidth"]));
+            }
+            set {
+                this["SidebarExpandedWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public string EnhancedSidebarExpandedWidth {
+            get {
+                return ((string)(this["EnhancedSidebarExpandedWidth"]));
+            }
+            set {
+                this["EnhancedSidebarExpandedWidth"] = value;
+            }
+        }
     }
 }

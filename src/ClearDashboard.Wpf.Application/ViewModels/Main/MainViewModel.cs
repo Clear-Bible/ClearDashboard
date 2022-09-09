@@ -30,6 +30,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
+using Xceed.Wpf.AvalonDock;
+using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -49,6 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
+        private ProjectDesignSurfaceView _projectDesignSurfaceControl = null;
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -240,9 +243,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case "PINSID":
                             _windowIdToLoad = "PINS";
                             break;
-                        case "ProjectDesignSurfaceID":
-                            _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
-                            break;
+                        //case "ProjectDesignSurfaceID":
+                        //    _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
+                        //    break;
                         case "WordMeaningsID":
                             _windowIdToLoad = "WORDMEANINGS";
                             break;
@@ -361,6 +364,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             init => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
         }
 
+        private bool _showProgressBar;
+        private string _message;
+        public bool ShowProgressBar
+        {
+            get => _showProgressBar;
+            set => Set(ref _showProgressBar, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -471,7 +488,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            
+
             base.OnViewLoaded(view);
         }
 
@@ -505,6 +522,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("dockManager");
+                _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
+                
             }
 
             await Task.Delay(250);
@@ -521,6 +540,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ReBuildMenu();
 
 
+            var viewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
+            var view = ViewLocator.LocateForModel(viewModel, null, null);
+            ViewModelBinder.Bind(viewModel, view, null);
+            _projectDesignSurfaceControl.DataContext = viewModel;
+
             Items.Clear();
             // documents
             await ActivateItemAsync<AlignmentToolViewModel>();
@@ -535,7 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<BiblicalTermsViewModel>();
             //await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
-            await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
+            
             //await ActivateItemAsync<SourceContextViewModel>();
             //await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
@@ -709,7 +733,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "⳼ Enhanced Corpus", Id = "EnhancedCorpusID", ViewModel = this, },
                         //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
                         new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
-                        new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
+                        //new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
@@ -884,9 +908,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.TextCollection:
                             e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
                             break;
-                        case WorkspaceLayoutNames.ProjectDesignSurface:
-                            e.Content = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                            break;
+                        //case WorkspaceLayoutNames.ProjectDesignSurface:
+                        //    e.Content = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
+                        //    break;
 
                     }
                 }
@@ -930,7 +954,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case BiblicalTermsViewModel:
                             //case NotesViewModel:
                             case PinsViewModel:
-                            case ProjectDesignSurfaceViewModel:
+                            //case ProjectDesignSurfaceViewModel:
                             //case SourceContextViewModel:
                             //case TargetContextViewModel:
                             case TextCollectionsViewModel:
@@ -941,7 +965,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
 
                     NotifyOfPropertyChange(() => Documents);
-                    //NotifyOfPropertyChange(() => BookNames);
                 }
             }
 
@@ -1000,7 +1023,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case BiblicalTermsViewModel:
                         //case NotesViewModel:
                         case PinsViewModel:
-                        case ProjectDesignSurfaceViewModel:
+                        //case ProjectDesignSurfaceViewModel:
                         //case SourceContextViewModel:
                         //case TargetContextViewModel:
                         case TextCollectionsViewModel:
@@ -1052,9 +1075,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //case WorkspaceLayoutNames.Notes:
                 //    var vm6 = GetToolViewModelFromItems("NotesViewModel");
                 //    return (vm6, vm6.Title, vm6.DockSide);
-                case WorkspaceLayoutNames.ProjectDesignSurface:
-                    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                    return (vm13, vm13.Title, vm13.DockSide);
+                //case WorkspaceLayoutNames.ProjectDesignSurface:
+                //    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
+                //    return (vm13, vm13.Title, vm13.DockSide);
                 //case WorkspaceLayoutNames.SourceContext:
                 //    var vm4 = GetToolViewModelFromItems("SourceContextViewModel");
                 //    return (vm4, vm4.Title, vm4.DockSide);
@@ -1125,28 +1148,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 if (windowDockable == null)
                 {
-                    // window has been closed so reload it
-                    windowPane = new LayoutAnchorable
+                    switch (windowTag.ToUpper())
                     {
-                        ContentId = windowTag
-                    };
+                        // Documents
+                        case WorkspaceLayoutNames.Dashboard:
+                        case WorkspaceLayoutNames.ConcordanceTool:
+                        case WorkspaceLayoutNames.StartPage:
+                        case WorkspaceLayoutNames.AlignmentTool:
+                        case WorkspaceLayoutNames.TreeDown:
+                        case WorkspaceLayoutNames.CorpusTokens:
+                        case WorkspaceLayoutNames.EnhancedCorpus:
+                            windowDockable = new LayoutDocument
+                            {
+                                ContentId = windowTag
+                            };
+                            // setup the right ViewModel for the pane
+                            var obj = LoadWindow(windowTag);
+                            windowDockable.Content = obj.vm;
+                            windowDockable.Title = obj.title;
+                            windowDockable.IsActive = true;
 
-                    // setup the right ViewModel for the pane
-                    var obj = LoadWindow(windowTag);
-                    windowPane.Content = obj.vm;
-                    windowPane.Title = obj.title;
-                    windowPane.IsActive = true;
+                            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
 
+                            if (documentPane != null)
+                            {
+                                documentPane.Children.Add(windowDockable);
+                            }
+                            break;
 
-                    // set where it will doc on layout
-                    if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
-                    {
-                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                        // Tools
+                        case WorkspaceLayoutNames.BiblicalTerms:
+                        case WorkspaceLayoutNames.WordMeanings:
+                        case WorkspaceLayoutNames.SourceContext:
+                        case WorkspaceLayoutNames.TargetContext:
+                        case WorkspaceLayoutNames.Notes:
+                        case WorkspaceLayoutNames.Pins:
+                        //case WorkspaceLayoutNames.ProjectDesignSurface:
+                        case WorkspaceLayoutNames.TextCollection:
+
+                            // window has been closed so reload it
+                            windowPane = new LayoutAnchorable
+                            {
+                                ContentId = windowTag
+                            };
+
+                            // setup the right ViewModel for the pane
+                            obj = LoadWindow(windowTag);
+                            windowPane.Content = obj.vm;
+                            windowPane.Title = obj.title;
+                            windowPane.IsActive = true;
+                            
+                            // set where it will doc on layout
+                            if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+                            {
+                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                            }
+                            else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                            {
+                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                            }
+                            break;
+
                     }
-                    else if (obj.dockSide == PaneViewModel.EDockSide.Left)
-                    {
-                        windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
-                    }
+
                 }
                 else
                 {
@@ -1342,22 +1406,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return;
         }
 
-        #endregion // Methods
-
-        private bool _showProgressBar;
-        private string _message;
-        public bool ShowProgressBar
-        {
-            get => _showProgressBar;
-            set => Set(ref _showProgressBar, value);
-        }
-
-        public string Message
-        {
-            get => _message;
-            set => Set(ref _message, value);
-        }
-
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {
             OnUIThread(() => ShowProgressBar = message.Show);
@@ -1370,6 +1418,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
+        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames
@@ -1381,7 +1430,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public const string Dashboard = "DASHBOARD";
         public const string Notes = "NOTES";
         public const string Pins = "PINS";
-        public const string ProjectDesignSurface = "PROJECTDESIGNSURFACETOOL";
+        //public const string ProjectDesignSurface = "PROJECTDESIGNSURFACETOOL";
         public const string SourceContext = "SOURCECONTEXT";
         public const string StartPage = "STARTPAGE";
         public const string TargetContext = "TARGETCONTEXT";
