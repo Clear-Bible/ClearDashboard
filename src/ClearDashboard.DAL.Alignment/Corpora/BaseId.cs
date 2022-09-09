@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public abstract record BaseId
@@ -9,6 +11,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             Id = id;
         }
 
-        public Guid Id { get; }
+        protected BaseId(string id)
+        {
+            Id = Guid.Parse(id);
+        }
+
+        public Guid Id { get; set; }
     }
 }
