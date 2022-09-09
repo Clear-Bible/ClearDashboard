@@ -9,7 +9,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
 using ClearDashboard.Wpf.Controls;
 using MediatR;
@@ -21,7 +20,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-//using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -29,7 +27,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -146,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
-        private ProjectDesignSurface _projectDesignSurface { get; set; }
+        private ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -376,7 +373,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // ReSharper disable once AssignNullToNotNullAttribute
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
 
-                    _projectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -403,11 +401,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //    base.OnViewLoaded(view);
         //}
 
-        protected override async void OnViewReady(object view)
-        {
-            Console.WriteLine();
-            base.OnViewReady(view);
-        }
+        //protected override async void OnViewReady(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewReady(view);
+        //}
         #endregion //Constructor
 
         #region Methods
@@ -454,7 +452,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Language = corpus.Language,
                     Name = corpus.Name,
                     ParatextGuid = corpus.ParatextGuid,
-                    UserId = corpus.UserId.Id.ToString()
+                    UserId = corpus.UserId?.Id.ToString()
                 });
             }
 
@@ -505,7 +503,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(Guid.NewGuid()),
-                        mediator: null,
+                        mediator: _mediator,
                         isRtl: false,
                         name: corpusNode.Name,
                         displayName: "",
@@ -809,7 +807,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
 #pragma warning disable CS8604
-                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                        var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
                             metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 #pragma warning restore CS8604
 
@@ -901,10 +899,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
 
                     // force a redraw
-                    if (_projectDesignSurface is not null)
-                    {
-                        _projectDesignSurface.InvalidateVisual();
-                    }
+                    ProjectDesignSurface?.InvalidateVisual();
                 }
             }
         }
