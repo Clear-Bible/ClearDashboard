@@ -141,6 +141,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
+
+        public void NoteLeftButtonDown(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteDoubleClicked(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteRightButtonDown(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseEnter(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseLeave(NoteEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseWheel(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
         // ReSharper restore UnusedMember.Global
 
         #endregion
