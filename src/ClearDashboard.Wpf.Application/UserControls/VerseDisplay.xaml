@@ -14,6 +14,10 @@
         <DataTemplate x:Key="TokenBubble">
             <local:TranslationDisplayControl 
                 DataContext="{Binding}" 
+                TokenClicked="OnTokenClicked" TokenDoubleClicked="OnTokenDoubleClicked"
+                TokenLeftButtonDown="OnTokenLeftButtonDown" TokenLeftButtonUp="OnTokenLeftButtonUp" 
+                TokenRightButtonDown="OnTokenRightButtonDown" TokenRightButtonUp="OnTokenRightButtonUp" 
+                TokenMouseEnter="OnTokenMouseEnter" TokenMouseLeave="OnTokenMouseLeave" TokenMouseWheel="OnTokenMouseWheel"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
                 TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"/>

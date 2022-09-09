@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -246,11 +247,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplay;
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                SurfaceText = (e.Source as FrameworkElement)?.DataContext as string
+                TokenDisplay = tokenDisplay
             });
+
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)

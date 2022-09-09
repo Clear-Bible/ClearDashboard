@@ -68,34 +68,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        //public void LoadTokens()
-        //{
-        //    LoadFiles();
-        //}
-
         #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) clicked";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{e.SurfaceText}' double-clicked";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"'{e.SurfaceText}' right-clicked";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            Message = $"Entered '{e.SurfaceText}'";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -107,7 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseWheel(TokenEventArgs e)
         {
-            Message = $"'{e.SurfaceText}' mouse wheel";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
         // ReSharper restore UnusedMember.Global

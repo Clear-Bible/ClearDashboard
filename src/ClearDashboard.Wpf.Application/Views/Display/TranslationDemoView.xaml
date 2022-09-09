@@ -53,13 +53,18 @@
 
         <Label Grid.Row="1">Verse 1 with translations, wrapped</Label>
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
-                                                  Wrap="True"
-                                                  cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)]"
-                                                  Tokens="{Binding Verse1}" 
-                                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  />
+                                   Wrap="True"
+                                   Tokens="{Binding Verse1}" 
+                                   cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
+                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
+                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
+                                                       [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
+                                                       [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
+                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]"
+                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   />
 
         <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="2" 

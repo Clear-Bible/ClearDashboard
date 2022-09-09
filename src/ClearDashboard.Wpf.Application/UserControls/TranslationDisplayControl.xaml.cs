@@ -433,10 +433,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Event Handlers
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplay;
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                SurfaceText = (e.Source as FrameworkElement)?.DataContext as string
+                TokenDisplay = tokenDisplay
             });
         }
 
