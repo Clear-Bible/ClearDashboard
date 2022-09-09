@@ -18,6 +18,13 @@
                 TokenLeftButtonDown="OnTokenLeftButtonDown" TokenLeftButtonUp="OnTokenLeftButtonUp" 
                 TokenRightButtonDown="OnTokenRightButtonDown" TokenRightButtonUp="OnTokenRightButtonUp" 
                 TokenMouseEnter="OnTokenMouseEnter" TokenMouseLeave="OnTokenMouseLeave" TokenMouseWheel="OnTokenMouseWheel"
+                TranslationClicked="OnTranslationClicked" TranslationDoubleClicked="OnTranslationDoubleClicked"
+                TranslationLeftButtonDown="OnTranslationLeftButtonDown" TranslationLeftButtonUp="OnTranslationLeftButtonUp"
+                TranslationRightButtonDown="OnTranslationRightButtonDown" TranslationRightButtonUp="OnTranslationRightButtonUp"
+                TranslationMouseEnter="OnTranslationMouseEnter" TranslationMouseLeave="OnTranslationMouseLeave" TranslationMouseWheel="OnTranslationMouseWheel"
+                NoteLeftButtonDown="OnNoteLeftButtonDown" NoteLeftButtonUp="OnNoteLeftButtonUp"
+                NoteRightButtonDown="OnNoteRightButtonDown" NoteRightButtonUp="OnNoteRightButtonUp" 
+                NoteMouseEnter="OnNoteMouseEnter" NoteMouseLeave="OnNoteMouseLeave" NoteMouseWheel="OnNoteMouseWheel"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
                 TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"/>

@@ -105,6 +105,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
+
+        public void TranslationClicked(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationDoubleClicked(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) double-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationRightButtonDown(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseEnter(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) hovered";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseLeave(TranslationEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseWheel(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
+        }
         // ReSharper restore UnusedMember.Global
 
         #endregion

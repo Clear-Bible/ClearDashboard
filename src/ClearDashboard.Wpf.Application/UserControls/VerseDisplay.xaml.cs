@@ -276,6 +276,150 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(TokenMouseWheelEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when an individual translation is clicked.
+        /// </summary>
+        public event RoutedEventHandler TranslationClicked
+        {
+            add => AddHandler(TranslationClickedEvent, value);
+            remove => RemoveHandler(TranslationClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual translation is clicked two or more times.
+        /// </summary>
+        public event RoutedEventHandler TranslationDoubleClicked
+        {
+            add => AddHandler(TranslationDoubleClickedEvent, value);
+            remove => RemoveHandler(TranslationDoubleClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationLeftButtonDown
+        {
+            add => AddHandler(TranslationLeftButtonDownEvent, value);
+            remove => RemoveHandler(TranslationLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationLeftButtonUp
+        {
+            add => AddHandler(TranslationLeftButtonUpEvent, value);
+            remove => RemoveHandler(TranslationLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationRightButtonDown
+        {
+            add => AddHandler(TranslationRightButtonDownEvent, value);
+            remove => RemoveHandler(TranslationRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationRightButtonUp
+        {
+            add => AddHandler(TranslationRightButtonUpEvent, value);
+            remove => RemoveHandler(TranslationRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationMouseEnter
+        {
+            add => AddHandler(TranslationMouseEnterEvent, value);
+            remove => RemoveHandler(TranslationMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationMouseLeave
+        {
+            add => AddHandler(TranslationMouseLeaveEvent, value);
+            remove => RemoveHandler(TranslationMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user rotates the mouse wheel while the mouse pointer is over a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationMouseWheel
+        {
+            add => AddHandler(TranslationMouseWheelEvent, value);
+            remove => RemoveHandler(TranslationMouseWheelEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteLeftButtonDown
+        {
+            add => AddHandler(NoteLeftButtonDownEvent, value);
+            remove => RemoveHandler(NoteLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteLeftButtonUp
+        {
+            add => AddHandler(NoteLeftButtonUpEvent, value);
+            remove => RemoveHandler(NoteLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteRightButtonDown
+        {
+            add => AddHandler(NoteRightButtonDownEvent, value);
+            remove => RemoveHandler(NoteRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteRightButtonUp
+        {
+            add => AddHandler(NoteRightButtonUpEvent, value);
+            remove => RemoveHandler(NoteRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteMouseEnter
+        {
+            add => AddHandler(NoteMouseEnterEvent, value);
+            remove => RemoveHandler(NoteMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteMouseLeave
+        {
+            add => AddHandler(NoteMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user rotates the mouse wheel while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler NoteMouseWheel
+        {
+            add => AddHandler(NoteMouseWheelEvent, value);
+            remove => RemoveHandler(NoteMouseWheelEvent, value);
+        }
+
         #endregion
         #region Event handlers
 
@@ -332,6 +476,104 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenMouseWheel(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenMouseWheelEvent, e);
+        }
+
+        private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as TranslationDisplayControl;
+            RaiseEvent(new TranslationEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Translation = control?.TokenDisplay?.Translation
+            });
+        }
+
+        private void OnTranslationClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationClickedEvent, e);
+        }
+
+        private void OnTranslationDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationDoubleClickedEvent, e);
+        }
+
+        private void OnTranslationLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationLeftButtonDownEvent, e);
+        }
+
+        private void OnTranslationLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
+        }
+        private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonDownEvent, e);
+        }
+
+        private void OnTranslationRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
+        }
+
+        private void OnTranslationMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseEnterEvent, e);
+        }
+
+        private void OnTranslationMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseLeaveEvent, e);
+        }
+
+        private void OnTranslationMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseWheelEvent, e);
+        }
+
+        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as TranslationDisplayControl;
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenDisplay = control?.TokenDisplay
+            });
+        }
+
+        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
+        }
+
+        private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+        private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+        }
+
+        private void OnNoteRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+
+        private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseEnterEvent, e);
+        }
+
+        private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+        }
+
+        private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseWheelEvent, e);
         }
 
         #endregion

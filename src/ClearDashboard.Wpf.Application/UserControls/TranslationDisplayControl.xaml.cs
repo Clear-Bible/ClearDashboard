@@ -488,11 +488,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplay;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                Translation = control?.TokenDisplay?.Translation
+                Translation = tokenDisplay?.Translation
             });
         }
 
@@ -542,11 +543,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplay;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = control?.TokenDisplay
+                TokenDisplay = tokenDisplay
             });
         }
 
@@ -628,7 +630,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the <see cref="TokenDisplay"/> data source for this control.
         /// </summary>
-        private TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
+        public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
 
         /// <summary>
         /// Gets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>

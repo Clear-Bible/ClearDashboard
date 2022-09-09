@@ -55,15 +55,22 @@
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
                                    Wrap="True"
                                    Tokens="{Binding Verse1}" 
+                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
                                                        [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
                                                        [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
                                                        [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
                                                        [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]"
-                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
+                                                       [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
+                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
+                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
+                                                       [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
+                                                       [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
+                                                       [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)]
+                                   "
                                    />
 
         <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
