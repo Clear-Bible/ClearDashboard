@@ -175,6 +175,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        public Visibility NoteVisibility
+        {
+            get
+            {
+                return !String.IsNullOrEmpty(TokenDisplay?.Note) ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
         public Thickness InnerPadding
         {
             get

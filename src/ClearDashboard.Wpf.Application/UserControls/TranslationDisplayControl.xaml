@@ -24,7 +24,9 @@
                 MouseEnter="OnTokenMouseEnter" MouseLeave="OnTokenMouseLeave" MouseWheel="OnTokenMouseWheel"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0">
             <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SurfaceText}" Margin="0" ></TextBlock>
-        </Button>        
+        </Button>
+        <Rectangle Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteVisibility}" 
+                   HorizontalAlignment="Stretch" Fill="LightGray" Height="3" ></Rectangle>
         <Button Background="{DynamicResource MaterialDesignPaper}" 
                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}" 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}" 

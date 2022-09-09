@@ -43,5 +43,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// The <see cref="TranslationState"/> of the translation.
         /// </summary>
         public string TranslationState => Translation?.TranslationState;
+
+        public string? Note { get; set; }
     }
 }
