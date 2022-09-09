@@ -21,6 +21,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using Dapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
