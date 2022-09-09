@@ -271,7 +271,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
-
+        
         public void SetLanguage()
         {
             var culture = Settings.Default.language_code;
@@ -289,6 +289,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             //WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            SetLanguage();
+            base.OnViewAttached(view, context);
         }
 
         private static void SaveUserLanguage(string language)
