@@ -31,7 +31,7 @@ using EngineToken = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
-    public class AlignmentSampleViewModel : DashboardApplicationScreen, IMainWindowViewModel
+    public class TranslationDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
@@ -59,11 +59,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public IEnumerable<TokenDisplay>? Verse3 { get; set; }
 
         // ReSharper disable UnusedMember.Global
-        public AlignmentSampleViewModel()
+        public TranslationDemoViewModel()
         {
         }
 
-        public AlignmentSampleViewModel(INavigationService navigationService, ILogger<AlignmentSampleViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
+        public TranslationDemoViewModel(INavigationService navigationService, ILogger<TranslationDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
         }
@@ -77,7 +77,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.SurfaceText}' clicked";
+            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 

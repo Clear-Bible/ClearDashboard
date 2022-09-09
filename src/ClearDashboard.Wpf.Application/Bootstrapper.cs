@@ -53,12 +53,12 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
-            builder.RegisterType<AlignmentSampleViewModel>().As<IMainWindowViewModel>();
+            builder.RegisterType<TranslationDemoViewModel>().As<IMainWindowViewModel>();
         }
 
         protected override async Task NavigateToMainWindow()
         {
-            NavigateToViewModel<AlignmentSampleViewModel>();
+            NavigateToViewModel<TranslationDemoViewModel>();
             EnsureApplicationMainWindowVisible();
             //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }

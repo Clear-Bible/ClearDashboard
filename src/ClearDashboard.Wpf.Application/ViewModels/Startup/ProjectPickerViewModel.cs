@@ -210,7 +210,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         //public void AlignmentSample()
         //{
         //    Logger.LogInformation("AlignmentSample called.");
-        //    NavigationService.NavigateToViewModel<AlignmentSampleViewModel>();
+        //    NavigationService.NavigateToViewModel<TranslationDemoViewModel>();
         //}
 
         public void SetLanguage()
