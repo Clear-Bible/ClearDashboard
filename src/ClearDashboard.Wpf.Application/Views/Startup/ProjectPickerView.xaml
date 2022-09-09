@@ -40,9 +40,10 @@
                                 <ControlTemplate>
                                     <materialDesign:Card
                                         Width="475"
-                                        Height="82"
+                                        Height="81"
                                         VerticalAlignment="Top"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Margin="0, 0, 0, 0"
                                         Background="#EEEBEB">
                                         <StackPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                         <Label FontSize="21" Margin="15">It's lonely here.  Please create a new project.</Label>
@@ -212,7 +213,7 @@
             </StackPanel>
 
             </StackPanel>
-        <StackPanel  Grid.Row="1"
+        <!--<StackPanel  Grid.Row="1"
                      Grid.Column="0" 
                      VerticalAlignment="Center">
 
@@ -236,12 +237,32 @@
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
             </TextBox>
-        </StackPanel>
+        </StackPanel>-->
         <StackPanel Grid.Row="2" Grid.Column="0" >
             <TextBlock
                 Margin="40,0"
                 FontSize="19"
                 Text="Open recent" />
+            <TextBox
+                x:Name="SearchText"
+                Width="320"
+                Height="30"
+                Margin="54,10,0,10"
+                Padding="3"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="Search recent"
+                BorderBrush="DarkGray"
+                BorderThickness="1"
+                IsEnabled="{Binding Connected}">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="SearchText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
@@ -257,7 +278,7 @@
             SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" 
             IsEnabled="{Binding Connected}"/>
         </StackPanel>
-        <StackPanel
+        <!--<StackPanel
             Grid.Row="2"
             Grid.Column="1"
             
@@ -270,9 +291,13 @@
                 FontSize="19"
                 Text="Get started" />
 
-        </StackPanel>
+        </StackPanel>-->
 
-        <StackPanel Grid.Row="3" Grid.Column="1">
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,55, 0,0">
+            <TextBlock
+                Margin="30, 0"
+                FontSize="19"
+                Text="Get started" />
             <Button
                 x:Name="MoveForwards"
                 Width="340"
@@ -317,7 +342,7 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
-            Margin="10,0,0,0"
+            Margin="10,-95,0,0"
             Orientation="Vertical">
             <ListView x:Name="ProjectListView"
               
