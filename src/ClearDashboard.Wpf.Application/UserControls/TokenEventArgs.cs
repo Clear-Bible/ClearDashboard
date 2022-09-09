@@ -9,6 +9,4 @@ namespace ClearDashboard.Wpf.Application.UserControls
     {
         public string SurfaceText { get; set; }
     }
-
-
 }
