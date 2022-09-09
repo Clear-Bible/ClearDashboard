@@ -11,6 +11,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
+using ClearDashboard.Wpf.Controls;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
@@ -31,7 +32,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     #region Enums
 
@@ -145,6 +146,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
+        private ProjectDesignSurface _projectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -373,6 +375,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     View = projectDesignSurfaceView;
                     // ReSharper disable once AssignNullToNotNullAttribute
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
+
+                    _projectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -399,11 +403,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         //    base.OnViewLoaded(view);
         //}
 
-        //protected override async void OnViewReady(object view)
-        //{
-        //    Console.WriteLine();
-        //    base.OnViewReady(view);
-        //}
+        protected override async void OnViewReady(object view)
+        {
+            Console.WriteLine();
+            base.OnViewReady(view);
+        }
         #endregion //Constructor
 
         #region Methods
@@ -890,8 +894,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         IsPopulated = true,
                         TokenizationName = viewModelSelectedTokenizer.ToString(),
                     });
+                    
+                    // TODO the UI chip is not being updated with the new count...why?
+
                     //NotifyOfPropertyChange(() => corpusNode);
                     NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
+
+                    // force a redraw
+                    if (_projectDesignSurface is not null)
+                    {
+                        _projectDesignSurface.InvalidateVisual();
+                    }
                 }
             }
         }
