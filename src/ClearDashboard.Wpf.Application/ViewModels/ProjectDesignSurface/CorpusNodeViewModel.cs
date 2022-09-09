@@ -89,7 +89,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
 
         private List<NodeTokenization> _nodeTokenizations = new();
-
         public List<NodeTokenization> NodeTokenizations
         {
             get => _nodeTokenizations;

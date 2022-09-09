@@ -28,6 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels
@@ -514,8 +515,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
 
-                    CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
-
+                    var node =CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
+                    node.NodeTokenizations = corpusNode.NodeTokenizations;
+                    
                     if (corpusNode.CorpusType == CorpusType.Manuscript)
                     {
                         AddManuscriptEnabled = false;
@@ -654,7 +656,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     await EventAggregator.PublishOnCurrentThreadAsync(
                         new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
-                    CreateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
+                    UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
                 }
                 catch (Exception ex)
                 {
@@ -768,9 +770,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                             TaskStatus = StatusEnum.Working
                         }), cancellationToken);
 
-                        var textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                        ITextCorpus textCorpus;
+
+                        switch (viewModel.SelectedTokenizer)
+                        {
+                            case Tokenizer.LatinWordTokenizer:
+                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
+                                break;
+                            case Tokenizer.WhitespaceTokenizer:
+                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                    .Tokenize<WhitespaceTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>();
+                                break;
+                            case Tokenizer.ZwspWordTokenizer:
+                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                    .Tokenize<ZwspWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>();
+                                break;
+                            default:
+                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                    .Tokenize<LatinWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>();
+                                break;
+                        }
 
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
@@ -782,7 +806,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                            metadata.Name, ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                            metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 #pragma warning restore CS8604
 
 
@@ -798,7 +822,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         await EventAggregator.PublishOnCurrentThreadAsync(
                             new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
-                        CreateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
+                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
 
                     }
                     catch (Exception ex)
@@ -832,24 +856,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-        private void CreateNodeTokenization(CorpusNodeViewModel node, DAL.Alignment.Corpora.Corpus corpus,
+
+        /// <summary>
+        /// adds on the tokenizedtextid to the node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="corpus"></param>
+        /// <param name="tokenizedTextCorpus"></param>
+        /// <param name="viewModelSelectedTokenizer"></param>
+        private void UpdateNodeTokenization(CorpusNodeViewModel node, DAL.Alignment.Corpora.Corpus corpus,
             TokenizedTextCorpus tokenizedTextCorpus, Tokenizer viewModelSelectedTokenizer)
         {
-            NodeTokenization nodeTokenization = new NodeTokenization
+            var corpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
+            if (corpusNode is not null)
             {
-                CorpusId = corpus.CorpusId.ToString(),
-                TokenizationFriendlyName = EnumHelper.GetDescription(viewModelSelectedTokenizer),
-                IsSelected = true,
-                TokenizationName = viewModelSelectedTokenizer.ToString(),
-                TokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId.ToString()
-            };
+                var nodeTokenization = corpusNode.NodeTokenizations.FirstOrDefault(b =>
+                    b.TokenizationName == viewModelSelectedTokenizer.ToString());
 
-            foreach (var corpusNodeViewModel in DesignSurface.CorpusNodes)
-            {
-                if (corpusNodeViewModel.Id == node.Id)
+                if (nodeTokenization is not null)
                 {
-                    corpusNodeViewModel.NodeTokenizations.Add(nodeTokenization);
-                    return;
+                    nodeTokenization.IsSelected = false;
+                    nodeTokenization.IsPopulated = true;
+                    nodeTokenization.TokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId.Id.ToString();
+                    NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
+                }
+                else
+                {
+                    corpusNode.NodeTokenizations.Add(new NodeTokenization
+                    {
+                        CorpusId = corpus.CorpusId.ToString(),
+                        TokenizationFriendlyName = EnumHelper.GetDescription(viewModelSelectedTokenizer),
+                        IsSelected = false,
+                        IsPopulated = true,
+                        TokenizationName = viewModelSelectedTokenizer.ToString(),
+                    });
+                    //NotifyOfPropertyChange(() => corpusNode);
+                    NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
                 }
             }
         }
@@ -1177,7 +1219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 CorpusId = corpus.CorpusId.ToString(),
                 TokenizationFriendlyName = EnumHelper.GetDescription(tokenizer),
-                IsSelected = true,
+                IsSelected = false,
                 TokenizationName = tokenizer.ToString(),
             });
 

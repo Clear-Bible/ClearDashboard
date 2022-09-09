@@ -407,7 +407,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="20" />
                                 <RowDefinition Height="Auto" />
                                 <!--  spacer  -->
                                 <RowDefinition Height="2" />
@@ -440,6 +440,24 @@
                                 Focusable="False"
                                 ItemTemplate="{StaticResource inputConnectorTemplate}"
                                 ItemsSource="{Binding InputConnectors}" />
+
+
+                            <materialDesign:Chip
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Width="30"
+                                Height="30"
+                                Margin="0,-5,6,0"
+                                HorizontalAlignment="Right"
+                                Content="{Binding Path=NodeTokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="Number of different tokenizations">
+                                <materialDesign:Chip.Style>
+                                    <Style TargetType="materialDesign:Chip">
+                                        <Setter Property="Padding" Value="0" />
+                                    </Style>
+                                </materialDesign:Chip.Style>
+                            </materialDesign:Chip>
 
                             <!--  Displays the node's output connectors.  -->
                             <ItemsControl
