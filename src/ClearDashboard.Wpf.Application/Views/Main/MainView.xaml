@@ -100,8 +100,9 @@
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
                 BorderThickness="2"
-                ExpandDirection="Right"
-                IsExpanded="True">
+                ExpandDirection="Left"
+                IsExpanded="True"
+                Style="{StaticResource LeftExpander}">
                 <controls:SidebarExpander.Header>
                     <TextBlock
                         BaselineOffset="100"
@@ -119,9 +120,9 @@
             </controls:SidebarExpander>
 
             <DockingManager
-                Grid.Column="1"
                 x:Name="dockManager"
                 Grid.Row="1"
+                Grid.Column="1"
                 ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
                 AllowMixedOrientation="True"
                 AnchorablesSource="{Binding Tools}"

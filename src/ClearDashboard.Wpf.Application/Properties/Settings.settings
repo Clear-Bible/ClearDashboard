@@ -35,5 +35,8 @@
     <Setting Name="SidebarExpandedWidth" Type="System.String" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
+    <Setting Name="EnhancedSidebarExpandedWidth" Type="System.String" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

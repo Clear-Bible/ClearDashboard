@@ -153,5 +153,17 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["SidebarExpandedWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public string EnhancedSidebarExpandedWidth {
+            get {
+                return ((string)(this["EnhancedSidebarExpandedWidth"]));
+            }
+            set {
+                this["EnhancedSidebarExpandedWidth"] = value;
+            }
+        }
     }
 }
