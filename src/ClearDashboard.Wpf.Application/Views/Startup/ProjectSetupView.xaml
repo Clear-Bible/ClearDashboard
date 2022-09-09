@@ -83,7 +83,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Create your new project" />
+        <Label Content="{helpers:Localization ProjectSetup_Title}" />
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
@@ -141,11 +141,11 @@
                 Style="{StaticResource TransparentStyle}"
                 cal:Message.Attach="MoveBackwards"
                 IsEnabled="{Binding EnableControls}"
-                Content="Back">
+                Content="{helpers:Localization Back}">
                 </Button>
             <Button
                 x:Name="Create"
-                Content="Create" 
+                Content="{helpers:Localization Create}" 
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>
 
