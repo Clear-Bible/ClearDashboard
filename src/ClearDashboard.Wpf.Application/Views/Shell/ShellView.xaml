@@ -16,7 +16,8 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,IsDesignTimeCreatable=True}"
-
+    Visibility="Hidden"
+    WindowState="Minimized"
     d:DesignHeight="800"
     d:DesignWidth="1200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
