@@ -35,7 +35,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="80" />
             <RowDefinition Height="80" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="170" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
@@ -52,7 +52,7 @@
         <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Word Translator Display" FontSize="20" />
 
         <Label Grid.Row="1">Verse 1 with translations, wrapped</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="1" 
+        <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
                                                   Wrap="True"
                                                   Tokens="{Binding Verse1}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -61,7 +61,7 @@
                                                   />
 
         <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="2" 
+        <userControls:VerseDisplay Grid.Column="1" Grid.Row="2" 
                                                   Wrap="True"
                                                   Tokens="{Binding Verse1NoTranslations}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -70,7 +70,7 @@
                                                   />
 
         <Label Grid.Row="3">Verse 1 with translations, no wrapping</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="3" 
+        <userControls:VerseDisplay Grid.Column="1" Grid.Row="3" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse1}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -79,17 +79,18 @@
                                                   />
 
         <Label Grid.Row="4">Verse 2 with note indicators</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="4" 
+        <userControls:VerseDisplay Grid.Column="1" Grid.Row="4" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse2}" 
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
         />
-        <Label Grid.Row="5">Verse 3 without translations</Label>
-        <userControls:TokensTextRowDisplayControl Grid.Column="1" Grid.Row="5" 
+        <Label Grid.Row="5">Verse 3, vertical orientation</Label>
+        <userControls:VerseDisplay Grid.Column="1" Grid.Row="5" 
                                                   Wrap="False"
                                                   Tokens="{Binding Verse3}" 
+                                                  Orientation="Vertical"
                                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                   TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

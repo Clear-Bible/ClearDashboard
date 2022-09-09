@@ -9,34 +9,34 @@ using SIL.Machine.Tokenization;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a <see cref="TokensTextRow"/>
+    /// A control for displaying a verse of <see cref="Token"/>s.
     /// </summary>
-    public partial class TokensTextRowDisplayControl : UserControl
+    public partial class VerseDisplay : UserControl
     {
         #region Static DependencyProperties
 
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
-        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay));
         
-        public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the Tokens dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
-        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
+        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(VerseDisplay));
 
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokensTextRowDisplayControl),
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(16d));
 
-        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokensTextRowDisplayControl),
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
         #endregion Static DependencyProperties
@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         //    remove => RemoveHandler(TokenMouseWheelEvent, value);
         //}
 
-        public TokensTextRowDisplayControl()
+        public VerseDisplay()
         {
             InitializeComponent();
         }
