@@ -300,7 +300,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
                 .Filter<FunctionWordTextRowProcessor>();
 
-            var translationCommandable = new TranslationCommands(Mediator!);
+            var translationCommandable = new TranslationCommands();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,

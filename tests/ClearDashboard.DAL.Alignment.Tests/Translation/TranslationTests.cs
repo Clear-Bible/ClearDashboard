@@ -56,7 +56,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                     .Filter<FunctionWordTextRowProcessor>();
 
                 {
-                    var translationCommandable = new TranslationCommands(mediator_);
+                    var translationCommandable = new TranslationCommands();
 
                     using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                         SmtModelType.FastAlign,
