@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using Autofac;
 using AvalonDock.Properties;
@@ -29,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
        IHandle<BackgroundTaskChangedMessage>
     {
-        private readonly TranslationSource _translationSource;
+        private readonly TranslationSource? _translationSource;
 
         #region Properties
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
@@ -37,12 +38,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly int _completedRemovalSeconds = 45;
         private bool _firstPass = false;
 
-        private Timer _timer;
+        private Timer? _timer;
         private bool _firstRun;
 
 
-        private string _paratextUserName;
-        public string ParatextUserName
+        private string? _paratextUserName;
+        public string? ParatextUserName
         {
             get => _paratextUserName;
 
@@ -54,8 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
 
-        private string _version;
-        public string Version
+        private string? _version;
+        public string? Version
         {
             get => _version;
             set
@@ -158,8 +159,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Commands
 
-        private ICommand _colorStylesCommand;
-        public ICommand ColorStylesCommand
+        private ICommand? _colorStylesCommand;
+        public ICommand? ColorStylesCommand
         {
             get => _colorStylesCommand;
             set
@@ -184,7 +185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             BogusData();
         }
 
-        public ShellViewModel(TranslationSource translationSource, INavigationService navigationService,
+        public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
@@ -210,10 +211,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 }
             }, null, _startTimeSpan, _periodTimeSpan);
 
-            //BogusData();
-        }
+            LoadingApplication = true;
+            NavigationService.Navigated += NavigationServiceOnNavigated;
+   
 
-        private void BogusData()
+        //BogusData();
+    }
+
+       
+
+
+
+    private bool _loadingApplication;
+    public bool LoadingApplication
+    {
+        get => _loadingApplication;
+        set => Set(ref _loadingApplication, value);
+    }
+
+
+    
+
+    private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
+    {
+        var uri = e.Uri;
+
+        if (uri.OriginalString.Contains("HomeView.xaml"))
+        {
+            LoadingApplication = false;
+        }
+    }
+
+    private void BogusData()
         {
             // make some bogus task data
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
@@ -297,7 +326,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
+            NavigationService.Navigated -= NavigationServiceOnNavigated;
             Logger.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
 
             // HACK:  Force the MainViewModel singleton to properly deactivate

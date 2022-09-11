@@ -105,7 +105,7 @@
                 <ComboBox
                     Margin="30,0,0,0"
                     VerticalAlignment="Top"
-                    ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type viewModels:Tokenizer}}}"
+                    ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type project:Tokenizer}}}"
                     SelectedItem="{Binding SelectedTokenizer}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

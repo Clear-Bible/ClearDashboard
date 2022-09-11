@@ -3,7 +3,7 @@ using System.Windows.Documents;
 using ClearDashboard.DataAccessLayer.Models;
 using Xunit;
 using SIL.Scripture;
-using Versification = ClearDashboard.Wpf.Helpers.Versification;
+using Versification = ClearDashboard.Wpf.Application.Helpers.Versification;
 
 namespace ClearDashboard.WPF.Tests
 {

@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record GetTranslationsByTranslationSetIdAndTokenIdRangeQuery(TranslationSetId TranslationSetId, TokenId FirstTokenId, TokenId LastTokenId) : 
+    public record GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId TranslationSetId, IEnumerable<TokenId> TokenIds) : 
         ProjectRequestQuery<IEnumerable<Alignment.Translation.Translation>>;
 }

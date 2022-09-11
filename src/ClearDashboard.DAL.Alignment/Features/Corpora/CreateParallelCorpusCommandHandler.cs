@@ -36,8 +36,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //3. return created ParallelCorpus based on ParallelCorpusId
             //var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
 
-            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
-            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.Tokens).FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
+            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.TokenComponents).FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.TokenComponents).FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
 
             if (sourceTokenizedCorpus == null || targetTokenizedCorpus == null)
             {
@@ -72,21 +72,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         };
                         verseMapping.Verses.AddRange(vm.SourceVerses
                             .Select(v => {
-                                int bookNumber;
-                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out bookNumber))
+                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out int bookNumber))
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
                                 }
-                                // Heavy where clause, but done only in the context of a TokenizedCorpus's
-                                // set of tokens...so maybe not that bad?
                                 var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
-                                    sourceTokenizedCorpus.Tokens
-                                        .Where(t =>
-                                            t.BookNumber == tid.BookNumber &&
-                                            t.ChapterNumber == tid.ChapterNumber &&
-                                            t.VerseNumber == tid.VerseNumber &&
-                                            t.WordNumber == tid.WordNumber &&
-                                            t.SubwordNumber == tid.SubWordNumber)
+                                    sourceTokenizedCorpus.TokenComponents
+                                        .Where(t => t.EngineTokenId == tid.ToString())
                                         .Select(t => t.Id)
                                     );                                
                                 var verse = new Models.Verse
@@ -100,7 +92,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenId = td,
+                                        TokenComponentId = td,
                                         Position = index
                                     }));
                                 }
@@ -114,16 +106,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
                                 }
-                                // Heavy where clause, but done only in the context of a TokenizedCorpus's 
-                                // set of tokens...so maybe not that bad?
                                 var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
-                                    targetTokenizedCorpus.Tokens
-                                        .Where(t =>
-                                            t.BookNumber == tid.BookNumber &&
-                                            t.ChapterNumber == tid.ChapterNumber &&
-                                            t.VerseNumber == tid.VerseNumber &&
-                                            t.WordNumber == tid.WordNumber &&
-                                            t.SubwordNumber == tid.SubWordNumber)
+                                    targetTokenizedCorpus.TokenComponents
+                                        .Where(t => t.EngineTokenId == tid.ToString())
                                         .Select(t => t.Id)
                                     );
                                 var verse = new Models.Verse
@@ -137,7 +122,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenId = td,
+                                        TokenComponentId = td,
                                         Position = index
                                     }));
                                 }

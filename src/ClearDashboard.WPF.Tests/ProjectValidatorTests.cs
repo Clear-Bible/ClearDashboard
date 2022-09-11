@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Validators;
-using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
+using ClearDashboard.Wpf.Application.Validators;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.WPF.Tests
 {

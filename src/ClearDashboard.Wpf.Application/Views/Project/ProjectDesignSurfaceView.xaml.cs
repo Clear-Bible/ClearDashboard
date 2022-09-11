@@ -5,6 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 
 namespace ClearDashboard.Wpf.Application.Views.Project
@@ -144,8 +145,8 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void CreateNode()
         {
             var newNodePosition = Mouse.GetPosition(ProjectDesignSurface);
-            this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, CorpusType.Standard,
-                Guid.NewGuid().ToString());
+            //this.ViewModel.CreateNode("New Corpus!", newNodePosition, true, CorpusType.Standard,
+            //    Guid.NewGuid().ToString());
         }
 
         /// <summary>
@@ -162,5 +163,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             node.Size = new Size(element.ActualWidth, element.ActualHeight);
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var node = e.Source as CorpusNodeViewModel;
+        }
     }
 }

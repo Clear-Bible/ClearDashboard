@@ -94,6 +94,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             return base.OnActivateAsync(cancellationToken);
         }
 
+        protected override void OnViewReady(object view)
+        {
+            Console.WriteLine();
+            base.OnViewReady(view);
+        }
+
         protected override void OnViewLoaded(object view)
         {
             Console.WriteLine();

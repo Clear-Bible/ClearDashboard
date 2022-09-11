@@ -44,14 +44,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return new RequestResult<Corpus>
             (
                 new Corpus(
-                    request.CorpusId, 
-                    _mediator, 
-                    corpus.IsRtl, 
-                    corpus.Name, 
-                    corpus.Language, 
+                    request.CorpusId,
+                    _mediator,
+                    corpus.IsRtl,
+                    corpus.Name,
+                    corpus.DisplayName,
+                    corpus.Language,
                     corpus.ParatextGuid,
-                    corpus.CorpusType,
-                    corpus.Metadata)
+                    corpus.CorpusType.ToString(),
+                    corpus.Metadata,
+                    corpus.Created,
+                    ModelHelper.BuildUserId(corpus))
             );
         }
     }

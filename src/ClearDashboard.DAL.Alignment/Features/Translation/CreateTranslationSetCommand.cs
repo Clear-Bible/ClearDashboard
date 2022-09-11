@@ -6,5 +6,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public record CreateTranslationSetCommand(
         Dictionary<string, Dictionary<string, double>> TranslationModel,
+        string? DisplayName,
+        string SmtModel,
+        Dictionary<string, object> Metadata,
         ParallelCorpusId ParallelCorpusId) : ProjectRequestCommand<TranslationSet>;
 }

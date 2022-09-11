@@ -12,12 +12,17 @@
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    MinWidth="250"
-    d:DataContext="{d:DesignInstance Type=viewModels:ProjectDesignSurfaceViewModel,
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    Width="500"
+    d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="300"
     mc:Ignorable="d">
+
+    <!--<UserControl.DataContext>
+        <viewModels:ProjectDesignSurfaceViewModel />
+    </UserControl.DataContext>-->
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -34,6 +39,8 @@
 
             <RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />
             <RoutedUICommand x:Key="Commands.CreateNode" />
+            <RoutedUICommand x:Key="Commands.NodeProperties" />
+            <RoutedUICommand x:Key="Commands.ConnectionProperties" />
             <RoutedUICommand x:Key="Commands.DeleteNode" />
             <RoutedUICommand x:Key="Commands.DeleteConnection" />
             <RoutedUICommand x:Key="Commands.ZoomOut" />
@@ -236,7 +243,23 @@
                         NodeTarget="{Binding Path=DestinationConnector}"
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
-                        StrokeThickness="3" />
+                        StrokeThickness="3">
+                        <viewModels:CurvedArrow.ContextMenu>
+                            <ContextMenu Name="ContextMenu">
+                                <MenuItem
+                                    Command="{StaticResource Commands.ConnectionProperties}"
+                                    CommandParameter="{Binding}"
+                                    Header="Properties"
+                                    ToolTip="View the corpus properties" />
+                                <!--
+                                    Command="{StaticResource Commands.Properties}"
+                                    cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
+                                    CommandParameter="{Binding ElementName=nodeRectangle}"
+                                -->
+
+                            </ContextMenu>
+                        </viewModels:CurvedArrow.ContextMenu>
+                    </viewModels:CurvedArrow>
 
                     <controls:AdornedControl.AdornerContent>
 
@@ -324,7 +347,33 @@
                                     </Style.Triggers>
                                 </Style>
                             </Rectangle.Style>
+                            <Rectangle.ContextMenu>
+                                <ContextMenu Name="ContextMenu">
+                                    <MenuItem
+                                        Command="{StaticResource Commands.CreateNode}"
+                                        Header="View Verse Text"
+                                        ToolTip="View the verse text for the corpus" />
+                                    <MenuItem
+                                        Command="{StaticResource Commands.CreateNode}"
+                                        Header="Edit Tokenizer"
+                                        ToolTip="Edit the corpus tokenizer" />
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{StaticResource Commands.NodeProperties}"
+                                        CommandParameter="{Binding}"
+                                        Header="Properties"
+                                        ToolTip="View the corpus properties" />
+                                    <!--
+                                        Command="{StaticResource Commands.Properties}"
+                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
+                                        CommandParameter="{Binding ElementName=nodeRectangle}"
+                                    -->
+
+                                </ContextMenu>
+                            </Rectangle.ContextMenu>
                         </Rectangle>
+
+
 
                         <!--<Button
                             Width="25"
@@ -363,7 +412,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="20" />
                                 <RowDefinition Height="Auto" />
                                 <!--  spacer  -->
                                 <RowDefinition Height="2" />
@@ -372,6 +421,7 @@
 
                             <!--  The name of the node.  -->
                             <TextBlock
+                                x:Name="tb1"
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -382,6 +432,7 @@
 
                             <!--  The project type of the node.  -->
                             <TextBlock
+                                x:Name="tb2"
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -396,6 +447,24 @@
                                 Focusable="False"
                                 ItemTemplate="{StaticResource inputConnectorTemplate}"
                                 ItemsSource="{Binding InputConnectors}" />
+
+
+                            <materialDesign:Chip
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Width="30"
+                                Height="30"
+                                Margin="0,-5,6,0"
+                                HorizontalAlignment="Right"
+                                Content="{Binding Path=NodeTokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="Number of different tokenizations">
+                                <materialDesign:Chip.Style>
+                                    <Style TargetType="materialDesign:Chip">
+                                        <Setter Property="Padding" Value="0" />
+                                    </Style>
+                                </materialDesign:Chip.Style>
+                            </materialDesign:Chip>
 
                             <!--  Displays the node's output connectors.  -->
                             <ItemsControl
@@ -467,6 +536,8 @@
 
         <CommandBinding Command="{StaticResource Commands.DeleteSelectedNodes}" Executed="OnDeleteSelectedNodesExecuted" />
         <CommandBinding Command="{StaticResource Commands.CreateNode}" Executed="OnCreateCorpusNodeExecuted" />
+        <CommandBinding Command="{StaticResource Commands.NodeProperties}" Executed="OnCorpusNodeProperties" />
+        <CommandBinding Command="{StaticResource Commands.ConnectionProperties}" Executed="OnConnectionProperties" />
         <CommandBinding Command="{StaticResource Commands.DeleteNode}" Executed="OnDeleteCorpusNodeExecuted" />
         <CommandBinding Command="{StaticResource Commands.DeleteConnection}" Executed="OnDeleteConnectionExecuted" />
         <CommandBinding Command="{StaticResource Commands.ZoomOut}" Executed="ZoomOut_Executed" />
@@ -482,11 +553,13 @@
 
     </UserControl.CommandBindings>
 
-    <UserControl.ContextMenu>
+    <!--<UserControl.ContextMenu>
 
         <ContextMenu>
 
-            <!--  Clicking this menu item creates a new node.  -->
+    -->
+    <!--  Clicking this menu item creates a new node.  -->
+    <!--
 
             <MenuItem
                 Command="{StaticResource Commands.CreateNode}"
@@ -524,7 +597,7 @@
                 ToolTip="Zooms in on the canvas" />
 
         </ContextMenu>
-    </UserControl.ContextMenu>
+    </UserControl.ContextMenu>-->
 
 
 
@@ -535,13 +608,11 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <materialDesign:Card
-            Margin="5"
+            Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
-            BorderBrush="Black"
-            BorderThickness="5"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            UniformCornerRadius="5">
+            IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
                 <Label
                     Margin="5,5,0,5"
@@ -554,6 +625,7 @@
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddManuscriptCorpus()"
                         Content="Manuscript"
+                        IsEnabled="{Binding AddManuscriptEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
                     <Button
@@ -574,6 +646,28 @@
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
+
+        <ProgressBar
+            Width="50"
+            Height="50"
+            Margin="0,0,50,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Value="0">
+            <ProgressBar.Style>
+                <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AddCorpusEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
+
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -682,12 +776,14 @@
                     is while zooming in and out.
                 -->
                 <TextBlock
+                    x:Name="tb3"
                     Grid.Column="7"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
                 <TextBlock
+                    x:Name="tb4"
                     Grid.Column="8"
                     VerticalAlignment="Center"
                     Text="%" />

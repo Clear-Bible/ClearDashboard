@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
@@ -24,13 +23,56 @@
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,8" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
         </Style>
 
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="10,10" />
+            <Setter Property="Margin" Value="20,10" />
             <Setter Property="FontSize" Value="24" />
+        </Style>
+
+        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Height" Value="50"></Setter>
+            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border >
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightGray"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#EEEBEB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter></ContentPresenter>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
     </UserControl.Resources>
@@ -41,27 +83,25 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Create New Project" />
+        <Label Content="Create your new project" />
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
-            Margin="0,40"
-            HorizontalAlignment="Center"
+            Margin="24,10"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
             <TextBox
                 x:Name="ProjectName"
                 MinWidth="400"
                 VerticalAlignment="Center"
-                materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:HintAssist.FloatingScale="0.60"
+                materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                 materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Foreground="{DynamicResource MaterialDesignBody}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-
-
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -97,26 +137,16 @@
 
             <Button
                 x:Name="MoveBackwards"
-                Grid.Row="2"
-                Grid.Column="0"
-                Width="100"
                 Margin="5,5,5,5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                Style="{StaticResource TransparentStyle}"
                 cal:Message.Attach="MoveBackwards"
-                IsEnabled="{Binding EnableControls}">
-                <StackPanel Orientation="Horizontal">
-                    <Viewbox MaxWidth="50" MaxHeight="50" />
-                    <TextBlock VerticalAlignment="Center" Text="Back" />
-                </StackPanel>
-            </Button>
+                IsEnabled="{Binding EnableControls}"
+                Content="Back">
+                </Button>
             <Button
                 x:Name="Create"
-                Grid.Row="3"
-                Grid.Column="1"
-                Width="100"
-                VerticalAlignment="Center"
-                Content="Create" />
+                Content="Create" 
+                Style="{StaticResource TransparentStyle}"/>
         </StackPanel>
 
     </Grid>
