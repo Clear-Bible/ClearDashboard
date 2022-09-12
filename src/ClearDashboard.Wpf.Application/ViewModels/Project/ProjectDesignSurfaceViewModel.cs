@@ -8,7 +8,9 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using ClearDashboard.Wpf.Controls;
 using MediatR;
@@ -143,7 +145,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
-        private ProjectDesignSurface? ProjectDesignSurface { get; set; }
+        private Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -291,6 +293,87 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        private string _menuIdCommmand;
+        public string MenuIdCommmand
+        {
+            get => _menuIdCommmand;
+            set
+            {
+                if (value.StartsWith("ProjectLayout:") || value.StartsWith("StandardLayout"))
+                {
+                }
+                else if (value == "SeparatorID")
+                {
+                    // no op
+                }
+                else if (value == "SaveID")
+                {
+
+                }
+                else if (value == "DeleteID")
+                {
+
+                }
+                else
+                {
+                    switch (value)
+                    {
+                        case "LayoutID":
+                            Console.WriteLine();
+                            break;
+                        case "AlignmentToolID":
+                            _menuIdCommmand = "ALIGNMENTTOOL";
+                            break;
+                        case "BiblicalTermsID":
+                            _menuIdCommmand = "BIBLICALTERMS";
+                            break;
+                        case "ConcordanceToolID":
+                            _menuIdCommmand = "CONCORDANCETOOL";
+                            break;
+                        case "CorpusTokensID":
+                            _menuIdCommmand = "CORPUSTOKENS";
+                            break;
+                        case "DashboardID":
+                            _menuIdCommmand = "DASHBOARD";
+                            break;
+                        case "EnhancedCorpusID":
+                            _menuIdCommmand = "ENHANCEDCORPUS";
+                            break;
+                        case "NotesID":
+                            _menuIdCommmand = "NOTES";
+                            break;
+                        case "PINSID":
+                            _menuIdCommmand = "PINS";
+                            break;
+                        //case "ProjectDesignSurfaceID":
+                        //    _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
+                        //    break;
+                        case "WordMeaningsID":
+                            _menuIdCommmand = "WORDMEANINGS";
+                            break;
+                        case "SourceContextID":
+                            _menuIdCommmand = "SOURCECONTEXT";
+                            break;
+                        case "StartPageID":
+                            _menuIdCommmand = "STARTPAGE";
+                            break;
+                        case "TargetContextID":
+                            _menuIdCommmand = "TARGETCONTEXT";
+                            break;
+                        case "TextCollectionID":
+                            _menuIdCommmand = "TEXTCOLLECTION";
+                            break;
+
+                        default:
+                            _menuIdCommmand = value;
+                            break;
+                    }
+
+                }
+
+                NotifyOfPropertyChange(() => MenuIdCommmand);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -356,7 +439,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    ProjectDesignSurface = (Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -408,7 +491,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion //Constructor
 
         #region Methods
-
 
         public async  Task SaveCanvas()
         {
@@ -900,8 +982,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // force a redraw
                     ProjectDesignSurface?.InvalidateVisual();
                 }
+                
+                CreateNodeMenu(corpusNode);
             }
         }
+
+
+        /// <summary>
+        /// creates the databound menu for the node
+        /// </summary>
+        /// <param name="corpusNode"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void CreateNodeMenu(CorpusNodeViewModel corpusNode)
+        {
+            // initiate the menu system
+            corpusNode.MenuItems.Clear();
+
+            ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new()
+            {
+                // add in the standard menu items
+                new NodeMenuItemViewModel { Header = "⳼ Add new tokenization", Id = "AddTokenizationId", Icon = null, ViewModel = this, },
+            };
+            
+            foreach (var nodeTokenization in corpusNode.NodeTokenizations)
+            {
+                nodeMenuItems.Add(new NodeMenuItemViewModel
+                {
+                    Header = "🝆 " + nodeTokenization.TokenizationFriendlyName,
+                    Id = nodeTokenization.TokenizedTextCorpusId,
+                    MenuItems = new ObservableCollection<NodeMenuItemViewModel>
+                    {
+                        new NodeMenuItemViewModel { Header = "Add to focused enhanced view", Id="AddToEnhancedViewId", ViewModel = this, },
+                        new NodeMenuItemViewModel { Header = "Properties",  Id="PropertiesId", ViewModel = this, }
+                    }
+                });
+            }
+
+            corpusNode.MenuItems = nodeMenuItems;
+        }
+
 
         /// <summary>
         /// gets the position below the last node on the surface
@@ -930,25 +1049,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             return new Point(x, y + (yOffset * 0.5));
-        }
-
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
-            {
-                CancellationTokenSource?.Cancel();
-
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-            }
-
-            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -1349,6 +1449,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void ShowConnectionProperties(ConnectionViewModel connection)
         {
             SelectedConnection = connection;
+        }
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingMessage = message.Status;
+
+            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            {
+                CancellationTokenSource?.Cancel();
+
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
+            }
+
+            await Task.CompletedTask;
         }
 
         public Task HandleAsync(NodeSelectedChanagedMessage message, CancellationToken cancellationToken)
