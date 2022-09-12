@@ -43,28 +43,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
 
-        private Icon _icon;
-        public Icon Icon
-        {
-            get => _icon;
-            set
-            {
-                _icon = value;
-                NotifyOfPropertyChange(() => Icon);
-            }
-        }
-
-        private string _iconSource = string.Empty;
-        public string IconSource
-        {
-            get => _iconSource;
-            set
-            {
-                _iconSource = value;
-                NotifyOfPropertyChange(() => IconSource);
-            }
-        }
-
         private string _iconKind;
         public string IconKind
         {

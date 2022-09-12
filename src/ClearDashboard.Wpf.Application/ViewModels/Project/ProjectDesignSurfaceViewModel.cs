@@ -922,7 +922,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new()
             {
                 // add in the standard menu items
-                new NodeMenuItemViewModel { Header = "⳼ Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, },
+                new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, },
             };
 
             nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });

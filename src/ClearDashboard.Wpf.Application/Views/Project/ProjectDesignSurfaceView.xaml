@@ -403,6 +403,8 @@
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <iconPacks:PackIconPicolIcons
                                                                         Width="15"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="5 5 0 0"
                                                                         Height="15"
                                                                         Kind="{Binding IconKind}" />
                                                                     <TextBlock
