@@ -411,7 +411,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Methods
 
 
-        private async void SaveCanvas()
+
+        //protected override async void OnViewLoaded(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewLoaded(view);
+        //}
+
+        //protected override async void OnViewReady(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewReady(view);
+        //}
+        #endregion //Constructor
+
+        #region Methods
+
+
+        public async  Task SaveCanvas()
         {
             var surface = new ProjectDesignSurfaceSerializationModel();
 
