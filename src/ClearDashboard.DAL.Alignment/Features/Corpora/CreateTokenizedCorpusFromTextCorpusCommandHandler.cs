@@ -70,11 +70,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
             var tokenizationId = Guid.Empty;
 
-            var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
-            if (!connectionWasOpen)
-            {
+            //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
+            //if (!connectionWasOpen)
+            //{
                 await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-            }
+            //}
            
             try
             {
@@ -162,10 +162,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
             finally
             {
-                if (!connectionWasOpen)
-                {
+                //if (!connectionWasOpen)
+                //{
                     await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
-                }
+                //}
             }
         }
 
