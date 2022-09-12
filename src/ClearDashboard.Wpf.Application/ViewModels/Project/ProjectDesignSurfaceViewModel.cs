@@ -82,8 +82,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Member Variables
 
         // ReSharper disable once RedundantDefaultMemberInitializer
-        private CancellationTokenSource? _cancellationTokenSource = null;
-        private bool _addParatextCorpusRunning;
+        public CancellationTokenSource? CancellationTokenSource = null;
+        public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
@@ -341,24 +341,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            SaveCanvas();
-
-            //we need to cancel this process here
-            //check a bool to see if it already cancelled or already completed
-            if (_addParatextCorpusRunning)
-            {
-#pragma warning disable CS8602
-                _cancellationTokenSource.Cancel();
-#pragma warning restore CS8602
-                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                {
-                    Name = "Corpus",
-                    Description = "Task was cancelled",
-                    EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
-                }), cancellationToken);
-            }
-            // todo - save the project
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -596,8 +578,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             AddManuscriptEnabled = false;
 
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
 
 
             var syntaxTree = new SyntaxTrees();
@@ -694,8 +676,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 finally
                 {
-                    _cancellationTokenSource.Dispose();
-                    _addParatextCorpusRunning = false;
+                    CancellationTokenSource.Dispose();
+                    AddParatextCorpusRunning = false;
                 }
                 AddCorpusEnabled = true;
 
@@ -708,9 +690,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void AddParatextCorpus()
         {
             _logger.LogInformation("AddParatextCorpus called.");
-            _addParatextCorpusRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            AddParatextCorpusRunning = true;
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
 
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
@@ -861,8 +843,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     finally
                     {
-                        _cancellationTokenSource.Dispose();
-                        _addParatextCorpusRunning = false;
+                        CancellationTokenSource.Dispose();
+                        AddParatextCorpusRunning = false;
                     }
 
 
@@ -956,7 +938,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _cancellationTokenSource?.Cancel();
+                CancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;

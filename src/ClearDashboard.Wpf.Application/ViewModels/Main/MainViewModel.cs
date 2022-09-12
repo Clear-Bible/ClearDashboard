@@ -511,6 +511,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // save the design surface
             await _projectDesignSurfaceViewModel.SaveCanvas();
 
+            //we need to cancel running background processes
+            //check a bool to see if it already cancelled or already completed
+            if (_projectDesignSurfaceViewModel.AddParatextCorpusRunning)
+            {
+#pragma warning disable CS8602
+                _projectDesignSurfaceViewModel.CancellationTokenSource.Cancel();
+#pragma warning restore CS8602
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = "Corpus",
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }), cancellationToken);
+            }
+
+
+
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
