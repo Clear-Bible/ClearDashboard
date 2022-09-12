@@ -2,111 +2,41 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.Wpf.UserControls
 {
     /// <summary>
-    /// A control for displaying a list of words/tokens.
+    /// A control for displaying a <see cref="TokensTextRow"/>
     /// </summary>
-    public partial class TextDisplayControl : UserControl
+    public partial class TokensTextRowDisplayControl : UserControl
     {
-        #region Static RoutedEvents
-        ///// <summary>
-        ///// Identifies the TokenClickedEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenDoubleClickedEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenLeftButtonDownEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenLeftButtonUpEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenRightButtonDownEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenRightButtonUpEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenMouseEnterEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenMouseEnterEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenMouseLeaveEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        ///// <summary>
-        ///// Identifies the TokenMouseWheelEvent routed event.
-        ///// </summary>
-        //public static readonly RoutedEvent TokenMouseWheelEvent = EventManager.RegisterRoutedEvent
-        //    ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TextDisplayControl));
-
-        #endregion Static RoutedEvents
         #region Static DependencyProperties
-
-        /// <summary>
-        /// Identifies the ItemsSource dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(TextDisplayControl));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TextDisplayControl));
-
-        /// <summary>
-        /// Identifies the InnerMargin dependency property.
-        /// </summary>
-        //public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(TextDisplayControl),
-        //    new PropertyMetadata(new Thickness(6, 2, 6, 2)));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokensTextRowDisplayControl));
 
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
-        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(TextDisplayControl));
+        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(TokensTextRowDisplayControl));
+        
+        public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(TokensTextRowDisplayControl));
 
         /// <summary>
-        /// Identifies the ParagraphMode dependency property.
+        /// Identifies the ItemsSource dependency property.
         /// </summary>
-        public static readonly DependencyProperty ParagraphModeProperty = DependencyProperty.Register("ParagraphMode", typeof(bool), typeof(TextDisplayControl));
-        
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
+        public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(TokensTextRowDisplayControl));
+
         #endregion Static DependencyProperties
 
         /// <summary>
-        /// Gets or sets a collection to display in the control.
-        /// </summary>
-        public IEnumerable ItemsSource
-        {
-            get => (IEnumerable)GetValue(ItemsSourceProperty);
-            set => SetValue(ItemsSourceProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the orientation for text display.
+        /// Gets or sets the orientation for displaying the tokens.
         /// </summary>
         public Orientation Orientation
         {
@@ -115,47 +45,31 @@ namespace ClearDashboard.Wpf.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the margin around each word for text display.
-        /// </summary>
-        //public Thickness InnerMargin
-        //{
-        //    get
-        //    {
-        //        var result = GetValue(InnerMarginProperty);
-        //        return (Thickness) result;
-        //    }
-        //    set => SetValue(InnerMarginProperty, value);
-        //}
-
-        /// <summary>
         /// Gets or sets whether the words should wrap in the control.
         /// </summary>
         public bool Wrap
         {
             get => (bool)GetValue(WrapProperty);
             set => SetValue(WrapProperty, value);
-        }        
+        }           
         
-        /// <summary>
-        /// Gets or sets whether paragraph mode is enabled.
-        /// </summary>
-        public bool ParagraphMode
+        public TokensTextRow TokensTextRow
         {
-            get => (bool)GetValue(ParagraphModeProperty);
-            set => SetValue(ParagraphModeProperty, value);
-        }
+            get => (TokensTextRow)GetValue(TokensTextRowProperty);
+            set => SetValue(TokensTextRowProperty, value);
+        }        
 
-        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap || ParagraphMode ? "WrapPanelTemplate" : "StackPanelTemplate");
+        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
 
-        public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
+        //public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
 
-        private Thickness ParagraphMargin = new(0,0,0,0);
-        private Thickness StackMargin = new(6,2,6,2);
+        //private Thickness ParagraphMargin = new(0,0,0,0);
+        //private Thickness StackMargin = new(6,2,6,2);
         //public Thickness InnerMargin => ParagraphMode ? ParagraphMargin : StackMargin;        
         
-        private Thickness ParagraphPadding = new(5,0,5,0);
-        private Thickness StackPadding = new(10,2,10,2);
-        public Thickness InnerPadding => ParagraphMode ? ParagraphPadding : StackPadding;
+        //private Thickness ParagraphPadding = new(5,0,5,0);
+        //private Thickness StackPadding = new(10,2,10,2);
+        //public Thickness InnerPadding => ParagraphMode ? ParagraphPadding : StackPadding;
 
         ///// <summary>
         ///// Occurs when an individual token is clicked.
@@ -238,11 +152,45 @@ namespace ClearDashboard.Wpf.UserControls
         //    remove => RemoveHandler(TokenMouseWheelEvent, value);
         //}
 
-        public TextDisplayControl()
+        public TokensTextRowDisplayControl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets or sets a collection to display in the control.
+        /// </summary>
+        public IEnumerable ItemsSource
+        {
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set
+            {
+                SetValue(ItemsSourceProperty, value);
+                Tokens = Detokenize(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a collection to display in the control.
+        /// </summary>
+        public IEnumerable Tokens
+        {
+            get => (IEnumerable)GetValue(TokensProperty);
+            set => SetValue(TokensProperty, value);
+        }
+
+        public IEnumerable Detokenize(IEnumerable row)
+        {
+            var tokensTextRow = row as TokensTextRow;
+            if (tokensTextRow != null)
+            {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                var tokensWithPadding = detokenizer.Detokenize(tokensTextRow.Tokens);
+                return tokensWithPadding;
+            }
+
+            return null;
+        }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
