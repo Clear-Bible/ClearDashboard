@@ -15,10 +15,10 @@
 
                 <ResourceDictionary Source="Styles/SidebarExpander.xaml" />
 
-                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+                <!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <!-- Theme setting -->
+                <!--  Theme setting  -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
 
                 <!--  Note: I have intentionally omitted the Light/Dark theme dictionary as that is being set in code  -->
