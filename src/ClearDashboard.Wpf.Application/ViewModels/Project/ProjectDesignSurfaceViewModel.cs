@@ -87,14 +87,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
-
-        //private readonly INavigationService _navigationService;
-        //private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
-        //private readonly DashboardProjectManager _projectManager;
-        //private readonly IEventAggregator _eventAggregator;
-        //private readonly IMediator _mediator;
-        //private readonly ILifetimeScope _lifetimeScope;
-
         /// <summary>
         /// This is the network that is displayed in the window.
         /// It is the main part of the view-model.
@@ -312,12 +304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-            //_navigationService = navigationService;
-            //_logger = logger;
-            //_projectManager = projectManager;
-            //_eventAggregator = eventAggregator;
-            //_mediator = mediator;
-            //_lifetimeScope = lifetimeScope;
+           
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
