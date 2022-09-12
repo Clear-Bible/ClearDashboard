@@ -17,11 +17,8 @@ namespace ClearDashboard.DAL.Alignment.Translation
 {
     public class TranslationCommands : ITranslationCommandable
     {
-        private readonly IMediator mediator_;
-
-        public TranslationCommands(IMediator mediator)
+        public TranslationCommands()
         {
-            mediator_ = mediator;
         }
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
@@ -42,15 +39,6 @@ namespace ClearDashboard.DAL.Alignment.Translation
             {
                 var smtOrdinalAlignments =  wordAligner.GetBestAlignment(parallelMappedVerses.SourceSegment, parallelMappedVerses.TargetSegment);
                 return parallelMappedVerses.GetAlignedTokenPairs(smtOrdinalAlignments);
-            }
-        }
-
-        public async Task PutAlignments(Corpora.ParallelCorpusId parallelCorpusId, IEnumerable<(Token, Token, double)> sourceTokenToTargetTokenAlignments)
-        {
-            var result = await mediator_.Send(new PutAlignmentsCommand(sourceTokenToTargetTokenAlignments, parallelCorpusId));
-            if (!result.Success)
-            {
-                throw new MediatorErrorEngineException(result.Message);
             }
         }
 

@@ -67,16 +67,5 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="engineParallelVerses"></param>
         /// <returns></returns>
         IEnumerable<AlignedTokenPairs> PredictParallelMappedVersesAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextRow parallelMappedVerses);
-
-        /* IMPLEMENTER'S NOTES:
-         * mediator's result.Data is ignored. Marked as object in Command to accommodate compilation needs of RequestResult only.
-         * 
-         */
-        /// <summary>
-        /// Puts alignments into the DB
-        /// </summary>
-        /// <param name="engineParallelTextCorpusId"></param>
-        /// <param name="alignments"></param>
-        Task PutAlignments(ParallelCorpusId parallelCorpusId, IEnumerable<(Token, Token, double)> alignments);
     }
 }

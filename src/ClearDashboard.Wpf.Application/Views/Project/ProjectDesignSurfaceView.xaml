@@ -903,7 +903,7 @@
         <xctk:PropertyGrid
             x:Name="_propertyGrid"
             Grid.Row="2"
-            Margin="5,5,17,5"
+            Margin="5,5,35,5"
             Filter=""
             Foreground="Black"
             HideInheritedProperties="False"
