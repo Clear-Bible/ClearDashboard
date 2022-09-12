@@ -42,6 +42,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
+        private string _tokenizer;
+        public  string Tokenizer
+        {
+            get => _tokenizer;
+            set
+            {
+                _tokenizer = value;
+                NotifyOfPropertyChange(() => Tokenizer);
+            }
+        }
+
+
 
         private string _iconKind;
         public string IconKind
@@ -51,6 +63,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             {
                 _iconKind = value;
                 NotifyOfPropertyChange(() => IconKind);
+            }
+        }
+
+
+        private CorpusNodeViewModel _corpusNodeViewModel;
+        public CorpusNodeViewModel CorpusNodeViewModel
+        {
+            get => _corpusNodeViewModel;
+            set
+            {
+                _corpusNodeViewModel = value;
+                NotifyOfPropertyChange(() => CorpusNodeViewModel);
             }
         }
 
@@ -105,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         {
             if (ViewModel is not null)
             {
-                ViewModel.MenuCommmand(this);
+                ViewModel.MenuCommmand(this, CorpusNodeViewModel);
             }
         }
 

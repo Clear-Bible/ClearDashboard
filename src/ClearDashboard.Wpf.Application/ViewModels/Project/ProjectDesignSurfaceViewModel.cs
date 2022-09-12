@@ -922,7 +922,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new()
             {
                 // add in the standard menu items
-                new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, },
+                new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, CorpusNodeViewModel = corpusNode, },
             };
 
             nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
@@ -936,9 +936,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     IconKind = "Relevance",
                     MenuItems = new ObservableCollection<NodeMenuItemViewModel>
                     {
-                        new NodeMenuItemViewModel { Header = "Add to focused enhanced view", Id="AddToEnhancedViewId", ViewModel = this, IconKind = "DocumentTextAdd"},
-                        new NodeMenuItemViewModel { Header = "Show verses", Id="ShowVerseId", ViewModel = this, IconKind = "DocumentText", },
-                        new NodeMenuItemViewModel { Header = "Properties",  Id="PropertiesId", ViewModel = this, IconKind = "Settings", }
+                        new NodeMenuItemViewModel
+                        {
+                            Header = "Add to focused enhanced view", Id = "AddToEnhancedViewId", ViewModel = this,
+                            IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
+                            Tokenizer = nodeTokenization.TokenizationName,
+                        },
+                        new NodeMenuItemViewModel
+                        {
+                            Header = "Show verses", Id = "ShowVerseId", ViewModel = this, IconKind = "DocumentText",
+                            CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
+                        },
+                        new NodeMenuItemViewModel
+                        {
+                            Header = "Properties", Id = "PropertiesId", ViewModel = this, IconKind = "Settings",
+                            CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
+                        }
                     }
                 });
             }
@@ -947,13 +960,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             nodeMenuItems.Add(new NodeMenuItemViewModel
             {
-                Header = "Properties", Id = corpusNode.Id.ToString(), IconKind = "Settings",
+                Header = "Properties", 
+                Id = corpusNode.Id.ToString(), 
+                IconKind = "Settings",
+                CorpusNodeViewModel = corpusNode,
             });
                 
             corpusNode.MenuItems = nodeMenuItems;
         }
 
-        public void MenuCommmand(NodeMenuItemViewModel nodeMenuItem)
+        public async Task MenuCommmand(NodeMenuItemViewModel nodeMenuItem, CorpusNodeViewModel corpusNodeViewModel)
         {
             switch (nodeMenuItem.Id)
             {
@@ -968,11 +984,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // TODO
                     break;
                 case "ShowVerseId":
-                    
+                    await EventAggregator.PublishOnUIThreadAsync(new ShowTokenizationWindowMessage(corpusNodeViewModel.ParatextProjectId, nodeMenuItem.Tokenizer), CancellationToken.None);
                     break;
             }
         }
-
+        
 
         /// <summary>
         /// gets the position below the last node on the surface
