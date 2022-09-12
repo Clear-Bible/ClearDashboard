@@ -34,9 +34,6 @@ namespace ClearDashboard.DAL.Alignment.Notes
             DomainSubEntityId = domainSubEntityId;
         }
 
-        /*
-(static) IEnumerableGetAll() [This is where the conversion from DomainEntityIdType to an actual DomainEntityId occurs via reflection]
-         */
         public async void Create(CancellationToken token = default)
         {      
             if (NoteDomainEntityAssociationId == null)
@@ -79,23 +76,6 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IMediator mediator)
         {
             var command = new GetAllNoteDomainEntityAssociationsQuery();
-
-            var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
-        public static async Task<IEnumerable<LabelNoteAssociation>> GetAll(
-            IMediator mediator,
-            NoteId noteId)
-        {
-            var command = new GetLabelNoteAssociationsByLabelIdOrNoteIdQuery(null, noteId);
 
             var result = await mediator.Send(command);
             if (result.Success)
