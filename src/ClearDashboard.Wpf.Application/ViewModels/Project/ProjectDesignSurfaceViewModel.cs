@@ -9,8 +9,8 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
+using ClearDashboard.Wpf.Controls;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-//using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -28,10 +27,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     #region Enums
 
@@ -145,6 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
+        private ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -373,6 +372,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     View = projectDesignSurfaceView;
                     // ReSharper disable once AssignNullToNotNullAttribute
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
+
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -450,7 +452,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     Language = corpus.Language,
                     Name = corpus.Name,
                     ParatextGuid = corpus.ParatextGuid,
-                    UserId = corpus.UserId.Id.ToString()
+                    UserId = corpus.UserId?.Id.ToString()
                 });
             }
 
@@ -501,7 +503,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(Guid.NewGuid()),
-                        mediator: null,
+                        mediator: _mediator,
                         isRtl: false,
                         name: corpusNode.Name,
                         displayName: "",
@@ -805,7 +807,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         }), cancellationToken);
 
 #pragma warning disable CS8604
-                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                        var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
                             metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 #pragma warning restore CS8604
 
@@ -890,8 +892,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         IsPopulated = true,
                         TokenizationName = viewModelSelectedTokenizer.ToString(),
                     });
+                    
+                    // TODO the UI chip is not being updated with the new count...why?
+
                     //NotifyOfPropertyChange(() => corpusNode);
                     NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
+
+                    // force a redraw
+                    ProjectDesignSurface?.InvalidateVisual();
                 }
             }
         }

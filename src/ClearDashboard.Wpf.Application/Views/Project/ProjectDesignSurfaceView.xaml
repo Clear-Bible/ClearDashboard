@@ -12,12 +12,17 @@
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    MinWidth="250"
-    d:DataContext="{d:DesignInstance Type=viewModels:ProjectDesignSurfaceViewModel,
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    Width="500"
+    d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="300"
     mc:Ignorable="d">
+
+    <!--<UserControl.DataContext>
+        <viewModels:ProjectDesignSurfaceViewModel />
+    </UserControl.DataContext>-->
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -416,6 +421,7 @@
 
                             <!--  The name of the node.  -->
                             <TextBlock
+                                x:Name="tb1"
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -426,6 +432,7 @@
 
                             <!--  The project type of the node.  -->
                             <TextBlock
+                                x:Name="tb2"
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -601,14 +608,11 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <materialDesign:Card
-            Margin="5"
+            Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
-            BorderBrush="Black"
-            BorderThickness="5"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            IsEnabled="{Binding AddCorpusEnabled}"
-            UniformCornerRadius="5">
+            IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
                 <Label
                     Margin="5,5,0,5"
@@ -772,12 +776,14 @@
                     is while zooming in and out.
                 -->
                 <TextBlock
+                    x:Name="tb3"
                     Grid.Column="7"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
                 <TextBlock
+                    x:Name="tb4"
                     Grid.Column="8"
                     VerticalAlignment="Center"
                     Text="%" />

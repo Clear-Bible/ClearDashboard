@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
