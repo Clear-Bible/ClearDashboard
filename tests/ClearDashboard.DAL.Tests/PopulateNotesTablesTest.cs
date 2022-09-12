@@ -45,7 +45,7 @@ namespace ClearDashboard.DAL.Tests
 
                 var note = new Note
                 {
-                    Author = author
+ //                   Author = author
                 };
 
                
@@ -96,7 +96,7 @@ namespace ClearDashboard.DAL.Tests
 
                 var note = new Note
                 {
-                    Author = user
+ //                   Author = user
                 };
 
                 var stringContent = new StringContent

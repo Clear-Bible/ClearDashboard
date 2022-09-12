@@ -50,6 +50,9 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
         public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
+        public virtual DbSet<Label> Labels => Set<Label>();
+        public virtual DbSet<LabelNoteAssociation> LabelNoteAssociations => Set<LabelNoteAssociation>();
+        public virtual DbSet<NoteDomainEntityAssociation> NoteDomainEntityAssociations => Set<NoteDomainEntityAssociation>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<Project> Projects => Set<Project>();
@@ -247,6 +250,12 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
+
+            modelBuilder
+                .Entity<Note>()
+                .HasMany(p => p.Labels)
+                .WithMany(p => p.Notes)
+                .UsingEntity<LabelNoteAssociation>();
         }
 
 
