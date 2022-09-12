@@ -36,6 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 IsRtl = request.IsRtl,
                 Name = request.Name,
                 Language = request.Language,
+                ParatextGuid = request.ParatextId,
             };
 
             if (Enum.TryParse<ModelCorpusType>(request.CorpusType, out ModelCorpusType corpusType))

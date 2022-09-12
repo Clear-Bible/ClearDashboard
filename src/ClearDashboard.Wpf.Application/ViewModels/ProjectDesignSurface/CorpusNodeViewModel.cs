@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             _eventAggregator = eventAggregator;
             _projectManager = projectManager;
         }
+
+
+        private List<NodeTokenization> _nodeTokenizations = new();
+        public List<NodeTokenization> NodeTokenizations
+        {
+            get => _nodeTokenizations;
+            set
+            {
+                _nodeTokenizations = value;
+                NotifyOfPropertyChange(() => NodeTokenizations);
+            }
+        }
+
+
+        private Guid _id = Guid.NewGuid();
+        public Guid Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
+        }
+
+
 
         /// <summary>
         /// The name of the node.

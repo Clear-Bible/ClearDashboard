@@ -289,11 +289,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpus()
     {
-        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
         var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -304,14 +304,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpusWithComposite()
     {
-        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard");
+        var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
         var sourceTextCorpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoFakeCompositeTokensTextRowProcessor>();
         var sourceTokenizedTextCorpus = await sourceTextCorpus
             .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoFakeCompositeTokensTextRowProcessor>()");
 
-        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible");
+        var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible",Guid.NewGuid().ToString());
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
@@ -329,7 +329,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
                 .Filter<FunctionWordTextRowProcessor>();
 
-            var translationCommandable = new TranslationCommands(Mediator!);
+            var translationCommandable = new TranslationCommands();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
