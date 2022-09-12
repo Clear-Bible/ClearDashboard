@@ -605,6 +605,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         AddManuscriptEnabled = false;
                     }
+                    
+                    // add in the menu
+                    CreateNodeMenu(node);
                 }
 
                 // restore the connections
@@ -1003,7 +1006,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // add in the standard menu items
                 new NodeMenuItemViewModel { Header = "⳼ Add new tokenization", Id = "AddTokenizationId", Icon = null, ViewModel = this, },
             };
-            
+
+            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorID", ViewModel = this, IsSeparator = true });
+
             foreach (var nodeTokenization in corpusNode.NodeTokenizations)
             {
                 nodeMenuItems.Add(new NodeMenuItemViewModel
@@ -1018,6 +1023,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
             }
 
+            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorID", ViewModel = this, IsSeparator = true });
+
+            nodeMenuItems.Add(new NodeMenuItemViewModel
+            {
+                Header = "🝆 Properties", Id = corpusNode.Id.ToString(),
+            });
+                
             corpusNode.MenuItems = nodeMenuItems;
         }
 

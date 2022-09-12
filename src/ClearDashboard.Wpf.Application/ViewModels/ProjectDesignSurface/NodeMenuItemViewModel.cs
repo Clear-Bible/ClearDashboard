@@ -16,7 +16,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
     public class NodeMenuItemViewModel : PropertyChangedBase
     {
-        private readonly ICommand _command;
 
         public NodeMenuItemViewModel()
         {
@@ -66,6 +65,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
+        private bool _isSeparator = false;
+        public bool IsSeparator
+        {
+            get => _isSeparator;
+            set
+            {
+                _isSeparator = value;
+                NotifyOfPropertyChange(() => IsSeparator);
+            }
+        }
 
 
         private string _Id;
@@ -93,6 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         public ObservableCollection<NodeMenuItemViewModel> MenuItems { get; set; }
 
+        private readonly ICommand _command;
         public ICommand Command
         {
             get
