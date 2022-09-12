@@ -88,12 +88,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
 
-        private readonly INavigationService _navigationService;
-        private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly IMediator _mediator;
-        private readonly ILifetimeScope _lifetimeScope;
+        //private readonly INavigationService _navigationService;
+        //private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
+        //private readonly DashboardProjectManager _projectManager;
+        //private readonly IEventAggregator _eventAggregator;
+        //private readonly IMediator _mediator;
+        //private readonly ILifetimeScope _lifetimeScope;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -312,12 +312,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-            _navigationService = navigationService;
-            _logger = logger;
-            _projectManager = projectManager;
-            _eventAggregator = eventAggregator;
-            _mediator = mediator;
-            _lifetimeScope = lifetimeScope;
+            //_navigationService = navigationService;
+            //_logger = logger;
+            //_projectManager = projectManager;
+            //_eventAggregator = eventAggregator;
+            //_mediator = mediator;
+            //_lifetimeScope = lifetimeScope;
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
@@ -363,13 +363,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
             // Create a network, the root of the view-model.
             //
-#pragma warning disable CS8604
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
-#pragma warning restore CS8604
-                _projectManager, _eventAggregator);
+            var designSurfaceViewModelLogger = IoC.Get<ILogger<DesignSurfaceViewModel>>();
+            DesignSurface = new DesignSurfaceViewModel(NavigationService, designSurfaceViewModelLogger, ProjectManager, EventAggregator);
 
-            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+            if (ProjectManager.CurrentProject.DesignSurfaceLayout is not "" and not null)
             {
                 LoadCanvas();
             }
@@ -460,11 +457,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 IncludeFields = true,
                 WriteIndented = true
             };
-            string jsonString = JsonSerializer.Serialize(surface, options);
+            var jsonString = JsonSerializer.Serialize(surface, options);
 
-            _projectManager.CurrentProject.DesignSurfaceLayout = jsonString;
+            ProjectManager.CurrentProject.DesignSurfaceLayout = jsonString;
 
-            await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
+            await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
         }
 
         private void LoadCanvas()
@@ -475,12 +472,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
-            if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
+            if (ProjectManager.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
             }
 
-            var json = _projectManager.CurrentProject.DesignSurfaceLayout;
+            var json = ProjectManager.CurrentProject.DesignSurfaceLayout;
 
             if (json == null)
             {
@@ -502,7 +499,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(Guid.NewGuid()),
-                        mediator: _mediator,
+                        mediator: Mediator,
                         isRtl: false,
                         name: corpusNode.Name,
                         displayName: "",
@@ -511,7 +508,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusType: corpusNode.CorpusType.ToString(),
                         metadata: new Dictionary<string, object>(),
                         created: new DateTimeOffset(),
-                        userId: new UserId(_projectManager.CurrentUser.Id));
+                        userId: new UserId(ProjectManager.CurrentUser.Id));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -550,7 +547,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     this.Corpora.Add(new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(corpus.CorpusId ?? Guid.NewGuid().ToString()),
-                        mediator: _mediator,
+                        mediator: Mediator,
                         isRtl: corpus.IsRtl,
                         name: corpus.Name,
                         displayName: corpus.DisplayName,
@@ -568,7 +565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
         public async void AddManuscriptCorpus()
         {
-            _logger.LogInformation("AddParatextCorpus called.");
+            Logger.LogInformation("AddParatextCorpus called.");
 
             //var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
             //    isRtl: false, name: "Manuscript", language: "Manuscript", paratextGuid: _projectManager.ManuscriptGuid,
@@ -585,12 +582,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var syntaxTree = new SyntaxTrees();
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree);
 
-            BookInfo bookInfo = new BookInfo();
+            var bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList();
 
             var metadata = new ParatextProjectMetadata
             {
-                Id = _projectManager.ManuscriptGuid.ToString(),
+                Id = ProjectManager.ManuscriptGuid.ToString(),
                 CorpusType = CorpusType.Manuscript,
                 Name = "Manuscript",
                 AvailableBooks = books,
@@ -604,12 +601,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
-                        mediator: _projectManager.Mediator, 
+                        mediator: ProjectManager.Mediator, 
                         IsRtl: false, 
                         Name: "Manuscript", 
                         Language: "Manuscript",
                         CorpusType: CorpusType.Manuscript.ToString(), 
-                        ParatextId: _projectManager.ManuscriptGuid.ToString(), 
+                        ParatextId: ProjectManager.ManuscriptGuid.ToString(), 
                         token: cancellationToken);
 
                     OnUIThread(() => Corpora.Add(corpus));
@@ -640,7 +637,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskStatus = StatusEnum.Working
                     }), cancellationToken);
 
-                    var tokenizedTextCorpus = await sourceCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
+                    var tokenizedTextCorpus = await sourceCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
                         "Manuscript",
                         ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
                         cancellationToken);
@@ -653,7 +650,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskStatus = StatusEnum.Completed
                     }), cancellationToken);
 
-                    _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                    Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                     await EventAggregator.PublishOnCurrentThreadAsync(
                         new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
@@ -661,7 +658,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                    Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -689,12 +686,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
         public async void AddParatextCorpus()
         {
-            _logger.LogInformation("AddParatextCorpus called.");
+            Logger.LogInformation("AddParatextCorpus called.");
             AddParatextCorpusRunning = true;
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
-            await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
+            await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
@@ -743,7 +740,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 #pragma warning disable CS8604
                             corpus = await DAL.Alignment.Corpora.Corpus.Create(
-                                mediator: _projectManager.Mediator,
+                                mediator: ProjectManager.Mediator,
                                 IsRtl: metadata.IsRtl, 
                                 Name: metadata.Name, 
                                 Language: metadata.LanguageName,
@@ -776,22 +773,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         switch (viewModel.SelectedTokenizer)
                         {
                             case Tokenizer.LatinWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.WhitespaceTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.ZwspWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             default:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(ProjectManager.Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
@@ -806,7 +803,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
 #pragma warning disable CS8604
-                        var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
+                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
                             metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 #pragma warning restore CS8604
 
@@ -819,7 +816,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TaskStatus = StatusEnum.Completed
                         }), cancellationToken);
 
-                        _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                        Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                         await EventAggregator.PublishOnCurrentThreadAsync(
                             new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
@@ -828,7 +825,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                        Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
                             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -1103,26 +1100,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // Finalize the connection by attaching it to the connector
             // that the user dragged the mouse over.
             //
-            bool added;
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+           // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (newConnection.DestinationConnector is null)
             {
                 newConnection.DestinationConnector = connectorDraggedOver;
-                added = true;
             }
             else
             {
                 newConnection.SourceConnector = connectorDraggedOver;
-                added = true;
             }
 
-            if (added)
-            {
-                EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
-                    sourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
-                    targetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
-                    connectorGuid: newConnection.Id));
-            }
+
+            EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
+                sourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
+                targetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
+                connectorGuid: newConnection.Id));
+     
         }
 
         /// <summary>
@@ -1203,7 +1196,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation, 
             Tokenizer tokenizer)
         {
-            var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, _eventAggregator, _projectManager)
+            var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, EventAggregator, ProjectManager)
             {
                 X = nodeLocation.X,
                 Y = nodeLocation.Y,
@@ -1211,12 +1204,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ParatextProjectId = corpus.ParatextGuid ?? string.Empty
             };
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", EventAggregator, ProjectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
 
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", _eventAggregator, _projectManager, node.ParatextProjectId)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", EventAggregator, ProjectManager, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
             });
@@ -1407,7 +1400,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public Task HandleAsync(ProjectLoadCompleteMessage message, CancellationToken cancellationToken)
         {
-            if (_projectManager.CurrentProject is not null)
+            if (ProjectManager.CurrentProject is not null)
             {
                 LoadCanvas();
             }
