@@ -374,16 +374,23 @@
                             <Rectangle.ContextMenu>
                                 <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                                     <ContextMenu.Resources>
-                                        <!--<HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                                             <StackPanel Orientation="Horizontal">
-                                                <iconPacks:PackIconCodicons Kind="SymbolProperty" Width="25" Height="25" />
+                                                <iconPacks:PackIconPicolIcons
+                                                    Width="15"
+                                                    VerticalAlignment="Center"
+                                                    Margin="5 5 0 0"
+                                                    Height="15"
+                                                    Kind="{Binding IconKind}" />
                                                 <TextBlock
                                                     Margin="5,5,0,0"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                     Text="{Binding Header}" />
                                             </StackPanel>
-                                        </HierarchicalDataTemplate>-->
+                                        </HierarchicalDataTemplate>
+
                                         <Style TargetType="MenuItem">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSeparator}" Value="True">
@@ -396,7 +403,7 @@
                                                     </Setter>
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding IsSeparator}" Value="False">
+                                                <!--<DataTrigger Binding="{Binding IsSeparator}" Value="False">
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="{x:Type MenuItem}">
@@ -417,7 +424,7 @@
                                                         </Setter.Value>
                                                     </Setter>
                                                     <Setter Property="Command" Value="{Binding Command}" />
-                                                </DataTrigger>
+                                                </DataTrigger>-->
                                             </Style.Triggers>
                                         </Style>
                                     </ContextMenu.Resources>
@@ -432,31 +439,11 @@
                                     </ContextMenu.ItemContainerStyle>
                                     <ContextMenu.ItemTemplate>
                                         <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
-                                            <HierarchicalDataTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding IsSeparator}" Value="True">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
-                                                                <Separator />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsSeparator}" Value="False">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
-                                                                <TextBlock
-                                                                    Margin="5,5,0,0"
-                                                                    VerticalAlignment="Center"
-                                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                                    Text="{Binding Header}" />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </DataTrigger>
-                                            </HierarchicalDataTemplate.Triggers>
-
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
                                         </HierarchicalDataTemplate>
                                     </ContextMenu.ItemTemplate>-->
 

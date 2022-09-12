@@ -39,7 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<VerseChangedMessage>,
                 IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
-                IHandle<ProgressBarMessage>
+                IHandle<ProgressBarMessage>,
+                IHandle<ShowTokenizationWindowMessage>
     {
 #nullable disable
         #region Member Variables
@@ -1438,6 +1439,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             OnUIThread(() => Message = message.Message);
             await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Pop open a new Corpus Tokization window and pass in the current corpus
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        {
+            string tokenizationType = message.TokenizationType;
+            string paratextId = message.ParatextId;
+
+            CorpusTokensViewModel viewModel = new();
+
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = paratextId
+            };
+            // setup the right ViewModel for the pane
+            windowDockable.Content = viewModel;
+            windowDockable.Title = message.projectName + " (" + tokenizationType + ")";
+            windowDockable.IsActive = true;
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+
+            if (documentPane != null)
+            {
+                documentPane.Children.Add(windowDockable);
+            }
+
+            viewModel.ShowCorpusTokens(message, cancellationToken);
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods

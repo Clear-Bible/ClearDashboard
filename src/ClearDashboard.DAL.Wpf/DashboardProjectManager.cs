@@ -21,7 +21,7 @@ using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record ShowTokenizationWindowMessage(string ParatextId, string TokenizationType);
+public record ShowTokenizationWindowMessage(string ParatextId, string projectName, string TokenizationType);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record VerseChangedMessage(string Verse);

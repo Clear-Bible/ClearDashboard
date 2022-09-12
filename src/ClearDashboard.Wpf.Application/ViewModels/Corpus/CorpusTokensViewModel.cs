@@ -213,6 +213,88 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             }
             await Task.CompletedTask;
         }
+
+        public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        {
+            var paratextId = message.ParatextId;
+            var tokenizationType = message.TokenizationType;
+
+
+            Logger.LogInformation("Received ShowCorpusTokens");
+
+            _handleAsyncRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var localCancellationToken = _cancellationTokenSource.Token;
+            
+            await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
+
+                    //var corpus = message.TokenizedTextCorpus;
+
+                    //CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
+
+                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    //    new BackgroundTaskStatus
+                    //    {
+                    //        Name = "Fetch Book",
+                    //        Description = $"Getting book '{CurrentBook}'...",
+                    //        StartTime = DateTime.Now,
+                    //        TaskStatus = StatusEnum.Working
+                    //    }));
+
+                    //var tokensTextRows =
+                    //    corpus[CurrentBook]
+                    //        .GetRows()
+                    //        .WithCancellation(localCancellationToken)
+                    //        .Cast<TokensTextRow>()
+                    //        .Where(ttr => ttr
+                    //            .Tokens
+                    //            .Count(t => t
+                    //                .TokenId
+                    //                .ChapterNumber == 1) > 0)
+                    //        .ToList();
+
+                    //OnUIThread(() =>
+                    //{
+                    //    TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                    //    Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
+                    //});
+
+                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                    //    new BackgroundTaskStatus
+                    //    {
+                    //        Name = "Fetch Book",
+                    //        Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                    //        StartTime = DateTime.Now,
+                    //        TaskStatus = StatusEnum.Completed
+                    //    }));
+                }
+                catch (Exception ex)
+                {
+                    if (!localCancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskStatus = StatusEnum.Error
+                            }));
+                    }
+                }
+                finally
+                {
+                    _handleAsyncRunning = false;
+
+                    _cancellationTokenSource.Dispose();
+                }
+
+            }, cancellationToken);
+        }
     }
 
     static class CancelExtention

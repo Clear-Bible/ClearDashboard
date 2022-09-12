@@ -370,25 +370,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning restore CS8604
                 _projectManager, _eventAggregator);
 
+            base.OnViewAttached(view, context);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
             {
                 LoadCanvas();
             }
-
-            base.OnViewAttached(view, context);
+            
+            base.OnViewLoaded(view);
         }
 
-        //protected override async void OnViewLoaded(object view)
-        //{
-        //    Console.WriteLine();
-        //    base.OnViewLoaded(view);
-        //}
-
-        //protected override async void OnViewReady(object view)
-        //{
-        //    Console.WriteLine();
-        //    base.OnViewReady(view);
-        //}
         #endregion //Constructor
 
         #region Methods
@@ -660,7 +654,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await EventAggregator.PublishOnCurrentThreadAsync(
                         new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
-                    UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
+                    OnUIThread(() =>
+                    {
+                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
+                    });
+
                 }
                 catch (Exception ex)
                 {
@@ -826,8 +824,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await EventAggregator.PublishOnCurrentThreadAsync(
                             new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
 
-                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
-
+                        OnUIThread(() =>
+                        {
+                            UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -919,13 +919,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // initiate the menu system
             corpusNode.MenuItems.Clear();
 
-            ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new()
-            {
-                // add in the standard menu items
-                new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, CorpusNodeViewModel = corpusNode, },
-            };
+            ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new();
 
-            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
+            if (corpusNode.CorpusType != CorpusType.Manuscript)
+            {
+                // restrict the ability of Manuscript to add new tokenizers
+                nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, CorpusNodeViewModel = corpusNode, });
+                nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
+            }
 
             foreach (var nodeTokenization in corpusNode.NodeTokenizations)
             {
@@ -949,7 +950,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         },
                         new NodeMenuItemViewModel
                         {
-                            Header = "Properties", Id = "PropertiesId", ViewModel = this, IconKind = "Settings",
+                            Header = "Properties", Id = "TokenizerPropertiesId", ViewModel = this, IconKind = "Settings",
                             CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
                         }
                     }
@@ -961,9 +962,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             nodeMenuItems.Add(new NodeMenuItemViewModel
             {
                 Header = "Properties", 
-                Id = corpusNode.Id.ToString(), 
+                Id = "PropertiesId", 
                 IconKind = "Settings",
                 CorpusNodeViewModel = corpusNode,
+                ViewModel = this
             });
                 
             corpusNode.MenuItems = nodeMenuItems;
@@ -984,7 +986,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // TODO
                     break;
                 case "ShowVerseId":
-                    await EventAggregator.PublishOnUIThreadAsync(new ShowTokenizationWindowMessage(corpusNodeViewModel.ParatextProjectId, nodeMenuItem.Tokenizer), CancellationToken.None);
+                    await EventAggregator.PublishOnUIThreadAsync(
+                        new ShowTokenizationWindowMessage(corpusNodeViewModel.ParatextProjectId,
+                            corpusNodeViewModel.Name,
+                            nodeMenuItem.Tokenizer), CancellationToken.None);
+                    break;
+                case "PropertiesId":
+                    break;
+                case "TokenizerPropertiesId":
                     break;
             }
         }
