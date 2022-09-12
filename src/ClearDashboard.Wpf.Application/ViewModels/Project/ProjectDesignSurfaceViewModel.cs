@@ -293,88 +293,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private string _menuIdCommmand;
-        public string MenuIdCommmand
-        {
-            get => _menuIdCommmand;
-            set
-            {
-                if (value.StartsWith("ProjectLayout:") || value.StartsWith("StandardLayout"))
-                {
-                }
-                else if (value == "SeparatorID")
-                {
-                    // no op
-                }
-                else if (value == "SaveID")
-                {
-
-                }
-                else if (value == "DeleteID")
-                {
-
-                }
-                else
-                {
-                    switch (value)
-                    {
-                        case "LayoutID":
-                            Console.WriteLine();
-                            break;
-                        case "AlignmentToolID":
-                            _menuIdCommmand = "ALIGNMENTTOOL";
-                            break;
-                        case "BiblicalTermsID":
-                            _menuIdCommmand = "BIBLICALTERMS";
-                            break;
-                        case "ConcordanceToolID":
-                            _menuIdCommmand = "CONCORDANCETOOL";
-                            break;
-                        case "CorpusTokensID":
-                            _menuIdCommmand = "CORPUSTOKENS";
-                            break;
-                        case "DashboardID":
-                            _menuIdCommmand = "DASHBOARD";
-                            break;
-                        case "EnhancedCorpusID":
-                            _menuIdCommmand = "ENHANCEDCORPUS";
-                            break;
-                        case "NotesID":
-                            _menuIdCommmand = "NOTES";
-                            break;
-                        case "PINSID":
-                            _menuIdCommmand = "PINS";
-                            break;
-                        //case "ProjectDesignSurfaceID":
-                        //    _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
-                        //    break;
-                        case "WordMeaningsID":
-                            _menuIdCommmand = "WORDMEANINGS";
-                            break;
-                        case "SourceContextID":
-                            _menuIdCommmand = "SOURCECONTEXT";
-                            break;
-                        case "StartPageID":
-                            _menuIdCommmand = "STARTPAGE";
-                            break;
-                        case "TargetContextID":
-                            _menuIdCommmand = "TARGETCONTEXT";
-                            break;
-                        case "TextCollectionID":
-                            _menuIdCommmand = "TEXTCOLLECTION";
-                            break;
-
-                        default:
-                            _menuIdCommmand = value;
-                            break;
-                    }
-
-                }
-
-                NotifyOfPropertyChange(() => MenuIdCommmand);
-            }
-        }
-
         #endregion //Observable Properties
 
         #region Constructor
@@ -1004,33 +922,55 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new()
             {
                 // add in the standard menu items
-                new NodeMenuItemViewModel { Header = "⳼ Add new tokenization", Id = "AddTokenizationId", Icon = null, ViewModel = this, },
+                new NodeMenuItemViewModel { Header = "⳼ Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, },
             };
 
-            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorID", ViewModel = this, IsSeparator = true });
+            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
 
             foreach (var nodeTokenization in corpusNode.NodeTokenizations)
             {
                 nodeMenuItems.Add(new NodeMenuItemViewModel
                 {
-                    Header = "🝆 " + nodeTokenization.TokenizationFriendlyName,
+                    Header = nodeTokenization.TokenizationFriendlyName,
                     Id = nodeTokenization.TokenizedTextCorpusId,
+                    IconKind = "Relevance",
                     MenuItems = new ObservableCollection<NodeMenuItemViewModel>
                     {
-                        new NodeMenuItemViewModel { Header = "Add to focused enhanced view", Id="AddToEnhancedViewId", ViewModel = this, },
-                        new NodeMenuItemViewModel { Header = "Properties",  Id="PropertiesId", ViewModel = this, }
+                        new NodeMenuItemViewModel { Header = "Add to focused enhanced view", Id="AddToEnhancedViewId", ViewModel = this, IconKind = "DocumentTextAdd"},
+                        new NodeMenuItemViewModel { Header = "Show verses", Id="ShowVerseId", ViewModel = this, IconKind = "DocumentText", },
+                        new NodeMenuItemViewModel { Header = "Properties",  Id="PropertiesId", ViewModel = this, IconKind = "Settings", }
                     }
                 });
             }
 
-            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorID", ViewModel = this, IsSeparator = true });
+            nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
 
             nodeMenuItems.Add(new NodeMenuItemViewModel
             {
-                Header = "🝆 Properties", Id = corpusNode.Id.ToString(),
+                Header = "Properties", Id = corpusNode.Id.ToString(), IconKind = "Settings",
             });
                 
             corpusNode.MenuItems = nodeMenuItems;
+        }
+
+        public void MenuCommmand(NodeMenuItemViewModel nodeMenuItem)
+        {
+            switch (nodeMenuItem.Id)
+            {
+                case "AddTokenizationId":
+                    // kick off the add new tokenization dialog
+                    AddParatextCorpus();
+                    break;
+                case "SeparatorId":
+                    // no-op
+                    break;
+                case "AddToEnhancedViewId":
+                    // TODO
+                    break;
+                case "ShowVerseId":
+                    
+                    break;
+            }
         }
 
 
@@ -1341,47 +1281,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 IsSelected = false,
                 TokenizationName = tokenizer.ToString(),
             });
-
-
-//            if (centerNode)
-//            {
-//                // 
-//                // We want to center the node.
-//                //
-//                // For this to happen we need to wait until the UI has determined the 
-//                // size based on the node's data-template.
-//                //
-//                // So we define an anonymous method to handle the SizeChanged event for a node.
-//                //
-//                // Note: If you don't declare sizeChangedEventHandler before initializing it you will get
-//                //       an error when you try and unsubscribe the event from within the event handler.
-//                //
-//                void SizeChangedEventHandler(object sender, EventArgs e)
-//                {
-//                    //
-//                    // This event handler will be called after the size of the node has been determined.
-//                    // So we can now use the size of the node to modify its position.
-//                    //
-//                    node.X -= node.Size.Width / 2;
-//                    node.Y -= node.Size.Height / 2;
-
-//                    //
-//                    // Don't forget to unhook the event, after the initial centering of the node
-//                    // we don't need to be notified again of any size changes.
-//                    //
-//#pragma warning disable CS8622
-//                    node.SizeChanged -= SizeChangedEventHandler;
-//#pragma warning restore CS8622
-//                }
-
-//                //
-//                // Now we hook the SizeChanged event so the anonymous method is called later
-//                // when the size of the node has actually been determined.
-//                //
-//#pragma warning disable CS8622
-//                node.SizeChanged += SizeChangedEventHandler;
-//#pragma warning restore CS8622
-//            }
 
             //
             // Add the node to the view-model.

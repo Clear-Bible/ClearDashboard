@@ -54,7 +54,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-        private string _iconSource;
+        private string _iconSource = string.Empty;
         public string IconSource
         {
             get => _iconSource;
@@ -64,6 +64,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
                 NotifyOfPropertyChange(() => IconSource);
             }
         }
+
+        private string _iconKind;
+        public string IconKind
+        {
+            get => _iconKind;
+            set
+            {
+                _iconKind = value;
+                NotifyOfPropertyChange(() => IconKind);
+            }
+        }
+
 
         private bool _isSeparator = false;
         public bool IsSeparator
@@ -115,7 +127,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         {
             if (ViewModel is not null)
             {
-                ViewModel.MenuIdCommmand = Id;
+                ViewModel.MenuCommmand(this);
             }
         }
 

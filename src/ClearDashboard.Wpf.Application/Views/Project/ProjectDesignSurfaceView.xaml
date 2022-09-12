@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -373,13 +374,16 @@
                             <Rectangle.ContextMenu>
                                 <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                                     <ContextMenu.Resources>
-                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
-                                            <TextBlock
-                                                Margin="5,5,0,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                Text="{Binding Header}" />
-                                        </HierarchicalDataTemplate>
+                                        <!--<HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconCodicons Kind="SymbolProperty" Width="25" Height="25" />
+                                                <TextBlock
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>-->
                                         <Style TargetType="MenuItem">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSeparator}" Value="True">
@@ -396,11 +400,17 @@
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="{x:Type MenuItem}">
-                                                                <TextBlock
-                                                                    Margin="5,5,0,0"
-                                                                    VerticalAlignment="Center"
-                                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                                    Text="{Binding Header}" />
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <iconPacks:PackIconPicolIcons
+                                                                        Width="15"
+                                                                        Height="15"
+                                                                        Kind="{Binding IconKind}" />
+                                                                    <TextBlock
+                                                                        Margin="5,5,0,0"
+                                                                        VerticalAlignment="Center"
+                                                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                        Text="{Binding Header}" />
+                                                                </StackPanel>
                                                             </ControlTemplate>
                                                         </Setter.Value>
                                                     </Setter>
