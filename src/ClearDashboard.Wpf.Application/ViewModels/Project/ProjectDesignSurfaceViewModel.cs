@@ -351,6 +351,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (View == null)
             {
@@ -379,6 +381,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override async void OnViewLoaded(object view)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
             {
                 LoadCanvas();
@@ -389,6 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewReady(object view)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
             {
                 LoadCanvas();
@@ -1137,14 +1141,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         public void ConnectionDragging(Point curDragPoint, ConnectionViewModel connection)
         {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (connection.DestinationConnector == null)
+            if (connection is not null)
             {
-                connection.DestConnectorHotspot = curDragPoint;
-            }
-            else
-            {
-                connection.SourceConnectorHotspot = curDragPoint;
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                if (connection.DestinationConnector == null)
+                {
+                    connection.DestConnectorHotspot = curDragPoint;
+                }
+                else
+                {
+                    connection.SourceConnectorHotspot = curDragPoint;
+                }
             }
         }
 
