@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
@@ -25,7 +26,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         private bool _handleAsyncRunning = false;
 
 
-        private readonly ILogger<CorpusTokensViewModel> _logger;
         public string TokenizationName
         {
             get => _tokenizationName;
@@ -63,8 +63,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            _logger = logger;
-
             Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";
         }
@@ -230,7 +228,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            
+            Logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -248,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                             Description = $"Getting book '{CurrentBook}'...",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Working
-                        }));
+                        }), _cancellationTokenSource.Token);
                     var tokensTextRows =
                         CurrentTokenizedTextCorpus[CurrentBook]
                             .GetRows()
@@ -275,7 +274,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Completed
-                        }));
+                        }), _cancellationTokenSource.Token);
                 }
                 catch (Exception ex)
                 {
@@ -288,7 +287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
                                 TaskStatus = StatusEnum.Error
-                            }));
+                            }), _cancellationTokenSource.Token);
                     }
                 }
                 finally
@@ -323,7 +322,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
