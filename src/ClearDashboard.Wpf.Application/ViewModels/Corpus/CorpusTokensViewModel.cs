@@ -322,15 +322,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             {
                 try
                 {
+                    ParatextProjectMetadata metadata;
 
-                    var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-                    var metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-",""));
+                    if (message.ParatextProjectId == ProjectManager.ManuscriptGuid.ToString())
+                    {
+                        // our fake Manuscript corpus
+                        BookInfo bookInfo = new BookInfo();
+                        var books = bookInfo.GenerateScriptureBookList();
 
-                    //foreach (var paratextProjectMetadata in result.Data)
-                    //{
-                    //    Debug.WriteLine(paratextProjectMetadata.Name + " " + paratextProjectMetadata.Id);
-                    //}
+                        metadata = new ParatextProjectMetadata
+                        {
+                            Id = ProjectManager.ManuscriptGuid.ToString(),
+                            CorpusType = CorpusType.Manuscript,
+                            Name = "Manuscript",
+                            AvailableBooks = books,
+                        };
 
+                    }
+                    else
+                    {
+                        // regular Paratext corpus
+                        var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", ""));
+                    }
 
                     CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(
                         ProjectManager.Mediator,
