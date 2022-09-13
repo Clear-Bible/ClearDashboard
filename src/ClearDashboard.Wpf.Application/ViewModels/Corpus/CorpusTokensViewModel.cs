@@ -18,7 +18,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
-
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
@@ -44,7 +44,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         private TokenizedTextCorpus _currentTokenizedTextCorpus;
         private string _tokenizationName;
 
-        
+
+        private Visibility _progressBarVisibility = Visibility.Visible;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+
+
         public CorpusTokensViewModel()
         {
             // required by design-time binding
@@ -377,6 +390,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                     {
                         // TokensDisplays = new ObservableCollection<TokenDisplay>(tokenDisplays);
                         Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+
+                        ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
