@@ -121,12 +121,11 @@
 
             <helpers:ScrollingToTopListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border
-                        Name="WordMeaningsBorder"
+                    <materialDesign:Card
                         Padding="0"
                         BorderBrush="Black"
-                        BorderThickness="1"
-                        CornerRadius="0">
+                        BorderThickness="1">
+
 
                         <Grid Width="{Binding ActualWidth, ElementName=LVSenses}">
                             <Grid.ColumnDefinitions>
@@ -171,6 +170,7 @@
                                         Margin="5,0,0,0"
                                         Padding="0"
                                         VerticalAlignment="Center"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                         Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
                                         CommandParameter="{Binding}">
                                         <Button.Content>
@@ -424,7 +424,8 @@
 
 
                         </Grid>
-                    </Border>
+                    </materialDesign:Card>
+
 
                 </DataTemplate>
             </helpers:ScrollingToTopListBox.ItemTemplate>
