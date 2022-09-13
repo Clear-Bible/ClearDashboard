@@ -211,6 +211,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
+        /// <summary>
+        /// Identifies the ShowTranslations dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowTranslationsProperty = DependencyProperty.Register("ShowTranslations", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true));
+
+        /// <summary>
+        /// Identifies the ShowNoteIndicators dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowNoteIndicatorsProperty = DependencyProperty.Register("ShowNoteIndicators", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true));
+
         #endregion Static DependencyProperties
 
         #region Public events
@@ -443,6 +455,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Event handlers
 
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateItemsPanelTemplate(Wrap);
+        }
+
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -635,8 +652,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TokensProperty, value);
         }
 
-        //public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
-
         /// <summary>
         /// Gets or sets the font size for the translation.
         /// </summary>
@@ -655,15 +670,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationVerticalSpacingProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets whether to display token translations.
+        /// </summary>
+        public bool ShowTranslations
+        {
+            get => (bool)GetValue(ShowTranslationsProperty);
+            set => SetValue(ShowTranslationsProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether to display note indicators.
+        /// </summary>
+        public bool ShowNoteIndicators
+        {
+            get => (bool)GetValue(ShowNoteIndicatorsProperty);
+            set => SetValue(ShowNoteIndicatorsProperty, value);
+        }
+
         public VerseDisplay()
         {
             InitializeComponent();
             Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            CalculateItemsPanelTemplate(Wrap);
         }
     }
 }

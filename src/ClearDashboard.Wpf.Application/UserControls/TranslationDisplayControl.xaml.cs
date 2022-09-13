@@ -189,17 +189,40 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the TranslationVerticalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TranslationDisplayControl),
-            new PropertyMetadata(10d, new PropertyChangedCallback(OnTransactionVerticalSpacingChanged)));
+            new PropertyMetadata(10d, new PropertyChangedCallback(OnTranslationVerticalSpacingChanged)));
+
+        /// <summary>
+        /// Identifies the ShowTranslation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TranslationDisplayControl),
+            new PropertyMetadata(true, new PropertyChangedCallback(OnShowTranslationChanged)));
+
+        /// <summary>
+        /// Identifies the TranslationVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register("TranslationVisibility", typeof(Visibility), typeof(TranslationDisplayControl),
+            new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Callback handler for changes to the TranslationVerticalSpacing dependency property: when this property changes, recalculate the inner padding for the translation.
         /// </summary>
         /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
         /// <param name="args">Event args containing the new value.</param>
-        private static void OnTransactionVerticalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        private static void OnTranslationVerticalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             var control = (TranslationDisplayControl)obj;
             control.CalculateTranslationInnerPadding((double) args.NewValue);
+        }
+
+        /// <summary>
+        /// Callback handler for changes to the ShowTranslation dependency property: when this property changes, recalculate the visibility of the translation.
+        /// </summary>
+        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnShowTranslationChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var control = (TranslationDisplayControl)obj;
+            control.CalculateTranslationVisibility((bool) args.NewValue);
         }
 
         #endregion Static DependencyProperties
@@ -439,10 +462,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 spacing * 2);
         }
 
+        private void CalculateTranslationVisibility(bool show)
+        {
+            TranslationVisibility = (show && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             CalculateTranslationInnerPadding(TranslationVerticalSpacing);
+            CalculateTranslationVisibility(ShowTranslation);
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -642,6 +670,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the whether to show the translation.
+        /// </summary>
+        public bool ShowTranslation
+        {
+            get => (bool) GetValue(ShowTranslationProperty);
+            set => SetValue(ShowTranslationProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the translation.
+        /// </summary>
+        /// <remarks>This should normally not be called; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
+        public Visibility TranslationVisibility
+        {
+            get => (Visibility) GetValue(TranslationVisibilityProperty);
+            set => SetValue(TranslationVisibilityProperty, value);
+        }
+
+        /// <summary>
         /// Gets the <see cref="TokenDisplay"/> data source for this control.
         /// </summary>
         public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
@@ -680,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the visibility of the translation button.
         /// </summary>
-        public Visibility TranslationVisibility => TokenDisplay.Translation != null ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility TranslationVisibility => TokenDisplay.Translation != null ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>
         /// Gets the visibility of the note indicator.
