@@ -11,7 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     Width="600"
-    Height="300"
+    Height="330"
     d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="300"
@@ -33,9 +33,6 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-
-        
-
         <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -81,16 +78,19 @@
             </Style.Triggers>
         </Style>
 
+
         <!--<Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,8" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>-->
+
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,8" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
         </Style>
+
 
         <!--<Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
             <Setter Property="Margin" Value="5,5"/>
@@ -99,8 +99,6 @@
         </Style>-->
 
         <Style TargetType="Label">
-
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="10,10" />
@@ -186,16 +184,15 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
                 <Button
-                    Style="{StaticResource TransparentButton}"
                     x:Name="Ok"
-
-                    Content="{helpers:Localization Ok}" />
+                    Content="{helpers:Localization Ok}"
+                    Style="{StaticResource TransparentStyle}" />
 
                 <Button
-                    Style="{StaticResource TransparentButton}"
                     x:Name="Cancel"
-
-                    Content="{helpers:Localization Cancel}" />
+                    Margin="5"
+                    Content="{helpers:Localization Cancel}"
+                    Style="{StaticResource TransparentStyle}" />
             </StackPanel>
         </Grid>
     </Border>
