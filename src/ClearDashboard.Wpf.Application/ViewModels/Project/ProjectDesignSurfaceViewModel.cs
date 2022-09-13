@@ -1002,13 +1002,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             nodeMenuItem.Tokenizer), CancellationToken.None);
                     break;
                 case "PropertiesId":
+                    // node properties
                     SelectedConnection = corpusNodeViewModel;
                     break;
                 case "TokenizerPropertiesId":
+                    // get the selected tokenizer
                     var nodeTokenization =
                         corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
                             b.TokenizationName == nodeMenuItem.Tokenizer);
-
                     SelectedConnection = nodeTokenization;
                     break;
             }

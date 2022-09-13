@@ -379,9 +379,9 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <iconPacks:PackIconPicolIcons
                                                     Width="15"
-                                                    VerticalAlignment="Center"
-                                                    Margin="5 5 0 0"
                                                     Height="15"
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
                                                     Kind="{Binding IconKind}" />
                                                 <TextBlock
                                                     Margin="5,5,0,0"
@@ -392,6 +392,7 @@
                                         </HierarchicalDataTemplate>
 
                                         <Style TargetType="MenuItem">
+                                            <Setter Property="Command" Value="{Binding Command}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSeparator}" Value="True">
                                                     <Setter Property="Template">
