@@ -175,19 +175,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
-        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay));
-        
-        public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(VerseDisplay));
+        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true, new PropertyChangedCallback(OnWrapChanged)));
 
+        private static void OnWrapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (VerseDisplay)d;
+            control.CalculateItemsPanelTemplate((bool) e.NewValue);
+        }
+
+        private void CalculateItemsPanelTemplate(bool wrap)
+        {
+            ItemsPanelTemplate = (ItemsPanelTemplate) FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+        }
+
+        /// <summary>
+        /// Identifies the ItemsPanelTemplate dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(ItemsPanelTemplate), typeof(VerseDisplay));
+        
         /// <summary>
         /// Identifies the Tokens dependency property.
         /// </summary>
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
-        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(VerseDisplay));
 
+        /// <summary>
+        /// Identifies the TranslationFontSize dependency property.
+        /// </summary>
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(16d));
 
+        /// <summary>
+        /// Identifies the TranslationVerticalSpacing dependency property.
+        /// </summary>
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
@@ -595,43 +615,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (bool)GetValue(WrapProperty);
             set => SetValue(WrapProperty, value);
         }           
-        
-        public TokensTextRow TokensTextRow
-        {
-            get => (TokensTextRow)GetValue(TokensTextRowProperty);
-            set => SetValue(TokensTextRowProperty, value);
-        }        
-
-        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
-
-        //public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
-
-        //private Thickness ParagraphMargin = new(0,0,0,0);
-        //private Thickness StackMargin = new(6,2,6,2);
-        //public Thickness InnerMargin => ParagraphMode ? ParagraphMargin : StackMargin;        
-
-        //private Thickness ParagraphPadding = new(5,0,5,0);
-        //private Thickness StackPadding = new(10,2,10,2);
-        //public Thickness InnerPadding => ParagraphMode ? ParagraphPadding : StackPadding;
-
-
-        public VerseDisplay()
-        {
-            InitializeComponent();
-        }
 
         /// <summary>
-        /// Gets or sets a collection to display in the control.
+        /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
         /// </summary>
-        //public IEnumerable ItemsSource
-        //{
-        //    get => (IEnumerable)GetValue(ItemsSourceProperty);
-        //    set
-        //    {
-        //        SetValue(ItemsSourceProperty, value);
-        //        Tokens = Detokenize(value);
-        //    }
-        //}
+        /// <remarks>This should normally not be set manually, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate ItemsPanelTemplate
+        {
+            get => (ItemsPanelTemplate)GetValue(ItemsPanelTemplateProperty);
+            set => SetValue(ItemsPanelTemplateProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
@@ -642,14 +635,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TokensProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets a collection to display in the control.
-        /// </summary>
-        public IEnumerable Translations
-        {
-            get => (IEnumerable)GetValue(TranslationsProperty);
-            set => SetValue(TranslationsProperty, value);
-        }
+        //public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
 
         /// <summary>
         /// Gets or sets the font size for the translation.
@@ -669,19 +655,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationVerticalSpacingProperty, value);
         }
 
-        public IEnumerable Detokenize(IEnumerable row)
+        public VerseDisplay()
         {
-            var tokensTextRow = row as TokensTextRow;
-            if (tokensTextRow != null)
-            {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                var tokensWithPadding = detokenizer.Detokenize(tokensTextRow.Tokens);
-                return tokensWithPadding;
-            }
-
-            return null;
+            InitializeComponent();
+            Loaded += OnLoaded;
         }
 
-
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateItemsPanelTemplate(Wrap);
+        }
     }
 }
