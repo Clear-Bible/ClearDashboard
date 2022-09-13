@@ -12,6 +12,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using DashboardApplication = System.Windows.Application;
 
 
@@ -53,11 +55,14 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
+            builder.RegisterType<TranslationDemoViewModel>().As<IMainWindowViewModel>();
         }
 
         protected override async Task NavigateToMainWindow()
         {
-           await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+            EnsureApplicationMainWindowVisible();
+            NavigateToViewModel<TranslationDemoViewModel>();
+            //await ShowStartupDialog<StartupDialogViewModel, TranslationDemoViewModel>();
         }
 
         protected override void RestoreMainWindowState()
