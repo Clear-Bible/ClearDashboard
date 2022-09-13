@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterValidators(Assembly.GetExecutingAssembly());
 
 
-            builder.RegisterType<TranslationSource>().AsSelf();
+            builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
 
             builder.RegisterType<ProjectPickerView>().AsSelf();
 

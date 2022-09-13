@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         //protected IWindowManager? _windowManager;
         private readonly ParatextProxy _paratextProxy;
-        private readonly TranslationSource? _translationSource;
+        private TranslationSource? _translationSource;
         #endregion
 
         #region Observable Objects
@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => AlertVisibility);
             }
         }
-        
+
         private string? _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string? Message
         {
@@ -150,16 +150,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
+        public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
+            IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
-            _translationSource = translationSource;
             AlertVisibility = Visibility.Collapsed;
+            _translationSource = translationSource;
         }
 
         public async Task StartParatext()
@@ -271,7 +271,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
-        
+
         public void SetLanguage()
         {
             var culture = Settings.Default.language_code;
