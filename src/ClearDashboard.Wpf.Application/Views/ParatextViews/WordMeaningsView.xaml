@@ -74,149 +74,216 @@
                 <DataTemplate>
                     <Border
                         Padding="0"
-                        BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                        BorderBrush="Black"
                         BorderThickness="1"
-                        CornerRadius="4">
+                        CornerRadius="0">
 
-                        <Grid>
+                        <Grid Width="{Binding ActualWidth, ElementName=LVSenses}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition MinWidth="50" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="Auto" />
+
+                                <!--<ColumnDefinition Width="370" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />-->
                             </Grid.ColumnDefinitions>
 
 
 
-                            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="37" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                            <Grid Background="{DynamicResource MaterialDesignDivider}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="37" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                                    <!--  First Column - LOGOS button  -->
-                                    <StackPanel
-                                        Grid.Column="0"
-                                        Margin="0,0,0,5"
-                                        Orientation="Horizontal">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-                                        <Button
-                                            x:Name="ShowLogos"
-                                            Grid.Column="1"
-                                            Width="32"
-                                            Height="32"
-                                            Margin="5,0,0,0"
-                                            Padding="0"
-                                            Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
-                                            CommandParameter="{Binding}">
-                                            <Button.Content>
-                                                <Image Source="/Resources/logos_icon.png" />
-                                            </Button.Content>
-                                        </Button>
-                                    </StackPanel>
-
-                                    <StackPanel
+                                <!--  First Column - LOGOS button  -->
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <!--<Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>-->
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Button
+                                        x:Name="ShowLogos"
                                         Grid.Column="1"
-                                        Margin="0,0,0,5"
-                                        Orientation="Horizontal">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
+                                        Width="32"
+                                        Height="32"
+                                        Margin="5,0,0,0"
+                                        Padding="0"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
+                                        CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <Image Source="/Resources/logos_icon.png" />
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
 
-                                        <StackPanel Margin="3" Orientation="Vertical">
-                                            <TextBlock
-                                                Margin="3,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
-                                                FontSize="18"
-                                                FontWeight="Bold"
-                                                Foreground="{StaticResource RedDarkBrush}"
-                                                Text="{Binding Word}" />
-                                            <TextBlock
-                                                Width="80"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Center"
-                                                FontSize="12"
-                                                Foreground="{StaticResource OrangeDarkBrush}"
-                                                Text="{Binding WordTransliterated, StringFormat=({0})}" />
-                                        </StackPanel>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <!--<Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>-->
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <StackPanel Margin="3" Orientation="Vertical">
                                         <TextBlock
-                                            Width="235"
-                                            Margin="5,0,0,0"
+                                            Margin="3,0,0,0"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
-                                            FontSize="14"
+                                            FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
+                                            FontSize="18"
                                             FontWeight="Bold"
+                                            Foreground="{StaticResource RedDarkBrush}"
+                                            Text="{Binding Word}" />
+                                        <TextBlock
+                                            Width="80"
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            FontSize="12"
                                             Foreground="{StaticResource OrangeDarkBrush}"
-                                            Text="{Binding Glosses}"
-                                            TextWrapping="Wrap" />
+                                            Text="{Binding WordTransliterated, StringFormat=({0})}" />
                                     </StackPanel>
-                                </Grid>
+                                    <TextBlock
+                                        Width="235"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource OrangeDarkBrush}"
+                                        Text="{Binding Glosses}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
 
 
-                            </StackPanel>
 
-                            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <!--  Second Column  -->
-                                <StackPanel Margin="5,0,0,0" Orientation="Vertical">
-                                    <!--  Domain  -->
-                                    <Label
+                            <Grid Grid.Column="1" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    MinWidth="50"
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization WordMeaningsView_Domain}"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueDarkBrush}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource OrangeDarkBrush}"
+                                    Text="{Binding Domains}"
+                                    TextAlignment="Left"
+                                    TextWrapping="Wrap" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    MinWidth="70"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization WordMeaningsView_SubDomain}"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource BlueDarkBrush}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontStyle="Italic"
+                                    Foreground="{StaticResource OrangeDarkBrush}"
+                                    Text="{Binding SubDomains}"
+                                    TextAlignment="Left"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                            <!--<StackPanel
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Background="Red"
+                                Orientation="Horizontal">
+                            -->
+                            <!--  Second Column  -->
+                            <!--
+                                <StackPanel
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
+                            -->
+                            <!--  Domain  -->
+                            <!--<Label
                                         MinWidth="50"
                                         Margin="0,0,0,0"
                                         VerticalAlignment="Center"
                                         Content="{helpers:Localization WordMeaningsView_Domain}"
                                         FontStyle="Italic"
-                                        Foreground="{StaticResource BlueDarkBrush}" />
-                                    <TextBlock
+                                        Foreground="{StaticResource BlueDarkBrush}" />-->
+                            <!--<TextBlock
                                         Width="Auto"
-                                        Margin="3,0,0,5"
+                                        Margin="5,0,0,5"
                                         VerticalAlignment="Center"
                                         FontStyle="Italic"
                                         Foreground="{StaticResource OrangeDarkBrush}"
                                         Text="{Binding Domains}"
                                         TextAlignment="Left"
-                                        TextWrapping="Wrap" />
+                                        TextWrapping="Wrap" />-->
+                            <!--
                                 </StackPanel>
 
                                 <StackPanel Margin="10,0,0,0" Orientation="Vertical">
-                                    <!--  Sub domain  -->
-                                    <Label
+                            -->
+                            <!--  Sub domain  -->
+                            <!--<Label
                                         MinWidth="70"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Content="{helpers:Localization WordMeaningsView_SubDomain}"
                                         FontStyle="Italic"
-                                        Foreground="{StaticResource BlueDarkBrush}" />
-                                    <TextBlock
-                                        Width="Auto"
+                                        Foreground="{StaticResource BlueDarkBrush}" />-->
+                            <!--<TextBlock
+                                          Margin="5,0,0,0"
+                                          Width="Auto"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         FontStyle="Italic"
                                         Foreground="{StaticResource OrangeDarkBrush}"
                                         Text="{Binding SubDomains}"
                                         TextAlignment="Left"
-                                        TextWrapping="Wrap" />
+                                        TextWrapping="Wrap" />-->
+                            <!--
                                 </StackPanel>
-                            </StackPanel>
+                            </StackPanel>-->
 
                             <TextBlock
                                 Grid.Column="2"
@@ -230,6 +297,7 @@
                             <StackPanel
                                 Grid.Column="3"
                                 Margin="10,0,0,0"
+                                VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <!--  Sense  -->
                                 <Label
@@ -254,11 +322,9 @@
                                 </TextBlock>
                             </StackPanel>
 
-
                             <Button
                                 Grid.Column="4"
-                                Margin="5,0,0,5"
-                                Padding="3"
+                                Margin="0,0,35,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 BorderThickness="0"
@@ -269,8 +335,6 @@
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="Button">
                                                     <Button
-                                                        Margin="5,5,0,0"
-                                                        Padding="3"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
                                                         BorderThickness="0"
@@ -288,8 +352,6 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="Button">
                                                             <Button
-                                                                Margin="5,5,0,0"
-                                                                Padding="3"
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Top"
                                                                 BorderThickness="0"
