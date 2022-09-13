@@ -1,27 +1,26 @@
 ﻿<Page
     x:Class="ClearDashboard.Wpf.Application.Views.Main.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
-    xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
-    xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
-    xmlns:panes1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Panes"
-    xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
-    xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
-    xmlns:resx="http://schemas.xceed.com/wpf/xaml/avalondock"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
+    xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
+    xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
+    xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
+    xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -42,8 +41,8 @@
 
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
-        <system:Boolean x:Key="TRUE">True</system:Boolean>
-        <system:Boolean x:Key="FALSE">False</system:Boolean>
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
     </Page.Resources>
@@ -107,9 +106,10 @@
                     <TextBlock
                         BaselineOffset="100"
                         FontWeight="Bold"
-                        Text="PROJECT DESIGN SURFACE"
+                        Text="Project Design Surface"
                         TextAlignment="Center"
-                        TextOptions.TextFormattingMode="Ideal">
+                        TextOptions.TextFormattingMode="Ideal"
+                     >
                         <TextBlock.LayoutTransform>
                             <RotateTransform Angle="270" />
                         </TextBlock.LayoutTransform>
@@ -120,8 +120,8 @@
             </controls:SidebarExpander>
 
             <DockingManager
-                x:Name="dockManager"
-                Grid.Row="1"
+                x:Name="DockManager"
+                Grid.Row="0"
                 Grid.Column="1"
                 ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
                 AllowMixedOrientation="True"
@@ -242,7 +242,7 @@
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
                                 <Setter Property="CanClose" Value="True" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
-                                <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource FALSE}}" />
+                                <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
                                 <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                                 <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
                                 <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
@@ -279,7 +279,7 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Content="Save Current Layout:" />
             <ComboBox
-                x:Name="cboNames"
+                x:Name="CboNames"
                 Grid.Row="1"
                 Padding="15"
                 DisplayMemberPath="LayoutName"
@@ -353,9 +353,7 @@
                             <Button Padding="-10" cm:Message.Attach="[Event Click] = [Action DeleteLayout($this)]">
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
-                                        <!--  Default value  -->
                                         <Setter Property="IsEnabled" Value="True" />
-                                        <!--  Triggered values  -->
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
                                                 <Setter Property="IsEnabled" Value="False" />
@@ -380,9 +378,7 @@
                                 Text="{Binding LayoutName}">
                                 <TextBlock.Style>
                                     <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="{x:Type TextBlock}">
-                                        <!--  Default value  -->
                                         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
-                                        <!--  Triggered values  -->
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
                                                 <Setter Property="Foreground" Value="Gray" />

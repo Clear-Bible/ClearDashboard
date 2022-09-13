@@ -65,16 +65,16 @@ namespace ClearDashboard.Wpf.Application.Views.Main
                 {
                     case "LOAD":
                         // remove all existing windows
-                        dockManager.AnchorablesSource = null;
-                        dockManager.DocumentsSource = null;
-                        var layoutSerializer = new XmlLayoutSerializer(dockManager);
+                        DockManager.AnchorablesSource = null;
+                        DockManager.DocumentsSource = null;
+                        var layoutSerializer = new XmlLayoutSerializer(DockManager);
 
                         //_vm.LoadLayout(layoutSerializer);
 
                         break;
                     case "SAVE":
                         //TODO
-                        layoutSerializer = new XmlLayoutSerializer(dockManager);
+                        layoutSerializer = new XmlLayoutSerializer(DockManager);
                         layoutSerializer.Serialize(@".\AvalonDock.Layout.config");
                         break;
                     case "BIBLICALTERMS":
