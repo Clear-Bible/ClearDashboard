@@ -63,7 +63,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Corpus Tokens";
-            TokensDisplays = new ObservableCollection<TokenDisplay>();
             Verses = new ObservableCollection<TokensTextRow>();
             return base.OnInitializeAsync(cancellationToken);
         }
@@ -113,23 +112,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook) ? string.Empty : $"Book: {CurrentBook}";
 
-        private ObservableCollection<TokenDisplay> _tokenDisplays;
         private TokenizedTextCorpus _currentTokenizedTextCorpus;
         private string _tokenizationName;
 
-        public ObservableCollection<TokenDisplay> TokensDisplays
-        {
-            get => _tokenDisplays;
-            set => Set(ref _tokenDisplays, value);
-        }
-
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetTokensWithPadding(TokensTextRow tokensTextRow)
-        {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                return detokenizer.Detokenize(tokensTextRow.Tokens);
-
-
-        }
 
         public string TokenizationName
         {
@@ -155,8 +140,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             {
                 try
                 {
-                    // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
-
                     CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
                     TokenizationName = message.TokenizationName;
 
@@ -183,16 +166,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                     .ChapterNumber == 1) > 0)
                             .ToList();
 
-
-
-                    var tokensWithPadding = GetTokensWithPadding(tokensTextRows[0]);
-                    var tokenDisplays = tokensWithPadding.Select(t => new TokenDisplay
-                        { Token = t.token, PaddingAfter = t.paddingAfter, PaddingBefore = t.paddingBefore });
-
                     OnUIThread(() =>
                     {
-                       // TokensDisplays = new ObservableCollection<TokenDisplay>(tokenDisplays);
-                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                       Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(

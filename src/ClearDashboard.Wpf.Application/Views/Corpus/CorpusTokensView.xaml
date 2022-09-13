@@ -1,13 +1,11 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Corpus.CorpusTokensView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Corpus"
     d:DataContext="{d:DesignInstance Type=corpus:CorpusTokensViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -32,12 +30,6 @@
             Grid.Row="0"
             Grid.Column="0"
             Orientation="Horizontal">
-            <!--<TextBlock
-                Margin="20,0"
-                VerticalAlignment="Top"
-                FontSize="24"
-                Foreground="Orange"
-                Text="CORPUSPANEL" />-->
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
@@ -64,17 +56,11 @@
                             Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                             FontSize="12"
                             Foreground="{DynamicResource MaterialDesignBody}" />
-                        <!--<userControls:TextDisplayControl Margin="10" ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor}}"  />-->
-                        <!--<userControls:VerseDisplay  Tokens="{Binding Converter={StaticResource TokensTextRowValueConvertor}, ConverterParameter={Binding CurrentTokenizedTextCoprus.TokenizationFunction}}" FontSize="20" Wrap="True"></userControls:VerseDisplay>-->
-
-
                         <userControls:VerseDisplay  FontSize="20" Wrap="True">
                             <userControls:VerseDisplay.Tokens>
                                 <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
                                     <Binding Path="." />
                                     <Binding ElementName="MainGrid" Path="DataContext.TokenizationName"></Binding>
-                                    <!--<Binding Path="DataContext.TokenizationName" RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                     AncestorType={x:Type Grid}}"/>-->
                                 </MultiBinding>
                             </userControls:VerseDisplay.Tokens>
                         </userControls:VerseDisplay>
