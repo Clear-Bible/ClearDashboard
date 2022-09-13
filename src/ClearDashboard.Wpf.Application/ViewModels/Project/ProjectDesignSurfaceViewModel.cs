@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata ProjectMetadata);
 
         private readonly INavigationService _navigationService;
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
@@ -351,6 +351,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (View == null)
             {
@@ -379,6 +381,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override async void OnViewLoaded(object view)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
             {
                 LoadCanvas();
@@ -389,6 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewReady(object view)
         {
+            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
             {
                 LoadCanvas();
@@ -666,7 +670,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                     await EventAggregator.PublishOnCurrentThreadAsync(
-                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
+                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.LatinWordTokenizer.ToString(), metadata), cancellationToken);
 
                     OnUIThread(() =>
                     {
@@ -701,16 +705,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+        public void AddParatextCorpus()
+        {
+            AddParatextCorpus("");
+        }
+
         // ReSharper disable once UnusedMember.Global
-        public async void AddParatextCorpus()
+        public async void AddParatextCorpus(string selectedParatextProjectId = "")
         {
             _logger.LogInformation("AddParatextCorpus called.");
             AddParatextCorpusRunning = true;
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
+            string json = "{\"ParatextProjectId\":\"" + selectedParatextProjectId + "\"}";
+            
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+                DashboardProjectManager.NewProjectDialogSettings, json, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
@@ -836,7 +848,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                         await EventAggregator.PublishOnCurrentThreadAsync(
-                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
+                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
 
                         OnUIThread(() =>
                         {
@@ -902,7 +914,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     corpusNode.NodeTokenizations.Add(new NodeTokenization
                     {
-                        CorpusId = corpus.CorpusId.ToString(),
+                        CorpusId = corpus.CorpusId.Id.ToString(),
                         TokenizationFriendlyName = EnumHelper.GetDescription(viewModelSelectedTokenizer),
                         IsSelected = false,
                         IsPopulated = true,
@@ -991,7 +1003,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 case "AddTokenizationId":
                     // kick off the add new tokenization dialog
-                    AddParatextCorpus();
+                    AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
                     break;
                 case "SeparatorId":
                     // no-op
@@ -1000,10 +1012,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // TODO
                     break;
                 case "ShowVerseId":
+                    // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
+                    var tokenization =
+                        corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
+                            b.TokenizationName == nodeMenuItem.Tokenizer);
+                    if (tokenization == null)
+                    {
+                        return;
+                    }
+                    
+                    Guid corpusId = Guid.Parse(tokenization.CorpusId);
+                    Guid tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
                     await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowTokenizationWindowMessage(corpusNodeViewModel.ParatextProjectId,
-                            corpusNodeViewModel.Name,
-                            nodeMenuItem.Tokenizer), CancellationToken.None);
+                        new ShowTokenizationWindowMessage(ParatextProjectId: corpusNodeViewModel.ParatextProjectId,
+                            projectName: corpusNodeViewModel.Name,
+                            TokenizationType: nodeMenuItem.Tokenizer,
+                            corpusId: corpusId,
+                            tokenizedTextCorpusId: tokenizationId));
                     break;
                 case "PropertiesId":
                     // node properties
@@ -1137,14 +1162,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         public void ConnectionDragging(Point curDragPoint, ConnectionViewModel connection)
         {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (connection.DestinationConnector == null)
+            if (connection is not null)
             {
-                connection.DestConnectorHotspot = curDragPoint;
-            }
-            else
-            {
-                connection.SourceConnectorHotspot = curDragPoint;
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                if (connection.DestinationConnector == null)
+                {
+                    connection.DestConnectorHotspot = curDragPoint;
+                }
+                else
+                {
+                    connection.SourceConnectorHotspot = curDragPoint;
+                }
             }
         }
 
@@ -1322,7 +1350,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             node.NodeTokenizations.Add(new NodeTokenization
             {
-                CorpusId = corpus.CorpusId.ToString(),
+                CorpusId = corpus.CorpusId.Id.ToString(),
                 TokenizationFriendlyName = EnumHelper.GetDescription(tokenizer),
                 IsSelected = false,
                 TokenizationName = tokenizer.ToString(),

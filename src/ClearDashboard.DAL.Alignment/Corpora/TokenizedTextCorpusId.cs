@@ -8,6 +8,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             Metadata = new Dictionary<string, object>();
         }
 
+        public TokenizedTextCorpusId(string id) : base(id)
+        {
+            Metadata = new Dictionary<string, object>();
+        }
+
         public TokenizedTextCorpusId(Guid id, string? displayName, string? tokenizationFunction, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId) : base(id)
         {
             DisplayName = displayName;
