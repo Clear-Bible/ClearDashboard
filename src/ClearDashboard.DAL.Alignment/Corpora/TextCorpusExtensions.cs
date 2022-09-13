@@ -18,11 +18,14 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         ///         .Tokenize<LatinWordTokenizer>()
         ///         .Transform<IntoTokensTextRowProcessor>()
         /// </param>
+        /// <param name="textCorpus"></param>
         /// <param name="mediator"></param>
         /// <param name="corpusId"></param>
+        /// <param name="displayName"></param>
         /// <param name="tokenizationFunction"></param>
-        /// <returns>TokenizedTextCorpus</returns>
-        /// <exception cref="InvalidTypeEngineException">textCorpus enumerable is not castable to a TokensTextRow type, or textCorpus is of type TokenizedTextCorpus</exception>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default)
         {

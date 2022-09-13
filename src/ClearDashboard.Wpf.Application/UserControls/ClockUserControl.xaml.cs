@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -56,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ObservableCollection<MenuItemNest> SettingsMenuItemNest = new();
 
             StringCollection SettingsStringCollection = new StringCollection();
-            SettingsStringCollection = Properties.Settings.Default.TimeZones;
+            SettingsStringCollection = Settings.Default.TimeZones;
             if (SettingsStringCollection != null)
             {
                 foreach (var group in SettingsStringCollection)
@@ -187,8 +188,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 }
             }
 
-            Properties.Settings.Default.TimeZones = settingsStringCollection;
-            Properties.Settings.Default.Save();
+            Settings.Default.TimeZones = settingsStringCollection;
+            Settings.Default.Save();
         }
 
         private void ClockRefresh(object sender, ElapsedEventArgs e)

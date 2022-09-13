@@ -233,12 +233,8 @@
                             <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
                         </StackPanel>
                     </StackPanel>
-
                 </Button>
-
-
             </StackPanel>
-
         </StackPanel>
         <!--<StackPanel  Grid.Row="1"
                      Grid.Column="0"
@@ -311,13 +307,12 @@
         <!--<StackPanel
             Grid.Row="2"
             Grid.Column="1"
-
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
 
             <TextBlock
-                Margin="30, 0"
+                Margin="30,0"
                 FontSize="19"
                 Text="{helpers:Localization ProjectPicker_GetStarted}" />
 
@@ -363,6 +358,7 @@
                             VerticalAlignment="Center"
                             FontWeight="Light"
                             Text="{helpers:Localization ProjectPicker_CreateLong}"
+
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </StackPanel>

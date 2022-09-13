@@ -5,7 +5,6 @@
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
@@ -13,7 +12,7 @@
     Height="635"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -34,32 +33,35 @@
         </Style>
 
         <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Height" Value="50"></Setter>
-            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Width" Value="100" />
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border >
+                        <Border>
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="LightGray"/>
+                                            <Setter Property="Background" Value="LightGray" />
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Background" Value="#EEEBEB"/>
+                                            <Setter Property="Background" Value="#EEEBEB" />
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Background" Value="Transparent" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
-                            <Grid Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <ContentPresenter></ContentPresenter>
+                            <Grid
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent">
+                                <ContentPresenter />
                             </Grid>
                         </Border>
                     </ControlTemplate>
@@ -68,9 +70,9 @@
 
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="1"/>
-                    <Setter Property="Foreground" Value="Gray"/>
-                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Background" Value="LightGray" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -131,21 +133,22 @@
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
+            Margin="20"
             HorizontalAlignment="Right"
-            Orientation="Horizontal"
-            Margin="20">
+            Orientation="Horizontal">
 
             <Button
                 x:Name="MoveBackwards"
                 Margin="5,5,5,5"
-                Style="{StaticResource TransparentStyle}"
                 cal:Message.Attach="MoveBackwards"
+                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding EnableControls}"
-                Content="{helpers:Localization Back}">
+                Style="{StaticResource TransparentStyle}">
                 </Button>
             <Button
                 x:Name="Create"
                 Content="{helpers:Localization Create}" 
+                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>
 
@@ -182,8 +185,9 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style TargetType="Label">
-            --><!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />--><!--
+        <Style TargetType="Label">-->
+<!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
+<!--
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="10,10" />
             <Setter Property="FontSize" Value="24" />
