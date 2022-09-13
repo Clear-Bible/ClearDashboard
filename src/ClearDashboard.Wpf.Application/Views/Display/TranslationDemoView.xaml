@@ -53,7 +53,7 @@
 
         <Label Grid.Row="1">Verse 1 with translations, wrapped</Label>
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
-                                   Wrap="True"
+                                   Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding Verse1}" 
                                    FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -214,6 +214,9 @@
             <Label>Vertical spacing:</Label>
             <Slider Minimum="0" Maximum="20" Name="VerticalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label Content="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+
+            <Label>Wrap</Label>
+            <CheckBox Name="WrapCheckbox" IsChecked="True"/>
         </StackPanel>
 
     </Grid>
