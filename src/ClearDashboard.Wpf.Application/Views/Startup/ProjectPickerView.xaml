@@ -22,13 +22,10 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-
-
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <system:Boolean x:Key="True">True</system:Boolean>
             <system:Boolean x:Key="False">False</system:Boolean>
-
             <Style
                 x:Key="EmptyMaterialDesignListView"
                 BasedOn="{StaticResource MaterialDesignListView}"
@@ -123,7 +120,7 @@
             <TextBlock
                 Margin="47,10,0,0"
                 FontSize="32"
-                Text="Clear Dashboard" />
+                Text="{helpers:Localization ProjectPicker_AppName}" />
 
         </StackPanel>
         <StackPanel
@@ -151,7 +148,7 @@
                 Width="400"
                 Margin="15"
                 FontWeight="Bold"
-                Text="Paratext is not installed.  Please install Paratext and rerun the Clear Dashboard application."
+                Text="{helpers:Localization ProjectPicker_NotInstalled}"
                 TextWrapping="Wrap" />
         </StackPanel>
         <StackPanel
@@ -180,7 +177,7 @@
                     Margin="5,0,5,0"
                     VerticalAlignment="Center"
                     Foreground="{DynamicResource PrimaryHueMidBrush}">
-                    <Run Text="Paratext" />
+                    <Run Text="{helpers:Localization ProjectPicker_Paratext}" />
                     <Run Text="{helpers:Localization ShellView_User}" />
                 </TextBlock>
                 <TextBlock
@@ -232,14 +229,11 @@
                                 HorizontalAlignment="Center"
                                 FontSize="14"
                                 FontWeight="Bold"
-                                Text="Paratext is not running" />
-                            <TextBlock HorizontalAlignment="Center" Text="Click here to start Paratext" />
+                                Text="{helpers:Localization ProjectPicker_NotRunning}" />
+                            <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
                         </StackPanel>
                     </StackPanel>
-
                 </Button>
-
-
             </StackPanel>
         </StackPanel>
         <!--<StackPanel  Grid.Row="1"
@@ -254,7 +248,7 @@
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Search recent"
+                materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">
@@ -271,7 +265,7 @@
             <TextBlock
                 Margin="40,0"
                 FontSize="19"
-                Text="Open recent" />
+                Text="{helpers:Localization ProjectPicker_OpenRecent}" />
             <TextBox
                 x:Name="SearchText"
                 Width="320"
@@ -320,7 +314,7 @@
             <TextBlock
                 Margin="30,0"
                 FontSize="19"
-                Text="Get started" />
+                Text="{helpers:Localization ProjectPicker_GetStarted}" />
 
         </StackPanel>-->
 
@@ -357,13 +351,14 @@
                             VerticalAlignment="Center"
                             FontSize="19"
                             FontWeight="Normal"
-                            Text="Create a new project" />
+                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
                         <TextBlock
                             Margin="0,2"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             FontWeight="Light"
-                            Text="Create your project to get started."
+                            Text="{helpers:Localization ProjectPicker_CreateLong}"
+
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </StackPanel>
@@ -398,7 +393,7 @@
                             Background="Transparent">
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="Delete Project" />
+                                    <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
                             <StackPanel Margin="0" Orientation="Horizontal">
@@ -427,7 +422,7 @@
                                         Grid.Column="1"
                                         FontSize="14"
                                         FontWeight="DemiBold">
-                                        <Run Text="Project: " />
+                                        <Run Text="{helpers:Localization ProjectPicker_Project}" />
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
@@ -443,7 +438,7 @@
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
-                                        <Run FontSize="11" Text="Database: " />
+                                        <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Database}" />
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
                                     </TextBlock>
                                 </Grid>
