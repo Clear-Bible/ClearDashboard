@@ -55,6 +55,7 @@
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                   ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding Verse1}" 
                                    FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -218,6 +219,9 @@
 
             <Label VerticalAlignment="Center">Show Translations:</Label>
             <CheckBox VerticalAlignment="Center" Name="ShowTranslationsCheckbox" IsChecked="True"/>
+
+            <Label VerticalAlignment="Center">Show Note Indicators:</Label>
+            <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True"/>
 
             <Label VerticalAlignment="Center">Wrap:</Label>
             <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>

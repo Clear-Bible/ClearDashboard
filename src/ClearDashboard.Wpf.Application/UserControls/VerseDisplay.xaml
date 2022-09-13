@@ -26,6 +26,7 @@
                 NoteRightButtonDown="OnNoteRightButtonDown" NoteRightButtonUp="OnNoteRightButtonUp" 
                 NoteMouseEnter="OnNoteMouseEnter" NoteMouseLeave="OnNoteMouseLeave" NoteMouseWheel="OnNoteMouseWheel"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
+                ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
                 TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"/>

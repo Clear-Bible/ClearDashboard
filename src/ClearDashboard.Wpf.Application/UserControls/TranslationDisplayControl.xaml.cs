@@ -204,6 +204,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
+        /// Identifies the ShowNoteIndicator dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TranslationDisplayControl),
+            new PropertyMetadata(true, new PropertyChangedCallback(OnShowNoteIndicatorChanged)));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TranslationDisplayControl),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
         /// Callback handler for changes to the TranslationVerticalSpacing dependency property: when this property changes, recalculate the inner padding for the translation.
         /// </summary>
         /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
@@ -223,6 +235,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = (TranslationDisplayControl)obj;
             control.CalculateTranslationVisibility((bool) args.NewValue);
+        }
+
+        /// <summary>
+        /// Callback handler for changes to the ShowNoteIndicator dependency property: when this property changes, recalculate the visibility of the note indicator.
+        /// </summary>
+        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnShowNoteIndicatorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var control = (TranslationDisplayControl)obj;
+            control.CalculateNoteIndicatorVisibility((bool) args.NewValue);
         }
 
         #endregion Static DependencyProperties
@@ -467,10 +490,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationVisibility = (show && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        private void CalculateNoteIndicatorVisibility(bool show)
+        {
+            NoteIndicatorVisibility = (show && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             CalculateTranslationInnerPadding(TranslationVerticalSpacing);
             CalculateTranslationVisibility(ShowTranslation);
+            CalculateNoteIndicatorVisibility(ShowNoteIndicator);
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -689,6 +718,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the whether to show the note indicator.
+        /// </summary>
+        public bool ShowNoteIndicator
+        {
+            get => (bool) GetValue(ShowNoteIndicatorProperty);
+            set => SetValue(ShowNoteIndicatorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator.
+        /// </summary>
+        /// <remarks>This should normally not be called directly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        public Visibility NoteIndicatorVisibility
+        {
+            get => (Visibility) GetValue(NoteIndicatorVisibilityProperty);
+            set => SetValue(NoteIndicatorVisibilityProperty, value);
+        }
+
+        /// <summary>
         /// Gets the <see cref="TokenDisplay"/> data source for this control.
         /// </summary>
         public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
@@ -723,16 +771,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets the target translation text.
         /// </summary>
         public string TargetTranslationText => TokenDisplay.TargetTranslationText;
-
-        /// <summary>
-        /// Gets the visibility of the translation button.
-        /// </summary>
-        //public Visibility TranslationVisibility => TokenDisplay.Translation != null ? Visibility.Visible : Visibility.Collapsed;
-
-        /// <summary>
-        /// Gets the visibility of the note indicator.
-        /// </summary>
-        public Visibility NoteVisibility => !String.IsNullOrEmpty(TokenDisplay?.Note) ? Visibility.Visible : Visibility.Hidden;
 
         /// <summary>
         /// Gets the inner padding of the source text button.
