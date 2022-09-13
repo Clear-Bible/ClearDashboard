@@ -390,7 +390,8 @@
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            Background="Transparent">
+                            Background="Transparent"
+                            Tag="{Binding DataContext, ElementName=GridLayout}" >
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />

@@ -262,6 +262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 di.Delete();
 
                 DashboardProjects.Remove(project);
+                DashboardProjectsDisplay.Remove(project);
 
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
                 File.Delete(Path.Combine(di.Parent.ToString(), originalDatabaseCopyName));
@@ -271,6 +272,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
+
+        
 
         public void SetLanguage()
         {
