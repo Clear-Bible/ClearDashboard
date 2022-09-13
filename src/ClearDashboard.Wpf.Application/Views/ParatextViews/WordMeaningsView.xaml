@@ -121,7 +121,7 @@
 
             <helpers:ScrollingToTopListBox.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card>
+                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
 
                         <Grid Width="{Binding ActualWidth, ElementName=LVSenses}">
@@ -162,8 +162,8 @@
                                     <Button
                                         x:Name="ShowLogos"
                                         Grid.Column="1"
-                                        Width="34"
-                                        Height="34"
+                                       Width="32"
+                                        Height="32"
                                         Margin="5,0,0,0"
                                         Padding="0"
                                         VerticalAlignment="Center"
@@ -171,7 +171,8 @@
                                         Command="{Binding DataContext.LaunchLogosCommand, ElementName=LVSenses}"
                                         CommandParameter="{Binding}">
                                         <Button.Content>
-                                            <Image Source="/Resources/logos_icon.png" />
+                                            <Image
+                                                Source="/Resources/logos_icon.png" Width="32" Height="32"/>
                                         </Button.Content>
                                     </Button>
                                 </StackPanel>
