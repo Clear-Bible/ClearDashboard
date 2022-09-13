@@ -431,6 +431,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Event Handlers
+        private void CalculateTranslationInnerPadding(double spacing)
+        {
+            TranslationInnerPadding = new Thickness(TokenDisplay.PaddingBefore.Length * 10,
+                spacing,
+                0,
+                spacing * 2);
+        }
+
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateTranslationInnerPadding(TranslationVerticalSpacing);
+        }
+
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -678,26 +692,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public Thickness InnerPadding => new Thickness(TokenDisplay.PaddingBefore.Length * 10, 0, TokenDisplay.PaddingAfter.Length * 10, 0);
 
-        private void CalculateTranslationInnerPadding(double spacing)
-        {
-            TranslationInnerPadding = new Thickness(TokenDisplay.PaddingBefore.Length * 10,
-                spacing,
-                0,
-                spacing * 2);
-        }
-
-
         public TranslationDisplayControl()
         {
             InitializeComponent();
 
-            this.Loaded += TranslationDisplayControl_Loaded;
+            this.Loaded += OnLoaded;
         }
-
-        private void TranslationDisplayControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            CalculateTranslationInnerPadding(TranslationVerticalSpacing);
-        }
-
     }
 }
