@@ -263,6 +263,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                     }
                 }
+                else
+                {
+                    return _selectedConnection;
+                }
 
 #pragma warning disable CS8603
                 return null;
