@@ -144,9 +144,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
             }
 
-            // need an await to get the compiler to be 'quiet'
-//            await Task.CompletedTask;
-
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             return new RequestResult<object>(null);
         }

@@ -53,7 +53,7 @@ public class GetCorpusByCorpusIdQueryHandlerTests : TestBase
             Assert.True(corpusDB.IsRtl);
             Assert.Equal("a name", corpusDB.Name);
             Assert.Equal("a language", corpusDB.Language);
-            Assert.Null(corpusDB.ParatextGuid);
+            Assert.NotNull(corpusDB.ParatextGuid);
             Assert.Equal(Models.CorpusType.StudyBible.ToString(), corpusDB.CorpusType);
             Assert.Empty(corpusDB.Metadata);
         }

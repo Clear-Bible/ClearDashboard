@@ -1,0 +1,57 @@
+﻿using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
+using Microsoft.Extensions.Logging;
+
+namespace ClearDashboard.DAL.Alignment.Features.Notes
+{
+    public class GetNoteByNoteIdQueryHandler : ProjectDbContextQueryHandler<
+        GetNoteByNoteIdQuery,
+        RequestResult<Note>,
+        Note>
+    {
+        private readonly IMediator _mediator;
+
+        public GetNoteByNoteIdQueryHandler(IMediator mediator, 
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider, 
+            ILogger<GetNoteByNoteIdQueryHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
+        {
+            _mediator = mediator;
+        }
+
+        protected override async Task<RequestResult<Note>> GetDataAsync(GetNoteByNoteIdQuery request, CancellationToken cancellationToken)
+        {
+            // need an await to get the compiler to be 'quiet'
+            await Task.CompletedTask;
+
+            var note = ProjectDbContext.Notes.FirstOrDefault(pc => pc.Id == request.NoteId.Id);
+            if (note == null)
+            {
+                return new RequestResult<Note>
+                (
+                    success: false,
+                    message: $"Label not found for LabelId '{request.NoteId.Id}'"
+                );
+            }
+
+            return new RequestResult<Note>
+            (
+                new Note(
+                    _mediator,
+                    new NoteId(
+                        note.Id,
+                        note.Created,
+                        note.Modified,
+                        new UserId(note.UserId)),
+                    note.Text!,
+                    note.AbbreviatedText)
+            );
+        }
+    }
+}
