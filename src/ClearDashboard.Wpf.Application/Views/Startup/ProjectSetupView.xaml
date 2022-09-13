@@ -184,8 +184,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style TargetType="Label">
--->
+        <Style TargetType="Label">-->
 <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
 <!--
             <Setter Property="VerticalAlignment" Value="Center" />
