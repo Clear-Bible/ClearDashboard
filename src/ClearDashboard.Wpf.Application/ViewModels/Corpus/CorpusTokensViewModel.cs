@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Extensions;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.ViewModels;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
@@ -29,7 +26,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         private bool _handleAsyncRunning = false;
 
 
-        private readonly ILogger<CorpusTokensViewModel> _logger;
         public string TokenizationName
         {
             get => _tokenizationName;
@@ -64,11 +60,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         }
 
         public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) 
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            _logger = logger;
-
             Title = "🗟 CORPUS TOKENS";
             ContentId = "CORPUSTOKENS";
 
@@ -157,7 +151,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            
+            Logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -176,7 +171,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                             Description = $"Getting book '{CurrentBook}'...",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Working
-                        }));
+                        }), _cancellationTokenSource.Token);
                     var tokensTextRows =
                         CurrentTokenizedTextCorpus[CurrentBook]
                             .GetRows()
@@ -204,7 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Completed
-                        }));
+                        }), _cancellationTokenSource.Token);
                 }
                 catch (Exception ex)
                 {
@@ -217,7 +212,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
                                 TaskStatus = StatusEnum.Error
-                            }));
+                            }), _cancellationTokenSource.Token);
                     }
                 }
                 finally
@@ -252,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -354,7 +349,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         }
     }
 
-    static class CancelExtention
+    static class CancelExtension
     {
         public static IEnumerable<T> WithCancellation<T>(this IEnumerable<T> en, CancellationToken token)
         {
