@@ -1489,12 +1489,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
             string tokenizationType = message.TokenizationType;
-            string paratextId = message.ParatextId;
+            string paratextId = message.ParatextProjectId;
 
-            CorpusTokensViewModel viewModel = new();
+
+
+            CorpusTokensViewModel viewModel = IoC.Get<CorpusTokensViewModel>();
 
             var windowDockable = new LayoutDocument
             {
@@ -1512,9 +1514,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 documentPane.Children.Add(windowDockable);
             }
 
-            viewModel.ShowCorpusTokens(message, cancellationToken);
-
-            return Task.CompletedTask;
+            await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
 
         #endregion // Methods
