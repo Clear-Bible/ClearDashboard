@@ -135,10 +135,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         public BookInfo? CurrentBook
         {
             get => _currentBook;
-            set => Set(ref _currentBook, value);
+            set
+            {
+                Set(ref _currentBook, value);
+                NotifyOfPropertyChange(() => CurrentBookDisplay);
+            }
         }
 
-      
+
         //public string CurrentBookCode
         //{
         //    get => _currentBookCode;
