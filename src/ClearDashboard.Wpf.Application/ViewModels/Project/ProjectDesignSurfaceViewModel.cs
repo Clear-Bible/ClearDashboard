@@ -8,11 +8,9 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
-using ClearDashboard.Wpf.Controls;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
@@ -95,7 +93,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly DashboardProjectManager _projectManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
-        private readonly ILifetimeScope _lifetimeScope;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -322,7 +319,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
             _mediator = mediator;
-            _lifetimeScope = lifetimeScope;
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
@@ -342,11 +338,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             //IsBusy = false;
             return base.OnActivateAsync(cancellationToken);
-        }
-
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -379,7 +370,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             base.OnViewAttached(view, context);
         }
 
-        protected override async void OnViewLoaded(object view)
+        protected override void OnViewLoaded(object view)
         {
             // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
             if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
@@ -706,13 +697,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
+        // ReSharper disable once UnusedMember.Global
         public void AddParatextCorpus()
         {
             AddParatextCorpus("");
         }
 
         // ReSharper disable once UnusedMember.Global
-        public async void AddParatextCorpus(string selectedParatextProjectId = "")
+        private async void AddParatextCorpus(string selectedParatextProjectId = "")
         {
             _logger.LogInformation("AddParatextCorpus called.");
             AddParatextCorpusRunning = true;
@@ -1039,7 +1031,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var nodeTokenization =
                         corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
                             b.TokenizationName == nodeMenuItem.Tokenizer);
+#pragma warning disable CS8601
                     SelectedConnection = nodeTokenization;
+#pragma warning restore CS8601
                     break;
             }
         }
@@ -1162,6 +1156,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         public void ConnectionDragging(Point curDragPoint, ConnectionViewModel connection)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (connection is not null)
             {
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
