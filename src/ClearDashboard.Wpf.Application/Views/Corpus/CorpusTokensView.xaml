@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewModels:CorpusTokensViewModel,
+    xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Corpus"
+    d:DataContext="{d:DesignInstance Type=corpus:CorpusTokensViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,6 +19,7 @@
             <converters:VerseTokensValueConvertor x:Key="VerseTokensValueConvertor" />
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
             <converters:TokensTextRowValueConvertor x:Key="TokensTextRowValueConvertor" />
+            <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="MainGrid">
@@ -50,6 +52,7 @@
             Grid.Row="2"
             Grid.Column="0"
             ItemsSource="{Binding Verses}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
@@ -61,7 +64,20 @@
                             Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                             FontSize="12"
                             Foreground="{DynamicResource MaterialDesignBody}" />
-                        <userControls:TextDisplayControl Margin="10" ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor}}" />
+                        <!--<userControls:TextDisplayControl Margin="10" ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor}}"  />-->
+                        <!--<userControls:VerseDisplay  Tokens="{Binding Converter={StaticResource TokensTextRowValueConvertor}, ConverterParameter={Binding CurrentTokenizedTextCoprus.TokenizationFunction}}" FontSize="20" Wrap="True"></userControls:VerseDisplay>-->
+
+
+                        <userControls:VerseDisplay  FontSize="20" Wrap="True">
+                            <userControls:VerseDisplay.Tokens>
+                                <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
+                                    <Binding Path="." />
+                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationName"></Binding>
+                                    <!--<Binding Path="DataContext.TokenizationName" RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                     AncestorType={x:Type Grid}}"/>-->
+                                </MultiBinding>
+                            </userControls:VerseDisplay.Tokens>
+                        </userControls:VerseDisplay>
                     </StackPanel>
 
 

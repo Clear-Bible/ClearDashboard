@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Extensions;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Tokenization;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.DAL.Alignment.Corpora;
+using Token = ClearBible.Engine.Corpora.Token;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
@@ -61,8 +63,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Corpus Tokens";
-            TokensTextRows = new ObservableCollection<TokensTextRow>();
-            Verses = new ObservableCollection<VerseTokens>();
+            TokensDisplays = new ObservableCollection<TokenDisplay>();
+            Verses = new ObservableCollection<TokensTextRow>();
             return base.OnInitializeAsync(cancellationToken);
         }
 
@@ -84,8 +86,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        private ObservableCollection<VerseTokens> _verses;
-        public ObservableCollection<VerseTokens> Verses
+        private ObservableCollection<TokensTextRow> _verses;
+        public ObservableCollection<TokensTextRow> Verses
         {
             get => _verses;
             set => Set(ref _verses, value);
@@ -111,11 +113,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook) ? string.Empty : $"Book: {CurrentBook}";
 
-        private ObservableCollection<TokensTextRow> _tokensTextRows;
-        public ObservableCollection<TokensTextRow> TokensTextRows
+        private ObservableCollection<TokenDisplay> _tokenDisplays;
+        private TokenizedTextCorpus _currentTokenizedTextCorpus;
+        private string _tokenizationName;
+
+        public ObservableCollection<TokenDisplay> TokensDisplays
         {
-            get => _tokensTextRows;
-            set => Set(ref _tokensTextRows, value);
+            get => _tokenDisplays;
+            set => Set(ref _tokenDisplays, value);
+        }
+
+        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetTokensWithPadding(TokensTextRow tokensTextRow)
+        {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                return detokenizer.Detokenize(tokensTextRow.Tokens);
+
+
+        }
+
+        public string TokenizationName
+        {
+            get => _tokenizationName;
+            set => Set(ref _tokenizationName, value);
+        }
+
+        public TokenizedTextCorpus CurrentTokenizedTextCorpus
+        {
+            get => _currentTokenizedTextCorpus;
+            set => Set(ref _currentTokenizedTextCorpus, value);
         }
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
@@ -132,7 +157,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                 {
                     // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
 
-                    var corpus = message.TokenizedTextCorpus;
+                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
+                    TokenizationName = message.TokenizationName;
 
                     CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
 
@@ -146,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                         }));
 
                     var tokensTextRows =
-                        corpus[CurrentBook]
+                        CurrentTokenizedTextCorpus[CurrentBook]
                             .GetRows()
                             .WithCancellation(localCancellationToken)
                             .Cast<TokensTextRow>()
@@ -156,11 +182,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                     .TokenId
                                     .ChapterNumber == 1) > 0)
                             .ToList();
-                    
+
+
+
+                    var tokensWithPadding = GetTokensWithPadding(tokensTextRows[0]);
+                    var tokenDisplays = tokensWithPadding.Select(t => new TokenDisplay
+                        { Token = t.token, PaddingAfter = t.paddingAfter, PaddingBefore = t.paddingBefore });
+
                     OnUIThread(() =>
                     {
-                        TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
-                        Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
+                       // TokensDisplays = new ObservableCollection<TokenDisplay>(tokenDisplays);
+                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(

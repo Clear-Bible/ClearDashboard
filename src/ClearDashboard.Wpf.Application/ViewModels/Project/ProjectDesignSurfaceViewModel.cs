@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata ProjectMetadata);
         /// <summary>
         /// This is the network that is displayed in the window.
         /// It is the main part of the view-model.
@@ -605,7 +605,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, Tokenizer.LatinWordTokenizer);
+                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -626,7 +626,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
                         "Manuscript",
-                        ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                        Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -639,7 +639,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                     await EventAggregator.PublishOnCurrentThreadAsync(
-                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
+                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
 
                     UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
                 }
@@ -791,7 +791,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
-                            metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                            metadata.Name, $"{viewModel.SelectedTokenizer.ToString()}", cancellationToken);
 #pragma warning restore CS8604
 
 
@@ -805,7 +805,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                         await EventAggregator.PublishOnCurrentThreadAsync(
-                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, metadata), cancellationToken);
+                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
 
                         UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
 
