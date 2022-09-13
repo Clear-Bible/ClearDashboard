@@ -9,7 +9,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
 using ClearDashboard.Wpf.Controls;
 using MediatR;
@@ -21,7 +20,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-//using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -29,7 +27,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -85,8 +82,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Member Variables
 
         // ReSharper disable once RedundantDefaultMemberInitializer
-        private CancellationTokenSource? _cancellationTokenSource = null;
-        private bool _addParatextCorpusRunning;
+        public CancellationTokenSource? CancellationTokenSource = null;
+        public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, ParatextProjectMetadata ProjectMetadata);
@@ -146,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
-        private ProjectDesignSurface _projectDesignSurface { get; set; }
+        private ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -344,24 +341,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            SaveCanvas();
-
-            //we need to cancel this process here
-            //check a bool to see if it already cancelled or already completed
-            if (_addParatextCorpusRunning)
-            {
-#pragma warning disable CS8602
-                _cancellationTokenSource.Cancel();
-#pragma warning restore CS8602
-                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                {
-                    Name = "Corpus",
-                    Description = "Task was cancelled",
-                    EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
-                }), cancellationToken);
-            }
-            // todo - save the project
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -376,7 +355,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // ReSharper disable once AssignNullToNotNullAttribute
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
 
-                    _projectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -403,17 +383,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //    base.OnViewLoaded(view);
         //}
 
-        protected override async void OnViewReady(object view)
-        {
-            Console.WriteLine();
-            base.OnViewReady(view);
-        }
+        //protected override async void OnViewReady(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewReady(view);
+        //}
         #endregion //Constructor
 
         #region Methods
 
 
-        private async void SaveCanvas()
+
+        //protected override async void OnViewLoaded(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewLoaded(view);
+        //}
+
+        //protected override async void OnViewReady(object view)
+        //{
+        //    Console.WriteLine();
+        //    base.OnViewReady(view);
+        //}
+        #endregion //Constructor
+
+        #region Methods
+
+
+        public async  Task SaveCanvas()
         {
             var surface = new ProjectDesignSurfaceSerializationModel();
 
@@ -454,7 +451,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Language = corpus.Language,
                     Name = corpus.Name,
                     ParatextGuid = corpus.ParatextGuid,
-                    UserId = corpus.UserId.Id.ToString()
+                    UserId = corpus.UserId?.Id.ToString()
                 });
             }
 
@@ -505,7 +502,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(Guid.NewGuid()),
-                        mediator: null,
+                        mediator: _mediator,
                         isRtl: false,
                         name: corpusNode.Name,
                         displayName: "",
@@ -581,8 +578,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             AddManuscriptEnabled = false;
 
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
 
 
             var syntaxTree = new SyntaxTrees();
@@ -679,8 +676,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 finally
                 {
-                    _cancellationTokenSource.Dispose();
-                    _addParatextCorpusRunning = false;
+                    CancellationTokenSource.Dispose();
+                    AddParatextCorpusRunning = false;
                 }
                 AddCorpusEnabled = true;
 
@@ -693,9 +690,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void AddParatextCorpus()
         {
             _logger.LogInformation("AddParatextCorpus called.");
-            _addParatextCorpusRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            AddParatextCorpusRunning = true;
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
 
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
@@ -809,7 +806,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
 #pragma warning disable CS8604
-                        var tokenizedTextCorpus = await textCorpus.Create(ProjectManager.Mediator, corpus.CorpusId,
+                        var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
                             metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
 #pragma warning restore CS8604
 
@@ -846,8 +843,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     finally
                     {
-                        _cancellationTokenSource.Dispose();
-                        _addParatextCorpusRunning = false;
+                        CancellationTokenSource.Dispose();
+                        AddParatextCorpusRunning = false;
                     }
 
 
@@ -901,10 +898,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
 
                     // force a redraw
-                    if (_projectDesignSurface is not null)
-                    {
-                        _projectDesignSurface.InvalidateVisual();
-                    }
+                    ProjectDesignSurface?.InvalidateVisual();
                 }
             }
         }
@@ -944,7 +938,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _cancellationTokenSource?.Cancel();
+                CancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;

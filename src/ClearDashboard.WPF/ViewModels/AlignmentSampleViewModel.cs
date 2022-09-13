@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -16,6 +17,7 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.UserControls;
 using MediatR;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
@@ -23,6 +25,7 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using Token = ClearDashboard.DataAccessLayer.Models.Token;
 using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
+using EngineToken = ClearBible.Engine.Corpora.Token;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -49,7 +52,8 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>();
+                .Transform<IntoTokensTextRowProcessor>()
+                .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
         }
 
         private static ITextCorpus GetSampleGreekTextCorpus()
@@ -120,6 +124,9 @@ namespace ClearDashboard.Wpf.ViewModels
 
         public List<string> DatabaseVerseTokensText => DatabaseVerseTokens != null ? DatabaseVerseTokens.Tokens.Select(t => t.SurfaceText).ToList() : new List<string>();
 
+        public TokensTextRow TextRow { get; set; }
+        public IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)> Tokens { get; set; }
+
         public string DatabaseVerseDetokenized
         {
             get
@@ -145,44 +152,73 @@ namespace ClearDashboard.Wpf.ViewModels
             : base(navigationService, logger, projectManager, eventAggregator)
         {
             _mediator = mediator;
+            //LoadFiles();
         }
 
-        public void TokenBubbleLeftClicked(string target)
+        public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{target}' left-clicked";
+            Message = $"'{e.SurfaceText}' clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenBubbleRightClicked(string target)
+        public void LoadTokens()
         {
-            Message = $"'{target}' right-clicked";
+            LoadFiles();
+        }
+        
+        public void TokenDoubleClicked(TokenEventArgs e)
+        {
+            Message = $"'{e.SurfaceText}' double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenBubbleMouseEntered(string target)
+        public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"Hovering over '{target}'";
+            Message = $"'{e.SurfaceText}' right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenBubbleMouseLeft(string target)
+        public void TokenMouseEnter(TokenEventArgs e)
+        {
+            Message = $"Entered '{e.SurfaceText}'";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseLeave(TokenEventArgs e)
         {
             Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseWheel(TokenEventArgs e)
+        {
+            Message = $"'{e.SurfaceText}' mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
         // ReSharper restore UnusedMember.Global
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            LoadFiles();
-            await MockProjectAndUser();
+            //LoadFiles();
+            //await MockProjectAndUser();
             //await RetrieveTokensViaQuery(cancellationToken);
-            await RetrieveTokensViaCorpusClass();
+            //await RetrieveTokensViaCorpusClass();
             await base.OnActivateAsync(cancellationToken);
         }
 
         private void LoadFiles()
         {
+            var corpus = GetSampleEnglishTextCorpus();
+            TextRow = corpus.Cast<TokensTextRow>().FirstOrDefault();
+            NotifyOfPropertyChange(nameof(TextRow));
+
+            if (TextRow != null)
+            {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                Tokens = detokenizer.Detokenize(TextRow.Tokens);
+            }
+            NotifyOfPropertyChange(nameof(Tokens));
+
             EnglishFile = EnglishTokenizedCorpus.Tokens.Where(t => t.BookNumber == 40 && t.ChapterNumber == 1 && t.VerseNumber == 1).Select(t => t.SurfaceText).ToList();
             NotifyOfPropertyChange(nameof(EnglishFile));
 
@@ -210,7 +246,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedTextCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
+                var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")), "MAT");
                 var result = await ExecuteRequest(query, cancellationToken);
 
                 if (result.Success && result.Data != null)
@@ -229,7 +265,7 @@ namespace ClearDashboard.Wpf.ViewModels
         {
             try
             {
-                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
+                var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("3A0CC3EA-D7D7-47D7-A85E-3E9316B8DD55")));
                 var book = corpus.Where(row => ((VerseRef) row.Ref).BookNum == 40);
                 var chapter = book.Where(row => ((VerseRef) row.Ref).ChapterNum == 1);
                 var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;

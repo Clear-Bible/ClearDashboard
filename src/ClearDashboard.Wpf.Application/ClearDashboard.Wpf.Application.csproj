@@ -80,6 +80,8 @@
   <ItemGroup>
     <PackageReference Include="ClearApplicationFoundation" Version="1.0.17" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
@@ -221,14 +223,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\usfm\Tes\41MATTes.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\42MRKTes.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\custom.vrs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\Settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Layouts\Project.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\usx.xslt">
@@ -264,6 +275,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Styles\" />
     <Folder Include="Views\DesignSurface\" />
     <Folder Include="Views\PopUps\" />
   </ItemGroup>
