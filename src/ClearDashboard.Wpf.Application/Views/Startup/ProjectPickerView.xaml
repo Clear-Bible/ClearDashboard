@@ -12,6 +12,8 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Width="Auto"
     Height="635"
     MinWidth="886"
@@ -39,7 +41,18 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Label>It's lonely here.  Please create a new project.</Label>
+                                    <materialDesign:Card
+                                        Width="475"
+                                        Height="81"
+                                        VerticalAlignment="Top"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Margin="0, 0, 0, 0"
+                                        Background="#EEEBEB">
+                                        <StackPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Label FontSize="21" Margin="15">It's lonely here.  Please create a new project.</Label>
+                                            <iconPacks:PackIconMaterial  Margin="0, 0, 20, 00" Kind="ArrowRight" VerticalAlignment="Center" Width="24" Height="24"  />
+                                        </StackPanel>
+                                        </materialDesign:Card>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -221,12 +234,9 @@
 
 
             </StackPanel>
-
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            VerticalAlignment="Center">
+        <!--<StackPanel  Grid.Row="1"
+                     Grid.Column="0" 
+                     VerticalAlignment="Center">
 
             <TextBox
                 x:Name="SearchText"
@@ -248,12 +258,32 @@
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
             </TextBox>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="0">
+        </StackPanel>-->
+        <StackPanel Grid.Row="2" Grid.Column="0" >
             <TextBlock
                 Margin="40,0"
                 FontSize="19"
                 Text="Open recent" />
+            <TextBox
+                x:Name="SearchText"
+                Width="320"
+                Height="30"
+                Margin="54,10,0,10"
+                Padding="3"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="Search recent"
+                BorderBrush="DarkGray"
+                BorderThickness="1"
+                IsEnabled="{Binding Connected}">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="SearchText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
 
         <StackPanel
@@ -272,7 +302,7 @@
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
                 SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
         </StackPanel>
-        <StackPanel
+        <!--<StackPanel
             Grid.Row="2"
             Grid.Column="1"
             HorizontalAlignment="Left"
@@ -284,9 +314,13 @@
                 FontSize="19"
                 Text="Get started" />
 
-        </StackPanel>
+        </StackPanel>-->
 
-        <StackPanel Grid.Row="3" Grid.Column="1">
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,55, 0,0">
+            <TextBlock
+                Margin="30, 0"
+                FontSize="19"
+                Text="Get started" />
             <Button
                 x:Name="MoveForwards"
                 Width="340"
@@ -331,7 +365,7 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
-            Margin="10,0,0,0"
+            Margin="10,-95,0,0"
             Orientation="Vertical">
             <ListView
                 x:Name="ProjectListView"

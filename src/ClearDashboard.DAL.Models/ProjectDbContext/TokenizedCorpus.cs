@@ -20,22 +20,10 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public virtual ICollection<TokenComponent> TokenComponents { get; set; }
 
     [NotMapped]
-    public IEnumerable<Token> Tokens
-    {
-        get
-        {
-            return TokenComponents.Where(tc => tc.GetType() == typeof(Token)).Select(tc => (tc as Token)!);
-        }
-    }
+    public IEnumerable<Token> Tokens => TokenComponents.Where(tc => tc.GetType() == typeof(Token)).Cast<Token>();
 
     [NotMapped]
-    public IEnumerable<TokenComposite> TokenComposites
-    {
-        get
-        {
-            return TokenComponents.Where(tc => tc.GetType() == typeof(TokenComposite)).Select(tc => (tc as TokenComposite)!);
-        }
-    }
+    public IEnumerable<TokenComposite> TokenComposites => TokenComponents.Where(tc => tc.GetType() == typeof(TokenComposite)).Cast<TokenComposite>();
 
     //public virtual ICollection<ParallelTokenizedCorpus> SourceParallelTokenizedCorpus { get; set; }
     //public virtual ICollection<ParallelTokenizedCorpus> TargetParallelTokenizedCorpus { get; set; }

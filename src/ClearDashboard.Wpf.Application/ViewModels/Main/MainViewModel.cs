@@ -53,6 +53,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
         private ProjectDesignSurfaceView _projectDesignSurfaceControl = null;
+        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel = null;
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -526,7 +527,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             base.OnViewReady(view);
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
 
@@ -535,6 +536,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 SelectedLayoutText = "Last Saved";
                 OkSave();
             }
+
+            // save the design surface
+            await _projectDesignSurfaceViewModel.SaveCanvas();
+
+            //we need to cancel running background processes
+            //check a bool to see if it already cancelled or already completed
+            if (_projectDesignSurfaceViewModel.AddParatextCorpusRunning)
+            {
+#pragma warning disable CS8602
+                _projectDesignSurfaceViewModel.CancellationTokenSource.Cancel();
+#pragma warning restore CS8602
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = "Corpus",
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskStatus = StatusEnum.Completed
+                }), cancellationToken);
+            }
+
+
 
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
@@ -569,10 +591,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ReBuildMenu();
 
 
-            var viewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
-            var view = ViewLocator.LocateForModel(viewModel, null, null);
-            ViewModelBinder.Bind(viewModel, view, null);
-            _projectDesignSurfaceControl.DataContext = viewModel;
+            _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
+            var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
+            ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
+            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
 
             Items.Clear();
             // documents
