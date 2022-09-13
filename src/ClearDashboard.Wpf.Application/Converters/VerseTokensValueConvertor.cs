@@ -7,6 +7,7 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.Converters;
 
+[Obsolete]
 public class VerseTokensValueConvertor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
