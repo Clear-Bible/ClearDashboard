@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
-            base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             this.Title = "⳼ ENHANCED CORPUS";
             this.ContentId = "ENHANCEDCORPUS";

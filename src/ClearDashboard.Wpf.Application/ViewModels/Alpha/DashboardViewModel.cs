@@ -67,7 +67,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         public DashboardViewModel(INavigationService navigationService, ILogger<DashboardViewModel> logger,
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator,
             ILifetimeScope lifetimeScope)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             Initialize();
 

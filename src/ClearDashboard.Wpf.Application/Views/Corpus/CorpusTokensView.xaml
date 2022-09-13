@@ -65,11 +65,22 @@
                             </userControls:VerseDisplay.Tokens>
                         </userControls:VerseDisplay>
                     </StackPanel>
-
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <!--<ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"
                   ItemsSource="{Binding TokensTextRows}"

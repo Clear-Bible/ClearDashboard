@@ -62,6 +62,31 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Label",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Label", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NoteAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AssociationId = table.Column<string>(type: "TEXT", nullable: true),
+                    AssociationType = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NoteAssociation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -127,7 +152,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AuthorId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: true),
+                    AbbreviatedText = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -135,8 +162,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     table.PrimaryKey("PK_Note", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Note_User_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_Note_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -234,22 +261,50 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NoteAssociation",
+                name: "LabelNoteAssociation",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AssociationId = table.Column<string>(type: "TEXT", nullable: true),
-                    AssociationType = table.Column<string>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    LabelId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NoteAssociation", x => x.Id);
+                    table.PrimaryKey("PK_LabelNoteAssociation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NoteAssociation_Note_NoteId",
+                        name: "FK_LabelNoteAssociation_Label_LabelId",
+                        column: x => x.LabelId,
+                        principalTable: "Label",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LabelNoteAssociation_Note_NoteId",
                         column: x => x.NoteId,
                         principalTable: "Note",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NoteDomainEntityAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DomainEntityIdString = table.Column<string>(type: "TEXT", nullable: true),
+                    DomainEntityIdTypeString = table.Column<string>(type: "TEXT", nullable: true),
+                    DomainSubEntityIdString = table.Column<string>(type: "TEXT", nullable: true),
+                    DomainSubEntityIdTypeString = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NoteDomainEntityAssociation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NoteDomainEntityAssociation_Note_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "Note",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -641,13 +696,23 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Note_AuthorId",
-                table: "Note",
-                column: "AuthorId");
+                name: "IX_LabelNoteAssociation_LabelId",
+                table: "LabelNoteAssociation",
+                column: "LabelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NoteAssociation_NoteId",
-                table: "NoteAssociation",
+                name: "IX_LabelNoteAssociation_NoteId",
+                table: "LabelNoteAssociation",
+                column: "NoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Note_UserId",
+                table: "Note",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NoteDomainEntityAssociation_NoteId",
+                table: "NoteDomainEntityAssociation",
                 column: "NoteId");
 
             migrationBuilder.CreateIndex(
@@ -827,7 +892,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "Alignment");
 
             migrationBuilder.DropTable(
+                name: "LabelNoteAssociation");
+
+            migrationBuilder.DropTable(
                 name: "NoteAssociation");
+
+            migrationBuilder.DropTable(
+                name: "NoteDomainEntityAssociation");
 
             migrationBuilder.DropTable(
                 name: "NoteRecipient");
@@ -849,6 +920,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AlignmentSet");
+
+            migrationBuilder.DropTable(
+                name: "Label");
 
             migrationBuilder.DropTable(
                 name: "Note");

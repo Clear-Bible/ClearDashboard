@@ -46,6 +46,11 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void OnProjectDesignSurfaceConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
         {
+            if (ViewModel.AddCorpusEnabled == false)
+            {
+                return;
+            }
+
             var draggedOutConnector = (ConnectorViewModel)e.ConnectorDraggedOut;
             var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
 
