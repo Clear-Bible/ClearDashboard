@@ -26,6 +26,55 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+
+        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <!--<Setter Property="Height" Value="50" />-->
+            <Setter Property="Width" Value="100" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightGray" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#EEEBEB" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent">
+                                <ContentPresenter />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -73,6 +122,7 @@
             <helpers:ScrollingToTopListBox.ItemTemplate>
                 <DataTemplate>
                     <Border
+                        Name="WordMeaningsBorder"
                         Padding="0"
                         BorderBrush="Black"
                         BorderThickness="1"
@@ -80,7 +130,7 @@
 
                         <Grid Width="{Binding ActualWidth, ElementName=LVSenses}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="1*" />
@@ -180,7 +230,7 @@
                             <Grid Grid.Column="1" VerticalAlignment="Center">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="1.4*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
@@ -302,6 +352,7 @@
                                 <!--  Sense  -->
                                 <Label
                                     MinWidth="45"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Content="{helpers:Localization WordMeaningsView_Sense}"
                                     FontStyle="Italic"
@@ -326,10 +377,11 @@
                                 Grid.Column="4"
                                 Margin="0,0,35,0"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Stretch"
                                 BorderThickness="0"
-                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
-                                <Button.Style>
+                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
+                                Style="{StaticResource TransparentStyle}">
+                                <!--<Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
                                             <Setter.Value>
@@ -365,8 +417,8 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Button.Style>
-
+                                </Button.Style>-->
+                                <materialDesign:PackIcon Kind="ChevronRight" />
                             </Button>
 
 
