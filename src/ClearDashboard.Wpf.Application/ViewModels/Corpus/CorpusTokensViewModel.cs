@@ -16,7 +16,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
     public class CorpusTokensViewModel : PaneViewModel,
@@ -40,6 +39,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         private TokenizedTextCorpus _currentTokenizedTextCorpus;
         private string _tokenizationName;
+
+
+        private Visibility _progressBarVisibility = Visibility.Visible;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
 
 
         public CorpusTokensViewModel()
@@ -319,15 +331,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             {
                 try
                 {
+                    ParatextProjectMetadata metadata;
 
-                    var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-                    var metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", ""));
+                    if (message.ParatextProjectId == ProjectManager.ManuscriptGuid.ToString())
+                    {
+                        // our fake Manuscript corpus
+                        BookInfo bookInfo = new BookInfo();
+                        var books = bookInfo.GenerateScriptureBookList();
 
-                    //foreach (var paratextProjectMetadata in result.Data)
-                    //{
-                    //    Debug.WriteLine(paratextProjectMetadata.Name + " " + paratextProjectMetadata.Id);
-                    //}
+                        metadata = new ParatextProjectMetadata
+                        {
+                            Id = ProjectManager.ManuscriptGuid.ToString(),
+                            CorpusType = CorpusType.Manuscript,
+                            Name = "Manuscript",
+                            AvailableBooks = books,
+                        };
 
+                    }
+                    else
+                    {
+                        // regular Paratext corpus
+                        var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", ""));
+                    }
 
                     CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(
                         ProjectManager.Mediator,
@@ -360,6 +386,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                     {
                         // TokensDisplays = new ObservableCollection<TokenDisplay>(tokenDisplays);
                         Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+
+                        ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
