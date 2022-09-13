@@ -18,10 +18,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-
+public record ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record VerseChangedMessage(string Verse);
@@ -297,11 +298,32 @@ public class DashboardProjectManager : ProjectManager
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.NoResize;
             return settings;
-    }
+        }
 
-        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings , Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
+        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings, string extraParams, Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
         {
             var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
+            
+            //Dictionary<string, string> values;
+            //if (extraParams != "")
+            //{
+
+            //    try
+            //    {
+            //        values = JsonConvert.DeserializeObject<Dictionary<string, string>>(extraParams);
+            //        foreach (var value in values)
+            //        {
+            //            settings
+            //        }
+            //    }
+            //    catch (Exception)
+            //    {
+
+            //    }
+            //}
+            
+
+
             var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
 
             if (success)

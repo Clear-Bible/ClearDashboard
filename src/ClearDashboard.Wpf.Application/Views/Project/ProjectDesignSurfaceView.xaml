@@ -6,13 +6,15 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -142,6 +144,28 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+
+            <!--
+                Template for the contextmenu
+            -->
+            <ControlTemplate x:Key="mist" TargetType="{x:Type MenuItem}">
+                <Separator />
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="mict" TargetType="{x:Type MenuItem}">
+                <MenuItem Header="{Binding Caption}" />
+            </ControlTemplate>
+
+            <Style x:Key="cmics" TargetType="{x:Type MenuItem}">
+                <Setter Property="Template" Value="{StaticResource mict}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                        <Setter Property="Template" Value="{StaticResource mist}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
 
             <!--
                 Template for the button that is used to delete nodes and connections in the graph.
@@ -348,8 +372,93 @@
                                 </Style>
                             </Rectangle.Style>
                             <Rectangle.ContextMenu>
-                                <ContextMenu Name="ContextMenu">
-                                    <MenuItem
+                                <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
+                                    <ContextMenu.Resources>
+
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconPicolIcons
+                                                    Width="15"
+                                                    Height="15"
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="{Binding IconKind}" />
+                                                <TextBlock
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <Separator />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+
+                                                <!--<DataTrigger Binding="{Binding IsSeparator}" Value="False">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <iconPacks:PackIconPicolIcons
+                                                                        Width="15"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="5 5 0 0"
+                                                                        Height="15"
+                                                                        Kind="{Binding IconKind}" />
+                                                                    <TextBlock
+                                                                        Margin="5,5,0,0"
+                                                                        VerticalAlignment="Center"
+                                                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                        Text="{Binding Header}" />
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                </DataTrigger>-->
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContextMenu.Resources>
+
+
+                                    <!--<ContextMenu.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Icon" Value="{Binding Icon}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                    <ContextMenu.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
+                                        </HierarchicalDataTemplate>
+                                    </ContextMenu.ItemTemplate>-->
+
+                                    <!--<ContextMenu.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
+                                        </HierarchicalDataTemplate>
+                                    </ContextMenu.ItemTemplate>-->
+
+                                    <!--<MenuItem
                                         Command="{StaticResource Commands.CreateNode}"
                                         Header="View Verse Text"
                                         ToolTip="View the verse text for the corpus" />
@@ -362,12 +471,7 @@
                                         Command="{StaticResource Commands.NodeProperties}"
                                         CommandParameter="{Binding}"
                                         Header="Properties"
-                                        ToolTip="View the corpus properties" />
-                                    <!--
-                                        Command="{StaticResource Commands.Properties}"
-                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
-                                        CommandParameter="{Binding ElementName=nodeRectangle}"
-                                    -->
+                                        ToolTip="View the corpus properties" />-->
 
                                 </ContextMenu>
                             </Rectangle.ContextMenu>
