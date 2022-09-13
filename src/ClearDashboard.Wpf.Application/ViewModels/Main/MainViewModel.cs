@@ -568,6 +568,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
 
+            // force a load to happen as it is getting swallowed up elsewhere
+            _projectDesignSurfaceViewModel.LoadCanvas();
+
+
+
             Items.Clear();
             // documents
             await ActivateItemAsync<AlignmentToolViewModel>();

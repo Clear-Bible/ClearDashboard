@@ -383,6 +383,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             base.OnViewLoaded(view);
         }
 
+        protected override void OnViewReady(object view)
+        {
+            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+            {
+                LoadCanvas();
+            }
+
+            base.OnViewReady(view);
+        }
+
         #endregion //Constructor
 
         #region Methods
@@ -461,7 +471,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
         }
 
-        private void LoadCanvas()
+        public void LoadCanvas()
         {
             // we have already loaded once
             if (DesignSurface.CorpusNodes.Count > 0)
@@ -992,8 +1002,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             nodeMenuItem.Tokenizer), CancellationToken.None);
                     break;
                 case "PropertiesId":
+                    SelectedConnection = corpusNodeViewModel;
                     break;
                 case "TokenizerPropertiesId":
+                    var nodeTokenization =
+                        corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
+                            b.TokenizationName == nodeMenuItem.Tokenizer);
+
+                    SelectedConnection = nodeTokenization;
                     break;
             }
         }
