@@ -121,10 +121,7 @@
 
             <helpers:ScrollingToTopListBox.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card
-                        Padding="0"
-                        BorderBrush="Black"
-                        BorderThickness="1">
+                    <materialDesign:Card>
 
 
                         <Grid Width="{Binding ActualWidth, ElementName=LVSenses}">
@@ -165,8 +162,8 @@
                                     <Button
                                         x:Name="ShowLogos"
                                         Grid.Column="1"
-                                        Width="32"
-                                        Height="32"
+                                        Width="34"
+                                        Height="34"
                                         Margin="5,0,0,0"
                                         Padding="0"
                                         VerticalAlignment="Center"
