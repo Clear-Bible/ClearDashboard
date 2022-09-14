@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the TokenVerticalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(0d, OnTokenVerticalSpacingChanged));
+            new PropertyMetadata(4d, OnTokenVerticalSpacingChanged));
 
         /// <summary>
         /// Identifies the TranslationMargin dependency property.
@@ -763,7 +763,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing below the translation and the next token.
+        /// Gets or sets the vertical spacing below the token.
         /// </summary>
         public double TokenVerticalSpacing
         {
@@ -802,7 +802,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing below the translation and the next token.
+        /// Gets or sets the vertical spacing below the translation.
         /// </summary>
         public double TranslationVerticalSpacing
         {

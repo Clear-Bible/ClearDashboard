@@ -179,15 +179,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, new PropertyChangedCallback(OnWrapChanged)));
 
-        private static void OnWrapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
+        /// </summary>
+        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnWrapChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            var control = (VerseDisplay)d;
-            control.CalculateItemsPanelTemplate((bool) e.NewValue);
-        }
-
-        private void CalculateItemsPanelTemplate(bool wrap)
-        {
-            ItemsPanelTemplate = (ItemsPanelTemplate) FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+            var control = (VerseDisplay)obj;
+            control.CalculateItemsPanelTemplate((bool) args.NewValue);
         }
 
         /// <summary>
@@ -201,10 +201,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenHorizontalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenHorizontalSpacingProperty = DependencyProperty.Register("TokenHorizontalSpacing", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(10d));
+
+        /// <summary>
+        /// Identifies the TokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(4d));
+
+        /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the TranslationHorizontalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationHorizontalSpacingProperty = DependencyProperty.Register("TranslationHorizontalSpacing", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(10d));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
@@ -453,7 +471,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
-        #region Event handlers
+        #region Private event handlers
+
+        private void CalculateItemsPanelTemplate(bool wrap)
+        {
+            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+        }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -618,6 +641,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
         /// </summary>
+        /// <remarks>
+        /// This controls the layout of the tokens to be displayed; regardless of this setting, any translation will be displayed vertically below the token.
+        /// </remarks>
         public Orientation Orientation
         {
             get => (Orientation) GetValue(OrientationProperty);
@@ -625,7 +651,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets whether the words should wrap in the control.
+        /// Gets or sets whether the tokens should wrap in the control.
         /// </summary>
         public bool Wrap
         {
@@ -653,6 +679,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the horizontal spacing between translations.
+        /// </summary>
+        /// <remarks>
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// </remarks>
+        public double TokenHorizontalSpacing
+        {
+            get => (double)GetValue(TokenHorizontalSpacingProperty);
+            set => SetValue(TokenHorizontalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the token.
+        /// </summary>
+        public double TokenVerticalSpacing
+        {
+            get => (double)GetValue(TokenVerticalSpacingProperty);
+            set => SetValue(TokenVerticalSpacingProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the font size for the translation.
         /// </summary>
         public double TranslationFontSize
@@ -662,7 +709,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing between the token and its translation.
+        /// Gets or sets the horizontal spacing between translations.
+        /// </summary>
+        public double TranslationHorizontalSpacing
+        {
+            get => (double)GetValue(TranslationHorizontalSpacingProperty);
+            set => SetValue(TranslationHorizontalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the translation.
         /// </summary>
         public double TranslationVerticalSpacing
         {

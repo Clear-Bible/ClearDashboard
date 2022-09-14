@@ -14,6 +14,14 @@
         <DataTemplate x:Key="TokenBubble">
             <local:TokenDisplayControl 
                 DataContext="{Binding}" 
+                ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
+                ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
+                TokenHorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenHorizontalSpacing}"
+                TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
+                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                TranslationHorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationHorizontalSpacing}"
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"
                 TokenClicked="OnTokenClicked" TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenLeftButtonDown="OnTokenLeftButtonDown" TokenLeftButtonUp="OnTokenLeftButtonUp" 
                 TokenRightButtonDown="OnTokenRightButtonDown" TokenRightButtonUp="OnTokenRightButtonUp" 
@@ -25,11 +33,7 @@
                 NoteLeftButtonDown="OnNoteLeftButtonDown" NoteLeftButtonUp="OnNoteLeftButtonUp"
                 NoteRightButtonDown="OnNoteRightButtonDown" NoteRightButtonUp="OnNoteRightButtonUp" 
                 NoteMouseEnter="OnNoteMouseEnter" NoteMouseLeave="OnNoteMouseLeave" NoteMouseWheel="OnNoteMouseWheel"
-                ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
-                ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
-                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
-                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"/>
+                />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="WrapPanelTemplate">
             <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
