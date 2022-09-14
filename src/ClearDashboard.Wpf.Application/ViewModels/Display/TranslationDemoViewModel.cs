@@ -262,8 +262,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 tokenDisplay.Translation = null;
             }
 
-            Verse2.First().Note = "This is a note";
-            Verse2.Skip(3).First().Note = "Here's another note.";
+            Verse1.First().Note = "This is a note";
+            Verse1.Skip(3).First().Note = "Here's another note.";
             
             NotifyOfPropertyChange(nameof(Verse1));
             NotifyOfPropertyChange(nameof(Verse2));

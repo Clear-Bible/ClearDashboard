@@ -224,7 +224,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true));
 
         #endregion Static DependencyProperties
-
         #region Public events
 
         /// <summary>
@@ -636,7 +635,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
         /// </summary>
-        /// <remarks>This should normally not be set manually, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
         private ItemsPanelTemplate ItemsPanelTemplate
         {
             get => (ItemsPanelTemplate)GetValue(ItemsPanelTemplateProperty);

@@ -24,6 +24,9 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter"/>
+    </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="245"/>
@@ -56,6 +59,7 @@
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                   Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                    Tokens="{Binding Verse1}" 
                                    FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -217,11 +221,14 @@
             <Slider VerticalAlignment="Center" Minimum="0" Maximum="20" Name="VerticalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label VerticalAlignment="Center" Content="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
 
-            <Label VerticalAlignment="Center">Show Translations:</Label>
+            <Label VerticalAlignment="Center">Translations:</Label>
             <CheckBox VerticalAlignment="Center" Name="ShowTranslationsCheckbox" IsChecked="True"/>
 
-            <Label VerticalAlignment="Center">Show Note Indicators:</Label>
+            <Label VerticalAlignment="Center">Note Indicators:</Label>
             <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True"/>
+
+            <Label VerticalAlignment="Center">Vertical:</Label>
+            <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
 
             <Label VerticalAlignment="Center">Wrap:</Label>
             <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
