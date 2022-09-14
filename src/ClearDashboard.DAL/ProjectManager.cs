@@ -19,6 +19,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Data.Models;
+using ClearDashboard.DataAccessLayer.Features.Projects;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -87,7 +88,6 @@ namespace ClearDashboard.DataAccessLayer
             ParatextProxy = paratextProxy;
             Logger.LogInformation("'ProjectManager' ctor called.");
             Mediator = mediator;
-
         }
 
 
@@ -253,6 +253,8 @@ namespace ClearDashboard.DataAccessLayer
 
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
+            CurrentProject = new Project();
+            CurrentProject.ProjectName = projectName;
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
@@ -313,10 +315,9 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
         {
-            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
 
-            return EntityFrameworkQueryableExtensions.Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora).ThenInclude(tokenizedCorpus=> tokenizedCorpus.Tokens);
-           // return null;
+            return result.Data;
         }
 
         public async Task LoadProjectFromDatabase(string projectName)
@@ -328,75 +329,17 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task<Project> DeleteProject(string projectName)
         {
-            try
-            {
-                var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+            var result = await ExecuteRequest(new DeleteProjectCommand(projectName), CancellationToken.None);
 
-                if (projectAssets.ProjectDbContext != null)
-                {
-                    var project = projectAssets.ProjectDbContext.Projects.FirstOrDefault();
-
-                    //projectAssets.ProjectDbContext!.Database.EnsureDeleted();
-                    await projectAssets.ProjectDbContext!.Database.EnsureDeletedAsync();
-
-
-                    if (Directory.Exists(projectAssets.ProjectDirectory))
-                    {
-                        Directory.Delete(projectAssets.ProjectDirectory, true);
-                    }
-
-                    return project;
-                }
-
-                throw new NullReferenceException($"The 'ProjectDbContext' for the project {projectName} could not be created.");
-
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{projectName}'");
-                throw;
-            }
+            return result.Data;
 
         }
 
         public async Task<Project> CreateProject(string projectName)
         {
-            try
-            {
-                var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-               
+            var result = await ExecuteRequest(new CreateProjectCommand(projectName), CancellationToken.None);
 
-                if (projectAssets.ProjectDbContext != null)
-                {
-                    var project = new Project()
-                    {
-                        ProjectName = projectName
-                    };
-
-                    try
-                    {
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync();
-                    }
-                    catch (Exception)
-                    {
-                     
-                        //var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
-                        //projects.Add(project);
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync();
-                    }
-
-
-                    return project;
-                }
-                throw new NullReferenceException($"The 'ProjectDbContext' for the project {projectName} could not be created.");
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{projectName}'");
-                throw;
-            }
+            return result.Data;
         }
 
 
