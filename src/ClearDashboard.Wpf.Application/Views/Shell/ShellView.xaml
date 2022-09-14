@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
-    xmlns:converters1="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
@@ -13,9 +12,9 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"

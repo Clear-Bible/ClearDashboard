@@ -2,9 +2,12 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Menus;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -111,7 +114,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-
+        private ObservableCollection<NodeMenuItemViewModel> _menuItems = new();
+        public ObservableCollection<NodeMenuItemViewModel> MenuItems
+        {
+            get => _menuItems;
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => MenuItems);
+            }
+        }
 
         /// <summary>
         /// The name of the node.

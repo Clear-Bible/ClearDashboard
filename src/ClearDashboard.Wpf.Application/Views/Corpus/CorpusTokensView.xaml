@@ -1,14 +1,13 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Corpus.CorpusTokensView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewModels:CorpusTokensViewModel,
+    xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Corpus"
+    d:DataContext="{d:DesignInstance Type=corpus:CorpusTokensViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,6 +17,7 @@
             <converters:VerseTokensValueConvertor x:Key="VerseTokensValueConvertor" />
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
             <converters:TokensTextRowValueConvertor x:Key="TokensTextRowValueConvertor" />
+            <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="MainGrid">
@@ -30,12 +30,6 @@
             Grid.Row="0"
             Grid.Column="0"
             Orientation="Horizontal">
-            <!--<TextBlock
-                Margin="20,0"
-                VerticalAlignment="Top"
-                FontSize="24"
-                Foreground="Orange"
-                Text="CORPUSPANEL" />-->
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
@@ -50,6 +44,7 @@
             Grid.Row="2"
             Grid.Column="0"
             ItemsSource="{Binding Verses}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
@@ -61,13 +56,40 @@
                             Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                             FontSize="12"
                             Foreground="{DynamicResource MaterialDesignBody}" />
-                        <userControls:TextDisplayControl Margin="10" ItemsSource="{Binding Converter={StaticResource VerseTokensValueConvertor}}" />
+                        <userControls:VerseDisplay  FontSize="20" Wrap="True">
+                            <userControls:VerseDisplay.Tokens>
+                                <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
+                                    <Binding Path="." />
+                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationName"></Binding>
+                                </MultiBinding>
+                            </userControls:VerseDisplay.Tokens>
+                        </userControls:VerseDisplay>
                     </StackPanel>
-
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+        <ProgressBar
+            Grid.Row="2"
+            Width="75"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+
+
+
+
+
+
+
+
+
 
         <!--<ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"
                   ItemsSource="{Binding TokensTextRows}"

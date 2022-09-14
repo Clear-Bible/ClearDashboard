@@ -6,7 +6,7 @@ using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,6 +114,47 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             Assert.False(result.Success);
             Assert.NotNull(result.Message);
             Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void BookIds__QueryLargeCorpus_MeasurePerformance()
+    {
+        try
+        {
+            //Import
+            var textCorpus = new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>();
+
+            //ITextCorpus.Create() extension requires that ITextCorpus source and target corpus have been transformed
+            // into TokensTextRow, puts them into the DB, and returns a TokensTextRow.
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "LanguageType", Guid.NewGuid().ToString());
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var tokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId;
+
+            ProjectDbContext!.ChangeTracker.Clear();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            Process proc = Process.GetCurrentProcess();
+            proc.Refresh();
+
+            Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
+
+            _ = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
+
+            proc.Refresh();
+            Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0}", sw.Elapsed);
         }
         finally
         {

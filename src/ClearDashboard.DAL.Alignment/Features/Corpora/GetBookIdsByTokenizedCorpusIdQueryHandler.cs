@@ -48,9 +48,9 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             );
         }
 
-        var bookNumbers = ProjectDbContext.TokenComponents
-            .Where(tc => tc.TokenizationId == request.TokenizedTextCorpusId.Id).Cast<Models.Token>()
-            .Select(tc => tc.BookNumber).Distinct();
+        var bookNumbers = ProjectDbContext.Tokens
+             .Where(tc => tc.TokenizationId == request.TokenizedTextCorpusId.Id)
+             .Select(tc => tc.BookNumber).Distinct();
 
         var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),

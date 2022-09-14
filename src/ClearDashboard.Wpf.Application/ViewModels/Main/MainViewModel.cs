@@ -1,4 +1,6 @@
-﻿using AvalonDock.Themes;
+﻿using AvalonDock.Layout;
+using AvalonDock.Layout.Serialization;
+using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
@@ -6,7 +8,14 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Corpus;
+using ClearDashboard.Wpf.Application.ViewModels.Menus;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Views.Main;
+using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,6 +28,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using AvalonDock;
 using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
@@ -39,7 +49,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<VerseChangedMessage>,
                 IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
-                IHandle<ProgressBarMessage>
+                IHandle<ProgressBarMessage>,
+                IHandle<ShowTokenizationWindowMessage>
     {
 #nullable disable
         #region Member Variables
@@ -213,6 +224,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     DeleteGridIsVisible = Visibility.Visible;
                     GridIsVisible = Visibility.Collapsed;
                 }
+                else if (value == "NewID")
+                {
+                    StartDashboardAsync();
+                }
                 else
                 {
                     switch (value)
@@ -273,6 +288,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 NotifyOfPropertyChange(() => WindowIdToLoad);
             }
+        }
+
+        public async Task<Process> StartDashboardAsync(int secondsToWait = 10)
+        {
+            var dashboard = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
+            Process process = null;
+            
+            Logger.LogInformation("Opening a new instance of Dashboard.");
+            process = await InternalStartDashboardAsync();
+
+
+            Logger.LogInformation($"Waiting {secondsToWait} seconds for Dashboard to completely start");
+            await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
+            
+            return process;
+        }
+
+        private async Task<Process> InternalStartDashboardAsync()
+        {
+            string programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var dashboardInstallDirectory = Path.Combine(programFiles, "Clear Dashboard");
+            var process = Process.Start($"{dashboardInstallDirectory}\\ClearDashboard.Wpf.Application.exe");
+
+            return await Task.FromResult(process);
         }
 
         private ObservableCollection<MenuItemViewModel> _menuItems = new();
@@ -567,6 +606,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
 
+            // force a load to happen as it is getting swallowed up elsewhere
+            _projectDesignSurfaceViewModel.LoadCanvas();
+
+
+
             Items.Clear();
             // documents
             await ActivateItemAsync<AlignmentToolViewModel>();
@@ -712,8 +756,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, },
                 new MenuItemViewModel { Header = "---- STANDARD LAYOUTS ----", Id = "SeparatorID", ViewModel = this, }
             };
-
-
+            
             bool bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
@@ -737,6 +780,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
+                new()
+                {
+                    Header = "File", Id = "FileID", ViewModel = this,
+                    MenuItems = new ObservableCollection<MenuItemViewModel>
+                    {
+                        new() { Header = "New", Id = "NewID", ViewModel = this, }
+                    }
+                },
                 new()
                 {
                     Header = "Layouts", Id = "LayoutID", ViewModel = this,
@@ -764,7 +815,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
                     }
                 },
-                new() { Header = "Help", Id = "HelpID", ViewModel = this, }
+                new() { Header = "Help", Id =  "HelpID", ViewModel = this, }
             };
         }
 
@@ -1438,6 +1489,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             OnUIThread(() => Message = message.Message);
             await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Pop open a new Corpus Tokization window and pass in the current corpus
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        {
+            string tokenizationType = message.TokenizationType;
+            string paratextId = message.ParatextProjectId;
+
+
+
+            CorpusTokensViewModel viewModel = IoC.Get<CorpusTokensViewModel>();
+
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = paratextId
+            };
+            // setup the right ViewModel for the pane
+            windowDockable.Content = viewModel;
+            windowDockable.Title = message.projectName + " (" + tokenizationType + ")";
+            windowDockable.IsActive = true;
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+
+            if (documentPane != null)
+            {
+                documentPane.Children.Add(windowDockable);
+            }
+
+            await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
 
         #endregion // Methods
