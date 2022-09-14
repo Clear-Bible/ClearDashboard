@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Models;
@@ -18,6 +19,7 @@ using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,7 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
-                IHandle<ShowTokenizationWindowMessage>
+                IHandle<ShowTokenizationWindowMessage>,
+                IHandle<UiLanguageChangedMessage>
     {
 #nullable disable
         #region Member Variables
@@ -738,19 +741,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ObservableCollection<MenuItemViewModel> layouts = new()
             {
                 // add in the standard menu items
+
+                // Save Current Layout
                 new MenuItemViewModel
-                    { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon = null },
-                new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, },
-                new MenuItemViewModel { Header = "---- STANDARD LAYOUTS ----", Id = "SeparatorID", ViewModel = this, }
+                {
+                    Header = "🖫 " + LocalizationStrings.Get("MainView_LayoutsSave", Logger), Id = "SaveID",
+                    ViewModel = this, Icon = null
+                },
+                
+                // Delete Saved Layout
+                new MenuItemViewModel
+                {
+                    Header = "🗑 " + LocalizationStrings.Get("MainView_LayoutsDelete", Logger), Id = "DeleteID",
+                    ViewModel = this,
+                },
+
+                // STANDARD LAYOUTS
+                new MenuItemViewModel
+                {
+                    Header = "---- " + LocalizationStrings.Get("MainView_LayoutsStandardLayouts", Logger) + " ----",
+                    Id = "SeparatorID", ViewModel = this,
+                }
             };
             
             var bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
+                // PROJECT LAYOUTS
                 if (fileLayout.LayoutID.StartsWith("ProjectLayout:") && bFound == false)
                 {
                     layouts.Add(new MenuItemViewModel
-                    { Header = "---- PROJECT LAYOUTS ----", Id = "SeparatorID", ViewModel = this, });
+                    {
+                        Header = "---- " + LocalizationStrings.Get("MainView_LayoutsProjectLayouts", Logger) + " ----",
+                        Id = "SeparatorID", ViewModel = this,
+                    });
                     bFound = true;
                 }
 
@@ -767,42 +791,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
+                // File
                 new()
                 {
-                    Header = "File", Id = "FileID", ViewModel = this,
+                    Header = LocalizationStrings.Get("MainView_File", Logger), Id = "FileID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new() { Header = "New", Id = "NewID", ViewModel = this, }
+                        // New
+                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, }
                     }
                 },
                 new()
                 {
-                    Header = "Layouts", Id = "LayoutID", ViewModel = this,
+                    // Layouts
+                    Header = LocalizationStrings.Get("MainView_Layouts", Logger), Id = "LayoutID", ViewModel = this,
                     MenuItems = layouts,
                 },
                 new()
                 {
-                    Header = "Windows", Id = "WindowID", ViewModel = this,
+                    // Windows
+                    Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new() { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
-                        new() { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        // Alignment Tool
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsAlignmentTool", Logger), Id = "AlignmentToolID", ViewModel = this, },
+                        // Biblical Terms
+                        new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
+                        
                         //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        new() { Header = "🗟 Corpus Tokens", Id = "CorpusTokensID", ViewModel = this, },
-                        new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new() { Header = "⳼ Enhanced Corpus", Id = "EnhancedCorpusID", ViewModel = this, },
+                        
+                        // Corpus Tokens
+                        new() { Header = "🗟 " + LocalizationStrings.Get("MainView_WindowsCorpusTokens", Logger), Id = "CorpusTokensID", ViewModel = this, },
+
+                        // Dashboard
+                        new() { Header = "📐 " + LocalizationStrings.Get("MainView_WindowsDashboard", Logger), Id = "DashboardID", ViewModel = this, },
+                        
+                        // Enhanced Corpus
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        
                         //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
-                        new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
+                        
+                        // PINS
+                        new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
+                        
                         //new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new() { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
+
+                        // Text Collection
+                        new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
+                        
                         //new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
-                        new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+
+                        // Word Meanings
+                        new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                     }
                 },
-                new() { Header = "Help", Id =  "HelpID", ViewModel = this, }
+                
+                // HELP
+                new() { Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this, }
             };
         }
 
@@ -1511,6 +1559,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             await viewModel.ShowCorpusTokens(message, cancellationToken);
+        }
+
+        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // pass up to the Project Design Surface the message
+            if (_projectDesignSurfaceViewModel is not null)
+            {
+                _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
+            }
+
+            // rebuild the menu system with the new language
+            RebuildMenu();
+            
+            return Task.CompletedTask;
         }
 
         #endregion // Methods

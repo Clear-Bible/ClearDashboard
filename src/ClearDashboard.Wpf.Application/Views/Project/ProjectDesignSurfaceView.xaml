@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -13,6 +14,7 @@
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Width="500"
@@ -20,6 +22,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="300"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
 
     <!--<UserControl.DataContext>
@@ -133,6 +136,41 @@
                                         HorizontalAlignment="Center"
                                         Kind="{TemplateBinding Tag,
                                                                Converter={StaticResource StringToMaterialDesignKindConverter}}" />
+                                    <ContentPresenter
+                                        x:Name="ButtonContentPresenter"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="BigParatextButton" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Height" Value="80" />
+                <Setter Property="MinWidth" Value="80" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                <!--<Setter Property="FontWeight" Value="Bold" />-->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="border"
+                                Background="{DynamicResource PrimaryHueDarkBrush}"
+                                CornerRadius="5">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image
+                                        Width="36"
+                                        Height="36"
+                                        Margin="5,5,5,5"
+                                        HorizontalAlignment="Center"
+                                        Source="/Resources/Paratext_white_Icon48.png" />
+
                                     <ContentPresenter
                                         x:Name="ButtonContentPresenter"
                                         Margin="5,0,5,0"
@@ -718,34 +756,36 @@
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
             IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
+                <!--  Add Corpora  -->
                 <Label
                     Margin="5,5,0,5"
-                    Content="Add Corpora"
+                    Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
                 <WrapPanel>
+                    <!--  Manuscript  -->
                     <Button
                         x:Name="AddManuscriptCorpus"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddManuscriptCorpus()"
-                        Content="Manuscript"
+                        Content="{helpers:Localization Pds_Manuscript}"
                         IsEnabled="{Binding AddManuscriptEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
-                    <Button
+                    <!--<Button
                         x:Name="AddUsfmCorpus"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddUsfmCorpus()"
                         Content="USFM"
                         Style="{StaticResource BigButton}"
                         Tag="ScriptTextOutline"
-                        Visibility="Collapsed" />
+                        Visibility="Collapsed" />-->
                     <Button
                         x:Name="AddParatextCorpus"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddParatextCorpus()"
                         Content="Paratext"
-                        Style="{StaticResource BigButton}"
+                        Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
                 </WrapPanel>
             </StackPanel>
