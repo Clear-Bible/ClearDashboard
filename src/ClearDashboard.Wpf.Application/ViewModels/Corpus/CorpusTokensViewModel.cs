@@ -176,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                 {
                     CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
                     TokenizationType = message.TokenizationName;
-                    var firstBook = message.ProjectMetadata.AvailableBooks.First();
+                    CurrentBook = message.ProjectMetadata.AvailableBooks.First();
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -195,7 +195,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 .Tokens
                                 .Count(t => t
                                     .TokenId
-                                    .ChapterNumber == firstBook.Number) > 0)
+                                    .ChapterNumber == CurrentBook?.Number) > 0)
                             .ToList();
                  
                     OnUIThread(() =>
