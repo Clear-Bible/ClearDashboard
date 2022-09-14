@@ -25,6 +25,7 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using EngineToken = ClearBible.Engine.Corpora.Token;
+using ClearDashboard.Wpf.Application.Events;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo

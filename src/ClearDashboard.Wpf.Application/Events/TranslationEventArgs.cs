@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using ClearDashboard.DAL.Alignment.Translation;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.Events
 {
     public class TranslationEventArgs : RoutedEventArgs
     {

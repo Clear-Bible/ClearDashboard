@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using SIL.Machine.Tokenization;
 

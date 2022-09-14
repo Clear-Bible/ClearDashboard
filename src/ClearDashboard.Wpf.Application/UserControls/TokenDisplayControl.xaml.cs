@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.UserControls
