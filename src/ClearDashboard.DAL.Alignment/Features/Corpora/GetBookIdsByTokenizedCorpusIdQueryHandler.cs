@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Persistence;
+﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -10,8 +11,24 @@ using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using System.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
+
+public class TokenEqualityComparer : IEqualityComparer<Models.Token> {
+    public bool Equals(Models.Token? x, Models.Token? y)
+    {
+        if (x == null || y == null) return false;
+
+        return x.BookNumber == y.BookNumber && x.ChapterNumber == y.ChapterNumber && x.VerseNumber == y.VerseNumber &&
+               x.SubwordNumber == y.SubwordNumber;
+    }
+
+    public int GetHashCode(Models.Token obj)
+    {
+        return obj.EngineTokenId.GetHashCode();
+    }
+}
 
 public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHandler<
     GetBookIdsByTokenizedCorpusIdQuery,
@@ -55,6 +72,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
+
 
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
