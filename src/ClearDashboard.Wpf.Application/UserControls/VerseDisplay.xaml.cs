@@ -219,6 +219,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(16d));
 
         /// <summary>
+        /// Identifies the TranslationAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
+            new PropertyMetadata(HorizontalAlignment.Center));
+
+        /// <summary>
         /// Identifies the TranslationHorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationHorizontalSpacingProperty = DependencyProperty.Register("TranslationHorizontalSpacing", typeof(double), typeof(VerseDisplay),
@@ -718,6 +724,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(TranslationFontSizeProperty);
             set => SetValue(TranslationFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// </summary>
+        public HorizontalAlignment TranslationAlignment
+        {
+            get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
+            set => SetValue(HorizontalAlignmentProperty, value);
         }
 
         /// <summary>

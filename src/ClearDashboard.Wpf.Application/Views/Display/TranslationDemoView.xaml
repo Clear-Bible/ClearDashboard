@@ -26,6 +26,7 @@
 
     <Page.Resources>
         <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter"/>
+        <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter"/>
     </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -47,17 +48,18 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        <Label Grid.Row="0" Grid.ColumnSpan ="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View Demo" FontSize="20" />
+        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View Demo" FontSize="20" />
 
         <userControls:VerseDisplay Grid.Row="1" 
+                                   Tokens="{Binding Verse1}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                   Tokens="{Binding Verse1}" 
                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TokenHorizontalSpacing="{Binding ElementName=TokenHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                    TranslationHorizontalSpacing="{Binding ElementName=TranslationHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -88,11 +90,12 @@
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="225"/>
                 <ColumnDefinition Width="275"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="275"/>
+                <ColumnDefinition Width="275"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -140,15 +143,20 @@
                 <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Height:</Label>
+                <Label VerticalAlignment="Center" Margin="0,0,14,0">Height:</Label>
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
-            <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center" Name="CenteredCheckbox" IsChecked="True"/>
+                <Label VerticalAlignment="Center">Centered Text</Label>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
-            <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Wrap Lines</Label>
             </StackPanel>

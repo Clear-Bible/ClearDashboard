@@ -14,12 +14,14 @@
         <DataTemplate x:Key="TokenBubble">
             <local:TokenDisplayControl 
                 DataContext="{Binding}" 
+                HorizontalAlignment="Left"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"
                 TokenHorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenHorizontalSpacing}"
                 TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
                 TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                 TranslationHorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationHorizontalSpacing}"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}"
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
@@ -42,7 +44,7 @@
             <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>        
         <ItemsPanelTemplate x:Key="StackPanelTemplate">
-            <StackPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+            <StackPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" HorizontalAlignment="Left" />
         </ItemsPanelTemplate>
     </UserControl.Resources>
     <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" 

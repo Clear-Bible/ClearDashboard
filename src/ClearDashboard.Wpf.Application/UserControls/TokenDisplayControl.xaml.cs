@@ -79,6 +79,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
+        /// Identifies the TranslationAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(TokenDisplayControl),
+            new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
+
+        /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplayControl),
@@ -753,6 +759,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// </summary>
+        public HorizontalAlignment TranslationAlignment
+        {
+            get => (HorizontalAlignment) GetValue(HorizontalAlignmentProperty);
+            set => SetValue(HorizontalAlignmentProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -899,7 +914,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
 
+            HorizontalContentAlignment = HorizontalAlignment.Center;
+            var horizontalAlignmentProperty = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(Control.HorizontalContentAlignmentProperty, typeof(Control));
+            horizontalAlignmentProperty.AddValueChanged(this, OnHorizontalAlignmentChanged);
+            
             Loaded += OnLoaded;
+        }
+
+        private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)
+        {
+            CalculateLayout();
         }
     }
 }
