@@ -13,6 +13,7 @@ using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using System;
@@ -946,10 +947,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ObservableCollection<NodeMenuItemViewModel> nodeMenuItems = new();
 
+            // restrict the ability of Manuscript to add new tokenizers
             if (corpusNode.CorpusType != CorpusType.Manuscript)
             {
-                // restrict the ability of Manuscript to add new tokenizers
-                nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "Add new tokenization", Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, CorpusNodeViewModel = corpusNode, });
+                // Add new tokenization
+                nodeMenuItems.Add(new NodeMenuItemViewModel { Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger), Id = "AddTokenizationId", IconKind = "BookTextAdd", ViewModel = this, CorpusNodeViewModel = corpusNode, });
                 nodeMenuItems.Add(new NodeMenuItemViewModel { Header = "", Id = "SeparatorId", ViewModel = this, IsSeparator = true });
             }
 
@@ -964,18 +966,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         new NodeMenuItemViewModel
                         {
-                            Header = "Add to focused enhanced view", Id = "AddToEnhancedViewId", ViewModel = this,
+                            // Add to focused enhanced view
+                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), Id = "AddToEnhancedViewId", ViewModel = this,
                             IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new NodeMenuItemViewModel
                         {
-                            Header = "Show verses", Id = "ShowVerseId", ViewModel = this, IconKind = "DocumentText",
+                            // Show Verses
+                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), Id = "ShowVerseId", ViewModel = this, IconKind = "DocumentText",
                             CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new NodeMenuItemViewModel
                         {
-                            Header = "Properties", Id = "TokenizerPropertiesId", ViewModel = this, IconKind = "Settings",
+                            // Properties
+                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), Id = "TokenizerPropertiesId", ViewModel = this, IconKind = "Settings",
                             CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
                         }
                     }
@@ -986,7 +991,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             nodeMenuItems.Add(new NodeMenuItemViewModel
             {
-                Header = "Properties", 
+                // Properties
+                Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), 
                 Id = "PropertiesId", 
                 IconKind = "Settings",
                 CorpusNodeViewModel = corpusNode,
@@ -1438,6 +1444,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             SelectedConnection = connection;
         }
 
+        public void UiLanguageChangedMessage(UiLanguageChangedMessage message)
+        {
+            var language = message.LanguageCode;
+
+            // rerender the context menus
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                CreateNodeMenu(corpusNode);
+            }
+        }
+
+
+
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
             var incomingMessage = message.Status;
@@ -1558,6 +1577,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             // TODO - update the UI language
             var language = message.LanguageCode;
+
+            // rerender the context menus
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                CreateNodeMenu(corpusNode);
+            }
+
+
 
             return Task.CompletedTask;
         }
