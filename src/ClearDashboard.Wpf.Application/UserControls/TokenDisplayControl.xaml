@@ -12,9 +12,10 @@
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="Auto">
         <Button x:Name="TokenButton"
-                Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" 
+                Background="{DynamicResource MaterialDesignPaper}" 
+                Foreground="{DynamicResource MaterialDesignBody}" 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}" 
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=InnerPadding}" 
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" 
                 Padding="0" 
                 Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}" Height="Auto"
                 IsDefault="False" BorderThickness="0"
@@ -27,7 +28,8 @@
             <TextBlock x:Name="SurfaceTextBlock" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SurfaceText}" Margin="0" ></TextBlock>
         </Button>
         <Rectangle Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" 
-                   HorizontalAlignment="Left" Fill="LightGray" Height="3" Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+                   HorizontalAlignment="Left" Fill="LightGray" Height="3" 
+                   Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
                    MouseLeftButtonDown="OnNoteLeftButtonDown" MouseLeftButtonUp="OnNoteLeftButtonUp" 
                    MouseRightButtonDown="OnNoteRightButtonDown" MouseRightButtonUp="OnNoteRightButtonUp" 
                    MouseEnter="OnNoteMouseEnter" MouseLeave="OnNoteMouseLeave" MouseWheel="OnNoteMouseWheel"
@@ -36,10 +38,10 @@
         <Button Background="{DynamicResource MaterialDesignPaper}" 
                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}" 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}" 
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationInnerPadding}" 
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}" 
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}" 
                 Padding="0" 
-                Height="Auto" Width="Auto"
+                Height="Auto" 
                 IsDefault="False" BorderThickness="0"
                 HorizontalContentAlignment="Left"
                 Click="OnTranslationClicked" MouseDoubleClick="OnTranslationDoubleClicked"
