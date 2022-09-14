@@ -24,6 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 
 public record ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
+public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
 
