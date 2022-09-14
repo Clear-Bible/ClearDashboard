@@ -231,6 +231,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(10d));
 
         /// <summary>
+        /// Identifies the NoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(3d));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
         /// Identifies the ShowTranslations dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowTranslationsProperty = DependencyProperty.Register("ShowTranslations", typeof(bool), typeof(VerseDisplay),
@@ -733,6 +745,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (bool)GetValue(ShowTranslationsProperty);
             set => SetValue(ShowTranslationsProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the note indicator.
+        /// </summary>
+        public double NoteIndicatorHeight
+        {
+            get => (double)GetValue(NoteIndicatorHeightProperty);
+            set => SetValue(NoteIndicatorHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
+        /// </summary>
+        public Brush NoteIndicatorColor
+        {
+            get => (Brush)GetValue(NoteIndicatorColorProperty);
+            set => SetValue(NoteIndicatorColorProperty, value);
         }
 
         /// <summary>

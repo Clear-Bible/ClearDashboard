@@ -32,13 +32,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the TokenHorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenHorizontalSpacingProperty = DependencyProperty.Register("TokenHorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(10d, OnTokenHorizontalSpacingChanged));
+            new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(4d, OnTokenVerticalSpacingChanged));
+            new PropertyMetadata(4d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register("NoteIndicatorMargin", typeof(Thickness), typeof(TokenDisplayControl),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(3d, OnLayoutChanged));
+        
+        /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(TokenDisplayControl),
+            new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
         /// Identifies the TranslationMargin dependency property.
@@ -50,13 +68,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the TranslationHorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationHorizontalSpacingProperty = DependencyProperty.Register("TranslationHorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(10d, OnTranslationHorizontalSpacingChanged));
+            new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(10d, OnTranslationVerticalSpacingChanged));
+            new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationFontSize dependency property.
@@ -68,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the ShowTranslation dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TokenDisplayControl),
-            new PropertyMetadata(true, OnShowTranslationChanged));
+            new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationVisibility dependency property.
@@ -80,79 +98,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the ShowNoteIndicator dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TokenDisplayControl),
-            new PropertyMetadata(true, OnShowNoteIndicatorChanged));
+            new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplayControl),
             new PropertyMetadata(Visibility.Visible));
-
-        /// <summary>
-        /// Callback handler for changes to the TokenHorizontalSpacing dependency property; when this property changes, recalculate the margin for the translation button.
-        /// </summary>
-        /// <param name="obj">The object whose TokenHorizontalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnTokenHorizontalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateTokenMargin((double)args.NewValue, control.TokenVerticalSpacing);
-        }
-
-        /// <summary>
-        /// Callback handler for changes to the TokenVerticalSpacing dependency property: when this property changes, recalculate the margin for the translation button.
-        /// </summary>
-        /// <param name="obj">The object whose TokenVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnTokenVerticalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateTokenMargin(control.TokenHorizontalSpacing, (double)args.NewValue);
-        }
-
-        /// <summary>
-        /// Callback handler for changes to the TranslationHorizontalSpacing dependency property; when this property changes, recalculate the margin for the translation button.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationHorizontalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnTranslationHorizontalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateTranslationMargin((double) args.NewValue, control.TranslationVerticalSpacing);
-        }
-
-        /// <summary>
-        /// Callback handler for changes to the TranslationVerticalSpacing dependency property: when this property changes, recalculate the margin for the translation button.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnTranslationVerticalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateTranslationMargin(control.TranslationHorizontalSpacing, (double) args.NewValue);
-        }
-
-        /// <summary>
-        /// Callback handler for changes to the ShowTranslation dependency property: when this property changes, recalculate the visibility of the translation.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnShowTranslationChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateTranslationVisibility((bool) args.NewValue);
-        }
-
-        /// <summary>
-        /// Callback handler for changes to the ShowNoteIndicator dependency property: when this property changes, recalculate the visibility of the note indicator.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnShowNoteIndicatorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TokenDisplayControl)obj;
-            control.CalculateNoteIndicatorVisibility((bool) args.NewValue);
-        }
 
         #endregion Static DependencyProperties
         #region Static RoutedEvents
@@ -535,38 +487,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Private Event Handlers
-        private void CalculateTokenMargin(double horizontalSpacing, double verticalSpacing)
+        private void CalculateLayout()
         {
-            TokenMargin = new Thickness(TokenDisplay.PaddingBefore.Length * horizontalSpacing,
-                0,
-                TokenDisplay.PaddingAfter.Length * horizontalSpacing,
-                verticalSpacing);
+            var horizontalSpacing = Math.Max(TokenHorizontalSpacing, TranslationHorizontalSpacing);
+            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * horizontalSpacing : 0;
+            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * horizontalSpacing : 0;
+            
+            TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
+            NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
+            TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
+            TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
+            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
         }
 
-        private void CalculateTranslationMargin(double horizontalSpacing, double verticalSpacing)
+        /// <summary>
+        /// Callback handler for changes to the dependency properties that affect the layout.
+        /// </summary>
+        /// <param name="obj">The object whose layout has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnLayoutChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            TranslationMargin = new Thickness(TokenDisplay.PaddingBefore.Length * horizontalSpacing,
-                0,
-                TokenDisplay.PaddingAfter.Length * horizontalSpacing,
-                verticalSpacing);
-        }
-
-        private void CalculateTranslationVisibility(bool showTranslation)
-        {
-            TranslationVisibility = (showTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void CalculateNoteIndicatorVisibility(bool showNoteIndicator)
-        {
-            NoteIndicatorVisibility = (showNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+            var control = (TokenDisplayControl)obj;
+            control.CalculateLayout();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            CalculateTokenMargin(TokenHorizontalSpacing, TokenVerticalSpacing);
-            CalculateTranslationMargin(TranslationHorizontalSpacing, TranslationVerticalSpacing);
-            CalculateTranslationVisibility(ShowTranslation);
-            CalculateNoteIndicatorVisibility(ShowNoteIndicator);
+            CalculateLayout();
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -751,6 +698,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the height of the note indicator.
+        /// </summary>
+        public double NoteIndicatorHeight
+        {
+            get => (double)GetValue(NoteIndicatorHeightProperty);
+            set => SetValue(NoteIndicatorHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin around the note indicator.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness NoteIndicatorMargin
+        {
+            get => (Thickness) GetValue(NoteIndicatorMarginProperty);
+            set => SetValue(NoteIndicatorMarginProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -849,6 +817,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
+        /// </summary>
+        public Brush NoteIndicatorColor
+        {
+            get => (Brush) GetValue(NoteIndicatorColorProperty);
+            set => SetValue(NoteIndicatorColorProperty, value);
+        }
+
+        /// <summary>
         /// Gets the <see cref="TokenDisplay"/> data source for this control.
         /// </summary>
         public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
@@ -883,11 +860,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets the target translation text.
         /// </summary>
         public string TargetTranslationText => TokenDisplay.TargetTranslationText;
-
-        /// <summary>
-        /// Gets the inner padding of the source text button.
-        /// </summary>
-        public Thickness InnerPadding => new Thickness(TokenDisplay.PaddingBefore.Length * 10, 0, TokenDisplay.PaddingAfter.Length * 10, 0);
 
         public TokenDisplayControl()
         {
