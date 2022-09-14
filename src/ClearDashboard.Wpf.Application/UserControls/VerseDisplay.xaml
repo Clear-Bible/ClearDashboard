@@ -12,7 +12,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TokenBubble">
-            <local:TranslationDisplayControl 
+            <local:TokenDisplayControl 
                 DataContext="{Binding}" 
                 TokenClicked="OnTokenClicked" TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenLeftButtonDown="OnTokenLeftButtonDown" TokenLeftButtonUp="OnTokenLeftButtonUp" 

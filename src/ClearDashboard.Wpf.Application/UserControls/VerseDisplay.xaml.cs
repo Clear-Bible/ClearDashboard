@@ -516,7 +516,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as TokenDisplayControl;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -570,7 +570,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as TokenDisplayControl;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
