@@ -15,12 +15,8 @@
 
     <Grid Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Orientation="Vertical">
-            <TextBlock
-                Margin="20"
-                VerticalAlignment="Top"
-                Background="Brown"
-                Text="DASHBOARD" />
-            <Button Command="{Binding ClearLogCommand}">CLEAR LOG</Button>
+
+            <Button Margin="5" Command="{Binding ClearLogCommand}">CLEAR LOG</Button>
             <ScrollViewer>
                 <ListBox x:Name="Messages" ItemsSource="{Binding Messages}">
                     <ListBox.ItemContainerStyle>
