@@ -311,7 +311,7 @@
                                 <MenuItem
                                     Command="{StaticResource Commands.ConnectionProperties}"
                                     CommandParameter="{Binding}"
-                                    Header="Properties"
+                                    Header="{helpers:Localization Pds_PropertiesMenu}"
                                     ToolTip="View the corpus properties" />
                                 <!--
                                     Command="{StaticResource Commands.Properties}"
