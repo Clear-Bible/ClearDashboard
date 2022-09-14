@@ -253,6 +253,8 @@ namespace ClearDashboard.DataAccessLayer
 
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
+            CurrentProject = new Project();
+            CurrentProject.ProjectName = projectName;
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;

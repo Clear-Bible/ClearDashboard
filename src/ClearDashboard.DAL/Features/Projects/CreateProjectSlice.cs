@@ -1,44 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record CreateProjectCommand(string projectName) : ProjectRequestCommand<Models.Project>;
+    public record CreateProjectCommand(string ProjectName) : ProjectRequestCommand<Models.Project>;
 
-    public class CreateProjectCommandHandler : ProjectDbContextCommandHandler<CreateProjectCommand,
-        RequestResult<Models.Project>, Models.Project>
+    public class CreateProjectCommandHandler : ProjectDbContextCommandHandler<CreateProjectCommand, RequestResult<Models.Project>, Models.Project>
     {
-        private readonly IMediator _mediator;
-        public CreateProjectCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory,
-            IProjectProvider projectProvider, ILogger<CreateProjectCommandHandler> logger)
-            : base(projectNameDbContextFactory, projectProvider, logger)
+        public CreateProjectCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateProjectCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
         {
-            _mediator = mediator;
+            ProjectNameDbContextFactory = projectNameDbContextFactory ?? throw new ArgumentNullException(nameof(projectNameDbContextFactory));
+            Logger = logger;
         }
 
-        protected override async Task<RequestResult<Models.Project>> SaveDataAsync(CreateProjectCommand request, CancellationToken cancellationToken)
+        protected  override async Task<RequestResult<Models.Project>> SaveDataAsync(CreateProjectCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(request.projectName);
+                var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName);
 
 
                 if (projectAssets.ProjectDbContext != null)
                 {
                     var project = new Models.Project()
                     {
-                        ProjectName = request.projectName
+                        ProjectName = request.ProjectName
                     };
 
                     try
@@ -57,13 +49,15 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
 
                     return new RequestResult<Models.Project>(project);
                 }
-                throw new NullReferenceException($"The 'ProjectDbContext' for the project {request.projectName} could not be created.");
+                throw new NullReferenceException($"The 'ProjectDbContext' for the project {request.ProjectName} could not be created.");
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{request.projectName}'");
+                Logger.LogError(ex, $"An unexpected exception occurred while getting the database context for the project named '{request.ProjectName}'");
                 throw;
             }
         }
+
+       
     }
 }
