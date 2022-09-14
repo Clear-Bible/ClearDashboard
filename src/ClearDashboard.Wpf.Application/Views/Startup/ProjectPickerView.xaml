@@ -274,7 +274,7 @@
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Search recent"
+                materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">
@@ -322,10 +322,11 @@
             Grid.Row="2"
             Grid.Column="1"
             Margin="0,55,0,0">
-            <TextBlock
+            <!--  Open Recent  -->
+            <Label
                 Margin="30,0"
-                FontSize="19"
-                Text="Get started" />
+                Content="{helpers:Localization ProjectPicker_OpenRecent}"
+                FontSize="19" />
             <Button
                 x:Name="MoveForwards"
                 Width="340"

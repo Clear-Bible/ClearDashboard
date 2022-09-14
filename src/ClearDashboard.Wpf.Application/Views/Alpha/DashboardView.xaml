@@ -6,6 +6,11 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
+
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+
     d:DataContext="{d:DesignInstance Type=viewModels:DashboardViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -15,12 +20,8 @@
 
     <Grid Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Orientation="Vertical">
-            <TextBlock
-                Margin="20"
-                VerticalAlignment="Top"
-                Background="Brown"
-                Text="DASHBOARD" />
-            <Button Command="{Binding ClearLogCommand}">CLEAR LOG</Button>
+
+            <Button Margin="5" Command="{Binding ClearLogCommand}" Content="{helpers:Localization DashboardWindow_ClearNotes}"/>
             <ScrollViewer>
                 <ListBox x:Name="Messages" ItemsSource="{Binding Messages}">
                     <ListBox.ItemContainerStyle>

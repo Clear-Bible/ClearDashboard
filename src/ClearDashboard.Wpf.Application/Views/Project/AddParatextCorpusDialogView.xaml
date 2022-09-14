@@ -161,7 +161,7 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical">
-                <Label Content="Select Tokenizer Engine" />
+                <Label Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />
                 <ComboBox
                     Margin="30,0,0,0"
                     VerticalAlignment="Top"

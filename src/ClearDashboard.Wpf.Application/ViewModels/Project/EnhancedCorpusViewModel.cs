@@ -44,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            this.Title = "⳼ ENHANCED CORPUS";
+            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
             this.ContentId = "ENHANCEDCORPUS";
         }
 

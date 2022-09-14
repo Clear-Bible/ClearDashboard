@@ -78,8 +78,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private void Initialize()
         {
-
-            this.Title = "📐 DASHBOARD";
+            Title = "📐 " + LocalizationStrings.Get("Windows_Dashboard", Logger);
             this.ContentId = "DASHBOARD";
 
             if (!_firstLoad)
