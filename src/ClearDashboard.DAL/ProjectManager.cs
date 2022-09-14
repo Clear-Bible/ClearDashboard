@@ -403,6 +403,8 @@ namespace ClearDashboard.DataAccessLayer
         public async Task UpdateProject(Project project)
         {
             var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+
+            Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
             projectAssets.ProjectDbContext.Attach(project);
 
             await projectAssets.ProjectDbContext.SaveChangesAsync();
