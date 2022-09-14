@@ -5,6 +5,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
@@ -65,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            Title = "🗟 CORPUS TOKENS";
+            Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", Logger);
             ContentId = "CORPUSTOKENS";
             ProgressBarVisibility = Visibility.Collapsed;
         }

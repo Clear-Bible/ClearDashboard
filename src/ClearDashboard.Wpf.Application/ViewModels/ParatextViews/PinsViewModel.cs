@@ -137,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-            this.Title = "⍒ PINS";
+            Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);
             this.ContentId = "PINS";
 
             _projectManager = projectManager;

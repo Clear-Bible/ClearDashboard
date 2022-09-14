@@ -8,12 +8,46 @@
     d:DesignHeight="200"
     d:DesignWidth="500"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Width" Value="100" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border>
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="LightGray" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Background" Value="#EEEBEB" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid Background="Transparent">
+                                    <ContentPresenter />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid Height="37" MinWidth="125">
-        <Border
-            x:Name="TimerBorder"
-            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-            BorderThickness="2"
-            CornerRadius="10" />
+
         <StackPanel
             x:Name="TimerStackPanel"
             HorizontalAlignment="Center"
@@ -22,22 +56,27 @@
                 x:Name="StartStopButton"
                 Width="25"
                 Height="25"
-                Padding="-5"
-                VerticalContentAlignment="Center"
-                Click="StartStop_OnClick">
+                Click="StartStop_OnClick"
+                Style="{StaticResource TransparentStyle}">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon
                         x:Name="PauseIcon"
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
+                        Width="25"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Kind="Pause"
                         Visibility="Collapsed" />
                     <materialDesign:PackIcon
                         x:Name="PlayIcon"
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
+                        Width="25"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Kind="Play"
                         Visibility="Visible" />
                 </StackPanel>
@@ -48,10 +87,6 @@
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 Content="00h 00m 00s" />
-
-
-            <!--    -->
-
         </StackPanel>
         <TextBox
             x:Name="TimerBox"
@@ -69,7 +104,5 @@
             PreviewKeyDown="TimerTbx_OnPreviewKeyDown"
             PreviewTextInput="NumberValidationTextBox"
             TextChanged="TimerTbx_OnTextChanged" />
-
-
     </Grid>
 </UserControl>

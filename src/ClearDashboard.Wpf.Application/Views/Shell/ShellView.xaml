@@ -12,9 +12,9 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -236,9 +236,10 @@
                         Margin="8,0,20,0"
                         Style="{StaticResource GreenLightButton}"
                         ToolTip="This button only shows up in Debug mode"
-                        Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                        Visibility="Collapsed">
                         ColorStyles
                     </Button>
+                    <!--  Visibility="{x:Static helpers:DebugVisibility.DebugOnly}"  -->
 
                     <userControls:TimerUserControl
                         x:Name="TimerControl"
@@ -506,9 +507,10 @@
                     Padding="3"
                     Style="{StaticResource GreenLightButton}"
                     ToolTip="This button only shows up in Debug mode"
-                    Visibility="{x:Static helpers:DebugVisibility.DebugOnly}">
+                    Visibility="Collapsed">
                     Start Background Task
                 </Button>
+                <!--  Visibility="{x:Static helpers:DebugVisibility.DebugOnly}"  -->
             </StatusBarItem>
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">

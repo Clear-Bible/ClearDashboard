@@ -38,6 +38,7 @@
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
+    <None Remove="Resources\Paratext_white_Icon48.png" />
     <None Remove="Resources\SBL_grk.ttf" />
     <None Remove="Resources\SBL_Hbrw.ttf" />
     <None Remove="Resources\scissors.png" />
@@ -136,6 +137,7 @@
     <Resource Include="Resources\Paratext_Disconnected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Paratext_white_Icon48.png" />
     <Resource Include="Resources\SBL_grk.ttf" />
     <Resource Include="Resources\SBL_Hbrw.ttf" />
     <Resource Include="Resources\scissors.png" />

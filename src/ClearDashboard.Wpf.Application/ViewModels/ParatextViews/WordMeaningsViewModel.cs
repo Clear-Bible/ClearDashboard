@@ -167,7 +167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-            Title = "⌺ WORD MEANINGS";
+            Title = "⌺ " + LocalizationStrings.Get("Windows_WordMeanings", Logger);
             ContentId = "WORDMEANINGS";
             DockSide = EDockSide.Left;
 

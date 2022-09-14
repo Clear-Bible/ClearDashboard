@@ -243,7 +243,7 @@
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Search recent"
+                materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">
@@ -291,10 +291,11 @@
             Grid.Row="2"
             Grid.Column="1"
             Margin="0,55,0,0">
-            <TextBlock
+            <!--  Open Recent  -->
+            <Label
                 Margin="30,0"
-                FontSize="19"
-                Text="Get started" />
+                Content="{helpers:Localization ProjectPicker_OpenRecent}"
+                FontSize="19" />
             <Button
                 x:Name="MoveForwards"
                 Width="340"
@@ -327,7 +328,6 @@
                             VerticalAlignment="Center"
                             FontWeight="Light"
                             Text="{helpers:Localization ProjectPicker_CreateLong}"
-
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </StackPanel>
@@ -360,7 +360,7 @@
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent"
-                            Tag="{Binding DataContext, ElementName=GridLayout}" >
+                            Tag="{Binding DataContext, ElementName=GridLayout}">
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
