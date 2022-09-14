@@ -54,9 +54,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public string? Message { get; set; }
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
-        public IEnumerable<TokenDisplay>? Verse1NoTranslations { get; set; }
-        public IEnumerable<TokenDisplay>? Verse2 { get; set; }
-        public IEnumerable<TokenDisplay>? Verse3 { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public TranslationDemoViewModel()
@@ -248,26 +245,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
-            Verse1NoTranslations = GetTokenDisplays(corpus, 40001001);
-            Verse2 = GetTokenDisplays(corpus, 40001002);
-            Verse3 = GetTokenDisplays(corpus, 40001003);
-            
-            // Show some without translations
-            foreach (var tokenDisplay in Verse1NoTranslations)
-            {
-                tokenDisplay.Translation = null;
-            }            
-            foreach (var tokenDisplay in Verse3)
-            {
-                tokenDisplay.Translation = null;
-            }
-
             Verse1.First().Note = "This is a note";
             Verse1.Skip(3).First().Note = "Here's another note.";
             
             NotifyOfPropertyChange(nameof(Verse1));
-            NotifyOfPropertyChange(nameof(Verse2));
-            NotifyOfPropertyChange(nameof(Verse3));
         }
 
         private async Task MockProjectAndUser()

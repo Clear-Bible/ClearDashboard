@@ -34,11 +34,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
-            <RowDefinition Height="160" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="170" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
@@ -52,9 +48,8 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        <Label Grid.ColumnSpan ="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Word Translator Display" FontSize="20" />
+        <Label Grid.Row="0" Grid.ColumnSpan ="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Word Translator Display" FontSize="20" />
 
-        <Label Grid.Row="1">Verse 1 with translations, wrapped</Label>
         <userControls:VerseDisplay Grid.Column="1" Grid.Row="1" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -85,130 +80,9 @@
                                    "
                                    />
 
-        <Label Grid.Row="2">Verse 1 without translations, wrapped</Label>
-        <userControls:VerseDisplay Grid.Column="1" Grid.Row="2" 
-                                   Wrap="True"
-                                   Tokens="{Binding Verse1NoTranslations}" 
-                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
-                                                       [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                       [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
-                                                       [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
-                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
-                                                       [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
-                                                       [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
-                                                       [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
-                                                       [Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];
-                                                       [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
-                                                       [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                       [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)]
-                                   "
-                                                  />
+        <Label Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
 
-        <Label Grid.Row="3">Verse 1 with translations, no wrapping</Label>
-        <userControls:VerseDisplay Grid.Column="1" Grid.Row="3" 
-                                                  Wrap="False"
-                                                  Tokens="{Binding Verse1}" 
-                                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
-                                                       [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                       [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
-                                                       [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
-                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
-                                                       [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
-                                                       [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
-                                                       [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
-                                                       [Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];
-                                                       [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
-                                                       [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                       [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)]
-                                   "
-                                                  />
-
-        <Label Grid.Row="4">Verse 2 with note indicators</Label>
-        <userControls:VerseDisplay Grid.Column="1" Grid.Row="4" 
-                                                  Wrap="False"
-                                                  Tokens="{Binding Verse2}" 
-                                                  FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                  TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
-                                                       [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                       [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
-                                                       [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
-                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
-                                                       [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
-                                                       [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
-                                                       [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
-                                                       [Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];
-                                                       [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
-                                                       [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                       [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)]
-                                   "
-        />
-
-        <Label Grid.Row="5">Verse 3, vertical orientation</Label>
-        <userControls:VerseDisplay Grid.Column="1" Grid.Row="5" 
-                                   Wrap="False"
-                                   Tokens="{Binding Verse3}" 
-                                   Orientation="Vertical"
-                                   FontSize="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   TranslationVerticalSpacing="{Binding ElementName=VerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
-                                                       [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                       [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
-                                                       [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
-                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
-                                                       [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
-                                                       [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
-                                                       [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
-                                                       [Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];
-                                                       [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
-                                                       [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                       [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)]
-                                   "
-        />
-
-        <!--<userControls:TextDisplayControl Grid.Column="1" Grid.Row="4" ItemsSource="{Binding GreekVerse1}" VerticalAlignment="Center" 
-                                     cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                         [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                         [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
-                                                         [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                         [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                         [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)]" />-->
-
-        <Label Grid.ColumnSpan="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
-
-        <StackPanel Grid.Column="1" Grid.Row="7"  Orientation="Horizontal">
+        <StackPanel Grid.Column="1" Grid.Row="3"  Orientation="Horizontal">
             <Label VerticalAlignment="Center">Source font size:</Label>
             <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="SourceFontSizeSlider" Width="100" Value="18" TickFrequency="1" IsSnapToTickEnabled="True"/>
             <Label VerticalAlignment="Center" Content="{Binding ElementName=SourceFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
@@ -232,7 +106,6 @@
 
             <Label VerticalAlignment="Center">Wrap:</Label>
             <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
-
         </StackPanel>
 
     </Grid>
