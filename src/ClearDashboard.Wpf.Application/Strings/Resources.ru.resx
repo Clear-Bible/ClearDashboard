@@ -313,6 +313,9 @@
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext не работает</value>
   </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>ПРИБОРНАЯ ДОСКА</value>
+  </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Захария</value>
   </data>
@@ -379,6 +382,9 @@
   <data name="ProperCase_Micah" xml:space="preserve">
     <value>Михей</value>
   </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>Корпус токены</value>
+  </data>
   <data name="Landing_Settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
@@ -436,6 +442,9 @@
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>фрукты</value>
   </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>Инструмент выравнивания</value>
+  </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
     <value>Исаия</value>
   </data>
@@ -465,6 +474,9 @@
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
     <value>Транслитерация withIteNcoder</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>Библейские термины</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Учебное пособие</value>
@@ -504,6 +516,9 @@
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
     <value>Предоставленный ключ неисправен. При расшифровке определенные элементы JSON не могли быть найдены.</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>Штифт</value>
   </data>
   <data name="2JN" xml:space="preserve">
     <value>2Ин.</value>
@@ -573,6 +588,9 @@
   </data>
   <data name="NEH" xml:space="preserve">
     <value>Неем.</value>
+  </data>
+  <data name="Windows_EnhancedCorpus" xml:space="preserve">
+    <value>Улучшенный корпус</value>
   </data>
   <data name="EZK" xml:space="preserve">
     <value>Иез.</value>
@@ -676,6 +694,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Создать новый проект</value>
   </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>Значения слова</value>
+  </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>лицензионный ключ отсутствует</value>
   </data>
@@ -687,6 +708,9 @@
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>группа</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>Текстовая коллекция</value>
   </data>
   <data name="ProperCase_1_Thessalonians" xml:space="preserve">
     <value>1 Фессалоникийцам</value>
