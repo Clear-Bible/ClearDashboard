@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //[Description("Latin Word Detokenizer")]
         //LatinWordDetokenizer,
 
-        [Description("Latin Word Tokenizer")]
+        [Description("Latin Word Tokenization")]
         LatinWordTokenizer,
 
         //[Description("Line Segment Tokenizer")]
@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //[Description("Whitespace Detokenizer")]
         //WhitespaceDetokenizer,
 
-        [Description("Whitespace Tokenizer")]
+        [Description("Whitespace Tokenization")]
         // ReSharper disable once UnusedMember.Global
         WhitespaceTokenizer,
 
@@ -71,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //ZwspWordDetokenizer,
 
         // ReSharper disable once UnusedMember.Global
-        [Description("Zwsp Word Tokenizer")]
+        [Description("Zwsp Word Tokenization")]
         ZwspWordTokenizer
     }
 
@@ -635,7 +635,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, Tokenizer.LatinWordTokenizer);
+                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -656,7 +656,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
                         "Manuscript",
-                        ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()",
+                        ".Tokenize<WhitespaceTokenizer>().Transform<IntoTokensTextRowProcessor>()",
                         cancellationToken);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -669,11 +669,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                     await EventAggregator.PublishOnCurrentThreadAsync(
-                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.LatinWordTokenizer.ToString(), metadata), cancellationToken);
+                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
 
                     OnUIThread(() =>
                     {
-                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.LatinWordTokenizer);
+                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
                     });
 
                 }
@@ -819,7 +819,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 break;
                             default:
                                 textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
-                                    .Tokenize<LatinWordTokenizer>()
+                                    .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                         }

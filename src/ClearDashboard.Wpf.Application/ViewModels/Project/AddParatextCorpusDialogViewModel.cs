@@ -93,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projects, value);
         }
 
-        private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
+        private Tokenizer _selectedTokenizer = Tokenizer.WhitespaceTokenizer;
         public Tokenizer SelectedTokenizer
         {
             get => _selectedTokenizer;
