@@ -28,6 +28,7 @@
             <TextBlock x:Name="SurfaceTextBlock" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SurfaceText}" Margin="0" ></TextBlock>
         </Button>
         <Rectangle Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" 
+                   Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}" 
                    HorizontalAlignment="Left" 
                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorColor}" 
                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}" 
@@ -35,8 +36,6 @@
                    MouseLeftButtonDown="OnNoteLeftButtonDown" MouseLeftButtonUp="OnNoteLeftButtonUp" 
                    MouseRightButtonDown="OnNoteRightButtonDown" MouseRightButtonUp="OnNoteRightButtonUp" 
                    MouseEnter="OnNoteMouseEnter" MouseLeave="OnNoteMouseLeave" MouseWheel="OnNoteMouseWheel"
-                   Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}" 
-                   
                    >
         </Rectangle>
         <Button Background="{DynamicResource MaterialDesignPaper}" 

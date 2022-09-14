@@ -20,7 +20,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplayControl));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplayControl),
+            new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
         
         /// <summary>
         /// Identifies the TokenMargin dependency property.
@@ -39,6 +40,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
             new PropertyMetadata(4d, OnLayoutChanged));
+
 
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
@@ -105,6 +107,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplayControl),
             new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// Identifies the SurfaceText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplayControl));
+
+        /// <summary>
+        /// Identifies the TargetTranslationText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register("TargetTranslationText", typeof(string), typeof(TokenDisplayControl));
+
+        /// <summary>
+        /// Identifies the TranslationColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register("TranslationColor", typeof(Brush), typeof(TokenDisplayControl));
 
         #endregion Static DependencyProperties
         #region Static RoutedEvents
@@ -487,19 +504,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Private Event Handlers
-        private void CalculateLayout()
-        {
-            var horizontalSpacing = Math.Max(TokenHorizontalSpacing, TranslationHorizontalSpacing);
-            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * horizontalSpacing : 0;
-            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * horizontalSpacing : 0;
-            
-            TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
-            NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
-            TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
-            TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
-        }
-
         /// <summary>
         /// Callback handler for changes to the dependency properties that affect the layout.
         /// </summary>
@@ -831,35 +835,65 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
 
         /// <summary>
-        /// Gets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
         /// </summary>
         /// <remarks>
-        /// Words in red come from a translation model generated from SMT, e.g. IBM4.
-        /// Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
-        /// Words in black were set by the user.
+        /// This should normally not be set directly; the value is based on the TranslationState:
+        ///   * Words in red come from a translation model generated from SMT, e.g. IBM4.
+        ///   * Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
+        ///   * Words in black were set by the user.
         /// </remarks>
         public Brush TranslationColor
         {
-            get
-            {
-                return TokenDisplay.TranslationState switch
-                {
-                    "FromTranslationModel" => Brushes.Red,
-                    "FromOther" => Brushes.Blue,
-                    _ => Brushes.Black
-                };
-            }
+            get => (Brush)GetValue(TranslationColorProperty);
+            set => SetValue(TranslationColorProperty, value);
         }
 
         /// <summary>
-        /// Gets the surface text to be displayed.
+        /// Gets or sets the surface text to be displayed.
         /// </summary>
-        public string SurfaceText => TokenDisplay.SurfaceText;
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the orientation of the display.
+        /// </remarks>
+        public string SurfaceText
+        {
+            get => (string) GetValue(SurfaceTextProperty);
+            set => SetValue(SurfaceTextProperty, value);
+        }
 
         /// <summary>
-        /// Gets the target translation text.
+        /// Gets or sets the translation target text to be displayed.
         /// </summary>
-        public string TargetTranslationText => TokenDisplay.TargetTranslationText;
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the display properties.
+        /// </remarks>
+        public string TargetTranslationText
+        {
+            get => (string) GetValue(TargetTranslationTextProperty);
+            set => SetValue(TargetTranslationTextProperty, value);
+        }
+
+        private void CalculateLayout()
+        {
+            var horizontalSpacing = Math.Max(TokenHorizontalSpacing, TranslationHorizontalSpacing);
+            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * horizontalSpacing : 0;
+            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * horizontalSpacing : 0;
+
+            TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
+            NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
+            TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
+            TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
+            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+
+            SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplay.SurfaceText : TokenDisplay.SurfaceText.Trim();
+            TargetTranslationText = TokenDisplay.TargetTranslationText;
+            TranslationColor = TokenDisplay.TranslationState switch
+            {
+                "FromTranslationModel" => Brushes.Red,
+                "FromOther" => Brushes.Blue,
+                _ => Brushes.Black
+            };
+        }
 
         public TokenDisplayControl()
         {
