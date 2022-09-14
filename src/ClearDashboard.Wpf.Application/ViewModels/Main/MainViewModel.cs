@@ -28,19 +28,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using AvalonDock;
-using AvalonDock.Layout;
-using AvalonDock.Layout.Serialization;
-using ClearApplicationFoundation.ViewModels.Shell;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Corpus;
-using ClearDashboard.Wpf.Application.ViewModels.Menus;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.Views.Main;
-using ClearDashboard.Wpf.Application.Views.Project;
-using Xceed.Wpf.AvalonDock;
 using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -582,7 +569,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (view is MainView currentView)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                _dockingManager = (DockingManager)currentView.FindName("dockManager");
+                _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
                 
             }
@@ -598,7 +585,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async void Init()
         {
-            ReBuildMenu();
+            RebuildMenu();
 
 
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
@@ -745,7 +732,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return fileLayouts;
         }
 
-        private void ReBuildMenu()
+        private void RebuildMenu()
         {
             FileLayouts = GetFileLayouts();
             ObservableCollection<MenuItemViewModel> layouts = new()
@@ -757,7 +744,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 new MenuItemViewModel { Header = "---- STANDARD LAYOUTS ----", Id = "SeparatorID", ViewModel = this, }
             };
             
-            bool bFound = false;
+            var bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
                 if (fileLayout.LayoutID.StartsWith("ProjectLayout:") && bFound == false)
@@ -824,11 +811,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// </summary>
         public void OkSave()
         {
-            string filePath = "";
+            var filePath = string.Empty;
             if (SelectedLayout == null)
             {
                 // create a new layout
-                if (SelectedLayoutText != "")
+                if (SelectedLayoutText != string.Empty)
                 {
                     // TODO this isn't working right as CurrentDashboardProject isn't always filled in
 
@@ -859,7 +846,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 GridIsVisible = Visibility.Collapsed;
 
-                ReBuildMenu();
+                RebuildMenu();
             }
 
         }
@@ -1379,7 +1366,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // CHAPTERS
             var bookId = CurrentBcv.Book;
             var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-            for (int i = 0; i < chapters.Count; i++)
+            for (var i = 0; i < chapters.Count; i++)
             {
                 chapters[i] = chapters[i].Substring(3, 3);
             }
@@ -1388,7 +1375,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // invoke to get it to run in STA mode
             System.Windows.Application.Current.Dispatcher.Invoke(delegate
             {
-                List<int> chapterNumbers = new List<int>();
+                var chapterNumbers = new List<int>();
                 foreach (var chapter in chapters)
                 {
                     chapterNumbers.Add(Convert.ToInt16(chapter));

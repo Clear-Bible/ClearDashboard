@@ -14,31 +14,31 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:VerseTokensValueConvertor x:Key="VerseTokensValueConvertor" />
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
-            <converters:TokensTextRowValueConvertor x:Key="TokensTextRowValueConvertor" />
             <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid x:Name="MainGrid">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
             Orientation="Horizontal">
             <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
                 Margin="20,0"
                 VerticalAlignment="Top"
                 FontSize="24"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 Text="{Binding CurrentBookDisplay}" />
         </StackPanel>
+
         <ListView
             x:Name="ListView"
             Grid.Row="2"
@@ -60,7 +60,7 @@
                             <userControls:VerseDisplay.Tokens>
                                 <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
                                     <Binding Path="." />
-                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationName"></Binding>
+                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationType"></Binding>
                                 </MultiBinding>
                             </userControls:VerseDisplay.Tokens>
                         </userControls:VerseDisplay>
@@ -68,7 +68,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
 
         <ProgressBar
             Grid.Row="2"
@@ -82,34 +81,5 @@
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
-
-
-
-
-
-
-
-
-
-        <!--<ListView x:Name="ListView"  Grid.Column="0" Grid.Row="2"
-                  ItemsSource="{Binding TokensTextRows}"
-                  VirtualizingStackPanel.IsVirtualizing ="True"
-                  VirtualizingStackPanel.VirtualizationMode="Recycling"
-                  ScrollViewer.IsDeferredScrollingEnabled="True">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <userControls:TextDisplayControl
-                        Margin="10"
-                        ItemsSource="{Binding Converter={StaticResource TokensTextRowValueConvertor} }"
-                    />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
-
-        <!--<userControls:TextDisplayControl cm:Bind.Model="{Binding}"
-                                         Grid.Column="0" Grid.Row="1"
-                                         Margin="10"
-                                         ItemsSource="{Binding DatabaseVerseTokensText}"
-                                         VerticalAlignment="Center"/>-->
     </Grid>
 </UserControl>
