@@ -62,7 +62,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
             navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-            this.Title = "🗐 TEXT COLLECTION";
+            Title = "🗐 " + LocalizationStrings.Get("Windows_TextCollection", Logger);
             this.ContentId = "TEXTCOLLECTION";
         }
 
