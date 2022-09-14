@@ -48,7 +48,7 @@
                     <TextBlock
                         BaselineOffset="100"
                         FontWeight="Bold"
-                        Text="PROJECT DESIGN SURFACE"
+                        Text="Notes"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal">
                         <TextBlock.LayoutTransform>
