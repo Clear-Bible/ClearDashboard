@@ -77,7 +77,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
     #endregion //Enums
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChanagedMessage>,
-        IHandle<ConnectionSelectedChanagedMessage>, IHandle<ProjectLoadCompleteMessage>, IHandle<CorpusDeletedMessage>
+        IHandle<ConnectionSelectedChanagedMessage>, IHandle<ProjectLoadCompleteMessage>, IHandle<CorpusDeletedMessage>,
+        IHandle<UiLanguageChangedMessage>
     {
         #region Member Variables
 
@@ -1543,6 +1544,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             AddManuscriptEnabled = true;
+            return Task.CompletedTask;
+        }
+
+        
+        /// <summary>
+        /// The UI language has changed
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // TODO - update the UI language
+            var language = message.LanguageCode;
+
             return Task.CompletedTask;
         }
 

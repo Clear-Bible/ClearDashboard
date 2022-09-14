@@ -136,6 +136,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 
                 Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
                 NotifyOfPropertyChange(() => SelectedLanguage);
+
+                EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language));
             }
         }
 
