@@ -33,8 +33,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } =
-            new ObservableCollection<DashboardProject>();
+        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } = new ObservableCollection<DashboardProject>();
+
+        private Visibility _searchBlankVisibility;
+        public Visibility SearchBlankVisibility
+        {
+            get => _searchBlankVisibility;
+            set
+            {
+                _searchBlankVisibility = value;
+                NotifyOfPropertyChange(() => SearchBlankVisibility);
+            }
+        }
+
+        private Visibility _noProjectVisibility;
+        public Visibility NoProjectVisibility
+        {
+            get => _noProjectVisibility;
+            set
+            {
+                _noProjectVisibility = value;
+                NotifyOfPropertyChange(() => NoProjectVisibility);
+            }
+        }
 
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -103,11 +124,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (SearchText == string.Empty)
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    SearchBlankVisibility = Visibility.Collapsed;
+                    NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
                     _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower()));
+                }
+
+                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count>0)
+                {
+                    NoProjectVisibility = Visibility.Hidden;
+                    SearchBlankVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    SearchBlankVisibility = Visibility.Collapsed;
+                    NoProjectVisibility = Visibility.Visible;
+                }
+
+                if (SearchText != string.Empty && DashboardProjects.Count <= 0)
+                {
+                    NoProjectVisibility = Visibility.Hidden;
+                    SearchBlankVisibility = Visibility.Visible;
                 }
             }
         }
@@ -160,6 +200,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _paratextProxy = paratextProxy;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
+            NoProjectVisibility = Visibility.Visible;
+            SearchBlankVisibility = Visibility.Collapsed;
         }
 
         public async Task StartParatext()

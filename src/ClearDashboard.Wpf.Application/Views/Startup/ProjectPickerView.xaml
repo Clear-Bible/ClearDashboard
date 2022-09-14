@@ -342,6 +342,23 @@
             Grid.Column="0"
             Margin="10,-95,0,0"
             Orientation="Vertical">
+
+            <materialDesign:Card
+                Width="475"
+                Height="81"
+                Margin="5"
+                HorizontalAlignment="Center"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="#EEEBEB"
+                Visibility="{Binding SearchBlankVisibility}">
+                <Label
+                    Margin="15"
+                    VerticalAlignment="Center"
+                    FontSize="21">
+                    No matches.
+                </Label>
+            </materialDesign:Card>
+
             <ListView
                 x:Name="ProjectListView"
                 Height="460"
@@ -350,7 +367,8 @@
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Style="{StaticResource EmptyMaterialDesignListView}">
+                Style="{StaticResource EmptyMaterialDesignListView}"
+                Visibility="{Binding NoProjectVisibility}">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -418,6 +436,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+
         </StackPanel>
     </Grid>
 </UserControl>
