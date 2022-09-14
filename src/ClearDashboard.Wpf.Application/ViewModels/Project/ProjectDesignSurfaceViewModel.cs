@@ -463,11 +463,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 IncludeFields = true,
                 WriteIndented = true
             };
-            string jsonString = JsonSerializer.Serialize(surface, options);
+            _projectManager.CurrentProject.DesignSurfaceLayout = JsonSerializer.Serialize(surface, options);
 
-            _projectManager.CurrentProject.DesignSurfaceLayout = jsonString;
-
-            await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
+            try
+            {
+                await _projectManager.UpdateProject(_projectManager.CurrentProject).ConfigureAwait(false);
+                await Task.Delay(250);
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(ex, $"An unexpected error occurred while saving the project layout to the '{_projectManager.CurrentProject.ProjectName} database.");
+            }
         }
 
         public void LoadCanvas()
