@@ -114,16 +114,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async void BcvInit()
         {
-            // grab the dictionary of all the verse lookups
-            //if (ProjectManager?.CurrentParatextProject is not null)
-            //{
-            //    BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-            //}
-            //else
-            //{
-            //    BCVDictionary = new Dictionary<string, string>();
-            //}
-
             var context = await ProjectManager.ProjectNameDbContextFactory.GetDatabaseContext(ProjectManager.CurrentProject.ProjectName);
             var localCorpora = context.Corpa.Local;
             var result = await ProjectManager.Mediator.Send(new GetBcvDictionariesQuery(localCorpora));

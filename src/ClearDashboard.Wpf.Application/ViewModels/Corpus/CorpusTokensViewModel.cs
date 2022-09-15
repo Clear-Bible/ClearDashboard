@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Features.Bcv;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
@@ -30,6 +31,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>
     {
+        private readonly ILogger<CorpusTokensViewModel> _logger;
+        private readonly DashboardProjectManager _projectManager;
 
         #region Member Variables
 
@@ -170,7 +173,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", Logger);
+            _logger = logger;
+            _projectManager = projectManager;
+
+            Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", _logger);
             ContentId = "CORPUSTOKENS";
 
             BcvInit();
@@ -228,21 +234,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         }
 
 
-        private async void BcvInit()
+        private async void BcvInit(string projectName = "")
         {
-            // grab the dictionary of all the verse lookups
-            //if (ProjectManager?.CurrentParatextProject is not null)
-            //{
-            //    BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-            //}
-            //else
-            //{
-            //    BCVDictionary = new Dictionary<string, string>();
-            //}
+            ProjectDbContext context;
 
-            var context = await ProjectManager.ProjectNameDbContextFactory.GetDatabaseContext(ProjectManager.CurrentProject.ProjectName);
+            if (projectName == string.Empty)
+            {
+                context = await _projectManager.ProjectNameDbContextFactory.GetDatabaseContext(_projectManager.CurrentProject.ProjectName);
+            }
+            else
+            {
+                context = await _projectManager.ProjectNameDbContextFactory.GetDatabaseContext(projectName);
+            }
+             
             var localCorpora = context.Corpa.Local;
-            var result = await ProjectManager.Mediator.Send(new GetBcvDictionariesQuery(localCorpora));
+            var result = await _projectManager.Mediator.Send(new GetBcvDictionariesQuery(localCorpora));
             if (result.Success)
             {
                 BCVDictionary = result.Data;
@@ -255,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             InComingChangesStarted = true;
 
             // set the CurrentBcv prior to listening to the event
-            CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
+            CurrentBcv.SetVerseFromId(_projectManager?.CurrentVerse);
 
             CalculateBooks();
             CalculateChapters();
@@ -427,20 +433,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         // ReSharper disable once UnusedMember.Global
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            if (ProjectManager?.CurrentParatextProject is not null)
+            if (_projectManager?.CurrentParatextProject is not null)
             {
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-
-                //BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                 InComingChangesStarted = true;
 
                 // add in the books to the dropdown list
                 CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
 
                 CalculateChapters();
                 CalculateVerses();
@@ -458,8 +462,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
-            
-            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
+
+            _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -549,7 +553,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
+            BcvInit(message.ProjectName);
+
+            _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -562,7 +568,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                 {
                     ParatextProjectMetadata metadata;
 
-                    if (message.ParatextProjectId == ProjectManager?.ManuscriptGuid.ToString())
+                    if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -570,7 +576,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = ProjectManager.ManuscriptGuid.ToString(),
+                            Id = _projectManager.ManuscriptGuid.ToString(),
                             CorpusType = CorpusType.Manuscript,
                             Name = "Manuscript",
                             AvailableBooks = books,
@@ -580,7 +586,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                     else
                     {
                         // regular Paratext corpus
-                        var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
                         if (result.Success && result.HasData)
                         {
                             metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", "")) ?? throw new InvalidOperationException();
@@ -592,7 +598,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                         
                     }
 
-                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(ProjectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(_projectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
 
                     TokenizationType = message.TokenizationType;
 

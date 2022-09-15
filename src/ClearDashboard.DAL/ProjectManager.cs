@@ -351,7 +351,6 @@ namespace ClearDashboard.DataAccessLayer
             projectAssets.ProjectDbContext.Attach(project);
 
             await projectAssets.ProjectDbContext.SaveChangesAsync();
-            return;
         }
     }
 }
