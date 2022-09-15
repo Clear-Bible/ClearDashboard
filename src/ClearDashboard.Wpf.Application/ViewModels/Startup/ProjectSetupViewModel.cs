@@ -1,24 +1,18 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using FluentValidation;
 using FluentValidation.Results;
-using ClearDashboard.DataAccessLayer;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>, IStartupDialog
+    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>
     {
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -43,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
         public ProjectSetupViewModel(DashboardProjectManager projectManager,
-            INavigationService navigationService, ILogger<MainViewModel> logger, IEventAggregator eventAggregator,
+            INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<DataAccessLayer.Models.Project> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {

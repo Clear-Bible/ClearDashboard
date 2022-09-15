@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             set
             {
                 Set(ref _selectedConnection, value);
-                _eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChanagedMessage(value));
+                _eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChangedMessage(value));
             }
         }
 
