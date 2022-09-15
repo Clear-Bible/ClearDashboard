@@ -154,9 +154,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         //    }
         //}
 
-        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"Book: {CurrentBook.Code}";
+        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
+        
+        private string _currentCorpusName = string.Empty;
+        public string CurrentCorpusName
+        {
+            get => _currentCorpusName;
+            set
+            {
+                _currentCorpusName = value;
+                NotifyOfPropertyChange(() => CurrentCorpusName);
+            }
+        }
 
-     
+
         public ObservableCollection<TokensTextRow>? TokensTextRows
         {
             get => _tokensTextRows;

@@ -1,12 +1,12 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Corpus.CorpusTokensView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Corpus"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=corpus:CorpusTokensViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -30,13 +30,25 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
+            Background="{DynamicResource MaterialDesignDivider}"
             Orientation="Horizontal">
+            
             <TextBlock
                 Margin="20,0"
                 VerticalAlignment="Top"
                 FontSize="24"
+                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Text="{Binding CurrentCorpusName}" />
+
+
+            <TextBlock
+                Margin="20,0"
+                VerticalAlignment="Top"
+                FontSize="24"
+                FontStyle="Italic"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 Text="{Binding CurrentBookDisplay}" />
+            
         </StackPanel>
 
         <ListView
@@ -56,11 +68,11 @@
                             Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                             FontSize="12"
                             Foreground="{DynamicResource MaterialDesignBody}" />
-                        <userControls:VerseDisplay  FontSize="20" Wrap="True">
+                        <userControls:VerseDisplay FontSize="20" Wrap="True">
                             <userControls:VerseDisplay.Tokens>
                                 <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
                                     <Binding Path="." />
-                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationType"></Binding>
+                                    <Binding ElementName="MainGrid" Path="DataContext.TokenizationType" />
                                 </MultiBinding>
                             </userControls:VerseDisplay.Tokens>
                         </userControls:VerseDisplay>

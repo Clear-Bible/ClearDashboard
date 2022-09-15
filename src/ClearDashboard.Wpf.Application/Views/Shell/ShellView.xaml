@@ -121,7 +121,7 @@
         <Border
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            Background="{DynamicResource MaterialDesignPaper}"
+            Background="{StaticResource MaterialDesignPaper}"
             BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="1"
             CornerRadius="1">
@@ -152,7 +152,7 @@
                     <TextBlock
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Foreground="{DynamicResource PrimaryHueMidBrush}">
+                        Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
                         <Run Text="{helpers:Localization ShellView_User}" />
                     </TextBlock>
@@ -186,7 +186,7 @@
                         SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
                     <Border
-                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                        BorderBrush="{StaticResource PrimaryHueMidBrush}"
                         BorderThickness="1"
                         CornerRadius="3"
                         Visibility="Hidden">
@@ -267,8 +267,8 @@
             Margin="5,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Background="{DynamicResource MaterialDesignPaper}"
-            BorderBrush="{DynamicResource SecondaryHueMidBrush}"
+            Background="{StaticResource MaterialDesignPaper}"
+            BorderBrush="{StaticResource SecondaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="3"
             Visibility="{Binding ShowTaskView}">
@@ -315,7 +315,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{DynamicResource PrimaryHueDarkBrush}" BorderThickness="1">
+                            <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
 
                                     <!--  ISCOMPLETED ICON  -->
@@ -350,7 +350,7 @@
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
 
-
+                                    <!-- Cancel Task Button -->
                                     <Button
                                         Width="20"
                                         Height="20"
