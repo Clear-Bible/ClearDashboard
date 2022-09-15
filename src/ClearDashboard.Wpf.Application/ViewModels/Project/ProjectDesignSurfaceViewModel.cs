@@ -88,12 +88,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata ProjectMetadata);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly INavigationService _navigationService;
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
 
         /// <summary>
@@ -312,8 +312,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel(INavigationService navigationService,
 #pragma warning restore CS8618
-            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
@@ -1002,8 +1002,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             corpusNode.MenuItems = nodeMenuItems;
         }
 
-        public async Task MenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem, CorpusNodeViewModel corpusNodeViewModel)
+        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
+            var corpusNodeViewModel = corpusNodeMenuItem.CorpusNodeViewModel;
             switch (corpusNodeMenuItem.Id)
             {
                 case "AddTokenizationId":

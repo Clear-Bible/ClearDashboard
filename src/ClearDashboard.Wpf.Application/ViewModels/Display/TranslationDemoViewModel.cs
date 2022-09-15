@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        public TranslationDemoViewModel(INavigationService navigationService, ILogger<TranslationDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
+        public TranslationDemoViewModel(INavigationService navigationService, ILogger<TranslationDemoViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
         }

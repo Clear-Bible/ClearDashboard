@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         }
 
         public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", Logger);

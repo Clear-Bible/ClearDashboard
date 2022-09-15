@@ -163,8 +163,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger,
-            DashboardProjectManager projectManager, TranslationSource translationSource,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, TranslationSource translationSource,
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "⌺ " + LocalizationStrings.Get("Windows_WordMeanings", Logger);

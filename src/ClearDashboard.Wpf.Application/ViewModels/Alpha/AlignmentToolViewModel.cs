@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public AlignmentToolViewModel(INavigationService navigationService, ILogger<AlignmentToolViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             this.Title = "⳼ " + LocalizationStrings.Get("Windows_AlignmentTool", Logger);
