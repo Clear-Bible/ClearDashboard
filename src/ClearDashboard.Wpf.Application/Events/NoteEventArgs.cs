@@ -1,8 +1,7 @@
 ﻿using System.Windows;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.Events
 {
     public class NoteEventArgs : RoutedEventArgs
     {

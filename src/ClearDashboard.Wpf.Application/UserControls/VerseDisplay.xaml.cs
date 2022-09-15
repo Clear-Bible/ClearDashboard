@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using SIL.Machine.Tokenization;
 
@@ -168,6 +169,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
+        /// Identifies the Title dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the TitlePadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitlePaddingProperty = DependencyProperty.Register("TitlePadding", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TitleMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleMarginProperty = DependencyProperty.Register("TitleMargin", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TitleFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleFontSizeProperty = DependencyProperty.Register("TitleFontSize", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the TitleHorizontalAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleHorizontalAlignmentProperty = DependencyProperty.Register("TitleHorizontalAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
+            new PropertyMetadata(HorizontalAlignment.Left));
+
+        /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(VerseDisplay));
@@ -175,24 +205,85 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
-        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay));
-        
-        public static readonly DependencyProperty TokensTextRowProperty = DependencyProperty.Register("TokensTextRow", typeof(TokensTextRow), typeof(VerseDisplay));
+        public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true, new PropertyChangedCallback(OnWrapChanged)));
 
+        /// <summary>
+        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
+        /// </summary>
+        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnWrapChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var control = (VerseDisplay)obj;
+            control.CalculateItemsPanelTemplate((bool) args.NewValue);
+        }
+
+        /// <summary>
+        /// Identifies the ItemsPanelTemplate dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(ItemsPanelTemplate), typeof(VerseDisplay));
+        
         /// <summary>
         /// Identifies the Tokens dependency property.
         /// </summary>
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
-        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register("Translations", typeof(IEnumerable), typeof(VerseDisplay));
 
+        /// <summary>
+        /// Identifies the HorizontalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(10d));
+
+        /// <summary>
+        /// Identifies the TokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(4d));
+
+        /// <summary>
+        /// Identifies the TranslationFontSize dependency property.
+        /// </summary>
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(16d));
 
+        /// <summary>
+        /// Identifies the TranslationAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
+            new PropertyMetadata(HorizontalAlignment.Center));
+
+        /// <summary>
+        /// Identifies the TranslationVerticalSpacing dependency property.
+        /// </summary>
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
-        #endregion Static DependencyProperties
+        /// <summary>
+        /// Identifies the NoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(3d));
 
+        /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the ShowTranslations dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowTranslationsProperty = DependencyProperty.Register("ShowTranslations", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true));
+
+        /// <summary>
+        /// Identifies the ShowNoteIndicators dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowNoteIndicatorsProperty = DependencyProperty.Register("ShowNoteIndicators", typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true));
+
+        #endregion Static DependencyProperties
         #region Public events
 
         /// <summary>
@@ -421,7 +512,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
-        #region Event handlers
+        #region Private event handlers
+
+        private void CalculateItemsPanelTemplate(bool wrap)
+        {
+            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateItemsPanelTemplate(Wrap);
+        }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
@@ -480,10 +581,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as TokenDisplayControl;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
+                TokenDisplay = control?.TokenDisplay,
                 Translation = control?.TokenDisplay?.Translation
             });
         }
@@ -534,7 +636,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TranslationDisplayControl;
+            var control = e.Source as TokenDisplayControl;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -579,8 +681,56 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
 
         /// <summary>
+        /// Gets or sets the title to be displayed for the verse.
+        /// </summary>
+        public string Title
+        {
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding of the title to be displayed for the verse.
+        /// </summary>
+        public Thickness TitlePadding
+        {
+            get => (Thickness)GetValue(TitlePaddingProperty);
+            set => SetValue(TitlePaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin of the title to be displayed for the verse.
+        /// </summary>
+        public Thickness TitleMargin
+        {
+            get => (Thickness)GetValue(TitleMarginProperty);
+            set => SetValue(TitleMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the title.
+        /// </summary>
+        public double TitleFontSize
+        {
+            get => (double)GetValue(TitleFontSizeProperty);
+            set => SetValue(TitleFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal alignment for the title.
+        /// </summary>
+        public HorizontalAlignment TitleHorizontalAlignment
+        {
+            get => (HorizontalAlignment)GetValue(TitleHorizontalAlignmentProperty);
+            set => SetValue(TitleHorizontalAlignmentProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
         /// </summary>
+        /// <remarks>
+        /// This controls the layout of the tokens to be displayed; regardless of this setting, any translation will be displayed vertically below the token.
+        /// </remarks>
         public Orientation Orientation
         {
             get => (Orientation) GetValue(OrientationProperty);
@@ -588,50 +738,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets whether the words should wrap in the control.
+        /// Gets or sets whether the tokens should wrap in the control.
         /// </summary>
         public bool Wrap
         {
             get => (bool)GetValue(WrapProperty);
             set => SetValue(WrapProperty, value);
         }           
-        
-        public TokensTextRow TokensTextRow
-        {
-            get => (TokensTextRow)GetValue(TokensTextRowProperty);
-            set => SetValue(TokensTextRowProperty, value);
-        }        
-
-        public ItemsPanelTemplate ItemsPanelTemplate => (ItemsPanelTemplate) FindResource(Wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
-
-        //public Brush WordBorderBrush => ParagraphMode ? Brushes.Transparent : (Brush) FindResource("MaterialDesignBody");
-
-        //private Thickness ParagraphMargin = new(0,0,0,0);
-        //private Thickness StackMargin = new(6,2,6,2);
-        //public Thickness InnerMargin => ParagraphMode ? ParagraphMargin : StackMargin;        
-
-        //private Thickness ParagraphPadding = new(5,0,5,0);
-        //private Thickness StackPadding = new(10,2,10,2);
-        //public Thickness InnerPadding => ParagraphMode ? ParagraphPadding : StackPadding;
-
-
-        public VerseDisplay()
-        {
-            InitializeComponent();
-        }
 
         /// <summary>
-        /// Gets or sets a collection to display in the control.
+        /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
         /// </summary>
-        //public IEnumerable ItemsSource
-        //{
-        //    get => (IEnumerable)GetValue(ItemsSourceProperty);
-        //    set
-        //    {
-        //        SetValue(ItemsSourceProperty, value);
-        //        Tokens = Detokenize(value);
-        //    }
-        //}
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate ItemsPanelTemplate
+        {
+            get => (ItemsPanelTemplate)GetValue(ItemsPanelTemplateProperty);
+            set => SetValue(ItemsPanelTemplateProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
@@ -643,12 +766,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets a collection to display in the control.
+        /// Gets or sets the horizontal spacing between translations.
         /// </summary>
-        public IEnumerable Translations
+        /// <remarks>
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// </remarks>
+        public double HorizontalSpacing
         {
-            get => (IEnumerable)GetValue(TranslationsProperty);
-            set => SetValue(TranslationsProperty, value);
+            get => (double)GetValue(HorizontalSpacingProperty);
+            set => SetValue(HorizontalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the token.
+        /// </summary>
+        public double TokenVerticalSpacing
+        {
+            get => (double)GetValue(TokenVerticalSpacingProperty);
+            set => SetValue(TokenVerticalSpacingProperty, value);
         }
 
         /// <summary>
@@ -661,7 +796,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing between the token and its translation.
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// </summary>
+        public HorizontalAlignment TranslationAlignment
+        {
+            get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
+            set => SetValue(HorizontalAlignmentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the translation.
         /// </summary>
         public double TranslationVerticalSpacing
         {
@@ -669,19 +813,46 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationVerticalSpacingProperty, value);
         }
 
-        public IEnumerable Detokenize(IEnumerable row)
+        /// <summary>
+        /// Gets or sets whether to display token translations.
+        /// </summary>
+        public bool ShowTranslations
         {
-            var tokensTextRow = row as TokensTextRow;
-            if (tokensTextRow != null)
-            {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                var tokensWithPadding = detokenizer.Detokenize(tokensTextRow.Tokens);
-                return tokensWithPadding;
-            }
-
-            return null;
+            get => (bool)GetValue(ShowTranslationsProperty);
+            set => SetValue(ShowTranslationsProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the height of the note indicator.
+        /// </summary>
+        public double NoteIndicatorHeight
+        {
+            get => (double)GetValue(NoteIndicatorHeightProperty);
+            set => SetValue(NoteIndicatorHeightProperty, value);
+        }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
+        /// </summary>
+        public Brush NoteIndicatorColor
+        {
+            get => (Brush)GetValue(NoteIndicatorColorProperty);
+            set => SetValue(NoteIndicatorColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether to display note indicators.
+        /// </summary>
+        public bool ShowNoteIndicators
+        {
+            get => (bool)GetValue(ShowNoteIndicatorsProperty);
+            set => SetValue(ShowNoteIndicatorsProperty, value);
+        }
+
+        public VerseDisplay()
+        {
+            InitializeComponent();
+            Loaded += OnLoaded;
+        }
     }
 }

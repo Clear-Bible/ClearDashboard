@@ -34,8 +34,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
-    Visibility="Collapsed"
-    WindowState="Minimized"
+
     mc:Ignorable="d">
 
     <Window.Resources>
