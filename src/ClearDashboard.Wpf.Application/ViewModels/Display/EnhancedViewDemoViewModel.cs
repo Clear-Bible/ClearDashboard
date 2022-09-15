@@ -32,7 +32,7 @@ using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
-    public class TranslationDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
+    public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
@@ -57,11 +57,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
 
         // ReSharper disable UnusedMember.Global
-        public TranslationDemoViewModel()
+        public EnhancedViewDemoViewModel()
         {
         }
 
-        public TranslationDemoViewModel(INavigationService navigationService, ILogger<TranslationDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
         }

@@ -16,10 +16,10 @@ using System.Windows.Shapes;
 
 namespace ClearDashboard.Wpf.Application.Views.Display
 {
-    public partial class TranslationDemoView : Page
+    public partial class EnhancedViewDemoView : Page
     {
 
-        public TranslationDemoView()
+        public EnhancedViewDemoView()
         {
             InitializeComponent();
         }
