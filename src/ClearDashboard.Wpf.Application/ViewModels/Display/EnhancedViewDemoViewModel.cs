@@ -92,6 +92,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
+            if (e.TokenDisplay.HasNote)
+            {
+                DisplayNote(e);
+            }
+
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
@@ -198,6 +203,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             TranslationControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }        
+        
+        public void NoteApplied(NoteEventArgs e)
+        {
+            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void NoteCancelled(RoutedEventArgs e)
+        {
+            Message = "Note cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
         // ReSharper restore UnusedMember.Global
 
@@ -311,6 +334,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
         }
 
+        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
+        private void DisplayNote(TokenEventArgs e)
+        {
+            NoteControlVisibility = Visibility.Visible;
+            CurrentTokenDisplay = e.TokenDisplay;
+        
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+        }
 
         private async Task LoadFiles()
         {

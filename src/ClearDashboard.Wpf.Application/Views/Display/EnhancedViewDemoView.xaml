@@ -167,13 +167,17 @@
             </StackPanel>
         </Grid>
 
-        <userControls:TranslationControl Grid.Column="1" Grid.Row="1" 
-                                         Visibility="{Binding TranslationControlVisibility}"
-                                         TokenDisplay="{Binding CurrentTokenDisplay}"
-                                         TranslationOptions="{Binding TranslationOptions}"
-                                         SelectedItem="{Binding CurrentTranslationOption}"
-                                         cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
-                                                             [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
-                                         />
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+            <userControls:TranslationControl Visibility="{Binding TranslationControlVisibility}"
+                                             TokenDisplay="{Binding CurrentTokenDisplay}"
+                                             TranslationOptions="{Binding TranslationOptions}"
+                                             SelectedItem="{Binding CurrentTranslationOption}"
+                                             cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
+                                                             [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
+            <userControls:NoteControl Visibility="{Binding NoteControlVisibility}"
+                                      TokenDisplay="{Binding CurrentTokenDisplay}"
+                                      cal:Message.Attach="[Event NoteApplied] = [Action NoteApplied($eventArgs)];
+                                                          [Event NoteCancelled] = [Action NoteCancelled($eventArgs)];" />
+        </StackPanel>
     </Grid>
 </Page>

@@ -163,6 +163,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="UserControls\NoteControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -259,6 +262,10 @@
     </Page>
     <Page Update="UserControls\TimerUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\NoteControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\WorkflowFooter.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
