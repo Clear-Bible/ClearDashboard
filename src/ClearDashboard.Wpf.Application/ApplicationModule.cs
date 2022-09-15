@@ -3,8 +3,8 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using ClearDashboard.Wpf.Application.Views.Startup;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
@@ -19,6 +19,7 @@ namespace ClearDashboard.Wpf.Application
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
+
         }
 
         public static void RegisterValidationDependencies(this ContainerBuilder builder)
@@ -34,22 +35,34 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
-            builder.RegisterType<ProjectPickerView>().AsSelf();
-
-            builder.RegisterType<ProjectSetupView>().AsSelf();
 
             builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 1); ;
+                .WithMetadata("Order", 1); 
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 2); ;
+                .WithMetadata("Order", 2); 
         }
 
         public static void RegisterParallelCorpusDialogDependencies(this ContainerBuilder builder)
         {
 
+            builder.RegisterType<ParallelCorpusStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 1); 
+
+            builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 2);
+
+            builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 3);
+
+            builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 4);
 
         }
 
@@ -60,16 +73,11 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-
             builder.OverrideFoundationDependencies();
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
-
-
-
-
         }
 
     }
