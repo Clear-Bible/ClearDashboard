@@ -556,6 +556,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
+                TokenDisplay = control?.TokenDisplay,
                 Translation = control?.TokenDisplay?.Translation
             });
         }

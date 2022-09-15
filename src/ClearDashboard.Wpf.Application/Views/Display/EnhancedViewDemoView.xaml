@@ -31,6 +31,7 @@
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
+            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -48,7 +49,7 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View Demo" FontSize="20" />
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View Demo" FontSize="20" />
 
         <userControls:VerseDisplay Grid.Row="1" 
                                    Tokens="{Binding Verse1}" 
@@ -155,5 +156,9 @@
                 <Label VerticalAlignment="Center">Wrap Lines</Label>
             </StackPanel>
         </Grid>
+
+        <userControls:TranslationControl Grid.Column="1" Grid.Row="1" 
+                                         TokenDisplay="{Binding CurrentTokenDisplay}"
+                                         TranslationOptions="{Binding TranslationOptions}"/>
     </Grid>
 </Page>

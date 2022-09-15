@@ -55,6 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public string? Message { get; set; }
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
+        public TokenDisplay CurrentTokenDisplay { get; set; }
+        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -106,6 +108,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TranslationClicked(TranslationEventArgs e)
         {
+            DisplayTranslation(e);
+
             Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
@@ -203,12 +207,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         private static int mockOogaWordsIndexer_;
+
+        private string GetMockOogaWord()
+        {
+            var result = MockOogaWords[mockOogaWordsIndexer_++];
+            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+            return result;
+        }
+
         private Translation GetTranslation(Token token)
         {
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? MockOogaWords[mockOogaWordsIndexer_++]
+                ? GetMockOogaWord()
                 : String.Empty;
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
             var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
             
             return translation;
@@ -226,6 +237,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return null;
         }
 
+        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        {
+            var result = new List<TranslationOption>();
+
+            var random = new Random();
+            var optionCount = random.Next(4) + 2;     // 2-5 options
+            var remainingPercentage = 100d;
+
+            var basePercentage = random.NextDouble() * remainingPercentage;
+            result.Add(new TranslationOption {Word = sourceTranslation, Probability = basePercentage});
+            remainingPercentage -= basePercentage;
+
+            for (var i = 1; i < optionCount - 1; i++)
+            {
+                var percentage = random.NextDouble() * remainingPercentage;
+                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+                remainingPercentage -= percentage;
+            }
+
+            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+
+            return result.OrderByDescending(to => to.Probability);
+        }
+
         private List<TokenDisplay> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
         {
             var tokenDisplays = new List<TokenDisplay>();
@@ -240,6 +275,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             return tokenDisplays;
         }
+
+        private void DisplayTranslation(TranslationEventArgs e)
+        {
+            CurrentTokenDisplay = e.TokenDisplay;
+            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(TranslationOptions));
+        }
+
 
         private async Task LoadFiles()
         {
