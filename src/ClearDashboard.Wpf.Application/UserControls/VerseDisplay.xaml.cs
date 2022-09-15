@@ -169,6 +169,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
+        /// Identifies the Title dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the TitlePadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitlePaddingProperty = DependencyProperty.Register("TitlePadding", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TitleMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleMarginProperty = DependencyProperty.Register("TitleMargin", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TitleFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleFontSizeProperty = DependencyProperty.Register("TitleFontSize", typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the TitleHorizontalAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleHorizontalAlignmentProperty = DependencyProperty.Register("TitleHorizontalAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
+            new PropertyMetadata(HorizontalAlignment.Left));
+
+        /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(VerseDisplay));
@@ -650,6 +679,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets or sets the title to be displayed for the verse.
+        /// </summary>
+        public string Title
+        {
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding of the title to be displayed for the verse.
+        /// </summary>
+        public Thickness TitlePadding
+        {
+            get => (Thickness)GetValue(TitlePaddingProperty);
+            set => SetValue(TitlePaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin of the title to be displayed for the verse.
+        /// </summary>
+        public Thickness TitleMargin
+        {
+            get => (Thickness)GetValue(TitleMarginProperty);
+            set => SetValue(TitleMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the title.
+        /// </summary>
+        public double TitleFontSize
+        {
+            get => (double)GetValue(TitleFontSizeProperty);
+            set => SetValue(TitleFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal alignment for the title.
+        /// </summary>
+        public HorizontalAlignment TitleHorizontalAlignment
+        {
+            get => (HorizontalAlignment)GetValue(TitleHorizontalAlignmentProperty);
+            set => SetValue(TitleHorizontalAlignmentProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.

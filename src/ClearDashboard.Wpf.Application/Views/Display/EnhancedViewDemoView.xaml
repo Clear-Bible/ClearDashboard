@@ -49,9 +49,10 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View Demo" FontSize="20" />
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View demo" FontSize="20" />
 
         <userControls:VerseDisplay Grid.Row="1" 
+                                   Title="Latin -> Ooga word Translation (Interlinear Gloss)"
                                    Tokens="{Binding Verse1}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
@@ -145,7 +146,7 @@
 
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center" Name="CenteredCheckbox" IsChecked="True"/>
-                <Label VerticalAlignment="Center">Centered Text</Label>
+                <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
             <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
