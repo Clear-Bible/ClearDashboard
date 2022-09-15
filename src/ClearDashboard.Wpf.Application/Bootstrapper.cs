@@ -1,7 +1,11 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
+using ClearApplicationFoundation.Framework;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
@@ -12,8 +16,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
 
 
@@ -27,12 +30,16 @@ namespace ClearDashboard.Wpf.Application
             base.PreInitialize();
         }
 
-     
+        protected void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddLocalization();
+        }
 
         protected override void PostInitialize()
         {
             LogDependencyInjectionRegistrations();
-           
+            SetupLanguage();
+
             base.PostInitialize();
         }
 
@@ -41,10 +48,31 @@ namespace ClearDashboard.Wpf.Application
             SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboard.log"));
         }
 
+        private void SetupLanguage()
+        {
+            var selectedLanguage = Settings.Default.language_code;
+            if (string.IsNullOrEmpty(selectedLanguage))
+            {
+                selectedLanguage = "en";
+            }
+
+            var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
+            var translationSource = Container?.Resolve<TranslationSource>();
+            if (translationSource != null)
+            {
+                translationSource.Language = EnumHelper.GetDescription(languageType);
+            }
+            else
+            {
+                throw new NullReferenceException("'TranslationSource' needs to registered with the DI container.");
+            }
+        }
+
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
             serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+            //serviceCollection.AddLocalization();
 
             base.PopulateServiceCollection(serviceCollection);
         }
@@ -55,14 +83,11 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
-            builder.RegisterType<EnhancedViewDemoViewModel>().As<IMainWindowViewModel>();
         }
 
         protected override async Task NavigateToMainWindow()
         {
-            EnsureApplicationMainWindowVisible();
-            NavigateToViewModel<EnhancedViewDemoViewModel>();
-            //await ShowStartupDialog<StartupDialogViewModel, EnhancedViewDemoViewModel>();
+            await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 
         protected override void RestoreMainWindowState()

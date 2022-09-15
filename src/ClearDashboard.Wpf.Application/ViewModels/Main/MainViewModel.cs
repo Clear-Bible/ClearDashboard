@@ -1,14 +1,25 @@
-﻿using AvalonDock.Themes;
+﻿using AvalonDock.Layout;
+using AvalonDock.Layout.Serialization;
+using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Corpus;
+using ClearDashboard.Wpf.Application.ViewModels.Menus;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Views.Main;
+using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,19 +30,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using AvalonDock;
-using AvalonDock.Layout;
-using AvalonDock.Layout.Serialization;
-using ClearApplicationFoundation.ViewModels.Shell;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Corpus;
-using ClearDashboard.Wpf.Application.ViewModels.Menus;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.Views.Main;
-using ClearDashboard.Wpf.Application.Views.Project;
-using Xceed.Wpf.AvalonDock;
 using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -41,7 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
-                IHandle<ShowTokenizationWindowMessage>
+                IHandle<ShowTokenizationWindowMessage>,
+                IHandle<UiLanguageChangedMessage>
     {
 #nullable disable
         #region Member Variables
@@ -573,7 +572,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (view is MainView currentView)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                _dockingManager = (DockingManager)currentView.FindName("dockManager");
+                _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
                 
             }
@@ -589,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async void Init()
         {
-            ReBuildMenu();
+            RebuildMenu();
 
 
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
@@ -736,25 +735,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return fileLayouts;
         }
 
-        private void ReBuildMenu()
+        private void RebuildMenu()
         {
             FileLayouts = GetFileLayouts();
             ObservableCollection<MenuItemViewModel> layouts = new()
             {
                 // add in the standard menu items
+
+                // Save Current Layout
                 new MenuItemViewModel
-                    { Header = "🖫 Save Current Layout", Id = "SaveID", ViewModel = this, Icon = null },
-                new MenuItemViewModel { Header = "🗑 Delete Saved Layout", Id = "DeleteID", ViewModel = this, },
-                new MenuItemViewModel { Header = "---- STANDARD LAYOUTS ----", Id = "SeparatorID", ViewModel = this, }
+                {
+                    Header = "🖫 " + LocalizationStrings.Get("MainView_LayoutsSave", Logger), Id = "SaveID",
+                    ViewModel = this, Icon = null
+                },
+                
+                // Delete Saved Layout
+                new MenuItemViewModel
+                {
+                    Header = "🗑 " + LocalizationStrings.Get("MainView_LayoutsDelete", Logger), Id = "DeleteID",
+                    ViewModel = this,
+                },
+
+                // STANDARD LAYOUTS
+                new MenuItemViewModel
+                {
+                    Header = "---- " + LocalizationStrings.Get("MainView_LayoutsStandardLayouts", Logger) + " ----",
+                    Id = "SeparatorID", ViewModel = this,
+                }
             };
             
-            bool bFound = false;
+            var bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
+                // PROJECT LAYOUTS
                 if (fileLayout.LayoutID.StartsWith("ProjectLayout:") && bFound == false)
                 {
                     layouts.Add(new MenuItemViewModel
-                    { Header = "---- PROJECT LAYOUTS ----", Id = "SeparatorID", ViewModel = this, });
+                    {
+                        Header = "---- " + LocalizationStrings.Get("MainView_LayoutsProjectLayouts", Logger) + " ----",
+                        Id = "SeparatorID", ViewModel = this,
+                    });
                     bFound = true;
                 }
 
@@ -771,42 +791,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             MenuItems.Clear();
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
+                // File
                 new()
                 {
-                    Header = "File", Id = "FileID", ViewModel = this,
+                    Header = LocalizationStrings.Get("MainView_File", Logger), Id = "FileID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new() { Header = "New", Id = "NewID", ViewModel = this, }
+                        // New
+                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, }
                     }
                 },
                 new()
                 {
-                    Header = "Layouts", Id = "LayoutID", ViewModel = this,
+                    // Layouts
+                    Header = LocalizationStrings.Get("MainView_Layouts", Logger), Id = "LayoutID", ViewModel = this,
                     MenuItems = layouts,
                 },
                 new()
                 {
-                    Header = "Windows", Id = "WindowID", ViewModel = this,
+                    // Windows
+                    Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        new() { Header = "⳼ Alignment Tool", Id = "AlignmentToolID", ViewModel = this, },
-                        new() { Header = "🕮 Biblical Terms", Id = "BiblicalTermsID", ViewModel = this, },
+                        // Alignment Tool
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsAlignmentTool", Logger), Id = "AlignmentToolID", ViewModel = this, },
+                        // Biblical Terms
+                        new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
+                        
                         //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        new() { Header = "🗟 Corpus Tokens", Id = "CorpusTokensID", ViewModel = this, },
-                        new() { Header = "📐 Dashboard", Id = "DashboardID", ViewModel = this, },
-                        new() { Header = "⳼ Enhanced Corpus", Id = "EnhancedCorpusID", ViewModel = this, },
+                        
+                        // Corpus Tokens
+                        new() { Header = "🗟 " + LocalizationStrings.Get("MainView_WindowsCorpusTokens", Logger), Id = "CorpusTokensID", ViewModel = this, },
+
+                        // Dashboard
+                        new() { Header = "📐 " + LocalizationStrings.Get("MainView_WindowsDashboard", Logger), Id = "DashboardID", ViewModel = this, },
+                        
+                        // Enhanced Corpus
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        
                         //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
-                        new() { Header = "⍒ PINS", Id = "PINSID", ViewModel = this, },
+                        
+                        // PINS
+                        new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
+                        
                         //new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
                         //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
                         //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
                         //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
-                        new() { Header = "🗐 Text Collection", Id = "TextCollectionID", ViewModel = this, },
+
+                        // Text Collection
+                        new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
+                        
                         //new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
-                        new() { Header = "⌺ Word Meanings", Id = "WordMeaningsID", ViewModel = this, },
+
+                        // Word Meanings
+                        new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                     }
                 },
-                new() { Header = "Help", Id =  "HelpID", ViewModel = this, }
+                
+                // HELP
+                new() { Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this, }
             };
         }
 
@@ -815,11 +859,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// </summary>
         public void OkSave()
         {
-            string filePath = "";
+            var filePath = string.Empty;
             if (SelectedLayout == null)
             {
                 // create a new layout
-                if (SelectedLayoutText != "")
+                if (SelectedLayoutText != string.Empty)
                 {
                     // TODO this isn't working right as CurrentDashboardProject isn't always filled in
 
@@ -850,7 +894,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 GridIsVisible = Visibility.Collapsed;
 
-                ReBuildMenu();
+                RebuildMenu();
             }
 
         }
@@ -1370,7 +1414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // CHAPTERS
             var bookId = CurrentBcv.Book;
             var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-            for (int i = 0; i < chapters.Count; i++)
+            for (var i = 0; i < chapters.Count; i++)
             {
                 chapters[i] = chapters[i].Substring(3, 3);
             }
@@ -1379,7 +1423,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // invoke to get it to run in STA mode
             System.Windows.Application.Current.Dispatcher.Invoke(delegate
             {
-                List<int> chapterNumbers = new List<int>();
+                var chapterNumbers = new List<int>();
                 foreach (var chapter in chapters)
                 {
                     chapterNumbers.Add(Convert.ToInt16(chapter));
@@ -1489,12 +1533,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
             string tokenizationType = message.TokenizationType;
-            string paratextId = message.ParatextId;
+            string paratextId = message.ParatextProjectId;
 
-            CorpusTokensViewModel viewModel = new();
+
+
+            CorpusTokensViewModel viewModel = IoC.Get<CorpusTokensViewModel>();
 
             var windowDockable = new LayoutDocument
             {
@@ -1502,7 +1548,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
             // setup the right ViewModel for the pane
             windowDockable.Content = viewModel;
-            windowDockable.Title = message.projectName + " (" + tokenizationType + ")";
+            windowDockable.Title = message.ProjectName + " (" + tokenizationType + ")";
             windowDockable.IsActive = true;
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
@@ -1512,8 +1558,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 documentPane.Children.Add(windowDockable);
             }
 
-            viewModel.ShowCorpusTokens(message, cancellationToken);
+            await viewModel.ShowCorpusTokens(message, cancellationToken);
+        }
 
+        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // pass up to the Project Design Surface the message
+            if (_projectDesignSurfaceViewModel is not null)
+            {
+                _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
+            }
+
+            // rebuild the menu system with the new language
+            RebuildMenu();
+            
             return Task.CompletedTask;
         }
 

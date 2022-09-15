@@ -11,7 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     Width="600"
-    Height="300"
+    Height="330"
     d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="300"
@@ -33,12 +33,64 @@
     mc:Ignorable="d">
 
     <Window.Resources>
+        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightGray" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#EEEBEB" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent">
+                                <ContentPresenter />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!--<Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>-->
 
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,8" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
         </Style>
+
 
         <!--<Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
             <Setter Property="Margin" Value="5,5"/>
@@ -47,12 +99,18 @@
         </Style>-->
 
         <Style TargetType="Label">
-            <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="10,10" />
             <Setter Property="FontSize" Value="24" />
         </Style>
+
+        <!--<Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="20,10" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>-->
 
         <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
             <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
@@ -103,7 +161,7 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical">
-                <Label Content="Select Tokenizer Engine" />
+                <Label Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />
                 <ComboBox
                     Margin="30,0,0,0"
                     VerticalAlignment="Top"
@@ -127,15 +185,14 @@
                 Orientation="Horizontal">
                 <Button
                     x:Name="Ok"
-                    Margin="5,5,5,5"
-                    Background="LightGray"
-                    Content="{helpers:Localization Ok}" />
+                    Content="{helpers:Localization Ok}"
+                    Style="{StaticResource TransparentStyle}" />
 
                 <Button
                     x:Name="Cancel"
-                    Margin="5,5,5,5"
-                    Background="LightGray"
-                    Content="{helpers:Localization Cancel}" />
+                    Margin="5"
+                    Content="{helpers:Localization Cancel}"
+                    Style="{StaticResource TransparentStyle}" />
             </StackPanel>
         </Grid>
     </Border>

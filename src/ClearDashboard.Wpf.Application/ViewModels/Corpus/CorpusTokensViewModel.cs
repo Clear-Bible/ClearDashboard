@@ -1,41 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Extensions;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 {
-    public class CorpusTokensViewModel : PaneViewModel, IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
+    public class CorpusTokensViewModel : PaneViewModel,
+        IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>, IHandle<BackgroundTaskChangedMessage>
     {
-        private CancellationTokenSource _cancellationTokenSource = null;
-        private bool _handleAsyncRunning = false;
+        private CancellationTokenSource? _cancellationTokenSource;
+        private bool? _handleAsyncRunning ;
+        private string? _tokenizationType;
+        private TokenizedTextCorpus? _currentTokenizedTextCorpus;
+        private Visibility? _progressBarVisibility = Visibility.Visible;
+        private ObservableCollection<TokensTextRow>? _verses;
+        private string? _message;
+        private BookInfo? _currentBook;
+        private ObservableCollection<TokensTextRow>? _tokensTextRows;
 
+
+        public string? TokenizationType
+        {
+            get => _tokenizationType;
+            set => Set(ref _tokenizationType, value);
+        }
+
+        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
+        {
+            get => _currentTokenizedTextCorpus;
+            set => Set(ref _currentTokenizedTextCorpus, value);
+        }
+      
+        public Visibility? ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+        // ReSharper disable once UnusedMember.Global
         public CorpusTokensViewModel()
         {
             // required by design-time binding
         }
 
         public CorpusTokensViewModel(INavigationService navigationService, ILogger<CorpusTokensViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) 
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            Title = "🗟 CORPUS TOKENS";
+            Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", Logger);
             ContentId = "CORPUSTOKENS";
+            ProgressBarVisibility = Visibility.Collapsed;
         }
 
         public void TokenBubbleLeftClicked(string target)
@@ -62,7 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         {
             DisplayName = "Corpus Tokens";
             TokensTextRows = new ObservableCollection<TokensTextRow>();
-            Verses = new ObservableCollection<VerseTokens>();
+            Verses = new ObservableCollection<TokensTextRow>();
             return base.OnInitializeAsync(cancellationToken);
         }
 
@@ -70,36 +103,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         {
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
-            if (_handleAsyncRunning)
+            if (_handleAsyncRunning.HasValue && _handleAsyncRunning.Value)
             {
-                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource?.Cancel();
                 EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = "Fetch Book",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
                     TaskStatus = StatusEnum.Completed
-                }));
+                }), cancellationToken);
             }
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        private ObservableCollection<VerseTokens> _verses;
-        public ObservableCollection<VerseTokens> Verses
+     
+        public ObservableCollection<TokensTextRow>? Verses
         {
             get => _verses;
             set => Set(ref _verses, value);
         }
 
-        private string _message;
-        public string Message
+       
+        public string? Message
         {
             get => _message;
             set => Set(ref _message, value);
         }
 
-        private string _currentBook;
-        public string CurrentBook
+      
+
+        public BookInfo? CurrentBook
         {
             get => _currentBook;
             set
@@ -109,10 +143,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             }
         }
 
-        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook) ? string.Empty : $"Book: {CurrentBook}";
 
-        private ObservableCollection<TokensTextRow> _tokensTextRows;
-        public ObservableCollection<TokensTextRow> TokensTextRows
+        //public string CurrentBookCode
+        //{
+        //    get => _currentBookCode;
+        //    set
+        //    {
+        //        Set(ref _currentBookCode, value);
+        //        NotifyOfPropertyChange(() => CurrentBookDisplay);
+        //    }
+        //}
+
+        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"Book: {CurrentBook.Code}";
+
+     
+        public ObservableCollection<TokensTextRow>? TokensTextRows
         {
             get => _tokensTextRows;
             set => Set(ref _tokensTextRows, value);
@@ -120,33 +165,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
-            Logger.LogInformation("Received TokenizedTextCorpusMessage.");
-
+            
+            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
-
+            ProgressBarVisibility = Visibility.Visible;
             await Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
-
-                    var corpus = message.TokenizedTextCorpus;
-
-                    CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
-
+                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
+                    TokenizationType = message.TokenizationName;
+                    CurrentBook = message.ProjectMetadata.AvailableBooks.First();
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
                             Name = "Fetch Book",
-                            Description = $"Getting book '{CurrentBook}'...",
+                            Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Working
-                        }));
+                        }), cancellationToken);
 
                     var tokensTextRows =
-                        corpus[CurrentBook]
+                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
                             .GetRows()
                             .WithCancellation(localCancellationToken)
                             .Cast<TokensTextRow>()
@@ -154,15 +196,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 .Tokens
                                 .Count(t => t
                                     .TokenId
-                                    .ChapterNumber == 1) > 0)
+                                    .ChapterNumber == CurrentBook?.Number) > 0)
                             .ToList();
-                    
+                 
                     OnUIThread(() =>
                     {
-                        TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
-                        Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
+                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        ProgressBarVisibility = Visibility.Collapsed;
                     });
-
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -170,7 +211,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
                             TaskStatus = StatusEnum.Completed
-                        }));
+                        }), cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -183,94 +224,124 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
                                 TaskStatus = StatusEnum.Error
-                            }));
+                            }), cancellationToken);
                     }
                 }
                 finally
                 {
                     _handleAsyncRunning = false;
-
                     _cancellationTokenSource.Dispose();
                 }
-
             }, cancellationToken);
-
         }
+
+
+
+
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
             var incomingMessage = message.Status;
 
             if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
             {
-                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
                 incomingMessage.TaskStatus = StatusEnum.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
             }
             await Task.CompletedTask;
         }
 
+
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            var paratextId = message.ParatextId;
-            var tokenizationType = message.TokenizationType;
-
-
-            Logger.LogInformation("Received ShowCorpusTokens");
-
+            Logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
-            
+
+            ProgressBarVisibility = Visibility.Visible;
+
             await Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    // IMPORTANT: wait to allow the UI to catch up - otherwise toggling the progress bar visibility may fail.
+                    ParatextProjectMetadata metadata;
 
-                    //var corpus = message.TokenizedTextCorpus;
+                    if (message.ParatextProjectId == ProjectManager?.ManuscriptGuid.ToString())
+                    {
+                        // our fake Manuscript corpus
+                        var bookInfo = new BookInfo();
+                        var books = bookInfo.GenerateScriptureBookList();
 
-                    //CurrentBook = message.ProjectMetadata.AvailableBooks.First().Code;
+                        metadata = new ParatextProjectMetadata
+                        {
+                            Id = ProjectManager.ManuscriptGuid.ToString(),
+                            CorpusType = CorpusType.Manuscript,
+                            Name = "Manuscript",
+                            AvailableBooks = books,
+                        };
 
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "Fetch Book",
-                    //        Description = $"Getting book '{CurrentBook}'...",
-                    //        StartTime = DateTime.Now,
-                    //        TaskStatus = StatusEnum.Working
-                    //    }));
+                    }
+                    else
+                    {
+                        // regular Paratext corpus
+                        var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        if (result.Success && result.HasData)
+                        {
+                            metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", "")) ?? throw new InvalidOperationException();
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException(result.Message);
+                        }
+                        
+                    }
 
-                    //var tokensTextRows =
-                    //    corpus[CurrentBook]
-                    //        .GetRows()
-                    //        .WithCancellation(localCancellationToken)
-                    //        .Cast<TokensTextRow>()
-                    //        .Where(ttr => ttr
-                    //            .Tokens
-                    //            .Count(t => t
-                    //                .TokenId
-                    //                .ChapterNumber == 1) > 0)
-                    //        .ToList();
+                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(ProjectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
 
-                    //OnUIThread(() =>
-                    //{
-                    //    TokensTextRows = new ObservableCollection<TokensTextRow>(tokensTextRows);
-                    //    Verses = new ObservableCollection<VerseTokens>(tokensTextRows.CreateVerseTokens());
-                    //});
+                    TokenizationType = message.TokenizationType;
 
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "Fetch Book",
-                    //        Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                    //        StartTime = DateTime.Now,
-                    //        TaskStatus = StatusEnum.Completed
-                    //    }));
+                    CurrentBook = metadata?.AvailableBooks.First();
+                  
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Getting book '{CurrentBook?.Code}'...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }), cancellationToken);
+
+                    var tokensTextRows =
+                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBook?.Number) > 0)
+                            .ToList();
+                    
+                    OnUIThread(() =>
+                    {
+                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Completed
+                        }), cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -283,21 +354,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
                                 TaskStatus = StatusEnum.Error
-                            }));
+                            }), cancellationToken);
                     }
                 }
                 finally
                 {
                     _handleAsyncRunning = false;
-
                     _cancellationTokenSource.Dispose();
                 }
-
             }, cancellationToken);
+
         }
     }
 
-    static class CancelExtention
+    static class CancelExtension
     {
         public static IEnumerable<T> WithCancellation<T>(this IEnumerable<T> en, CancellationToken token)
         {

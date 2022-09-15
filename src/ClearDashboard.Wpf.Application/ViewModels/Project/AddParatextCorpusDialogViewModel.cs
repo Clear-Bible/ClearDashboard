@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -17,6 +18,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 using Autofac.Core.Lifetime;
 using Autofac;
+using ClearDashboard.DataAccessLayer;
+using Newtonsoft.Json;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -34,8 +37,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ParatextProjectMetadata _selectedProject;
 
 
+        private string _corpusNameToSelect;
 
-        public AddParatextCorpusDialogViewModel() 
+        public string Parameter { get; set; }
+
+        public AddParatextCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time    
         }
@@ -50,6 +56,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _projectManager = projectManager;
         }
 
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            if (Parameter != null && Parameter != string.Empty)
+            {
+                Dictionary<string, string> values;
+
+                try
+                {
+                    values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
+                    foreach (var value in values)
+                    {
+                        _corpusNameToSelect = value.Key;
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            
+            return base.OnInitializeAsync(cancellationToken);
+
+        }
+
         public CorpusSourceType CorpusSourceType
         {
             get => _corpusSourceType;
@@ -62,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projects, value);
         }
 
-        private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
+        private Tokenizer _selectedTokenizer = Tokenizer.WhitespaceTokenizer;
         public Tokenizer SelectedTokenizer
         {
             get => _selectedTokenizer;
