@@ -179,7 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
             Title = "🗟 " + LocalizationStrings.Get("Windows_CorpusTokens", _logger);
             ContentId = "CORPUSTOKENS";
 
-            BcvInit();
+            BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
         }
 
@@ -234,21 +234,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         }
 
 
-        private async void BcvInit(string projectName = "")
+        private async void BcvInit(string paratextProjectId = "")
         {
-            ProjectDbContext context;
-
-            if (projectName == string.Empty)
-            {
-                context = await _projectManager.ProjectNameDbContextFactory.GetDatabaseContext(_projectManager.CurrentProject.ProjectName);
-            }
-            else
-            {
-                context = await _projectManager.ProjectNameDbContextFactory.GetDatabaseContext(projectName);
-            }
-             
-            var localCorpora = context.Corpa.Local;
-            var result = await _projectManager.Mediator.Send(new GetBcvDictionariesQuery(localCorpora));
+            var result = await _projectManager.Mediator.Send(new GetBcvDictionariesQuery(paratextProjectId));
             if (result.Success)
             {
                 BCVDictionary = result.Data;
@@ -553,7 +541,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            BcvInit(message.ProjectName);
+            BcvInit(message.ParatextProjectId);
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;

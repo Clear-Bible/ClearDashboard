@@ -100,7 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
             this.ContentId = "ENHANCEDCORPUS";
 
-            BcvInit();
+            //BcvInit();
         }
 
         #endregion //Constructor
@@ -112,11 +112,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
         }
 
-        private async void BcvInit()
+        private async void BcvInit(string paratextProjectId = "")
         {
-            var context = await ProjectManager.ProjectNameDbContextFactory.GetDatabaseContext(ProjectManager.CurrentProject.ProjectName);
-            var localCorpora = context.Corpa.Local;
-            var result = await ProjectManager.Mediator.Send(new GetBcvDictionariesQuery(localCorpora));
+
+            var result = await ProjectManager.Mediator.Send(new GetBcvDictionariesQuery(paratextProjectId));
             if (result.Success)
             {
                 BCVDictionary = result.Data;
