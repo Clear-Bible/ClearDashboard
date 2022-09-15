@@ -30,9 +30,9 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Background="{DynamicResource MaterialDesignDivider}"
+            Background="{DynamicResource MahApps.Brushes.Button.AccentedSquare.Background.MouseOver}"
             Orientation="Horizontal">
-            
+
             <TextBlock
                 Margin="20,0"
                 VerticalAlignment="Top"
@@ -48,8 +48,15 @@
                 FontStyle="Italic"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 Text="{Binding CurrentBookDisplay}" />
-            
+
         </StackPanel>
+
+        <userControls:BcvUserControl
+            Grid.Row="0"
+            HorizontalAlignment="Right"
+            CurrentBcv="{Binding CurrentBcv}"
+            IsRtl="{Binding IsRtl}"
+            ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <ListView
             x:Name="ListView"
