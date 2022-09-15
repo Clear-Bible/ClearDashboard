@@ -9,5 +9,6 @@ namespace ClearDashboard.Wpf.Application.Events
         public TokenDisplay TokenDisplay { get; set; }
 
         public Translation Translation { get; set; }
+        public string TranslationActionType { get; set; }
     }
 }

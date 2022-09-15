@@ -12,7 +12,7 @@
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="Auto">
         <Button x:Name="TokenButton"
-                Background="{DynamicResource MaterialDesignPaper}" 
+                Background="Transparent" 
                 Foreground="{DynamicResource MaterialDesignBody}" 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}" 
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" 
@@ -39,7 +39,7 @@
                    MouseEnter="OnNoteMouseEnter" MouseLeave="OnNoteMouseLeave" MouseWheel="OnNoteMouseWheel"
                    >
         </Rectangle>
-        <Button Background="{DynamicResource MaterialDesignPaper}" 
+        <Button Background="Transparent" 
                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}" 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}" 
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}" 

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
@@ -57,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
         public TokenDisplay CurrentTokenDisplay { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        public TranslationOption CurrentTranslationOption { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -180,6 +182,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
+        public void TranslationApplied(TranslationEventArgs e)
+        {
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }
+
+        public void TranslationCancelled(RoutedEventArgs e)
+        {
+            Message = "Translation cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }
         // ReSharper restore UnusedMember.Global
 
         #endregion
@@ -276,13 +295,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
+        public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
+
         private void DisplayTranslation(TranslationEventArgs e)
         {
+            TranslationControlVisibility = Visibility.Visible;
+
             CurrentTokenDisplay = e.TokenDisplay;
             TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
 
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
             NotifyOfPropertyChange(nameof(TranslationOptions));
+            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
         }
 
 

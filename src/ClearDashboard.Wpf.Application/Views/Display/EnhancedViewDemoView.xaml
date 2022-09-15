@@ -52,7 +52,9 @@
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View demo" FontSize="20" />
 
         <userControls:VerseDisplay Grid.Row="1" 
-                                   Title="Latin -> Ooga word Translation (Interlinear Gloss)"
+                                   Margin="50,10"
+                                   Title="Latin -> Ooga word translation (interlinear gloss)"
+                                   TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding Verse1}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
@@ -100,66 +102,78 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Tokens:</Label>
+            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Title:</Label>
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Font size:</Label>
+                <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TitleFontSizeSlider" Width="100" Value="20" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Tokens:</Label>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Font size:</Label>
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TokenFontSizeSlider" Width="100" Value="20" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
-            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Vertical spacing:</Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="40" Name="TokenVerticalSpacingSlider" Width="100" Value="5" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
-            <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Horizontal spacing:</Label>
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="40" Name="HorizontalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
                 <CheckBox VerticalAlignment="Center" Name="ShowTranslationsCheckbox" IsChecked="True" Margin="22,0,0,0"/>
             </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Font size:</Label>
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TranslationFontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="2"  Orientation="Horizontal">
+            <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Vertical spacing:</Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="40" Name="TranslationVerticalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
                 <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True" Margin="5,0,0,0"/>
             </StackPanel>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Margin="0,0,14,0">Height:</Label>
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="CenteredCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
-            <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
+            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
-            <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal">
+            <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Wrap Lines</Label>
             </StackPanel>
         </Grid>
 
         <userControls:TranslationControl Grid.Column="1" Grid.Row="1" 
+                                         Visibility="{Binding TranslationControlVisibility}"
                                          TokenDisplay="{Binding CurrentTokenDisplay}"
-                                         TranslationOptions="{Binding TranslationOptions}"/>
+                                         TranslationOptions="{Binding TranslationOptions}"
+                                         SelectedItem="{Binding CurrentTranslationOption}"
+                                         cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
+                                                             [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
+                                         />
     </Grid>
 </Page>

@@ -11,6 +11,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string Word { get; set; }
         public double Probability { get; set; }
 
-        public string ProbabilityPercentage => Probability.ToString("P");
+        public string ProbabilityPercentage => (Probability / 100).ToString("P");
     }
 }
