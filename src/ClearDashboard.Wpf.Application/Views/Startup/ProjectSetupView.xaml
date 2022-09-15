@@ -97,13 +97,12 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding EnableControls}"
-                Style="{StaticResource TransparentStyle}">
-                </Button>
+                Style="{StaticResource TransparentStyle}" />
             <Button
                 x:Name="Create"
-                Content="{helpers:Localization Create}" 
+                Content="{helpers:Localization Create}"
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
+                Style="{StaticResource TransparentStyle}" />
         </StackPanel>
 
     </Grid>
