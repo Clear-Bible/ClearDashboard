@@ -30,9 +30,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
-        /// Identifies the TokenHorizontalSpacing dependency property.
+        /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenHorizontalSpacingProperty = DependencyProperty.Register("TokenHorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
             new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
@@ -65,12 +65,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register("TranslationMargin", typeof(Thickness), typeof(TokenDisplayControl),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the TranslationHorizontalSpacing dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationHorizontalSpacingProperty = DependencyProperty.Register("TranslationHorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
-            new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
@@ -734,10 +728,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <remarks>
         /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
         /// </remarks>
-        public double TokenHorizontalSpacing
+        public double HorizontalSpacing
         {
-            get => (double)GetValue(TokenHorizontalSpacingProperty);
-            set => SetValue(TokenHorizontalSpacingProperty, value);
+            get => (double)GetValue(HorizontalSpacingProperty);
+            set => SetValue(HorizontalSpacingProperty, value);
         }
 
         /// <summary>
@@ -777,15 +771,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness) GetValue(TranslationMarginProperty);
             set => SetValue(TranslationMarginProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the horizontal spacing between translations.
-        /// </summary>
-        public double TranslationHorizontalSpacing
-        {
-            get => (double)GetValue(TranslationHorizontalSpacingProperty);
-            set => SetValue(TranslationHorizontalSpacingProperty, value);
         }
 
         /// <summary>
@@ -890,9 +875,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateLayout()
         {
-            var horizontalSpacing = Math.Max(TokenHorizontalSpacing, TranslationHorizontalSpacing);
-            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * horizontalSpacing : 0;
-            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * horizontalSpacing : 0;
+            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * HorizontalSpacing : 0;
+            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * HorizontalSpacing : 0;
 
             TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);

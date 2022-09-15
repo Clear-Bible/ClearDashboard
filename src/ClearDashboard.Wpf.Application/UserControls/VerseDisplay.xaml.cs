@@ -201,9 +201,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the TokenHorizontalSpacing dependency property.
+        /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenHorizontalSpacingProperty = DependencyProperty.Register("TokenHorizontalSpacing", typeof(double), typeof(VerseDisplay),
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
         /// <summary>
@@ -223,12 +223,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
             new PropertyMetadata(HorizontalAlignment.Center));
-
-        /// <summary>
-        /// Identifies the TranslationHorizontalSpacing dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationHorizontalSpacingProperty = DependencyProperty.Register("TranslationHorizontalSpacing", typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(10d));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
@@ -702,10 +696,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <remarks>
         /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
         /// </remarks>
-        public double TokenHorizontalSpacing
+        public double HorizontalSpacing
         {
-            get => (double)GetValue(TokenHorizontalSpacingProperty);
-            set => SetValue(TokenHorizontalSpacingProperty, value);
+            get => (double)GetValue(HorizontalSpacingProperty);
+            set => SetValue(HorizontalSpacingProperty, value);
         }
 
         /// <summary>
@@ -733,15 +727,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
             set => SetValue(HorizontalAlignmentProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the horizontal spacing between translations.
-        /// </summary>
-        public double TranslationHorizontalSpacing
-        {
-            get => (double)GetValue(TranslationHorizontalSpacingProperty);
-            set => SetValue(TranslationHorizontalSpacingProperty, value);
         }
 
         /// <summary>

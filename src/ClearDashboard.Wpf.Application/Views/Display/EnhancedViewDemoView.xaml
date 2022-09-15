@@ -55,12 +55,11 @@
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   TokenHorizontalSpacing="{Binding ElementName=TokenHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                   TranslationHorizontalSpacing="{Binding ElementName=TranslationHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -114,8 +113,8 @@
             </StackPanel>
             <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Horizontal spacing:</Label>
-                <Slider VerticalAlignment="Center" Minimum="0" Maximum="40" Name="TokenHorizontalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
-                <Label VerticalAlignment="Center" Content="{Binding ElementName=TokenHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+                <Slider VerticalAlignment="Center" Minimum="1" Maximum="40" Name="HorizontalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
@@ -126,11 +125,6 @@
                 <Label VerticalAlignment="Center">Font size:</Label>
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TranslationFontSizeSlider" Width="100" Value="16" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Horizontal spacing:</Label>
-                <Slider VerticalAlignment="Center" Minimum="0" Maximum="40" Name="TranslationHorizontalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
-                <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationHorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="2"  Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Vertical spacing:</Label>
