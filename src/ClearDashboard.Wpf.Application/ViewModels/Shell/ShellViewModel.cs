@@ -481,7 +481,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
         {
-            ParatextUserName = message.user.FullName;
+            ParatextUserName = message.User.FullName;
             await Task.CompletedTask;
         }
 

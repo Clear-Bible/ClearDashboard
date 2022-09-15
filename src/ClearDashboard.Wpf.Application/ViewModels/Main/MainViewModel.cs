@@ -1548,7 +1548,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
             // setup the right ViewModel for the pane
             windowDockable.Content = viewModel;
-            windowDockable.Title = message.projectName + " (" + tokenizationType + ")";
+            windowDockable.Title = message.ProjectName + " (" + tokenizationType + ")";
             windowDockable.IsActive = true;
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
