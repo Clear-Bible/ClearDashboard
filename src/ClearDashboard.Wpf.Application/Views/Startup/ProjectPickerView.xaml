@@ -12,6 +12,7 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Width="Auto"
     Height="635"
     MinWidth="886"
@@ -63,7 +64,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            
+
         </ResourceDictionary>
     </UserControl.Resources>
 
