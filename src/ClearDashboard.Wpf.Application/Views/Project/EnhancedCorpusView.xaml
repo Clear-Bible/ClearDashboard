@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Padding="2" Background="{StaticResource MahApps.Brushes.Button.AccentedSquare.Background.MouseOver}">
+        <Border Padding="2" Background="{StaticResource PrimaryHueMidBrush}">
             <StackPanel Orientation="Horizontal">
                 <userControls:BcvUserControl
                     Height="50"

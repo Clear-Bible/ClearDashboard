@@ -30,7 +30,7 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Background="{DynamicResource MahApps.Brushes.Button.AccentedSquare.Background.MouseOver}"
+            Background="{DynamicResource PrimaryHueMidBrush}"
             Orientation="Horizontal">
 
             <TextBlock
