@@ -17,7 +17,6 @@ using Xunit;
 using Xunit.Abstractions;
 
 using Models = ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DAL.Alignment.Tests.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
