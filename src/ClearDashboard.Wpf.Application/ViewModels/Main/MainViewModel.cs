@@ -152,7 +152,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        
+
         private string _windowIdToLoad;
         public string WindowIdToLoad
         {
@@ -188,45 +188,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case "LayoutID":
                             Console.WriteLine();
                             break;
-                        //case "AlignmentToolID":
-                        //    _windowIdToLoad = "ALIGNMENTTOOL";
-                        //    break;
                         case "BiblicalTermsID":
                             _windowIdToLoad = "BIBLICALTERMS";
                             break;
-                        //case "ConcordanceToolID":
-                        //    _windowIdToLoad = "CONCORDANCETOOL";
-                        //    break;
-                        //case "CorpusTokensID":
-                        //    _windowIdToLoad = "CORPUSTOKENS";
-                        //    break;
-                        //case "DashboardID":
-                        //    _windowIdToLoad = "DASHBOARD";
-                        //    break;
                         case "EnhancedCorpusID":
                             _windowIdToLoad = "ENHANCEDCORPUS";
                             break;
-                        //case "NotesID":
-                        //    _windowIdToLoad = "NOTES";
-                        //    break;
                         case "PINSID":
                             _windowIdToLoad = "PINS";
                             break;
-                        //case "ProjectDesignSurfaceID":
-                        //    _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
-                        //    break;
                         case "WordMeaningsID":
                             _windowIdToLoad = "WORDMEANINGS";
                             break;
-                        //case "SourceContextID":
-                        //    _windowIdToLoad = "SOURCECONTEXT";
-                        //    break;
-                        //case "StartPageID":
-                        //    _windowIdToLoad = "STARTPAGE";
-                        //    break;
-                        //case "TargetContextID":
-                        //    _windowIdToLoad = "TARGETCONTEXT";
-                        //    break;
                         case "TextCollectionID":
                             _windowIdToLoad = "TEXTCOLLECTION";
                             break;
@@ -247,14 +220,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             var dashboard = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
             Process process = null;
-            
+
             Logger.LogInformation("Opening a new instance of Dashboard.");
             process = await InternalStartDashboardAsync();
 
 
             Logger.LogInformation($"Waiting {secondsToWait} seconds for Dashboard to completely start");
             await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
-            
+
             return process;
         }
 
@@ -460,7 +433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (Parameter != null)
             {
-               
+
                 Logger.LogInformation($"Received {Parameter.ProjectName}.");
                 if (Parameter.IsNew)
                 {
@@ -537,16 +510,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
-                
+
             }
 
             await Task.Delay(250);
             Init();
-            //await Task.Run(() =>
-            //{
-            //    OnUIThread(Init);
-            //});
-           
         }
 
         private async void Init()
@@ -565,22 +533,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
             Items.Clear();
+
             // documents
-            //await ActivateItemAsync<AlignmentToolViewModel>();
-            //await ActivateItemAsync<ConcordanceViewModel>();
-            //await ActivateItemAsync<CorpusTokensViewModel>();
-            //await ActivateItemAsync<DashboardViewModel>();
-            //await ActivateItemAsync<StartPageViewModel>();
-            //await ActivateItemAsync<TreeDownViewModel>();
             await ActivateItemAsync<EnhancedCorpusViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
-            //await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
-            
-            //await ActivateItemAsync<SourceContextViewModel>();
-            //await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
 
@@ -726,7 +685,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Id = "SeparatorID", ViewModel = this,
                 }
             };
-            
+
             var bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
@@ -736,7 +695,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     layouts.Add(new MenuItemViewModel
                     {
                         Header = "---- " + LocalizationStrings.Get("MainView_LayoutsProjectLayouts", Logger) + " ----",
-                        Id = "SeparatorID", ViewModel = this,
+                        Id = "SeparatorID",
+                        ViewModel = this,
                     });
                     bFound = true;
                 }
@@ -776,37 +736,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        // Alignment Tool
-                        //new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsAlignmentTool", Logger), Id = "AlignmentToolID", ViewModel = this, },
                         // Biblical Terms
-                        //new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
-                        
-                        //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        
-                        // Corpus Tokens
-                        //new() { Header = "🗟 " + LocalizationStrings.Get("MainView_WindowsCorpusTokens", Logger), Id = "CorpusTokensID", ViewModel = this, },
-
-                        // Dashboard
-                        //new() { Header = "📐 " + LocalizationStrings.Get("MainView_WindowsDashboard", Logger), Id = "DashboardID", ViewModel = this, },
+                        new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
                         
                         // Enhanced Corpus
                         new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
                         
-                        //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
-                        
                         // PINS
                         new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
                         
-                        //new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
-                        //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
-                        //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
-                        //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
-
                         // Text Collection
                         new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
                         
-                        //new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
-
                         // Word Meanings
                         new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                     }
@@ -935,24 +876,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (e.Model.ContentId.ToUpper())
                     {
                         // Documents
-                        //case WorkspaceLayoutNames.Dashboard:
-                        //    e.Content = GetPaneViewModelFromItems("DashboardViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.ConcordanceTool:
-                        //    e.Content = GetPaneViewModelFromItems("ConcordanceViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.StartPage:
-                        //    e.Content = GetPaneViewModelFromItems("StartPageViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.AlignmentTool:
-                        //    e.Content = GetPaneViewModelFromItems("AlignmentToolViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.TreeDown:
-                        //    e.Content = GetPaneViewModelFromItems("TreeDownViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.CorpusTokens:
-                        //    e.Content = GetPaneViewModelFromItems("CorpusTokensViewModel");
-                        //    break;
                         case WorkspaceLayoutNames.EnhancedCorpus:
                             e.Content = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
                             break;
@@ -964,24 +887,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.WordMeanings:
                             e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
                             break;
-                        //case WorkspaceLayoutNames.SourceContext:
-                        //    e.Content = GetToolViewModelFromItems("SourceContextViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.TargetContext:
-                        //    e.Content = GetToolViewModelFromItems("TargetContextViewModel");
-                        //    break;
-                        //case WorkspaceLayoutNames.Notes:
-                        //    e.Content = GetToolViewModelFromItems("NotesViewModel");
-                        //    break;
                         case WorkspaceLayoutNames.Pins:
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
                             break;
                         case WorkspaceLayoutNames.TextCollection:
                             e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
                             break;
-                        //case WorkspaceLayoutNames.ProjectDesignSurface:
-                        //    e.Content = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                        //    break;
 
                     }
                 }
@@ -1012,22 +923,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         var type = t;
                         switch (type)
                         {
-                            //case AlignmentToolViewModel:
-                            //case ConcordanceViewModel:
-                            //case CorpusTokensViewModel:
-                            //case DashboardViewModel:
+
                             case EnhancedCorpusViewModel:
-                                //case StartPageViewModel:
-                                //case TreeDownViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
                             case BiblicalTermsViewModel:
-                            //case NotesViewModel:
                             case PinsViewModel:
-                            //case ProjectDesignSurfaceViewModel:
-                            //case SourceContextViewModel:
-                            //case TargetContextViewModel:
                             case TextCollectionsViewModel:
                             case WordMeaningsViewModel:
                                 _tools.Add((ToolViewModel)t);
@@ -1062,13 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
-                        //case AlignmentToolViewModel:
-                        //case ConcordanceViewModel:
-                        //case CorpusTokensViewModel:
-                        //case DashboardViewModel:
                         case EnhancedCorpusViewModel:
-                            //case StartPageViewModel:
-                            //case TreeDownViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -1092,11 +988,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case BiblicalTermsViewModel:
-                        //case NotesViewModel:
                         case PinsViewModel:
-                        //case ProjectDesignSurfaceViewModel:
-                        //case SourceContextViewModel:
-                        //case TargetContextViewModel:
                         case TextCollectionsViewModel:
                         case WordMeaningsViewModel:
                             return (ToolViewModel)t;
@@ -1113,33 +1005,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             switch (windowTag)
             {
                 // DOCUMENTS
-
                 case WorkspaceLayoutNames.EnhancedCorpus:
                     var vm14 = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
                     return (vm14, vm14.Title, vm14.DockSide);
 
-                //case WorkspaceLayoutNames.AlignmentTool:
-                //    var vm10 = GetPaneViewModelFromItems("AlignmentToolViewModel");
-                //    return (vm10, vm10.Title, vm10.DockSide);
-                //case WorkspaceLayoutNames.ConcordanceTool:
-                //    var vm2 = GetPaneViewModelFromItems("ConcordanceViewModel");
-                //    return (vm2, vm2.Title, vm2.DockSide);
-                //case WorkspaceLayoutNames.CorpusTokens:
-                //    var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
-                //    return (vm12, vm12.Title, vm12.DockSide);
-                //case WorkspaceLayoutNames.Dashboard:
-                //    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
-                //    return (vm1, vm1.Title, vm1.DockSide);
-                //case WorkspaceLayoutNames.StartPage:
-                //    var vm9 = GetPaneViewModelFromItems("StartPageViewModel");
-                //    return (vm9, vm9.Title, vm9.DockSide);
-                //case WorkspaceLayoutNames.TreeDown:
-                //    var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
-                //    return (vm11, vm11.Title, vm11.DockSide);
-
-
                 // TOOLS
-                
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
@@ -1152,19 +1022,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.WordMeanings:
                     var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
                     return (vm3, vm3.Title, vm3.DockSide);
-                
-                //case WorkspaceLayoutNames.Notes:
-                //    var vm6 = GetToolViewModelFromItems("NotesViewModel");
-                //    return (vm6, vm6.Title, vm6.DockSide);
-                //case WorkspaceLayoutNames.ProjectDesignSurface:
-                //    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                //    return (vm13, vm13.Title, vm13.DockSide);
-                //case WorkspaceLayoutNames.SourceContext:
-                //    var vm4 = GetToolViewModelFromItems("SourceContextViewModel");
-                //    return (vm4, vm4.Title, vm4.DockSide);
-                //case WorkspaceLayoutNames.TargetContext:
-                //    var vm5 = GetToolViewModelFromItems("TargetContextViewModel");
-                //    return (vm5, vm5.Title, vm5.DockSide);
 
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
@@ -1227,12 +1084,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (windowTag.ToUpper())
                     {
                         // Documents
-                        //case WorkspaceLayoutNames.Dashboard:
-                        //case WorkspaceLayoutNames.ConcordanceTool:
-                        //case WorkspaceLayoutNames.StartPage:
-                        //case WorkspaceLayoutNames.AlignmentTool:
-                        //case WorkspaceLayoutNames.TreeDown:
-                        //case WorkspaceLayoutNames.CorpusTokens:
                         case WorkspaceLayoutNames.EnhancedCorpus:
                             windowDockable = new LayoutDocument
                             {
@@ -1255,11 +1106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
                         case WorkspaceLayoutNames.WordMeanings:
-                        //case WorkspaceLayoutNames.SourceContext:
-                        //case WorkspaceLayoutNames.TargetContext:
-                        //case WorkspaceLayoutNames.Notes:
                         case WorkspaceLayoutNames.Pins:
-                        //case WorkspaceLayoutNames.ProjectDesignSurface:
                         case WorkspaceLayoutNames.TextCollection:
 
                             // window has been closed so reload it
@@ -1273,7 +1120,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.Content = obj.vm;
                             windowPane.Title = obj.title;
                             windowPane.IsActive = true;
-                            
+
                             // set where it will doc on layout
                             if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                             {
@@ -1509,7 +1356,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
-            
+
             var windowDockable = new LayoutDocument
             {
                 ContentId = paratextId
@@ -1539,7 +1386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // rebuild the menu system with the new language
             RebuildMenu();
-            
+
             return Task.CompletedTask;
         }
 
@@ -1548,20 +1395,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
     public static class WorkspaceLayoutNames
     {
-        public const string AlignmentTool = "ALIGNMENTTOOL";
-        public const string BiblicalTerms = "BIBLICALTERMS";
-        public const string ConcordanceTool = "CONCORDANCETOOL";
-        public const string CorpusTokens = "CORPUSTOKENS";
-        public const string Dashboard = "DASHBOARD";
-        public const string Notes = "NOTES";
-        public const string Pins = "PINS";
-        //public const string ProjectDesignSurface = "PROJECTDESIGNSURFACETOOL";
-        public const string SourceContext = "SOURCECONTEXT";
-        public const string StartPage = "STARTPAGE";
-        public const string TargetContext = "TARGETCONTEXT";
-        public const string TextCollection = "TEXTCOLLECTION";
-        public const string TreeDown = "TREEDOWN";
-        public const string WordMeanings = "WORDMEANINGS";
         public const string EnhancedCorpus = "ENHANCEDCORPUS";
+
+        public const string BiblicalTerms = "BIBLICALTERMS";
+        public const string Pins = "PINS";
+        public const string TextCollection = "TEXTCOLLECTION";
+        public const string WordMeanings = "WORDMEANINGS";
     }
 }

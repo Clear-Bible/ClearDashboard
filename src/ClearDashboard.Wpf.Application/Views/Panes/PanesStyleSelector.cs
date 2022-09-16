@@ -42,41 +42,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             // ====================
             //   DOCUMENTS
             // ====================
-            //if (item is StartPageViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is AlignmentToolViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
 
             if (item is EnhancedCorpusViewModel)
             {
                 return DocumentStyle;
             }
-
-            //if (item is DashboardViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is CorpusTokensViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is TreeDownViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is ConcordanceViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
 
 
             // ====================
@@ -92,20 +62,6 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return ToolStyle;
             }
 
-            //if (item is SourceContextViewModel)
-            //{
-            //    return ToolStyle;
-            //}
-
-            //if (item is TargetContextViewModel)
-            //{
-            //    return ToolStyle;
-            //}
-
-            //if (item is NotesViewModel)
-            //{
-            //    return ToolStyle;
-            //}
 
             if (item is PinsViewModel)
             {
