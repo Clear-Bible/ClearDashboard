@@ -4,6 +4,7 @@ using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
             Assert.Single(someTranslationSetIds);
+
             Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First().translationSetId);
             Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().parallelCorpusId);
 

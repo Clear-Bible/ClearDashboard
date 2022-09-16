@@ -5,6 +5,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -30,16 +31,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
 
                 var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
+
+                // We do a ToList() here to avoid 'cannot create expression tree'
+                // errors in the VerseTokens GroupBy below
                 var tokens = ProjectDbContext.Tokens
-                    .Where(token => token.TokenizationId == request.TokenizedCorpusId.Id
-                           && token.BookNumber == bookNumberForAbbreviation);
+                    .Where(token => token.TokenizationId == request.TokenizedCorpusId.Id)
+                    .Where(token => token.BookNumber == bookNumberForAbbreviation).ToList();
 
                 if (!tokens.Any() && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
                 {
                     throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
                 }
 
-                var verseTokens = tokens.ToList()
+                // -------------------------------------------------------
+                // These queries are only needed if it is possible for a
+                // composite token to span across more than one bible book
+                var tokenCompositeIds = tokens
+                    .Where(token => token.TokenCompositeId != null)
+                    .Select(token => token.TokenCompositeId)
+                    .Distinct();
+
+                // Will mostly likely return no tokens
+                var nonBookTokensFromComposites = ProjectDbContext.Tokens
+                    .Where(token => token.TokenCompositeId != null)
+                    .Where(token => token.BookNumber != bookNumberForAbbreviation)
+                    .Where(token => tokenCompositeIds.Contains(token.TokenCompositeId)).ToList();
+
+                var allTokens = tokens
+                    .Union(nonBookTokensFromComposites)
+                    .OrderBy(token => token.EngineTokenId);
+                // -------------------------------------------------------
+
+                var verseTokens = allTokens
                     .GroupBy(t => new { t.ChapterNumber, t.VerseNumber })
                     .Select(g => new VerseTokens(
                         g.Key.ChapterNumber.ToString(),

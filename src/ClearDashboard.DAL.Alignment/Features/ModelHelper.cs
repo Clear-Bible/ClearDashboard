@@ -13,7 +13,11 @@ namespace ClearDashboard.DAL.Alignment.Features
             if (tokenComponent is Models.TokenComposite)
             {
                 var tokenComposite = (tokenComponent as Models.TokenComposite)!;
-                return new CompositeToken(tokenComposite.Tokens.Select(t => BuildToken(t)));
+
+                var ct = new CompositeToken(tokenComposite.Tokens.Select(t => BuildToken(t)));
+                ct.TokenId.Id = tokenComponent.Id;
+
+                return ct;
             }
             else
             {
@@ -29,7 +33,10 @@ namespace ClearDashboard.DAL.Alignment.Features
             if (tokenComponent is Models.TokenComposite)
             {
                 var tokenComposite = (tokenComponent as Models.TokenComposite)!;
-                return new CompositeTokenId(tokenComposite.Tokens.Select(t => BuildToken(t)));
+                return new CompositeTokenId(tokenComposite.Tokens.Select(t => BuildToken(t)))
+                {
+                    Id = tokenComponent.Id
+                };
             }
             else
             {
@@ -39,10 +46,13 @@ namespace ClearDashboard.DAL.Alignment.Features
                     token.ChapterNumber,
                     token.VerseNumber,
                     token.WordNumber,
-                    token.SubwordNumber);
+                    token.SubwordNumber)
+                {
+                    Id = tokenComponent.Id
+                };
             }
         }
-        public static bool IsTokenIdMatch(TokenId tokenId, Models.Token dbToken)
+        public static bool IsTokenIdLocationMatch(TokenId tokenId, Models.Token dbToken)
         {
             return (dbToken.BookNumber == tokenId.BookNumber &&
                     dbToken.ChapterNumber == tokenId.ChapterNumber &&
