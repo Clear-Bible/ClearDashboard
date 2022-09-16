@@ -47,13 +47,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         
         private bool InComingChangesStarted { get; set; }
 
-        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
+        private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
         #endregion //Member Variables
 
         #region Public Properties
 
-        public string ContentID => this.ContentID;
+        private string ContentID => this.ContentID;
 
         public bool IsRtl { get; set; }
 
@@ -106,47 +106,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-
-
-        public string? TokenizationType
-        {
-            get => _tokenizationType;
-            set => Set(ref _tokenizationType, value);
-        }
-
-        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
-        {
-            get => _currentTokenizedTextCorpus;
-            set => Set(ref _currentTokenizedTextCorpus, value);
-        }
-
-        public Visibility? ProgressBarVisibility
-        {
-            get => _progressBarVisibility;
-            set
-            {
-                _progressBarVisibility = value;
-                NotifyOfPropertyChange(() => ProgressBarVisibility);
-            }
-        }
-
-
-
-        public ObservableCollection<TokensTextRow>? Verses
-        {
-            get => _verses;
-            set => Set(ref _verses, value);
-        }
-
-
-        public string? Message
-        {
-            get => _message;
-            set => Set(ref _message, value);
-        }
-
-
-
         public BookInfo? CurrentBook
         {
             get => _currentBook;
@@ -183,8 +142,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public string? TokenizationType
+        {
+            get => _tokenizationType;
+            set => Set(ref _tokenizationType, value);
+        }
+
+        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
+        {
+            get => _currentTokenizedTextCorpus;
+            set => Set(ref _currentTokenizedTextCorpus, value);
+        }
+
+        public Visibility? ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+        public ObservableCollection<TokensTextRow>? Verses
+        {
+            get => _verses;
+            set => Set(ref _verses, value);
+        }
+
+        public string? Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
         #endregion //Observable Properties
 
+        
         #region Constructor
 
         public EnhancedCorpusViewModel()
