@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             AbbreviatedText = abbreviatedText;
         }
 
-        public async void CreateOrUpdate(CancellationToken token = default)
+        public async Task<Note> CreateOrUpdate(CancellationToken token = default)
         {            
             var command = new CreateOrUpdateNoteCommand(NoteId, Text, AbbreviatedText);
 
@@ -36,6 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             if (result.Success)
             {
                 NoteId = result.Data!;
+                return this;
             }
             else
             {
@@ -50,7 +51,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 return;
             }
 
-            var command = new DeleteNoteByNoteIdCommand(NoteId);
+            var command = new DeleteNoteAndAssociationsByNoteIdCommand(NoteId);
 
             var result = await mediator_.Send(command, token);
             if (!result.Success)

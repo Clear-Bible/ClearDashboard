@@ -98,12 +98,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             {
                                 return new TokenComposite
                                 {
+                                    Id = compositeToken.TokenId.Id,
                                     TokenizationId = tokenizationId,
                                     TrainingText = compositeToken.TrainingText,
                                     EngineTokenId = compositeToken.TokenId.ToString(),
                                     Tokens = compositeToken.GetPositionalSortedBaseTokens()
                                         .Select(childToken => new Models.Token
                                         {
+                                            Id = childToken.TokenId.Id,
                                             TokenizationId = tokenizationId,
                                             TrainingText = childToken.TrainingText,
                                             EngineTokenId = childToken.TokenId.ToString(),
@@ -120,6 +122,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             {
                                 return new Models.Token
                                 {
+                                    Id = token.TokenId.Id,
                                     TokenizationId = tokenizationId,
                                     TrainingText = token.TrainingText,
                                     EngineTokenId = token.TokenId.ToString(),
@@ -186,11 +189,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 if (tokenComponent is TokenComposite)
                 {
                     var tokenComposite = (tokenComponent as TokenComposite)!;
-                    var tokenCompositeId = await InsertTokenCompositeAsync(tokenComposite, componentCmd, cancellationToken);
+                    await InsertTokenCompositeAsync(tokenComposite, componentCmd, cancellationToken);
 
                     foreach (var token in tokenComposite.Tokens)
                     {
-                        await InsertTokenAsync(token, tokenCompositeId, componentCmd, cancellationToken);
+                        await InsertTokenAsync(token, tokenComposite.Id, componentCmd, cancellationToken);
                     }
                 }
                 else
@@ -202,9 +205,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         }
         private static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand componentCmd, CancellationToken cancellationToken)
         {
-            var id = (Guid.Empty != token.Id) ? token.Id : Guid.NewGuid();
-
-            componentCmd.Parameters["@Id"].Value = id;
+            componentCmd.Parameters["@Id"].Value = token.Id;
             componentCmd.Parameters["@EngineTokenId"].Value = token.EngineTokenId;
             componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
             componentCmd.Parameters["@TokenizationId"].Value = token.TokenizationId;
@@ -218,11 +219,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@TokenCompositeId"].Value = (tokenCompositeId != null) ? tokenCompositeId : DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
-        private static async Task<Guid> InsertTokenCompositeAsync(TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
+        private static async Task InsertTokenCompositeAsync(TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
         {
-            var id = (Guid.Empty != tokenComposite.Id) ? tokenComposite.Id : Guid.NewGuid();
-
-            componentCmd.Parameters["@Id"].Value = id;
+            componentCmd.Parameters["@Id"].Value = tokenComposite.Id;
             componentCmd.Parameters["@EngineTokenId"].Value = tokenComposite.EngineTokenId;
             componentCmd.Parameters["@TrainingText"].Value = tokenComposite.TrainingText;
             componentCmd.Parameters["@TokenizationId"].Value = tokenComposite.TokenizationId;
@@ -235,8 +234,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@SurfaceText"].Value = DBNull.Value;
             componentCmd.Parameters["@TokenCompositeId"].Value = DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-            return id;
         }
 
         private DbCommand CreateTokenizedCorpusInsertCommand()

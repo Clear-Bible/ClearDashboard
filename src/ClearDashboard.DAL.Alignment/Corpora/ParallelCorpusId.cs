@@ -1,15 +1,18 @@
-﻿
+﻿using ClearBible.Engine.Utils;
+
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public record ParallelCorpusId : BaseId
+    public class ParallelCorpusId : EntityId<ParallelCorpusId>, IEquatable<ParallelCorpusId>
     {
-        public ParallelCorpusId(Guid id) : base(id)
+        public ParallelCorpusId(Guid id)
         {
+            Id = id;
             Metadata = new Dictionary<string, object>();
         }
 
-        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId, TokenizedTextCorpusId targetTokenizedCorpusId, string? displayName, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId) : base(id)
+        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId, TokenizedTextCorpusId targetTokenizedCorpusId, string? displayName, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
         {
+            Id = id;
             SourceTokenizedCorpusId = sourceTokenizedCorpusId;
             TargetTokenizedCorpusId = targetTokenizedCorpusId;
             DisplayName = displayName;
@@ -24,20 +27,36 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public TokenizedTextCorpusId? TargetTokenizedCorpusId { get; }
         public DateTimeOffset? Created { get; }
         public UserId? UserId { get; }
-        public virtual bool Equals(ParallelCorpusId? other)
+
+        public override bool Equals(object? obj) => Equals(obj as ParallelCorpusId);
+        public bool Equals(ParallelCorpusId? other)
         {
-            if (other == null)
-                return false;
+            if (other is null) return false;
 
-            if (this.Id == other.Id)
-                return true;
-            else
+            if (!IdEquals(other)) return false;
+
+            if (SourceTokenizedCorpusId != other.SourceTokenizedCorpusId ||
+                TargetTokenizedCorpusId != other.TargetTokenizedCorpusId || 
+                DisplayName != other.DisplayName ||
+                Created != other.Created ||
+                UserId != other.UserId)
+            {
                 return false;
+            }
+
+            return Metadata.SequenceEqual(other.Metadata);
         }
-
         public override int GetHashCode()
         {
-            return this.Id.GetHashCode();
+            var mhc = 0;
+            foreach (var item in Metadata)
+            {
+                mhc ^= (item.Key, item.Value).GetHashCode();
+            }
+
+            return HashCode.Combine(Id, SourceTokenizedCorpusId, TargetTokenizedCorpusId, DisplayName, Created, UserId, mhc);
         }
+        public static bool operator ==(ParallelCorpusId? e1, ParallelCorpusId? e2) => object.Equals(e1, e2);
+        public static bool operator !=(ParallelCorpusId? e1, ParallelCorpusId? e2) => !(e1 == e2);
     }
 }

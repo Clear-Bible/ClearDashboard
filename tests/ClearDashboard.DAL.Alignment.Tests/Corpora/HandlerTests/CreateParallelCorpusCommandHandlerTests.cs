@@ -3,6 +3,7 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ using Xunit.Abstractions;
 using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 using Verse = ClearBible.Engine.Corpora.Verse;
 using SIL.Extensions;
+using SIL.Machine.Corpora;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -121,6 +124,102 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__CreateLarge_MeasurePerformance()
+    {
+        try
+        {
+            var sourceCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>()
+                .Create(Mediator!, sourceCorpus.CorpusId, "Big Source", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            Output.WriteLine("Created source tokenized corpus");
+
+            var targetCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 2",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>()
+                .Create(Mediator!, targetCorpus.CorpusId, "Big Target", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            Output.WriteLine("Created target tokenized corpus");
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            Output.WriteLine("Created engine parallel text corpus");
+
+            var someSourceTokens = ProjectDbContext!.Tokens
+                .Where(tc => tc.TokenizationId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(50)
+                .ToList();
+
+            var someTargetTokens = ProjectDbContext!.Tokens
+                .Where(tc => tc.TokenizationId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Skip(50)
+                .Take(50)
+                .ToList();
+
+            int vmi = 0;
+            parallelTextCorpus.VerseMappingList =
+                parallelTextCorpus.VerseMappingList!.Take(5).Select(vm =>
+                {
+                    vmi++;
+                    int svi = 0, tvi = 0;
+                    return new VerseMapping(
+                        vm.SourceVerses.Select(v =>
+                        {
+                            svi++;
+                            return new Verse(v.Book, v.ChapterNum, v.VerseNum, someSourceTokens.Skip(vmi * svi * 3).Take(vmi)
+                                .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber)
+                                    {
+                                        Id = t.Id
+                                    }
+                                ));
+                        }).ToList(),
+                        vm.TargetVerses.Select(v =>
+                        {
+                            tvi++;
+                            return new Verse(v.Book, v.ChapterNum, v.VerseNum, someTargetTokens.Skip(vmi * tvi * 4).Take(vmi)
+                                .Select(t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber)
+                                {
+                                    Id = t.Id
+                                }
+                                ));
+                        }).ToList()
+                    ); ;
+                }).ToList();
+
+            Output.WriteLine("Added tokens to verse mapping list");
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+
+            proc.Refresh();
+            Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0}", sw.Elapsed);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
     public async void ParallelCorpus__CreateUsingHandler()
     {
         try
@@ -170,9 +269,9 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                 .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id);
 
             var sourceTokenGuidIds = sourceTokenizedCorpus.Tokens
-                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber) { Id = t.Id });
             var targetTokenGuidIds = targetTokenizedCorpus.Tokens
-                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber) { Id = t.Id });
 
             Assert.True(sourceTokenGuidIds.Keys.Count > 50);
             Assert.True(targetTokenGuidIds.Keys.Count > 50);
