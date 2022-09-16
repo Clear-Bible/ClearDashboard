@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -8,7 +12,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// Interaction logic for BookChapterVerse.xaml
     /// </summary>
-    public partial class BcvUserControl : UserControl
+    public partial class BcvUserControl : UserControl, INotifyPropertyChanged
     {
         #region Member Variables
 
@@ -47,17 +51,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (BookChapterVerseViewModel)GetValue(_currentBcv);
             set => SetValue(_currentBcv, value);
         }
+        
+
+        public static readonly DependencyProperty _isControlEnabled =
+            DependencyProperty.Register("IsControlEnabled", typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true));
+
+        public bool IsControlEnabled
+        {
+            get => (bool)GetValue(_isControlEnabled);
+            set => SetValue(_isControlEnabled, value);
+        }
+
+        public static readonly DependencyProperty _showOffsetControl =
+            DependencyProperty.Register("ShowOffsetControl", typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true));
+
+        public bool ShowOffsetControl
+        {
+            get => (bool)GetValue(_showOffsetControl);
+            set => SetValue(_showOffsetControl, value);
+        }
 
 
-        //public static readonly DependencyProperty _bookNames =
-        //    DependencyProperty.Register("BookNames", typeof(ObservableCollection<string>), typeof(BcvUserControl),
-        //    new PropertyMetadata(new ObservableCollection<string>()));
+        public static readonly DependencyProperty _verseRange =
+            DependencyProperty.Register("VerseRange", typeof(int), typeof(BcvUserControl),
+                new PropertyMetadata(1));
 
-        //public ObservableCollection<string> BookNames
-        //{
-        //    get => (ObservableCollection<string>)GetValue(_bookNames);
-        //    set => SetValue(_bookNames, value);
-        //}
+        public int VerseRange
+        {
+            get => (int)GetValue(_verseRange);
+            set => SetValue(_verseRange, value);
+        }
+
 
         #endregion
 
@@ -164,6 +190,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ChapterDownArrow_Click(null, null);
                 CboVerse.SelectedIndex = 0;
             }
+        }
+
+        
+
+        // Declare the event
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Create the OnPropertyChanged method to raise the event
+        // The calling member's name will be used as the parameter.
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         #endregion

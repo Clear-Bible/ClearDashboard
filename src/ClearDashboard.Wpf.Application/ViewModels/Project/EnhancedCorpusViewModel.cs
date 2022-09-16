@@ -69,7 +69,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private int _verseRange = 0;
+        private int _verseRange = 1;
         public int VerseRange
         {
             get => _verseRange;
