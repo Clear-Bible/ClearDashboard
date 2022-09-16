@@ -905,7 +905,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
             TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplay.HasNote) ? Visibility.Visible : Visibility.Hidden;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplay.SurfaceText : TokenDisplay.SurfaceText.Trim();
             TargetTranslationText = TokenDisplay.TargetTranslationText;

@@ -37,6 +37,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="130" />
         </Grid.RowDefinitions>
 
@@ -89,9 +90,17 @@
                                    "
                                    />
 
-        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <userControls:LabelsDisplayControl Grid.Row="2" 
+                                           Labels="{Binding SampleLabels}" 
+                                           LabelBackground="BlanchedAlmond"
+                                           LabelMargin="3,0"
+                                           LabelPadding="10,5"
+                                           LabelCornerRadius="10"
+                                           FontSize="11"/>
 
-        <Grid Grid.Row="3">
+        <Label Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
