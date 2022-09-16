@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             Text = text;
         }
 
-        public async void CreateOrUpdate(CancellationToken token = default)
+        public async Task<Label> CreateOrUpdate(CancellationToken token = default)
         {            
             var command = new CreateOrUpdateLabelCommand(LabelId, Text);
 
@@ -34,6 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             if (result.Success)
             {
                 LabelId = result.Data!;
+                return this;
             }
             else
             {
@@ -48,10 +49,27 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 return;
             }
 
-            var command = new DeleteLabelByLabelIdCommand(LabelId);
+            var command = new DeleteLabelAndAssociationsByLabelIdCommand(LabelId);
 
             var result = await mediator_.Send(command, token);
             if (!result.Success)
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<Label> Get(
+            IMediator mediator,
+            LabelId labelId)
+        {
+            var command = new GetLabelByLabelIdQuery(labelId);
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
             {
                 throw new MediatorErrorEngineException(result.Message);
             }

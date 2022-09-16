@@ -291,10 +291,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     NoteId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DomainEntityIdString = table.Column<string>(type: "TEXT", nullable: true),
-                    DomainEntityIdTypeString = table.Column<string>(type: "TEXT", nullable: true),
-                    DomainSubEntityIdString = table.Column<string>(type: "TEXT", nullable: true),
-                    DomainSubEntityIdTypeString = table.Column<string>(type: "TEXT", nullable: true)
+                    DomainEntityIdGuid = table.Column<Guid>(type: "TEXT", nullable: true),
+                    DomainEntityIdName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
