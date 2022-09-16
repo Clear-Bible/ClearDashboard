@@ -28,6 +28,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
 using System.Windows.Controls;
 using DockingManager = AvalonDock.DockingManager;
 
@@ -355,7 +356,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedMember.Global
         public MainViewModel()
         {
-
+            // no-op for design time support
         }
 
 
@@ -1121,7 +1122,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.Content = obj.vm;
                             windowPane.Title = obj.title;
                             windowPane.IsActive = true;
-                            
+
                             // set where it will doc on layout
                             if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                             {
@@ -1351,6 +1352,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <exception cref="NotImplementedException"></exception>
         public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
+
+            // the user wants to add to the currently active window
+            if (message.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>();
+                //.SingleOrDefault(a =>
+                //{
+                //    if (a.ContentId is not null)
+                //    {
+                //        Debug.WriteLine(a.ContentId);
+                //        return a.ContentId.ToUpper() == windowTag.ToUpper();
+                //    }
+                //    return false;
+                //});
+
+                if (dockableWindows.Count() == 1)
+                {
+                    // there is only one doc window open, so we can just add to it
+                    var enhancedCorpusViewModels =
+                        Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel));
+
+                    
+                }
+
+                foreach (var document in dockableWindows)
+                {
+
+                }
+            }
+
+
+
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 

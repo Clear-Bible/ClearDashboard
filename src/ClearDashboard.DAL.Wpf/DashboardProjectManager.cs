@@ -22,7 +22,7 @@ using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType, Guid CorpusId, Guid TokenizedTextCorpusId);
+public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType, Guid CorpusId, Guid TokenizedTextCorpusId, bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
 
