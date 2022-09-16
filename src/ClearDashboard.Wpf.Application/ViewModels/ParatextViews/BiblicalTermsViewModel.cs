@@ -503,7 +503,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
-            DockSide = EDockSide.Left;
+            DockSide = EDockSide.Bottom;
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
