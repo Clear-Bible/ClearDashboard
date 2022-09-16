@@ -1538,10 +1538,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
-
-
-            CorpusTokensViewModel viewModel = IoC.Get<CorpusTokensViewModel>();
-
+            EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
+            viewModel.CurrentCorpusName = message.ProjectName;
+            viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
+            
             var windowDockable = new LayoutDocument
             {
                 ContentId = paratextId
