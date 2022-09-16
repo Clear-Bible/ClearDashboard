@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.Events
 {
     public class TokenEventArgs : RoutedEventArgs
     {
