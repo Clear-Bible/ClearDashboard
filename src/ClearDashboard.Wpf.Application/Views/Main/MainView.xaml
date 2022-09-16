@@ -80,11 +80,11 @@
                 </Menu.ItemTemplate>
             </Menu>
 
-            <userControls:BcvUserControl
+            <!--<userControls:BcvUserControl
                 Grid.Column="2"
                 CurrentBcv="{Binding CurrentBcv}"
                 IsRtl="{Binding IsRtl}"
-                ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
         </Grid>
 
         <Grid Grid.Row="1">

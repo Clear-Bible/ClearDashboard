@@ -34,7 +34,6 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
-
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -120,7 +119,7 @@
         <Border
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            Background="{DynamicResource MaterialDesignPaper}"
+            Background="{StaticResource MaterialDesignPaper}"
             BorderBrush="{StaticResource PrimaryHueMidBrush}"
             BorderThickness="1"
             CornerRadius="1">
@@ -151,7 +150,7 @@
                     <TextBlock
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
-                        Foreground="{DynamicResource PrimaryHueMidBrush}">
+                        Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
                         <Run Text="{helpers:Localization ShellView_User}" />
                     </TextBlock>
@@ -185,7 +184,7 @@
                         SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
                     <Border
-                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                        BorderBrush="{StaticResource PrimaryHueMidBrush}"
                         BorderThickness="1"
                         CornerRadius="3"
                         Visibility="Hidden">
@@ -228,18 +227,6 @@
                         </Grid>
                     </Border>
 
-                    <Button
-                        x:Name="ShowColorStyles"
-                        Width="110"
-                        Height="25"
-                        Margin="8,0,20,0"
-                        Style="{StaticResource GreenLightButton}"
-                        ToolTip="This button only shows up in Debug mode"
-                        Visibility="Collapsed">
-                        ColorStyles
-                    </Button>
-                    <!--  Visibility="{x:Static helpers:DebugVisibility.DebugOnly}"  -->
-
                     <userControls:TimerUserControl
                         x:Name="TimerControl"
                         VerticalAlignment="Top"
@@ -266,8 +253,8 @@
             Margin="5,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Background="{DynamicResource MaterialDesignPaper}"
-            BorderBrush="{DynamicResource SecondaryHueMidBrush}"
+            Background="{StaticResource MaterialDesignPaper}"
+            BorderBrush="{StaticResource SecondaryHueMidBrush}"
             BorderThickness="2"
             CornerRadius="3"
             Visibility="{Binding ShowTaskView}">
@@ -314,7 +301,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{DynamicResource PrimaryHueDarkBrush}" BorderThickness="1">
+                            <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
 
                                     <!--  ISCOMPLETED ICON  -->
@@ -349,7 +336,7 @@
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
 
-
+                                    <!--  Cancel Task Button  -->
                                     <Button
                                         Width="20"
                                         Height="20"
