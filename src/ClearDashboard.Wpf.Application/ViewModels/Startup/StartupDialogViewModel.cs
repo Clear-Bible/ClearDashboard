@@ -9,17 +9,26 @@ using System.Threading.Tasks;
 using ClearApplicationFoundation.Exceptions;
 using System.Linq;
 using ClearApplicationFoundation.Extensions;
+using System;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class StartupDialogViewModel : WorkflowShellViewModel, IStartupDialog
     {
+        private readonly DashboardProjectManager _projectManager;
+        public bool MimicParatextConnection { get; set; }
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager) 
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            _projectManager = projectManager;
             CanOk = true;
             DisplayName = "Startup Dialog";
         }
+
+        public StartupDialogViewModel() { }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -37,14 +46,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             CurrentStep = Steps![0];
             IsLastWorkflowStep = (Steps.Count == 1);
-
             EnableControls = true;
             await ActivateItemAsync(Steps[0], cancellationToken);
 
+            if (MimicParatextConnection)
+            {
+                var vm = Steps[0] as ProjectPickerViewModel;
+                vm.Connected = true;
+            }
+
             await base.OnInitializeAsync(cancellationToken);
         }
-
-
+        
         public bool CanCancel => true /* can always cancel */;
         public async void Cancel()
         {

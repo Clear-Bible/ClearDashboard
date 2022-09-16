@@ -160,7 +160,7 @@ public class DashboardProjectManager : ProjectManager
     }
 
 
-    protected  async Task PublishSignalRConnected(bool connected)
+    protected async Task PublishSignalRConnected(bool connected)
     {
         await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
     }

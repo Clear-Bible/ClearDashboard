@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
-using ClearApplicationFoundation.Framework;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -16,7 +15,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
 
 
