@@ -11,6 +11,11 @@
              x:Name="TextDisplay">
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="Auto">
+        <StackPanel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Create Note" Click="OnCreateNote"></MenuItem>
+            </ContextMenu>
+        </StackPanel.ContextMenu>
         <Button x:Name="TokenButton"
                 Background="Transparent" 
                 Foreground="{DynamicResource MaterialDesignBody}" 

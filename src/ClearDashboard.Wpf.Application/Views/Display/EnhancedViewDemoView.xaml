@@ -84,7 +84,8 @@
                                                        [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
                                                        [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
                                                        [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)]
+                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];
+                                                       [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
 

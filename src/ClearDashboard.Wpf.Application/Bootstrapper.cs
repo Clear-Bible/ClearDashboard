@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
 
@@ -87,7 +88,9 @@ namespace ClearDashboard.Wpf.Application
 
         protected override async Task NavigateToMainWindow()
         {
-            await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
+            EnsureApplicationMainWindowVisible();
+            NavigateToViewModel<EnhancedViewDemoViewModel>();
+            //await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 
         protected override void RestoreMainWindowState()

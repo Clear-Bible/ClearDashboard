@@ -37,6 +37,7 @@
                 NoteLeftButtonDown="OnNoteLeftButtonDown" NoteLeftButtonUp="OnNoteLeftButtonUp"
                 NoteRightButtonDown="OnNoteRightButtonDown" NoteRightButtonUp="OnNoteRightButtonUp" 
                 NoteMouseEnter="OnNoteMouseEnter" NoteMouseLeave="OnNoteMouseLeave" NoteMouseWheel="OnNoteMouseWheel"
+                NoteCreate="OnNoteCreate"
                 />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="WrapPanelTemplate">

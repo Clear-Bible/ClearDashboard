@@ -94,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.TokenDisplay.HasNote)
             {
-                DisplayNote(e);
+                DisplayNote(e.TokenDisplay);
             }
 
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
@@ -185,6 +185,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteCreate(NoteEventArgs e)
+        {
+            DisplayNote(e.TokenDisplay);
         }
 
         public void TranslationApplied(TranslationEventArgs e)
@@ -335,10 +340,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-        private void DisplayNote(TokenEventArgs e)
+        private void DisplayNote(TokenDisplay tokenDisplay)
         {
             NoteControlVisibility = Visibility.Visible;
-            CurrentTokenDisplay = e.TokenDisplay;
+            CurrentTokenDisplay = tokenDisplay;
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
