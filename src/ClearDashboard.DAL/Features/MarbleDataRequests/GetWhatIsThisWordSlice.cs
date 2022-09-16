@@ -192,11 +192,19 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                             try
                             {
-                                Debug.WriteLine(xmlSnippet);
+                                //Debug.WriteLine(xmlSnippet);
                                 foreach (XmlNode node in nodeList)
                                 {
                                     string senseID = node.Attributes["Id"].Value;
-                                    senseID = senseID.Substring(9, 3);
+                                    if (senseID.Length>9)
+                                    {
+                                        senseID = senseID.Substring(9, 3);
+                                    }
+                                    else
+                                    {
+                                        senseID = "0";
+                                    }
+                                    
 
                                     int iSenseID = Convert.ToInt32(senseID);
                                     int ilinkSenseID = Convert.ToInt32(lexicalLink.SenseID);
