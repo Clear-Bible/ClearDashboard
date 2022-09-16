@@ -281,9 +281,4 @@
     </Page>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\DesignSurface\" />
-    <Folder Include="Views\PopUps\" />
-  </ItemGroup>
-
 </Project>
