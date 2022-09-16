@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -29,7 +30,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Padding="8" Background="{StaticResource MahApps.Brushes.Accent}">
+        <!--<Border Padding="8" Background="{StaticResource MahApps.Brushes.Accent}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -44,7 +45,70 @@
                     ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ShowOffsetControl="True" />
             </Grid>
-        </Border>
+        </Border>-->
+
+
+        <materialDesign:DrawerHost
+            x:Name="DrawerHost"
+            Grid.Row="0"
+            VerticalAlignment="Center"
+            Background="{StaticResource MahApps.Brushes.Accent}"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="2">
+            <materialDesign:DrawerHost.Style>
+                <Style BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}" TargetType="materialDesign:DrawerHost">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=BackgroundToggle}" Value="True">
+                            <Setter Property="OverlayBackground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </materialDesign:DrawerHost.Style>
+            <materialDesign:DrawerHost.TopDrawerContent>
+                <StackPanel
+                    Margin="160"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+
+                    <Button
+                        Margin="4"
+                        VerticalAlignment="Center"
+                        Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                        CommandParameter="{x:Static Dock.Top}"
+                        Content="CLOSE THIS"
+                        Style="{DynamicResource MaterialDesignFlatButton}" />
+                </StackPanel>
+            </materialDesign:DrawerHost.TopDrawerContent>
+
+            <Grid Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Margin="4 4 4 4"
+                    Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="{x:Static Dock.Top}"
+                    Content="{materialDesign:PackIcon Kind=Tune}"
+                    ToolTip="Show the Enhanced View Controls" />
+
+                <userControls:BcvUserControl
+                    Grid.Column="1"
+                    Margin="50,0,0,0"
+                    CurrentBcv="{Binding CurrentBcv}"
+                    IsControlEnabled="True"
+                    IsRtl="{Binding IsRtl}"
+                    ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ShowOffsetControl="True" />
+            </Grid>
+        </materialDesign:DrawerHost>
+
+
+
+
+
 
 
         <Grid Grid.Row="1">
