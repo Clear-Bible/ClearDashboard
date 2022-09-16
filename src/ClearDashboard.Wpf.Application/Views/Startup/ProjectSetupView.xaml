@@ -31,52 +31,6 @@
             <Setter Property="Margin" Value="20,10" />
             <Setter Property="FontSize" Value="24" />
         </Style>
-
-        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Height" Value="50" />
-            <Setter Property="Width" Value="100" />
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border>
-                            <Border.Style>
-                                <Style TargetType="{x:Type Border}">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="LightGray" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Background" Value="#EEEBEB" />
-                                        </Trigger>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Background" Value="Transparent" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <Grid
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Background="Transparent">
-                                <ContentPresenter />
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="1" />
-                    <Setter Property="Foreground" Value="Gray" />
-                    <Setter Property="Background" Value="LightGray" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
     </UserControl.Resources>
 
     <Grid>
@@ -143,13 +97,12 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding EnableControls}"
-                Style="{StaticResource TransparentStyle}">
-                </Button>
+                Style="{StaticResource TransparentStyle}" />
             <Button
                 x:Name="Create"
-                Content="{helpers:Localization Create}" 
+                Content="{helpers:Localization Create}"
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
+                Style="{StaticResource TransparentStyle}" />
         </StackPanel>
 
     </Grid>

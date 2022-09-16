@@ -136,11 +136,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 
                 Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
                 NotifyOfPropertyChange(() => SelectedLanguage);
+
+                SendUiLanguageChangeMessage(language);
             }
         }
-
-
-
 
         private static void SaveUserLanguage(string language)
         {
@@ -465,6 +464,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }));
         }
 
+        private async Task SendUiLanguageChangeMessage(string language)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+        }
+
         #endregion
 
 
@@ -477,7 +481,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
         {
-            ParatextUserName = message.user.FullName;
+            ParatextUserName = message.User.FullName;
             await Task.CompletedTask;
         }
 

@@ -1,7 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -51,6 +53,21 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return DocumentStyle;
             }
 
+            if (item is EnhancedCorpusViewModel)
+            {
+                return DocumentStyle;
+            }
+
+            if (item is DashboardViewModel)
+            {
+                return DocumentStyle;
+            }
+
+            if (item is CorpusTokensViewModel)
+            {
+                return DocumentStyle;
+            }
+
             //if (item is TreeDownViewModel)
             //{
             //    return DocumentStyle;
@@ -61,10 +78,7 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             //    return DocumentStyle;
             //}
 
-            //if (item is DashboardViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
+
 
             // ====================
             //   TOOLS

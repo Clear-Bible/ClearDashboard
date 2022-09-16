@@ -2,7 +2,6 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
@@ -18,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChanagedMessage>
+    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChangedMessage>
     {
 
         #region events
@@ -114,8 +113,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-        private ObservableCollection<NodeMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<NodeMenuItemViewModel> MenuItems
+        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
+        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
         {
             get => _menuItems;
             set
@@ -286,11 +285,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                 if (_isSelected)
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(this));
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(this));
                 }
                 else
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(null));
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(null));
                 }
             }
         }
@@ -345,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-        public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(ConnectionSelectedChangedMessage message, CancellationToken cancellationToken)
         {
             var connection = message.ConnectorId;
 

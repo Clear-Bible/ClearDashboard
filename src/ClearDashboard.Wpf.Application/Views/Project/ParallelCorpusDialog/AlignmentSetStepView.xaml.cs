@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views.Display
+namespace ClearDashboard.Wpf.Application.Views.Project.ParallelCorpusDialog
 {
-    public partial class TranslationDemoView : Page
+    /// <summary>
+    /// Interaction logic for AlignmentSetStepView.xaml
+    /// </summary>
+    public partial class AlignmentSetStepView : UserControl
     {
-
-        public TranslationDemoView()
+        public AlignmentSetStepView()
         {
             InitializeComponent();
         }

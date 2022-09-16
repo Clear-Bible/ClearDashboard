@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 
@@ -45,5 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string TranslationState => Translation?.TranslationOriginatedFrom;
 
         public string? Note { get; set; }
+
+        public bool HasNote => !String.IsNullOrEmpty(Note);
     }
 }

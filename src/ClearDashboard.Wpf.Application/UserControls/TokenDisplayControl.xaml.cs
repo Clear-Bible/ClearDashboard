@@ -4,206 +4,279 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a single <see cref="Token"/> alongside a <see cref="Translation"/>.
+    /// A control for displaying a single <see cref="Token"/> alongside a possible <see cref="Translation"/>
+    /// and possible note indicator.
     /// </summary>
-    public partial class TranslationDisplayControl : UserControl
+    public partial class TokenDisplayControl
     {
+        #region Static DependencyProperties
+
+        /// <summary>
+        /// Identifies the Orientation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplayControl),
+            new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
+        
+        /// <summary>
+        /// Identifies the TokenMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register("TokenMargin", typeof(Thickness), typeof(TokenDisplayControl),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the HorizontalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(5d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(4d, OnLayoutChanged));
+
+
+        /// <summary>
+        /// Identifies the NoteIndicatorMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register("NoteIndicatorMargin", typeof(Thickness), typeof(TokenDisplayControl),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(3d, OnLayoutChanged));
+        
+        /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(TokenDisplayControl),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the TranslationMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register("TranslationMargin", typeof(Thickness), typeof(TokenDisplayControl),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TranslationVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(10d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(TokenDisplayControl),
+            new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplayControl),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the ShowTranslation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TokenDisplayControl),
+            new PropertyMetadata(true, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register("TranslationVisibility", typeof(Visibility), typeof(TokenDisplayControl),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// Identifies the ShowNoteIndicator dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TokenDisplayControl),
+            new PropertyMetadata(true, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplayControl),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// Identifies the SurfaceText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplayControl));
+
+        /// <summary>
+        /// Identifies the TargetTranslationText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register("TargetTranslationText", typeof(string), typeof(TokenDisplayControl));
+
+        /// <summary>
+        /// Identifies the TranslationColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register("TranslationColor", typeof(Brush), typeof(TokenDisplayControl));
+
+        #endregion Static DependencyProperties
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the TranslationMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         /// <summary>
         /// Identifies the NoteMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationDisplayControl));
+            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
         #endregion Static RoutedEvents
-        #region Static DependencyProperties
-
-        /// <summary>
-        /// Identifies the InnerMargin dependency property.
-        /// </summary>
-        public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(TranslationDisplayControl),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the TranslationInnerPadding dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationInnerPaddingProperty = DependencyProperty.Register("TranslationInnerPadding", typeof(Thickness), typeof(TranslationDisplayControl),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the TranslationFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TranslationDisplayControl),
-            new PropertyMetadata(16d));
-
-        /// <summary>
-        /// Identifies the TranslationVerticalSpacing dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TranslationDisplayControl),
-            new PropertyMetadata(10d, new PropertyChangedCallback(OnTransactionVerticalSpacingChanged)));
-
-        /// <summary>
-        /// Callback handler for changes to the TranslationVerticalSpacing dependency property: when this property changes, recalculate the inner padding for the translation.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnTransactionVerticalSpacingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (TranslationDisplayControl)obj;
-            control.CalculateTranslationInnerPadding((double) args.NewValue);
-        }
-
-        #endregion Static DependencyProperties
-        #region Public events
+        #region Public Events
         /// <summary>
         /// Occurs when an individual token is clicked.
         /// </summary>
@@ -430,7 +503,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
-        #region Event Handlers
+        #region Private Event Handlers
+        /// <summary>
+        /// Callback handler for changes to the dependency properties that affect the layout.
+        /// </summary>
+        /// <param name="obj">The object whose layout has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnLayoutChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var control = (TokenDisplayControl)obj;
+            control.CalculateLayout();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateLayout();
+        }
+
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -493,6 +582,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
+                TokenDisplay = tokenDisplay,
                 Translation = tokenDisplay?.Translation
             });
         }
@@ -586,20 +676,74 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(NoteMouseWheelEvent, e);
         }
         #endregion
-        
+
         /// <summary>
-        /// Gets or sets the margin around each word for text display.
+        /// Gets or sets the orientation for displaying the token.
         /// </summary>
-        public Thickness InnerMargin
+        /// <remarks>
+        /// Regardless of the value of this property, the token and its translation are still displayed in a vertical orientation.
+        /// This is only relevant for determining whether leading whitespace should be trimmed prior to display.
+        /// </remarks>
+        public Orientation Orientation
         {
-            get
-            {
-                var result = GetValue(InnerMarginProperty);
-                return (Thickness) result;
-            }
-            set => SetValue(InnerMarginProperty, value);
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the margin around each token for display.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness TokenMargin
+        {
+            get => (Thickness) GetValue(TokenMarginProperty);
+            set => SetValue(TokenMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the note indicator.
+        /// </summary>
+        public double NoteIndicatorHeight
+        {
+            get => (double)GetValue(NoteIndicatorHeightProperty);
+            set => SetValue(NoteIndicatorHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin around the note indicator.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness NoteIndicatorMargin
+        {
+            get => (Thickness) GetValue(NoteIndicatorMarginProperty);
+            set => SetValue(NoteIndicatorMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal spacing between translations.
+        /// </summary>
+        /// <remarks>
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// </remarks>
+        public double HorizontalSpacing
+        {
+            get => (double)GetValue(HorizontalSpacingProperty);
+            set => SetValue(HorizontalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the token.
+        /// </summary>
+        public double TokenVerticalSpacing
+        {
+            get => (double)GetValue(TokenVerticalSpacingProperty);
+            set => SetValue(TokenVerticalSpacingProperty, value);
+        }
+        
         /// <summary>
         /// Gets or sets the font size for the translation.
         /// </summary>
@@ -610,21 +754,80 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing between the token and its translation.
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// </summary>
+        public HorizontalAlignment TranslationAlignment
+        {
+            get => (HorizontalAlignment) GetValue(HorizontalAlignmentProperty);
+            set => SetValue(HorizontalAlignmentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal spacing between translations.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the translation horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness TranslationMargin
+        {
+            get => (Thickness) GetValue(TranslationMarginProperty);
+            set => SetValue(TranslationMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the translation.
         /// </summary>
         public double TranslationVerticalSpacing
         {
-            get => (double) GetValue(TranslationVerticalSpacingProperty);
+            get => (double)GetValue(TranslationVerticalSpacingProperty);
             set => SetValue(TranslationVerticalSpacingProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the vertical spacing between the token and its translation.
+        /// Gets or sets the whether to showTranslation the translation.
         /// </summary>
-        public Thickness TranslationInnerPadding
+        public bool ShowTranslation
         {
-            get => (Thickness) GetValue(TranslationInnerPaddingProperty);
-            set => SetValue(TranslationInnerPaddingProperty, value);
+            get => (bool) GetValue(ShowTranslationProperty);
+            set => SetValue(ShowTranslationProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the translation.
+        /// </summary>
+        /// <remarks>This should normally not be called; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
+        public Visibility TranslationVisibility
+        {
+            get => (Visibility) GetValue(TranslationVisibilityProperty);
+            set => SetValue(TranslationVisibilityProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the whether to showTranslation the note indicator.
+        /// </summary>
+        public bool ShowNoteIndicator
+        {
+            get => (bool) GetValue(ShowNoteIndicatorProperty);
+            set => SetValue(ShowNoteIndicatorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator.
+        /// </summary>
+        /// <remarks>This should normally not be called directly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        public Visibility NoteIndicatorVisibility
+        {
+            get => (Visibility) GetValue(NoteIndicatorVisibilityProperty);
+            set => SetValue(NoteIndicatorVisibilityProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
+        /// </summary>
+        public Brush NoteIndicatorColor
+        {
+            get => (Brush) GetValue(NoteIndicatorColorProperty);
+            set => SetValue(NoteIndicatorColorProperty, value);
         }
 
         /// <summary>
@@ -633,71 +836,79 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
 
         /// <summary>
-        /// Gets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
         /// </summary>
         /// <remarks>
-        /// Words in red come from a translation model generated from SMT, e.g. IBM4.
-        /// Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
-        /// Words in black were set by the user.
+        /// This should normally not be set directly; the value is based on the TranslationState:
+        ///   * Words in red come from a translation model generated from SMT, e.g. IBM4.
+        ///   * Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
+        ///   * Words in black were set by the user.
         /// </remarks>
         public Brush TranslationColor
         {
-            get
-            {
-                return TokenDisplay.TranslationState switch
-                {
-                    "FromTranslationModel" => Brushes.Red,
-                    "FromOther" => Brushes.Blue,
-                    _ => Brushes.Black
-                };
-            }
+            get => (Brush)GetValue(TranslationColorProperty);
+            set => SetValue(TranslationColorProperty, value);
         }
 
         /// <summary>
-        /// Gets the surface text to be displayed.
+        /// Gets or sets the surface text to be displayed.
         /// </summary>
-        public string SurfaceText => TokenDisplay.SurfaceText;
-
-        /// <summary>
-        /// Gets the target translation text.
-        /// </summary>
-        public string TargetTranslationText => TokenDisplay.TargetTranslationText;
-
-        /// <summary>
-        /// Gets the visibility of the translation button.
-        /// </summary>
-        public Visibility TranslationVisibility => TokenDisplay.Translation != null ? Visibility.Visible : Visibility.Collapsed;
-
-        /// <summary>
-        /// Gets the visibility of the note indicator.
-        /// </summary>
-        public Visibility NoteVisibility => !String.IsNullOrEmpty(TokenDisplay?.Note) ? Visibility.Visible : Visibility.Hidden;
-
-        /// <summary>
-        /// Gets the inner padding of the source text button.
-        /// </summary>
-        public Thickness InnerPadding => new Thickness(TokenDisplay.PaddingBefore.Length * 10, 0, TokenDisplay.PaddingAfter.Length * 10, 0);
-
-        private void CalculateTranslationInnerPadding(double spacing)
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the orientation of the display.
+        /// </remarks>
+        public string SurfaceText
         {
-            TranslationInnerPadding = new Thickness(TokenDisplay.PaddingBefore.Length * 10,
-                spacing,
-                0,
-                spacing * 2);
+            get => (string) GetValue(SurfaceTextProperty);
+            set => SetValue(SurfaceTextProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the translation target text to be displayed.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the display properties.
+        /// </remarks>
+        public string TargetTranslationText
+        {
+            get => (string) GetValue(TargetTranslationTextProperty);
+            set => SetValue(TargetTranslationTextProperty, value);
+        }
 
-        public TranslationDisplayControl()
+        private void CalculateLayout()
+        {
+            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * HorizontalSpacing : 0;
+            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * HorizontalSpacing : 0;
+
+            TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
+            NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
+            TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
+            TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
+            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+
+            SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplay.SurfaceText : TokenDisplay.SurfaceText.Trim();
+            TargetTranslationText = TokenDisplay.TargetTranslationText;
+            TranslationColor = TokenDisplay.TranslationState switch
+            {
+                "FromTranslationModel" => Brushes.Red,
+                "FromOther" => Brushes.Blue,
+                _ => Brushes.Black
+            };
+        }
+
+        public TokenDisplayControl()
         {
             InitializeComponent();
 
-            this.Loaded += TranslationDisplayControl_Loaded;
+            HorizontalContentAlignment = HorizontalAlignment.Center;
+            var horizontalAlignmentProperty = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(Control.HorizontalContentAlignmentProperty, typeof(Control));
+            horizontalAlignmentProperty.AddValueChanged(this, OnHorizontalAlignmentChanged);
+            
+            Loaded += OnLoaded;
         }
 
-        private void TranslationDisplayControl_Loaded(object sender, RoutedEventArgs e)
+        private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)
         {
-            CalculateTranslationInnerPadding(TranslationVerticalSpacing);
+            CalculateLayout();
         }
-
     }
 }

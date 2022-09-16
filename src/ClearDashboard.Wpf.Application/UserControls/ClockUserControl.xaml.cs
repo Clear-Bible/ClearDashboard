@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -57,7 +56,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ObservableCollection<MenuItemNest> SettingsMenuItemNest = new();
 
             StringCollection SettingsStringCollection = new StringCollection();
-            SettingsStringCollection = Settings.Default.TimeZones;
+            SettingsStringCollection = Properties.Settings.Default.TimeZones;
             if (SettingsStringCollection != null)
             {
                 foreach (var group in SettingsStringCollection)
@@ -188,8 +187,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 }
             }
 
-            Settings.Default.TimeZones = settingsStringCollection;
-            Settings.Default.Save();
+            Properties.Settings.Default.TimeZones = settingsStringCollection;
+            Properties.Settings.Default.Save();
         }
 
         private void ClockRefresh(object sender, ElapsedEventArgs e)
@@ -569,7 +568,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
             if (sender is ComboBox cbox)
             {
-                cbox.Background = Brushes.CornflowerBlue;
+                cbox.Background = Brushes.White;
             }
         }
 
@@ -577,7 +576,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             if (sender is TextBox box)
             {
-                box.Foreground = Brushes.White;
+                box.Foreground = Brushes.Black;
             }
             if (sender is ComboBox cbox)
             {

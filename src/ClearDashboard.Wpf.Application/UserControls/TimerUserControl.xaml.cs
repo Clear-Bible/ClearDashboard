@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             SetAppearance();
 
-            TimerLabel.Foreground = Brushes.White;
+            TimerLabel.Foreground = Brushes.Black;
             if (_timerOn)
             {
                 PauseTimer();
@@ -115,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TimerTbx_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            TimerLabel.Foreground = Brushes.LightGray;
+            TimerLabel.Foreground = Brushes.DimGray;
             if ((TimerBox.CaretIndex != TimerBox.Text.Length) && (TimerBox.CaretIndex != 0))
             {
                 // cut and paste to end of string
@@ -187,7 +187,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TimerTbx_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            TimerLabel.Foreground = Brushes.White;
+            TimerLabel.Foreground = Brushes.Black;
             if (_secondsLeft == 0)
             {
                 //SetAppearNoTimeLeft();
@@ -223,19 +223,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void SetAppearNoTimeLeft()
         {
-            TimerBorder.Background = Brushes.Red;
+            TimerLabel.Background = Brushes.Red;
             //StartStopButton.Background = Brushes.Salmon;
         }
 
         private void SetAppearLittleTimeLeft()
         {
-            TimerBorder.Background = Brushes.OrangeRed;
+            TimerLabel.Background = Brushes.Orange;
             //StartStopButton.Background = Brushes.DarkOrange;
         }
 
         private void SetAppearMuchTimeLeft()
         {
-            TimerBorder.Background = Brushes.Transparent;
+            TimerLabel.Background = Brushes.Transparent;
             //StartStopButton.Background = Brushes.DodgerBlue;
         }
     }

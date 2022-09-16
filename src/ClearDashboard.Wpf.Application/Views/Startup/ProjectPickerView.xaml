@@ -12,6 +12,7 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Width="Auto"
     Height="635"
     MinWidth="886"
@@ -64,37 +65,6 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Height" Value="50" />
-                <Setter Property="Width" Value="100" />
-                <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border>
-                                <Border.Style>
-                                    <Style TargetType="{x:Type Border}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="LightGray" />
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="False">
-                                                <Setter Property="Background" Value="#EEEBEB" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                                <Grid Background="Transparent">
-                                    <ContentPresenter />
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -274,7 +244,7 @@
                 Padding="3"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Search recent"
+                materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">
@@ -322,10 +292,11 @@
             Grid.Row="2"
             Grid.Column="1"
             Margin="0,55,0,0">
-            <TextBlock
+            <!--  Open Recent  -->
+            <Label
                 Margin="30,0"
-                FontSize="19"
-                Text="Get started" />
+                Content="{helpers:Localization ProjectPicker_OpenRecent}"
+                FontSize="19" />
             <Button
                 x:Name="MoveForwards"
                 Width="340"
@@ -358,7 +329,6 @@
                             VerticalAlignment="Center"
                             FontWeight="Light"
                             Text="{helpers:Localization ProjectPicker_CreateLong}"
-
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </StackPanel>
@@ -373,6 +343,23 @@
             Grid.Column="0"
             Margin="10,-95,0,0"
             Orientation="Vertical">
+
+            <materialDesign:Card
+                Width="475"
+                Height="81"
+                Margin="5"
+                HorizontalAlignment="Center"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="#EEEBEB"
+                Visibility="{Binding SearchBlankVisibility}">
+                <Label
+                    Margin="15"
+                    VerticalAlignment="Center"
+                    FontSize="21">
+                    No matches.
+                </Label>
+            </materialDesign:Card>
+
             <ListView
                 x:Name="ProjectListView"
                 Height="460"
@@ -381,7 +368,8 @@
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Style="{StaticResource EmptyMaterialDesignListView}">
+                Style="{StaticResource EmptyMaterialDesignListView}"
+                Visibility="{Binding NoProjectVisibility}">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -391,7 +379,7 @@
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent"
-                            Tag="{Binding DataContext, ElementName=GridLayout}" >
+                            Tag="{Binding DataContext, ElementName=GridLayout}">
                             <materialDesign:Card.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
@@ -449,6 +437,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+
         </StackPanel>
     </Grid>
 </UserControl>

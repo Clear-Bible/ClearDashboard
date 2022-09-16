@@ -78,8 +78,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private void Initialize()
         {
-
-            this.Title = "📐 DASHBOARD";
+            Title = "📐 " + LocalizationStrings.Get("Windows_Dashboard", Logger);
             this.ContentId = "DASHBOARD";
 
             if (!_firstLoad)
@@ -112,7 +111,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public Task HandleAsync(LogActivityMessage message, CancellationToken cancellationToken)
         {
-            string shortMessage = message.message.Replace("ClearDashboard.Wpf.ViewModels.", "");
+            string shortMessage = message.Message.Replace("ClearDashboard.Wpf.ViewModels.", "");
 
             Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) {shortMessage}");
             _currentMessage++;
@@ -126,23 +125,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public Task HandleAsync(CorpusAddedMessage message, CancellationToken cancellationToken)
         {
-            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusAdded: {message.paratextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusAdded: {message.ParatextId}");
             _currentMessage++;
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(CorpusDeletedMessage message, CancellationToken cancellationToken)
         {
-            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusDeleted: {message.paratextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) CorpusDeleted: {message.ParatextId}");
             _currentMessage++;
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(ParallelCorpusAddedMessage message, CancellationToken cancellationToken)
         {
-            Messages.Insert(0, $"     --> target: {message.targetParatextId}");
-            Messages.Insert(0, $"     --> source: {message.sourceParatextId}");
-            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionAdded: ({message.connectorGuid})");
+            Messages.Insert(0, $"     --> target: {message.TargetParatextId}");
+            Messages.Insert(0, $"     --> source: {message.SourceParatextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionAdded: ({message.ConnectorGuid})");
 
             _currentMessage++;
             return Task.CompletedTask;
@@ -150,9 +149,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
         {
-            Messages.Insert(0, $"     --> target: {message.targetParatextId}");
-            Messages.Insert(0, $"     --> source: {message.sourceParatextId}");
-            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionDeleted: ({message.connectorGuid})");
+            Messages.Insert(0, $"     --> target: {message.TargetParatextId}");
+            Messages.Insert(0, $"     --> source: {message.SourceParatextId}");
+            Messages.Insert(0, $"{_currentMessage} - ({DateTime.Now.ToString("t")}) ConnectionDeleted: ({message.ConnectorGuid})");
 
             _currentMessage++;
             return Task.CompletedTask;

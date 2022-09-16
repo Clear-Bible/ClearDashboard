@@ -1,26 +1,26 @@
 ﻿<Page
     x:Class="ClearDashboard.Wpf.Application.Views.Main.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:cm="http://caliburnmicro.com"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="http://schemas.xceed.com/wpf/xaml/avalondock"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
-    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
-    xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
-    xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
     xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
+    xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -103,13 +103,13 @@
                 IsExpanded="True"
                 Style="{StaticResource LeftExpander}">
                 <controls:SidebarExpander.Header>
+                    <!--  Project Design Surface  -->
                     <TextBlock
                         BaselineOffset="100"
                         FontWeight="Bold"
-                        Text="Project Design Surface"
+                        Text="{helpers:Localization Pds_ProjectDesignSurface}"
                         TextAlignment="Center"
-                        TextOptions.TextFormattingMode="Ideal"
-                     >
+                        TextOptions.TextFormattingMode="Ideal">
                         <TextBlock.LayoutTransform>
                             <RotateTransform Angle="270" />
                         </TextBlock.LayoutTransform>

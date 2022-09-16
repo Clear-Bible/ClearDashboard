@@ -501,8 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-
-            Title = "🕮 BIBLICAL TERMS";
+            Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Left;
             _cancellationTokenSource = new CancellationTokenSource();

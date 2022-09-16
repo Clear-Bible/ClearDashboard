@@ -22,8 +22,9 @@ using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
+public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType, Guid CorpusId, Guid TokenizedTextCorpusId);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
+public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
 
@@ -35,22 +36,22 @@ public record TextCollectionChangedMessage(List<TextCollection> TextCollections)
 
 public record ParatextConnectedMessage(bool Connected);
 
-public record UserMessage(User user);
+public record UserMessage(User User);
 
-public record LogActivityMessage(string message);
+public record LogActivityMessage(string Message);
 
 
 #region ProjectDesignSurfaceMessages
-public record NodeSelectedChanagedMessage(object Node);
-public record ConnectionSelectedChanagedMessage(Guid ConnectorId);
-public record CorpusAddedMessage(string paratextId);
-public record CorpusDeletedMessage(string paratextId);
-public record CorpusSelectedMessage(string paratextId);
-public record CorpusDeselectedMessage(string paratextId);
-public record ParallelCorpusAddedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
-public record ParallelCorpusDeletedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
-public record ParallelCorpusSelectedMessage(string sourceParatextId, string targetParatextId, Guid connectorGuid);
-public record ParallelCorpusDeselectedMessage(Guid connectorGuid);
+public record NodeSelectedChangedMessage(object Node);
+public record ConnectionSelectedChangedMessage(Guid ConnectorId);
+public record CorpusAddedMessage(string ParatextId);
+public record CorpusDeletedMessage(string ParatextId);
+public record CorpusSelectedMessage(string ParatextId);
+public record CorpusDeselectedMessage(string ParatextId);
+public record ParallelCorpusAddedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
+public record ParallelCorpusDeletedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
+public record ParallelCorpusSelectedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
+public record ParallelCorpusDeselectedMessage(Guid ConnectorGuid);
 
 #endregion //ProjectDesignSurfaceMessages
 

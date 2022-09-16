@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            this.Title = "⳼ ALIGNMENT TOOL";
+            this.Title = "⳼ " + LocalizationStrings.Get("Windows_AlignmentTool", Logger);
             this.ContentId = "ALIGNMENTTOOL";
         }
 
