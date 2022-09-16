@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,180 +13,186 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Reporting;
 using Unidecode.NET;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
-    #nullable disable
+#nullable disable
     public record GetWhatIsThisWordByBcvQuery(BookChapterVerseViewModel bcv, string languageCode) : IRequest<RequestResult<List<MarbleResource>>>;
 
-        public class GetWhatIsThisWordByBCVHandler : XmlReaderRequestHandler<GetWhatIsThisWordByBcvQuery,
-            RequestResult<List<MarbleResource>>, List<MarbleResource>>
+    public class GetWhatIsThisWordByBCVHandler : XmlReaderRequestHandler<GetWhatIsThisWordByBcvQuery,
+        RequestResult<List<MarbleResource>>, List<MarbleResource>>
+    {
+        private readonly ILogger<GetWhatIsThisWordByBCVHandler> _logger;
+        private BookChapterVerseViewModel _bcv;
+        private string _languageCode;
+
+        public GetWhatIsThisWordByBCVHandler(ILogger<GetWhatIsThisWordByBCVHandler> logger) : base(logger)
         {
-            private BookChapterVerseViewModel _bcv;
-            private string _languageCode;
+            _logger = logger;
+            //no-op
+        }
 
-            public GetWhatIsThisWordByBCVHandler(ILogger<GetWhatIsThisWordByBCVHandler> logger) : base(logger)
+
+        protected override string ResourceName { get; set; } = "";
+
+        public override Task<RequestResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
+            CancellationToken cancellationToken)
+        {
+            _bcv = request.bcv;
+            _languageCode = request.languageCode;
+
+            ResourceName = GetFilenameFromMarbleBook(_bcv.BookNum);
+            ResourceName = @"marble-indexes-full\MARBLELinks-" + ResourceName + ".XML";
+
+            var queryResult = ValidateResourcePath(new List<MarbleResource>());
+            if (queryResult.Success == false)
             {
-                //no-op
-            }
-
-
-            protected override string ResourceName { get; set; } = "";
-
-            public override Task<RequestResult<List<MarbleResource>>> Handle(GetWhatIsThisWordByBcvQuery request,
-                CancellationToken cancellationToken)
-            {
-                _bcv = request.bcv;
-                _languageCode = request.languageCode;
-
-                ResourceName = GetFilenameFromMarbleBook(_bcv.BookNum);
-                ResourceName = @"marble-indexes-full\MARBLELinks-" + ResourceName + ".XML";
-
-                var queryResult = ValidateResourcePath(new List<MarbleResource>());
-                if (queryResult.Success == false)
-                {
-                    LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.BBBCCCVVV}'");
-                    return Task.FromResult(queryResult);
-                }
-
-                try
-                {
-                    queryResult.Data = LoadXmlAndProcessData(null);
-                }
-                catch (Exception ex)
-                {
-                    LogAndSetUnsuccessfulResult(ref queryResult,
-                        $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.BBBCCCVVV}'",
-                        ex);
-                }
-
+                LogAndSetUnsuccessfulResult(ref queryResult,
+                    $"An unexpected error occurred while querying the MARBLE databases for data with verseId : '{_bcv.BBBCCCVVV}'");
                 return Task.FromResult(queryResult);
             }
 
-            protected override List<MarbleResource> ProcessData()
+            try
             {
-                return GetLemmaListFromMarbleIndexes(ResourcePath, _bcv, _languageCode);
+                queryResult.Data = LoadXmlAndProcessData(null);
+            }
+            catch (Exception ex)
+            {
+                LogAndSetUnsuccessfulResult(ref queryResult,
+                    $"An unexpected error occurred while querying the '{ResourceName}' database for data with verseId : '{_bcv.BBBCCCVVV}'",
+                    ex);
             }
 
+            return Task.FromResult(queryResult);
+        }
 
-            /// <summary>
-            /// Function takes in Marble filename for the index and the BCV reference
-            /// Returns the list of MARBLE resources for that verse
-            /// </summary>
-            /// <param name="filename"></param>
-            /// <param name="bcv"></param>
-            /// <returns></returns>
-            private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerseViewModel bcv,
-                string languageCode)
+        protected override List<MarbleResource> ProcessData()
+        {
+            return GetLemmaListFromMarbleIndexes(ResourcePath, _bcv, _languageCode);
+        }
+
+
+        /// <summary>
+        /// Function takes in Marble filename for the index and the BCV reference
+        /// Returns the list of MARBLE resources for that verse
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="bcv"></param>
+        /// <returns></returns>
+        private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerseViewModel bcv,
+            string languageCode)
+        {
+            Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
+            Dictionary<string, LexicalLookUp> SDBH = new Dictionary<string, LexicalLookUp>();
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filename);
+            //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
+            string bbbcccvvv = bcv.BBBCCCVVV.PadLeft(9, '0');
+            XmlNodeList prop =
+                doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
+
+            // loop through the XML getting al the LexicalLinks for this verse
+            List<MarbleIndexLinks> lexicalLinks = new List<MarbleIndexLinks>();
+            foreach (XmlNode item in prop)
             {
-                Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
-                Dictionary<string, LexicalLookUp> SDBH = new Dictionary<string, LexicalLookUp>();
+                var link = item.InnerText;
 
-                XmlDocument doc = new XmlDocument();
-                doc.Load(filename);
-                //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
-                string bbbcccvvv = bcv.BBBCCCVVV.PadLeft(9, '0');
-                XmlNodeList prop =
-                    doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
+                string[] s = link.Split(':');
 
-                // loop through the XML getting al the LexicalLinks for this verse
-                List<MarbleIndexLinks> lexicalLinks = new List<MarbleIndexLinks>();
-                foreach (XmlNode item in prop)
+                if (s.Length == 3)
                 {
-                    var link = item.InnerText;
-
-                    string[] s = link.Split(':');
-
-                    if (s.Length == 3)
+                    lexicalLinks.Add(new MarbleIndexLinks
                     {
-                        lexicalLinks.Add(new MarbleIndexLinks
-                        {
-                            DictionaryName = s[0],
-                            SenseID = s[2],
-                            Lemma = s[1],
-                        });
+                        DictionaryName = s[0],
+                        SenseID = s[2],
+                        Lemma = s[1],
+                    });
+                }
+            }
+
+            List<MarbleResource> resourceList = new List<MarbleResource>();
+
+            // load up the resources
+            int ID = 0;
+            foreach (var lexicalLink in lexicalLinks)
+            {
+                LexicalLookUp item = null;
+
+                // get the database name
+                if (lexicalLink.DictionaryName == "SDBG")
+                {
+                    if (SDBG.Count == 0)
+                    {
+                        SDBG = ReadInLookupList("SDBG");
+                    }
+
+                    if (SDBG.ContainsKey(lexicalLink.Lemma))
+                    {
+                        item = SDBG[lexicalLink.Lemma];
+                    }
+
+                }
+                else
+                {
+                    if (SDBH.Count == 0)
+                    {
+                        SDBH = ReadInLookupList("SDBH");
+                    }
+
+                    if (SDBH.ContainsKey(lexicalLink.Lemma))
+                    {
+                        item = SDBH[lexicalLink.Lemma];
                     }
                 }
 
-                List<MarbleResource> resourceList = new List<MarbleResource>();
-
-                // load up the resources
-                int ID = 0;
-                foreach (var lexicalLink in lexicalLinks)
+                if (item != null)
                 {
-                    LexicalLookUp item = null;
+                    // read in the XML file and go to the line number
+                    // read in the lookup file and put into a dictionary lookup
+                    string startupPath = AppDomain.CurrentDomain.BaseDirectory;
+                    string fileName = Path.Combine(startupPath,
+                        $@"resources\{lexicalLink.DictionaryName}\{item.DictionaryName}.xml");
 
-                    // get the database name
-                    if (lexicalLink.DictionaryName == "SDBG")
+                    if (!File.Exists(fileName))
                     {
-                        if (SDBG.Count == 0)
-                        {
-                            SDBG = ReadInLookupList("SDBG");
-                        }
-
-                        if (SDBG.ContainsKey(lexicalLink.Lemma))
-                        {
-                            item = SDBG[lexicalLink.Lemma];
-                        }
-
-                    }
-                    else
-                    {
-                        if (SDBH.Count == 0)
-                        {
-                            SDBH = ReadInLookupList("SDBH");
-                        }
-
-                        if (SDBH.ContainsKey(lexicalLink.Lemma))
-                        {
-                            item = SDBH[lexicalLink.Lemma];
-                        }
+                        return new List<MarbleResource>();
                     }
 
-                    if (item != null)
+                    // read the file into a string array
+                    string[] lines = File.ReadAllLines(fileName);
+                    if (item.LineNum < lines.Length)
                     {
-                        // read in the XML file and go to the line number
-                        // read in the lookup file and put into a dictionary lookup
-                        string startupPath = AppDomain.CurrentDomain.BaseDirectory;
-                        string fileName = Path.Combine(startupPath,
-                            $@"resources\{lexicalLink.DictionaryName}\{item.DictionaryName}.xml");
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendLine(lines[item.LineNum - 1]);
 
-                        if (!File.Exists(fileName))
+                        for (int i = item.LineNum; i < lines.Length; i++)
                         {
-                            return new List<MarbleResource>();
-                        }
-
-                        // read the file into a string array
-                        string[] lines = File.ReadAllLines(fileName);
-                        if (item.LineNum < lines.Length)
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            sb.AppendLine(lines[item.LineNum - 1]);
-
-                            for (int i = item.LineNum; i < lines.Length; i++)
+                            if (lines[i].Trim().ToLower() == "</lexicon_entry>")
                             {
-                                if (lines[i].Trim().ToLower() == "</lexicon_entry>")
-                                {
-                                    sb.AppendLine(lines[i]);
-                                    break;
-                                }
-                                else
-                                {
-                                    sb.AppendLine(lines[i]);
-                                }
+                                sb.AppendLine(lines[i]);
+                                break;
                             }
-
-                            string xmlSnippet = sb.ToString();
-
-                            if (xmlSnippet.Length > 0)
+                            else
                             {
-                                doc = new XmlDocument();
-                                doc.LoadXml(xmlSnippet);
+                                sb.AppendLine(lines[i]);
+                            }
+                        }
 
-                                XmlNodeList nodeList = doc.SelectNodes($"//LEXMeanings/LEXMeaning");
+                        string xmlSnippet = sb.ToString();
 
+                        if (xmlSnippet.Length > 0)
+                        {
+                            doc = new XmlDocument();
+                            doc.LoadXml(xmlSnippet);
+
+                            XmlNodeList nodeList = doc.SelectNodes($"//LEXMeanings/LEXMeaning");
+
+                            try
+                            {
+                                Debug.WriteLine(xmlSnippet);
                                 foreach (XmlNode node in nodeList)
                                 {
                                     string senseID = node.Attributes["Id"].Value;
@@ -340,146 +347,151 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                                 }
                             }
-                        }
-                    }
-
-                    ID++;
-
-                }
-
-                // group by to get the totals
-
-                var groups = resourceList.GroupBy(p => p.Id);
-                foreach (var group in groups)
-                {
-                    int count = group.Count();
-
-                    foreach (var item in group)
-                    {
-                        item.TotalSenses = count;
-                    }
-                }
-
-                return resourceList;
-            }
-
-
-            /// <summary>
-            /// Function to read in a CSV lookup for the SDBG/H databases that have pointers to where in
-            /// the XML files the lemma is located.
-            /// </summary>
-            /// <param name="sDictionaryName"></param>
-            /// <returns></returns>
-            private Dictionary<string, LexicalLookUp> ReadInLookupList(string sDictionaryName)
-            {
-                Dictionary<string, LexicalLookUp> lookup = new Dictionary<string, LexicalLookUp>();
-
-                // read in the lookup file and put into a dictionary lookup
-                string startupPath = AppDomain.CurrentDomain.BaseDirectory;
-                string fileName = Path.Combine(startupPath, $@"resources\{sDictionaryName}\lemmaLU.csv");
-
-                using (StreamReader reader = new StreamReader(fileName))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        string[] s = line.Split(',');
-                        if (s.Length == 3)
-                        {
-                            lookup.Add(s[0], new LexicalLookUp
+                            catch (Exception ex)
                             {
-                                DictionaryName = s[1],
-                                Lemma = s[0],
-                                LineNum = Convert.ToInt32(s[2])
-                            });
+                                _logger.LogError(ex.Message);
+                            }
                         }
                     }
                 }
 
-                return lookup;
+                ID++;
+
             }
 
-            /// <summary>
-            /// A function that takes in a book number and translatest that to a book name
-            /// </summary>
-            /// <param name="bookNum"></param>
-            /// <returns></returns>
-            private string GetFilenameFromMarbleBook(int bookNum)
+            // group by to get the totals
+
+            var groups = resourceList.GroupBy(p => p.Id);
+            foreach (var group in groups)
             {
-                Dictionary<int, string> dic = new Dictionary<int, string>();
-                dic.Add(1, "GEN");
-                dic.Add(2, "EXO");
-                dic.Add(3, "LEV");
-                dic.Add(4, "NUM");
-                dic.Add(5, "DEU");
-                dic.Add(6, "JOS");
-                dic.Add(7, "JDG");
-                dic.Add(8, "RUT");
-                dic.Add(9, "1SA");
-                dic.Add(10, "2SA");
-                dic.Add(11, "1KI");
-                dic.Add(12, "2KI");
-                dic.Add(13, "1CH");
-                dic.Add(14, "2CH");
-                dic.Add(15, "EZR");
-                dic.Add(16, "NEH");
-                dic.Add(17, "EST");
-                dic.Add(18, "JOB");
-                dic.Add(19, "PSA");
-                dic.Add(20, "PRO");
-                dic.Add(21, "ECC");
-                dic.Add(22, "SNG");
-                dic.Add(23, "ISA");
-                dic.Add(24, "JER");
-                dic.Add(25, "LAM");
-                dic.Add(26, "EZK");
-                dic.Add(27, "DAN");
-                dic.Add(28, "HOS");
-                dic.Add(29, "JOL");
-                dic.Add(30, "AMO");
-                dic.Add(31, "OBA");
-                dic.Add(32, "JON");
-                dic.Add(33, "MIC");
-                dic.Add(34, "NAM");
-                dic.Add(35, "HAB");
-                dic.Add(36, "ZEP");
-                dic.Add(37, "HAG");
-                dic.Add(38, "ZEC");
-                dic.Add(39, "MAL");
-                dic.Add(40, "MAT");
-                dic.Add(41, "MRK");
-                dic.Add(42, "LUK");
-                dic.Add(43, "JHN");
-                dic.Add(44, "ACT");
-                dic.Add(45, "ROM");
-                dic.Add(46, "1CO");
-                dic.Add(47, "2CO");
-                dic.Add(48, "GAL");
-                dic.Add(49, "EPH");
-                dic.Add(50, "PHP");
-                dic.Add(51, "COL");
-                dic.Add(52, "1TH");
-                dic.Add(53, "2TH");
-                dic.Add(54, "1TI");
-                dic.Add(55, "2TI");
-                dic.Add(56, "TIT");
-                dic.Add(57, "PHM");
-                dic.Add(58, "HEB");
-                dic.Add(59, "JAS");
-                dic.Add(60, "1PE");
-                dic.Add(61, "2PE");
-                dic.Add(62, "1JN");
-                dic.Add(63, "2JN");
-                dic.Add(64, "3JN");
-                dic.Add(65, "JUD");
-                dic.Add(66, "REV");
+                int count = group.Count();
 
-                if (dic.ContainsKey(bookNum))
+                foreach (var item in group)
                 {
-                    return dic[bookNum];
+                    item.TotalSenses = count;
                 }
-
-                return "";
             }
+
+            return resourceList;
+        }
+
+
+        /// <summary>
+        /// Function to read in a CSV lookup for the SDBG/H databases that have pointers to where in
+        /// the XML files the lemma is located.
+        /// </summary>
+        /// <param name="sDictionaryName"></param>
+        /// <returns></returns>
+        private Dictionary<string, LexicalLookUp> ReadInLookupList(string sDictionaryName)
+        {
+            Dictionary<string, LexicalLookUp> lookup = new Dictionary<string, LexicalLookUp>();
+
+            // read in the lookup file and put into a dictionary lookup
+            string startupPath = AppDomain.CurrentDomain.BaseDirectory;
+            string fileName = Path.Combine(startupPath, $@"resources\{sDictionaryName}\lemmaLU.csv");
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] s = line.Split(',');
+                    if (s.Length == 3)
+                    {
+                        lookup.Add(s[0], new LexicalLookUp
+                        {
+                            DictionaryName = s[1],
+                            Lemma = s[0],
+                            LineNum = Convert.ToInt32(s[2])
+                        });
+                    }
+                }
+            }
+
+            return lookup;
+        }
+
+        /// <summary>
+        /// A function that takes in a book number and translatest that to a book name
+        /// </summary>
+        /// <param name="bookNum"></param>
+        /// <returns></returns>
+        private string GetFilenameFromMarbleBook(int bookNum)
+        {
+            Dictionary<int, string> dic = new Dictionary<int, string>();
+            dic.Add(1, "GEN");
+            dic.Add(2, "EXO");
+            dic.Add(3, "LEV");
+            dic.Add(4, "NUM");
+            dic.Add(5, "DEU");
+            dic.Add(6, "JOS");
+            dic.Add(7, "JDG");
+            dic.Add(8, "RUT");
+            dic.Add(9, "1SA");
+            dic.Add(10, "2SA");
+            dic.Add(11, "1KI");
+            dic.Add(12, "2KI");
+            dic.Add(13, "1CH");
+            dic.Add(14, "2CH");
+            dic.Add(15, "EZR");
+            dic.Add(16, "NEH");
+            dic.Add(17, "EST");
+            dic.Add(18, "JOB");
+            dic.Add(19, "PSA");
+            dic.Add(20, "PRO");
+            dic.Add(21, "ECC");
+            dic.Add(22, "SNG");
+            dic.Add(23, "ISA");
+            dic.Add(24, "JER");
+            dic.Add(25, "LAM");
+            dic.Add(26, "EZK");
+            dic.Add(27, "DAN");
+            dic.Add(28, "HOS");
+            dic.Add(29, "JOL");
+            dic.Add(30, "AMO");
+            dic.Add(31, "OBA");
+            dic.Add(32, "JON");
+            dic.Add(33, "MIC");
+            dic.Add(34, "NAM");
+            dic.Add(35, "HAB");
+            dic.Add(36, "ZEP");
+            dic.Add(37, "HAG");
+            dic.Add(38, "ZEC");
+            dic.Add(39, "MAL");
+            dic.Add(40, "MAT");
+            dic.Add(41, "MRK");
+            dic.Add(42, "LUK");
+            dic.Add(43, "JHN");
+            dic.Add(44, "ACT");
+            dic.Add(45, "ROM");
+            dic.Add(46, "1CO");
+            dic.Add(47, "2CO");
+            dic.Add(48, "GAL");
+            dic.Add(49, "EPH");
+            dic.Add(50, "PHP");
+            dic.Add(51, "COL");
+            dic.Add(52, "1TH");
+            dic.Add(53, "2TH");
+            dic.Add(54, "1TI");
+            dic.Add(55, "2TI");
+            dic.Add(56, "TIT");
+            dic.Add(57, "PHM");
+            dic.Add(58, "HEB");
+            dic.Add(59, "JAS");
+            dic.Add(60, "1PE");
+            dic.Add(61, "2PE");
+            dic.Add(62, "1JN");
+            dic.Add(63, "2JN");
+            dic.Add(64, "3JN");
+            dic.Add(65, "JUD");
+            dic.Add(66, "REV");
+
+            if (dic.ContainsKey(bookNum))
+            {
+                return dic[bookNum];
+            }
+
+            return "";
         }
     }
+}

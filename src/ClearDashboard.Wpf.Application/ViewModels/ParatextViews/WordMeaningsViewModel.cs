@@ -159,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         #region Constructor
         public WordMeaningsViewModel()
         {
-
+            // no-op retained for designer support
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger,
@@ -172,8 +172,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             DockSide = EDockSide.Bottom;
 
             _translationSource = translationSource;
-
-            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
