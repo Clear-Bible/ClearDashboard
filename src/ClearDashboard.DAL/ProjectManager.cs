@@ -308,9 +308,11 @@ namespace ClearDashboard.DataAccessLayer
         #endregion
 
 
-        public Task<IEnumerable<Project>> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
-            throw new NotImplementedException();
+            var result = await ExecuteRequest(new GetAllProjectsFromDatabaseQuery(), CancellationToken.None);
+
+            return result.Data;
         }
 
         public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
@@ -345,13 +347,14 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task UpdateProject(Project project)
         {
-            var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+            await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
+            
+            //var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
 
-            Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
-            projectAssets.ProjectDbContext.Attach(project);
+            //Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
+            //projectAssets.ProjectDbContext.Attach(project);
 
-            await projectAssets.ProjectDbContext.SaveChangesAsync();
-            return;
+            //await projectAssets.ProjectDbContext.SaveChangesAsync();
         }
     }
 }
