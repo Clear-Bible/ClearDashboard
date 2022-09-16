@@ -1,5 +1,4 @@
-﻿using AvalonDock.Layout;
-using ClearDashboard.Wpf.Application.ViewModels;
+﻿using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System.Windows;
@@ -11,35 +10,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
     {
         public PanesTemplateSelector()
         {
-            
+            // no-op
         }
 
         // ====================
         //   DOCUMENTS
         // ====================
-        //public DataTemplate StartPageViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate AlignmentToolViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate TreeDownViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate DashboardViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
 
         public DataTemplate EnhancedCorpusViewTemplate
         {
@@ -47,17 +23,6 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             set;
         }
 
-        //public DataTemplate ConcordanceViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate CorpusTokensViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
 
         // ====================
         //        TOOLS
@@ -68,35 +33,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             set;
         }
 
-        //public DataTemplate ProjectDesignSurfaceViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
         public DataTemplate WordMeaningsViewTemplate
         {
             get;
             set;
         }
 
-        //public DataTemplate SourceContextViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate TargetContextViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public DataTemplate NotesViewTemplate
-        //{
-        //    get;
-        //    set;
-        //}
 
         public DataTemplate PinsViewTemplate
         {
@@ -110,31 +52,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             set;
         }
 
-        public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var itemAsLayoutContent = item as LayoutContent;
-
             // ====================
             //   DOCUMENTS
             // ====================
-            //if (item is StartPageViewModel)
-            //    return StartPageViewTemplate;
-
-            //if (item is AlignmentToolViewModel)
-            //    return AlignmentToolViewTemplate;
-
-
-            //if (item is TreeDownViewModel)
-            //    return TreeDownViewTemplate;
-
-            //if (item is DashboardViewModel)
-            //    return DashboardViewTemplate;
-
-            //if (item is ConcordanceViewModel)
-            //    return ConcordanceViewTemplate;
-
-            //if (item is CorpusTokensViewModel)
-            //    return CorpusTokensViewTemplate;
 
             if(item is EnhancedCorpusViewModel)
                 return EnhancedCorpusViewTemplate;
@@ -152,20 +74,6 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return WordMeaningsViewTemplate;
             }
 
-            //if (item is SourceContextViewModel)
-            //{
-            //    return SourceContextViewTemplate;
-            //}
-
-            //if (item is TargetContextViewModel)
-            //{
-            //    return TargetContextViewTemplate;
-            //}
-
-            //if (item is NotesViewModel)
-            //{
-            //    return NotesViewTemplate;
-            //}
 
             if (item is PinsViewModel)
             {
@@ -176,11 +84,6 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             {
                 return TextCollectionViewTemplate;
             }
-
-            //if (item is ProjectDesignSurfaceViewModel)
-            //{
-            //    return ProjectDesignSurfaceViewTemplate;
-            //}
 
             return base.SelectTemplate(item, container);
         }

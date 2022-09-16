@@ -184,9 +184,9 @@
                 </DockingManager.LayoutUpdateStrategy>
 
                 <LayoutRoot>
-                    <LayoutPanel Orientation="Vertical">
+                    <LayoutPanel DockHeight="1.3781725888324874*" Orientation="Vertical">
                         <LayoutDocumentPane />
-                        <LayoutAnchorablePane Name="ToolsPane" DockHeight="150" />
+                        <LayoutAnchorablePane Name="ToolsPane" DockHeight="0.6218274111675127*" />
                     </LayoutPanel>
                 </LayoutRoot>
             </DockingManager>

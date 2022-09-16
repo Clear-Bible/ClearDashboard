@@ -28,6 +28,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -1014,7 +1015,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
                 case WorkspaceLayoutNames.Pins:
-                    var vm7 = GetPaneViewModelFromItems("PinsViewModel");
+                    var vm7 = GetToolViewModelFromItems("PinsViewModel");
                     return (vm7, vm7.Title, vm7.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
@@ -1120,7 +1121,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.Content = obj.vm;
                             windowPane.Title = obj.title;
                             windowPane.IsActive = true;
-
+                            
                             // set where it will doc on layout
                             if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                             {
