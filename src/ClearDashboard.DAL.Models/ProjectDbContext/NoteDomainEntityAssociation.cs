@@ -15,9 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Guid NoteId { get; set; }
         public virtual Note? Note { get; set; }
 
-        public string? DomainEntityIdString { get; set; }
-        public string? DomainEntityIdTypeString { get; set; }
-        public string? DomainSubEntityIdString { get; set; }
-        public string? DomainSubEntityIdTypeString { get; set; }
+        public Guid? DomainEntityIdGuid { get; set; }
+        public string? DomainEntityIdName { get; set; }
     }
 }

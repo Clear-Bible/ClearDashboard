@@ -11,6 +11,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
+using System.Text;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -178,25 +179,30 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         {
             // Create the corpus in the database:
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+            var nonTokenizedTextCorpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath);
 
             // Create the TokenizedCorpus + Tokens in the database:
             var tokenizationFunction1 = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
-            var tokenizedTextCorpus1 = await TestDataHelpers.GetSampleTextCorpus()
-                .Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction1);
+            var tokenizedTextCorpus1 = await nonTokenizedTextCorpus
+                .Tokenize<LatinWordTokenizer>()
+                .Transform<IntoTokensTextRowProcessor>()
+                .Create(Mediator!, corpus.CorpusId, "Unit Test, a", tokenizationFunction1);
 
             Assert.NotNull(tokenizedTextCorpus1);
 
-            var tokenizationFunction2 = ".Tokenize<ZwspWordTokenizer>()";
-            var tokenizedTextCorpus2 = await tokenizedTextCorpus1
+            var tokenizationFunction2 = ".Tokenize<ZwspWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus2 = await nonTokenizedTextCorpus
                 .Tokenize<ZwspWordTokenizer>()
-                .Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction1 + tokenizationFunction2);
+                .Transform<IntoTokensTextRowProcessor>()
+                .Create(Mediator!, corpus.CorpusId, "Unit Test, b", tokenizationFunction2);
 
             Assert.NotNull(tokenizedTextCorpus2);
 
-            var tokenizationFunction3 = ".Tokenize<LineSegmentTokenizer>()";
-            var tokenizedTextCorpus3 = await tokenizedTextCorpus1
+            var tokenizationFunction3 = ".Tokenize<LineSegmentTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus3 = await nonTokenizedTextCorpus
                 .Tokenize<LineSegmentTokenizer>()
-                .Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction1 + tokenizationFunction3);
+                .Transform<IntoTokensTextRowProcessor>()
+                .Create(Mediator!, corpus.CorpusId, "Unit Test, c", tokenizationFunction3);
 
             Assert.NotNull(tokenizedTextCorpus3);
 
@@ -218,8 +224,8 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             Assert.NotNull(tokenizedCorpora);
             Assert.Equal(tokenizationFunction1, tokenizedCorpora[0].TokenizationFunction);
-            Assert.Equal(tokenizationFunction1 + tokenizationFunction2, tokenizedCorpora[1].TokenizationFunction);
-            Assert.Equal(tokenizationFunction1 + tokenizationFunction3, tokenizedCorpora[2].TokenizationFunction);
+            Assert.Equal(tokenizationFunction2, tokenizedCorpora[1].TokenizationFunction);
+            Assert.Equal(tokenizationFunction3, tokenizedCorpora[2].TokenizationFunction);
 
             tokenizedCorpora.ForEach(tc =>
                 {

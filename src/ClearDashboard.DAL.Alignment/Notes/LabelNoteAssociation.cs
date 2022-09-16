@@ -12,6 +12,14 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public LabelId LabelId { get; set; }
         public NoteId NoteId { get; set; }
 
+        public LabelNoteAssociation(IMediator mediator, LabelId labelId, NoteId noteId)
+        {
+            this.mediator_ = mediator;
+
+            LabelId = labelId;
+            NoteId = noteId;
+        }
+
         internal LabelNoteAssociation(IMediator mediator, LabelNoteAssociationId labelNoteAssociationId, LabelId labelId, NoteId noteId)
         {
             this.mediator_ = mediator;
@@ -21,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             NoteId = noteId;
         }
 
-        public async void Create(CancellationToken token = default)
+        public async Task<LabelNoteAssociation> Create(CancellationToken token = default)
         {      
             if (LabelNoteAssociationId == null)
             {
@@ -41,6 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             {
                 throw new MediatorErrorEngineException($"LabelNoteAssociation already created having id '{LabelNoteAssociationId}'");
             }
+            return this;
         }
 
         public async void Delete(CancellationToken token = default)

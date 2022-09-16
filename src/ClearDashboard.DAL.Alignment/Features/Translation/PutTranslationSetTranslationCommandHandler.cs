@@ -58,7 +58,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 var tokenGuidsUpdated = new List<Guid>();
                 foreach (var tr in translations)
                 {
-                    var exactMatch = rTokenId.ToString() == tr.SourceTokenComponent!.EngineTokenId;
+                    var exactMatch = rTokenId.Id == tr.SourceTokenComponent!.Id;
 
                     // Don't propagate to a non-exact match that has already been assigned:
                     if (exactMatch || tr.TranslationState != Models.TranslationOriginatedFrom.Assigned)
@@ -78,7 +78,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 {
                     if (!tokenGuidsUpdated.Contains(t.Id))
                     {
-                        var exactMatch = rTokenId.ToString() == t.EngineTokenId;
+                        var exactMatch = rTokenId.Id == t.Id;
                         translationSet.Translations.Add(new Models.Translation
                         {
                             SourceTokenComponent = t,
@@ -106,7 +106,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 var translation = ProjectDbContext!.Translations
                     .Where(tr => tr.TranslationSetId == translationSet.Id)
-                    .Where(tr => tr.SourceTokenComponent!.EngineTokenId == rTokenId.ToString())
+                    .Where(tr => tr.SourceTokenComponent!.Id == rTokenId.Id)
                     .FirstOrDefault();
 
                 if (translation != null)
@@ -118,7 +118,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 {
                     var tokenComponent = ProjectDbContext!.TokenComponents
                         .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                        .Where(t => t.EngineTokenId == rTokenId.ToString())
+                        .Where(t => t.Id == rTokenId.Id)
                         //.Where(t => t.Tokenization!.SourceParallelCorpora
                         //    .Any(spc => spc.TranslationSets
                         //        .Any(ts => ts.Id == request.TranslationSetId.Id)))

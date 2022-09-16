@@ -140,20 +140,22 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var tokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId;
 
             ProjectDbContext!.ChangeTracker.Clear();
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
 
             Process proc = Process.GetCurrentProcess();
             proc.Refresh();
 
             Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             _ = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
+
+            sw.Stop();
 
             proc.Refresh();
             Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
 
-            sw.Stop();
             Output.WriteLine("Elapsed={0}", sw.Elapsed);
         }
         finally

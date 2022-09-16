@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 return new RequestResult<Note>
                 (
                     success: false,
-                    message: $"Label not found for LabelId '{request.NoteId.Id}'"
+                    message: $"Note not found for NotelId '{request.NoteId.Id}'"
                 );
             }
 
