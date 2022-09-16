@@ -34,7 +34,6 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
-
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -337,7 +336,7 @@
                                         </materialDesign:PackIcon.Style>
                                     </materialDesign:PackIcon>
 
-                                    <!-- Cancel Task Button -->
+                                    <!--  Cancel Task Button  -->
                                     <Button
                                         Width="20"
                                         Height="20"

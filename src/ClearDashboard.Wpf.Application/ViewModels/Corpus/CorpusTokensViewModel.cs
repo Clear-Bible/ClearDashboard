@@ -56,7 +56,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Corpus
         #region Observable Properties
 
         private Dictionary<string, string> _bcvDictionary;
-
         private Dictionary<string, string> BCVDictionary
         {
             get => _bcvDictionary;
