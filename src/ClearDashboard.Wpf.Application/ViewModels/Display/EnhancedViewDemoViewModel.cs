@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
@@ -25,13 +26,14 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using EngineToken = ClearBible.Engine.Corpora.Token;
+using ClearDashboard.Wpf.Application.Events;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
-    public class TranslationDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
+    public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
@@ -54,16 +56,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public string? Message { get; set; }
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
-        public IEnumerable<TokenDisplay>? Verse1NoTranslations { get; set; }
-        public IEnumerable<TokenDisplay>? Verse2 { get; set; }
-        public IEnumerable<TokenDisplay>? Verse3 { get; set; }
+        public TokenDisplay CurrentTokenDisplay { get; set; }
+        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        public TranslationOption CurrentTranslationOption { get; set; }
 
         // ReSharper disable UnusedMember.Global
-        public TranslationDemoViewModel()
+        public EnhancedViewDemoViewModel()
         {
         }
 
-        public TranslationDemoViewModel(INavigationService navigationService, ILogger<TranslationDemoViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
         }
@@ -90,6 +92,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
+            if (e.TokenDisplay.HasNote)
+            {
+                DisplayNote(e);
+            }
+
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
@@ -108,6 +115,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TranslationClicked(TranslationEventArgs e)
         {
+            DisplayTranslation(e);
+
             Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
@@ -178,6 +187,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
+        public void TranslationApplied(TranslationEventArgs e)
+        {
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }
+
+        public void TranslationCancelled(RoutedEventArgs e)
+        {
+            Message = "Translation cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }        
+        
+        public void NoteApplied(NoteEventArgs e)
+        {
+            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void NoteCancelled(RoutedEventArgs e)
+        {
+            Message = "Note cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
         // ReSharper restore UnusedMember.Global
 
         #endregion
@@ -205,12 +249,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         private static int mockOogaWordsIndexer_;
+
+        private string GetMockOogaWord()
+        {
+            var result = MockOogaWords[mockOogaWordsIndexer_++];
+            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+            return result;
+        }
+
         private Translation GetTranslation(Token token)
         {
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? MockOogaWords[mockOogaWordsIndexer_++]
+                ? GetMockOogaWord()
                 : String.Empty;
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
             var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
             
             return translation;
@@ -228,6 +279,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return null;
         }
 
+        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        {
+            var result = new List<TranslationOption>();
+
+            var random = new Random();
+            var optionCount = random.Next(4) + 2;     // 2-5 options
+            var remainingPercentage = 100d;
+
+            var basePercentage = random.NextDouble() * remainingPercentage;
+            result.Add(new TranslationOption {Word = sourceTranslation, Probability = basePercentage});
+            remainingPercentage -= basePercentage;
+
+            for (var i = 1; i < optionCount - 1; i++)
+            {
+                var percentage = random.NextDouble() * remainingPercentage;
+                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+                remainingPercentage -= percentage;
+            }
+
+            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+
+            return result.OrderByDescending(to => to.Probability);
+        }
+
         private List<TokenDisplay> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
         {
             var tokenDisplays = new List<TokenDisplay>();
@@ -243,31 +318,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
+        public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
+
+        private void DisplayTranslation(TranslationEventArgs e)
+        {
+            TranslationControlVisibility = Visibility.Visible;
+
+            CurrentTokenDisplay = e.TokenDisplay;
+            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
+
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(TranslationOptions));
+            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+        }
+
+        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
+        private void DisplayNote(TokenEventArgs e)
+        {
+            NoteControlVisibility = Visibility.Visible;
+            CurrentTokenDisplay = e.TokenDisplay;
+        
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+        }
+
         private async Task LoadFiles()
         {
             var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
-            Verse1NoTranslations = GetTokenDisplays(corpus, 40001001);
-            Verse2 = GetTokenDisplays(corpus, 40001002);
-            Verse3 = GetTokenDisplays(corpus, 40001003);
-            
-            // Show some without translations
-            foreach (var tokenDisplay in Verse1NoTranslations)
-            {
-                tokenDisplay.Translation = null;
-            }            
-            foreach (var tokenDisplay in Verse3)
-            {
-                tokenDisplay.Translation = null;
-            }
-
-            Verse2.First().Note = "This is a note";
-            Verse2.Skip(3).First().Note = "Here's another note.";
+            Verse1.First().Note = "This is a note";
+            Verse1.Skip(3).First().Note = "Here's another note.";
             
             NotifyOfPropertyChange(nameof(Verse1));
-            NotifyOfPropertyChange(nameof(Verse2));
-            NotifyOfPropertyChange(nameof(Verse3));
         }
 
         private async Task MockProjectAndUser()

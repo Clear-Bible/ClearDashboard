@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views
+namespace ClearDashboard.Wpf.Application.Views.Display
 {
-    /// <summary>
-    /// Interaction logic for AlignmentToolView.xaml
-    /// </summary>
-    public partial class AlignmentToolView : UserControl
+    public partial class EnhancedViewDemoView : Page
     {
-        public AlignmentToolView()
+
+        public EnhancedViewDemoView()
         {
             InitializeComponent();
         }

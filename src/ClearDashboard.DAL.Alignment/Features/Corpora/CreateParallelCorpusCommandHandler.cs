@@ -36,8 +36,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             //3. return created ParallelCorpus based on ParallelCorpusId
             //var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(new Guid()));
 
-            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.TokenComponents).FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
-            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.Include(tc => tc.TokenComponents).FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
+            var sourceTokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.SourceTokenizedCorpusId.Id);
+            var targetTokenizedCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TargetTokenizedCorpusId.Id);
 
             if (sourceTokenizedCorpus == null || targetTokenizedCorpus == null)
             {
@@ -76,11 +76,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
                                 }
-                                var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
-                                    sourceTokenizedCorpus.TokenComponents
-                                        .Where(t => t.EngineTokenId == tid.ToString())
-                                        .Select(t => t.Id)
-                                    );                                
                                 var verse = new Models.Verse
                                 {
                                     VerseNumber = v.VerseNum,
@@ -88,11 +83,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     ChapterNumber = v.ChapterNum,
                                     CorpusId = sourceTokenizedCorpus!.CorpusId
                                 };
-                                if (tokenDatabaseIds.Any())
+                                if (v.TokenIds.Any())
                                 {
-                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
+                                    verse.TokenVerseAssociations.AddRange(v.TokenIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenComponentId = td,
+                                        TokenComponentId = td.Id,
                                         Position = index
                                     }));
                                 }
@@ -101,16 +96,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             ));
                         verseMapping.Verses.AddRange(vm.TargetVerses
                             .Select(v => {
-                                int bookNumber;
-                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out bookNumber))
+                                if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out int bookNumber))
                                 {
                                     throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
                                 }
-                                var tokenDatabaseIds = v.TokenIds.SelectMany(tid =>
-                                    targetTokenizedCorpus.TokenComponents
-                                        .Where(t => t.EngineTokenId == tid.ToString())
-                                        .Select(t => t.Id)
-                                    );
                                 var verse = new Models.Verse
                                 {
                                     VerseNumber = v.VerseNum,
@@ -118,11 +107,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     ChapterNumber = v.ChapterNum,
                                     CorpusId = targetTokenizedCorpus!.CorpusId
                                 };
-                                if (tokenDatabaseIds.Count() > 0)
+                                if (v.TokenIds.Any())
                                 {
-                                    verse.TokenVerseAssociations.AddRange(tokenDatabaseIds.Select((td, index) => new Models.TokenVerseAssociation
+                                    verse.TokenVerseAssociations.AddRange(v.TokenIds.Select((td, index) => new Models.TokenVerseAssociation
                                     {
-                                        TokenComponentId = td,
+                                        TokenComponentId = td.Id,
                                         Position = index
                                     }));
                                 }

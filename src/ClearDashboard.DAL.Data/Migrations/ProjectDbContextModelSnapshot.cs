@@ -327,16 +327,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DomainEntityIdString")
+                    b.Property<Guid?>("DomainEntityIdGuid")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DomainEntityIdTypeString")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DomainSubEntityIdString")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DomainSubEntityIdTypeString")
+                    b.Property<string>("DomainEntityIdName")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("NoteId")

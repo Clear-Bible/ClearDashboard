@@ -772,14 +772,14 @@
                         IsEnabled="{Binding AddManuscriptEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
-                    <!--<Button
+                    <Button
                         x:Name="AddUsfmCorpus"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddUsfmCorpus()"
                         Content="USFM"
                         Style="{StaticResource BigButton}"
                         Tag="ScriptTextOutline"
-                        Visibility="Collapsed" />-->
+                        Visibility="Collapsed" />
                     <Button
                         x:Name="AddParatextCorpus"
                         Margin="10,0,10,10"

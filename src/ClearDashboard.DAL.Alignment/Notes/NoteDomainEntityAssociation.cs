@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Exceptions;
+﻿using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
 
@@ -12,33 +13,30 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public NoteId NoteId { get; private set; }
         // FIXME:  make a real NoteInfo type!
         public string? NoteInfo { get; private set; }
-        public object DomainEntityId { get; private set; }
-        public object? DomainSubEntityId { get; private set; }
+        public IId DomainEntityId { get; private set; }
 
-        public NoteDomainEntityAssociation(IMediator mediator, NoteId noteId, object domainEntityId, object? domainSubEntityId)
+        public NoteDomainEntityAssociation(IMediator mediator, NoteId noteId, IId domainEntityId)
         {
             this.mediator_ = mediator;
 
             NoteId = noteId;
             DomainEntityId = domainEntityId;
-            DomainSubEntityId = domainSubEntityId;
         }
 
-        internal NoteDomainEntityAssociation(IMediator mediator, NoteDomainEntityAssociationId noteDomainEntityAssociationId, NoteId noteId, string noteInfo, object domainEntityId, object? domainSubEntityId)
+        internal NoteDomainEntityAssociation(IMediator mediator, NoteDomainEntityAssociationId noteDomainEntityAssociationId, NoteId noteId, string noteInfo, IId domainEntityId)
         {
             this.mediator_ = mediator;
 
             NoteDomainEntityAssociationId = noteDomainEntityAssociationId;
             NoteId = noteId;
             DomainEntityId = domainEntityId;
-            DomainSubEntityId = domainSubEntityId;
         }
 
-        public async void Create(CancellationToken token = default)
+        public async Task<NoteDomainEntityAssociation> Create(CancellationToken token = default)
         {      
             if (NoteDomainEntityAssociationId == null)
             {
-                var command = new CreateNoteDomainEntityAssociationCommand(NoteId, DomainEntityId, DomainSubEntityId);
+                var command = new CreateNoteDomainEntityAssociationCommand(NoteId, DomainEntityId);
 
                 var result = await mediator_.Send(command, token);
                 if (result.Success)
@@ -54,6 +52,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             {
                 throw new MediatorErrorEngineException($"NoteDomainEntityAssociation already created having id '{NoteDomainEntityAssociationId}'");
             }
+            return this;
         }
 
         public async void Delete(CancellationToken token = default)
