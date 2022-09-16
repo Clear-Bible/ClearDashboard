@@ -50,7 +50,7 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        
+
         <Label
             Grid.Row="0"
             Grid.Column="0"

@@ -162,7 +162,7 @@
                                     <Button
                                         x:Name="ShowLogos"
                                         Grid.Column="1"
-                                       Width="32"
+                                        Width="32"
                                         Height="32"
                                         Margin="5,0,0,0"
                                         Padding="0"
@@ -172,7 +172,9 @@
                                         CommandParameter="{Binding}">
                                         <Button.Content>
                                             <Image
-                                                Source="/Resources/logos_icon.png" Width="32" Height="32"/>
+                                                Width="32"
+                                                Height="32"
+                                                Source="/Resources/logos_icon.png" />
                                         </Button.Content>
                                     </Button>
                                 </StackPanel>

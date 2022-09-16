@@ -17,6 +17,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -57,6 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public string ContentID => this.ContentID;
 
         public bool IsRtl { get; set; }
+
+        public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
 
         #region BCV
         private bool _paratextSync = true;
@@ -654,7 +657,165 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+
         #endregion // Methods
+
+        #region Event Handlers
+
+        public void TokenClicked(TokenEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenDoubleClicked(TokenEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenRightButtonDown(TokenEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseEnter(TokenEventArgs e)
+        {
+            if (e.TokenDisplay.HasNote)
+            {
+                // DisplayNote(e);
+            }
+
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseLeave(TokenEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TokenMouseWheel(TokenEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationClicked(TranslationEventArgs e)
+        {
+            // DisplayTranslation(e);
+
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationDoubleClicked(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) double-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationRightButtonDown(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseEnter(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) hovered";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseLeave(TranslationEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationMouseWheel(TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteLeftButtonDown(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteDoubleClicked(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteRightButtonDown(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseEnter(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseLeave(NoteEventArgs e)
+        {
+            Message = string.Empty;
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteMouseWheel(NoteEventArgs e)
+        {
+            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void TranslationApplied(TranslationEventArgs e)
+        {
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }
+
+        public void TranslationCancelled(RoutedEventArgs e)
+        {
+            Message = "Translation cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        }
+
+        public void NoteApplied(NoteEventArgs e)
+        {
+            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            // NoteControlVisibility = Visibility.Hidden;
+            // NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void NoteCancelled(RoutedEventArgs e)
+        {
+            Message = "Note cancelled.";
+            NotifyOfPropertyChange(nameof(Message));
+
+            // NoteControlVisibility = Visibility.Hidden;
+            // NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+        // ReSharper restore UnusedMember.Global
+
+        #endregion
     }
 
 

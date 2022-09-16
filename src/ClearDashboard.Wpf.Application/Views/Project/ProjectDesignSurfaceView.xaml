@@ -756,14 +756,14 @@
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
             IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
-                  Add Corpora  
+                <!--  Add Corpora  -->
                 <Label
                     Margin="5,5,0,5"
                     Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
                 <WrapPanel>
-                      Manuscript  
+                    <!--  Manuscript  -->
                     <Button
                         x:Name="AddManuscriptCorpus"
                         Margin="10,0,10,10"
