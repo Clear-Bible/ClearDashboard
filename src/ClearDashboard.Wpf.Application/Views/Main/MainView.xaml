@@ -5,7 +5,6 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
-    xmlns:corpus="clr-namespace:ClearDashboard.Wpf.Application.Views.Corpus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
@@ -19,8 +18,6 @@
     xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:views="clr-namespace:ClearDashboard.Wpf.Application.Views"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -52,40 +49,26 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <Menu Grid.Column="0" ItemsSource="{Binding MenuItems}">
-                <Menu.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
-                        <Setter Property="Icon" Value="{Binding Icon}" />
-                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
-                        <!--<Setter Property="Icon" Value="{Binding IconSource}" />-->
-                        <Setter Property="Command" Value="{Binding Command}" />
-                    </Style>
-                </Menu.ItemContainerStyle>
+        <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
+            <Menu.ItemContainerStyle>
+                <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
+                    <Setter Property="Icon" Value="{Binding Icon}" />
+                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
+                    <Setter Property="Icon" Value="{Binding IconSource}" />
+                    <Setter Property="Command" Value="{Binding Command}" />
+                </Style>
+            </Menu.ItemContainerStyle>
 
-                <Menu.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
-                        <TextBlock
-                            Margin="5,5,0,0"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource PrimaryHueMidBrush}"
-                            Text="{Binding Header}" />
-                    </HierarchicalDataTemplate>
-                </Menu.ItemTemplate>
-            </Menu>
-
-            <!--<userControls:BcvUserControl
-                Grid.Column="2"
-                CurrentBcv="{Binding CurrentBcv}"
-                IsRtl="{Binding IsRtl}"
-                ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-        </Grid>
+            <Menu.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                        Text="{Binding Header}" />
+                </HierarchicalDataTemplate>
+            </Menu.ItemTemplate>
+        </Menu>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -131,23 +114,6 @@
                 <DockingManager.LayoutItemTemplateSelector>
                     <panes:PanesTemplateSelector>
                         <!--  DOCUMENTS  -->
-                        <!--<panes:PanesTemplateSelector.ConcordanceViewTemplate>
-                        <DataTemplate>
-                            <local:ConcordanceView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.ConcordanceViewTemplate>-->
-
-                        <panes:PanesTemplateSelector.CorpusTokensViewTemplate>
-                            <DataTemplate>
-                                <corpus:CorpusTokensView />
-                            </DataTemplate>
-                        </panes:PanesTemplateSelector.CorpusTokensViewTemplate>
-
-                        <panes:PanesTemplateSelector.DashboardViewTemplate>
-                            <DataTemplate>
-                                <views:DashboardView />
-                            </DataTemplate>
-                        </panes:PanesTemplateSelector.DashboardViewTemplate>
 
                         <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
                             <DataTemplate>
@@ -155,23 +121,6 @@
                             </DataTemplate>
                         </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
 
-                        <panes:PanesTemplateSelector.AlignmentToolViewTemplate>
-                            <DataTemplate>
-                                <views:AlignmentToolView />
-                            </DataTemplate>
-                        </panes:PanesTemplateSelector.AlignmentToolViewTemplate>
-
-                        <!--<panes:PanesTemplateSelector.TreeDownViewTemplate>
-                        <DataTemplate>
-                            <local:TreeDownView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.TreeDownViewTemplate>-->
-
-                        <!--<panes:PanesTemplateSelector.StartPageViewTemplate>
-                        <DataTemplate>
-                            <local:StartPageView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.StartPageViewTemplate>-->
 
                         <!--  TOOLS  -->
                         <panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
@@ -180,35 +129,11 @@
                             </DataTemplate>
                         </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
-                        <!--<panes:PanesTemplateSelector.ProjectDesignSurfaceViewTemplate>
-                            <DataTemplate>
-                                <local:ProjectDesignSurfaceView />
-                            </DataTemplate>
-                        </panes:PanesTemplateSelector.ProjectDesignSurfaceViewTemplate>-->
-
                         <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
                                 <paratextViews1:WordMeaningsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
-
-                        <!--<panes:PanesTemplateSelector.SourceContextViewTemplate>
-                        <DataTemplate>
-                            <local:SourceContextView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.SourceContextViewTemplate>-->
-
-                        <!--<panes:PanesTemplateSelector.TargetContextViewTemplate>
-                        <DataTemplate>
-                            <local:TargetContextView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.TargetContextViewTemplate>-->
-
-                        <!--<panes:PanesTemplateSelector.NotesViewTemplate>
-                        <DataTemplate>
-                            <local:NotesView />
-                        </DataTemplate>
-                    </panes:PanesTemplateSelector.NotesViewTemplate>-->
 
                         <panes:PanesTemplateSelector.PinsViewTemplate>
                             <DataTemplate>
@@ -230,9 +155,12 @@
                         <!--  DOCUMENTS  -->
                         <panes:PanesStyleSelector.DocumentStyle>
                             <Style TargetType="{x:Type LayoutItem}">
+                                <Setter Property="CanClose" Value="False" />
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                                <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                                <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
                             </Style>
                         </panes:PanesStyleSelector.DocumentStyle>
 
@@ -256,9 +184,9 @@
                 </DockingManager.LayoutUpdateStrategy>
 
                 <LayoutRoot>
-                    <LayoutPanel Orientation="Vertical">
+                    <LayoutPanel DockHeight="1.3781725888324874*" Orientation="Vertical">
                         <LayoutDocumentPane />
-                        <LayoutAnchorablePane Name="ToolsPane" DockHeight="150" />
+                        <LayoutAnchorablePane Name="ToolsPane" DockHeight="0.6218274111675127*" />
                     </LayoutPanel>
                 </LayoutRoot>
             </DockingManager>
