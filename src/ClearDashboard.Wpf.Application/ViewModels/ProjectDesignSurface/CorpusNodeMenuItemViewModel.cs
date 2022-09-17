@@ -13,18 +13,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
     public class CorpusNodeMenuItemViewModel : MenuItemViewModel<CorpusNodeMenuItemViewModel>
     {
 
-        public CorpusNodeMenuItemViewModel()
-        {
-            
-        }
-
-
-        private ProjectDesignSurfaceViewModel? _projectDesignSurfaceViewModel;
-        public ProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
-        {
-            get => _projectDesignSurfaceViewModel;
-            set => Set(ref _projectDesignSurfaceViewModel, value);
-        }
+       
 
         private CorpusNodeViewModel? _corpusNodeViewModel;
         public CorpusNodeViewModel? CorpusNodeViewModel
@@ -36,7 +25,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         protected override void Execute()
         {
-            ProjectDesignSurfaceViewModel?.MenuCommand(this, CorpusNodeViewModel);
+            ProjectDesignSurfaceViewModel?.ExecuteCorpusNodeMenuCommand(this);
         }
 
         

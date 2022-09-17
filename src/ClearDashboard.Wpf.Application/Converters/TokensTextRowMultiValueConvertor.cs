@@ -39,7 +39,9 @@ public class TokensTextRowMultiValueConvertor : IMultiValueConverter
         
         if (values[0] is not TokensTextRow)
         {
-            throw new NullReferenceException("The first parameter must be of type 'TokensTextRow`");
+           // throw new NullReferenceException("The first parameter must be of type 'TokensTextRow`");
+           // CODE REVIEW:  What's the right thing to do here?
+            return list;
         }
 
         if (values[1] is not string)
