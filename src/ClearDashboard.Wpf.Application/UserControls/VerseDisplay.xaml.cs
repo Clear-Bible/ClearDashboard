@@ -164,7 +164,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the NoteMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));        
+        
+        /// <summary>
+        /// Identifies the NoteCreateEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
+            ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
         #region Static DependencyProperties
 
@@ -511,6 +517,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(NoteMouseWheelEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when the user requests to create a new note.
+        /// </summary>
+        public event RoutedEventHandler NoteCreate
+        {
+            add => AddHandler(NoteCreateEvent, value);
+            remove => RemoveHandler(NoteCreateEvent, value);
+        }
+
         #endregion
         #region Private event handlers
 
@@ -676,6 +691,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteMouseWheelEvent, e);
+        }
+
+        private void OnNoteCreate(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteCreateEvent, e);
         }
 
         #endregion

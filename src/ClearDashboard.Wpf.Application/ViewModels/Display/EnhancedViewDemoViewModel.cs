@@ -15,6 +15,8 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 //using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
@@ -60,6 +62,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
 
+        public IEnumerable<Label> SampleLabels { get; set; }
+
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
         {
@@ -94,7 +98,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.TokenDisplay.HasNote)
             {
-                DisplayNote(e);
+                DisplayNote(e.TokenDisplay);
             }
 
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
@@ -187,6 +191,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
+        public void NoteCreate(NoteEventArgs e)
+        {
+            DisplayNote(e.TokenDisplay);
+        }
+
         public void TranslationApplied(TranslationEventArgs e)
         {
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
@@ -229,10 +238,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            CreateLabels();
+
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
             //await MockProjectAndUser();
             //await RetrieveTokensViaCorpusClass();
+        }
+
+        private void CreateLabels()
+        {
+            var labels = new List<Label>();
+            for (var i = 1; i <= 5; i++)
+            {
+                labels.Add(new Label(Mediator, $"Label{i}"));
+            }
+
+            SampleLabels = labels;
         }
 
 
@@ -318,6 +340,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
+        //private List<Note> GetNotesForEntity(TokenId id)
+        //{
+        //    var noteIds = GetAllNoteDomainEntityAssociationsQuery.Where()
+        //}
+
+        //private void Foo()
+        //{
+        //    Dictionary<NoteId, Note> dictionary_;
+            
+        //    List<>
+        //}
+
         public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
 
         private void DisplayTranslation(TranslationEventArgs e)
@@ -335,10 +369,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-        private void DisplayNote(TokenEventArgs e)
+        private void DisplayNote(TokenDisplay tokenDisplay)
         {
             NoteControlVisibility = Visibility.Visible;
-            CurrentTokenDisplay = e.TokenDisplay;
+            CurrentTokenDisplay = tokenDisplay;
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
