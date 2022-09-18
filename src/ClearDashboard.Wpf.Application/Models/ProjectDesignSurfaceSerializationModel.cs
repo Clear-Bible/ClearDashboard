@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public string CorpusType { get; set; }
         public DateTimeOffset? Created { get; set; }
         public string? UserId { get; set; }
+        public string? UserDisplayName { get; set; }
     }
 
 }

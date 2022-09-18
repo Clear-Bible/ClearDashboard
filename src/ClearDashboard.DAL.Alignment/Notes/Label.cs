@@ -58,11 +58,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public static async Task<Label> Get(
-            IMediator mediator,
-            LabelId labelId)
+        public static async Task<IEnumerable<Label>> GetAll(
+            IMediator mediator)
         {
-            var command = new GetLabelByLabelIdQuery(labelId);
+            var command = new GetAllLabelsQuery();
 
             var result = await mediator.Send(command);
             if (result.Success)

@@ -1,5 +1,5 @@
 ﻿using ClearBible.Engine.Tokenization;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using ClearDashboard.DAL.Alignment.Features;
 using System.Threading.Tasks;
+using ClearBible.Engine.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -32,7 +33,6 @@ public class CreateNotesCommandHandlerTests : TestBase
     {
         try
         {
-
             #region Stopwatch
             Stopwatch sw = new Stopwatch();
 
@@ -93,21 +93,25 @@ public class CreateNotesCommandHandlerTests : TestBase
             #endregion
 
             var label = await new Label(Mediator!, "boo label full of label-ness").CreateOrUpdate();
-            var label2 = await new Label(Mediator!, "boo label NOT full of label-ness").CreateOrUpdate();
+
             var note = await new Note(Mediator!, "a boo note", "not sure").CreateOrUpdate();
-            var lna11 = await new LabelNoteAssociation(Mediator!, label.LabelId!, note.NoteId!).Create();
-            await new LabelNoteAssociation(Mediator!, label2.LabelId!, note.NoteId!).Create();
+            await note.AssociateLabel(label);
+            var label2 = await note.CreateAssociateLabel("boo label created in context of boo note");
+
+            Assert.Equal(2, note.Labels.Count());
 
             #region Stopwatch
             sw.Stop();
-            Output.WriteLine("Elapsed={0} - Create two labels, one note and two label note associations", sw.Elapsed);
+            Output.WriteLine("Elapsed={0} - Create two labels, one note and associate", sw.Elapsed);
             sw.Restart();
             #endregion
 
-            var nda1 = await new NoteDomainEntityAssociation(Mediator!, note.NoteId!, sourceTokens[4].TokenId).Create();
-            await new NoteDomainEntityAssociation(Mediator!, note.NoteId!, sourceTokens[7].TokenId).Create();
-            await new NoteDomainEntityAssociation(Mediator!, note.NoteId!, targetTokenizedTextCorpus.TokenizedTextCorpusId).Create();
-            await new NoteDomainEntityAssociation(Mediator!, note.NoteId!, parallelCorpus.ParallelCorpusId).Create();
+            await note.AssociateDomainEntity(sourceTokens[4].TokenId);
+            await note.AssociateDomainEntity(sourceTokens[7].TokenId);
+            await note.AssociateDomainEntity(targetTokenizedTextCorpus.TokenizedTextCorpusId);
+            await note.AssociateDomainEntity(parallelCorpus.ParallelCorpusId);
+
+            Assert.Equal(4, note.DomainEntityIds.Count());
 
             #region Stopwatch
             sw.Stop();
@@ -118,51 +122,79 @@ public class CreateNotesCommandHandlerTests : TestBase
             var note2 = await new Note(Mediator!, "a baa note", "not sure").CreateOrUpdate();
             var labels = await Label.Get(Mediator!, "boo lab");
             Assert.True(labels.Count() == 2);
-            var label3 = await new Label(Mediator!, "super third").CreateOrUpdate();
-            await new LabelNoteAssociation(Mediator!, labels.First().LabelId!, note2.NoteId!).Create();
-            await new LabelNoteAssociation(Mediator!, label3.LabelId!, note2.NoteId!).Create();
-
-            await new NoteDomainEntityAssociation(Mediator!, note2.NoteId!, sourceTokenizedTextCorpus.TokenizedTextCorpusId).Create();
+            await note2.AssociateLabel(labels.First());
+            await note2.CreateAssociateLabel("super third");
+            await note2.AssociateDomainEntity(sourceTokenizedTextCorpus.TokenizedTextCorpusId);
+            await note2.AssociateDomainEntity(parallelCorpus.ParallelCorpusId);
 
             #region Stopwatch
             sw.Stop();
             Output.WriteLine("Elapsed={0} - Create one note, retrieve one label, create one label, create two label note associations and create one note domain entity id association", sw.Elapsed);
             #endregion
 
+
+            ProjectDbContext.ChangeTracker.Clear();
             Output.WriteLine("");
 
-            var allAssoc = await NoteDomainEntityAssociation.GetAll(Mediator!);
-            foreach (var assoc in allAssoc)
+            var labelsToCompare = new List<Label>();
+            var allNoteLabelIds = new HashSet<LabelId>();
+            var allNotes = await Note.GetAllNotes(Mediator!);
+            foreach (var n in allNotes)
             {
-                var associatedNote = await Note.Get(Mediator!, assoc.NoteId);
-                var associatedLabels = (await Task.WhenAll(
-                    (await LabelNoteAssociation.GetAll(Mediator!, associatedNote.NoteId!))
-                        .Select(ln => Label.Get(Mediator!, ln.LabelId)))).AsEnumerable();
-                Output.WriteLine($"Assoc - Domain Id type: '{assoc.DomainEntityId.GetType().GetGenericArguments().First().Name}', Note Text: '{associatedNote.Text}', Domain Id: '{assoc.DomainEntityId.Id}', Note Id: '{assoc.NoteId.Id}'");
-                foreach (var l in associatedLabels)
+                Output.WriteLine($"Note - Text: '{n.Text}', Id: '{n.NoteId!.Id}'");
+                foreach (var l in n.Labels)
                 {
-                    Output.WriteLine($"\tAssociated Label - Text: '{l.Text}', Id: '{l.LabelId}'");
+                    Output.WriteLine($"\tLabel - Text: '{l.Text}', Id: '{l.LabelId!.Id}'");
+                    allNoteLabelIds.Add(l.LabelId);
                 }
-                Output.WriteLine(string.Empty);
+                foreach (var nd in n.DomainEntityIds)
+                {
+                    Output.WriteLine($"\tDomain Entity Id - Type: '{nd.GetType().GetGenericArguments().First().Name}', Id: '{nd}'");
+                }
+            }
+
+            Output.WriteLine("");
+
+            var domainEntityIdCount = 0;
+            var domainEntityIdNotes = await Note.GetAllDomainEntityIdNotes(Mediator!);
+            foreach (var domainEntityIdNote in domainEntityIdNotes)
+            {
+                Output.WriteLine($"Domain Entity Id - Type: '{domainEntityIdNote.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityIdNote.Key as IId)!.Id}'");
+                foreach (var n in domainEntityIdNote.Value)
+                {
+                    Output.WriteLine($"\tNote - Text: '{n.Text}', Id: '{n.NoteId!.Id}'");
+                    foreach (var l in n.Labels)
+                    {
+                        Output.WriteLine($"\t\tLabel - Text: '{l.Text}', Id: '{l.LabelId!.Id}'");
+                    }
+                }
+                domainEntityIdCount++;
             }
 
             ProjectDbContext.ChangeTracker.Clear();
 
+            var allLabels = await Label.GetAll(Mediator!);
             Assert.Equal(3, ProjectDbContext.Labels.Count());
+            Assert.Equal(3, allLabels.Count());
+            Assert.Equal(3, allNoteLabelIds.Count);
+
             Assert.Equal(2, ProjectDbContext.Notes.Count());
+            Assert.Equal(2, allNotes.Count());
+
+            Assert.Equal(5, domainEntityIdCount);
             Assert.Equal(4, ProjectDbContext.LabelNoteAssociations.Count());
-            Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
+            Assert.Equal(6, ProjectDbContext.NoteDomainEntityAssociations.Count());
 
             // Test the LabelNoteAssociation and NoteDomainEntityAssociation Delete methods:
-            lna11.Delete();
-            nda1.Delete();
+            await note.DetachLabel(labels.First());
+            await note.DetachDomainEntity(sourceTokens[7].TokenId);
 
             ProjectDbContext.ChangeTracker.Clear();
 
             Assert.Equal(3, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(3, ProjectDbContext.LabelNoteAssociations.Count());
-            Assert.Equal(4, ProjectDbContext.NoteDomainEntityAssociations.Count());
+            Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
 
             // Test Label.Delete and make sure the cascade delete works:
             // (Leave one Label/LabelNoteAssociation so we can test Note
@@ -175,7 +207,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Equal(1, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(1, ProjectDbContext.LabelNoteAssociations.Count());
-            Assert.Equal(4, ProjectDbContext.NoteDomainEntityAssociations.Count());
+            Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
 
             // Test Note.Delete and make sure the cascade delete works:
             note.Delete();
@@ -188,7 +220,9 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.False(ProjectDbContext.LabelNoteAssociations.Any());
             Assert.False(ProjectDbContext.NoteDomainEntityAssociations.Any());
 
-            label3.Delete();
+            allLabels = await Label.GetAll(Mediator!);
+            Assert.Single(allLabels);
+            allLabels.First().Delete();
 
             ProjectDbContext.ChangeTracker.Clear();
 

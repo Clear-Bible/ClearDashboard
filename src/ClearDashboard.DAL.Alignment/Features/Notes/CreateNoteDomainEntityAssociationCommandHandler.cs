@@ -36,7 +36,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
                     .FirstOrDefault(
                         nd => nd.NoteId == request.NoteId.Id && 
-                        nd.DomainEntityIdName == name && 
                         nd.DomainEntityIdGuid == guid
                     );
 
@@ -50,6 +49,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                     };
 
                     ProjectDbContext.NoteDomainEntityAssociations.Add(noteDomainEntityAssociation);
+                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+                }
+                else if (name != noteDomainEntityAssociation.DomainEntityIdName)
+                {
+                    noteDomainEntityAssociation.DomainEntityIdName = name;
                     _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
                 }
 

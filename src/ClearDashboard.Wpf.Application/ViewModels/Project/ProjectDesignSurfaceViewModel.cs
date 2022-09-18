@@ -522,7 +522,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusType: corpusNode.CorpusType.ToString(),
                         metadata: new Dictionary<string, object>(),
                         created: new DateTimeOffset(),
-                        userId: new UserId(_projectManager.CurrentUser.Id));
+                        userId: new UserId(_projectManager.CurrentUser.Id, _projectManager.CurrentUser.FullName ?? string.Empty));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -573,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusType: corpus.CorpusType,
                         metadata: new Dictionary<string, object>(),
                         created: corpus.Created,
-                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString())
+                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString(), corpus.UserDisplayName ?? string.Empty)
                     ));
                 }
             }
