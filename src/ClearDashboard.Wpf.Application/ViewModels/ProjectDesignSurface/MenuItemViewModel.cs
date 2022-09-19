@@ -1,0 +1,71 @@
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
+
+public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBase
+{
+    protected MenuItemViewModel()
+    {
+        MenuItems = new ObservableCollection<TMenuItemViewModel>();
+        Command = new CommandViewModel(Execute);
+    }
+    private bool? _isChecked = false;
+    public bool? IsChecked
+    {
+        get => _isChecked;
+        set => Set(ref _isChecked, value);
+    }
+
+    private string? _tokenizer;
+    public string? Tokenizer
+    {
+        get => _tokenizer;
+        set => Set(ref _tokenizer, value);
+    }
+
+    private string? _iconKind;
+    public string? IconKind
+    {
+        get => _iconKind;
+        set => Set(ref _iconKind, value);
+    }
+
+    private bool? _isSeparator = false;
+    public bool? IsSeparator
+    {
+        get => _isSeparator;
+        set => Set(ref _isSeparator, value);
+    }
+
+
+    private string? _id;
+    public string? Id
+    {
+        get => _id;
+        set => Set(ref _id, value);
+    }
+
+
+    private string? _header;
+    public string? Header
+    {
+        get => _header;
+        set => Set(ref _header, value);
+    }
+
+    private ProjectDesignSurfaceViewModel? _projectDesignSurfaceViewModel;
+    public ProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
+    {
+        get => _projectDesignSurfaceViewModel;
+        set => Set(ref _projectDesignSurfaceViewModel, value);
+    }
+
+    public ObservableCollection<TMenuItemViewModel>? MenuItems { get; set; }
+
+    public ICommand? Command { get; protected set; }
+
+    protected abstract void Execute();
+}

@@ -4,11 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="50"
-    d:DesignWidth="450"
-    Background="{DynamicResource MaterialDesignPaper}"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="55"
+    d:DesignWidth="515"
+    Background="Transparent"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
@@ -23,15 +25,15 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Name="LayoutRoot" HorizontalAlignment="Stretch">
+    <Grid Name="LayoutRoot" IsEnabled="{Binding IsControlEnabled}">
         <!--  DataContext="{Binding ElementName=parent}"  -->
         <Grid.RowDefinitions>
             <RowDefinition Height="15" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <!--  sync [0]  -->
-            <ColumnDefinition Width="75" />
+            <ColumnDefinition Width="55" />
             <!--  left book arrow [1]  -->
             <ColumnDefinition Width="25" />
             <!--  book combo [2]  -->
@@ -50,16 +52,42 @@
             <ColumnDefinition Width="50" />
             <!--  right Verse arrow [9]  -->
             <ColumnDefinition Width="25" />
+            <!--  up/down control [10]  -->
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Setter Property="Width" Value="75" />
+                        <Style.Triggers>
+                            <!--  set the width of the up/down control to 0 when the control is readonly  -->
+                            <DataTrigger Binding="{Binding ShowOffsetControl}" Value="False">
+                                <Setter Property="Width" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <!--  OUTLINE BORDER  -->
         <Border
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            Grid.ColumnSpan="10"
+            Grid.ColumnSpan="11"
             Margin="-1,-1,-1,0"
-            BorderBrush="{StaticResource MaterialDesignLightSeparatorBackground}"
-            BorderThickness="2" />
+            BorderBrush="{StaticResource MahApps.Brushes.Control.Background}"
+            BorderThickness="1"
+            CornerRadius="4" />
+        <!--  BACKGROUND BORDER BRUSH  -->
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="11"
+            Margin="-1,-1,-1,0"
+            Background="{DynamicResource MahApps.Brushes.Badged.Background.Disabled}"
+            CornerRadius="4" />
+
 
         <TextBlock
             Grid.Row="0"
@@ -67,7 +95,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
             Text="SYNC" />
         <TextBlock
             Grid.Row="0"
@@ -75,7 +103,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
             Text="BOOK" />
         <TextBlock
             Grid.Row="0"
@@ -83,7 +111,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
             Text="CHAPTER" />
         <TextBlock
             Grid.Row="0"
@@ -91,8 +119,17 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="12"
-            Foreground="{StaticResource PrimaryHueLightBrush}"
+            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
             Text="VERSE" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+            Text="OFFSET" />
 
         <ComboBox
             x:Name="CboBook"
@@ -160,17 +197,14 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookDownArrow_Click"
             IsEnabled="False"
             ToolTip="Next Book">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
+
             <TextBlock
                 Name="NextBookArrow"
                 FontWeight="ExtraBold"
@@ -187,17 +221,13 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterUpArrow_Click"
             IsEnabled="False"
             ToolTip="Previous Chapter">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
             <TextBlock
                 Name="PreviousChapterArrow"
                 FontWeight="ExtraBold"
@@ -213,17 +243,14 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterDownArrow_Click"
             IsEnabled="False"
             ToolTip="Next Chapter">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
+
             <TextBlock
                 Name="NextChapterArrow"
                 FontWeight="ExtraBold"
@@ -241,17 +268,14 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseUpArrow_Click"
             IsEnabled="False"
             ToolTip="Previous Verse">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
+
             <TextBlock
                 Name="PreviousVerseArrow"
                 FontWeight="ExtraBold"
@@ -267,21 +291,28 @@
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
+            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseDownArrow_Click"
             IsEnabled="False"
             ToolTip="Next Verse">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </Button.Style>
+
             <TextBlock
                 Name="NextVerseArrow"
                 FontWeight="ExtraBold"
                 Text="⏵" />
         </Button>
+
+        <mah:NumericUpDown
+            Grid.Row="1"
+            Grid.Column="10"
+            Margin="0,0,5,2"
+            Interval="1"
+            Maximum="100"
+            Minimum="1"
+            Value="{Binding VerseRange, Mode=TwoWay}" />
+
     </Grid>
 </UserControl>

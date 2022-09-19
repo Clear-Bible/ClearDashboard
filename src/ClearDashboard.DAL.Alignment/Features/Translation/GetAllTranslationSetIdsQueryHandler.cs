@@ -27,9 +27,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
             IQueryable<Models.TranslationSet> translationSets = ProjectDbContext.TranslationSets
                 .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc.SourceTokenizedCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
                 .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc.TargetTokenizedCorpus);
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ts => ts.ParallelCorpus)
+                    .ThenInclude(pc => pc!.User)
+                .Include(ts => ts.User);
             if (request.ParallelCorpusId != null)
             {
                 translationSets = translationSets.Where(ts => ts.ParallelCorpusId == request.ParallelCorpusId.Id);
@@ -44,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Select(ts => (
                     ModelHelper.BuildTranslationSetId(ts), 
                     ModelHelper.BuildParallelCorpusId(ts.ParallelCorpus!),
-                    ModelHelper.BuildUserId(ts)));
+                    ModelHelper.BuildUserId(ts.User!)));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;

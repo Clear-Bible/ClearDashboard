@@ -5,7 +5,7 @@
 #define MyAppVersion "1.5"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
-#define MyAppExeName "ClearDashboard.Wpf.exe"
+#define MyAppExeName "ClearDashboard.Wpf.Application.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
@@ -27,14 +27,14 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputBaseFilename=ClearDashboard
-SetupIconFile=..\src\ClearDashboard.WPF\Assets\ClearDashboard_logo.ico
+SetupIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64
 UninstallDisplayIcon={uninstallexe}
 Uninstallable=yes
-UninstallIconFile=..\src\ClearDashboard.WPF\Assets\ClearDashboard_logo.ico
+UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo.ico
 DisableDirPage=yes
 
 [Languages]
@@ -132,9 +132,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 ;Source: "windowsdesktop-runtime-6.0.5-win-x64.exe"; Flags: dontcopy noencryption
 Source: "windowsdesktop-runtime-6.0.6-win-x64.exe"; Flags: dontcopy noencryption
 
-Source: "..\src\ClearDashboard.WPF\bin\Release\net6.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\ClearDashboard.WPF\bin\Release\net6.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WPF\bin\Release\net6.0-windows\ClearDashboard.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.deps.json"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion

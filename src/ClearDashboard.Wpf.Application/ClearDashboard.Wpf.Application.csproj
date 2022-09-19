@@ -38,6 +38,7 @@
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
+    <None Remove="Resources\Paratext_white_Icon48.png" />
     <None Remove="Resources\SBL_grk.ttf" />
     <None Remove="Resources\SBL_Hbrw.ttf" />
     <None Remove="Resources\scissors.png" />
@@ -78,8 +79,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.17" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.21" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
@@ -133,6 +137,7 @@
     <Resource Include="Resources\Paratext_Disconnected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Paratext_white_Icon48.png" />
     <Resource Include="Resources\SBL_grk.ttf" />
     <Resource Include="Resources\SBL_Hbrw.ttf" />
     <Resource Include="Resources\scissors.png" />
@@ -160,6 +165,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="UserControls\NoteControl.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
@@ -221,14 +229,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\usfm\Tes\41MATTes.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\42MRKTes.SFM">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\custom.vrs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\usfm\Tes\Settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Layouts\Project.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\usx.xslt">
@@ -246,11 +263,12 @@
     <Page Update="UserControls\ClockUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\TextDisplayControl.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
     <Page Update="UserControls\TimerUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\NoteControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\WorkflowFooter.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
@@ -270,9 +288,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Views\DesignSurface\" />
   </ItemGroup>
-
 </Project>

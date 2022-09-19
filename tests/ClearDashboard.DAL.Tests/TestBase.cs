@@ -10,12 +10,14 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
 using ClearDashboard.DAL.Tests.Slices.Users;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
@@ -37,11 +39,16 @@ namespace ClearDashboard.DAL.Tests
         private IServiceProvider _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
 
+        protected IMediator? Mediator => ServiceProvider.GetService<IMediator>();
+        protected ProjectDbContext? ProjectDbContext { get; set; }
+        protected string? ProjectName { get; set; }
+
         protected TestBase(ITestOutputHelper output)
         {
             Output = output;
             // ReSharper disable once VirtualMemberCallInConstructor
             SetupDependencyInjection();
+            SetupTests();
         }
 
         protected virtual void SetupDependencyInjection()
@@ -50,10 +57,26 @@ namespace ClearDashboard.DAL.Tests
             Services.AddSingleton<IWindowManager, WindowManager>();
             Services.AddSingleton<INavigationService>(sp=> null);
             Services.AddClearDashboardDataAccessLayer();
-            Services.AddMediatR(typeof(IMediatorRegistrationMarker));
+            Services.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateParallelCorpusCommandHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
+            Services.AddScoped<ProjectDbContext>();
+            Services.AddScoped<ProjectDbContextFactory>();
+            Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
+        }
+        private async void SetupTests()
+        {
+            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            ProjectName = $"EnhancedView";
+            Assert.NotNull(factory);
+
+            Output.WriteLine($"Opening database: {ProjectName}");
+            var assets = await factory?.Get(ProjectName)!;
+            ProjectDbContext = assets.ProjectDbContext;
+            
+            var testUser = await AddDashboardUser(ProjectDbContext);
+            SetupProjectProvider(ProjectDbContext);
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
@@ -173,9 +196,16 @@ namespace ClearDashboard.DAL.Tests
             return testUser;
         }
 
+        protected void SetupProjectProvider(ProjectDbContext context)
+        {
+            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
+            Assert.NotNull(projectProvider);
+            projectProvider!.CurrentProject = context.Projects.First();
+        }
+
         protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName)
         {
-            var testProject = new Project { ProjectName = projectName, IsRtl = true};
+            var testProject = new Project { ProjectName = projectName, IsRtl = true };
             var projectProvider = ServiceProvider.GetService<IProjectProvider>();
             Assert.NotNull(projectProvider);
             projectProvider!.CurrentProject = testProject;

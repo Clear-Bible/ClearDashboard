@@ -12,8 +12,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     /// </summary>
     public sealed class ConnectorViewModel : AbstractModelBase
     {
-        private readonly IEventAggregator _eventAggregator;
-        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
 
         #region Internal Data Members
 
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         #endregion Internal Data Members
 
-        public ConnectorViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager, string paratextProjectId)
+        public ConnectorViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager, string paratextProjectId)
         {
             _eventAggregator = eventAggregator;
             _projectManager = projectManager;
@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             set
             {
                 Set(ref _selectedConnection, value);
-                _eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChanagedMessage(value));
+                _eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChangedMessage(value));
             }
         }
 

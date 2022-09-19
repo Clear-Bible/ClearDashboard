@@ -1,7 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.ViewModels;
+﻿using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -41,30 +42,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             // ====================
             //   DOCUMENTS
             // ====================
-            //if (item is StartPageViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
 
-            if (item is AlignmentToolViewModel)
+            if (item is EnhancedCorpusViewModel)
             {
                 return DocumentStyle;
             }
 
-            //if (item is TreeDownViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is ConcordanceViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
-
-            //if (item is DashboardViewModel)
-            //{
-            //    return DocumentStyle;
-            //}
 
             // ====================
             //   TOOLS
@@ -79,20 +62,6 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return ToolStyle;
             }
 
-            //if (item is SourceContextViewModel)
-            //{
-            //    return ToolStyle;
-            //}
-
-            //if (item is TargetContextViewModel)
-            //{
-            //    return ToolStyle;
-            //}
-
-            //if (item is NotesViewModel)
-            //{
-            //    return ToolStyle;
-            //}
 
             if (item is PinsViewModel)
             {

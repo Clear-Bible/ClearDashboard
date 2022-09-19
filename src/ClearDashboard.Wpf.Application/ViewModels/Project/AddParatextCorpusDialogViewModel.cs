@@ -1,22 +1,19 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using FluentValidation;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ValidationResult = FluentValidation.Results.ValidationResult;
-using Autofac.Core.Lifetime;
-using Autofac;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -28,14 +25,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Other
         }
 
-        private readonly DashboardProjectManager _projectManager;
+        private readonly DashboardProjectManager? _projectManager;
         private CorpusSourceType _corpusSourceType;
-        private List<ParatextProjectMetadata> _projects;
-        private ParatextProjectMetadata _selectedProject;
+        private List<ParatextProjectMetadata>? _projects;
+        private ParatextProjectMetadata? _selectedProject;
 
 
+        private string? _corpusNameToSelect;
 
-        public AddParatextCorpusDialogViewModel() 
+        public string? Parameter { get; set; }
+
+        public AddParatextCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time    
         }
@@ -43,11 +43,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
             ILogger<AddParatextCorpusDialogViewModel>? logger,
             DashboardProjectManager? projectManager,
-        IEventAggregator? eventAggregator,
+            IEventAggregator? eventAggregator,
             IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             _projectManager = projectManager;
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrEmpty(Parameter))
+            {
+                try
+                {
+                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
+                    foreach (var value in values)
+                    {
+                        _corpusNameToSelect = value.Key;
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+                    //no-op.
+                }
+            }
+            
+            return base.OnInitializeAsync(cancellationToken);
+
         }
 
         public CorpusSourceType CorpusSourceType
@@ -56,7 +79,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _corpusSourceType, value);
         }
 
-        public List<ParatextProjectMetadata> Projects
+        public List<ParatextProjectMetadata>? Projects
         {
             get => _projects;
             set => Set(ref _projects, value);
@@ -69,13 +92,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _selectedTokenizer, value);
         }
 
-        public ParatextProjectMetadata SelectedProject
+        public ParatextProjectMetadata? SelectedProject
         {
             get => _selectedProject;
             set
             {
                 Set(ref _selectedProject, value);
-                ValidationResult = Validator.Validate(this);
+                ValidationResult = Validator?.Validate(this);
                 CanOk = ValidationResult.IsValid;
             }
         }
@@ -94,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override ValidationResult Validate()
         {
-            return (SelectedProject != null) ? Validator.Validate(this) : null;
+            return (SelectedProject != null) ? Validator?.Validate(this) : null;
         }
 
         private bool _canOk;

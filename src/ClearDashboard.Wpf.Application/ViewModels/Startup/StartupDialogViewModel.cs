@@ -1,4 +1,4 @@
-﻿using Caliburn.Micro;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -9,13 +9,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Collections.Generic;
 using Autofac;
+using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearApplicationFoundation.Exceptions;
+using System.Linq;
+using ClearApplicationFoundation.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -35,8 +42,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
             CheckLicense(IoC.Get<RegistrationDialogViewModel>());
 #endif
-
-            var views = IoC.GetAll<IWorkflowStepViewModel>();
+            var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("Startup", "Order").ToArray();
+            if (views == null || !views.Any())
+            {
+                throw new DependencyRegistrationMissingException(
+                    "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
+            }
 
             foreach (var view in views)
             {
@@ -71,8 +82,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             await TryCloseAsync(true);
         }
-
-        public object ExtraData { get; set; }
 
         public void CheckLicense<TViewModel>(TViewModel viewModel)
         {
@@ -132,5 +141,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
             _licenseCleared = true;
         }
+
+        public object? ExtraData { get; set; }
+
     }
 }

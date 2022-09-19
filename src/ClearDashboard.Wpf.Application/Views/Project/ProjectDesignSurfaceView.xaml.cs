@@ -5,6 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 
 namespace ClearDashboard.Wpf.Application.Views.Project
@@ -45,6 +46,11 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void OnProjectDesignSurfaceConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
         {
+            if (ViewModel.AddCorpusEnabled == false)
+            {
+                return;
+            }
+
             var draggedOutConnector = (ConnectorViewModel)e.ConnectorDraggedOut;
             var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
 

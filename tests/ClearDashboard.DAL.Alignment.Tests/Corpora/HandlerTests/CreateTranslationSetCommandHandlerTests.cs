@@ -4,6 +4,7 @@ using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore;
@@ -54,13 +55,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
             Assert.Single(someTranslationSetIds);
+
             Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First().translationSetId);
             Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().parallelCorpusId);
 
-            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id));
+            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id, user.FullName ?? string.Empty));
             Assert.Equal(2, allTranslationSetIdsForUser.Count());
 
-            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid()));
+            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid(), "User Boo"));
             Assert.Empty(allTranslationSetIdsForBogusUser);
         }
         finally
@@ -329,7 +331,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
                 .Filter<FunctionWordTextRowProcessor>();
 
-            var translationCommandable = new TranslationCommands(Mediator!);
+            var translationCommandable = new TranslationCommands();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,

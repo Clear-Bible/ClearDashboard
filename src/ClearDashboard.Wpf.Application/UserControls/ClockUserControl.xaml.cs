@@ -568,7 +568,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
             if (sender is ComboBox cbox)
             {
-                cbox.Background = Brushes.CornflowerBlue;
+                cbox.Background = Brushes.White;
             }
         }
 
@@ -576,7 +576,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             if (sender is TextBox box)
             {
-                box.Foreground = Brushes.White;
+                box.Foreground = Brushes.Black;
             }
             if (sender is ComboBox cbox)
             {

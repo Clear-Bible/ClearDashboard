@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using Autofac;
-using AvalonDock.Properties;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearApplicationFoundation.ViewModels.Shell;
@@ -19,12 +20,15 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using Dapper;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Action = System.Action;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -123,21 +127,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             get => _selectedLanguage;
             set
             {
+               
                 _selectedLanguage = value;
 
                 var language = EnumHelper.GetDescription(_selectedLanguage);
                 SaveUserLanguage(_selectedLanguage.ToString());
                 _translationSource.Language = language;
-
+                
+                
                 Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
-
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
+                SendUiLanguageChangeMessage(language);
             }
         }
-
-
-
 
         private static void SaveUserLanguage(string language)
         {
@@ -187,7 +190,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
@@ -214,10 +217,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             LoadingApplication = true;
             NavigationService.Navigated += NavigationServiceOnNavigated;
-   
-
-        //BogusData();
-    }
+            
+            //BogusData();
+        }
 
        
 
@@ -227,7 +229,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public bool LoadingApplication
     {
         get => _loadingApplication;
-        set => Set(ref _loadingApplication, value);
+        set
+        {
+                _loadingApplication = value;
+                SetLanguage();
+            }
     }
 
 
@@ -314,11 +320,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             dispatcherTimer.Start();
         }
 
-
-        protected override void OnViewLoaded(object view)
-        {
-            SetLanguage();
-        }
+        //protected override void OnUIThread(Action action)
+        //{
+        //    SetLanguage();
+        //}
 
         #endregion
 
@@ -460,6 +465,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }));
         }
 
+        private async Task SendUiLanguageChangeMessage(string language)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+        }
+
         #endregion
 
 
@@ -472,7 +482,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
         {
-            ParatextUserName = message.user.FullName;
+            ParatextUserName = message.User.FullName;
             await Task.CompletedTask;
         }
 

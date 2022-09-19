@@ -8,19 +8,24 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Note()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-
-            NoteAssociations = new HashSet<NoteAssociation>();
+            Labels = new HashSet<Label>();
+            LabelNoteAssociations = new HashSet<LabelNoteAssociation>();
+            NoteDomainEntityAssociations = new HashSet<NoteDomainEntityAssociation>();
             ContentCollection = new HashSet<RawContent>();
+            //NoteAssociations = new HashSet<NoteAssociation>();
             NoteRecipients = new HashSet<NoteRecipient>();
 
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
-        public virtual User? Author { get; set; }
-        public Guid AuthorId { get; set; }
-
-        public virtual ICollection<NoteAssociation> NoteAssociations { get; set; }
+        public string? Text { get; set; }
+        public string? AbbreviatedText { get; set; }
+        public ICollection<Label> Labels { get; set; }
+        public ICollection<LabelNoteAssociation> LabelNoteAssociations { get; set; }
+        public ICollection<NoteDomainEntityAssociation> NoteDomainEntityAssociations { get; set; }
+        
         public virtual ICollection<RawContent> ContentCollection { get; set; }
+        //public virtual ICollection<NoteAssociation> NoteAssociations { get; set; }
         public virtual ICollection<NoteRecipient> NoteRecipients { get; set; }
 
         [NotMapped]
@@ -29,17 +34,16 @@ namespace ClearDashboard.DataAccessLayer.Models
         [NotMapped]
         public IEnumerable<BinaryContent> BinaryContentCollection => ContentCollection.Where(content => content.ContentType == nameof(BinaryContent)).Cast<BinaryContent>();
 
-        [NotMapped]
-        public IEnumerable<AlignmentAssociation> AlignmentAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(AlignmentAssociation)).Cast<AlignmentAssociation>();
+        //[NotMapped]
+        //public IEnumerable<AlignmentAssociation> AlignmentAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(AlignmentAssociation)).Cast<AlignmentAssociation>();
 
-        [NotMapped]
-        public IEnumerable<TokenAssociation> TokenAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(TokenAssociation)).Cast<TokenAssociation>();
+        //[NotMapped]
+        //public IEnumerable<TokenAssociation> TokenAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(TokenAssociation)).Cast<TokenAssociation>();
 
-        [NotMapped]
-        public IEnumerable<VerseAssociation> VerseAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(VerseAssociation)).Cast<VerseAssociation>();
+        //[NotMapped]
+        //public IEnumerable<VerseAssociation> VerseAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(VerseAssociation)).Cast<VerseAssociation>();
 
-
-
-
+        public Guid UserId { get; set; }
+        public virtual User? User { get; set; }
     }
 }

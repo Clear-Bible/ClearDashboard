@@ -498,13 +498,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-
-            Title = "🕮 BIBLICAL TERMS";
+            Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
-            DockSide = EDockSide.Left;
+            DockSide = EDockSide.Bottom;
             _cancellationTokenSource = new CancellationTokenSource();
         }
 

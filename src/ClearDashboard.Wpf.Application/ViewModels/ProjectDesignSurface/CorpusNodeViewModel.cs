@@ -2,9 +2,11 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChanagedMessage>
+    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChangedMessage>
     {
 
         #region events
@@ -30,8 +32,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// </summary>
         private string _name = string.Empty;
 
-        private readonly IEventAggregator _eventAggregator;
-        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -80,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         {
         }
 
-        public CorpusNodeViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
+        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager)
         {
             _name = name;
             _eventAggregator = eventAggregator;
@@ -89,7 +91,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
 
         private List<NodeTokenization> _nodeTokenizations = new();
-
         public List<NodeTokenization> NodeTokenizations
         {
             get => _nodeTokenizations;
@@ -112,7 +113,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-
+        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
+        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
+        {
+            get => _menuItems;
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => MenuItems);
+            }
+        }
 
         /// <summary>
         /// The name of the node.
@@ -202,7 +212,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// of the nodes data-template.  It then pushes the size through to the view-model
         /// and this 'SizeChanged' event occurs.
         /// </summary>
-        public event EventHandler<EventArgs> SizeChanged;
+        public event EventHandler<EventArgs>? SizeChanged;
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
@@ -275,11 +285,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
                 if (_isSelected)
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(this));
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(this));
                 }
                 else
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChanagedMessage(null));
+                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(null));
                 }
             }
         }
@@ -334,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-        public Task HandleAsync(ConnectionSelectedChanagedMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(ConnectionSelectedChangedMessage message, CancellationToken cancellationToken)
         {
             var connection = message.ConnectorId;
 

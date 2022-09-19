@@ -25,11 +25,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         #endregion Internal Data Members
 
-        private readonly INavigationService _navigationService;
-        private readonly ILogger<DesignSurfaceViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
-        private IEventAggregator _eventAggregator;
-        public IEventAggregator EventAggregator
+        private readonly INavigationService? _navigationService;
+        private readonly ILogger<DesignSurfaceViewModel>? _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private IEventAggregator? _eventAggregator;
+        public IEventAggregator? EventAggregator
         {
             get => _eventAggregator;
             set => _eventAggregator = value;
@@ -101,9 +101,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         #region ctor
 
-        public DesignSurfaceViewModel(INavigationService navigationService,
-            ILogger<DesignSurfaceViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public DesignSurfaceViewModel(INavigationService? navigationService,
+            ILogger<DesignSurfaceViewModel>? logger,
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator)
         {
             _navigationService = navigationService;
             _logger = logger;

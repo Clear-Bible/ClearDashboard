@@ -1083,6 +1083,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                             verseText = "";
                         }
                         chapter = marker.Data.Trim();
+                        verse = string.Empty;
 
                         lastTokenChapter = true;
                     }

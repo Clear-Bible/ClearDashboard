@@ -6,18 +6,28 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    MinWidth="250"
-    d:DataContext="{d:DesignInstance Type=viewModels:ProjectDesignSurfaceViewModel,
+    Width="500"
+    d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="300"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
+
+    <!--<UserControl.DataContext>
+        <viewModels:ProjectDesignSurfaceViewModel />
+    </UserControl.DataContext>-->
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -138,6 +148,63 @@
                 </Setter>
             </Style>
 
+
+            <Style x:Key="BigParatextButton" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Height" Value="80" />
+                <Setter Property="MinWidth" Value="80" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                <!--<Setter Property="FontWeight" Value="Bold" />-->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="border"
+                                Background="{DynamicResource PrimaryHueDarkBrush}"
+                                CornerRadius="5">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image
+                                        Width="36"
+                                        Height="36"
+                                        Margin="5,5,5,5"
+                                        HorizontalAlignment="Center"
+                                        Source="/Resources/Paratext_white_Icon48.png" />
+
+                                    <ContentPresenter
+                                        x:Name="ButtonContentPresenter"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <!--
+                Template for the contextmenu
+            -->
+            <ControlTemplate x:Key="mist" TargetType="{x:Type MenuItem}">
+                <Separator />
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="mict" TargetType="{x:Type MenuItem}">
+                <MenuItem Header="{Binding Caption}" />
+            </ControlTemplate>
+
+            <Style x:Key="cmics" TargetType="{x:Type MenuItem}">
+                <Setter Property="Template" Value="{StaticResource mict}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                        <Setter Property="Template" Value="{StaticResource mist}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
             <!--
                 Template for the button that is used to delete nodes and connections in the graph.
                 This button is displayed in an adorner when the user hovers the mouse over a node or connection.
@@ -244,7 +311,7 @@
                                 <MenuItem
                                     Command="{StaticResource Commands.ConnectionProperties}"
                                     CommandParameter="{Binding}"
-                                    Header="Properties"
+                                    Header="{helpers:Localization Pds_PropertiesMenu}"
                                     ToolTip="View the corpus properties" />
                                 <!--
                                     Command="{StaticResource Commands.Properties}"
@@ -343,8 +410,93 @@
                                 </Style>
                             </Rectangle.Style>
                             <Rectangle.ContextMenu>
-                                <ContextMenu Name="ContextMenu">
-                                    <MenuItem
+                                <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
+                                    <ContextMenu.Resources>
+
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconPicolIcons
+                                                    Width="15"
+                                                    Height="15"
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="{Binding IconKind}" />
+                                                <TextBlock
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <Separator />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+
+                                                <!--<DataTrigger Binding="{Binding IsSeparator}" Value="False">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <iconPacks:PackIconPicolIcons
+                                                                        Width="15"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="5 5 0 0"
+                                                                        Height="15"
+                                                                        Kind="{Binding IconKind}" />
+                                                                    <TextBlock
+                                                                        Margin="5,5,0,0"
+                                                                        VerticalAlignment="Center"
+                                                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                        Text="{Binding Header}" />
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                </DataTrigger>-->
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContextMenu.Resources>
+
+
+                                    <!--<ContextMenu.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Icon" Value="{Binding Icon}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                    <ContextMenu.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
+                                        </HierarchicalDataTemplate>
+                                    </ContextMenu.ItemTemplate>-->
+
+                                    <!--<ContextMenu.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:NodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
+                                        </HierarchicalDataTemplate>
+                                    </ContextMenu.ItemTemplate>-->
+
+                                    <!--<MenuItem
                                         Command="{StaticResource Commands.CreateNode}"
                                         Header="View Verse Text"
                                         ToolTip="View the verse text for the corpus" />
@@ -357,12 +509,7 @@
                                         Command="{StaticResource Commands.NodeProperties}"
                                         CommandParameter="{Binding}"
                                         Header="Properties"
-                                        ToolTip="View the corpus properties" />
-                                    <!--
-                                        Command="{StaticResource Commands.Properties}"
-                                        cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
-                                        CommandParameter="{Binding ElementName=nodeRectangle}"
-                                    -->
+                                        ToolTip="View the corpus properties" />-->
 
                                 </ContextMenu>
                             </Rectangle.ContextMenu>
@@ -407,7 +554,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="20" />
                                 <RowDefinition Height="Auto" />
                                 <!--  spacer  -->
                                 <RowDefinition Height="2" />
@@ -416,6 +563,7 @@
 
                             <!--  The name of the node.  -->
                             <TextBlock
+                                x:Name="tb1"
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -426,6 +574,7 @@
 
                             <!--  The project type of the node.  -->
                             <TextBlock
+                                x:Name="tb2"
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
@@ -440,6 +589,24 @@
                                 Focusable="False"
                                 ItemTemplate="{StaticResource inputConnectorTemplate}"
                                 ItemsSource="{Binding InputConnectors}" />
+
+
+                            <materialDesign:Chip
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Width="30"
+                                Height="30"
+                                Margin="0,-5,6,0"
+                                HorizontalAlignment="Right"
+                                Content="{Binding Path=NodeTokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="Number of different tokenizations">
+                                <materialDesign:Chip.Style>
+                                    <Style TargetType="materialDesign:Chip">
+                                        <Setter Property="Padding" Value="0" />
+                                    </Style>
+                                </materialDesign:Chip.Style>
+                            </materialDesign:Chip>
 
                             <!--  Displays the node's output connectors.  -->
                             <ItemsControl
@@ -583,26 +750,25 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <materialDesign:Card
-            Margin="5"
+            Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
-            BorderBrush="Black"
-            BorderThickness="5"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            IsEnabled="{Binding AddCorpusEnabled}"
-            UniformCornerRadius="5">
+            IsEnabled="{Binding AddCorpusEnabled}">
             <StackPanel Grid.Row="0" MinWidth="400">
+                <!--  Add Corpora  -->
                 <Label
                     Margin="5,5,0,5"
-                    Content="Add Corpora"
+                    Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
                 <WrapPanel>
+                    <!--  Manuscript  -->
                     <Button
                         x:Name="AddManuscriptCorpus"
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddManuscriptCorpus()"
-                        Content="Manuscript"
+                        Content="{helpers:Localization Pds_Manuscript}"
                         IsEnabled="{Binding AddManuscriptEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
@@ -619,7 +785,14 @@
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddParatextCorpus()"
                         Content="Paratext"
-                        Style="{StaticResource BigButton}"
+                        Style="{StaticResource BigParatextButton}"
+                        Tag=" ScriptTextOutline" />
+                    <Button
+                        x:Name="AddParallelCorpus"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="AddParallelCorpus()"
+                        Content="Paratext"
+                        Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
                 </WrapPanel>
             </StackPanel>
@@ -754,12 +927,14 @@
                     is while zooming in and out.
                 -->
                 <TextBlock
+                    x:Name="tb3"
                     Grid.Column="7"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
                 <TextBlock
+                    x:Name="tb4"
                     Grid.Column="8"
                     VerticalAlignment="Center"
                     Text="%" />
@@ -879,7 +1054,7 @@
         <xctk:PropertyGrid
             x:Name="_propertyGrid"
             Grid.Row="2"
-            Margin="5,5,17,5"
+            Margin="5,5,35,5"
             Filter=""
             Foreground="Black"
             HideInheritedProperties="False"

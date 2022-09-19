@@ -29,12 +29,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         //protected IWindowManager? _windowManager;
         private readonly ParatextProxy _paratextProxy;
-        private readonly TranslationSource? _translationSource;
+        private TranslationSource? _translationSource;
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } =
-            new ObservableCollection<DashboardProject>();
+        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } = new ObservableCollection<DashboardProject>();
+
+        private Visibility _searchBlankVisibility;
+        public Visibility SearchBlankVisibility
+        {
+            get => _searchBlankVisibility;
+            set
+            {
+                _searchBlankVisibility = value;
+                NotifyOfPropertyChange(() => SearchBlankVisibility);
+            }
+        }
+
+        private Visibility _noProjectVisibility;
+        public Visibility NoProjectVisibility
+        {
+            get => _noProjectVisibility;
+            set
+            {
+                _noProjectVisibility = value;
+                NotifyOfPropertyChange(() => NoProjectVisibility);
+            }
+        }
 
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -46,7 +67,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => AlertVisibility);
             }
         }
-        
+
         private string? _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string? Message
         {
@@ -103,11 +124,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (SearchText == string.Empty)
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    SearchBlankVisibility = Visibility.Collapsed;
+                    NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
                     _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower()));
+                }
+
+                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count>0)
+                {
+                    NoProjectVisibility = Visibility.Hidden;
+                    SearchBlankVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    SearchBlankVisibility = Visibility.Collapsed;
+                    NoProjectVisibility = Visibility.Visible;
+                }
+
+                if (SearchText != string.Empty && DashboardProjects.Count <= 0)
+                {
+                    NoProjectVisibility = Visibility.Hidden;
+                    SearchBlankVisibility = Visibility.Visible;
                 }
             }
         }
@@ -150,16 +190,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
+        public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource) 
+            IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
-            _translationSource = translationSource;
             AlertVisibility = Visibility.Collapsed;
+            _translationSource = translationSource;
+            NoProjectVisibility = Visibility.Visible;
+            SearchBlankVisibility = Visibility.Collapsed;
         }
 
         public async Task StartParatext()
@@ -262,6 +304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 di.Delete();
 
                 DashboardProjects.Remove(project);
+                DashboardProjectsDisplay.Remove(project);
 
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
                 File.Delete(Path.Combine(di.Parent.ToString(), originalDatabaseCopyName));
@@ -271,6 +314,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
+
+        
 
         public void SetLanguage()
         {
@@ -291,6 +336,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             //WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
+        protected override void OnViewAttached(object view, object context)
+        {
+            SetLanguage();
+            base.OnViewAttached(view, context);
+        }
+
         private static void SaveUserLanguage(string language)
         {
             Settings.Default.language_code = language;
@@ -307,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task HandleAsync(UserMessage message, CancellationToken cancellationToken)
         {
-            ParatextUserName = message.user.FullName;
+            ParatextUserName = message.User.FullName;
             await Task.CompletedTask;
         }
     }

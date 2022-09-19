@@ -58,8 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         }
 
         public ToolViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator,
-            ILifetimeScope lifetimeScope) : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
+            ILifetimeScope lifetimeScope) : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
 
         }
