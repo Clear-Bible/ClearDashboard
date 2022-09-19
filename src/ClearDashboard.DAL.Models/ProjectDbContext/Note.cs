@@ -43,8 +43,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         //[NotMapped]
         //public IEnumerable<VerseAssociation> VerseAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(VerseAssociation)).Cast<VerseAssociation>();
 
-
-
-
+        public Guid UserId { get; set; }
+        public virtual User? User { get; set; }
     }
 }

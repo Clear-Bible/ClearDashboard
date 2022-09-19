@@ -241,12 +241,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("SmtWordAlignerType")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("EngineWordAlignment");
                 });
@@ -260,12 +255,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Label");
                 });
@@ -282,16 +272,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("NoteId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LabelId");
 
                     b.HasIndex("NoteId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("LabelNoteAssociation");
                 });
@@ -314,7 +299,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -337,12 +322,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("NoteAssociation");
 
@@ -364,14 +344,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("NoteId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NoteId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("NoteDomainEntityAssociation");
                 });
@@ -516,14 +491,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("NoteId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NoteId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("RawContent");
 
@@ -549,16 +519,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("TrainingText")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EngineTokenId");
 
                     b.HasIndex("TokenizationId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TokenComponent");
 
@@ -692,12 +657,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("TranslationSetId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("TranslationSetId", "SourceText")
                         .IsUnique();
@@ -720,12 +680,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("TranslationModelEntryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("TranslationModelEntryId", "Text")
                         .IsUnique();
@@ -797,12 +752,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("User");
                 });
@@ -1084,24 +1034,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Label", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelNoteAssociation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Label", "Label")
@@ -1116,31 +1048,18 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Label");
 
                     b.Navigation("Note");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteAssociation", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1153,13 +1072,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Note");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteRecipient", b =>
@@ -1247,12 +1160,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", null)
                         .WithMany("ContentCollection")
                         .HasForeignKey("NoteId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComponent", b =>
@@ -1263,13 +1170,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Tokenization");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
@@ -1355,13 +1256,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TranslationModel")
                         .HasForeignKey("TranslationSetId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("TranslationSet");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelTargetTextScore", b =>
@@ -1370,13 +1265,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TargetTextScores")
                         .HasForeignKey("TranslationModelEntryId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("TranslationModelEntry");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
@@ -1410,15 +1299,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("EngineWordAlignment");
 
                     b.Navigation("ParallelCorpus");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

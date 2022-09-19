@@ -8,10 +8,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
 {
     public class Note
     {
-        private readonly IMediator mediator_;
-
         public NoteId? NoteId { get; private set; }
-        public string Text { get; set; }
+        public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
         private readonly ICollection<Label> labels_;
@@ -20,19 +18,13 @@ namespace ClearDashboard.DAL.Alignment.Notes
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
-        public Note(IMediator mediator, string text, string? abbreviatedText)
+        public Note()
         {
-            mediator_ = mediator;
-
-            Text = text;
-            AbbreviatedText = abbreviatedText;
             labels_ = new HashSet<Label>(new NoteLabelComparer());
             domainEntityIds_ = new HashSet<IId>(new IIdEquatableComparer());
         }
-        internal Note(IMediator mediator, NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
+        internal Note(NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
         {
-            mediator_ = mediator;
-
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
@@ -48,11 +40,11 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return new List<string>();
         }
 
-        public async Task<Note> CreateOrUpdate(CancellationToken token = default)
+        public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
         {            
-            var command = new CreateOrUpdateNoteCommand(NoteId, Text, AbbreviatedText);
+            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 NoteId = result.Data!;
@@ -64,20 +56,20 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async Task<Label> CreateAssociateLabel(string labelText, CancellationToken token = default)
+        public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, CancellationToken token = default)
         {
             if (NoteId is null)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before associating with Label");
             }
 
-            var label = await new Label(mediator_, labelText).CreateOrUpdate(token);
-            await AssociateLabel(label, token);
+            var label = await new Label { Text = labelText }.CreateOrUpdate(mediator, token);
+            await AssociateLabel(mediator, label, token);
 
             return label;
         }
 
-        public async Task AssociateLabel(Label label, CancellationToken token = default)
+        public async Task AssociateLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
             if (labels_.Contains(label))
             {
@@ -95,7 +87,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new CreateLabelNoteAssociationCommand(label.LabelId, NoteId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 labels_.Add(label);
@@ -106,7 +98,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
        }
 
-        public async Task DetachLabel(Label label, CancellationToken token = default)
+        public async Task DetachLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
             if (!labels_.Contains(label))
             {
@@ -124,7 +116,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new DeleteLabelNoteAssociationCommand(label.LabelId, NoteId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 labels_.Remove(label);
@@ -135,7 +127,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async Task AssociateDomainEntity(IId domainEntityId, CancellationToken token = default)
+        public async Task AssociateDomainEntity(IMediator mediator, IId domainEntityId, CancellationToken token = default)
         {
             if (domainEntityIds_.Contains(domainEntityId))
             {
@@ -149,7 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new CreateNoteDomainEntityAssociationCommand(NoteId, domainEntityId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 domainEntityIds_.Add(domainEntityId);
@@ -160,7 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async Task DetachDomainEntity(IId domainEntityId, CancellationToken token = default)
+        public async Task DetachDomainEntity(IMediator mediator, IId domainEntityId, CancellationToken token = default)
         {
             if (!domainEntityIds_.Contains(domainEntityId))
             {
@@ -174,7 +166,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new DeleteNoteDomainEntityAssociationCommand(NoteId, domainEntityId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 domainEntityIds_.Remove(domainEntityId);
@@ -185,7 +177,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async void Delete(CancellationToken token = default)
+        public async void Delete(IMediator mediator, CancellationToken token = default)
         {
             if (NoteId == null)
             {
@@ -194,7 +186,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new DeleteNoteAndAssociationsByNoteIdCommand(NoteId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (!result.Success)
             {
                 throw new MediatorErrorEngineException(result.Message);

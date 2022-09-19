@@ -5,6 +5,10 @@ public class TimestampedEntity : IdentifiableEntity
     public TimestampedEntity()
     {
         var utcNow = DateTimeOffset.UtcNow;
+
+        // Remove any fractions of a millisecond 
+        utcNow = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond));
+
         Created = utcNow;
         Modified = utcNow;
     }

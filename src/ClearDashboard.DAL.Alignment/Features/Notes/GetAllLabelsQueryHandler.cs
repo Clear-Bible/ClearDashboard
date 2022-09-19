@@ -33,7 +33,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             var labels = ProjectDbContext.Labels
                 .Select(l => new Label(
-                    _mediator,
                     new LabelId(l.Id),
                     l.Text ?? string.Empty
                     ));

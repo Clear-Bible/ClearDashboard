@@ -34,7 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
-                .ThenInclude(n => n!.User);
+                .Include(n => n!.User);
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
@@ -42,7 +42,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             return new RequestResult<IEnumerable<Note>>(
                 notes.Select(note =>
                     new Note(
-                        _mediator,
                         new NoteId(
                             note.Id,
                             note.Created,
@@ -51,7 +50,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         note.Text!,
                         note.AbbreviatedText,
                         note.LabelNoteAssociations
-                            .Select(ln => new Label(_mediator, new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
+                            .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
                         note.NoteDomainEntityAssociations
                             .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
                     )

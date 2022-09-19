@@ -10,23 +10,55 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "EngineWordAlignment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SmtWordAlignerType = table.Column<string>(type: "TEXT", nullable: true),
+                    IsClearAligner = table.Column<bool>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EngineWordAlignment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Label",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Label", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NoteAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AssociationId = table.Column<string>(type: "TEXT", nullable: true),
+                    AssociationType = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NoteAssociation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_User_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -81,50 +113,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EngineWordAlignment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SmtWordAlignerType = table.Column<string>(type: "TEXT", nullable: true),
-                    IsClearAligner = table.Column<bool>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EngineWordAlignment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EngineWordAlignment_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Label",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Text = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Label", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Label_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Note",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: true),
                     AbbreviatedText = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -135,26 +130,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Note_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NoteAssociation",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AssociationId = table.Column<string>(type: "TEXT", nullable: true),
-                    AssociationType = table.Column<string>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NoteAssociation", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_NoteAssociation_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,8 +199,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     LabelId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,11 +216,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "Note",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_LabelNoteAssociation_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -254,8 +225,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     NoteId = table.Column<Guid>(type: "TEXT", nullable: false),
                     DomainEntityIdGuid = table.Column<Guid>(type: "TEXT", nullable: true),
-                    DomainEntityIdName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    DomainEntityIdName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -266,11 +236,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "Note",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NoteDomainEntityAssociation_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -305,8 +270,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Bytes = table.Column<byte[]>(type: "BLOB", nullable: true),
                     ContentType = table.Column<string>(type: "TEXT", nullable: false),
-                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    NoteId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -315,11 +279,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_RawContent_Note_NoteId",
                         column: x => x.NoteId,
                         principalTable: "Note",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_RawContent_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
@@ -408,8 +367,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
-                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -425,11 +383,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "TokenizedCorpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TokenComponent_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -665,8 +618,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TranslationSetId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    SourceText = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    SourceText = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -675,11 +627,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_TranslationModelEntry_TranslationSet_TranslationSetId",
                         column: x => x.TranslationSetId,
                         principalTable: "TranslationSet",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TranslationModelEntry_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
@@ -732,8 +679,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TranslationModelEntryId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Text = table.Column<string>(type: "TEXT", nullable: true),
-                    Score = table.Column<double>(type: "REAL", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Score = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -742,11 +688,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_TranslationModelTargetTextScore_TranslationModelEntry_TranslationModelEntryId",
                         column: x => x.TranslationModelEntryId,
                         principalTable: "TranslationModelEntry",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TranslationModelTargetTextScore_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
@@ -846,16 +787,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EngineWordAlignment_UserId",
-                table: "EngineWordAlignment",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Label_UserId",
-                table: "Label",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_LabelNoteAssociation_LabelId",
                 table: "LabelNoteAssociation",
                 column: "LabelId");
@@ -866,29 +797,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "NoteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LabelNoteAssociation_UserId",
-                table: "LabelNoteAssociation",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Note_UserId",
                 table: "Note",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NoteAssociation_UserId",
-                table: "NoteAssociation",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NoteDomainEntityAssociation_NoteId",
                 table: "NoteDomainEntityAssociation",
                 column: "NoteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NoteDomainEntityAssociation_UserId",
-                table: "NoteDomainEntityAssociation",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NoteRecipient_NoteId",
@@ -941,11 +857,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "NoteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RawContent_UserId",
-                table: "RawContent",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TokenComponent_BookNumber",
                 table: "TokenComponent",
                 column: "BookNumber");
@@ -974,11 +885,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_TokenComponent_TokenizationId",
                 table: "TokenComponent",
                 column: "TokenizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TokenComponent_UserId",
-                table: "TokenComponent",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TokenComponent_VerseNumber",
@@ -1042,20 +948,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TranslationModelEntry_UserId",
-                table: "TranslationModelEntry",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TranslationModelTargetTextScore_TranslationModelEntryId_Text",
                 table: "TranslationModelTargetTextScore",
                 columns: new[] { "TranslationModelEntryId", "Text" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TranslationModelTargetTextScore_UserId",
-                table: "TranslationModelTargetTextScore",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TranslationSet_DerivedFromId",
@@ -1080,11 +976,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TranslationSet_UserId",
                 table: "TranslationSet",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_UserId",
-                table: "User",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(

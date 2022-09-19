@@ -6,31 +6,29 @@ namespace ClearDashboard.DAL.Alignment.Notes
 {
     public class Label
     {
-        private readonly IMediator mediator_;
-
         public LabelId? LabelId { get; private set; }
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
-        public Label(IMediator mediator, string text)
+        public Label()
         {
-            mediator_ = mediator;
-
-            Text = text;
         }
 
-        internal Label(IMediator mediator, LabelId labelId, string text)
+        internal Label(LabelId labelId, string text)
         {
-            this.mediator_ = mediator;
-
             LabelId = labelId;
             Text = text;
         }
 
-        public async Task<Label> CreateOrUpdate(CancellationToken token = default)
-        {            
+        public async Task<Label> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
+        {     
+            if (string.IsNullOrEmpty(Text))
+            {
+                throw new MediatorErrorEngineException($"Unable to create Label - Text property has not been set");
+            }
+
             var command = new CreateOrUpdateLabelCommand(LabelId, Text);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 LabelId = result.Data!;
@@ -42,7 +40,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async void Delete(CancellationToken token = default)
+        public async void Delete(IMediator mediator, CancellationToken token = default)
         {
             if (LabelId == null)
             {
@@ -51,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             var command = new DeleteLabelAndAssociationsByLabelIdCommand(LabelId);
 
-            var result = await mediator_.Send(command, token);
+            var result = await mediator.Send(command, token);
             if (!result.Success)
             {
                 throw new MediatorErrorEngineException(result.Message);

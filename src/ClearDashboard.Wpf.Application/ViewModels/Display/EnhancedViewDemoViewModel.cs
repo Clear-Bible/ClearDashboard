@@ -251,7 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var labels = new List<Label>();
             for (var i = 1; i <= 5; i++)
             {
-                labels.Add(new Label(Mediator, $"Label{i}"));
+                labels.Add(new Label { Text = $"Label{i}" });
             }
 
             SampleLabels = labels;
