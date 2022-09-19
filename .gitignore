@@ -353,3 +353,4 @@ MigrationBackup/
 code_signing_key/password.txt
 installer/Output/ClearDashboard.exe
 installer/Output/ClearDashboardPlugin.exe
+
