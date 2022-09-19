@@ -227,91 +227,91 @@ public class DashboardProjectManager : ProjectManager
         return project;
     }
 
-    public void CheckLicense <TViewModel>(TViewModel viewModel)
+    public void CheckLicense<TViewModel>(TViewModel viewModel)
+    {
+        if (!_licenseCleared)
         {
-            if (!_licenseCleared)
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
+            if (File.Exists(filePath))
             {
-                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
-                if (File.Exists(filePath))
+                try
                 {
-                    try
+                    var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
+                    var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                    if (decryptedLicenseUser.Id != null)
                     {
-                        var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
-                        var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        if (decryptedLicenseUser.Id != null)
+                        CurrentUser = new User
                         {
-                            CurrentUser = new User
-                            {
-                                FirstName = decryptedLicenseUser.FirstName,
-                                LastName = decryptedLicenseUser.LastName,
-                                Id = Guid.Parse(decryptedLicenseUser.Id)
-                            };
+                            FirstName = decryptedLicenseUser.FirstName,
+                            LastName = decryptedLicenseUser.LastName,
+                            Id = Guid.Parse(decryptedLicenseUser.Id)
+                        };
 
-                        }
+                    }
 
-                        _licenseCleared = true;
-                    }
-                    catch (Exception)
-                    {
-                        //MessageBox.Show("There was an issue decrypting your license key.");
-                        PopupRegistration(viewModel);
-                    }
+                    _licenseCleared = true;
                 }
-                else
-                {   
-                    //MessageBox.Show("Your license key file is missing.");
+                catch (Exception)
+                {
+                    //MessageBox.Show("There was an issue decrypting your license key.");
                     PopupRegistration(viewModel);
                 }
             }
-        }
-
-        private void PopupRegistration <TViewModel>(TViewModel viewModel)
-        {
-            Logger.LogInformation("Registration called.");
-
-            dynamic settings = new ExpandoObject();
-            settings.Width = 850;
-            settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
-            settings.PopupAnimation = PopupAnimation.Fade;
-            settings.Placement = PlacementMode.Absolute;
-            settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
-            settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
-            settings.Title = "License Registration";
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-
-            var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
-            _licenseCleared = true;
-        }
-
-        public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-
-        private static dynamic CreateNewProjectDialogSettings()
-        {
-            dynamic settings = new ExpandoObject();
-            settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
-            //settings.Title = "Create New Project";  // TODO:  localize
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-            return settings;
-    }
-
-        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings , Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
-        {
-            var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
-            var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
-
-            if (success)
+            else
             {
-                var navigate = await callback.Invoke(newProjectPopupViewModel);
-
-                if (navigate)
-                {
-                    _navigationService.NavigateToViewModel<TNavigationViewModel>();
-                }
+                //MessageBox.Show("Your license key file is missing.");
+                PopupRegistration(viewModel);
             }
         }
+    }
+
+    private void PopupRegistration<TViewModel>(TViewModel viewModel)
+    {
+        Logger.LogInformation("Registration called.");
+
+        dynamic settings = new ExpandoObject();
+        settings.Width = 850;
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.PopupAnimation = PopupAnimation.Fade;
+        settings.Placement = PlacementMode.Absolute;
+        settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
+        settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
+        settings.Title = "License Registration";
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+
+        var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
+        _licenseCleared = true;
+    }
+
+    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+
+    private static dynamic CreateNewProjectDialogSettings()
+    {
+        dynamic settings = new ExpandoObject();
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        //settings.Title = "Create New Project";  // TODO:  localize
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+        return settings;
+    }
+
+    public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings , Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
+    {
+        var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
+        var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
+
+        if (success)
+        {
+            var navigate = await callback.Invoke(newProjectPopupViewModel);
+
+            if (navigate)
+            {
+                _navigationService.NavigateToViewModel<TNavigationViewModel>();
+            }
+        }
+    }
 }
