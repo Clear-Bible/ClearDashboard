@@ -15,21 +15,6 @@ using System.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
-public class TokenEqualityComparer : IEqualityComparer<Models.Token> {
-    public bool Equals(Models.Token? x, Models.Token? y)
-    {
-        if (x == null || y == null) return false;
-
-        return x.BookNumber == y.BookNumber && x.ChapterNumber == y.ChapterNumber && x.VerseNumber == y.VerseNumber &&
-               x.SubwordNumber == y.SubwordNumber;
-    }
-
-    public int GetHashCode(Models.Token obj)
-    {
-        return obj.EngineTokenId.GetHashCode();
-    }
-}
-
 public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHandler<
     GetBookIdsByTokenizedCorpusIdQuery,
     RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>,
@@ -52,7 +37,10 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
         var tokenizedCorpus =
-            ProjectDbContext.TokenizedCorpora.Include(tc => tc.Corpus).FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
+            ProjectDbContext.TokenizedCorpora
+            .Include(tc => tc.Corpus)
+            .Include(tc => tc.User)
+            .FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
 
         if (tokenizedCorpus == null)
         {

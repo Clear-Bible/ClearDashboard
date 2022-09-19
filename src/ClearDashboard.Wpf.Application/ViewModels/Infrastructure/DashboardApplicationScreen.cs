@@ -13,7 +13,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
         {
         }
 
-        protected DashboardApplicationScreen(DashboardProjectManager projectManager,
+        protected DashboardApplicationScreen(DashboardProjectManager? projectManager,
             INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {

@@ -443,7 +443,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else
                 {
-                    await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
+                    await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
             }
 

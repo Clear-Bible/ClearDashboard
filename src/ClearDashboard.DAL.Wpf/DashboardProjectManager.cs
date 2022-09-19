@@ -301,7 +301,7 @@ public class DashboardProjectManager : ProjectManager
             return settings;
         }
 
-        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings, string extraParams, Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
+        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings, Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
         {
             var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
 
@@ -315,6 +315,18 @@ public class DashboardProjectManager : ProjectManager
                 {
                     _navigationService.NavigateToViewModel<TNavigationViewModel>();
                 }
+            }
+        }
+
+        public async Task InvokeDialog<TDialogViewModel>(dynamic settings, Func<TDialogViewModel, Task> callback) where TDialogViewModel : new()
+        {
+            var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
+
+            var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
+
+            if (success)
+            {
+                await callback.Invoke(newProjectPopupViewModel);
             }
         }
 }

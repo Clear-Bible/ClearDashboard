@@ -103,6 +103,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             try
             {
                 //Import
+//                var textCorpus = (await ParatextProjectTextCorpus.Get(Mediator!, "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", System.Threading.CancellationToken.None))
                 var textCorpus = new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
                     .Tokenize<LatinWordTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>();

@@ -488,6 +488,7 @@
                     <TextBlock
                         BaselineOffset="100"
                         FontWeight="Bold"
+                        Margin="-5,0,0, 0"
                         Text="{helpers:Localization EnhancedView_Notes}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal">

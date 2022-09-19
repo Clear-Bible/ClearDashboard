@@ -144,7 +144,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 await transaction.CommitAsync(cancellationToken);
 
-                var tokenizedCorpusDb = ProjectDbContext!.TokenizedCorpora.First(tc => tc.Id == tokenizationId);
+                var tokenizedCorpusDb = ProjectDbContext!.TokenizedCorpora.Include(tc => tc.User).First(tc => tc.Id == tokenizationId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
                     request.CorpusId,

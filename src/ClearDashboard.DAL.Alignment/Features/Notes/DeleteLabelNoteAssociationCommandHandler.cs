@@ -12,29 +12,30 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-    public class DeleteLabelNoteAssociationByLabelNoteAssociationIdCommandHandler : ProjectDbContextCommandHandler<DeleteLabelNoteAssociationByLabelNoteAssociationIdCommand,
+    public class DeleteLabelNoteAssociationCommandHandler : ProjectDbContextCommandHandler<DeleteLabelNoteAssociationCommand,
         RequestResult<object>, object>
     {
         private readonly IMediator _mediator;
 
-        public DeleteLabelNoteAssociationByLabelNoteAssociationIdCommandHandler(IMediator mediator,
+        public DeleteLabelNoteAssociationCommandHandler(IMediator mediator,
             ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<DeleteLabelNoteAssociationByLabelNoteAssociationIdCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            ILogger<DeleteLabelNoteAssociationCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<object>> SaveDataAsync(DeleteLabelNoteAssociationByLabelNoteAssociationIdCommand request,
+        protected override async Task<RequestResult<object>> SaveDataAsync(DeleteLabelNoteAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            var labelNoteAssociation = ProjectDbContext!.LabelNoteAssociations.FirstOrDefault(ln => ln.Id == request.LabelNoteAssociationId.Id);
+            var labelNoteAssociation = ProjectDbContext!.LabelNoteAssociations.FirstOrDefault(ln => 
+                ln.LabelId == request.LabelId.Id && ln.NoteId == request.NoteId.Id);
             if (labelNoteAssociation == null)
             {
                 return new RequestResult<object>
                 (
                     success: false,
-                    message: $"Invalid LabelNoteAssociationId '{request.LabelNoteAssociationId.Id}' found in request"
+                    message: $"Invalid LabelId '{request.LabelId}' / NoteId {request.NoteId} combination found in request"
                 );
             }
 

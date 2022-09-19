@@ -122,7 +122,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
         }
     }
 
-    [Fact]
+//    [Fact]
     [Trait("Category", "Handlers")]
     public async void ParallelCorpus__CreateLarge_MeasurePerformance()
     {

@@ -6,6 +6,7 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -31,7 +32,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             //DB Impl notes: use request.CorpusId to retrieve from Corpus table and return it
 
-            var corpus = ProjectDbContext.Corpa.FirstOrDefault(pc => pc.Id == request.CorpusId.Id);
+            var corpus = ProjectDbContext.Corpa
+                .Include(c => c.User)
+                .FirstOrDefault(pc => pc.Id == request.CorpusId.Id);
             if (corpus == null)
             {
                 return new RequestResult<Corpus>
@@ -54,7 +57,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     corpus.CorpusType.ToString(),
                     corpus.Metadata,
                     corpus.Created,
-                    ModelHelper.BuildUserId(corpus))
+                    ModelHelper.BuildUserId(corpus.User!))
             );
         }
     }

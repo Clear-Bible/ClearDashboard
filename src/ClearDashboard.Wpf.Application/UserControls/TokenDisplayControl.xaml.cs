@@ -275,6 +275,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
             ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
 
+        /// <summary>
+        /// Identifies the NoteCreateEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
+            ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+
         #endregion Static RoutedEvents
         #region Public Events
         /// <summary>
@@ -502,6 +508,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(NoteMouseWheelEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when the user requests to create a new note.
+        /// </summary>
+        public event RoutedEventHandler NoteCreate
+        {
+            add => AddHandler(NoteCreateEvent, value);
+            remove => RemoveHandler(NoteCreateEvent, value);
+        }
+
         #endregion
         #region Private Event Handlers
         /// <summary>
@@ -675,6 +690,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseNoteEvent(NoteMouseWheelEvent, e);
         }
+
+        private void OnCreateNote(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteCreateEvent, e);
+
+        }
+
         #endregion
 
         /// <summary>
@@ -883,7 +905,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
             TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            NoteIndicatorVisibility = (ShowNoteIndicator && !String.IsNullOrEmpty(TokenDisplay.Note)) ? Visibility.Visible : Visibility.Hidden;
+            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplay.HasNote) ? Visibility.Visible : Visibility.Hidden;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplay.SurfaceText : TokenDisplay.SurfaceText.Trim();
             TargetTranslationText = TokenDisplay.TargetTranslationText;
@@ -910,5 +932,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateLayout();
         }
+
     }
 }

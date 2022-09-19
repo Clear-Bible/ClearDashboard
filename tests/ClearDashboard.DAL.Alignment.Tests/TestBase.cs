@@ -41,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
             Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
-            Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler));
+            Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();
             Services.AddSingleton<IProjectProvider, ProjectProvider>();

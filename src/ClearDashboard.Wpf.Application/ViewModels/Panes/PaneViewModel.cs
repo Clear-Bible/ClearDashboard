@@ -97,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
 
