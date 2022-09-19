@@ -79,7 +79,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.21" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.25" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
