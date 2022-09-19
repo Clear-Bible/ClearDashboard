@@ -28,6 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -88,12 +89,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata ProjectMetadata);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly INavigationService _navigationService;
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
-        private Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
+        private Wpf.Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -312,8 +313,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel(INavigationService navigationService,
 #pragma warning restore CS8618
-            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
@@ -356,7 +357,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ProjectDesignSurface = (Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -719,10 +720,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
-            string json = "{\"ParatextProjectId\":\"" + selectedParatextProjectId + "\"}";
+           
             
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, json, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+                DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
@@ -1002,8 +1003,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             corpusNode.MenuItems = nodeMenuItems;
         }
 
-        public async Task MenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem, CorpusNodeViewModel corpusNodeViewModel)
+        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
+            var corpusNodeViewModel = corpusNodeMenuItem.CorpusNodeViewModel;
             switch (corpusNodeMenuItem.Id)
             {
                 case "AddTokenizationId":
@@ -1185,7 +1187,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <summary>
         /// Called when the user has finished dragging out the new connection.
         /// </summary>
-        public void ConnectionDragCompleted(ConnectionViewModel newConnection, ConnectorViewModel connectorDraggedOut, ConnectorViewModel connectorDraggedOver)
+        public async void ConnectionDragCompleted(ConnectionViewModel newConnection, ConnectorViewModel connectorDraggedOut, ConnectorViewModel connectorDraggedOver)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (connectorDraggedOver == null)
@@ -1250,10 +1252,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (added)
             {
-                EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
+                await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
                     SourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
                     TargetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
                     ConnectorGuid: newConnection.Id));
+
+                // TODO:  
+                //await AddParallelCorpus(newConnection);
+            }
+        }
+
+        public async Task AddParallelCorpus(/*ConnectionViewModel newConnection*/)
+        {
+            await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
+                DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback);
+
+            async Task Callback(ParallelCorpusDialogViewModel viewModel)
+            {
+
+                await Task.CompletedTask;
             }
         }
 

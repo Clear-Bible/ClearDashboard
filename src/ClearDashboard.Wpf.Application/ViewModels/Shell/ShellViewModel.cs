@@ -189,7 +189,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {

@@ -59,7 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
             navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "🗐 " + LocalizationStrings.Get("Windows_TextCollection", Logger);

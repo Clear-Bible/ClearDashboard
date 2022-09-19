@@ -30,7 +30,7 @@
            BasedOn="{StaticResource MahApps.Styles.ToggleButton.ExpanderHeader.Base}"
            TargetType="{x:Type ToggleButton}">-->
     <Style x:Key="IconPackBrowser.Styles.ToggleButton.ExpanderHeader" TargetType="{x:Type ToggleButton}">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -100,7 +100,9 @@
                                                 Kind="Left" />
                                             <ContentControl
                                                 HorizontalAlignment="Center"
+                                            
                                                 Content="{TemplateBinding Header}"
+                                                Margin="0,0,-5,0"
                                                 ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                                 ContentTemplate="{TemplateBinding HeaderTemplate}"
                                                 ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
@@ -299,7 +301,9 @@
                                                 Foreground="{DynamicResource MahApps.Brushes.Gray1}"
                                                 Kind="Right" />
                                             <ContentControl
-                                                HorizontalAlignment="Center"
+                                                HorizontalAlignment="Left"
+                                                HorizontalContentAlignment="Center"
+                                                Margin="0,0,-5,0"
                                                 Content="{TemplateBinding Header}"
                                                 ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                                 ContentTemplate="{TemplateBinding HeaderTemplate}"
