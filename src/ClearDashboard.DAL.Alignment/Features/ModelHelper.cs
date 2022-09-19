@@ -79,20 +79,25 @@ namespace ClearDashboard.DAL.Alignment.Features
             return BuildCorpusId(tokenizedCorpus.Corpus);
         }
 
-        public static UserId BuildUserId(Models.IdentifiableEntity identifiableEntity)
+        public static UserId BuildUserId(Models.User user)
         {
-            return new UserId(identifiableEntity.Id);
+            return new UserId(user.Id, user.FullName ?? string.Empty);
         }
 
         public static TokenizedTextCorpusId BuildTokenizedTextCorpusId(Models.TokenizedCorpus tokenizedCorpus)
         {
+            if (tokenizedCorpus.User == null)
+            {
+                throw new MediatorErrorEngineException("DB TokenizedCorpus passed to BuildTokenizedTextCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
             return new TokenizedTextCorpusId(
                 tokenizedCorpus.Id,
                 tokenizedCorpus.DisplayName,
                 tokenizedCorpus.TokenizationFunction,
                 tokenizedCorpus.Metadata,
                 tokenizedCorpus.Created,
-                BuildUserId(tokenizedCorpus));
+                BuildUserId(tokenizedCorpus.User));
         }
 
         public static ParallelCorpusId BuildParallelCorpusId(Models.ParallelCorpus parallelCorpus)
@@ -105,11 +110,15 @@ namespace ClearDashboard.DAL.Alignment.Features
             {
                 throw new MediatorErrorEngineException("DB ParallelCorpus passed to BuildParallelCorpusId does not contain a TargetTokenizedCorpus.  Please ensure all necessary EFCore/Linq Include() method is called");
             }
+            if (parallelCorpus.User == null)
+            {
+                throw new MediatorErrorEngineException("DB ParallelCorpus passed to BuildTokenizedTextCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
 
-            return BuildParallelCorpusId(parallelCorpus, parallelCorpus.SourceTokenizedCorpus, parallelCorpus.TargetTokenizedCorpus);
+            return BuildParallelCorpusId(parallelCorpus, parallelCorpus.SourceTokenizedCorpus, parallelCorpus.TargetTokenizedCorpus, parallelCorpus.User);
         }
 
-        public static ParallelCorpusId BuildParallelCorpusId(Models.ParallelCorpus parallelCorpus, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus)
+        public static ParallelCorpusId BuildParallelCorpusId(Models.ParallelCorpus parallelCorpus, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus, Models.User user)
         {
             return new ParallelCorpusId(
                 parallelCorpus.Id,
@@ -118,7 +127,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 parallelCorpus.DisplayName,
                 parallelCorpus.Metadata,
                 parallelCorpus.Created,
-                BuildUserId(parallelCorpus));
+                BuildUserId(user));
         }
 
         public static AlignmentSetId BuildAlignmentSetId(Models.AlignmentSet alignmentSet)
@@ -127,29 +136,25 @@ namespace ClearDashboard.DAL.Alignment.Features
             {
                 throw new MediatorErrorEngineException("DB AlignmentSet passed to BuildAlignmentSetId does not contain a ParallelCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
             }
-            if (alignmentSet.ParallelCorpus.SourceTokenizedCorpus == null)
+            if (alignmentSet.User == null)
             {
-                throw new MediatorErrorEngineException("DB AlignmentSet passed to BuildAlignmentSetId does not contain a ParallelCorpus.SourceTokenizedCorpus.  Please ensure all necessary EFCore/Linq Include() and ThenInclude methods are called");
-            }
-            if (alignmentSet.ParallelCorpus.TargetTokenizedCorpus == null)
-            {
-                throw new MediatorErrorEngineException("DB AlignmentSet passed to BuildAlignmentSetId does not contain a ParallelCorpus.TargetTokenizedCorpus.  Please ensure all necessary EFCore/Linq Include() and ThenInclude methods are called");
+                throw new MediatorErrorEngineException("DB AlignmentSet passed to BuildAlignmentSetId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
             }
 
-            return BuildAlignmentSetId(alignmentSet, alignmentSet.ParallelCorpus, alignmentSet.ParallelCorpus.SourceTokenizedCorpus, alignmentSet.ParallelCorpus.TargetTokenizedCorpus);
+            return BuildAlignmentSetId(alignmentSet, BuildParallelCorpusId(alignmentSet.ParallelCorpus), alignmentSet.User);
         }
 
-        public static AlignmentSetId BuildAlignmentSetId(Models.AlignmentSet alignmentSet, Models.ParallelCorpus parallelCorpus, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus)
+        public static AlignmentSetId BuildAlignmentSetId(Models.AlignmentSet alignmentSet, ParallelCorpusId parallelCorpusId, Models.User user)
         {
             return new AlignmentSetId(
                 alignmentSet.Id,
-                BuildParallelCorpusId(parallelCorpus, sourceTokenizedCorpus, targetTokenizedCorpus),
+                parallelCorpusId,
                 alignmentSet.DisplayName,
                 alignmentSet.SmtModel,
                 alignmentSet.IsSyntaxTreeAlignerRefined,
                 alignmentSet.Metadata,
                 alignmentSet.Created,
-                BuildUserId(alignmentSet));
+                BuildUserId(user));
         }
 
         public static TranslationSetId BuildTranslationSetId(Models.TranslationSet translationSet)
@@ -158,28 +163,24 @@ namespace ClearDashboard.DAL.Alignment.Features
             {
                 throw new MediatorErrorEngineException("DB TranslationSet passed to BuildTranslationSetId does not contain a ParallelCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
             }
-            if (translationSet.ParallelCorpus.SourceTokenizedCorpus == null)
+            if (translationSet.User == null)
             {
-                throw new MediatorErrorEngineException("DB TranslationSet passed to BuildTranslationSetId does not contain a ParallelCorpus.SourceTokenizedCorpus.  Please ensure all necessary EFCore/Linq Include() and ThenInclude methods are called");
-            }
-            if (translationSet.ParallelCorpus.TargetTokenizedCorpus == null)
-            {
-                throw new MediatorErrorEngineException("DB TranslationSet passed to BuildTranslationSetId does not contain a ParallelCorpus.TargetTokenizedCorpus.  Please ensure all necessary EFCore/Linq Include() and ThenInclude methods are called");
+                throw new MediatorErrorEngineException("DB TranslationSet passed to BuildTranslationSetId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
             }
 
-            return BuildTranslationSetId(translationSet, translationSet.ParallelCorpus, translationSet.ParallelCorpus.SourceTokenizedCorpus, translationSet.ParallelCorpus.TargetTokenizedCorpus);
+            return BuildTranslationSetId(translationSet, BuildParallelCorpusId(translationSet.ParallelCorpus), translationSet.User);
         }
 
-        public static TranslationSetId BuildTranslationSetId(Models.TranslationSet translationSet, Models.ParallelCorpus parallelCorpus, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus)
+        public static TranslationSetId BuildTranslationSetId(Models.TranslationSet translationSet, ParallelCorpusId parallelCorpusId, Models.User user)
         {
             return new TranslationSetId(
                 translationSet.Id,
-                BuildParallelCorpusId(parallelCorpus, sourceTokenizedCorpus, targetTokenizedCorpus),
+                parallelCorpusId,
                 translationSet.DisplayName,
                 translationSet.SmtModel,
                 translationSet.Metadata,
                 translationSet.Created,
-                BuildUserId(translationSet));
+                BuildUserId(user));
         }
     }
 }

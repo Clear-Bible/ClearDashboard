@@ -10,45 +10,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Corpus",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    Language = table.Column<string>(type: "TEXT", nullable: true),
-                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
-                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Corpus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CorpusHistory",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Language = table.Column<string>(type: "TEXT", nullable: true),
-                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
-                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CorpusHistory", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EngineWordAlignment",
                 columns: table => new
                 {
@@ -87,6 +48,93 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Corpus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    Language = table.Column<string>(type: "TEXT", nullable: true),
+                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
+                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Corpus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Corpus_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CorpusHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Language = table.Column<string>(type: "TEXT", nullable: true),
+                    ParatextGuid = table.Column<string>(type: "TEXT", nullable: true),
+                    CorpusType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CorpusHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CorpusHistory_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Note",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: true),
+                    AbbreviatedText = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false),
+                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Note", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Note_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -100,20 +148,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastAlignmentLevelId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Project_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,117 +185,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.CorpusHistoryId,
                         principalTable: "CorpusHistory",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Note",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Text = table.Column<string>(type: "TEXT", nullable: true),
-                    AbbreviatedText = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false),
-                    Modified = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Note", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Note_User_UserId",
+                        name: "FK_TokenizedCorpus_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ParallelCorpus",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    SourceTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TargetTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ParallelCorpus", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ParallelCorpus_TokenizedCorpus_SourceTokenizedCorpusId",
-                        column: x => x.SourceTokenizedCorpusId,
-                        principalTable: "TokenizedCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ParallelCorpus_TokenizedCorpus_TargetTokenizedCorpusId",
-                        column: x => x.TargetTokenizedCorpusId,
-                        principalTable: "TokenizedCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ParallelCorpusHistory",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    SourceTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TargetTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ParallelCorpusHistory", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ParallelCorpusHistory_TokenizedCorpus_SourceTokenizedCorpusId",
-                        column: x => x.SourceTokenizedCorpusId,
-                        principalTable: "TokenizedCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ParallelCorpusHistory_TokenizedCorpus_TargetTokenizedCorpusId",
-                        column: x => x.TargetTokenizedCorpusId,
-                        principalTable: "TokenizedCorpus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TokenComponent",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EngineTokenId = table.Column<string>(type: "TEXT", nullable: true),
-                    TrainingText = table.Column<string>(type: "TEXT", nullable: true),
-                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    BookNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
-                    SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
-                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TokenComponent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TokenComponent_TokenComponent_TokenCompositeId",
-                        column: x => x.TokenCompositeId,
-                        principalTable: "TokenComponent",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TokenComponent_TokenizedCorpus_TokenizationId",
-                        column: x => x.TokenizationId,
-                        principalTable: "TokenizedCorpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -347,6 +280,109 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.NoteId,
                         principalTable: "Note",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ParallelCorpus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    SourceTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TargetTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParallelCorpus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpus_TokenizedCorpus_SourceTokenizedCorpusId",
+                        column: x => x.SourceTokenizedCorpusId,
+                        principalTable: "TokenizedCorpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpus_TokenizedCorpus_TargetTokenizedCorpusId",
+                        column: x => x.TargetTokenizedCorpusId,
+                        principalTable: "TokenizedCorpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpus_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ParallelCorpusHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    SourceTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TargetTokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "jsonb", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParallelCorpusHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpusHistory_TokenizedCorpus_SourceTokenizedCorpusId",
+                        column: x => x.SourceTokenizedCorpusId,
+                        principalTable: "TokenizedCorpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpusHistory_TokenizedCorpus_TargetTokenizedCorpusId",
+                        column: x => x.TargetTokenizedCorpusId,
+                        principalTable: "TokenizedCorpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParallelCorpusHistory_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TokenComponent",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EngineTokenId = table.Column<string>(type: "TEXT", nullable: true),
+                    TrainingText = table.Column<string>(type: "TEXT", nullable: true),
+                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
+                    BookNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    VerseNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
+                    TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TokenComponent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TokenComponent_TokenComponent_TokenCompositeId",
+                        column: x => x.TokenCompositeId,
+                        principalTable: "TokenComponent",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TokenComponent_TokenizedCorpus_TokenizationId",
+                        column: x => x.TokenizationId,
+                        principalTable: "TokenizedCorpus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -461,6 +497,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.ParallelCorpusHistoryId,
                         principalTable: "ParallelCorpusHistory",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_VerseMapping_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -484,6 +526,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.TokenId,
                         principalTable: "TokenComponent",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Adornment_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -498,7 +546,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Score = table.Column<double>(type: "REAL", nullable: false),
                     SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -509,7 +557,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Alignment_AlignmentSet_AlignmentSetId",
                         column: x => x.AlignmentSetId,
                         principalTable: "AlignmentSet",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Alignment_TokenComponent_SourceTokenId",
                         column: x => x.SourceTokenId,
@@ -520,6 +569,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.TargetTokenId,
                         principalTable: "TokenComponent",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Alignment_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -547,6 +602,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Translation_TranslationSet_TranslationSetId",
                         column: x => x.TranslationSetId,
                         principalTable: "TranslationSet",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Translation_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -599,6 +660,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "CorpusHistory",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Verse_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Verse_VerseMapping_VerseMappingId",
                         column: x => x.VerseMappingId,
                         principalTable: "VerseMapping",
@@ -645,6 +712,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_TokenVerseAssociation_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_TokenVerseAssociation_Verse_VerseId",
                         column: x => x.VerseId,
                         principalTable: "Verse",
@@ -657,6 +730,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 table: "Adornment",
                 column: "TokenId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Adornment_UserId",
+                table: "Adornment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alignment_AlignmentSetId",
@@ -672,6 +750,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Alignment_TargetTokenId",
                 table: "Alignment",
                 column: "TargetTokenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alignment_UserId",
+                table: "Alignment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AlignmentSet_EngineWordAlignmentId",
@@ -691,6 +774,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AlignmentSet_UserId",
                 table: "AlignmentSet",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Corpus_UserId",
+                table: "Corpus",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CorpusHistory_UserId",
+                table: "CorpusHistory",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -734,6 +827,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "TargetTokenizedCorpusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ParallelCorpus_UserId",
+                table: "ParallelCorpus",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParallelCorpusHistory_SourceTokenizedCorpusId",
                 table: "ParallelCorpusHistory",
                 column: "SourceTokenizedCorpusId");
@@ -742,6 +840,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_ParallelCorpusHistory_TargetTokenizedCorpusId",
                 table: "ParallelCorpusHistory",
                 column: "TargetTokenizedCorpusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParallelCorpusHistory_UserId",
+                table: "ParallelCorpusHistory",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_UserId",
+                table: "Project",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RawContent_NoteId",
@@ -799,9 +907,19 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "CorpusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TokenizedCorpus_UserId",
+                table: "TokenizedCorpus",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TokenVerseAssociation_TokenComponentId",
                 table: "TokenVerseAssociation",
                 column: "TokenComponentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TokenVerseAssociation_UserId",
+                table: "TokenVerseAssociation",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TokenVerseAssociation_VerseId",
@@ -817,6 +935,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Translation_TranslationSetId",
                 table: "Translation",
                 column: "TranslationSetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Translation_UserId",
+                table: "Translation",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TranslationModelEntry_TranslationSetId_SourceText",
@@ -866,6 +989,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "CorpusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Verse_UserId",
+                table: "Verse",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Verse_VerseMappingId",
                 table: "Verse",
                 column: "VerseMappingId");
@@ -879,6 +1007,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_VerseMapping_ParallelCorpusId",
                 table: "VerseMapping",
                 column: "ParallelCorpusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerseMapping_UserId",
+                table: "VerseMapping",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -950,9 +1083,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "ParallelCorpusHistory");
 
             migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
                 name: "TokenizedCorpus");
 
             migrationBuilder.DropTable(
@@ -960,6 +1090,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "CorpusHistory");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
