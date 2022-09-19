@@ -1358,28 +1358,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 var dockableWindows = _dockingManager.Layout.Descendents()
                     .OfType<LayoutDocument>();
-                //.SingleOrDefault(a =>
-                //{
-                //    if (a.ContentId is not null)
-                //    {
-                //        Debug.WriteLine(a.ContentId);
-                //        return a.ContentId.ToUpper() == windowTag.ToUpper();
-                //    }
-                //    return false;
-                //});
 
                 if (dockableWindows.Count() == 1)
                 {
                     // there is only one doc window open, so we can just add to it
                     var enhancedCorpusViewModels =
-                        Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel));
+                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as EnhancedCorpusViewModel;
 
-                    
+                    enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
                 }
 
+                // more than one enhanced corpus window is open and active
                 foreach (var document in dockableWindows)
                 {
-
+                    if (document.IsActive)
+                    {
+                        
+                    }
                 }
             }
 
@@ -1403,10 +1398,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
 
-            if (documentPane != null)
-            {
-                documentPane.Children.Add(windowDockable);
-            }
+            documentPane?.Children.Add(windowDockable);
 
             await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
