@@ -71,7 +71,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             var command =
                 new CreateParallelCorpusCommand(new TokenizedTextCorpusId(sourceTokenizedCorpusId),
-                    new TokenizedTextCorpusId(targetTokenizedCorpusId), verseMappings);
+                    new TokenizedTextCorpusId(targetTokenizedCorpusId), verseMappings, "awesome parallel corpus");
             var result = await Mediator.Send(command);
 
             ProjectDbContext.ChangeTracker.Clear();
@@ -204,7 +204,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             proc.Refresh();
             Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             proc.Refresh();
             Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
@@ -234,7 +234,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             Assert.Equal(15, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
             Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 15);
@@ -304,7 +304,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                     }
                 ).ToList();
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             ProjectDbContext.ChangeTracker.Clear();
 
@@ -376,7 +376,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var command = new CreateParallelCorpusCommand(
                 bogusTokenizedCorpusId,
                 validTokenizedCorpusId,
-                verseMappings);
+                verseMappings,
+                "invalid source pc");
             var result = await Mediator!.Send(command);
 
             Assert.NotNull(result);
@@ -389,7 +390,8 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             command = new CreateParallelCorpusCommand(
                 validTokenizedCorpusId,
                 bogusTokenizedCorpusId,
-                verseMappings);
+                verseMappings,
+                "invalid target pc");
             result = await Mediator!.Send(command);
 
             Assert.NotNull(result);
