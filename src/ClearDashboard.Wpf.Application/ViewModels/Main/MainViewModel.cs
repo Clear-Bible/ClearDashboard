@@ -4,6 +4,7 @@ using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.Bcv;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
@@ -28,7 +29,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -497,8 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async void Init()
         {
             RebuildMenu();
-
-
+            
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
@@ -506,8 +509,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // force a load to happen as it is getting swallowed up elsewhere
             _projectDesignSurfaceViewModel.LoadCanvas();
-
-
 
             Items.Clear();
 
@@ -553,9 +554,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // set the CurrentBcv prior to listening to the event
             CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
 
-            CalculateBooks();
-            CalculateChapters();
-            CalculateVerses();
+            //CalculateBooks();
+            //CalculateChapters();
+            //CalculateVerses();
             InComingChangesStarted = false;
 
             // Subscribe to changes of the Book Chapter Verse data object.
@@ -1126,133 +1127,133 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void BcvChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ParatextSync && InComingChangesStarted == false)
-            {
-                string verseId;
-                bool somethingChanged = false;
-                if (e.PropertyName == "BookNum")
-                {
-                    // book switch so find the first chapter and verse for that book
-                    verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
+            //if (ParatextSync && InComingChangesStarted == false)
+            //{
+            //    string verseId;
+            //    bool somethingChanged = false;
+            //    if (e.PropertyName == "BookNum")
+            //    {
+            //        // book switch so find the first chapter and verse for that book
+            //        verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
+            //        if (verseId != "")
+            //        {
+            //            InComingChangesStarted = true;
+            //            CurrentBcv.SetVerseFromId(verseId);
 
-                        CalculateChapters();
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Chapter")
-                {
-                    // ReSharper disable once InconsistentNaming
-                    var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
+            //            CalculateChapters();
+            //            CalculateVerses();
+            //            InComingChangesStarted = false;
+            //            somethingChanged = true;
+            //        }
+            //    }
+            //    else if (e.PropertyName == "Chapter")
+            //    {
+            //        // ReSharper disable once InconsistentNaming
+            //        var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
-                    // chapter switch so find the first verse for that book and chapter
-                    verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
+            //        // chapter switch so find the first verse for that book and chapter
+            //        verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
+            //        if (verseId != "")
+            //        {
+            //            InComingChangesStarted = true;
+            //            CurrentBcv.SetVerseFromId(verseId);
 
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Verse")
-                {
-                    InComingChangesStarted = true;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-                    InComingChangesStarted = false;
-                    somethingChanged = true;
-                }
+            //            CalculateVerses();
+            //            InComingChangesStarted = false;
+            //            somethingChanged = true;
+            //        }
+            //    }
+            //    else if (e.PropertyName == "Verse")
+            //    {
+            //        InComingChangesStarted = true;
+            //        CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+            //        InComingChangesStarted = false;
+            //        somethingChanged = true;
+            //    }
 
-                if (somethingChanged)
-                {
-                    // send to the event aggregator for everyone else to hear about a verse change
-                    EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+            //    if (somethingChanged)
+            //    {
+            //        // send to the event aggregator for everyone else to hear about a verse change
+            //        EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
 
-                    // push to Paratext
-                    if (ParatextSync)
-                    {
-                        _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-                    }
-                }
+            //        // push to Paratext
+            //        if (ParatextSync)
+            //        {
+            //            _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+            //        }
+            //    }
 
-            }
+            //}
         }
 
-        private void CalculateBooks()
-        {
-            CurrentBcv.BibleBookList?.Clear();
+        //private void CalculateBooks()
+        //{
+        //    CurrentBcv.BibleBookList?.Clear();
 
-            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                .Select(g => g.First())
-                .ToList();
+        //    var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+        //        .Select(g => g.First())
+        //        .ToList();
 
-            foreach (var book in books)
-            {
-                var bookId = book.Substring(0, 3);
+        //    foreach (var book in books)
+        //    {
+        //        var bookId = book.Substring(0, 3);
 
-                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+        //        var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
 
-                CurrentBcv.BibleBookList?.Add(bookName);
-            }
+        //        CurrentBcv.BibleBookList?.Add(bookName);
+        //    }
 
-        }
+        //}
 
-        private void CalculateChapters()
-        {
-            // CHAPTERS
-            var bookId = CurrentBcv.Book;
-            var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-            for (var i = 0; i < chapters.Count; i++)
-            {
-                chapters[i] = chapters[i].Substring(3, 3);
-            }
+        //private void CalculateChapters()
+        //{
+        //    // CHAPTERS
+        //    var bookId = CurrentBcv.Book;
+        //    var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+        //    for (var i = 0; i < chapters.Count; i++)
+        //    {
+        //        chapters[i] = chapters[i].Substring(3, 3);
+        //    }
 
-            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                var chapterNumbers = new List<int>();
-                foreach (var chapter in chapters)
-                {
-                    chapterNumbers.Add(Convert.ToInt16(chapter));
-                }
+        //    chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+        //    // invoke to get it to run in STA mode
+        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
+        //    {
+        //        var chapterNumbers = new List<int>();
+        //        foreach (var chapter in chapters)
+        //        {
+        //            chapterNumbers.Add(Convert.ToInt16(chapter));
+        //        }
 
-                CurrentBcv.ChapterNumbers = chapterNumbers;
-            });
-        }
+        //        CurrentBcv.ChapterNumbers = chapterNumbers;
+        //    });
+        //}
 
-        private void CalculateVerses()
-        {
-            // VERSES
-            var bookId = CurrentBcv.Book;
-            var chapId = CurrentBcv.ChapterIdText;
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+        //private void CalculateVerses()
+        //{
+        //    // VERSES
+        //    var bookId = CurrentBcv.Book;
+        //    var chapId = CurrentBcv.ChapterIdText;
+        //    var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
 
-            for (int i = 0; i < verses.Count; i++)
-            {
-                verses[i] = verses[i].Substring(6);
-            }
+        //    for (int i = 0; i < verses.Count; i++)
+        //    {
+        //        verses[i] = verses[i].Substring(6);
+        //    }
 
-            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> verseNumbers = new List<int>();
-                foreach (var verse in verses)
-                {
-                    verseNumbers.Add(Convert.ToInt16(verse));
-                }
+        //    verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+        //    // invoke to get it to run in STA mode
+        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
+        //    {
+        //        List<int> verseNumbers = new List<int>();
+        //        foreach (var verse in verses)
+        //        {
+        //            verseNumbers.Add(Convert.ToInt16(verse));
+        //        }
 
-                CurrentBcv.VerseNumbers = verseNumbers;
-            });
-        }
+        //        CurrentBcv.VerseNumbers = verseNumbers;
+        //    });
+        //}
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
@@ -1269,8 +1270,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
-                CalculateChapters();
-                CalculateVerses();
+                //CalculateChapters();
+                //CalculateVerses();
                 InComingChangesStarted = false;
             }
         }
@@ -1288,13 +1289,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 InComingChangesStarted = true;
 
                 // add in the books to the dropdown list
-                CalculateBooks();
+                //CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
-                CalculateChapters();
-                CalculateVerses();
+                //CalculateChapters();
+                //CalculateVerses();
 
                 NotifyOfPropertyChange(() => CurrentBcv);
                 InComingChangesStarted = false;
@@ -1338,8 +1339,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     var enhancedCorpusViewModels =
                         Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
                             EnhancedCorpusViewModel;
+                    if (enhancedCorpusViewModels is not null)
+                    {
+                        await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
+                    }
 
-                    enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
                     return;
                 }
 
@@ -1349,6 +1353,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (document.IsActive && document.Content is EnhancedCorpusViewModel)
                     {
                         var vm = document.Content as EnhancedCorpusViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
                         var enhancedCorpusViewModels =
@@ -1358,7 +1363,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 EnhancedCorpusViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
-                            enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                            await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                             return;
                         }
                     }
@@ -1380,6 +1385,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
             // add vm to conductor
             Items.Add(viewModel);
 
@@ -1412,7 +1421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
-        #endregion // Methods
+
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1432,6 +1441,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames
