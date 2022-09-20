@@ -27,6 +27,7 @@
     <Page.Resources>
         <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter"/>
         <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter"/>
+        <userControls:ThicknessConverter x:Key="ThicknessConverter"/>
     </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -36,8 +37,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="250" />
-            <RowDefinition Height="30" />
             <RowDefinition Height="50" />
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
@@ -91,14 +90,14 @@
                                    "
                                    />
 
-        <Label Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
 
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
-                <ColumnDefinition Width="275"/>
-                <ColumnDefinition Width="275"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -169,6 +168,21 @@
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="LabelFontSizeSlider" Width="100" Value="11" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
+            <StackPanel Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Margin Left: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelLeftMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelLeftMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Top: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelTopMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelTopMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Right: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelRightMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelRightMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Bottom: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelBottomMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelBottomMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+
+            </StackPanel>
 
             <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
@@ -208,13 +222,21 @@
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-
                                        cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
                                                            [Event CloseRequested] = [Action CloseRequested];
                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];
-                                                           [Event LabelAdded] = [Action LabelAdded($eventArgs)];" />
+                                                           [Event LabelAdded] = [Action LabelAdded($eventArgs)];" >
+                <userControls:NotesControl.LabelMargin>
+                    <MultiBinding Converter="{StaticResource ThicknessConverter}">
+                        <Binding ElementName="LabelLeftMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelTopMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelRightMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelBottomMarginSlider" Path="Value"></Binding>
+                    </MultiBinding>
+                </userControls:NotesControl.LabelMargin>
+            </userControls:NotesControl>
         </StackPanel>
     </Grid>
 </Page>
