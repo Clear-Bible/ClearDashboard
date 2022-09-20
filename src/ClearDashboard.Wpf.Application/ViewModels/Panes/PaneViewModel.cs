@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
@@ -22,6 +23,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
 
         #region Member Variables
+       
         private string _title = null;
         private string _contentId = null;
         private bool _isSelected = false;
@@ -30,6 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         #region Public Properties
 
+        public Guid Guid = Guid.NewGuid();
         public EDockSide DockSide = EDockSide.Bottom;
 
         #endregion //Public Properties
@@ -85,6 +88,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
                 {
                     _isActive = value;
                     NotifyOfPropertyChange(() => IsActive);
+
+                    if (this.ContentId == "ENHANCEDCORPUS" && value == true)
+                    {
+                        // send out a notice that the active document has changed
+                        EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(this.Guid));
+                    }
                 }
             }
         }
