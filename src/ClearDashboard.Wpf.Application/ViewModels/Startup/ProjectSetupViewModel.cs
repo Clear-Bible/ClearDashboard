@@ -2,13 +2,13 @@
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
