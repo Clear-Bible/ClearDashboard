@@ -12,8 +12,8 @@
     xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Display"
     Title="AlignmentSample"
     d:DataContext="{d:DesignInstance Type=display:EnhancedViewDemoViewModel,  IsDesignTimeCreatable=True}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="600"
+    d:DesignWidth="1500"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -32,13 +32,13 @@
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="250" />
         </Grid.RowDefinitions>
 
         <Button
@@ -108,6 +108,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Verse Title:</Label>
@@ -154,12 +155,42 @@
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="NoteFontSizeSlider" Width="100" Value="15" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label VerticalAlignment="Center" Margin="0,0,8,0">Margin</Label>
+                <Label VerticalAlignment="Center">Left:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="NoteLeftMarginSlider" Width="40" Value="2" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteLeftMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Top:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="NoteTopMarginSlider" Width="40" Value="2" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteTopMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Right:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="NoteRightMarginSlider" Width="40" Value="2" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteRightMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Bottom:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="NoteBottomMarginSlider" Width="40" Value="2" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteBottomMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+            </StackPanel>
 
             <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Timestamps:</Label>
             <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Font size:</Label>
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TimestampFontSizeSlider" Width="100" Value="11" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label VerticalAlignment="Center" Margin="0,0,8,0">Margin</Label>
+                <Label VerticalAlignment="Center">Left:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="TimestampLeftMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampLeftMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Top:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="TimestampTopMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampTopMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Right:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="TimestampRightMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampRightMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Bottom:</Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="TimestampBottomMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampBottomMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
             </StackPanel>
 
             <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Labels:</Label>
@@ -169,40 +200,55 @@
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
             <StackPanel Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Margin Left: </Label>
-                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelLeftMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Margin="0,0,8,0">Margin</Label>
+                <Label VerticalAlignment="Center">Left: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelLeftMarginSlider" Width="40" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelLeftMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                 <Label VerticalAlignment="Center">Top: </Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelTopMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelTopMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                 <Label VerticalAlignment="Center">Right: </Label>
-                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelRightMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelRightMarginSlider" Width="40" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelRightMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                 <Label VerticalAlignment="Center">Bottom: </Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelBottomMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelBottomMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
-
+            </StackPanel>
+            <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Padding</Label>
+                <Label VerticalAlignment="Center">Left: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelLeftPaddingSlider" Width="40" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelLeftPaddingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Top: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelTopPaddingSlider" Width="40" Value="5" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelTopPaddingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Right: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelRightPaddingSlider" Width="40" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelRightPaddingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Bottom: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelBottomPaddingSlider" Width="40" Value="5" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelBottomPaddingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
             </StackPanel>
 
-            <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="7" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
                 <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True" Margin="5,0,0,0"/>
             </StackPanel>
-            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Margin="0,0,14,0">Height:</Label>
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="CenteredCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
-            <StackPanel Grid.Row="7" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
-            <StackPanel Grid.Row="7" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="8" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Wrap Lines</Label>
             </StackPanel>
@@ -228,6 +274,22 @@
                                                            [Event CloseRequested] = [Action CloseRequested];
                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];
                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];" >
+                <userControls:NotesControl.NoteMargin>
+                    <MultiBinding Converter="{StaticResource ThicknessConverter}">
+                        <Binding ElementName="NoteLeftMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="NoteTopMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="NoteRightMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="NoteBottomMarginSlider" Path="Value"></Binding>
+                    </MultiBinding>
+                </userControls:NotesControl.NoteMargin>
+                <userControls:NotesControl.TimestampMargin>
+                    <MultiBinding Converter="{StaticResource ThicknessConverter}">
+                        <Binding ElementName="TimestampLeftMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="TimestampTopMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="TimestampRightMarginSlider" Path="Value"></Binding>
+                        <Binding ElementName="TimestampBottomMarginSlider" Path="Value"></Binding>
+                    </MultiBinding>
+                </userControls:NotesControl.TimestampMargin>
                 <userControls:NotesControl.LabelMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="LabelLeftMarginSlider" Path="Value"></Binding>
@@ -236,6 +298,14 @@
                         <Binding ElementName="LabelBottomMarginSlider" Path="Value"></Binding>
                     </MultiBinding>
                 </userControls:NotesControl.LabelMargin>
+                <userControls:NotesControl.LabelPadding>
+                    <MultiBinding Converter="{StaticResource ThicknessConverter}">
+                        <Binding ElementName="LabelLeftPaddingSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelTopPaddingSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelRightPaddingSlider" Path="Value"></Binding>
+                        <Binding ElementName="LabelBottomPaddingSlider" Path="Value"></Binding>
+                    </MultiBinding>
+                </userControls:NotesControl.LabelPadding>
             </userControls:NotesControl>
         </StackPanel>
     </Grid>
