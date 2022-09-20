@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
+using MahApps.Metro.Converters;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -12,7 +18,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control that displays the details of a single <see cref="Note"/>.
     /// </summary>
-    public partial class NoteControl : UserControl
+    public partial class NoteControl : UserControl, INotifyPropertyChanged
     {
         #region Static Routed Events
         /// <summary>
@@ -110,8 +116,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(11d));
         #endregion
         #region Private event handlers
+
+        private void CloseEdit()
+        {
+            NoteLabelVisibility = Visibility.Visible;
+            NoteTextBoxVisibility = Visibility.Hidden;
+            TimestampVisibility = Visibility.Visible;
+            ButtonVisibility = Visibility.Hidden;
+
+            OnPropertyChanged(nameof(NoteLabelVisibility));
+            OnPropertyChanged(nameof(NoteTextBoxVisibility));
+            OnPropertyChanged(nameof(TimestampVisibility));
+            OnPropertyChanged(nameof(ButtonVisibility));
+        }
+
         private void ApplyNote(object sender, RoutedEventArgs e)
         {
+            CloseEdit();
             RaiseEvent(new NoteEventArgs()
             {
                 RoutedEvent = NoteAppliedEvent,
@@ -120,12 +141,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
+        public string NoteText => Note?.Text;
+
         private void Cancel(object sender, RoutedEventArgs e)
         {
+            Note.Text = OriginalNoteText;
+            OnPropertyChanged("Note.Text");
+
+            CloseEdit();
             RaiseEvent(new RoutedEventArgs { RoutedEvent = NoteCancelledEvent });
         }
+
         #endregion Private event handlers
         #region Public Properties
+
+        public Visibility NoteLabelVisibility { get; set; } = Visibility.Visible;
+        public Visibility NoteTextBoxVisibility { get; set; } = Visibility.Collapsed;
+
         /// <summary>
         /// Gets or sets the <see cref="EntityId{T}"/> that contains the note.
         /// </summary>
@@ -237,17 +269,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets a formatted string corresponding to the date the note was created.
         /// </summary>
-        public string Created => Note.NoteId?.Created != null ? Note.NoteId.Created.Value.ToString("u") : string.Empty;
+        public string? Created => Note.NoteId?.Created != null ? Note?.NoteId.Created.Value.ToString("u") : string.Empty;
 
         /// <summary>
         /// Gets a formatted string corresponding to the date the note was modified.
         /// </summary>
-        public string Modified => Note.NoteId?.Modified != null ? Note.NoteId.Modified.Value.ToString("u") : string.Empty;
+        //public string? Modified => Note != null && Note.NoteId != null && Note.NoteId.Modified != null ? Note?.NoteId?.Modified.Value.ToString("u") : string.Empty;
+        public string? Modified => DateTimeOffset.UtcNow.ToString("u");
 
         /// <summary>
         /// Gets the UserId of the user that last modified the note.
         /// </summary>
-        public string? UserId => Note.NoteId?.UserId?.ToString();
+        //public string? UserId => Note?.NoteId?.UserId?.ToString();
+        public string? UserId => "Joe Schmoe";
 
         #endregion
         #region Public events
@@ -274,7 +308,48 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public NoteControl()
         {
             InitializeComponent();
+
+            Loaded += OnLoaded;
         }
 
+        private string OriginalNoteText { get; set; }
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void NoteLabelClick(object sender, MouseButtonEventArgs e)
+        {
+            NoteLabelVisibility = Visibility.Collapsed;
+            NoteTextBoxVisibility = Visibility.Visible;
+            NoteTextBox.Focus();
+
+            OriginalNoteText = Note.Text;
+
+            OnPropertyChanged(nameof(NoteLabelVisibility));
+            OnPropertyChanged(nameof(NoteTextBoxVisibility));
+        }
+
+        public Visibility TimestampVisibility { get; set; } = Visibility.Visible;
+        public Visibility ButtonVisibility { get; set; } = Visibility.Hidden;
+
+        private void NoteTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (NoteTextBoxVisibility == Visibility.Visible)
+            {
+                TimestampVisibility = Visibility.Hidden;
+                ButtonVisibility = Visibility.Visible;
+
+                OnPropertyChanged(nameof(TimestampVisibility));
+                OnPropertyChanged(nameof(ButtonVisibility));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

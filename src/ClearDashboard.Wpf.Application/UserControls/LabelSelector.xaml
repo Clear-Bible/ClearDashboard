@@ -11,7 +11,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label>Add Label:</Label>
+        <Label>+</Label>
         <StackPanel Grid.Column="1">
             <TextBox x:Name="LabelTextBox" TextChanged="OnLabelTextChanged" KeyUp="OnLabelTextBoxKeyUp" Margin="5,0,0,0"/>
             <Popup x:Name="LabelPopup" Visibility="Collapsed" Height="Auto" StaysOpen="False" Placement="Right" Margin="5,0,0,0">

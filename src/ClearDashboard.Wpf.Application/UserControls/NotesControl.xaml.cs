@@ -48,7 +48,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(EntityIdProperty, value);
         }
 
-
         /// <summary>
         /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
         /// </summary>
@@ -58,23 +57,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(LabelSuggestionsProperty, value);
         }
 
-        /// <summary>
-        /// Occurs when an existing label suggesting is selected.
-        /// </summary>
-        public event RoutedEventHandler LabelSelected
-        {
-            add => AddHandler(LabelSelectedEvent, value);
-            remove => RemoveHandler(LabelSelectedEvent, value);
-        }
+        ///// <summary>
+        ///// Occurs when an existing label suggesting is selected.
+        ///// </summary>
+        //public event RoutedEventHandler LabelSelected
+        //{
+        //    add => AddHandler(LabelSelectedEvent, value);
+        //    remove => RemoveHandler(LabelSelectedEvent, value);
+        //}
 
-        /// <summary>
-        /// Occurs when an new label is added.
-        /// </summary>
-        public event RoutedEventHandler LabelAdded
-        {
-            add => AddHandler(LabelAddedEvent, value);
-            remove => RemoveHandler(LabelAddedEvent, value);
-        }
+        ///// <summary>
+        ///// Occurs when an new label is added.
+        ///// </summary>
+        //public event RoutedEventHandler LabelAdded
+        //{
+        //    add => AddHandler(LabelAddedEvent, value);
+        //    remove => RemoveHandler(LabelAddedEvent, value);
+        //}
 
         /// <summary>
         /// Occurs when a note is applied.
@@ -94,28 +93,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(NoteCancelledEvent, value);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Note"/> to display in this control.
-        /// </summary>
-        public TokenDisplay TokenDisplay
-        {
-            get => (TokenDisplay)GetValue(NoteProperty);
-            set => SetValue(NoteProperty, value);
-        }
+        ///// <summary>
+        ///// Gets or sets the <see cref="Note"/> to display in this control.
+        ///// </summary>
+        //public TokenDisplay TokenDisplay
+        //{
+        //    get => (TokenDisplay)GetValue(NoteProperty);
+        //    set => SetValue(NoteProperty, value);
+        //}
 
-        public NoteControl()
+        public NotesControl()
         {
             InitializeComponent();
         }
 
-        private void ApplyNote(object sender, RoutedEventArgs e)
-        {
-            RaiseEvent(new NoteEventArgs()
-            {
-                RoutedEvent = NoteAppliedEvent,
-                TokenDisplay = TokenDisplay
-            });
-        }
+        //private void ApplyNote(object sender, RoutedEventArgs e)
+        //{
+        //    RaiseEvent(new NoteEventArgs()
+        //    {
+        //        RoutedEvent = NoteAppliedEvent,
+        //        TokenDisplay = TokenDisplay
+        //    });
+        //}
 
         private void Cancel(object sender, RoutedEventArgs e)
         {

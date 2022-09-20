@@ -29,6 +29,7 @@ using SIL.Scripture;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using ClearDashboard.Wpf.Application.Events;
+using Dapper;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -58,6 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public string? Message { get; set; }
         public IEnumerable<TokenDisplay>? Verse1 { get; set; }
+        public Note CurrentNote { get; set; }
         public TokenDisplay CurrentTokenDisplay { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
@@ -158,25 +160,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -188,13 +190,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            DisplayNote(e.TokenDisplay);
+            //DisplayNote(e.TokenDisplay);
         }
 
         public void TranslationApplied(TranslationEventArgs e)
@@ -217,7 +219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         
         public void NoteApplied(NoteEventArgs e)
         {
-            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Note '{e.Note.Text}' applied to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             NoteControlVisibility = Visibility.Hidden;
@@ -239,8 +241,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            CreateLabels();
-            CreateLabelSuggestions();
+            GetLabelSuggestions();
+            GetLabels();
 
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
@@ -248,31 +250,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             //await RetrieveTokensViaCorpusClass();
         }
 
-        private void CreateLabels()
+        private List<Label> GetLabels()
         {
-            var labels = new List<Label>();
-            for (var i = 1; i <= 5; i++)
+            var labelSuggestions = LabelSuggestions.ToList();
+            var labelTexts = new List<string>();
+            var numLabels = new Random().Next(4);
+
+            for (var i = 0; i <= numLabels; i++)
             {
-                labels.Add(new Label(Mediator, $"Label{i}"));
+                var labelIndex = new Random().Next(LabelSuggestions.Count());
+                if (!labelTexts.Contains(labelSuggestions[labelIndex].Text))
+                {
+                    labelTexts.Add(labelSuggestions[labelIndex].Text);
+                }
             }
 
-            SampleLabels = labels;
+            return labelTexts.OrderBy(lt => lt).Select(lt => new Label(Mediator, lt)).AsList();
         }        
         
-        private void CreateLabelSuggestions()
+        private void GetLabelSuggestions()
         {
-            var labels = new List<Label>();
-            labels.Add(new Label(Mediator, $"alfa"));
-            labels.Add(new Label(Mediator, $"bravo"));
-            labels.Add(new Label(Mediator, $"charlie"));
-            labels.Add(new Label(Mediator, $"delta"));
-            labels.Add(new Label(Mediator, $"echo"));
+            var labels = new List<Label>
+            {
+                new Label(Mediator, $"alfa"),
+                new Label(Mediator, $"bravo"),
+                new Label(Mediator, $"charlie"),
+                new Label(Mediator, $"delta"),
+                new Label(Mediator, $"echo")
+            };
 
             LabelSuggestions = labels;
         }
 
-
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foo", "foodie", "fingle", "boing", "la" };
+        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
 
         private string RandomTranslationOriginatedFrom()
         {
@@ -354,18 +364,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
-        //private List<Note> GetNotesForEntity(TokenId id)
-        //{
-        //    var noteIds = GetAllNoteDomainEntityAssociationsQuery.Where()
-        //}
-
-        //private void Foo()
-        //{
-        //    Dictionary<NoteId, Note> dictionary_;
-            
-        //    List<>
-        //}
-
         public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
 
         private void DisplayTranslation(TranslationEventArgs e)
@@ -397,10 +395,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
-            Verse1.First().Note = "This is a note";
-            Verse1.Skip(3).First().Note = "Here's another note.";
+
+            CurrentNote = new Note(null, "This is a note.", string.Empty)
+            {
+                NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                Labels = GetLabels()
+            };
+
+            var note2 = new Note(null, "Here's another note.", string.Empty)
+            {
+                NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                Labels = GetLabels()
+            };
+
+            Verse1.First().Notes.Add(CurrentNote); 
+            Verse1.First().Notes.Add(note2); 
             
             NotifyOfPropertyChange(nameof(Verse1));
+            NotifyOfPropertyChange(nameof(CurrentNote));
         }
 
         private async Task MockProjectAndUser()

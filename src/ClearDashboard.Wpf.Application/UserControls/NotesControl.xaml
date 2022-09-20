@@ -27,7 +27,7 @@
                FontSize="20"/>
         <TextBox Grid.Row="2" x:Name="TranslationValue" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplay.Note}" Margin="10,0"></TextBox>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Margin="10" Click="ApplyNote">Add Note</Button>
+            <!--<Button Margin="10" Click="ApplyNote">Add Note</Button>-->
             <Button Margin="10" Click="Cancel">Close</Button>
         </StackPanel>
     </Grid>

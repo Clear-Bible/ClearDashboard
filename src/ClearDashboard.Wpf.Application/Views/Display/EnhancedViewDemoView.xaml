@@ -36,8 +36,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="250" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="100" />
             <RowDefinition Height="50" />
             <RowDefinition Height="130" />
         </Grid.RowDefinitions>
@@ -51,7 +51,7 @@
             Command="NavigationCommands.BrowseBack">
             <materialDesign:PackIcon Kind="ChevronLeft" />
         </Button>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View demo" FontSize="20" />
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View demo" FontSize="24" FontWeight="Bold"/>
 
         <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
@@ -90,9 +90,18 @@
                                                        [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
-        <userControls:LabelSelector Grid.Row="3" Grid.Column="0" Width="200" LabelSuggestions="{Binding LabelSuggestions}"/>
+        <!--<userControls:LabelSelector Grid.Row="3" Grid.Column="0" Width="200" LabelSuggestions="{Binding LabelSuggestions}"/>-->
 
-        <userControls:LabelsDisplayControl Grid.Row="2" Grid.Column="0"
+        <userControls:NoteControl Grid.Row="2" Width="500"
+                                  Note="{Binding CurrentNote}" 
+                                  NoteFontSize="15"
+                                  LabelBackground="BlanchedAlmond"
+                                  LabelMargin="3,0"
+                                  LabelPadding="10,5"
+                                  LabelCornerRadius="10"
+                                  />
+
+        <userControls:LabelsDisplayControl Grid.Row="3" Grid.Column="0"
                                            Labels="{Binding SampleLabels}" 
                                            LabelBackground="BlanchedAlmond"
                                            LabelMargin="3,0"
@@ -117,7 +126,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Title:</Label>
+            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Verse Title:</Label>
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Font size:</Label>
                 <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TitleFontSizeSlider" Width="100" Value="20" TickFrequency="1" IsSnapToTickEnabled="True"/>

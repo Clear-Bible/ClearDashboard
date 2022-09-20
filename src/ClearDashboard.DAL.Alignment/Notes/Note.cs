@@ -8,7 +8,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
     {
         private readonly IMediator mediator_;
 
-        public NoteId? NoteId { get; private set; }
+        public NoteId? NoteId { get; set; }
         public string Text { get; set; }
         public string? AbbreviatedText { get; set; }
 

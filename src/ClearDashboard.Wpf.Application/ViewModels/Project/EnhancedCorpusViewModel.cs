@@ -744,25 +744,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -774,7 +774,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -798,7 +798,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteApplied(NoteEventArgs e)
         {
-            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Note '{e.Note.Text}' applied to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             // NoteControlVisibility = Visibility.Hidden;

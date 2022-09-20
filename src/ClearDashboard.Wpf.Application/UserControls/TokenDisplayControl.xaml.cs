@@ -653,7 +653,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay
+                //TokenDisplay = tokenDisplay
             });
         }
 
