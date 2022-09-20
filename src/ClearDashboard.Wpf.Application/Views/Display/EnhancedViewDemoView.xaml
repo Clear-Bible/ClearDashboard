@@ -96,8 +96,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="325"/>
+                <ColumnDefinition Width="325"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -213,6 +213,10 @@
                 <Label VerticalAlignment="Center">Bottom: </Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="10" Name="LabelBottomMarginSlider" Width="40" Value="0" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelBottomMarginSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                <Label VerticalAlignment="Center">Corner: </Label>
+                <Slider VerticalAlignment="Center" Minimum="0" Maximum="25" Name="LabelCornerRadiusSlider" Width="40" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+
             </StackPanel>
             <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Padding</Label>
@@ -267,7 +271,10 @@
                                        Notes="{Binding CurrentTokenDisplay.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                       LabelSuggestions="{Binding LabelSuggestions}"
+                                       LabelBackground="BlanchedAlmond"
                                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                       LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
