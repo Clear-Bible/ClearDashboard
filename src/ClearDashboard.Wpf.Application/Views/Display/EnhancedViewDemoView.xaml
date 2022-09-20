@@ -90,24 +90,6 @@
                                                        [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
-        <!--<userControls:LabelSelector Grid.Row="3" Grid.Column="0" Width="200" LabelSuggestions="{Binding LabelSuggestions}"/>-->
-
-        <userControls:NoteControl Grid.Row="2" Width="500"
-                                  Note="{Binding CurrentNote}" 
-                                  NoteFontSize="15"
-                                  LabelBackground="BlanchedAlmond"
-                                  LabelMargin="3,0"
-                                  LabelPadding="10,5"
-                                  LabelCornerRadius="10"
-                                  />
-
-        <userControls:LabelsDisplayControl Grid.Row="3" Grid.Column="0"
-                                           Labels="{Binding SampleLabels}" 
-                                           LabelBackground="BlanchedAlmond"
-                                           LabelMargin="3,0"
-                                           LabelPadding="10,5"
-                                           LabelCornerRadius="10"
-                                           FontSize="11"/>
 
         <Label Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
 
@@ -195,16 +177,16 @@
                                              SelectedItem="{Binding CurrentTranslationOption}"
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
+
             <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
                                        Title="{Binding CurrentTokenDisplay.SurfaceText}"
                                        Notes="{Binding CurrentTokenDisplay.Notes}"
-                                      cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
-                                                          [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
-                                                          [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
-                                                          [Event CloseRequested] = [Action CloseRequested];
-                                                          [Event LabelSelected] = [Action LabelSelected($eventArgs)];
-                                                          [Event LabelAdded] = [Action LabelAdded($eventArgs)];" />
-            <!--TokenDisplay="{Binding CurrentTokenDisplay}"-->
+                                       cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
+                                                           [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
+                                                           [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
+                                                           [Event CloseRequested] = [Action CloseRequested];
+                                                           [Event LabelSelected] = [Action LabelSelected($eventArgs)];
+                                                           [Event LabelAdded] = [Action LabelAdded($eventArgs)];" />
         </StackPanel>
     </Grid>
 </Page>
