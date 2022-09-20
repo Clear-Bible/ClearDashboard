@@ -73,13 +73,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         private Dictionary<string, string> _bcvDictionary;
-        public Dictionary<string, string> BCVDictionary
+        public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
             set
             {
                 _bcvDictionary = value;
-                NotifyOfPropertyChange(() => BCVDictionary);
+                NotifyOfPropertyChange(() => BcvDictionary);
             }
         }
 
@@ -222,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-            BCVDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -466,7 +466,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                BCVDictionary = new Dictionary<string, string>();
+                BcvDictionary = new Dictionary<string, string>();
             }
 
             return;
@@ -676,7 +676,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
-            this.BCVDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            this.BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
 
             return Task.CompletedTask;
         }

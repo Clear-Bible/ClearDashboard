@@ -1,41 +1,60 @@
-﻿using System;
+﻿using ClearDashboard.DAL.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using Caliburn.Micro;
-using ClearDashboard.DAL.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// Interaction logic for BookChapterVerse.xaml
     /// </summary>
-    public partial class BcvUserControl : UserControl, INotifyPropertyChanged
+    public partial class BcvUserControl : INotifyPropertyChanged
     {
         #region Member Variables
 
-
         #endregion
 
+
+        
         #region Observable Properties
+        
+        
+        #region ParatextSync
 
         public static readonly DependencyProperty ParatextSyncProperty =
-            DependencyProperty.Register("ParatextSync", typeof(bool), typeof(BcvUserControl),
-                new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ParatextSync), typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true, new PropertyChangedCallback(OnParatextSyncPropertyChanged)));
+
+        private static void OnParatextSyncPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnParatextSyncPropertyChanged(e);
+        }
+
+        private void OnParatextSyncPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            ParatextSync = (bool)e.NewValue;
+        }
+
         public bool ParatextSync
         {
             get => (bool)GetValue(ParatextSyncProperty);
             set => SetValue(ParatextSyncProperty, value);
         }
 
+        #endregion ParatextSync
+
+
+
+        #region Rtl
 
         public static readonly DependencyProperty IsRtlProperty =
-            DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
-            new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsRtl), typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(false));
 
         public bool IsRtl
         {
@@ -43,10 +62,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(IsRtlProperty, value);
         }
 
+        #endregion Rtl
+        
+        
+
+
+        #region CurrentBcv
 
         public static readonly DependencyProperty CurrentBcvProperty =
-            DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerseViewModel), typeof(BcvUserControl),
-                new PropertyMetadata(new BookChapterVerseViewModel()));
+            DependencyProperty.Register(nameof(CurrentBcv), typeof(BookChapterVerseViewModel), typeof(BcvUserControl),
+                new PropertyMetadata(new BookChapterVerseViewModel(), new PropertyChangedCallback(OnCurrentBcvPropteryChanged)));
+
+        private static void OnCurrentBcvPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnVerseRangePropertyChanged(e);
+        }
+
+        private void OnCurrentBcvPropteryChanged(DependencyPropertyChangedEventArgs e)
+        {
+            CurrentBcv = (BookChapterVerseViewModel)e.NewValue;
+        }
+
         public BookChapterVerseViewModel CurrentBcv
         {
             get => (BookChapterVerseViewModel)GetValue(CurrentBcvProperty);
@@ -58,11 +95,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 SetValue(CurrentBcvProperty, value);
             }
         }
+
+        #endregion CurrentBcv
+
+
         
-        
+        #region VerseChange
+
         public static readonly DependencyProperty VerseChangeProperty =
-            DependencyProperty.Register("VerseChange", typeof(string), typeof(BcvUserControl),
-                new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(VerseChange), typeof(string), typeof(BcvUserControl),
+                new PropertyMetadata("", new PropertyChangedCallback(OnVerseChangePropertyChanged)));
+
+        private static void OnVerseChangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnVerseChangePropertyChanged(e);
+        }
+
+        private void OnVerseChangePropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            VerseChange = (string)e.NewValue;
+        }
         public string VerseChange
         {
             get => (string)GetValue(VerseChangeProperty);
@@ -72,9 +125,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        
+        #endregion VerseChange
+
+
+        #region IsControlEnabled
+
         public static readonly DependencyProperty IsControlEnabledProperty =
-            DependencyProperty.Register("IsControlEnabled", typeof(bool), typeof(BcvUserControl),
+            DependencyProperty.Register(nameof(IsControlEnabled), typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
         public bool IsControlEnabled
         {
@@ -82,9 +139,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(IsControlEnabledProperty, value);
         }
 
-        
+        #endregion IsControlEnabled
+
+
+
+        #region ShowOffsetControl
+
         public static readonly DependencyProperty ShowOffsetControlProperty =
-            DependencyProperty.Register("ShowOffsetControl", typeof(bool), typeof(BcvUserControl),
+            DependencyProperty.Register(nameof(ShowOffsetControl), typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
         public bool ShowOffsetControl
         {
@@ -92,42 +154,95 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(ShowOffsetControlProperty, value);
         }
 
+        #endregion ShowOffsetControl
 
+
+
+        #region ShowHeader
 
         public static readonly DependencyProperty ShowHeaderProperty =
-            DependencyProperty.Register("ShowHeader", typeof(bool), typeof(BcvUserControl),
-                new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowHeader), typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true, new PropertyChangedCallback(OnShowHeaderPropteryChanged)));
+
+        private static void OnShowHeaderPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnShowHeaderPropteryChanged(e);
+        }
+
+        private void OnShowHeaderPropteryChanged(DependencyPropertyChangedEventArgs e)
+        {
+            ShowHeader = (bool)e.NewValue;
+        }
+
         public bool ShowHeader
         {
             get => (bool)GetValue(ShowHeaderProperty);
             set => SetValue(ShowHeaderProperty, value);
         }
 
+        #endregion ShowHeader
 
-        
+
+
+        #region VerseRange
+
         public static readonly DependencyProperty VerseRangeProperty =
-            DependencyProperty.Register("VerseRange", typeof(int), typeof(BcvUserControl),
-                new PropertyMetadata(1));
+            DependencyProperty.Register(nameof(VerseRange), typeof(int), typeof(BcvUserControl),
+                new PropertyMetadata(1,
+                new PropertyChangedCallback(OnVerseRangePropertyChanged)));
+
+        private static void OnVerseRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnVerseRangePropertyChanged(e);
+        }
+
+        private void OnVerseRangePropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            VerseRange = (int)e.NewValue;
+        }
+
         public int VerseRange
         {
             get => (int)GetValue(VerseRangeProperty);
             set => SetValue(VerseRangeProperty, value);
         }
 
+        # endregion VerseRange
 
-        public static readonly DependencyProperty BcvDictionaryProperty =
-            DependencyProperty.Register("BcvDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
-                new PropertyMetadata(new Dictionary<string, string>()));
+        
+
+        #region BcvDictionary
+
+        public static readonly DependencyProperty BcvDictionaryProperty = DependencyProperty.Register(
+            nameof(BcvDictionary), typeof(Dictionary<string, string>), typeof(BcvUserControl),
+            new PropertyMetadata(new Dictionary<string, string>(),
+                new PropertyChangedCallback(OnBcvDictionaryChanged)));
+
+        private static void OnBcvDictionaryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BcvUserControl? userControl = d as BcvUserControl;
+            userControl?.OnBcvDictionaryChanged(e);
+        }
+
+        private void OnBcvDictionaryChanged(DependencyPropertyChangedEventArgs e)
+        {
+            BcvDictionary = (Dictionary<string, string>)e.NewValue;
+        }
+
         public Dictionary<string, string> BcvDictionary
         {
             get => (Dictionary<string, string>)GetValue(BcvDictionaryProperty);
             set => SetValue(BcvDictionaryProperty, value);
         }
 
+        #endregion BcvDictionary
+
+        #endregion Observable Properties
 
 
-        #endregion
-
+        
         #region Constructor
         public BcvUserControl()
         {
@@ -174,6 +289,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 CboBook.SelectedIndex -= 1;
             }
+
+            VerseChange = "New";
         }
 
         private void BookDownArrow_Click(object sender, RoutedEventArgs e)
@@ -304,7 +421,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
         // Declare the event
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         // Create the OnPropertyChanged method to raise the event
         // The calling member's name will be used as the parameter.

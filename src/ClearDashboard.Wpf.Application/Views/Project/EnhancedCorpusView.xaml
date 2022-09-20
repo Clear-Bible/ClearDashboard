@@ -306,14 +306,14 @@
                 <userControls:BcvUserControl
                     Grid.Column="1"
                     Margin="50,0,0,0"
-                    BcvDictionary="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path= BCVDictionary}"
-                    CurrentBcv="{Binding CurrentBcv}"
+                    BcvDictionary="{Binding Path=BcvDictionary}"
+                    CurrentBcv="{Binding Path=CurrentBcv}"
                     IsControlEnabled="True"
                     IsRtl="{Binding IsRtl}"
-                    ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ShowHeader="True"
                     ShowOffsetControl="True"
-                    VerseChange="{Binding VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </materialDesign:DrawerHost>
 
