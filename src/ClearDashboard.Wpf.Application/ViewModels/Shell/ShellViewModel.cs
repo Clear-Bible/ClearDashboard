@@ -23,7 +23,6 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using Dapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -287,7 +286,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
 #if RELEASE
-            ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
+            //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
 #endif
             return base.OnInitializeAsync(cancellationToken);
         }

@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
 
-
-namespace ClearDashboard.Wpf.Views.Popups
+namespace ClearDashboard.Wpf.Application.Views.Startup
 {
     /// <summary>
     /// Interaction logic for RegistrationPopupView.xaml

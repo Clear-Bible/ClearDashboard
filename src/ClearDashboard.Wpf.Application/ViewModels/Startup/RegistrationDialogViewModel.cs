@@ -15,10 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using LicenseUser = ClearDashboard.DataAccessLayer.Models.LicenseUser;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.PopUps;
+namespace ClearDashboard.Wpf.Application.ViewModels.Startup;
 
 public class RegistrationDialogViewModel : WorkflowShellViewModel
 {
+    private IServiceProvider ServiceProvider { get; }
+
     ILogger _logger;
     //private IServiceProvider serviceProvider;
     private RegistrationViewModel _registrationViewModel;
@@ -28,7 +30,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
     public string LastName => _registrationViewModel.LastName;
     public RegistrationDialogViewModel(
 
-        INavigationService navigationService, 
+        INavigationService navigationService,
         ILogger<RegistrationDialogViewModel> logger,
         IEventAggregator eventAggregator,
         IMediator mediator,
@@ -36,20 +38,21 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         IServiceProvider serviceProvider)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
+        ServiceProvider = serviceProvider;
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
     {
         await base.OnInitializeAsync(cancellationToken);
 
-        
+
         MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_Missing", _logger));
 
-        _registrationViewModel = serviceProvider.GetService<RegistrationViewModel>();
+        _registrationViewModel = ServiceProvider.GetService<RegistrationViewModel>();
 
         Steps.Add(_registrationViewModel);
 
-        var step2 = serviceProvider.GetService<RegistrationViewModel>();
+        var step2 = ServiceProvider.GetService<RegistrationViewModel>();
         Steps.Add((IWorkflowStepViewModel)step2);
 
         CurrentStep = Steps[0];
@@ -81,7 +84,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
             var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-            
+
             LicenseUser givenLicenseUser = new LicenseUser();
             givenLicenseUser.FirstName = _registrationViewModel.FirstName;
             givenLicenseUser.LastName = _registrationViewModel.LastName;

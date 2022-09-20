@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Views.Popups.RegistrationView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.RegistrationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
@@ -7,15 +7,14 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    d:DataContext="{d:DesignInstance Type=popUps:RegistrationViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
-    Background="{DynamicResource MaterialDesignPaper}"
-    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+    Background="White"
+    Foreground="Black"
     mc:Ignorable="d">
+    <!--  d:DataContext="{d:DesignInstance Type=popUps:RegistrationViewModel}"  -->
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
@@ -46,11 +45,11 @@
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
-                materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                materialDesign:HintAssist.Foreground="Black"
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_FirstName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Foreground="Black"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <!--  materialDesign:HintAssist.Hint="Please enter your first name"  -->
                 <TextBox.Text>
@@ -89,7 +88,7 @@
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LastName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Foreground="Black"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <!--  materialDesign:HintAssist.Hint="Please enter your last name"  -->
                 <TextBox.Text>
@@ -127,7 +126,7 @@
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="20"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Foreground="Black"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <!--  materialDesign:HintAssist.Hint="Please enter your license key"  -->
                 <TextBox.Text>

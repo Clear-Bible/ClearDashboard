@@ -276,11 +276,11 @@
     <Page Update="Views\MirrorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Views\PopUps\RegistrationDialogView.xaml">
+    <Page Update="Views\Startup\RegistrationDialogView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\PopUps\RegistrationView.xaml">
+    <Page Update="Views\Startup\RegistrationView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -290,5 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\DesignSurface\" />
+    <Folder Include="Views\PopUps\" />
   </ItemGroup>
 </Project>

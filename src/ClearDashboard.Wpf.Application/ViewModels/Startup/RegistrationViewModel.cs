@@ -1,39 +1,24 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Models;
-using FluentValidation;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
+using LicenseUser = ClearDashboard.Wpf.Application.Models.LicenseUser;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
+namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
     {
+        #region Member Variables
         private RegistrationDialogViewModel _parent;
+        #endregion
 
-        public RegistrationViewModel(
-            INavigationService navigationService,
-            ILogger<RegistrationViewModel> logger,
-            IEventAggregator? eventAggregator,
-            IMediator? mediator,
-            ILifetimeScope? lifetimeScope,
-            IValidator<LicenseUser> licenseValidator)                                               
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
-        {
-            LicenseUser = new LicenseUser();
-        }
-
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        {
-            _parent = this.Parent as RegistrationDialogViewModel;
-            return base.OnInitializeAsync(cancellationToken);
-        }
-
+        #region Observable Objects
         private LicenseUser _licenseUser;
         public LicenseUser LicenseUser
         {
@@ -51,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 LicenseUser.LicenseKey = value;
                 ValidationResult = Validate();
                 NotifyOfPropertyChange(nameof(LicenseUser));
-                
+
             }
         }
 
@@ -80,17 +65,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(nameof(LicenseUser));
             }
         }
+        #endregion
 
+        #region Constructor
+        public RegistrationViewModel(
+            INavigationService navigationService,
+            ILogger<RegistrationViewModel> logger,
+            IEventAggregator? eventAggregator,
+            IMediator? mediator,
+            ILifetimeScope? lifetimeScope,
+            IValidator<LicenseUser> licenseValidator)
+        : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
+        {
+            LicenseUser = new LicenseUser();
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            _parent = this.Parent as RegistrationDialogViewModel;
+            return base.OnInitializeAsync(cancellationToken);
+        }
+        #endregion Constructor
+
+        #region Methods
         protected override ValidationResult Validate()
         {
-            
+
             var ValidationResult = Validator.Validate(LicenseUser);
             if (ValidationResult != null && _parent != null)
             {
                 _parent.CanRegister = ValidationResult.IsValid;
             }
             return ValidationResult;
-           
+
         }
+        #endregion  Methods
+
+
+
     }
+
 }

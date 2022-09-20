@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.Wpf.Application.UserControls;
 
-namespace ClearDashboard.Wpf.Application.Views.PopUps
+namespace ClearDashboard.Wpf.Application.Views.Startup
 {
     /// <summary>
     /// Interaction logic for RegistrationDialogView.xaml

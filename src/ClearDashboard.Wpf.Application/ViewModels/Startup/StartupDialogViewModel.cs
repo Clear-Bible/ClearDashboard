@@ -1,60 +1,62 @@
+using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Exceptions;
+using ClearApplicationFoundation.Extensions;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using System.Collections.Generic;
-using Autofac;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearApplicationFoundation.Exceptions;
-using System.Linq;
-using ClearApplicationFoundation.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class StartupDialogViewModel : WorkflowShellViewModel, IStartupDialog
     {
+        //private WindowManager WindowManager { get; }
+        private DashboardProjectManager ProjectManager { get; }
         private bool _licenseCleared = false;
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager)//, WindowManager windowManager) 
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            //Logger = logger;
+            //WindowManager = windowManager;
+            ProjectManager = projectManager;
             CanOk = true;
             DisplayName = "Startup Dialog";
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-#if RELEASE
-            //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-            CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-#endif
             var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("Startup", "Order").ToArray();
+
             if (views == null || !views.Any())
             {
                 throw new DependencyRegistrationMissingException(
                     "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
+//#if RELEASE
+            //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
+            var runRegistration = CheckLicense(IoC.Get<RegistrationDialogViewModel>());
+//#endif
+
             foreach (var view in views)
             {
                 Steps!.Add(view);
             }
 
-            CurrentStep = Steps![0];
+            CurrentStep = runRegistration ? Steps![0] : Steps![1];
+
             IsLastWorkflowStep = (Steps.Count == 1);
 
             EnableControls = true;
@@ -83,7 +85,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await TryCloseAsync(true);
         }
 
-        public void CheckLicense<TViewModel>(TViewModel viewModel)
+        public bool CheckLicense<TViewModel>(TViewModel viewModel)
         {
             if (!_licenseCleared)
             {
@@ -97,13 +99,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
                         if (decryptedLicenseUser.Id != null)
                         {
-                            CurrentUser = new User
+                            ProjectManager.CurrentUser = new User
                             {
                                 FirstName = decryptedLicenseUser.FirstName,
                                 LastName = decryptedLicenseUser.LastName,
                                 Id = Guid.Parse(decryptedLicenseUser.Id)
                             };
-
                         }
 
                         _licenseCleared = true;
@@ -111,15 +112,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     catch (Exception)
                     {
                         //MessageBox.Show("There was an issue decrypting your license key.");
-                        PopupRegistration(viewModel);
+                        //PopupRegistration(viewModel);
+                        return true;
                     }
                 }
                 else
                 {
                     //MessageBox.Show("Your license key file is missing.");
-                    PopupRegistration(viewModel);
+                    //PopupRegistration(viewModel);
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private void PopupRegistration<TViewModel>(TViewModel viewModel)
@@ -138,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.NoResize;
 
-            var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
+            //var created = WindowManager.ShowDialogAsync(viewModel, null, settings);
             _licenseCleared = true;
         }
 
