@@ -18,12 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
     public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, ParallelCorpus>
     {
 
-        private ParallelCorpus _parallelCorprus;
-        public ParallelCorpus ParallelCorpus
-        {
-            get => _parallelCorprus;
-            private init => Set(ref _parallelCorprus, value);
-        }
+       
 
         public ParallelCorpusStepViewModel()
         {
@@ -36,19 +31,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpus> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
-            CanMoveForwards = true;
-            CanMoveBackwards = true;
+            CanMoveForwards = false;
+            CanMoveBackwards = false;
             EnableControls = true;
+            CanOk = true;
 
-            ParallelCorpus = new ParallelCorpus();
-           
         }
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+     
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             ParentViewModel.CurrentStepTitle =
                 LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
-            return base.OnInitializeAsync(cancellationToken);
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        private bool _canOk;
+        public bool CanOk
+        {
+            get => _canOk;
+            set => Set(ref _canOk, value);
+        }
+
+        public void Ok()
+        {
+            ParentViewModel?.Ok();
         }
 
         protected override ValidationResult? Validate()

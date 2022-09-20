@@ -5,12 +5,19 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
 public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
-    private bool _canOk;
+   
+
+    public AlignmentSetStepViewModel()
+    {
+
+    }
 
     public AlignmentSetStepViewModel(DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<AlignmentSetStepViewModel> logger, IEventAggregator eventAggregator,
@@ -25,6 +32,20 @@ public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewMod
 
     }
 
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        
+        return base.OnInitializeAsync(cancellationToken);
+    }
+
+    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel.CurrentStepTitle =
+            LocalizationStrings.Get("ParallelCorpusDialog_AddAlignmentSet", Logger);
+        return base.OnActivateAsync(cancellationToken);
+    }
+
+    private bool _canOk;
     public bool CanOk
     {
         get => _canOk;
@@ -33,8 +54,6 @@ public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewMod
 
     public void Ok()
     {
-        var dialogViewModel = Parent as ParallelCorpusDialogViewModel;
-       // startupDialogViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
-        dialogViewModel?.Ok();
+       ParentViewModel?.Ok();
     }
 }

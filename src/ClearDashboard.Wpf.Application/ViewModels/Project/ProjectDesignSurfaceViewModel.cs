@@ -28,7 +28,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -86,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public CancellationTokenSource? CancellationTokenSource = null;
-        public bool AddParatextCorpusRunning;
+        public bool LongProcessRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
@@ -96,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
-
+        private readonly IWindowManager _windowManager;
         /// <summary>
         /// This is the network that is displayed in the window.
         /// It is the main part of the view-model.
@@ -286,17 +289,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private bool _addCorpusEnabled = true;
-        public bool AddCorpusEnabled
-        {
-            get => _addCorpusEnabled;
-            set
-            {
-                _addCorpusEnabled = value;
-                NotifyOfPropertyChange(() => AddCorpusEnabled);
-            }
-        }
-
         #endregion //Observable Properties
 
         #region Constructor
@@ -311,13 +303,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
-        public ProjectDesignSurfaceViewModel(INavigationService navigationService,
+        public ProjectDesignSurfaceViewModel(INavigationService navigationService,IWindowManager windowManager,
 #pragma warning restore CS8618
             ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
             IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
+            _windowManager = windowManager;
             _logger = logger;
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
@@ -614,7 +607,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             _ = await Task.Factory.StartNew(async () =>
             {
-                AddCorpusEnabled = false;
+               
+                IsBusy = true;
 
                 try
                 {
@@ -696,10 +690,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 finally
                 {
                     CancellationTokenSource.Dispose();
-                    AddParatextCorpusRunning = false;
+                    LongProcessRunning = false;
+                    IsBusy = false;
                 }
-                AddCorpusEnabled = true;
-
             }, cancellationToken);
 
 
@@ -716,18 +709,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private async void AddParatextCorpus(string selectedParatextProjectId = "")
         {
             _logger.LogInformation("AddParatextCorpus called.");
-            AddParatextCorpusRunning = true;
+            LongProcessRunning = true;
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
            
             
-            await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
+            await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
-                AddCorpusEnabled = false;
+                IsBusy = true;
                 var metadata = viewModel.SelectedProject;
 
                 _ = await Task.Factory.StartNew(async () =>
@@ -835,7 +828,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
-                            metadata.Name, $".Tokenize<{viewModel.SelectedTokenizer.ToString()}>().Transform<IntoTokensTextRowProcessor>()", cancellationToken);
+                            metadata.Name, viewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
 
@@ -874,11 +867,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     finally
                     {
                         CancellationTokenSource.Dispose();
-                        AddParatextCorpusRunning = false;
+                        LongProcessRunning = false;
+                        IsBusy = false;
                     }
-
-
-                    AddCorpusEnabled = true;
                 }, cancellationToken);
 
 
@@ -1260,19 +1251,131 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ConnectorGuid: newConnection.Id));
 
                 // TODO:  
-                //await AddParallelCorpus(newConnection);
+                await AddParallelCorpus(newConnection);
             }
         }
 
-        public async Task AddParallelCorpus(/*ConnectionViewModel newConnection*/)
+        public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
-            await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback);
+            //await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
+            //    DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback, DialogMode.Add);
+            var sourceCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.SourceConnector.ParentNode.Id);
+            if (sourceCorpusNode == null)
+            {
+                throw new MissingCorpusNodeException(
+                    $"Cannot find the source Corpus node for the Corpus with Id '{newConnection.SourceConnector.ParentNode.CorpusId}'.");
+            }
+            var targetCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.DestinationConnector.ParentNode.Id);
+            if (targetCorpusNode == null)
+            {
+                throw new MissingCorpusNodeException(
+                    $"Cannot find the target Corpus node for the Corpus with Id '{newConnection.DestinationConnector.ParentNode.CorpusId}'.");
+            }
 
-            async Task Callback(ParallelCorpusDialogViewModel viewModel)
+            var sourceNodeTokenization = sourceCorpusNode.NodeTokenizations.FirstOrDefault();
+            if (sourceNodeTokenization == null)
+            {
+                throw new MissingTokenizedTextCorpusIdException(
+                    $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{newConnection.SourceConnector.ParentNode.CorpusId}'.");
+            }
+            var targetNodeTokenization = targetCorpusNode.NodeTokenizations.FirstOrDefault();
+            if (sourceNodeTokenization == null)
+            {
+                throw new MissingTokenizedTextCorpusIdException(
+                    $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{newConnection.DestinationConnector.ParentNode.CorpusId}'.");
+            }
+
+            var dialogViewModel = IoC.Get<ParallelCorpusDialogViewModel>();
+
+            dialogViewModel.ParallelCorpus.DisplayName = $"{sourceCorpusNode.Name} - {targetCorpusNode.Name}";
+
+            if (dialogViewModel is IDialog dialog)
+            {
+                dialog.DialogMode = DialogMode.Add;
+            }
+
+            var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+
+            if (success)
             {
 
-                await Task.CompletedTask;
+                IsBusy = true;
+                CancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = CancellationTokenSource.Token;
+
+                var parallelCorpus = dialogViewModel.ParallelCorpus;
+
+                _ = await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                          _logger.LogInformation($"Retrieving tokenized source and target corpora for '{parallelCorpus.DisplayName}'.");
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                        {
+                            Name = "ParallelCorpus",
+                            Description = $"Retrieving tokenized source and target corpora for '{parallelCorpus.DisplayName}'...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }), cancellationToken);
+
+
+                        var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
+                        var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
+
+                        _logger.LogInformation($"Aligning rows between target and source corpora");
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                        {
+                            Name = "ParallelCorpus",
+                            Description = $"Aligning rows for '{parallelCorpus.DisplayName}' between target and source corpora...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }), cancellationToken);
+                        var parallelTextCorpus = await Task.Run(async () => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<VerseMapping>()), cancellationToken);
+
+
+                        _logger.LogInformation($"Creating the ParallelCorpus '{parallelCorpus.DisplayName}'");
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                        {
+                            Name = "ParallelCorpus",
+                            Description = $"Creating  ParallelCorpus '{parallelCorpus.DisplayName}'...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }), cancellationToken);
+                        var parallelTokenizedCorpus = await parallelTextCorpus.Create(parallelCorpus.DisplayName, Mediator!);
+
+
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                        {
+                            Name = "ParallelCorpus",
+                            Description =  $"Completed creation of  ParallelCorpus '{parallelCorpus.DisplayName}'.",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Completed
+                        }), cancellationToken);
+                        _logger.LogInformation($"Completed creating the ParallelCorpus '{parallelCorpus.DisplayName}'");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                new BackgroundTaskStatus
+                                {
+                                    Name = "ParallelCorpus",
+                                    EndTime = DateTime.Now,
+                                    ErrorMessage = $"{ex}",
+                                    TaskStatus = StatusEnum.Error
+                                }), cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        CancellationTokenSource.Dispose();
+                        LongProcessRunning = false;
+                        IsBusy = false;
+                    }
+
+                }, cancellationToken);
             }
         }
 
@@ -1359,7 +1462,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 X = nodeLocation.X,
                 Y = nodeLocation.Y,
                 CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType),
-                ParatextProjectId = corpus.ParatextGuid ?? string.Empty
+                ParatextProjectId = corpus.ParatextGuid ?? string.Empty,
+                CorpusId = corpus.CorpusId.Id
             };
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)

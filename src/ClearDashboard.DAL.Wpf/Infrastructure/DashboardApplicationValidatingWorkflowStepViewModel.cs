@@ -11,7 +11,7 @@ public abstract class DashboardApplicationValidatingWorkflowStepViewModel<TParen
 where TParentViewModel : class
 {
     protected DashboardProjectManager? ProjectManager { get; }
-    protected TParentViewModel? ParentViewModel => Parent as TParentViewModel;
+    public TParentViewModel? ParentViewModel => Parent as TParentViewModel;
     protected DashboardApplicationValidatingWorkflowStepViewModel() {}
     protected DashboardApplicationValidatingWorkflowStepViewModel(DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger logger, IEventAggregator eventAggregator,
