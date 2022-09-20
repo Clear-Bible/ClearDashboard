@@ -8,9 +8,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Width="1000"
-    d:DesignHeight="150"
-    d:DesignWidth="200"
+    Width="509"
+    Height="635"
+    d:DesignHeight="212"
+    d:DesignWidth="409"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="White"
     Foreground="Black"
@@ -163,13 +164,16 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
-                x:Name="Register"
-                Margin="5,5,5,5"
-                Content="{helpers:Localization RegistrationDialogView_Register}" />
-            <Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
-                Content="{helpers:Localization RegistrationDialogView_CloseApplication}" />
+                Content="{helpers:Localization RegistrationDialogView_CloseApplication}"
+                Style="{StaticResource TransparentStyle}" />
+            <Button
+                x:Name="Register"
+                Margin="5,5,5,5"
+                Content="{helpers:Localization RegistrationDialogView_Register}"
+                Style="{StaticResource TransparentStyle}" />
+
         </StackPanel>
         <!--<userControls:WorkflowFooter Grid.Row="1" Grid.Column="0"/>-->
         <!--<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >

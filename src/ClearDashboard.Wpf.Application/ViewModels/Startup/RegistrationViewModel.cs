@@ -97,12 +97,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
 
             var ValidationResult = Validator.Validate(LicenseUser);
-            if (ValidationResult != null && _parent != null)
+            if (ValidationResult != null)
             {
-                _parent.CanRegister = ValidationResult.IsValid;
+                CanRegister = ValidationResult.IsValid;
             }
             return ValidationResult;
 
+        }
+
+        public bool CanCancel => true /* can always cancel */;
+
+        private bool _canRegister;
+        public bool CanRegister
+        {
+            get => _canRegister;
+            set => Set(ref _canRegister, value);
         }
 
         public void Cancel()
@@ -129,7 +138,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (match)
                 {
                     File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
-                    await TryCloseAsync(true);
+                    await MoveForwards();
+                    //await TryCloseAsync(true);
                 }
                 else
                 {

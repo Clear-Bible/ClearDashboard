@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsLastWorkflowStep = (Steps.Count == 1);
 
             EnableControls = true;
-            await ActivateItemAsync(Steps[0], cancellationToken);
+            await ActivateItemAsync(CurrentStep, cancellationToken);
 
             await base.OnInitializeAsync(cancellationToken);
         }
@@ -111,14 +111,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     }
                     catch (Exception)
                     {
-                        //MessageBox.Show("There was an issue decrypting your license key.");
+                        MessageBox.Show("There was an issue decrypting your license key.");
                         //PopupRegistration(viewModel);
                         return true;
                     }
                 }
                 else
                 {
-                    //MessageBox.Show("Your license key file is missing.");
+                    MessageBox.Show("Your license key file is missing.");
                     //PopupRegistration(viewModel);
                     return true;
                 }
