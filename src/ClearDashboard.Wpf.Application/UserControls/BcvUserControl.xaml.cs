@@ -45,7 +45,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public bool ParatextSync
         {
             get => (bool)GetValue(ParatextSyncProperty);
-            set => SetValue(ParatextSyncProperty, value);
+            set
+            {
+                SetValue(ParatextSyncProperty, value);
+            }
         }
 
         #endregion ParatextSync
@@ -146,6 +149,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion IsControlEnabled
 
+
+        #region IsControlMinimal
+        
+        public static readonly DependencyProperty IsControlMinimalProperty =
+            DependencyProperty.Register(nameof(IsControlMinimal), typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(false));
+        public bool IsControlMinimal
+        {
+            get => (bool)GetValue(IsControlMinimalProperty);
+            set => SetValue(IsControlMinimalProperty, value);
+        }
+
+        #endregion IsControlMinimal
 
 
         #region ShowOffsetControl

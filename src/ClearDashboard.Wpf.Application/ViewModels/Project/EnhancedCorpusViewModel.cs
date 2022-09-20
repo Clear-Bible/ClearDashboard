@@ -67,6 +67,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _paratextSync;
             set
             {
+                if (value == true)
+                {
+                    // TODO do we return back the control to what Paratext is showing
+                    // or do we change Paratext to this new verse?  currently set to 
+                    // change Paratext to this new verse
+                    _ = Task.Run(() =>
+                        ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                }
+
                 _paratextSync = value;
                 NotifyOfPropertyChange(() => ParatextSync);
             }
@@ -274,164 +283,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
         }
 
-        private async void BcvInit(string paratextProjectId = "")
-        {
-
-            //var result = await _projectManager.Mediator.Send(new GetBcvDictionariesQuery(paratextProjectId));
-            //if (result.Success)
-            //{
-            //    BCVDictionary = result.Data;
-
-                
-            //}
-            //else
-            //{
-            //    BCVDictionary = new Dictionary<string, string>();
-            //}
-
-            //InComingChangesStarted = true;
-
-            //// set the CurrentBcv prior to listening to the event
-            //CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
-
-            //CalculateBooks();
-            //CalculateChapters();
-            //CalculateVerses();
-            //InComingChangesStarted = false;
-
-            // Subscribe to changes of the Book Chapter Verse data object.
-            CurrentBcv.PropertyChanged += BcvChanged;
-        }
-
-        private void BcvChanged(object sender, PropertyChangedEventArgs e)
-        {
-            //if (ParatextSync && InComingChangesStarted == false)
-            //{
-            //    string verseId;
-            //    bool somethingChanged = false;
-            //    if (e.PropertyName == "BookNum")
-            //    {
-            //        // book switch so find the first chapter and verse for that book
-            //        verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
-            //        if (verseId != "")
-            //        {
-            //            InComingChangesStarted = true;
-            //            CurrentBcv.SetVerseFromId(verseId);
-
-            //            CalculateChapters();
-            //            CalculateVerses();
-            //            InComingChangesStarted = false;
-            //            somethingChanged = true;
-            //        }
-            //    }
-            //    else if (e.PropertyName == "Chapter")
-            //    {
-            //        // ReSharper disable once InconsistentNaming
-            //        var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
-
-            //        // chapter switch so find the first verse for that book and chapter
-            //        verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
-            //        if (verseId != "")
-            //        {
-            //            InComingChangesStarted = true;
-            //            CurrentBcv.SetVerseFromId(verseId);
-
-            //            CalculateVerses();
-            //            InComingChangesStarted = false;
-            //            somethingChanged = true;
-            //        }
-            //    }
-            //    else if (e.PropertyName == "Verse")
-            //    {
-            //        InComingChangesStarted = true;
-            //        CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-            //        InComingChangesStarted = false;
-            //        somethingChanged = true;
-            //    }
-
-            //    if (somethingChanged)
-            //    {
-            //        // send to the event aggregator for everyone else to hear about a verse change
-            //        EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
-
-            //        // push to Paratext
-            //        if (ParatextSync)
-            //        {
-            //            _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-            //        }
-            //    }
-
-            //}
-        }
-
-        //private void CalculateBooks()
-        //{
-        //    CurrentBcv.BibleBookList?.Clear();
-
-        //    var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-        //        .Select(g => g.First())
-        //        .ToList();
-
-        //    foreach (var book in books)
-        //    {
-        //        var bookId = book.Substring(0, 3);
-
-        //        var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
-        //        CurrentBcv.BibleBookList?.Add(bookName);
-        //    }
-
-        //}
-
-        //private void CalculateChapters()
-        //{
-        //    // CHAPTERS
-        //    var bookId = CurrentBcv.Book;
-        //    var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-        //    for (int i = 0; i < chapters.Count; i++)
-        //    {
-        //        chapters[i] = chapters[i].Substring(3, 3);
-        //    }
-
-        //    chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-        //    // invoke to get it to run in STA mode
-        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
-        //    {
-        //        List<int> chapterNumbers = new List<int>();
-        //        foreach (var chapter in chapters)
-        //        {
-        //            chapterNumbers.Add(Convert.ToInt16(chapter));
-        //        }
-
-        //        CurrentBcv.ChapterNumbers = chapterNumbers;
-        //    });
-        //}
-
-        //private void CalculateVerses()
-        //{
-        //    // VERSES
-        //    var bookId = CurrentBcv.Book;
-        //    var chapId = CurrentBcv.ChapterIdText;
-        //    var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
-
-        //    for (int i = 0; i < verses.Count; i++)
-        //    {
-        //        verses[i] = verses[i].Substring(6);
-        //    }
-
-        //    verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-        //    // invoke to get it to run in STA mode
-        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
-        //    {
-        //        List<int> verseNumbers = new List<int>();
-        //        foreach (var verse in verses)
-        //        {
-        //            verseNumbers.Add(Convert.ToInt16(verse));
-        //        }
-
-        //        CurrentBcv.VerseNumbers = verseNumbers;
-        //    });
-        //}
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
@@ -463,18 +314,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-
-                //BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                 InComingChangesStarted = true;
-
-                // add in the books to the dropdown list
-                //CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-
-                //CalculateChapters();
-                //CalculateVerses();
 
                 NotifyOfPropertyChange(() => CurrentBcv);
                 InComingChangesStarted = false;
@@ -483,8 +326,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 BcvDictionary = new Dictionary<string, string>();
             }
-
-            return;
         }
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
@@ -580,7 +421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            BcvInit(message.ParatextProjectId);
+            //BcvInit(message.ParatextProjectId);
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
