@@ -787,13 +787,6 @@
                         Content="Paratext"
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
-                    <Button
-                        x:Name="AddParallelCorpus"
-                        Margin="10,0,10,10"
-                        cm:Message.Attach="AddParallelCorpus()"
-                        Content="Paratext"
-                        Style="{StaticResource BigParatextButton}"
-                        Tag=" ScriptTextOutline" />
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>
