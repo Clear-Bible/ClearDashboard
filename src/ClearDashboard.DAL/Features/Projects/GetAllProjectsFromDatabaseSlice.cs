@@ -16,9 +16,9 @@ using SIL.Extensions;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record GetAllProjectsFromDatabaseQuery() : ProjectRequestQuery<IEnumerable<Models.Project>>;
+    public record GetAllProjectsFromDatabaseQuery() : LoadProjectQueryBase<IEnumerable<Models.Project>>;
 
-    public class GetAllProjectsFromDatabaseQueryHandler : ProjectDbContextQueryHandler<GetAllProjectsFromDatabaseQuery,
+    public class GetAllProjectsFromDatabaseQueryHandler : LoadProjectQueryBaseHandler<GetAllProjectsFromDatabaseQuery,
         RequestResult<IEnumerable<Models.Project>>, IEnumerable<Models.Project>>
     {
         private readonly IMediator _mediator;

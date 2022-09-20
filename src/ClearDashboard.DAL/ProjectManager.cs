@@ -322,11 +322,11 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task LoadProjectFromDatabase(string projectName)
         {
-            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-            CurrentProject = projectAssets.ProjectDbContext.Projects.First();
+            //var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
+            //CurrentProject = projectAssets.ProjectDbContext.Projects.First();
 
-            //InstantiateCurrentProject(projectName);
-            //CurrentProject = LoadProject(projectName).Result.First();
+            InstantiateCurrentProject(projectName);
+            CurrentProject = LoadProject(projectName).Result.First();
         }
 
         public async Task<IEnumerable<Project>> LoadProject(string projectName)

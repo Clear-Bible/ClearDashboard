@@ -13,15 +13,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Data.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record LoadProjectQuery(string projectName) : ProjectRequestQuery<IEnumerable<Models.Project>>;
+    public record LoadProjectQuery(string projectName) : LoadProjectQueryBase<IEnumerable<Models.Project>>;
 
-    public class LoadProjectQueryHandler : ProjectDbContextQueryHandler<LoadProjectQuery,
+    public class LoadProjectQueryHandler : LoadProjectQueryBaseHandler<LoadProjectQuery,
         RequestResult<IEnumerable<Models.Project>>, IEnumerable<Models.Project>>
     {
         private readonly IMediator _mediator;
+        private ProjectAssets _projectAssets;
+        private Microsoft.EntityFrameworkCore.DbSet<Models.Project> _projects;
         public LoadProjectQueryHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory,
             IProjectProvider projectProvider, ILogger<LoadProjectQueryHandler> logger)
             : base(projectNameDbContextFactory, projectProvider, logger)
