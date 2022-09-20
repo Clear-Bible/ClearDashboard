@@ -412,7 +412,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set => Set(ref _message, value);
         }
 
-        public string ProjectName => ProjectManager.CurrentProject.ProjectName;
+        private string _projectName;
+        public string ProjectName
+        {
+            get => _projectName;
+            set
+            {
+                _projectName = value;
+                NotifyOfPropertyChange(nameof(ProjectName));
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -424,7 +433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedMember.Global
         public MainViewModel()
         {
-
+            
         }
 
 
@@ -515,6 +524,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
                 }
+                ProjectName = ProjectManager.CurrentProject.ProjectName;
             }
 
 
@@ -1605,6 +1615,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             await ProjectManager.LoadProjectFromDatabase(dashboardProject.ProjectName);
                         }
+
+                        ProjectName = dashboardProject.ProjectName;
                     }
                     break;
             }

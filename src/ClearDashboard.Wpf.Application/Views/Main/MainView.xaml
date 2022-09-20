@@ -80,7 +80,7 @@
                 </Menu.ItemTemplate>
             </Menu>
 
-            <Label Grid.Column="2" Content="{Binding ProjectName}" />
+            <Label Grid.Column="2" Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
         </Grid>
 
         <Grid Grid.Row="1">
