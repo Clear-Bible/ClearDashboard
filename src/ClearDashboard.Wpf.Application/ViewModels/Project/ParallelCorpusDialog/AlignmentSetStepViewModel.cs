@@ -1,15 +1,14 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewModel
+public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
     private bool _canOk;
 

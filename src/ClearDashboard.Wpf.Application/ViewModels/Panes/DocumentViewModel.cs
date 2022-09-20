@@ -102,6 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
+
         public ICommand SaveCommand
         {
             get

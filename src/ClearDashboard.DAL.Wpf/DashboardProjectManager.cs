@@ -18,17 +18,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType, Guid CorpusId, Guid TokenizedTextCorpusId);
+public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType, Guid CorpusId, Guid TokenizedTextCorpusId, bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
 
 public record ProjectLoadCompleteMessage(bool Loaded);
+
+public record ActiveDocumentMessage(Guid Guid);
 
 public record ProjectChangedMessage(ParatextProject Project);
 
@@ -58,9 +61,9 @@ public record ParallelCorpusDeselectedMessage(Guid ConnectorGuid);
 
 public class DashboardProjectManager : ProjectManager
 {
-    
 
-    #nullable disable
+
+#nullable disable
 
     private IEventAggregator EventAggregator { get; set; }
 
@@ -86,7 +89,7 @@ public class DashboardProjectManager : ProjectManager
         await ConfigureSignalRClient();
     }
 
- 
+
 
     protected async Task ConfigureSignalRClient()
     {
@@ -160,7 +163,7 @@ public class DashboardProjectManager : ProjectManager
     }
 
 
-    protected  async Task PublishSignalRConnected(bool connected)
+    protected async Task PublishSignalRConnected(bool connected)
     {
         await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
     }
@@ -170,11 +173,11 @@ public class DashboardProjectManager : ProjectManager
         await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
     }
 
-    protected  async Task HookSignalREvents()
+    protected async Task HookSignalREvents()
     {
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
-          
+
         {
             CurrentVerse = verse;
             await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
@@ -229,104 +232,113 @@ public class DashboardProjectManager : ProjectManager
         return project;
     }
 
-    public void CheckLicense <TViewModel>(TViewModel viewModel)
+    public void CheckLicense<TViewModel>(TViewModel viewModel)
+    {
+        if (!_licenseCleared)
         {
-            if (!_licenseCleared)
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
+            if (File.Exists(filePath))
             {
-                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
-                if (File.Exists(filePath))
+                try
                 {
-                    try
+                    var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
+                    var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                    if (decryptedLicenseUser.Id != null)
                     {
-                        var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
-                        var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        if (decryptedLicenseUser.Id != null)
+                        CurrentUser = new User
                         {
-                            CurrentUser = new User
-                            {
-                                FirstName = decryptedLicenseUser.FirstName,
-                                LastName = decryptedLicenseUser.LastName,
-                                Id = Guid.Parse(decryptedLicenseUser.Id)
-                            };
+                            FirstName = decryptedLicenseUser.FirstName,
+                            LastName = decryptedLicenseUser.LastName,
+                            Id = Guid.Parse(decryptedLicenseUser.Id)
+                        };
 
-                        }
+                    }
 
-                        _licenseCleared = true;
-                    }
-                    catch (Exception)
-                    {
-                        //MessageBox.Show("There was an issue decrypting your license key.");
-                        PopupRegistration(viewModel);
-                    }
+                    _licenseCleared = true;
                 }
-                else
-                {   
-                    //MessageBox.Show("Your license key file is missing.");
+                catch (Exception)
+                {
+                    //MessageBox.Show("There was an issue decrypting your license key.");
                     PopupRegistration(viewModel);
                 }
             }
-        }
-
-        private void PopupRegistration <TViewModel>(TViewModel viewModel)
-        {
-            Logger.LogInformation("Registration called.");
-
-            dynamic settings = new ExpandoObject();
-            settings.Width = 850;
-            settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
-            settings.PopupAnimation = PopupAnimation.Fade;
-            settings.Placement = PlacementMode.Absolute;
-            settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
-            settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
-            settings.Title = "License Registration";
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-
-            var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
-            _licenseCleared = true;
-        }
-
-        public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-
-        private static dynamic CreateNewProjectDialogSettings()
-        {
-            dynamic settings = new ExpandoObject();
-            settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
-            //settings.Title = "Create New Project";  // TODO:  localize
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-            return settings;
-        }
-
-        public async Task InvokeDialog<TDialogViewModel,TNavigationViewModel>(dynamic settings, Func<TDialogViewModel, Task<bool>> callback) where TDialogViewModel : new()
-        {
-            var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
-
-            var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
-
-            if (success)
+            else
             {
-                var navigate = await callback.Invoke(newProjectPopupViewModel);
-
-                if (navigate)
-                {
-                    _navigationService.NavigateToViewModel<TNavigationViewModel>();
-                }
+                //MessageBox.Show("Your license key file is missing.");
+                PopupRegistration(viewModel);
             }
         }
+    }
 
-        public async Task InvokeDialog<TDialogViewModel>(dynamic settings, Func<TDialogViewModel, Task> callback) where TDialogViewModel : new()
+    private void PopupRegistration<TViewModel>(TViewModel viewModel)
+    {
+        Logger.LogInformation("Registration called.");
+
+        dynamic settings = new ExpandoObject();
+        settings.Width = 850;
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.PopupAnimation = PopupAnimation.Fade;
+        settings.Placement = PlacementMode.Absolute;
+        settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
+        settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
+        settings.Title = "License Registration";
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+
+        var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
+        _licenseCleared = true;
+    }
+
+    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+
+    private static dynamic CreateNewProjectDialogSettings()
+    {
+        dynamic settings = new ExpandoObject();
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+        return settings;
+    }
+
+    public async Task InvokeDialog<TDialogViewModel, TNavigationViewModel>(dynamic settings, Func<TDialogViewModel, Task<bool>> callback, DialogMode dialogMode = DialogMode.Add) where TDialogViewModel : new()
+    {
+        var dialogViewModel = IoC.Get<TDialogViewModel>();
+
+        if (dialogViewModel is IDialog dialog)
         {
-            var newProjectPopupViewModel = IoC.Get<TDialogViewModel>();
+            dialog.DialogMode = dialogMode;
+        }
 
-            var success = await _windowManager.ShowDialogAsync(newProjectPopupViewModel, null, settings);
+        var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, settings);
 
-            if (success)
+        if (success)
+        {
+            var navigate = await callback.Invoke(dialogViewModel);
+
+            if (navigate)
             {
-                await callback.Invoke(newProjectPopupViewModel);
+                _navigationService.NavigateToViewModel<TNavigationViewModel>();
             }
         }
+    }
+
+    public async Task InvokeDialog<TDialogViewModel>(dynamic settings, Func<TDialogViewModel, Task> callback, DialogMode dialogMode = DialogMode.Add) where TDialogViewModel : new()
+    {
+        var dialogViewModel = IoC.Get<TDialogViewModel>();
+
+        if (dialogViewModel is IDialog dialog)
+        {
+            dialog.DialogMode = dialogMode;
+        }
+
+        var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, settings);
+
+        if (success)
+        {
+            await callback.Invoke(dialogViewModel);
+        }
+    }
 }

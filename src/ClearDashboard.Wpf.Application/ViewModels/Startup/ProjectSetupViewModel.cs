@@ -2,17 +2,17 @@
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<DataAccessLayer.Models.Project>
+    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel,DataAccessLayer.Models.Project>
     {
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -66,9 +66,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             ProjectManager!.CurrentDashboardProject.ProjectName = Project.ProjectName;
             ProjectManager.CurrentDashboardProject.IsNew = true;
-            var startupDialogViewModel = Parent as StartupDialogViewModel;
-            startupDialogViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
-            startupDialogViewModel?.Ok();
+           
+            ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
+            ParentViewModel?.Ok();
         }
 
         private bool CheckIfConnectedToParatext()
