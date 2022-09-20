@@ -88,6 +88,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
                 {
                     _isActive = value;
                     NotifyOfPropertyChange(() => IsActive);
+
+                    if (this.ContentId == "ENHANCEDCORPUS" && value == true)
+                    {
+                        // send out a notice that the active document has changed
+                        EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(this.Guid));
+                    }
                 }
             }
         }

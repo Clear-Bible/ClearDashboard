@@ -30,6 +30,8 @@ public record VerseChangedMessage(string Verse);
 
 public record ProjectLoadCompleteMessage(bool Loaded);
 
+public record ActiveDocumentMessage(Guid Guid);
+
 public record ProjectChangedMessage(ParatextProject Project);
 
 public record TextCollectionChangedMessage(List<TextCollection> TextCollections);
