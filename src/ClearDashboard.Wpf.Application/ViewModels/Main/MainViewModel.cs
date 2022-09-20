@@ -513,6 +513,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
 
+                // subscribe to the event aggregator
+                //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
@@ -1366,38 +1368,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as EnhancedCorpusViewModel;
 
                     enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                    return;
                 }
 
                 // more than one enhanced corpus window is open and active
                 foreach (var document in dockableWindows)
                 {
-                    if (document.IsActive)
+                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
                     {
-                        
+                        var vm = document.Content as EnhancedCorpusViewModel;
+                        var guid = vm.Guid;
+
+                        var enhancedCorpusViewModels =
+                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                                .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as EnhancedCorpusViewModel;
+                        if (enhancedCorpusViewModels is not null)
+                        {
+                            enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                            return;
+                        }
                     }
                 }
             }
 
+            // unactivate any other doc windows before we add in the new one
+            var docWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var document in docWindows)
+            {
+                document.IsActive = false;
+            }
 
-
+            
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
+            // add vm to conductor
+            Items.Add(viewModel);
 
+            // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
-                ContentId = paratextId
+                ContentId = paratextId,
+                Content = viewModel,
+                Title = message.ProjectName + " (" + tokenizationType + ")",
+                IsActive = true
             };
-            // setup the right ViewModel for the pane
-            windowDockable.Content = viewModel;
-            windowDockable.Title = message.ProjectName + " (" + tokenizationType + ")";
-            windowDockable.IsActive = true;
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-
             documentPane?.Children.Add(windowDockable);
 
             await viewModel.ShowCorpusTokens(message, cancellationToken);
