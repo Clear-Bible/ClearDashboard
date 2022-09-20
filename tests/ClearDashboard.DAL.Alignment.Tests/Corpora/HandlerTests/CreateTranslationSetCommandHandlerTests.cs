@@ -32,7 +32,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus1 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus1 = await parallelTextCorpus1.Create(Mediator!);
+            var parallelCorpus1 = await parallelTextCorpus1.Create("pc1", Mediator!);
 
             var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
 
@@ -40,7 +40,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSet1);
 
             var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus2 = await parallelTextCorpus2.Create(Mediator!);
+            var parallelCorpus2 = await parallelTextCorpus2.Create("pc2", Mediator!);
 
             var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
 
@@ -78,7 +78,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -110,7 +110,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -205,12 +205,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
+
+            var initialFilteredEngineParallelTextRows = parallelTextCorpus.Take(10).Cast<EngineParallelTextRow>();
+            var initialTranslations = await translationSet.GetTranslations(initialFilteredEngineParallelTextRows);
+            Output.WriteLine($"TRANSLATION COUNT: {initialTranslations.Count()}");
 
             Output.WriteLine("");
 

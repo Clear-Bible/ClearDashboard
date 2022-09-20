@@ -66,7 +66,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(displayName,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId,
-                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null")));
+                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                displayName));
 
             if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
             {

@@ -81,7 +81,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
 			var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create(mediator_);
+			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create("parallelTextCorpusWithTokenizedTextCorpuses", mediator_);
 
 			Assert.Equal(16, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 16);

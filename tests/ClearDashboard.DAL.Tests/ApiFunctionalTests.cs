@@ -100,8 +100,8 @@ namespace ClearDashboard.DAL.Tests
             //    }
             //}
 
-            var parallelTextCorpus = manuscriptTokenizedTextCorpus.EngineAlignRows(zzSurTokenizedTextCorpus, new List<VerseMapping>());
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTextCorpus = manuscriptTokenizedTextCorpus.EngineAlignRows(zzSurTokenizedTextCorpus, new());
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("manuscript - ZZ_SUR", Mediator!);
 
             ////var verseMappings = new List<VerseMapping>();
             //var command = new CreateParallelCorpusCommand(new TokenizedTextCorpusId(manuscriptCorpus.Id),

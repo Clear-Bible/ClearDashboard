@@ -56,7 +56,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 DisplayName = request.DisplayName,
                 SourceTokenizedCorpus = sourceTokenizedCorpus,
-                TargetTokenizedCorpus = targetTokenizedCorpus
+                TargetTokenizedCorpus = targetTokenizedCorpus,
+                DisplayName = request.DisplayName
             };
 
             var bookAbbreviationsToNumbers =
