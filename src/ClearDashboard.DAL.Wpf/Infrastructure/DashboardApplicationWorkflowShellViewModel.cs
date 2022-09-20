@@ -1,20 +1,19 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
+namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
 {
-    public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel
+    public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel, IDialog
     {
         private string? _currentStepTitle;
-        private WorkflowMode _workflowMode;
+        private DialogMode _dialogMode;
 
         public DashboardApplicationWorkflowShellViewModel()
         {
-            WorkflowMode = WorkflowMode.Add;
+            DialogMode = DialogMode.Add;
         }
 
         public DashboardApplicationWorkflowShellViewModel(DashboardProjectManager? projectManager, 
@@ -24,15 +23,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
             navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
-            WorkflowMode = WorkflowMode.Add;
+            DialogMode = DialogMode.Add;
         }
 
         public DashboardProjectManager? ProjectManager { get; private set; }
 
-        public WorkflowMode WorkflowMode
+        public DialogMode DialogMode
         {
-            get => _workflowMode;
-            set => Set(ref _workflowMode, value);
+            get => _dialogMode;
+            set => Set(ref _dialogMode, value);
         }
 
         public string? CurrentStepTitle
@@ -42,7 +41,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
             {
                 Set(ref _currentStepTitle, value);
                 Title = $"{DisplayName} - {_currentStepTitle}";
-                //NotifyOfPropertyChange(nameof(Title));
             }
         }
 

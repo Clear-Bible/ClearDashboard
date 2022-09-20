@@ -7,7 +7,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup

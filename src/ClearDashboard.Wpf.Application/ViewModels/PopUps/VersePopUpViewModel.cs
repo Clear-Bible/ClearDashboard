@@ -6,10 +6,9 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Autofac;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
