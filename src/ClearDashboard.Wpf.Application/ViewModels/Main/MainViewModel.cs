@@ -1446,7 +1446,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         }
                         else
                         {
-                            await ProjectManager.LoadProjectFromDatabase(dashboardProject.ProjectName);
+                            await ProjectManager.LoadProject(dashboardProject.ProjectName);
                         }
 
                         ProjectName = dashboardProject.ProjectName;
