@@ -1,9 +1,8 @@
 ﻿using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

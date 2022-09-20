@@ -1,12 +1,11 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
+namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 public abstract class DashboardApplicationValidatingWorkflowStepViewModel<TParentViewModel,TEntity> : ValidatingWorkflowStepViewModel<TEntity>
 where TParentViewModel : class
