@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220910040010_InitialMigration")]
+    [Migration("20220919011351_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("TokenId")
                         .IsUnique();
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Adornment");
                 });
 
@@ -63,7 +65,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("AlignmentOriginatedFrom")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("AlignmentSetId")
+                    b.Property<Guid>("AlignmentSetId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AlignmentVerification")
@@ -97,6 +99,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("SourceTokenId");
 
                     b.HasIndex("TargetTokenId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Alignment");
                 });
@@ -184,6 +188,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Corpus");
                 });
 
@@ -219,6 +225,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CorpusHistory");
                 });
@@ -329,16 +337,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DomainEntityIdString")
+                    b.Property<Guid?>("DomainEntityIdGuid")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DomainEntityIdTypeString")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DomainSubEntityIdString")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DomainSubEntityIdTypeString")
+                    b.Property<string>("DomainEntityIdName")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("NoteId")
@@ -406,6 +408,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TargetTokenizedCorpusId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ParallelCorpus");
                 });
 
@@ -440,6 +444,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TargetTokenizedCorpusId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ParallelCorpusHistory");
                 });
 
@@ -465,6 +471,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Project");
                 });
@@ -564,6 +572,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("CorpusId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("TokenizedCorpus");
                 });
 
@@ -591,6 +601,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TokenComponentId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VerseId");
 
@@ -629,6 +641,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("SourceTokenId");
 
                     b.HasIndex("TranslationSetId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Translation");
                 });
@@ -787,6 +801,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("CorpusId");
 
+                    b.HasIndex("UserId");
+
                     b.HasIndex("VerseMappingId");
 
                     b.ToTable("Verse");
@@ -815,6 +831,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("ParallelCorpusHistoryId");
 
                     b.HasIndex("ParallelCorpusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("VerseMapping");
                 });
@@ -925,14 +943,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithOne("Adornment")
                         .HasForeignKey("ClearDashboard.DataAccessLayer.Models.Adornment", "TokenId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Token");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", null)
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
                         .WithMany("Alignments")
-                        .HasForeignKey("AlignmentSetId");
+                        .HasForeignKey("AlignmentSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
                         .WithMany("SourceAlignments")
@@ -942,9 +970,19 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TargetAlignments")
                         .HasForeignKey("TargetTokenId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlignmentSet");
+
                     b.Navigation("SourceTokenComponent");
 
                     b.Navigation("TargetTokenComponent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
@@ -972,6 +1010,28 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("EngineWordAlignment");
 
                     b.Navigation("ParallelCorpus");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.CorpusHistory", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1046,9 +1106,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("SourceTokenizedCorpus");
 
                     b.Navigation("TargetTokenizedCorpus");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", b =>
@@ -1065,9 +1133,28 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("SourceTokenizedCorpus");
 
                     b.Navigation("TargetTokenizedCorpus");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Project", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
@@ -1100,9 +1187,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Corpus");
 
                     b.Navigation("CorpusHistory");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
@@ -1113,6 +1208,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.Verse", "Verse")
                         .WithMany("TokenVerseAssociations")
                         .HasForeignKey("VerseId")
@@ -1120,6 +1221,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("TokenComponent");
+
+                    b.Navigation("User");
 
                     b.Navigation("Verse");
                 });
@@ -1136,9 +1239,17 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("SourceTokenComponent");
 
                     b.Navigation("TranslationSet");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
@@ -1204,11 +1315,19 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("Verses")
                         .HasForeignKey("CorpusId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseMapping", "VerseMapping")
                         .WithMany("Verses")
                         .HasForeignKey("VerseMappingId");
 
                     b.Navigation("Corpus");
+
+                    b.Navigation("User");
 
                     b.Navigation("VerseMapping");
                 });
@@ -1223,7 +1342,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("VerseMappings")
                         .HasForeignKey("ParallelCorpusId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ParallelCorpus");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>

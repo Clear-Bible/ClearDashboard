@@ -5,19 +5,253 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.ParallelCorpusDialog"
              xmlns:cm="http://caliburnmicro.com"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="500" d:DesignWidth="800"
+            Height="500"
+             Width="600"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FlowDirection="{Binding WindowFlowDirection}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:ParallelCorpusStepViewModel,
+                                     IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+
+        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Margin" Value="20,5" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+    
         </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="{helpers:Localization ParallelCorpusDialog_AddParallelRelationship}" />
 
+        <TextBox Grid.Row="1"
+            x:Name="DisplayName"
+            MinWidth="400"
+            MaxWidth="400"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            Margin="10,0"
+            materialDesign:HintAssist.FloatingScale="0.60"
+            materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+            materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
+            materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+            FontSize="16"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            >
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="ParallelCorpus.DisplayName"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="400"
+                            Margin="10"
+                            FontSize="16"
+                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+
+        </TextBox>
+
+        <TextBox Grid.Row="2"
+                 x:Name="JsonMetadata"
+                 MinWidth="400"
+                 MaxWidth="400"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Margin="10,0"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Visible"
+                 
+                 materialDesign:HintAssist.FloatingScale="0.60"
+                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                 materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_JSON_Metadata}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 FontSize="16"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="ParallelCorpus.Metadata"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="400"
+                            Margin="10"
+                            FontSize="16"
+                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+
+        </TextBox>
+
+        <TextBox Grid.Row="3"
+                 x:Name="VerseMappings"
+                 MinWidth="400"
+                 MaxWidth="400"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Margin="10,0"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Visible"
+                 
+                 materialDesign:HintAssist.FloatingScale="0.60"
+                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                 materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_VerseMappings}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 FontSize="16"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="ParallelCorpus.VerseMappings"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="400"
+                            Margin="10"
+                            FontSize="16"
+                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+
+        </TextBox>
+
+        <TextBox Grid.Row="4"
+                 x:Name="CreatedBy"
+                 MinWidth="400"
+                 MaxWidth="400"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Margin="10,0"
+                 IsEnabled="False"
+                 
+                 materialDesign:HintAssist.FloatingScale="0.60"
+                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                 materialDesign:HintAssist.Hint="{helpers:Localization CreatedBy}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 FontSize="16"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="ParallelCorpus.User.FullName"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="400"
+                            Margin="10"
+                            FontSize="16"
+                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+
+        </TextBox>
+        <TextBox Grid.Row="5"
+                 x:Name="Created"
+                 MinWidth="400"
+                 MaxWidth="400"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Margin="10,0"
+                 IsEnabled="False"
+                 
+                 materialDesign:HintAssist.FloatingScale="0.60"
+                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                 materialDesign:HintAssist.Hint="{helpers:Localization Created}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 FontSize="16"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="ParallelCorpus.Created"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="400"
+                            Margin="10"
+                            FontSize="16"
+                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+
+        </TextBox>
 
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="7"
             Grid.Column="0"
             Margin="20"
             HorizontalAlignment="Right"
@@ -32,8 +266,8 @@
                 Style="{StaticResource TransparentStyle}">
             </Button>
             <Button
-                x:Name="Create"
-                Content="{helpers:Localization Create}" 
+                x:Name="MoveForwards"
+                Content="{helpers:Localization Next}" 
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>

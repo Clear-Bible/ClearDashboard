@@ -50,13 +50,13 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 .First(tc => tc.Id == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id);
 
             var sourceTokenGuidIds = sourceTokenizedCorpus.Tokens.Take(10)
-                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber) { Id = t.Id });
             var sourceTokenIdValuesSortedDescending = sourceTokenGuidIds.Values
                 .OrderByDescending(t => t.BookNumber)
                 .ThenByDescending(t => t.ChapterNumber)
                 .ThenByDescending(t => t.VerseNumber);
             var targetTokenGuidIds = targetTokenizedCorpus.Tokens.Skip(3).Take(10)
-                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber));
+                .ToDictionary(t => t.Id, t => new TokenId(t.BookNumber, t.ChapterNumber, t.VerseNumber, t.WordNumber, t.SubwordNumber) { Id = t.Id });
             var targetTokenIdValuesSortedAscending = targetTokenGuidIds.Values
                 .OrderBy(t => t.VerseNumber)
                 .ThenBy(t => t.ChapterNumber)
@@ -87,7 +87,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 ).ToList();
 
             // Save:
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             // Clear ProjectDbContext:
             ProjectDbContext.ChangeTracker.Clear();
@@ -177,7 +177,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
             Assert.NotNull(parallelCorpusDB);

@@ -6,10 +6,9 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Autofac;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -93,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <param name="verse"></param>
         ///
         public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse, ILifetimeScope? lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             _verse = verse;
@@ -112,7 +111,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
         public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             VerseViewModel verseViewModel = new VerseViewModel();

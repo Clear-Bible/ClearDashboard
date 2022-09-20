@@ -1,15 +1,46 @@
-﻿<Page x:Class="ClearDashboard.Wpf.Application.Views.Project.ParallelCorpusDialog.ParallelCorpusDialogView"
+﻿<controls:DialogWindow x:Class="ClearDashboard.Wpf.Application.Views.Project.ParallelCorpusDialog.ParallelCorpusDialogView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
       xmlns:cm="http://caliburnmicro.com"
+      xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+      xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+      xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ParallelCorpusDialogView">
-
+      helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+      AllowsTransparency="True"
+      Background="{DynamicResource Transparent}"
+      FlowDirection="{Binding WindowFlowDirection}"
+      FontFamily="{DynamicResource MaterialDesignFont}"
+      Foreground="{DynamicResource MaterialDesignPaper}"
+      ShowInTaskbar="False"
+      ShowCloseButton="True"
+      ShowMinButton="False"
+      ShowMaxRestoreButton="False"
+      Title="{Binding Title}"
+      TextElement.FontSize="13"
+      TextElement.FontWeight="Regular"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextOptions.TextFormattingMode="Ideal"
+      TextOptions.TextRenderingMode="Auto"
+      WindowStartupLocation="CenterOwner"
+      Width="600"
+      d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:ParallelCorpusDialogViewModel,
+                                     IsDesignTimeCreatable=True}">
+   
+    <Border
+        Padding="6"
+        Background="{DynamicResource MaterialDesignLightBackground}"
+        BorderBrush="{DynamicResource MaterialDesignDarkBackground}"
+        BorderThickness="0"
+        CornerRadius="0">
     <Grid>
         <ContentControl cm:View.Model="{Binding ActiveItem}" />
     </Grid>
-</Page>
+        </Border>
+</controls:DialogWindow>

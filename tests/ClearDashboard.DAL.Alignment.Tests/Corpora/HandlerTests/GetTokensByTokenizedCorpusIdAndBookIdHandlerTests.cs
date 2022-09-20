@@ -8,8 +8,7 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -119,6 +118,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
                 new Alignment.Corpora.TokenizedTextCorpusId(new Guid("00000000-0000-0000-0000-000000000000")), "MRK");
             var result = await Mediator.Send(query);
+
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.StartsWith(
@@ -130,5 +130,101 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         {
             await DeleteDatabaseContext();
         }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void GetDataAsync__LargeCorpusWithComposites_MeasurePerformance()
+    {
+        try
+        {
+            var textCorpus = CreateFakeTextCorpusWithComposite(false);
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
+
+            var query = new GetTokensByTokenizedCorpusIdAndBookIdQuery(
+                tokenizedTextCorpus.TokenizedTextCorpusId, "GEN");
+            var result = await Mediator.Send(query);
+
+            proc.Refresh();
+            Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0}", sw.Elapsed);
+
+            //foreach (var verseTokens in result.Data)
+            //{
+            //    Output.WriteLine($"Chapter {verseTokens.Chapter}, verse {verseTokens.Verse}");
+            //    foreach (var token in verseTokens.Tokens)
+            //    {
+            //        Output.WriteLine($"{token.TokenId}");
+            //    }
+            //}
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    private static ITextCorpus CreateFakeTextCorpusWithComposite(bool includeBadCompositeToken)
+    {
+        var textCorpus = new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+            .Tokenize<LatinWordTokenizer>()
+            .Transform<IntoFakeCompositeTokensTextRowProcessor>()
+            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+
+        return textCorpus;
+    }
+
+    private class IntoFakeCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
+    {
+        public TextRow Process(TextRow textRow)
+        {
+            if (textRow.Text.Contains("wuri ɓàk am ɗi") || textRow.Text.Contains("ɗi moo put"))
+            {
+                return GenerateTokensTextRow(textRow);
+            }
+
+            return new TokensTextRow(textRow);
+        }
+    }
+
+    private static TokensTextRow GenerateTokensTextRow(TextRow textRow)
+    {
+        var tr = new TokensTextRow(textRow);
+
+        var tokens = tr.Tokens;
+
+        var tokenIds = tokens
+            .Select(t => t.TokenId)
+            .ToList();
+
+        var compositeTokens = new List<Token>() { tokens[0], tokens[1], tokens[3], tokens[7] };
+        var tokensWithComposite = new List<Token>()
+                 {
+                     new CompositeToken(compositeTokens),
+                     tokens[2],
+                     tokens[4],
+                     tokens[5],
+                     tokens[6]
+                 };
+
+        tokensWithComposite.AddRange(tokens.GetRange(8, tokens.Count - 8));
+
+        tr.Tokens = tokensWithComposite;
+        return tr;
     }
 }

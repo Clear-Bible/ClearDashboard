@@ -251,15 +251,17 @@ namespace ClearDashboard.DataAccessLayer
         {
             CreateDashboardProject();
 
+            // Seed the IProjectProvider implementation.
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
-            CurrentProject = new Project();
-            CurrentProject.ProjectName = projectName;
-            CurrentProject = await CreateProject(projectName);
-
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
             CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
            
+
+            CurrentProject = new Project
+            {
+                ProjectName = projectName
+            };
+            CurrentProject = await CreateProject(projectName);
         }
 
 
@@ -306,42 +308,40 @@ namespace ClearDashboard.DataAccessLayer
             return Mediator.Send(request, cancellationToken);
         }
         #endregion
-
-
+        
         public Task<IEnumerable<Project>> GetAllProjects()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
-        {
-            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
-
-            return result.Data;
-        }
-
-        public async Task LoadProjectFromDatabase(string projectName)
+        public async Task<Project> LoadProject(string projectName)
         {
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
             CurrentProject = projectAssets.ProjectDbContext.Projects.First();
+            return CurrentProject;
         }
 
         public async Task<Project> DeleteProject(string projectName)
         {
             var result = await ExecuteRequest(new DeleteProjectCommand(projectName), CancellationToken.None);
-
             return result.Data;
-
         }
 
         public async Task<Project> CreateProject(string projectName)
         {
-            var result = await ExecuteRequest(new CreateProjectCommand(projectName), CancellationToken.None);
-
-            return result.Data;
+            var result = await ExecuteRequest(new CreateProjectCommand(projectName, CurrentUser ), CancellationToken.None);
+            if (result.Success)
+            {
+                return result.Data;
+            }
+            else
+            {
+                var message = $"Could not create a project: {result.Message}";
+                Logger.LogError(message);
+                throw new ApplicationException(message);
+            }
+            
         }
-
 
         public async Task UpdateProject(Project project)
         {

@@ -3,6 +3,5 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-    public record DeleteLabelByLabelIdCommand(
-        LabelId LabelId) : ProjectRequestCommand<object>;
+    public record GetAllLabelsQuery() : ProjectRequestQuery<IEnumerable<Label>>;
 }

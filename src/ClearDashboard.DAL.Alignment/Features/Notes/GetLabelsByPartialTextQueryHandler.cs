@@ -27,7 +27,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             var labels = ProjectDbContext.Labels
                 .Where(l => l.Text != null && l.Text.StartsWith(request.PartialText))
                 .Select(l => new Label(
-                    _mediator,
                     new LabelId(l.Id),
                     l.Text!
                     ));

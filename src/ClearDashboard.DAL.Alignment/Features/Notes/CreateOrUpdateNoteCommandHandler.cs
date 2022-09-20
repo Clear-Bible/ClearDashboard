@@ -5,6 +5,7 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
@@ -31,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             Models.Note? note = null;
             if (request.NoteId != null)
             {
-                note = ProjectDbContext!.Notes.FirstOrDefault(c => c.Id == request.NoteId.Id);
+                note = ProjectDbContext!.Notes.Include(n => n.User).FirstOrDefault(c => c.Id == request.NoteId.Id);
                 if (note == null)
                 {
                     return new RequestResult<NoteId>
@@ -58,7 +59,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-            return new RequestResult<NoteId>(new NoteId(note.Id, note.Created, note.Modified, new UserId(note.UserId)));
+            return new RequestResult<NoteId>(new NoteId(note.Id, note.Created, note.Modified, ModelHelper.BuildUserId(note.User!)));
         }
     }
 }

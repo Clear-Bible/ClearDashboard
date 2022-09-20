@@ -27,8 +27,6 @@ public class TranslationSet :  SynchronizableTimestampedEntity
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }
 
-    public virtual User? User { get; set; }
-
     public virtual ICollection<TranslationModelEntry> TranslationModel { get; set; }
     public virtual ICollection<Translation> Translations { get; set; }
 }

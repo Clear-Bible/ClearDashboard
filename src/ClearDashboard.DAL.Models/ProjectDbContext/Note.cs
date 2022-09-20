@@ -23,9 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public ICollection<Label> Labels { get; set; }
         public ICollection<LabelNoteAssociation> LabelNoteAssociations { get; set; }
         public ICollection<NoteDomainEntityAssociation> NoteDomainEntityAssociations { get; set; }
-        public virtual User? User { get; set; }
-        public Guid UserId { get; set; }
- 
+        
         public virtual ICollection<RawContent> ContentCollection { get; set; }
         //public virtual ICollection<NoteAssociation> NoteAssociations { get; set; }
         public virtual ICollection<NoteRecipient> NoteRecipients { get; set; }
@@ -45,8 +43,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         //[NotMapped]
         //public IEnumerable<VerseAssociation> VerseAssociations => NoteAssociations.Where(association => association.AssociationType == nameof(VerseAssociation)).Cast<VerseAssociation>();
 
-
-
-
+        public Guid UserId { get; set; }
+        public virtual User? User { get; set; }
     }
 }

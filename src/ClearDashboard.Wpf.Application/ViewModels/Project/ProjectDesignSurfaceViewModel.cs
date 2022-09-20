@@ -28,6 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -88,12 +89,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool AddParatextCorpusRunning;
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata ProjectMetadata);
+        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly INavigationService _navigationService;
         private readonly ILogger<ProjectDesignSurfaceViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private ProjectDesignSurfaceView View { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Canvas DesignSurfaceCanvas { get; set; }
-        private Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
+        private Wpf.Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
         #endregion //Member Variables
@@ -312,8 +313,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel(INavigationService navigationService,
 #pragma warning restore CS8618
-            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager projectManager,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             _navigationService = navigationService;
@@ -356,7 +357,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ProjectDesignSurface = (Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -372,27 +373,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             base.OnViewAttached(view, context);
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-            {
-                LoadCanvas();
-            }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+        //    {
+        //        LoadCanvas();
+        //    }
             
-            base.OnViewLoaded(view);
-        }
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewReady(object view)
-        {
-            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-            {
-                LoadCanvas();
-            }
+        //protected override void OnViewReady(object view)
+        //{
+        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+        //    {
+        //        LoadCanvas();
+        //    }
 
-            base.OnViewReady(view);
-        }
+        //    base.OnViewReady(view);
+        //}
 
         #endregion //Constructor
 
@@ -522,7 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusType: corpusNode.CorpusType.ToString(),
                         metadata: new Dictionary<string, object>(),
                         created: new DateTimeOffset(),
-                        userId: new UserId(_projectManager.CurrentUser.Id));
+                        userId: new UserId(_projectManager.CurrentUser.Id, _projectManager.CurrentUser.FullName ?? string.Empty));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -573,7 +574,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusType: corpus.CorpusType,
                         metadata: new Dictionary<string, object>(),
                         created: corpus.Created,
-                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString())
+                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString(), corpus.UserDisplayName ?? string.Empty)
                     ));
                 }
             }
@@ -719,10 +720,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
-            string json = "{\"ParatextProjectId\":\"" + selectedParatextProjectId + "\"}";
+           
             
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel, AddParatextCorpusDialogViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, json, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+                DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
 
             async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
             {
@@ -966,14 +967,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         new CorpusNodeMenuItemViewModel
                         {
-                            // Add to focused enhanced view
+                            // Add Verses to focused enhanced view
                             Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
                         {
-                            // Show Verses
+                            // Show Verses in New Windows
                             Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, IconKind = "DocumentText",
                             CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
                         },
@@ -1002,8 +1003,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             corpusNode.MenuItems = nodeMenuItems;
         }
 
-        public async Task MenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem, CorpusNodeViewModel corpusNodeViewModel)
+        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
+            var corpusNodeViewModel = corpusNodeMenuItem.CorpusNodeViewModel;
             switch (corpusNodeMenuItem.Id)
             {
                 case "AddTokenizationId":
@@ -1013,9 +1015,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "SeparatorId":
                     // no-op
                     break;
+                
                 case "AddToEnhancedViewId":
-                    // TODO
-                    break;
                 case "ShowVerseId":
                     // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
                     var tokenization = corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b => b.TokenizationName == corpusNodeMenuItem.Tokenizer);
@@ -1023,7 +1024,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         return;
                     }
-                    
+
+                    bool showInNewWindow = corpusNodeMenuItem.Id == "ShowVerseId";
+
                     var corpusId = Guid.Parse(tokenization.CorpusId);
                     var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
                     await EventAggregator.PublishOnUIThreadAsync(
@@ -1031,7 +1034,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ProjectName: corpusNodeViewModel.Name,
                             TokenizationType: corpusNodeMenuItem.Tokenizer,
                             CorpusId: corpusId,
-                            TokenizedTextCorpusId: tokenizationId));
+                            TokenizedTextCorpusId: tokenizationId,
+                            IsNewWindow: showInNewWindow));
                     break;
                 case "PropertiesId":
                     // node properties
@@ -1042,9 +1046,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var nodeTokenization =
                         corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
                             b.TokenizationName == corpusNodeMenuItem.Tokenizer);
-                    #pragma warning disable CS8601
+#pragma warning disable CS8601
                     SelectedConnection = nodeTokenization;
-                    #pragma warning restore CS8601
+#pragma warning restore CS8601
                     break;
             }
         }
@@ -1139,7 +1143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // Also only allocation from one node to another, never one node back to the same node.
                 //
                 connectionOk = sourceConnector.ParentNode != destConnector.ParentNode &&
-                                 sourceConnector.Type != destConnector.Type;
+                               sourceConnector.Type != destConnector.Type;
 
                 if (connectionOk)
                 {
@@ -1185,7 +1189,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <summary>
         /// Called when the user has finished dragging out the new connection.
         /// </summary>
-        public void ConnectionDragCompleted(ConnectionViewModel newConnection, ConnectorViewModel connectorDraggedOut, ConnectorViewModel connectorDraggedOver)
+        public async void ConnectionDragCompleted(ConnectionViewModel newConnection, ConnectorViewModel connectorDraggedOut, ConnectorViewModel connectorDraggedOver)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (connectorDraggedOver == null)
@@ -1204,7 +1208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // Also only allocation from one node to another, never one node back to the same node.
             //
             var connectionOk = connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode &&
-                                connectorDraggedOut.Type != connectorDraggedOver.Type;
+                               connectorDraggedOut.Type != connectorDraggedOver.Type;
 
             if (!connectionOk)
             {
@@ -1250,10 +1254,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (added)
             {
-                EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
+                await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
                     SourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
                     TargetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
                     ConnectorGuid: newConnection.Id));
+
+                // TODO:  
+                //await AddParallelCorpus(newConnection);
+            }
+        }
+
+        public async Task AddParallelCorpus(/*ConnectionViewModel newConnection*/)
+        {
+            await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
+                DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback);
+
+            async Task Callback(ParallelCorpusDialogViewModel viewModel)
+            {
+
+                await Task.CompletedTask;
             }
         }
 

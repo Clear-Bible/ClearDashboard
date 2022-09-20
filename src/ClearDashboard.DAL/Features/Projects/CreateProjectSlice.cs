@@ -9,7 +9,7 @@ using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record CreateProjectCommand(string ProjectName) : ProjectRequestCommand<Models.Project>;
+    public record CreateProjectCommand(string ProjectName, Models.User User) : ProjectRequestCommand<Models.Project>;
 
     public class CreateProjectCommandHandler : ProjectDbContextCommandHandler<CreateProjectCommand, RequestResult<Models.Project>, Models.Project>
     {
@@ -36,16 +36,17 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
 
                     try
                     {
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                        await projectAssets.ProjectDbContext.Users.AddAsync(request.User, cancellationToken);
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project, cancellationToken);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync(cancellationToken);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
-                        //var projects = projectAssets.ProjectDbContext.Projects.ToList() ?? throw new ArgumentNullException("projectAssets.ProjectDbContext.Projects.ToList()");
-                        //projects.Add(project);
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync();
+                        Logger.LogError(ex, "An unexpected error occurred while creating a new project. Attempting to save one last time.");
+                       
+                        await projectAssets.ProjectDbContext.Users.AddAsync(request.User, cancellationToken);
+                        await projectAssets.ProjectDbContext.Projects.AddAsync(project, cancellationToken);
+                        await projectAssets.ProjectDbContext.SaveChangesAsync(cancellationToken);
                     }
 
                     return new RequestResult<Models.Project>(project);

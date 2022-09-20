@@ -17,11 +17,11 @@ using ClearApplicationFoundation.ViewModels.Shell;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Dapper;
 using MediatR;
@@ -189,7 +189,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
-            ILogger<ShellViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator,
+            ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {

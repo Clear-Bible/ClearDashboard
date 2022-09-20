@@ -3,6 +3,6 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-    public record DeleteNoteByNoteIdCommand(
-        NoteId NoteId) : ProjectRequestCommand<object>;
+    public record DeleteLabelNoteAssociationCommand(
+        LabelId LabelId, NoteId NoteId) : ProjectRequestCommand<object>;
 }

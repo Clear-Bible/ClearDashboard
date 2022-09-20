@@ -4,6 +4,7 @@ using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus1 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus1 = await parallelTextCorpus1.Create(Mediator!);
+            var parallelCorpus1 = await parallelTextCorpus1.Create("pc1", Mediator!);
 
             var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
 
@@ -39,7 +40,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSet1);
 
             var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus2 = await parallelTextCorpus2.Create(Mediator!);
+            var parallelCorpus2 = await parallelTextCorpus2.Create("pc2", Mediator!);
 
             var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
 
@@ -54,13 +55,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
             Assert.Single(someTranslationSetIds);
+
             Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First().translationSetId);
             Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().parallelCorpusId);
 
-            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id));
+            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id, user.FullName ?? string.Empty));
             Assert.Equal(2, allTranslationSetIdsForUser.Count());
 
-            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid()));
+            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid(), "User Boo"));
             Assert.Empty(allTranslationSetIdsForBogusUser);
         }
         finally
@@ -76,7 +78,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -108,7 +110,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -203,12 +205,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
+
+            var initialFilteredEngineParallelTextRows = parallelTextCorpus.Take(10).Cast<EngineParallelTextRow>();
+            var initialTranslations = await translationSet.GetTranslations(initialFilteredEngineParallelTextRows);
+            Output.WriteLine($"TRANSLATION COUNT: {initialTranslations.Count()}");
 
             Output.WriteLine("");
 

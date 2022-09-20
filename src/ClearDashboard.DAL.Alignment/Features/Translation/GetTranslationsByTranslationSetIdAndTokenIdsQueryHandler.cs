@@ -20,10 +20,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
         {
             //var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
-            var engineTokenIds = request.TokenIds.Select(t => t.ToString()).ToList();
+            var tokenIds = request.TokenIds.Select(t => t.Id).ToList();
             var translations = ProjectDbContext!.Translations
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
-                .Where(tr => engineTokenIds.Contains(tr.SourceTokenComponent!.EngineTokenId!))
+                .Where(tr => tokenIds.Contains(tr.SourceTokenComponent!.Id))
                 .Select(t => new Alignment.Translation.Translation(
                     ModelHelper.BuildToken(t.SourceTokenComponent!),
                     t.TargetText ?? string.Empty,

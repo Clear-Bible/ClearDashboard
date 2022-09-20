@@ -423,7 +423,7 @@
                                     Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                                     FontSize="12"
                                     Foreground="{DynamicResource MaterialDesignBody}" />-->
-                                
+
                                 <!--<userControls:VerseDisplay FontSize="20" Wrap="True">
                                     <userControls:VerseDisplay.Tokens>
                                         <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
@@ -433,12 +433,12 @@
                                     </userControls:VerseDisplay.Tokens>
                                 </userControls:VerseDisplay>-->
 
-                                <!--cm:Message.Attach="[EventTokenClicked]=[ActionTokenClicked($eventArgs)]; [EventTokenDoubleClicked]=[ActionTokenDoubleClicked($eventArgs)]; [EventTokenRightButtonDown]=[ActionTokenRightButtonDown($eventArgs)]; [EventTokenMouseEnter]=[ActionTokenMouseEnter($eventArgs)]; [EventTokenMouseLeave]=[ActionTokenMouseLeave($eventArgs)]; [EventTokenMouseWheel]=[ActionTokenMouseWheel($eventArgs)]; [EventTranslationClicked]=[ActionTranslationClicked($eventArgs)]; [EventTranslationDoubleClicked]=[ActionTranslationDoubleClicked($eventArgs)]; [EventTranslationRightButtonDown]=[ActionTranslationRightButtonDown($eventArgs)]; [EventTranslationMouseEnter]=[ActionTranslationMouseEnter($eventArgs)]; [EventTranslationMouseLeave]=[ActionTranslationMouseLeave($eventArgs)]; [EventTranslationMouseWheel]=[ActionTranslationMouseWheel($eventArgs)]; [EventNoteLeftButtonDown]=[ActionNoteLeftButtonDown($eventArgs)]; [EventNoteDoubleClicked]=[ActionNoteDoubleClicked($eventArgs)]; [EventNoteRightButtonDown]=[ActionNoteRightButtonDown($eventArgs)]; [EventNoteMouseEnter]=[ActionNoteMouseEnter($eventArgs)]; [EventNoteMouseLeave]=[ActionNoteMouseLeave($eventArgs)]; [EventNoteMouseWheel]=[ActionNoteMouseWheel($eventArgs)]"-->
-                                <userControls:VerseDisplay IsEnabled="True"
+                                <!--  cm:Message.Attach="[EventTokenClicked]=[ActionTokenClicked($eventArgs)]; [EventTokenDoubleClicked]=[ActionTokenDoubleClicked($eventArgs)]; [EventTokenRightButtonDown]=[ActionTokenRightButtonDown($eventArgs)]; [EventTokenMouseEnter]=[ActionTokenMouseEnter($eventArgs)]; [EventTokenMouseLeave]=[ActionTokenMouseLeave($eventArgs)]; [EventTokenMouseWheel]=[ActionTokenMouseWheel($eventArgs)]; [EventTranslationClicked]=[ActionTranslationClicked($eventArgs)]; [EventTranslationDoubleClicked]=[ActionTranslationDoubleClicked($eventArgs)]; [EventTranslationRightButtonDown]=[ActionTranslationRightButtonDown($eventArgs)]; [EventTranslationMouseEnter]=[ActionTranslationMouseEnter($eventArgs)]; [EventTranslationMouseLeave]=[ActionTranslationMouseLeave($eventArgs)]; [EventTranslationMouseWheel]=[ActionTranslationMouseWheel($eventArgs)]; [EventNoteLeftButtonDown]=[ActionNoteLeftButtonDown($eventArgs)]; [EventNoteDoubleClicked]=[ActionNoteDoubleClicked($eventArgs)]; [EventNoteRightButtonDown]=[ActionNoteRightButtonDown($eventArgs)]; [EventNoteMouseEnter]=[ActionNoteMouseEnter($eventArgs)]; [EventNoteMouseLeave]=[ActionNoteMouseLeave($eventArgs)]; [EventNoteMouseWheel]=[ActionNoteMouseWheel($eventArgs)]"  -->
+                                <userControls:VerseDisplay
                                     Title=""
-                                    
                                     FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -488,6 +488,7 @@
                     <TextBlock
                         BaselineOffset="100"
                         FontWeight="Bold"
+                        Margin="-5,0,0, 0"
                         Text="{helpers:Localization EnhancedView_Notes}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal">

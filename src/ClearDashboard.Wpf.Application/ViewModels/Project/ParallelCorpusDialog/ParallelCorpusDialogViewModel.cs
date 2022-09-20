@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using ClearDashboard.DataAccessLayer.Wpf;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
-    public class ParallelCorpusDialogViewModel : WorkflowShellViewModel
+    public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel
     {
 
-        public ParallelCorpusDialogViewModel(INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        public ParallelCorpusDialogViewModel()
+        {
+            // used by Caliburn Micro for design time 
+        }
+
+        public ParallelCorpusDialogViewModel(DashboardProjectManager? projectManager, INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             CanOk = true;
-            DisplayName = "Parallel Corpus Dialog";
+            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
