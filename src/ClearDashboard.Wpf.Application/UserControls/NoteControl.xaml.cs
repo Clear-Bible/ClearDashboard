@@ -22,16 +22,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
     {
         #region Static Routed Events
         /// <summary>
-        /// Identifies the NoteApplied routed event.
+        /// Identifies the NoteAdded routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteAppliedEvent = EventManager.RegisterRoutedEvent
-            ("NoteApplied", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+        public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
 
         /// <summary>
-        /// Identifies the NoteCancelled routed event.
+        /// Identifies the NoteUpdated routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteCancelledEvent = EventManager.RegisterRoutedEvent
-            ("NoteCancelled", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+        public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
+            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+
+        /// <summary>
+        /// Identifies the NoteDeleted routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
+            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
 
         /// <summary>
         /// Identifies the LabelSelectedEvent routed event.
@@ -66,13 +72,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the NoteFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register("NoteFontSize", typeof(double), typeof(NoteControl),
-            new PropertyMetadata(11d));
+            new PropertyMetadata(15d));
 
         /// <summary>
         /// Identifies the NoteMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register("NoteMargin", typeof(Thickness), typeof(NoteControl),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+            new PropertyMetadata(new Thickness(2, 2, 2, 2)));
 
         /// <summary>
         /// Identifies the TimestampFontSize dependency property.
@@ -95,7 +101,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the LabelMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register("LabelMargin", typeof(Thickness), typeof(NoteControl),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+            new PropertyMetadata(new Thickness(3, 0, 3, 0)));
 
         /// <summary>
         /// Identifies the LabelPadding dependency property.
@@ -135,7 +141,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CloseEdit();
             RaiseEvent(new NoteEventArgs()
             {
-                RoutedEvent = NoteAppliedEvent,
+                RoutedEvent = NoteUpdatedEvent,
                 EntityId = EntityId,
                 Note = Note
             });
@@ -149,7 +155,61 @@ namespace ClearDashboard.Wpf.Application.UserControls
             OnPropertyChanged("Note.Text");
 
             CloseEdit();
-            RaiseEvent(new RoutedEventArgs { RoutedEvent = NoteCancelledEvent });
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void NoteLabelClick(object sender, MouseButtonEventArgs e)
+        {
+            NoteLabelVisibility = Visibility.Collapsed;
+            NoteTextBoxVisibility = Visibility.Visible;
+            NoteTextBox.Focus();
+
+            OriginalNoteText = Note.Text;
+
+            OnPropertyChanged(nameof(NoteLabelVisibility));
+            OnPropertyChanged(nameof(NoteTextBoxVisibility));
+        }
+
+        private void NoteTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (NoteTextBoxVisibility == Visibility.Visible)
+            {
+                TimestampVisibility = Visibility.Hidden;
+                ButtonVisibility = Visibility.Visible;
+
+                OnPropertyChanged(nameof(TimestampVisibility));
+                OnPropertyChanged(nameof(ButtonVisibility));
+            }
+        }
+
+        private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
+        {
+            RaiseEvent(new LabelEventArgs
+            {
+                RoutedEvent = routedEvent,
+                EntityId = EntityId,
+                Label = label
+            });
+        }
+
+
+        private void OnLabelAdded(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(e);
+        }
+
+        private void OnLabelSelected(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(e);
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion Private event handlers
@@ -289,20 +349,50 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when a note is applied.
         /// </summary>
-        public event RoutedEventHandler NoteApplied
+        public event RoutedEventHandler NoteAdded
         {
-            add => AddHandler(NoteAppliedEvent, value);
-            remove => RemoveHandler(NoteAppliedEvent, value);
+            add => AddHandler(NoteAddedEvent, value);
+            remove => RemoveHandler(NoteAddedEvent, value);
         }
 
         /// <summary>
-        /// Occurs when a note is cancelled.
+        /// Occurs when a note is updated.
         /// </summary>
-        public event RoutedEventHandler NoteCancelled
+        public event RoutedEventHandler NoteUpdated
         {
-            add => AddHandler(NoteCancelledEvent, value);
-            remove => RemoveHandler(NoteCancelledEvent, value);
+            add => AddHandler(NoteUpdatedEvent, value);
+            remove => RemoveHandler(NoteUpdatedEvent, value);
         }
+
+        /// <summary>
+        /// Occurs when a note is deleted.
+        /// </summary>
+        public event RoutedEventHandler NoteDeleted
+        {
+            add => AddHandler(NoteDeletedEvent, value);
+            remove => RemoveHandler(NoteDeletedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an existing label suggestion is selected.
+        /// </summary>
+        public event RoutedEventHandler LabelSelected
+        {
+            add => AddHandler(LabelSelectedEvent, value);
+            remove => RemoveHandler(LabelSelectedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an new label is added.
+        /// </summary>
+        public event RoutedEventHandler LabelAdded
+        {
+            add => AddHandler(LabelAddedEvent, value);
+            remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         #endregion Public events
 
         public NoteControl()
@@ -313,43 +403,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         private string OriginalNoteText { get; set; }
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void NoteLabelClick(object sender, MouseButtonEventArgs e)
-        {
-            NoteLabelVisibility = Visibility.Collapsed;
-            NoteTextBoxVisibility = Visibility.Visible;
-            NoteTextBox.Focus();
-
-            OriginalNoteText = Note.Text;
-
-            OnPropertyChanged(nameof(NoteLabelVisibility));
-            OnPropertyChanged(nameof(NoteTextBoxVisibility));
-        }
 
         public Visibility TimestampVisibility { get; set; } = Visibility.Visible;
         public Visibility ButtonVisibility { get; set; } = Visibility.Hidden;
 
-        private void NoteTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (NoteTextBoxVisibility == Visibility.Visible)
-            {
-                TimestampVisibility = Visibility.Hidden;
-                ButtonVisibility = Visibility.Visible;
 
-                OnPropertyChanged(nameof(TimestampVisibility));
-                OnPropertyChanged(nameof(ButtonVisibility));
-            }
-        }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

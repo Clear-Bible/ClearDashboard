@@ -49,7 +49,8 @@
                                         LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
                                         LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
                                         FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"/>
-            <local:LabelSelector Grid.Row="3" LabelSuggestions="{Binding LabelSuggestions}"/>
+            <local:LabelSelector Grid.Row="3" VerticalAlignment="Center" LabelSuggestions="{Binding LabelSuggestions}"
+                                 LabelAdded="OnLabelAdded" LabelSelected="OnLabelSelected"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -8,6 +8,27 @@
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="16">
     <UserControl.Resources>
+        <DataTemplate x:Key="NoteTemplate">
+            <local:NoteControl
+                Note="{Binding}"
+                EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
+                NoteMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
+                NoteFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}"
+                TimestampMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                TimestampFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
+                NoteAdded="OnNoteAdded" NoteUpdated="OnNoteUpdated" NoteDeleted="OnNoteDeleted"
+                LabelSelected="OnLabelSelected" LabelAdded="OnLabelAdded"
+            />
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="NotesPanelTemplate">
+            <WrapPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
@@ -21,13 +42,15 @@
      </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Notes for" HorizontalContentAlignment="Center" />
         <Label Grid.Row="1" 
-               Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplay.SurfaceText}" 
+               Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}" 
                HorizontalContentAlignment="Center"
                FontWeight="Bold"
                FontSize="20"/>
-        <TextBox Grid.Row="2" x:Name="TranslationValue" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplay.Note}" Margin="10,0"></TextBox>
+        <ItemsControl Grid.Row="2" 
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
+                      ItemTemplate="{StaticResource NoteTemplate}" 
+                      ItemsPanel="{StaticResource NotesPanelTemplate}" />
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <!--<Button Margin="10" Click="ApplyNote">Add Note</Button>-->
             <Button Margin="10" Click="Cancel">Close</Button>
         </StackPanel>
     </Grid>

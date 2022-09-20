@@ -11,9 +11,9 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label>+</Label>
-        <StackPanel Grid.Column="1">
-            <TextBox x:Name="LabelTextBox" TextChanged="OnLabelTextChanged" KeyUp="OnLabelTextBoxKeyUp" Margin="5,0,0,0"/>
+        <Label MouseLeftButtonDown="AddButtonClicked" VerticalContentAlignment="Center">+</Label>
+        <StackPanel Grid.Column="1" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TextBoxVisibility}">
+            <TextBox x:Name="LabelTextBox" TextChanged="OnLabelTextChanged" KeyUp="OnLabelTextBoxKeyUp" Margin="5,0,0,0" MinWidth="100"/>
             <Popup x:Name="LabelPopup" Visibility="Collapsed" Height="Auto" StaysOpen="False" Placement="Right" Margin="5,0,0,0">
                 <ListBox x:Name="LabelSuggestionListBox" 
                          Visibility="Collapsed" 

@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
@@ -22,8 +16,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control to allow entry of note labels with autocomplete functionality.
     /// </summary>
-    public partial class LabelSelector : UserControl
+    public partial class LabelSelector : UserControl, INotifyPropertyChanged
     {
+        #region Static Routed Events
         /// <summary>
         /// Identifies the LabelSelectedEvent routed event.
         /// </summary>
@@ -35,7 +30,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
             ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
-
+        #endregion
+        #region Static Dependency Properties
         /// <summary>
         /// Identifies the EntityId dependency property.
         /// </summary>
@@ -45,42 +41,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register("LabelSuggestions", typeof(IEnumerable<NotesLabel>), typeof(LabelSelector));
-
-        /// <summary>
-        /// Gets or sets the <see cref="EntityId{T}"/> that this control is operating on..
-        /// </summary>
-        public IId? EntityId
-        {
-            get => (IId)GetValue(EntityIdProperty);
-            set => SetValue(EntityIdProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
-        /// </summary>
-        public IEnumerable<NotesLabel> LabelSuggestions
-        {
-            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
-            set => SetValue(LabelSuggestionsProperty, value);
-        }
-
-        /// <summary>
-        /// Occurs when an existing label suggesting is selected.
-        /// </summary>
-        public event RoutedEventHandler LabelSelected
-        {
-            add => AddHandler(LabelSelectedEvent, value);
-            remove => RemoveHandler(LabelSelectedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when an new label is added.
-        /// </summary>
-        public event RoutedEventHandler LabelAdded
-        {
-            add => AddHandler(LabelAddedEvent, value);
-            remove => RemoveHandler(LabelAddedEvent, value);
-        }
+        #endregion
+        #region Private event handlers
 
         private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
         {
@@ -110,12 +72,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RaiseLabelEvent(LabelSelectedEvent, selectedLabel);
                 LabelTextBox.Text = string.Empty;
                 LabelSuggestionListBox.SelectedIndex = -1;
+                TextBoxVisibility = Visibility.Hidden;
+                OnPropertyChanged(nameof(TextBoxVisibility));
             }
         }
 
         private void OnLabelTextBoxKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && ! String.IsNullOrWhiteSpace(LabelTextBox.Text))
+            if (e.Key == Key.Enter && !String.IsNullOrWhiteSpace(LabelTextBox.Text))
             {
                 var matchingLabel = LabelSuggestions.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
                 if (matchingLabel != null)
@@ -128,6 +92,68 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 }
             }
         }
+
+        private void AddButtonClicked(object sender, RoutedEventArgs e)
+        {
+            TextBoxVisibility = Visibility.Visible;
+            LabelTextBox.Focus();
+            OnPropertyChanged(nameof(TextBoxVisibility));
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+        #region Public properties
+
+        /// <summary>
+        /// Gets or sets the <see cref="EntityId{T}"/> that this control is operating on..
+        /// </summary>
+        public IId? EntityId
+        {
+            get => (IId)GetValue(EntityIdProperty);
+            set => SetValue(EntityIdProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
+        /// </summary>
+        public IEnumerable<NotesLabel> LabelSuggestions
+        {
+            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
+            set => SetValue(LabelSuggestionsProperty, value);
+        }
+
+        public Visibility TextBoxVisibility { get; set; } = Visibility.Hidden;
+
+        #endregion
+
+        #region Public events
+
+        /// <summary>
+        /// Occurs when an existing label suggestion is selected.
+        /// </summary>
+        public event RoutedEventHandler LabelSelected
+        {
+            add => AddHandler(LabelSelectedEvent, value);
+            remove => RemoveHandler(LabelSelectedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an new label is added.
+        /// </summary>
+        public event RoutedEventHandler LabelAdded
+        {
+            add => AddHandler(LabelAddedEvent, value);
+            remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        #endregion
 
         private void OpenSuggestionPopup()
         {
@@ -146,6 +172,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
         }
-
     }
 }

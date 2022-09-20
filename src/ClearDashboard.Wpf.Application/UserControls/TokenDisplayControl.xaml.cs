@@ -41,7 +41,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
             new PropertyMetadata(4d, OnLayoutChanged));
 
-
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
         /// </summary>

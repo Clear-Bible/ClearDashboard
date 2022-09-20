@@ -108,8 +108,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public LabelsDisplayControl()
         {
             InitializeComponent();
-            //this.Background = Brushes.White;
-
         }
     }
 }

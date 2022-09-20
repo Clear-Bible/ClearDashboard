@@ -195,9 +195,15 @@
                                              SelectedItem="{Binding CurrentTranslationOption}"
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
-            <userControls:NoteControl Visibility="{Binding NoteControlVisibility}"
-                                      cal:Message.Attach="[Event NoteApplied] = [Action NoteApplied($eventArgs)];
-                                                          [Event NoteCancelled] = [Action NoteCancelled($eventArgs)];" />
+            <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
+                                       Title="{Binding CurrentTokenDisplay.SurfaceText}"
+                                       Notes="{Binding CurrentTokenDisplay.Notes}"
+                                      cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
+                                                          [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
+                                                          [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
+                                                          [Event CloseRequested] = [Action CloseRequested];
+                                                          [Event LabelSelected] = [Action LabelSelected($eventArgs)];
+                                                          [Event LabelAdded] = [Action LabelAdded($eventArgs)];" />
             <!--TokenDisplay="{Binding CurrentTokenDisplay}"-->
         </StackPanel>
     </Grid>

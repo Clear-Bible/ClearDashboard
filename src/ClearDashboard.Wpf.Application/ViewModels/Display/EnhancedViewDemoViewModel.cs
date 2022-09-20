@@ -160,37 +160,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseLeave(NoteEventArgs e)
         {
-            Message = string.Empty;
+            //Message = string.Empty;
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -217,18 +217,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }        
         
-        public void NoteApplied(NoteEventArgs e)
+        public void NoteAdded(NoteEventArgs e)
         {
-            Message = $"Note '{e.Note.Text}' applied to token ({e.EntityId})";
+            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             NoteControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
-        public void NoteCancelled(RoutedEventArgs e)
+        public void NoteUpdated(NoteEventArgs e)
         {
-            Message = "Note cancelled.";
+            Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void NoteDeleted(NoteEventArgs e)
+        {
+            Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             NoteControlVisibility = Visibility.Hidden;
@@ -388,6 +397,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+        }
+
+        private void CloseRequested()
+        {
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
         private async Task LoadFiles()
