@@ -16,25 +16,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearApplicationFoundation.Exceptions;
+using System.Linq;
+using ClearApplicationFoundation.Extensions;
+using System;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class StartupDialogViewModel : WorkflowShellViewModel, IStartupDialog
     {
-        //private WindowManager WindowManager { get; }
         private DashboardProjectManager ProjectManager { get; }
+        public bool MimicParatextConnection { get; set; }
         private bool _licenseCleared = false;
         private bool _runRegistration = false;
-        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager)//, WindowManager windowManager) 
+
+        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-            //Logger = logger;
-            //WindowManager = windowManager;
             ProjectManager = projectManager;
+
             CanOk = true;
             DisplayName = "Startup Dialog";
         }
+
+        public StartupDialogViewModel() { }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -58,14 +66,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             CurrentStep = _runRegistration ? Steps![0] : Steps![1];
 
             IsLastWorkflowStep = (Steps.Count == 1);
-
             EnableControls = true;
             await ActivateItemAsync(CurrentStep, cancellationToken);
 
+            if (MimicParatextConnection)
+            {
+                var vm = Steps[0] as ProjectPickerViewModel;
+                vm.Connected = true;
+            }
+
             await base.OnInitializeAsync(cancellationToken);
         }
-
-
+        
         public bool CanCancel => true /* can always cancel */;
         public async void Cancel()
         {

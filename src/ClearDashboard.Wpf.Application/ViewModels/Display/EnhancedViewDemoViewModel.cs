@@ -18,9 +18,10 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+
 //using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SIL.Machine.Corpora;

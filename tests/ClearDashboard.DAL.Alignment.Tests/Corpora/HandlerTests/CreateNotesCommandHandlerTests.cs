@@ -64,7 +64,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             sw.Restart();
             #endregion
 
-            var parallelCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
 
             #region Stopwatch
             sw.Stop();

@@ -55,7 +55,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var parallelCorpusModel = new Models.ParallelCorpus
             {
                 SourceTokenizedCorpus = sourceTokenizedCorpus,
-                TargetTokenizedCorpus = targetTokenizedCorpus
+                TargetTokenizedCorpus = targetTokenizedCorpus,
+                DisplayName = request.DisplayName
             };
 
             var bookAbbreviationsToNumbers =

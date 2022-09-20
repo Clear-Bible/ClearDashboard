@@ -373,27 +373,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             base.OnViewAttached(view, context);
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-            {
-                LoadCanvas();
-            }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+        //    {
+        //        LoadCanvas();
+        //    }
             
-            base.OnViewLoaded(view);
-        }
+        //    base.OnViewLoaded(view);
+        //}
 
-        protected override void OnViewReady(object view)
-        {
-            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-            if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-            {
-                LoadCanvas();
-            }
+        //protected override void OnViewReady(object view)
+        //{
+        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
+        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
+        //    {
+        //        LoadCanvas();
+        //    }
 
-            base.OnViewReady(view);
-        }
+        //    base.OnViewReady(view);
+        //}
 
         #endregion //Constructor
 
@@ -967,14 +967,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         new CorpusNodeMenuItemViewModel
                         {
-                            // Add to focused enhanced view
+                            // Add Verses to focused enhanced view
                             Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
                         {
-                            // Show Verses
+                            // Show Verses in New Windows
                             Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, IconKind = "DocumentText",
                             CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
                         },
@@ -1015,9 +1015,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "SeparatorId":
                     // no-op
                     break;
+                
                 case "AddToEnhancedViewId":
-                    // TODO
-                    break;
                 case "ShowVerseId":
                     // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
                     var tokenization = corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b => b.TokenizationName == corpusNodeMenuItem.Tokenizer);
@@ -1025,7 +1024,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         return;
                     }
-                    
+
+                    bool showInNewWindow = corpusNodeMenuItem.Id == "ShowVerseId";
+
                     var corpusId = Guid.Parse(tokenization.CorpusId);
                     var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
                     await EventAggregator.PublishOnUIThreadAsync(
@@ -1033,7 +1034,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ProjectName: corpusNodeViewModel.Name,
                             TokenizationType: corpusNodeMenuItem.Tokenizer,
                             CorpusId: corpusId,
-                            TokenizedTextCorpusId: tokenizationId));
+                            TokenizedTextCorpusId: tokenizationId,
+                            IsNewWindow: showInNewWindow));
                     break;
                 case "PropertiesId":
                     // node properties
@@ -1044,9 +1046,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var nodeTokenization =
                         corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
                             b.TokenizationName == corpusNodeMenuItem.Tokenizer);
-                    #pragma warning disable CS8601
+#pragma warning disable CS8601
                     SelectedConnection = nodeTokenization;
-                    #pragma warning restore CS8601
+#pragma warning restore CS8601
                     break;
             }
         }
@@ -1141,7 +1143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // Also only allocation from one node to another, never one node back to the same node.
                 //
                 connectionOk = sourceConnector.ParentNode != destConnector.ParentNode &&
-                                 sourceConnector.Type != destConnector.Type;
+                               sourceConnector.Type != destConnector.Type;
 
                 if (connectionOk)
                 {
@@ -1206,7 +1208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // Also only allocation from one node to another, never one node back to the same node.
             //
             var connectionOk = connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode &&
-                                connectorDraggedOut.Type != connectorDraggedOver.Type;
+                               connectorDraggedOut.Type != connectorDraggedOver.Type;
 
             if (!connectionOk)
             {

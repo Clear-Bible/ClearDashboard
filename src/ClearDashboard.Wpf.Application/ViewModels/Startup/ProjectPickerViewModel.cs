@@ -7,7 +7,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,16 +19,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
     {
         #region Member Variables
-        //protected IWindowManager? _windowManager;
         private readonly ParatextProxy _paratextProxy;
-        private TranslationSource? _translationSource;
+        private readonly TranslationSource? _translationSource;
         #endregion
 
         #region Observable Objects
@@ -265,9 +264,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-            var startupDialogViewModel = Parent as StartupDialogViewModel;
-            startupDialogViewModel!.ExtraData = project;
-            startupDialogViewModel.Ok();
+           
+            ParentViewModel!.ExtraData = project;
+            ParentViewModel.Ok();
         }
 
         private bool CheckIfConnectedToParatext()
@@ -286,28 +285,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
-            var fi = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
+            var fileInfo = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
 
             try
             {
-                var di = new DirectoryInfo(fi.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
+                var directoryInfo = new DirectoryInfo(fileInfo.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
 
-                foreach (var file in di.GetFiles())
+                foreach (var file in directoryInfo.GetFiles())
                 {
                     file.Delete();
                 }
-                foreach (var dir in di.GetDirectories())
+                foreach (var directory in directoryInfo.GetDirectories())
                 {
-                    dir.Delete(true);
+                    directory.Delete(true);
                 }
 
-                di.Delete();
+                directoryInfo.Delete();
 
                 DashboardProjects.Remove(project);
                 DashboardProjectsDisplay.Remove(project);
 
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
-                File.Delete(Path.Combine(di.Parent.ToString(), originalDatabaseCopyName));
+                File.Delete(Path.Combine(directoryInfo.Parent.ToString(), originalDatabaseCopyName));
             }
             catch (Exception e)
             {

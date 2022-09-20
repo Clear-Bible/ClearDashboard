@@ -1,31 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
+namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
 {
-    public enum WorkflowMode
+    public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel, IDialog
     {
-        Add,
-        Edit
-    }
-
-    public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel
-    {
+        private string? _currentStepTitle;
+        private DialogMode _dialogMode;
 
         public DashboardApplicationWorkflowShellViewModel()
         {
-
+            DialogMode = DialogMode.Add;
         }
 
         public DashboardApplicationWorkflowShellViewModel(DashboardProjectManager? projectManager, 
@@ -35,11 +23,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
             navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
-            WorkflowMode = WorkflowMode.Add;
+            DialogMode = DialogMode.Add;
         }
 
         public DashboardProjectManager? ProjectManager { get; private set; }
 
-        public WorkflowMode WorkflowMode { get; set; }
+        public DialogMode DialogMode
+        {
+            get => _dialogMode;
+            set => Set(ref _dialogMode, value);
+        }
+
+        public string? CurrentStepTitle
+        {
+            get => _currentStepTitle;
+            set
+            {
+                Set(ref _currentStepTitle, value);
+                Title = $"{DisplayName} - {_currentStepTitle}";
+            }
+        }
+
+
     }
 }

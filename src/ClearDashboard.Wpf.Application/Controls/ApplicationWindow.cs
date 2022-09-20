@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.Controls
         protected void Prepare()
         {
             RoundCorners();
-            ShowCloseButton = false;
+            ShowCloseButton = true;
             ShowInTaskbar = false;
             ShowMinButton = false;
             ShowMaxRestoreButton = false;
