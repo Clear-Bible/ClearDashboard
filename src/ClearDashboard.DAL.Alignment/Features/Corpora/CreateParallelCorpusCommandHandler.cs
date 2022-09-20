@@ -54,6 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // + with Verse Mappings
             var parallelCorpusModel = new Models.ParallelCorpus
             {
+                DisplayName = request.DisplayName,
                 SourceTokenizedCorpus = sourceTokenizedCorpus,
                 TargetTokenizedCorpus = targetTokenizedCorpus
             };

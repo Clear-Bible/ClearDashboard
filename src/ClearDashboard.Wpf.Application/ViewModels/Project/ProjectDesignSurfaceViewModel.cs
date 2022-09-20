@@ -29,6 +29,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -1260,17 +1261,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ConnectorGuid: newConnection.Id));
 
                 // TODO:  
-                //await AddParallelCorpus(newConnection);
+                await AddParallelCorpus(newConnection);
             }
         }
 
-        public async Task AddParallelCorpus(/*ConnectionViewModel newConnection*/)
+        public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
             await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
                 DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback);
 
             async Task Callback(ParallelCorpusDialogViewModel viewModel)
             {
+                CancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = CancellationTokenSource.Token;
+
+                var parallelCorpus = viewModel.ParallelCorpus;
+
+                var sourceCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.SourceConnector.ParentNode.Id);
+                var targetCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.DestinationConnector.ParentNode.Id);
+
+                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceCorpusNode.NodeTokenizations.First().TokenizedTextCorpusId));
+                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetCorpusNode.NodeTokenizations.First().TokenizedTextCorpusId));
+                var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<VerseMapping>());
+                var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!, parallelCorpus.DisplayName);
+
 
                 await Task.CompletedTask;
             }
@@ -1359,7 +1373,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 X = nodeLocation.X,
                 Y = nodeLocation.Y,
                 CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType),
-                ParatextProjectId = corpus.ParatextGuid ?? string.Empty
+                ParatextProjectId = corpus.ParatextGuid ?? string.Empty,
+                CorpusId = corpus.CorpusId.Id
             };
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
