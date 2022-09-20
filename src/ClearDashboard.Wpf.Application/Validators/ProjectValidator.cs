@@ -1,5 +1,4 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Helpers;
+﻿using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,10 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-
     public class ProjectValidator : AbstractValidator<DataAccessLayer.Models.Project>
     {
-        private ILogger _logger;
+        private ILogger? _logger;
         public ProjectValidator(ILogger<ProjectValidator> logger)
         {
             RuleFor(x => x.ProjectName).Custom((projectName, context) => {

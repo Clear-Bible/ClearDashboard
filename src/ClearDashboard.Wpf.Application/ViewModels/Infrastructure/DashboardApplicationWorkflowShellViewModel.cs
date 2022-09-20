@@ -1,31 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 {
-    public enum WorkflowMode
-    {
-        Add,
-        Edit
-    }
-
     public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel
     {
+        private string? _currentStepTitle;
+        private WorkflowMode _workflowMode;
 
         public DashboardApplicationWorkflowShellViewModel()
         {
-
+            WorkflowMode = WorkflowMode.Add;
         }
 
         public DashboardApplicationWorkflowShellViewModel(DashboardProjectManager? projectManager, 
@@ -40,6 +29,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 
         public DashboardProjectManager? ProjectManager { get; private set; }
 
-        public WorkflowMode WorkflowMode { get; set; }
+        public WorkflowMode WorkflowMode
+        {
+            get => _workflowMode;
+            set => Set(ref _workflowMode, value);
+        }
+
+        public string? CurrentStepTitle
+        {
+            get => _currentStepTitle;
+            set
+            {
+                Set(ref _currentStepTitle, value);
+                Title = $"{DisplayName} - {_currentStepTitle}";
+                //NotifyOfPropertyChange(nameof(Title));
+            }
+        }
+
+
     }
 }

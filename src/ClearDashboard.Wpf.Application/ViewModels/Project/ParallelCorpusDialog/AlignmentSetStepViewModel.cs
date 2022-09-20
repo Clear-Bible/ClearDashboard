@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewModel
+public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
     private bool _canOk;
 

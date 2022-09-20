@@ -7,10 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 {
-    public abstract class DashboardApplicationWorkflowStepViewModel: WorkflowStepViewModel
+    public abstract class DashboardApplicationWorkflowStepViewModel<TParentViewModel>: WorkflowStepViewModel
+    where TParentViewModel : class
     {
         protected DashboardProjectManager? ProjectManager { get; }
-        
+        protected TParentViewModel? ParentViewModel => Parent as TParentViewModel;
+
         protected DashboardApplicationWorkflowStepViewModel()
         {
         }
