@@ -290,8 +290,7 @@ public class DashboardProjectManager : ProjectManager
         var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
         _licenseCleared = true;
     }
-
-    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    
 
     private static dynamic CreateNewProjectDialogSettings()
     {

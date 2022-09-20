@@ -75,6 +75,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 vm.Connected = true;
             }
 
+            if (_runRegistration)
+            {
+                var vm = Steps[1] as ProjectPickerViewModel;
+                if (vm.IsParatextRunning)
+                {
+                    vm.Connected = true;
+                }
+                
+            }
+
             await base.OnInitializeAsync(cancellationToken);
         }
         
