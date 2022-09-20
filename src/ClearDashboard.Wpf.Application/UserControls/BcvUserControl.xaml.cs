@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -74,6 +76,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
 
+        public static readonly DependencyProperty _showHeader =
+            DependencyProperty.Register("ShowHeader", typeof(bool), typeof(BcvUserControl),
+                new PropertyMetadata(true));
+
+        public bool ShowHeader
+        {
+            get => (bool)GetValue(_showHeader);
+            set => SetValue(_showHeader, value);
+        }
+
+
         public static readonly DependencyProperty _verseRange =
             DependencyProperty.Register("VerseRange", typeof(int), typeof(BcvUserControl),
                 new PropertyMetadata(1));
@@ -83,6 +96,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (int)GetValue(_verseRange);
             set => SetValue(_verseRange, value);
         }
+
+
+        public static readonly DependencyProperty _bcvDictionary =
+            DependencyProperty.Register("BCVDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
+                new PropertyMetadata(new Dictionary<string, string>()));
+
+        public Dictionary<string, string> BCVDictionary
+        {
+            get => (Dictionary<string, string>)GetValue(_bcvDictionary);
+            set => SetValue(_bcvDictionary, value);
+        }
+
 
 
         #endregion
@@ -192,7 +217,75 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        
+        private void CalculateBooks()
+        {
+            CurrentBcv.BibleBookList?.Clear();
+
+            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var book in books)
+            {
+                var bookId = book.Substring(0, 3);
+
+                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                CurrentBcv.BibleBookList?.Add(bookName);
+            }
+
+        }
+
+        private void CalculateChapters()
+        {
+            // CHAPTERS
+            var bookId = CurrentBcv.Book;
+            var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(3, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                CurrentBcv.ChapterNumbers = chapterNumbers;
+            });
+        }
+
+        private void CalculateVerses()
+        {
+            // VERSES
+            var bookId = CurrentBcv.Book;
+            var chapId = CurrentBcv.ChapterIdText;
+            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(6);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            {
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                CurrentBcv.VerseNumbers = verseNumbers;
+            });
+        }
+
 
         // Declare the event
         public event PropertyChangedEventHandler PropertyChanged;

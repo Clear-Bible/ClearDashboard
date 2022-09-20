@@ -1338,8 +1338,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     var enhancedCorpusViewModels =
                         Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
                             EnhancedCorpusViewModel;
+                    if (enhancedCorpusViewModels is not null)
+                    {
+                        await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
+                    }
 
-                    enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
                     return;
                 }
 
@@ -1349,6 +1352,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (document.IsActive && document.Content is EnhancedCorpusViewModel)
                     {
                         var vm = document.Content as EnhancedCorpusViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
                         var enhancedCorpusViewModels =
@@ -1358,7 +1362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 EnhancedCorpusViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
-                            enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                            await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                             return;
                         }
                     }

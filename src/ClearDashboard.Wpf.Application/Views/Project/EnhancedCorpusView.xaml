@@ -304,10 +304,12 @@
                 <userControls:BcvUserControl
                     Grid.Column="1"
                     Margin="50,0,0,0"
+                    BCVDictionary="{Binding BCVDictionary}"
                     CurrentBcv="{Binding CurrentBcv}"
                     IsControlEnabled="True"
                     IsRtl="{Binding IsRtl}"
                     ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ShowHeader="True"
                     ShowOffsetControl="True" />
             </Grid>
         </materialDesign:DrawerHost>
@@ -486,9 +488,9 @@
                 Style="{StaticResource RightExpander}">
                 <controls:SidebarExpander.Header>
                     <TextBlock
+                        Margin="-5,0,0,0"
                         BaselineOffset="100"
                         FontWeight="Bold"
-                        Margin="-5,0,0, 0"
                         Text="{helpers:Localization EnhancedView_Notes}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal">

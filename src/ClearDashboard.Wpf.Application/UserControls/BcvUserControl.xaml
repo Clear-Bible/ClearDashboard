@@ -28,7 +28,19 @@
     <Grid Name="LayoutRoot" IsEnabled="{Binding IsControlEnabled}">
         <!--  DataContext="{Binding ElementName=parent}"  -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="15" />
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="15" />
+                        <Style.Triggers>
+                            <!--  set the width of the up/down control to 0 when the control is readonly  -->
+                            <DataTrigger Binding="{Binding ShowHeader}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
