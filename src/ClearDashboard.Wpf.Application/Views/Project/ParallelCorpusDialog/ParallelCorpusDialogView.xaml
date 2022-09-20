@@ -11,7 +11,6 @@
       xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ParallelCorpusDialogView"
       helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
       AllowsTransparency="True"
       Background="{DynamicResource Transparent}"
@@ -19,9 +18,10 @@
       FontFamily="{DynamicResource MaterialDesignFont}"
       Foreground="{DynamicResource MaterialDesignPaper}"
       ShowInTaskbar="False"
-      ShowCloseButton="False"
+      ShowCloseButton="True"
       ShowMinButton="False"
       ShowMaxRestoreButton="False"
+      Title="{helpers:Localization ParallelCorpusDialog_ParallelCorpus}"
       TextElement.FontSize="13"
       TextElement.FontWeight="Regular"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -29,7 +29,8 @@
       TextOptions.TextRenderingMode="Auto"
       WindowStartupLocation="CenterOwner"
       Width="600"
-      Height="330">
+     >
+   
     <Border
         Padding="6"
         Background="{DynamicResource MaterialDesignLightBackground}"
