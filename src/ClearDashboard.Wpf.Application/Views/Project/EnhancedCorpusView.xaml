@@ -10,9 +10,11 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DataContext="{d:DesignInstance Type=project:EnhancedCorpusViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -304,13 +306,14 @@
                 <userControls:BcvUserControl
                     Grid.Column="1"
                     Margin="50,0,0,0"
-                    BCVDictionary="{Binding BCVDictionary}"
+                    BcvDictionary="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path= BCVDictionary}"
                     CurrentBcv="{Binding CurrentBcv}"
                     IsControlEnabled="True"
                     IsRtl="{Binding IsRtl}"
                     ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ShowHeader="True"
-                    ShowOffsetControl="True" />
+                    ShowOffsetControl="True"
+                    VerseChange="{Binding VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </materialDesign:DrawerHost>
 

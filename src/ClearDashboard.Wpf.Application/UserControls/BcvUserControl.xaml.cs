@@ -23,89 +23,105 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #region Observable Properties
 
-        public static readonly DependencyProperty _paratextSync =
+        public static readonly DependencyProperty ParatextSyncProperty =
             DependencyProperty.Register("ParatextSync", typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
         public bool ParatextSync
         {
-            get => (bool)GetValue(_paratextSync);
-            set => SetValue(_paratextSync, value);
+            get => (bool)GetValue(ParatextSyncProperty);
+            set => SetValue(ParatextSyncProperty, value);
         }
 
 
-        public static readonly DependencyProperty _isRtl =
+        public static readonly DependencyProperty IsRtlProperty =
             DependencyProperty.Register("IsRtl", typeof(bool), typeof(BcvUserControl),
             new PropertyMetadata(false));
 
         public bool IsRtl
         {
-            get => (bool)GetValue(_isRtl);
-            set => SetValue(_isRtl, value);
+            get => (bool)GetValue(IsRtlProperty);
+            set => SetValue(IsRtlProperty, value);
         }
 
 
-        public static readonly DependencyProperty _currentBcv =
+        public static readonly DependencyProperty CurrentBcvProperty =
             DependencyProperty.Register("CurrentBcv", typeof(BookChapterVerseViewModel), typeof(BcvUserControl),
                 new PropertyMetadata(new BookChapterVerseViewModel()));
-
         public BookChapterVerseViewModel CurrentBcv
         {
-            get => (BookChapterVerseViewModel)GetValue(_currentBcv);
-            set => SetValue(_currentBcv, value);
+            get => (BookChapterVerseViewModel)GetValue(CurrentBcvProperty);
+            set
+            {
+                CalculateBooks();
+                CalculateChapters();
+                CalculateVerses();
+                SetValue(CurrentBcvProperty, value);
+            }
         }
         
+        
+        public static readonly DependencyProperty VerseChangeProperty =
+            DependencyProperty.Register("VerseChange", typeof(string), typeof(BcvUserControl),
+                new PropertyMetadata(""));
+        public string VerseChange
+        {
+            get => (string)GetValue(VerseChangeProperty);
+            set
+            {
+                SetValue(VerseChangeProperty, value);
+            }
+        }
 
-        public static readonly DependencyProperty _isControlEnabled =
+        
+        public static readonly DependencyProperty IsControlEnabledProperty =
             DependencyProperty.Register("IsControlEnabled", typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
-
         public bool IsControlEnabled
         {
-            get => (bool)GetValue(_isControlEnabled);
-            set => SetValue(_isControlEnabled, value);
+            get => (bool)GetValue(IsControlEnabledProperty);
+            set => SetValue(IsControlEnabledProperty, value);
         }
 
-        public static readonly DependencyProperty _showOffsetControl =
+        
+        public static readonly DependencyProperty ShowOffsetControlProperty =
             DependencyProperty.Register("ShowOffsetControl", typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
-
         public bool ShowOffsetControl
         {
-            get => (bool)GetValue(_showOffsetControl);
-            set => SetValue(_showOffsetControl, value);
+            get => (bool)GetValue(ShowOffsetControlProperty);
+            set => SetValue(ShowOffsetControlProperty, value);
         }
 
 
-        public static readonly DependencyProperty _showHeader =
+
+        public static readonly DependencyProperty ShowHeaderProperty =
             DependencyProperty.Register("ShowHeader", typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(true));
-
         public bool ShowHeader
         {
-            get => (bool)GetValue(_showHeader);
-            set => SetValue(_showHeader, value);
+            get => (bool)GetValue(ShowHeaderProperty);
+            set => SetValue(ShowHeaderProperty, value);
         }
 
 
-        public static readonly DependencyProperty _verseRange =
+        
+        public static readonly DependencyProperty VerseRangeProperty =
             DependencyProperty.Register("VerseRange", typeof(int), typeof(BcvUserControl),
                 new PropertyMetadata(1));
-
         public int VerseRange
         {
-            get => (int)GetValue(_verseRange);
-            set => SetValue(_verseRange, value);
+            get => (int)GetValue(VerseRangeProperty);
+            set => SetValue(VerseRangeProperty, value);
         }
 
 
-        public static readonly DependencyProperty _bcvDictionary =
-            DependencyProperty.Register("BCVDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
+        public static readonly DependencyProperty BcvDictionaryProperty =
+            DependencyProperty.Register("BcvDictionary", typeof(Dictionary<string, string>), typeof(BcvUserControl),
                 new PropertyMetadata(new Dictionary<string, string>()));
-
-        public Dictionary<string, string> BCVDictionary
+        public Dictionary<string, string> BcvDictionary
         {
-            get => (Dictionary<string, string>)GetValue(_bcvDictionary);
-            set => SetValue(_bcvDictionary, value);
+            get => (Dictionary<string, string>)GetValue(BcvDictionaryProperty);
+            set => SetValue(BcvDictionaryProperty, value);
         }
 
 
@@ -221,7 +237,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CurrentBcv.BibleBookList?.Clear();
 
-            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
                 .Select(g => g.First())
                 .ToList();
 
@@ -240,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             // CHAPTERS
             var bookId = CurrentBcv.Book;
-            var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+            var chapters = BcvDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
             for (int i = 0; i < chapters.Count; i++)
             {
                 chapters[i] = chapters[i].Substring(3, 3);
@@ -265,7 +281,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             // VERSES
             var bookId = CurrentBcv.Book;
             var chapId = CurrentBcv.ChapterIdText;
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+            var verses = BcvDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
 
             for (int i = 0; i < verses.Count; i++)
             {

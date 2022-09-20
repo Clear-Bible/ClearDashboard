@@ -113,14 +113,14 @@
                     Kind="ArrowExpandAll" />
             </Button>
 
-            <userControls:BcvUserControl
+            <!--<userControls:BcvUserControl
                 Margin="50,0,0,0"
                 CurrentBcv="{Binding CurrentBcv}"
                 IsControlEnabled="True"
                 IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowHeader="False"
-                ShowOffsetControl="False" />
+                ShowOffsetControl="False" />-->
         </StackPanel>
 
 
