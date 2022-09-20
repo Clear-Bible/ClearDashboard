@@ -9,6 +9,7 @@
       xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+      xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -21,7 +22,7 @@
       ShowCloseButton="True"
       ShowMinButton="False"
       ShowMaxRestoreButton="False"
-      Title="{helpers:Localization ParallelCorpusDialog_ParallelCorpus}"
+      Title="{Binding Title}"
       TextElement.FontSize="13"
       TextElement.FontWeight="Regular"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -29,7 +30,8 @@
       TextOptions.TextRenderingMode="Auto"
       WindowStartupLocation="CenterOwner"
       Width="600"
-     >
+      d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:ParallelCorpusDialogViewModel,
+                                     IsDesignTimeCreatable=True}">
    
     <Border
         Padding="6"

@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -24,7 +26,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             private init => Set(ref _parallelCorprus, value);
         }
 
+        public ParallelCorpusStepViewModel()
+        {
 
+        }
 
 
         public ParallelCorpusStepViewModel(DashboardProjectManager projectManager,
@@ -37,6 +42,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             EnableControls = true;
 
             ParallelCorpus = new ParallelCorpus();
+           
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            ParentViewModel.CurrentStepTitle =
+                LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
+            return base.OnInitializeAsync(cancellationToken);
         }
 
         protected override ValidationResult? Validate()

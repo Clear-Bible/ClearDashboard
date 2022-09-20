@@ -29,19 +29,20 @@
 
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="20,10" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Margin" Value="20,5" />
             <Setter Property="FontSize" Value="24" />
         </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
     
         </Grid.RowDefinitions>
@@ -250,7 +251,7 @@
         </TextBox>
 
         <StackPanel
-            Grid.Row="6"
+            Grid.Row="7"
             Grid.Column="0"
             Margin="20"
             HorizontalAlignment="Right"
