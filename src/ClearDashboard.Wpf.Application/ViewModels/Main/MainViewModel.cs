@@ -32,6 +32,7 @@ using System.Windows;
 using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -1384,6 +1385,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
             // add vm to conductor
             Items.Add(viewModel);
 
@@ -1416,7 +1421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
-        #endregion // Methods
+
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1436,6 +1441,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames

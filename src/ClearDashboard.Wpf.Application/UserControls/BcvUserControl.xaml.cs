@@ -384,6 +384,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateBooks()
         {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
             CurrentBcv.BibleBookList?.Clear();
 
             var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
@@ -402,6 +407,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateChapters()
         {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
             // CHAPTERS
             var bookId = CurrentBcv.Book;
             var chapters = BcvDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
@@ -426,6 +436,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateVerses()
         {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
             // VERSES
             var bookId = CurrentBcv.Book;
             var chapId = CurrentBcv.ChapterIdText;
