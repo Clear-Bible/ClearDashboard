@@ -24,6 +24,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         //private WindowManager WindowManager { get; }
         private DashboardProjectManager ProjectManager { get; }
         private bool _licenseCleared = false;
+        private bool _runRegistration = false;
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager)//, WindowManager windowManager) 
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
@@ -45,17 +46,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
-//#if RELEASE
-            //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-            var runRegistration = CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-//#endif
+#if RELEASE
+            _runRegistration = CheckLicense(IoC.Get<RegistrationDialogViewModel>());
+#endif
 
             foreach (var view in views)
             {
                 Steps!.Add(view);
             }
 
-            CurrentStep = runRegistration ? Steps![0] : Steps![1];
+            CurrentStep = _runRegistration ? Steps![0] : Steps![1];
 
             IsLastWorkflowStep = (Steps.Count == 1);
 
@@ -111,40 +111,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("There was an issue decrypting your license key.");
-                        //PopupRegistration(viewModel);
+                        //MessageBox.Show("There was an issue decrypting your license key.");
                         return true;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Your license key file is missing.");
-                    //PopupRegistration(viewModel);
+                    //MessageBox.Show("Your license key file is missing.");
                     return true;
                 }
             }
 
             return false;
-        }
-
-        private void PopupRegistration<TViewModel>(TViewModel viewModel)
-        {
-            Logger.LogInformation("Registration called.");
-
-            dynamic settings = new ExpandoObject();
-            settings.Width = 850;
-            settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
-            settings.PopupAnimation = PopupAnimation.Fade;
-            settings.Placement = PlacementMode.Absolute;
-            settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
-            settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
-            settings.Title = "License Registration";
-            settings.WindowState = WindowState.Normal;
-            settings.ResizeMode = ResizeMode.NoResize;
-
-            //var created = WindowManager.ShowDialogAsync(viewModel, null, settings);
-            _licenseCleared = true;
         }
 
         public object? ExtraData { get; set; }
