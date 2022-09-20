@@ -63,7 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     message: "both SourceCorpus and TargetCorpus of engineParallelTextCorpus must be from the database (of type TokenizedTextCorpus");
             }
 
-            var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(displayName,
+            var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId,
                 engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),

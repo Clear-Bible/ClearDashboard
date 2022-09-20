@@ -452,7 +452,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             //we need to cancel running background processes
             //check a bool to see if it already cancelled or already completed
-            if (_projectDesignSurfaceViewModel.AddParatextCorpusRunning)
+            if (_projectDesignSurfaceViewModel.LongProcessRunning)
             {
 #pragma warning disable CS8602
                 // ReSharper disable once PossibleNullReferenceException
