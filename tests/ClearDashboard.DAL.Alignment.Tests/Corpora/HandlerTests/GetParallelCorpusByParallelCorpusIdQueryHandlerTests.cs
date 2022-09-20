@@ -87,7 +87,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 ).ToList();
 
             // Save:
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             // Clear ProjectDbContext:
             ProjectDbContext.ChangeTracker.Clear();
@@ -177,7 +177,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
 
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create(Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
             Assert.NotNull(parallelCorpusDB);
