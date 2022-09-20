@@ -63,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public TranslationOption CurrentTranslationOption { get; set; }
 
         public IEnumerable<Label> SampleLabels { get; set; }
+        public IEnumerable<Label> LabelSuggestions { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -239,6 +240,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             CreateLabels();
+            CreateLabelSuggestions();
 
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
@@ -255,6 +257,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
 
             SampleLabels = labels;
+        }        
+        
+        private void CreateLabelSuggestions()
+        {
+            var labels = new List<Label>();
+            labels.Add(new Label(Mediator, $"alfa"));
+            labels.Add(new Label(Mediator, $"bravo"));
+            labels.Add(new Label(Mediator, $"charlie"));
+            labels.Add(new Label(Mediator, $"delta"));
+            labels.Add(new Label(Mediator, $"echo"));
+
+            LabelSuggestions = labels;
         }
 
 

@@ -12,6 +12,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
+        // Temporary
+        public List<Label> Labels { get; set; } = new();
+
         public Note(IMediator mediator, string text, string? abbreviatedText)
         {
             mediator_ = mediator;

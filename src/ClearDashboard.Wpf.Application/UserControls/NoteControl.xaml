@@ -7,28 +7,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="16">
-    <UserControl.Resources>
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-    </UserControl.Resources>
     <Grid>
      <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
      </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Notes for" HorizontalContentAlignment="Center" />
-        <Label Grid.Row="1" 
-               Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplay.SurfaceText}" 
-               HorizontalContentAlignment="Center"
-               FontWeight="Bold"
-               FontSize="20"/>
-        <TextBox Grid.Row="2" x:Name="TranslationValue" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplay.Note}" Margin="10,0"></TextBox>
+        <TextBox Grid.Row="0" x:Name="NoteTextBox" 
+                 Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" 
+                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
+                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label 
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserId}" />
+            <Label 
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Modified}" />
+        </StackPanel>
+        <local:LabelsDisplayControl Grid.Row="2"
+                                    Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}" 
+                                    LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                                    LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                                    LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                                    LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Label}"/>
+        <local:LabelSelector Grid.Row="3" LabelSuggestions="{Binding LabelSuggestions}"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="10" Click="ApplyNote">Add Note</Button>
-            <Button Margin="10" Click="Cancel">Close</Button>
+            <Button Margin="10" Click="Cancel">Cancel</Button>
         </StackPanel>
     </Grid>
 </UserControl>

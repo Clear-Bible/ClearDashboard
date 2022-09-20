@@ -37,6 +37,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
+            <RowDefinition Height="100" />
             <RowDefinition Height="50" />
             <RowDefinition Height="130" />
         </Grid.RowDefinitions>
@@ -52,7 +53,7 @@
         </Button>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Enhanced View demo" FontSize="20" />
 
-        <userControls:VerseDisplay Grid.Row="1" 
+        <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
                                    Title="Latin -> Ooga word translation (interlinear gloss)"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -89,8 +90,9 @@
                                                        [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
+        <userControls:LabelSelector Grid.Row="3" Grid.Column="0" Width="200" LabelSuggestions="{Binding LabelSuggestions}"/>
 
-        <userControls:LabelsDisplayControl Grid.Row="2" 
+        <userControls:LabelsDisplayControl Grid.Row="2" Grid.Column="0"
                                            Labels="{Binding SampleLabels}" 
                                            LabelBackground="BlanchedAlmond"
                                            LabelMargin="3,0"
@@ -98,9 +100,9 @@
                                            LabelCornerRadius="10"
                                            FontSize="11"/>
 
-        <Label Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
+        <Label Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
 
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
@@ -185,9 +187,9 @@
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
             <userControls:NoteControl Visibility="{Binding NoteControlVisibility}"
-                                      TokenDisplay="{Binding CurrentTokenDisplay}"
                                       cal:Message.Attach="[Event NoteApplied] = [Action NoteApplied($eventArgs)];
                                                           [Event NoteCancelled] = [Action NoteCancelled($eventArgs)];" />
+            <!--TokenDisplay="{Binding CurrentTokenDisplay}"-->
         </StackPanel>
     </Grid>
 </Page>
