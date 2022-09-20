@@ -41,7 +41,6 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
             {
                 Set(ref _currentStepTitle, value);
                 Title = $"{DisplayName} - {_currentStepTitle}";
-                //NotifyOfPropertyChange(nameof(Title));
             }
         }
 
