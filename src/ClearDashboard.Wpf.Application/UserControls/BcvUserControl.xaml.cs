@@ -16,13 +16,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
     {
         #region Member Variables
 
+        private bool InComingChangesStarted { get; set; }
+
         #endregion
 
 
-        
+
         #region Observable Properties
-        
-        
+
+
         #region ParatextSync
 
         public static readonly DependencyProperty ParatextSyncProperty =
@@ -76,7 +78,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private static void OnCurrentBcvPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BcvUserControl? userControl = d as BcvUserControl;
-            userControl?.OnVerseRangePropertyChanged(e);
+            userControl?.OnCurrentBcvPropteryChanged(e);
         }
 
         private void OnCurrentBcvPropteryChanged(DependencyPropertyChangedEventArgs e)
@@ -89,10 +91,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (BookChapterVerseViewModel)GetValue(CurrentBcvProperty);
             set
             {
+                SetValue(CurrentBcvProperty, value);
+
                 CalculateBooks();
                 CalculateChapters();
                 CalculateVerses();
-                SetValue(CurrentBcvProperty, value);
+
+                VerseChange = CurrentBcv.GetVerseId();
             }
         }
 
@@ -234,7 +239,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Dictionary<string, string> BcvDictionary
         {
             get => (Dictionary<string, string>)GetValue(BcvDictionaryProperty);
-            set => SetValue(BcvDictionaryProperty, value);
+            set
+            {
+                SetValue(BcvDictionaryProperty, value);
+            }
         }
 
         #endregion BcvDictionary
@@ -288,14 +296,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CboBook.SelectedIndex > 0)
             {
                 CboBook.SelectedIndex -= 1;
-            }
 
-            VerseChange = "New";
+                VerseChange = CurrentBcv.GetVerseId();
+            }
         }
 
         private void BookDownArrow_Click(object sender, RoutedEventArgs e)
         {
             CboBook.SelectedIndex += 1;
+
+            VerseChange = CurrentBcv.GetVerseId();
         }
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
@@ -309,6 +319,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 BookUpArrow_Click(null, null);
                 CboChapter.SelectedIndex = CboChapter.Items.Count - 1;
             }
+
+            VerseChange = CurrentBcv.GetVerseId();
         }
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
@@ -322,6 +334,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 BookDownArrow_Click(null, null);
                 CboChapter.SelectedIndex = 0;
             }
+
+            VerseChange = CurrentBcv.GetVerseId();
         }
 
         private void VerseUpArrow_Click(object sender, RoutedEventArgs e)
@@ -335,6 +349,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ChapterUpArrow_Click(null, null);
                 CboVerse.SelectedIndex = CboVerse.Items.Count - 1;
             }
+
+            VerseChange = CurrentBcv.GetVerseId();
         }
 
         private void VerseDownArrow_Click(object sender, RoutedEventArgs e)
@@ -366,7 +382,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
                 CurrentBcv.BibleBookList?.Add(bookName);
             }
-
         }
 
         private void CalculateChapters()
@@ -419,6 +434,71 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
+        private void CboBook_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (CurrentBcv.GetVerseId() != VerseChange)
+            {
+                bool somethingChanged = false;
+
+                // book switch so find the first chapter and verse for that book
+                var verseId = BcvDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
+                if (verseId != "")
+                {
+                    InComingChangesStarted = true;
+                    CurrentBcv.SetVerseFromId(verseId);
+
+                    CalculateChapters();
+                    CalculateVerses();
+                    InComingChangesStarted = false;
+                    somethingChanged = true;
+                }
+
+                if (somethingChanged)
+                {
+                    VerseChange = CurrentBcv.GetVerseId();
+                }
+            }
+        }
+
+        private void CboChapter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (CurrentBcv.GetVerseId() != VerseChange)
+            {
+                bool somethingChanged = false;
+                var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
+
+                // chapter switch so find the first verse for that book and chapter
+                var verseId = BcvDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
+                if (verseId != "")
+                {
+                    InComingChangesStarted = true;
+                    CurrentBcv.SetVerseFromId(verseId);
+
+                    CalculateVerses();
+                    InComingChangesStarted = false;
+                    somethingChanged = true;
+                }
+
+                if (somethingChanged)
+                {
+                    VerseChange = CurrentBcv.GetVerseId();
+                }
+            }
+        }
+
+
+        private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (CurrentBcv.GetVerseId() != VerseChange)
+            {
+                CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                VerseChange = CurrentBcv.GetVerseId();
+            }
+        }
+
+
+
+
 
         // Declare the event
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -430,6 +510,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+
+
         #endregion
+
+
     }
 }

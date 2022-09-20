@@ -150,7 +150,7 @@
             MinWidth="60"
             Margin="5,0,5,3"
             ItemsSource="{Binding CurrentBcv.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+            SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" SelectionChanged="CboBook_SelectionChanged" />
 
         <!--  SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor} , UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"  -->
         <ComboBox
@@ -160,7 +160,7 @@
             MinWidth="30"
             Margin="5,0,5,3"
             ItemsSource="{Binding CurrentBcv.ChapterNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" />
+            SelectedValue="{Binding CurrentBcv.Chapter, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}" SelectionChanged="CboChapter_SelectionChanged" />
         <ComboBox
             x:Name="CboVerse"
             Grid.Row="1"
@@ -168,7 +168,7 @@
             MinWidth="30"
             Margin="5,0,5,3"
             ItemsSource="{Binding CurrentBcv.VerseNumbers, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-            SelectedValue="{Binding CurrentBcv.Verse, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+            SelectedValue="{Binding CurrentBcv.Verse, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" SelectionChanged="CboVerse_SelectionChanged" />
 
         <!--  SYNC BUTTON  -->
         <ToggleButton

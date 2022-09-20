@@ -122,8 +122,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _verseChange;
             set
             {
-                _verseChange = value;
-                NotifyOfPropertyChange(() => VerseChange);
+                if (_verseChange == "")
+                {
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+                else if (_verseChange != value)
+                {
+                    // push to Paratext
+                    if (ParatextSync)
+                    {
+                        _ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    }
+
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
             }
         }   
 
