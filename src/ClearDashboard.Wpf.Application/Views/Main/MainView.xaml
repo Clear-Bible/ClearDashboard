@@ -156,7 +156,7 @@
                         <!--  DOCUMENTS  -->
                         <panes:PanesStyleSelector.DocumentStyle>
                             <Style TargetType="{x:Type LayoutItem}">
-                                <Setter Property="CanClose" Value="False" />
+                                <Setter Property="CanClose" Value="True" />
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="ContentId" Value="{Binding Model.ContentId}" />

@@ -28,7 +28,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using DockingManager = AvalonDock.DockingManager;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -39,20 +38,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<ShowTokenizationWindowMessage>,
-                IHandle<UiLanguageChangedMessage>
+                IHandle<UiLanguageChangedMessage>,
+                IHandle<ActiveDocumentMessage>
     {
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
         private ILogger<MainViewModel> Logger { get; }
-        private INavigationService NavigationService { get; }
-        private DashboardProject DashboardProject { get; }
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceView _projectDesignSurfaceControl = null;
-        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel = null;
+        private ProjectDesignSurfaceView _projectDesignSurfaceControl;
+        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -73,34 +71,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
 
-        public event EventHandler ActiveDocumentChanged;
-
-        private DocumentViewModel _activeDocument;
-        public DocumentViewModel ActiveDocument
-        {
-            get => _activeDocument;
-            set
-            {
-                if (_activeDocument != value)
-                {
-                    _activeDocument = value;
-                    NotifyOfPropertyChange(() => MenuItems);
-                    ActiveDocumentChanged(this, EventArgs.Empty);
-                }
-            }
-        }
-
-        public bool IsRtl { get; set; }
-
         private bool InComingChangesStarted { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
         {
             get => _isBusy;
-            set => Set(ref _isBusy, value, nameof(IsBusy));
+            set => Set(ref _isBusy, value);
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
         #endregion //Public Properties
 
@@ -180,7 +161,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "NewID")
                 {
+#pragma warning disable CS4014
                     StartDashboardAsync();
+#pragma warning restore CS4014
                 }
                 else
                 {
@@ -217,19 +200,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        public async Task<Process> StartDashboardAsync(int secondsToWait = 10)
+        private async Task StartDashboardAsync(int secondsToWait = 10)
         {
-            var dashboard = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
-            Process process = null;
+            _ = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
 
             Logger.LogInformation("Opening a new instance of Dashboard.");
-            process = await InternalStartDashboardAsync();
+            _ = await InternalStartDashboardAsync();
 
 
             Logger.LogInformation($"Waiting {secondsToWait} seconds for Dashboard to completely start");
             await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
-
-            return process;
         }
 
         private async Task<Process> InternalStartDashboardAsync()
@@ -309,7 +289,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set
             {
                 _selectedLayout = value;
-                NotifyOfPropertyChange(nameof(SelectedLayout));
+                NotifyOfPropertyChange(() => SelectedLayout);
             }
         }
 
@@ -328,7 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public FlowDirection WindowFlowDirection
         {
             get => _windowFlowDirection;
-            init => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
+            init => Set(ref _windowFlowDirection, value);
         }
 
         private bool _showProgressBar;
@@ -355,19 +335,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedMember.Global
         public MainViewModel()
         {
-
+            // no-op for design time support
         }
 
 
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(INavigationService navigationService,
-            ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public MainViewModel(ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
             EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
-            NavigationService = navigationService;
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -459,11 +437,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             base.OnViewLoaded(view);
         }
 
-        protected override async void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
-        }
-
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
@@ -482,6 +455,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (_projectDesignSurfaceViewModel.AddParatextCorpusRunning)
             {
 #pragma warning disable CS8602
+                // ReSharper disable once PossibleNullReferenceException
                 _projectDesignSurfaceViewModel.CancellationTokenSource.Cancel();
 #pragma warning restore CS8602
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -512,6 +486,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
 
+                // subscribe to the event aggregator
+                //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
@@ -632,6 +608,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // get the project layouts
             if (ProjectManager?.CurrentDashboardProject?.TargetProject != null)
             {
+                // ReSharper disable once AssignNullToNotNullAttribute
                 path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
                 if (Directory.Exists(path))
                 {
@@ -669,7 +646,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 new MenuItemViewModel
                 {
                     Header = "🖫 " + LocalizationStrings.Get("MainView_LayoutsSave", Logger), Id = "SaveID",
-                    ViewModel = this, Icon = null
+                    ViewModel = this
                 },
                 
                 // Delete Saved Layout
@@ -774,6 +751,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
                     // get the project layouts
+                    // ReSharper disable once PossibleNullReferenceException
+                    // ReSharper disable once AssignNullToNotNullAttribute
                     filePath = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
@@ -835,11 +814,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         //    DeleteGridIsVisible = Visibility.Collapsed;
         //}
 
-        private void WorkSpaceViewModel_ThemeChanged()
-        {
-            GridIsVisible = Visibility.Collapsed;
-            SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
-        }
+        //private void WorkSpaceViewModel_ThemeChanged()
+        //{
+        //    GridIsVisible = Visibility.Collapsed;
+        //    SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
+        //}
 
         private void LoadLayoutById(string layoutId)
         {
@@ -1121,7 +1100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.Content = obj.vm;
                             windowPane.Title = obj.title;
                             windowPane.IsActive = true;
-                            
+
                             // set where it will doc on layout
                             if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                             {
@@ -1294,8 +1273,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 CalculateVerses();
                 InComingChangesStarted = false;
             }
-
-            return;
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -1326,8 +1303,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 BCVDictionary = new Dictionary<string, string>();
             }
-
-            return;
         }
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
@@ -1351,28 +1326,74 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <exception cref="NotImplementedException"></exception>
         public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
+
+            // the user wants to add to the currently active window
+            if (message.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>().ToList();
+                if (dockableWindows.Count == 1)
+                {
+                    // there is only one doc window open, so we can just add to it
+                    var enhancedCorpusViewModels =
+                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
+                            EnhancedCorpusViewModel;
+
+                    enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                    return;
+                }
+
+                // more than one enhanced corpus window is open and active
+                foreach (var document in dockableWindows)
+                {
+                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
+                    {
+                        var vm = document.Content as EnhancedCorpusViewModel;
+                        var guid = vm.Guid;
+
+                        var enhancedCorpusViewModels =
+                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                                    // ReSharper disable once UsePatternMatching
+                                    .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as
+                                EnhancedCorpusViewModel;
+                        if (enhancedCorpusViewModels is not null)
+                        {
+                            enhancedCorpusViewModels?.ShowCorpusTokens(message, cancellationToken);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // unactivate any other doc windows before we add in the new one
+            var docWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var document in docWindows)
+            {
+                document.IsActive = false;
+            }
+
+
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
+            // add vm to conductor
+            Items.Add(viewModel);
 
+            // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
-                ContentId = paratextId
+                ContentId = paratextId,
+                Content = viewModel,
+                Title = message.ProjectName + " (" + tokenizationType + ")",
+                IsActive = true
             };
-            // setup the right ViewModel for the pane
-            windowDockable.Content = viewModel;
-            windowDockable.Title = message.ProjectName + " (" + tokenizationType + ")";
-            windowDockable.IsActive = true;
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-
-            if (documentPane != null)
-            {
-                documentPane.Children.Add(windowDockable);
-            }
+            documentPane?.Children.Add(windowDockable);
 
             await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
@@ -1392,6 +1413,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
         #endregion // Methods
+
+        public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
+        {
+            var guid = message.Guid;
+
+            var dockableWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var pane in dockableWindows)
+            {
+                var content = pane.Content as EnhancedCorpusViewModel;
+                // ReSharper disable once PossibleNullReferenceException
+                if (content.Guid != guid)
+                {
+                    pane.IsActive = false;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
     }
 
     public static class WorkspaceLayoutNames
