@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
@@ -25,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             CanOk = true;
-            DisplayName = "Parallel Corpus Dialog";
+            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)

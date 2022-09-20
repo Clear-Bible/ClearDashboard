@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel
+public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
     public SmtModelStepViewModel(DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
