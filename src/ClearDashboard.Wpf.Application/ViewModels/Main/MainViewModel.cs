@@ -497,7 +497,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (Parameter != null)
             {
-               
                 Logger.LogInformation($"Received {Parameter.ProjectName}.");
                 if (Parameter.IsNew)
                 {

@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record LoadProjectQuery(string projectName) : ProjectRequestQuery<IEnumerable<Corpus>>;
+    public record LoadProjectQuery(string projectName) : ProjectRequestQuery<IEnumerable<Models.Project>>;
 
     public class LoadProjectQueryHandler : ProjectDbContextQueryHandler<LoadProjectQuery,
-        RequestResult<IEnumerable<Corpus>>, IEnumerable<Corpus>>
+        RequestResult<IEnumerable<Models.Project>>, IEnumerable<Models.Project>>
     {
         private readonly IMediator _mediator;
         public LoadProjectQueryHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory,
@@ -29,14 +29,10 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<IEnumerable<Corpus>>> GetDataAsync(LoadProjectQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IEnumerable<Models.Project>>> GetDataAsync(LoadProjectQuery request, CancellationToken cancellationToken)
         {
-            var task = ProjectNameDbContextFactory.Get(request.projectName);
-            var projectAssets = task.Result;
-            return (RequestResult<IEnumerable<Corpus>>)EntityFrameworkQueryableExtensions
-                .Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora)
-                .ThenInclude(tokenizedCorpus => tokenizedCorpus.Tokens);
-
+            var projectAssets = await ProjectNameDbContextFactory.Get(request.projectName);
+            return new RequestResult<IEnumerable<Models.Project>>(projectAssets.ProjectDbContext.Projects);
         }
     }
 }

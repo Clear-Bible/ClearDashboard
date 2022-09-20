@@ -253,15 +253,13 @@ namespace ClearDashboard.DataAccessLayer
 
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
 
-            CurrentProject = new Project();
-            CurrentProject.ProjectName = projectName;
+            InstantiateCurrentProject(projectName);
             CurrentProject = await CreateProject(projectName);
 
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
             CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
            
         }
-
 
         public async Task CreateNewProject(DashboardProject dashboardProject)
         {
@@ -315,9 +313,9 @@ namespace ClearDashboard.DataAccessLayer
             return result.Data;
         }
 
-        public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
+        public async Task<IEnumerable<Corpus>> LoadCorpora(string projectName)
         {
-            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
+            var result = await ExecuteRequest(new LoadCorporaQuery(projectName), CancellationToken.None);
 
             return result.Data;
         }
@@ -325,8 +323,17 @@ namespace ClearDashboard.DataAccessLayer
         public async Task LoadProjectFromDatabase(string projectName)
         {
             var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
             CurrentProject = projectAssets.ProjectDbContext.Projects.First();
+
+            //InstantiateCurrentProject(projectName);
+            //CurrentProject = LoadProject(projectName).Result.First();
+        }
+
+        public async Task<IEnumerable<Project>> LoadProject(string projectName)
+        {
+            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
+
+            return result.Data;
         }
 
         public async Task<Project> DeleteProject(string projectName)
@@ -348,13 +355,12 @@ namespace ClearDashboard.DataAccessLayer
         public async Task UpdateProject(Project project)
         {
             await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
-            
-            //var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+        }
 
-            //Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
-            //projectAssets.ProjectDbContext.Attach(project);
-
-            //await projectAssets.ProjectDbContext.SaveChangesAsync();
+        private void InstantiateCurrentProject(string projectName)
+        {
+            CurrentProject = new Project();
+            CurrentProject.ProjectName = projectName;
         }
     }
 }

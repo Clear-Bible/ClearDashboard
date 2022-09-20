@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Tests.ProjectManager
 {
-    public class LoadProjectQueryHandlerTest : TestBase
+    public class LoadCorporaQueryHandlerTest : TestBase
     {
         private ParatextProxy _paratextProxy;
         private string _projectName;
@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Tests.ProjectManager
         private IWindowManager _windowManager;
         private INavigationService _navigationService;
 
-        public LoadProjectQueryHandlerTest(ITestOutputHelper output) : base(output)
+        public LoadCorporaQueryHandlerTest(ITestOutputHelper output) : base(output)
         {
             _projectName = "1";
             _projectManager = new DashboardProjectManager( _mediator,  _eventAggregator,  _paratextProxy, _logger,  _projectNameDbContextFactory,  _windowManager,  _navigationService)
@@ -32,10 +32,10 @@ namespace ClearDashboard.DAL.Tests.ProjectManager
         }
 
         [Fact]
-        public async Task LoadProjectQueryTest()
+        public async Task LoadCorporaQueryTest()
         {
-            var resultA = await _mediator.Send(new LoadProjectQuery(_projectName),CancellationToken.None);
-            var resultB = _projectManager.LoadProject(_projectName);
+            var resultA = await _mediator.Send(new LoadCorporaQuery(_projectName),CancellationToken.None);
+            var resultB = _projectManager.LoadCorpora(_projectName);
             Assert.Equal(resultA.Data,resultB.Result);
         }
     }
