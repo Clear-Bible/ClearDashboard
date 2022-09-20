@@ -412,6 +412,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set => Set(ref _message, value);
         }
 
+        public string ProjectName => ProjectManager.CurrentProject.ProjectName;
+
         #endregion //Observable Properties
 
         #region Constructor
