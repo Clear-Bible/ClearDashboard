@@ -29,14 +29,14 @@ namespace ClearDashboard.DataAccessLayer
             return crypt_provider;
         }
 
-        public static void EncryptToDirectory(LicenseUser licenseUser, string path)
+        public static void EncryptToDirectory(DalLicenseUser licenseUser, string path)
         {
             try
             {
                 var crypt_provider = CreateCryptoProvider();
 
                 ICryptoTransform transform = crypt_provider.CreateEncryptor();
-                var serialized = JsonSerializer.Serialize<LicenseUser>(licenseUser);
+                var serialized = JsonSerializer.Serialize<DalLicenseUser>(licenseUser);
 
                 var decrypted_bytes = ASCIIEncoding.ASCII.GetBytes(serialized);
                 byte[] encrypted_bytes = transform.TransformFinalBlock(decrypted_bytes, 0, decrypted_bytes.Length);
@@ -91,27 +91,27 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
+        public static DalLicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
         {
             try
             {
-                var licenseUser = JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
+                var licenseUser = JsonSerializer.Deserialize<DalLicenseUser>(decryptedLicenseKey);
                 if (licenseUser != null)
                 {
                     return licenseUser;
                 }
                 else { 
-                    return new LicenseUser();
+                    return new DalLicenseUser();
                 }
             }
             catch (Exception)
             {
-               return new LicenseUser();
+               return new DalLicenseUser();
             }
 
         }
 
-        public static bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        public static bool CompareGivenUserAndDecryptedUser(DalLicenseUser given, DalLicenseUser decrypted)
         {
             if (given.FirstName == decrypted.FirstName &&
                 given.LastName == decrypted.LastName)// &&

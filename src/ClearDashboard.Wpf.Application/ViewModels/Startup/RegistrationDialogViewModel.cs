@@ -7,13 +7,13 @@ using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using LicenseUser = ClearDashboard.DataAccessLayer.Models.LicenseUser;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup;
 
@@ -63,16 +63,16 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
 
     public bool CanCancel => true /* can always cancel */;
 
-    public void Cancel()
-    {
-        System.Windows.Application.Current.Shutdown();
-    }
-
     private bool _canRegister;
     public bool CanRegister
     {
         get => _canRegister;
         set => Set(ref _canRegister, value);
+    }
+
+    public void Cancel()
+    {
+        System.Windows.Application.Current.Shutdown();
     }
 
     public async void Register()
@@ -85,7 +85,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-            LicenseUser givenLicenseUser = new LicenseUser();
+            DalLicenseUser givenLicenseUser = new DalLicenseUser();
             givenLicenseUser.FirstName = _registrationViewModel.FirstName;
             givenLicenseUser.LastName = _registrationViewModel.LastName;
             //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid

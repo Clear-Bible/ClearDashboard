@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    Width="1000"
     d:DesignHeight="150"
     d:DesignWidth="200"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -28,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -154,6 +156,21 @@
 
         </StackPanel>
 
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0,0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                x:Name="Register"
+                Margin="5,5,5,5"
+                Content="{helpers:Localization RegistrationDialogView_Register}" />
+            <Button
+                x:Name="Cancel"
+                Margin="5,5,5,5"
+                Content="{helpers:Localization RegistrationDialogView_CloseApplication}" />
+        </StackPanel>
         <!--<userControls:WorkflowFooter Grid.Row="1" Grid.Column="0"/>-->
         <!--<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
             <Button x:Name="MoveBackwards" Content="Back" Margin="5 5 5 5" />

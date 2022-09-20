@@ -4,23 +4,28 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
 using FluentValidation;
 using FluentValidation.Results;
-using LicenseUser = ClearDashboard.Wpf.Application.Models.LicenseUser;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
+    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<AppLicenseUser>
     {
         #region Member Variables
         private RegistrationDialogViewModel _parent;
         #endregion
 
         #region Observable Objects
-        private LicenseUser _licenseUser;
-        public LicenseUser LicenseUser
+        private AppLicenseUser _licenseUser;
+        public AppLicenseUser LicenseUser
         {
             get { return _licenseUser; }
             set { _licenseUser = value; }
@@ -74,10 +79,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
-            IValidator<LicenseUser> licenseValidator)
+            IValidator<AppLicenseUser> licenseValidator)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
-            LicenseUser = new LicenseUser();
+            LicenseUser = new AppLicenseUser();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -98,6 +103,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             return ValidationResult;
 
+        }
+
+        public void Cancel()
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        public async void Register()
+        {
+            try
+            {
+                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+
+                var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
+                var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+
+                DalLicenseUser givenLicenseUser = new DalLicenseUser();
+                givenLicenseUser.FirstName = FirstName;//_registrationViewModel.FirstName;
+                givenLicenseUser.LastName = LastName;//_registrationViewModel.LastName;
+                ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+
+                bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+                if (match)
+                {
+                    File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+                    await TryCloseAsync(true);
+                }
+                else
+                {
+                    MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                }
+            }
+
+            catch (Exception)
+            {
+                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", Logger));
+            }
         }
         #endregion  Methods
 
