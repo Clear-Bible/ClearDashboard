@@ -39,7 +39,7 @@
             <RowDefinition Height="250" />
             <RowDefinition Height="30" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="130" />
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
 
         <Button
@@ -106,6 +106,9 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Verse Title:</Label>
@@ -146,31 +149,52 @@
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Notes:</Label>
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Font size:</Label>
+                <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="NoteFontSizeSlider" Width="100" Value="15" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+
+            <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Timestamps:</Label>
+            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Font size:</Label>
+                <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="TimestampFontSizeSlider" Width="100" Value="11" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+
+            <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Labels:</Label>
+            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Font size:</Label>
+                <Slider VerticalAlignment="Center" Minimum="8" Maximum="48" Name="LabelFontSizeSlider" Width="100" Value="11" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Label VerticalAlignment="Center" Content="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
                 <CheckBox VerticalAlignment="Center" Name="ShowNoteIndicatorsCheckbox" IsChecked="True" Margin="5,0,0,0"/>
             </StackPanel>
-            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Margin="0,0,14,0">Height:</Label>
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
-            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="CenteredCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
-            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="7" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
-            <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="7" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox VerticalAlignment="Center" Name="WrapCheckbox" IsChecked="True"/>
                 <Label VerticalAlignment="Center">Wrap Lines</Label>
             </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="7" Orientation="Vertical">
             <userControls:TranslationControl Visibility="{Binding TranslationControlVisibility}"
                                              TokenDisplay="{Binding CurrentTokenDisplay}"
                                              TranslationOptions="{Binding TranslationOptions}"
@@ -181,6 +205,10 @@
             <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
                                        Title="{Binding CurrentTokenDisplay.SurfaceText}"
                                        Notes="{Binding CurrentTokenDisplay.Notes}"
+                                       NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                       TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                       LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+
                                        cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
