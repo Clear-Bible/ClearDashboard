@@ -9,6 +9,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 {
     public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel
     {
+        private string? _currentStepTitle;
+        private WorkflowMode _workflowMode;
 
         public DashboardApplicationWorkflowShellViewModel()
         {
@@ -27,6 +29,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Infrastructure
 
         public DashboardProjectManager? ProjectManager { get; private set; }
 
-        public WorkflowMode WorkflowMode { get; set; }
+        public WorkflowMode WorkflowMode
+        {
+            get => _workflowMode;
+            set => Set(ref _workflowMode, value);
+        }
+
+        public string? CurrentStepTitle
+        {
+            get => _currentStepTitle;
+            set
+            {
+                Set(ref _currentStepTitle, value);
+                Title = $"{DisplayName} - {_currentStepTitle}";
+                //NotifyOfPropertyChange(nameof(Title));
+            }
+        }
+
+
     }
 }

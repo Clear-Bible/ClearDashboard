@@ -13,6 +13,7 @@ where TParentViewModel : class
 {
     protected DashboardProjectManager? ProjectManager { get; }
     protected TParentViewModel? ParentViewModel => Parent as TParentViewModel;
+    protected DashboardApplicationValidatingWorkflowStepViewModel() {}
     protected DashboardApplicationValidatingWorkflowStepViewModel(DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, IValidator<TEntity> validator) : 
