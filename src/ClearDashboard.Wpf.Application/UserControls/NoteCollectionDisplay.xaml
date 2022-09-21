@@ -53,6 +53,7 @@
                           ItemsPanel="{StaticResource NotesPanelTemplate}" />
             <local:NoteDisplay x:Name="AddNoteControl"
                                AddMode="True"
+                               Watermark="Enter a new note"
                                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
                                EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
                                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=InnerMargin}"
