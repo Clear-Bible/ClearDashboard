@@ -54,8 +54,9 @@ namespace ClearDashboard.DataAccessLayer
 
         public bool ParatextVisible = false;
         public string ParatextUserName { get; set; } = "";
-        private string _currentVerse;
 
+
+        private string _currentVerse;
         public string CurrentVerse
         {
             get => _currentVerse;
@@ -70,6 +71,16 @@ namespace ClearDashboard.DataAccessLayer
                     s = value.PadLeft("BBBCCCVVV".Length, '0');
                 }
                 _currentVerse = s;
+            }
+        }
+
+        private Dictionary<string, string> _bcvDictionary = new();
+        private Dictionary<string, string> BCVDictionary
+        {
+            get => _bcvDictionary;
+            set
+            {
+                _bcvDictionary = value;
             }
         }
 

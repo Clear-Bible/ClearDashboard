@@ -28,6 +28,7 @@ public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
+public record BCVLoadedMessage();
 
 public record ProjectLoadCompleteMessage(bool Loaded);
 

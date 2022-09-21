@@ -5,11 +5,19 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
 public class TranslationSetStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
+
+    public TranslationSetStepViewModel()
+    {
+
+    }
+
     public TranslationSetStepViewModel(DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<TranslationSetStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource)
@@ -20,5 +28,18 @@ public class TranslationSetStepViewModel : DashboardApplicationWorkflowStepViewM
         CanMoveBackwards = true;
         EnableControls = true;
 
+    }
+
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        
+        return base.OnInitializeAsync(cancellationToken);
+    }
+
+    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel.CurrentStepTitle =
+            LocalizationStrings.Get("ParallelCorpusDialog_AddTranslationSet", Logger);
+        return base.OnActivateAsync(cancellationToken);
     }
 }

@@ -90,9 +90,9 @@
                 <controls:SidebarExpander.Header>
                     <!--  Project Design Surface  -->
                     <TextBlock
+                        Margin="-2,0,0,0"
                         BaselineOffset="100"
                         FontWeight="Bold"
-                        Margin="-2, 0,0, 0"
                         Text="{helpers:Localization Pds_ProjectDesignSurface}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal">
