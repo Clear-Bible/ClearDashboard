@@ -24,11 +24,13 @@
                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabelVisibility}"
                MouseDown="NoteLabelClick"/>
         <TextBox Grid.Row="0" x:Name="NoteTextBox"
+                 TextWrapping="Wrap"
                  Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}" 
                  Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
                  FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}"
                  Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextBoxVisibility}"
-                 TextChanged="NoteTextBoxOnTextChanged"/>
+                 TextChanged="NoteTextBoxOnTextChanged"
+                 />
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampVisibility}">
             <Label 
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
