@@ -28,7 +28,7 @@
             />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="NotesPanelTemplate">
-            <WrapPanel Orientation="Vertical" />
+            <StackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />

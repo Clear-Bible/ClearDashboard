@@ -96,8 +96,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void AddButtonClicked(object sender, RoutedEventArgs e)
         {
             TextBoxVisibility = Visibility.Visible;
-            LabelTextBox.Focus();
             OnPropertyChanged(nameof(TextBoxVisibility));
+            LabelTextBox.Focus();
         }
 
         [NotifyPropertyChangedInvocator]
