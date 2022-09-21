@@ -163,7 +163,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void NoteLabelClick(object sender, MouseButtonEventArgs e)
         {
-            NoteLabelVisibility = Visibility.Collapsed;
+            NoteLabelVisibility = Visibility.Hidden;
             NoteTextBoxVisibility = Visibility.Visible;
             NoteTextBox.Focus();
 
@@ -185,25 +185,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
+        private void RaiseLabelEvent(RoutedEvent routedEvent, LabelEventArgs args)
         {
             RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
                 EntityId = EntityId,
-                Label = label
+                Label = args?.Label
             });
         }
 
-
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(e);
+            RaiseLabelEvent(LabelAddedEvent, e as LabelEventArgs);
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(e);
+            RaiseLabelEvent(LabelSelectedEvent, e as LabelEventArgs);
         }
 
         [NotifyPropertyChangedInvocator]

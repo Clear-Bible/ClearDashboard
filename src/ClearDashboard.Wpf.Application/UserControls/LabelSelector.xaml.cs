@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             if (e.Key == Key.Enter && !String.IsNullOrWhiteSpace(LabelTextBox.Text))
             {
-                var matchingLabel = LabelSuggestions.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                var matchingLabel = LabelSuggestions?.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
                 if (matchingLabel != null)
                 {
                     RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
