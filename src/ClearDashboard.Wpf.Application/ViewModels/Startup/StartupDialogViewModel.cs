@@ -81,6 +81,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (vm.IsParatextRunning)
                 {
                     vm.Connected = true;
+                    var four = 2 + 2;
                 }
                 
             }
