@@ -424,6 +424,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     NodeTokenizations = corpusNode.NodeTokenizations,
+                    CorpusId = corpusNode.CorpusId,
                 });
             }
 
@@ -506,7 +507,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var corpusNode in deserialized.CorpusNodes)
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
-                        corpusId: new CorpusId(Guid.NewGuid()),
+                        corpusId: new CorpusId(corpusNode.CorpusId),
                         mediator: _mediator,
                         isRtl: false,
                         name: corpusNode.Name,
@@ -663,8 +664,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }), cancellationToken);
 
                     _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-                    await EventAggregator.PublishOnCurrentThreadAsync(
-                        new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
+                    //await EventAggregator.PublishOnCurrentThreadAsync(
+                    //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
 
                     OnUIThread(() =>
                     {
@@ -698,12 +699,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-
-        // ReSharper disable once UnusedMember.Global
-        public void AddParatextCorpus()
-        {
-            AddParatextCorpus("");
-        }
 
         // ReSharper disable once UnusedMember.Global
         private async void AddParatextCorpus(string selectedParatextProjectId = "")
@@ -841,8 +836,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
                         _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-                        await EventAggregator.PublishOnCurrentThreadAsync(
-                            new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
+                        //await EventAggregator.PublishOnCurrentThreadAsync(
+                        //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
 
                         OnUIThread(() =>
                         {

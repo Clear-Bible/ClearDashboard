@@ -96,14 +96,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
-        private int _verseRange = 1;
-        public int VerseRange
+        private int _verseOffsetRange = 0;
+        public int VerseOffsetRange
         {
-            get => _verseRange;
+            get => _verseOffsetRange;
             set
             {
-                _verseRange = value;
-                NotifyOfPropertyChange(() => _verseRange);
+                _verseOffsetRange = value;
+                NotifyOfPropertyChange(() => _verseOffsetRange);
             }
         }
 

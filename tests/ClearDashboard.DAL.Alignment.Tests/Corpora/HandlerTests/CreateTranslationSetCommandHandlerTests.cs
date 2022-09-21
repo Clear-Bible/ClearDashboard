@@ -212,9 +212,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
 
-            var initialFilteredEngineParallelTextRows = parallelTextCorpus.Take(10).Cast<EngineParallelTextRow>();
+            var initialFilteredEngineParallelTextRows = parallelCorpus.Take(5).Cast<EngineParallelTextRow>();
             var initialTranslations = await translationSet.GetTranslations(initialFilteredEngineParallelTextRows);
-            Output.WriteLine($"TRANSLATION COUNT: {initialTranslations.Count()}");
+
+            Output.WriteLine($"Translations from model count: {initialTranslations.Count()} (from first five engine parallel text rows)");
+            //foreach (var translation in initialTranslations)
+            //{
+            //    Output.WriteLine($"\tTokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
+            //}
 
             Output.WriteLine("");
 
@@ -229,8 +234,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     Output.WriteLine($"\tVerse (row): {row++}");
                     foreach (var sourceToken in ttr.Tokens)
                     {
-//                        if (double.Parse(sourceToken.TokenId.ToString()) is >= 040001004004001 and <= 040002002004001)
-//                        {
+                        if (sourceToken.TokenId.ToString()[..15].CompareTo("040001004004001") >= 0 && sourceToken.TokenId.ToString()[..15].CompareTo("040002002004001") <= 0)
+                        {
                             Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
                             translationSet.PutTranslation(
                                 new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
@@ -238,7 +243,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
                             iteration++;
                             putTranslationTokenIds.Add(sourceToken.TokenId);
-//                        }
+                        }
                     }
                 }
             }
@@ -250,24 +255,28 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             }
 
             ProjectDbContext!.ChangeTracker.Clear();
-            return;
 
             Output.WriteLine("");
 
             var filteredEngineParallelTextRows = parallelTextCorpus.Cast<EngineParallelTextRow>()
                 .Where(e => e.SourceTokens!
-                    .Any(t => double.Parse(t.TokenId.ToString()) is >= 040001002004001 and <= 040001005005001));
+                    .Any(t => t.TokenId.ToString()[..15].CompareTo("040001002004001") >= 0 && t.TokenId.ToString()[..15].CompareTo("040001005005001") <= 0))
+                .ToList();
 
             var translations = await translationSet.GetTranslations(filteredEngineParallelTextRows);
-            Assert.Equal(9, translations.Count());
+            Assert.Equal(22, translations.Count());
 
             Output.WriteLine($"Translation count: {translations.Count()}");
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
+                if (translation.TranslationOriginatedFrom != "FromTranslationModel")
+                {
+                    Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
+                }
                 Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
             }
+            Output.WriteLine("DONE");
         }
         finally
         {
@@ -330,11 +339,6 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         try
         {
-            FunctionWordTextRowProcessor.Train(parallelTextCorpus);
-
-            parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
-                .Filter<FunctionWordTextRowProcessor>();
-
             var translationCommandable = new TranslationCommands();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(

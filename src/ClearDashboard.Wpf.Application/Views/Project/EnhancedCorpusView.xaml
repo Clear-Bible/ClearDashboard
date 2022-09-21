@@ -99,7 +99,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="20" />
+                            Value="16" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -125,7 +125,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="20" />
+                            Value="14" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -314,7 +314,8 @@
                     ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ShowHeader="True"
                     ShowOffsetControl="True"
-                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </materialDesign:DrawerHost>
 

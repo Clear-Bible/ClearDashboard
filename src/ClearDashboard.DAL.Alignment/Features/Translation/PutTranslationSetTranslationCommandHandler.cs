@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     return new RequestResult<object>
                     (
                         success: false,
-                        message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId}"
+                        message: $"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutPropagate)"
                     );
                 }
 
@@ -138,7 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         return new RequestResult<object>
                         (
                             success: false,
-                            message: $"Unable to find TokenId {request.Translation.SourceToken.TokenId} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId}"
+                            message: $"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutNoPropagate)"
                         );
                     }
                 }
