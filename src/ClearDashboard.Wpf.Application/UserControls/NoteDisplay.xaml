@@ -8,7 +8,10 @@
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="16">
     <Grid>
-     <Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -40,14 +43,14 @@
             <Button Foreground="{DynamicResource MaterialDesignBody}" Margin="5" FontSize="11" Height="25" Click="ApplyNote" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ApplyLabel}"></Button>
             <Button Foreground="{DynamicResource MaterialDesignBody}" Margin="5" FontSize="11" Height="25"  Click="Cancel">Cancel</Button>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <local:LabelsDisplayControl Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabels}" 
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <local:LabelsDisplay Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabels}" 
                                         LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                                         LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
                                         LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
                                         LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
                                         FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"/>
-            <local:LabelSelector Grid.Row="3" VerticalAlignment="Center" 
+            <local:LabelSelector Grid.Row="3" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
                                  LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                                  LabelAdded="OnLabelAdded" LabelSelected="OnLabelSelected"/>
         </StackPanel>
