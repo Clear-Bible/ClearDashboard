@@ -13,114 +13,114 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// A control for displaying a single <see cref="Token"/> alongside a possible <see cref="Translation"/>
     /// and possible note indicator.
     /// </summary>
-    public partial class TokenDisplayControl
+    public partial class TokenDisplay
     {
         #region Static DependencyProperties
 
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplay),
             new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
         
         /// <summary>
         /// Identifies the TokenMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register("TokenMargin", typeof(Thickness), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register("TokenMargin", typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(4d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register("NoteIndicatorMargin", typeof(Thickness), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register("NoteIndicatorMargin", typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the NoteIndicatorHeight dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(3d, OnLayoutChanged));
         
         /// <summary>
         /// Identifies the NoteIndicatorColor dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
         /// Identifies the TranslationMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register("TranslationMargin", typeof(Thickness), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register("TranslationMargin", typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationAlignment dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(TokenDisplay),
             new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(16d));
 
         /// <summary>
         /// Identifies the ShowTranslation dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TokenDisplay),
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register("TranslationVisibility", typeof(Visibility), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register("TranslationVisibility", typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Identifies the ShowNoteIndicator dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TokenDisplay),
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplayControl),
+        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Identifies the SurfaceText dependency property.
         /// </summary>
-        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplayControl));
+        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TargetTranslationText dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register("TargetTranslationText", typeof(string), typeof(TokenDisplayControl));
+        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register("TargetTranslationText", typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationColor dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register("TranslationColor", typeof(Brush), typeof(TokenDisplayControl));
+        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register("TranslationColor", typeof(Brush), typeof(TokenDisplay));
 
         #endregion Static DependencyProperties
         #region Static RoutedEvents
@@ -128,157 +128,157 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
-            ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplayControl));
+            ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         #endregion Static RoutedEvents
         #region Public Events
@@ -525,7 +525,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <param name="args">Event args containing the new value.</param>
         private static void OnLayoutChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            var control = (TokenDisplayControl)obj;
+            var control = (TokenDisplay)obj;
             control.CalculateLayout();
         }
 
@@ -916,7 +916,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             };
         }
 
-        public TokenDisplayControl()
+        public TokenDisplay()
         {
             InitializeComponent();
 
