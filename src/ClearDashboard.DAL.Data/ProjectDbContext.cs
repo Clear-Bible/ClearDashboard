@@ -64,6 +64,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
+        public virtual DbSet<TranslationModelEntry> TranslationModelEntries => Set<TranslationModelEntry>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();

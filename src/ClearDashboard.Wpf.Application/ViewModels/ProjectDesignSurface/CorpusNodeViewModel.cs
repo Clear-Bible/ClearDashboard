@@ -113,6 +113,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             }
         }
 
+        private Guid _corpusId;
+        public Guid CorpusId
+        {
+            get => _corpusId;
+            set
+            {
+                Set(ref _corpusId, value);
+                
+            }
+        }
+
         private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
         public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
         {

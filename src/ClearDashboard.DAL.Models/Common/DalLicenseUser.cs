@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class LicenseUser
+    public class DalLicenseUser
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

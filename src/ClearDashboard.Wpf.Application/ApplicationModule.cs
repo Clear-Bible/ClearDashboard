@@ -35,14 +35,17 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<RegistrationViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("Startup")
+                .WithMetadata("Order", 1);
 
             builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 1); 
+                .WithMetadata("Order", 2); 
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 2); 
+                .WithMetadata("Order", 3); 
         }
 
         public static void RegisterParallelCorpusDialogDependencies(this ContainerBuilder builder)
@@ -52,17 +55,17 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 1); 
 
-            builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-                .WithMetadata("Order", 2);
+            //builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
+            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+            //    .WithMetadata("Order", 2);
 
-            builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-                .WithMetadata("Order", 3);
+            //builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
+            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+            //    .WithMetadata("Order", 3);
 
-            builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-                .WithMetadata("Order", 4);
+            //builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
+            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+            //    .WithMetadata("Order", 4);
 
         }
 

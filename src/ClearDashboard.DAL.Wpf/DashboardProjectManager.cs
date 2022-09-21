@@ -28,6 +28,7 @@ public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
+public record BCVLoadedMessage();
 
 public record ProjectLoadCompleteMessage(bool Loaded);
 
@@ -88,8 +89,6 @@ public class DashboardProjectManager : ProjectManager
         await base.Initialize();
         await ConfigureSignalRClient();
     }
-
-
 
     protected async Task ConfigureSignalRClient()
     {
@@ -231,6 +230,8 @@ public class DashboardProjectManager : ProjectManager
 
         return project;
     }
+    
+    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
 
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
@@ -290,8 +291,7 @@ public class DashboardProjectManager : ProjectManager
         var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
         _licenseCleared = true;
     }
-
-    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    
 
     private static dynamic CreateNewProjectDialogSettings()
     {

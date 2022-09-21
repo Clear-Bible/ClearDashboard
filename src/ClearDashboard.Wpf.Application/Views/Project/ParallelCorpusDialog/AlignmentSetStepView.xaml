@@ -8,12 +8,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cm="http://caliburnmicro.com"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              Background="{DynamicResource MaterialDesignPaper}"
              FlowDirection="{Binding WindowFlowDirection}"
-             FontFamily="{DynamicResource MaterialDesignFont}">
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:AlignmentSetStepViewModel,
+                                     IsDesignTimeCreatable=True}">
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">

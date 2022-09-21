@@ -35,6 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="sourceCorpusId"></param>
         /// <param name="targetCorpusId"></param>
         /// <param name="parallelCorpusId"></param>
+        /// <param name="displayName"></param>
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
@@ -48,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(
                     name: "engineParallelTextCorpus",
                     value: "ParallelCorpus",
-                    message: "ParallelCorpus alreacy created");
+                    message: "ParallelCorpus already created");
             }
 
             if (

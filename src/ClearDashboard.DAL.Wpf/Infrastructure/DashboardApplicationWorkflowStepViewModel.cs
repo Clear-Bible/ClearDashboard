@@ -10,7 +10,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
     where TParentViewModel : class
     {
         protected DashboardProjectManager? ProjectManager { get; }
-        protected TParentViewModel? ParentViewModel => Parent as TParentViewModel;
+        public TParentViewModel? ParentViewModel => Parent as TParentViewModel;
 
         protected DashboardApplicationWorkflowStepViewModel()
         {

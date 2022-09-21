@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 
@@ -20,6 +21,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public ParallelCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time 
+            ParallelCorpus = new ParallelCorpus();
         }
 
         public ParallelCorpusDialogViewModel(DashboardProjectManager? projectManager, INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
@@ -27,6 +29,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             CanOk = true;
             DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger);
+
+            ParallelCorpus = new ParallelCorpus();
+        }
+
+        private ParallelCorpus _parallelCorprus;
+        public ParallelCorpus ParallelCorpus
+        {
+            get => _parallelCorprus;
+            private init => Set(ref _parallelCorprus, value);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)

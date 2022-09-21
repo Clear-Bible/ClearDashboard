@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.Wpf.Application.Models
 {
-    public class LicenseUser : IdentifiableEntity
+    public class AppLicenseUser : IdentifiableEntity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

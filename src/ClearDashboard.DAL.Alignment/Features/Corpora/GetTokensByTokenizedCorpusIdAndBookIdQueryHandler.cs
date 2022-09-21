@@ -71,9 +71,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             .GroupBy(tc => tc.TokenCompositeId)
                             .SelectMany(gc => gc.Key != null
                                 ? new[] {
-                                    new CompositeToken(gc
-                                        .Select(t => ModelHelper.BuildToken(t)))
-                                   }
+                                    ModelHelper.BuildCompositeToken((Guid)gc.Key, gc.Select(t => t))
+                                  }
                                 : gc.Select(t => ModelHelper.BuildToken(t))
                                 ),
                             false)

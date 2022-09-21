@@ -203,6 +203,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
         }
 
         public async Task StartParatext()
@@ -216,19 +217,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
 
-            IsParatextRunning = _paratextProxy.IsParatextRunning();
-            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
-
-            if (!IsParatextInstalled)
-            {
-               // await this.ShowMessageAsync("This is the title", "Some message");
-            }
+           
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
             if (results.Success && results.HasData)
             {
                 DashboardProjects = results.Data;
                 _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+            }
+
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+            if (IsParatextRunning)
+            {
+                Connected = true;
+            }
+            else
+            {
+                Connected = false;
+            }
+            if (!IsParatextInstalled)
+            {
+                // await this.ShowMessageAsync("This is the title", "Some message");
             }
 
             await base.OnActivateAsync(cancellationToken);
