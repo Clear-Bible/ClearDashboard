@@ -24,6 +24,7 @@ using Microsoft.Win32;
 using SIL.Linq;
 using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
+using ClearDashboard.DAL.CQRS;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -137,7 +138,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
-                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
                     return null;
             }
             // Load the most up to date version
@@ -245,8 +246,11 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                     _verseRef = newReference;
 
+                    WebHostStartup.ChangeVerse(newReference);
+
                     try
                     {
+                        AppendText(Color.DarkOrange, $"Sending verse - {_verseRef.BBBCCCVVV.ToString()}");
                         await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
 
                     }
@@ -255,23 +259,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                         AppendText(Color.Red,
                             $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
                     }
-
-
-                    //var textCollections = GetTextCollectionsData();
-
-                    //if (textCollections.Count > 0)
-                    //{
-                    //    try
-                    //    {
-                    //        await HubContext.Clients.All.SendTextCollections(textCollections);
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-                    //        AppendText(Color.Red,
-                    //            $"Unexpected error occurred calling PluginHub.SendTextCollections() : {ex.Message}");
-                    //    }
-                    //}
-
                 }
             }
             catch (Exception ex)

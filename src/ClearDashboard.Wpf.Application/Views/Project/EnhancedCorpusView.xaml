@@ -314,8 +314,8 @@
                     ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ShowHeader="True"
                     ShowOffsetControl="True"
-                    VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </materialDesign:DrawerHost>
 
