@@ -114,8 +114,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _verseOffsetRange;
             set
             {
-                _verseOffsetRange = value;
-                NotifyOfPropertyChange(() => _verseOffsetRange);
+                if (value != _verseOffsetRange)
+                {
+                    _verseOffsetRange = value;
+                    NotifyOfPropertyChange(() => _verseOffsetRange);
+                }
             }
         }
 
