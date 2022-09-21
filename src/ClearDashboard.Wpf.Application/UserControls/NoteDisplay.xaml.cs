@@ -121,9 +121,29 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register("LabelFontSize", typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(11d));
 
+        /// <summary>
+        /// Identifies the AddMode dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register("AddMode", typeof(bool), typeof(NoteDisplay),
+            new PropertyMetadata(false, OnAddModeChanged));
 
         #endregion
         #region Private event handlers
+
+        private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NoteDisplay)obj;
+            control.UpdateControlLayout();
+            control.OnPropertyChanged(nameof(ApplyLabel));
+        }
+
+        private void UpdateControlLayout()
+        {
+            if (AddMode)
+            {
+                IsEditing = true;
+            }
+        }
 
         private void CloseEdit()
         {
@@ -152,6 +172,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            UpdateControlLayout();
         }
 
         private void NoteLabelClick(object sender, MouseButtonEventArgs e)
@@ -212,8 +233,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets whether the control is adding a new note or editing an existing one.
         /// </summary>
-        public bool AddMode { get; set; } = false;
-        
+        public bool AddMode 
+        {
+            get => (bool)GetValue(AddModeProperty);
+            set => SetValue(AddModeProperty, value);
+        }
+
         // TODO: localize
         public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
 
