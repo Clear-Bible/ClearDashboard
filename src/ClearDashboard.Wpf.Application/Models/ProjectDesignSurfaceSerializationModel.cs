@@ -22,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public double Y { get; set; }
         public CorpusType CorpusType = CorpusType.Standard;
         public List<NodeTokenization> NodeTokenizations = new();
+        public Guid CorpusId { get; set; } = Guid.Empty;
     }
 
     public class SerializedConnections
@@ -41,6 +42,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public string CorpusType { get; set; }
         public DateTimeOffset? Created { get; set; }
         public string? UserId { get; set; }
+        public string? UserDisplayName { get; set; }
     }
 
 }

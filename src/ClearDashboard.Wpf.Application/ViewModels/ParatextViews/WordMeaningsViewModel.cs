@@ -4,6 +4,7 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Interfaces;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -28,6 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         //private readonly ILogger _logger;
         //private readonly ProjectManager _projectManager;
+        private readonly DashboardProjectManager? _projectManager;
         private readonly TranslationSource _translationSource;
 
         private string _currentVerse = "";
@@ -66,25 +68,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        private BookChapterVerseViewModel _currentBcv = new();
-        public BookChapterVerseViewModel CurrentBcv
-        {
-            get => _currentBcv;
-            set
-            {
-                _currentBcv = value;
-                NotifyOfPropertyChange(() => CurrentBcv);
+        //private BookChapterVerseViewModel _currentBcv = new();
+        //public BookChapterVerseViewModel CurrentBcv
+        //{
+        //    get => _currentBcv;
+        //    set
+        //    {
+        //        _currentBcv = value;
+        //        NotifyOfPropertyChange(() => CurrentBcv);
 
-                if (_currentBcv.BookNum < 40)
-                {
-                    IsOT = true;
-                }
-                else
-                {
-                    IsOT = false;
-                }
-            }
-        }
+        //        if (_currentBcv.BookNum < 40)
+        //        {
+        //            IsOT = true;
+        //        }
+        //        else
+        //        {
+        //            IsOT = false;
+        //        }
+        //    }
+        //}
 
         private ObservableCollection<MarbleResource> _wordData = new ObservableCollection<MarbleResource>();
         public ObservableCollection<MarbleResource> WordData
@@ -141,6 +143,92 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        #region BCV
+        private bool _paratextSync = false;
+        public bool ParatextSync
+        {
+            get => _paratextSync;
+            set
+            {
+                if (value == true)
+                {
+                    // TODO do we return back the control to what Paratext is showing
+                    // or do we change Paratext to this new verse?  currently set to 
+                    // change Paratext to this new verse
+                    _ = Task.Run(() =>
+                        ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                }
+
+                _paratextSync = value;
+                NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+        private Dictionary<string, string> _bcvDictionary;
+        public Dictionary<string, string> BcvDictionary
+        {
+            get => _bcvDictionary;
+            set
+            {
+                _bcvDictionary = value;
+                NotifyOfPropertyChange(() => BcvDictionary);
+            }
+        }
+
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
+        {
+            get => _currentBcv;
+            set
+            {
+                _currentBcv = value;
+                NotifyOfPropertyChange(() => CurrentBcv);
+            }
+        }
+
+        private int _verseOffsetRange = 0;
+        public int VerseOffsetRange
+        {
+            get => _verseOffsetRange;
+            set
+            {
+                _verseOffsetRange = value;
+                NotifyOfPropertyChange(() => _verseOffsetRange);
+            }
+        }
+
+
+
+        private string _verseChange = string.Empty;
+        public string VerseChange
+        {
+            get => _verseChange;
+            set
+            {
+                if (_verseChange == "")
+                {
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+                else if (_verseChange != value)
+                {
+                    // push to Paratext
+                    if (ParatextSync)
+                    {
+                        _ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    }
+
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+            }
+        }
+
+
+
+        #endregion BCV
+
 
         #endregion //Observable Properties
 
@@ -159,26 +247,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         #region Constructor
         public WordMeaningsViewModel()
         {
-
+            // no-op retained for designer support
         }
 
         public WordMeaningsViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger,
-            DashboardProjectManager projectManager, TranslationSource translationSource,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, TranslationSource translationSource,
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "⌺ " + LocalizationStrings.Get("Windows_WordMeanings", Logger);
             ContentId = "WORDMEANINGS";
-            DockSide = EDockSide.Left;
+            DockSide = EDockSide.Bottom;
 
+            _projectManager = projectManager;
             _translationSource = translationSource;
-
-            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(ShowLogos);
             LaunchSensesCommand = new RelayCommand(ShowSenses);
             GoBackCommand = new RelayCommand(RefreshWords);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+            NotifyOfPropertyChange(() => CurrentBcv);
+            VerseChange = _projectManager.CurrentVerse;
+            
+            base.OnViewAttached(view, context);
         }
 
         protected override async void OnViewReady(object view)

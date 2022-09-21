@@ -11,13 +11,13 @@ using MvvmHelpers;
 using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-//using System.Data.Entity;
+
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Features.Projects;
 
@@ -33,29 +33,20 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        public ProjectDbContextFactory ProjectNameDbContextFactory { get; private set; }
-        public IMediator Mediator { get; private set; }
         public ProjectAssets ProjectAssets { get; set; }
-
-
+        protected ILifetimeScope LifetimeScope { get; private set; }
         public User CurrentUser { get; set; }
-
         public Project CurrentProject { get; set; }
         public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
-
-
+        
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
         public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
-
-
-
         public bool ParatextVisible = false;
         public string ParatextUserName { get; set; } = "";
         private string _currentVerse;
-
         public string CurrentVerse
         {
             get => _currentVerse;
@@ -73,6 +64,16 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
+        private Dictionary<string, string> _bcvDictionary = new();
+        private Dictionary<string, string> BCVDictionary
+        {
+            get => _bcvDictionary;
+            set
+            {
+                _bcvDictionary = value;
+            }
+        }
+
         #endregion
 
         #region Events
@@ -81,13 +82,12 @@ namespace ClearDashboard.DataAccessLayer
 
         #region Startup
 
-        protected ProjectManager(IMediator mediator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory)
+        protected ProjectManager(ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ILifetimeScope lifetimeScope)
         {
             Logger = logger;
-            ProjectNameDbContextFactory = projectNameDbContextFactory;
+            LifetimeScope = lifetimeScope;
             ParatextProxy = paratextProxy;
             Logger.LogInformation("'ProjectManager' ctor called.");
-            Mediator = mediator;
         }
 
 
@@ -251,49 +251,25 @@ namespace ClearDashboard.DataAccessLayer
         {
             CreateDashboardProject();
 
-            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
-            CurrentProject = new Project();
-            CurrentProject.ProjectName = projectName;
-            CurrentProject = await CreateProject(projectName);
-
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            
+            // Seed the IProjectProvider implementation.
+            var projectAssets = await projectDbContextFactory.Get(projectName);
             CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
             CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
-           
-        }
+            
 
-
-        public async Task CreateNewProject(DashboardProject dashboardProject)
-        {
-            try
+            CurrentProject = new Project
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(dashboardProject.ProjectName);
-                projectAssets.ProjectDbContext.Users.Add(CurrentUser);
-                projectAssets.ProjectDbContext.Projects.Add(
-                    new Project() { ProjectName = dashboardProject.ProjectName });
-                await projectAssets.ProjectDbContext.SaveChangesAsync();
+                ProjectName = projectName
+            };
+            CurrentProject = await CreateProject(projectName);
 
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex.Message);
-            }
-            // Populate Project table
-            // Identify relationships
-            //   1. Create ParallelCorpus per green line, which includes Corpus, getting back ParallelCorpusId and CorpaIds
-            //   2.Manuscript to target (use ToDb.ManuscriptParatextParallelCorporaToDb)
-            //      a. Get manuscript from Clear.Engine (SourceCorpus)
-            //      b. Get Target from Paratext (TargetCorpus)
-            //      c. Parallelize 
-            //
-            //      d.  Insert results into 
-
-            //dashboardProject.TargetProject.
         }
 
         public void Dispose()
         {
-
+            LifetimeScope.Dispose();
         }
 
 
@@ -303,49 +279,53 @@ namespace ClearDashboard.DataAccessLayer
 
         public Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            return Mediator.Send(request, cancellationToken);
+            var mediator = LifetimeScope.Resolve<IMediator>();
+            return mediator.Send(request, cancellationToken);
         }
         #endregion
-
-
+        
         public Task<IEnumerable<Project>> GetAllProjects()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Corpus>> LoadProject(string projectName)
+        public async Task<Project> LoadProject(string projectName)
         {
-            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
-
-            return result.Data;
-        }
-
-        public async Task LoadProjectFromDatabase(string projectName)
-        {
-            var projectAssets = await ProjectNameDbContextFactory.Get(projectName);
-
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            
+            var projectAssets = await projectDbContextFactory.Get(projectName, true);
             CurrentProject = projectAssets.ProjectDbContext.Projects.First();
+           
+
+            return CurrentProject;
         }
 
         public async Task<Project> DeleteProject(string projectName)
         {
             var result = await ExecuteRequest(new DeleteProjectCommand(projectName), CancellationToken.None);
-
             return result.Data;
-
         }
 
         public async Task<Project> CreateProject(string projectName)
         {
-            var result = await ExecuteRequest(new CreateProjectCommand(projectName), CancellationToken.None);
-
-            return result.Data;
+            var result = await ExecuteRequest(new CreateProjectCommand(projectName, CurrentUser ), CancellationToken.None);
+            if (result.Success)
+            {
+                return result.Data;
+            }
+            else
+            {
+                var message = $"Could not create a project: {result.Message}";
+                Logger.LogError(message);
+                throw new ApplicationException(message);
+            }
+            
         }
-
 
         public async Task UpdateProject(Project project)
         {
-            var projectAssets = await ProjectNameDbContextFactory.Get(project.ProjectName);
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            var projectAssets = await projectDbContextFactory.Get(project.ProjectName);
 
             Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
             projectAssets.ProjectDbContext.Attach(project);

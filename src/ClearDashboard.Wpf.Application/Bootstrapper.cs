@@ -31,11 +31,6 @@ namespace ClearDashboard.Wpf.Application
             base.PreInitialize();
         }
 
-        protected void ConfigureServices(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddLocalization();
-        }
-
         protected override void PostInitialize()
         {
             LogDependencyInjectionRegistrations();
@@ -71,10 +66,8 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddClearDashboardDataAccessLayer();
-            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
-            //serviceCollection.AddLocalization();
-
+            serviceCollection.AddClearDashboardDataAccessLayer(registerDatabaseAbstractions:false);
+            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>(); 
             base.PopulateServiceCollection(serviceCollection);
         }
 

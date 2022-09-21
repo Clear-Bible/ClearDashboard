@@ -32,8 +32,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// </summary>
         private string _name = string.Empty;
 
-        private readonly IEventAggregator _eventAggregator;
-        private readonly DashboardProjectManager _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
+        private readonly DashboardProjectManager? _projectManager;
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -82,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         {
         }
 
-        public CorpusNodeViewModel(string name, IEventAggregator eventAggregator, DashboardProjectManager projectManager)
+        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager)
         {
             _name = name;
             _eventAggregator = eventAggregator;
@@ -110,6 +110,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
             {
                 _id = value;
                 NotifyOfPropertyChange(() => Id);
+            }
+        }
+
+        private Guid _corpusId;
+        public Guid CorpusId
+        {
+            get => _corpusId;
+            set
+            {
+                Set(ref _corpusId, value);
+                
             }
         }
 
@@ -212,7 +223,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         /// of the nodes data-template.  It then pushes the size through to the view-model
         /// and this 'SizeChanged' event occurs.
         /// </summary>
-        public event EventHandler<EventArgs> SizeChanged;
+        public event EventHandler<EventArgs>? SizeChanged;
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.

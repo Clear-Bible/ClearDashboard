@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -19,11 +10,19 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using ClearDashboard.Wpf.Application.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -31,7 +30,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
-        IHandle<ProjectChangedMessage>
+        IHandle<ProjectChangedMessage>,
+        IHandle<BCVLoadedMessage>
     {
 
         #region Member Variables
@@ -49,13 +49,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         
         private bool InComingChangesStarted { get; set; }
 
-        public string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
+        private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
+
+        public List<TokenProject> _tokenProjects = new();
+
+        
         #endregion //Member Variables
 
         #region Public Properties
 
-        public string ContentID => this.ContentID;
+        private string ContentID => this.ContentID;
 
         public bool IsRtl { get; set; }
 
@@ -68,20 +72,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _paratextSync;
             set
             {
+                if (value == true)
+                {
+                    // update Paratext with the verseId
+                    //_ = Task.Run(() =>
+                    //    ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+
+                    // update this window with the Paratext verse
+                    CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+
+                    //TODO regenerate the verses to display
+                    
+                }
+
                 _paratextSync = value;
                 NotifyOfPropertyChange(() => ParatextSync);
             }
         }
 
         private Dictionary<string, string> _bcvDictionary;
-
-        private Dictionary<string, string> BCVDictionary
+        public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
             set
             {
                 _bcvDictionary = value;
-                NotifyOfPropertyChange(() => BCVDictionary);
+                NotifyOfPropertyChange(() => BcvDictionary);
             }
         }
 
@@ -96,57 +112,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private int _verseRange = 1;
-        public int VerseRange
+        private int _verseOffsetRange = 0;
+        public int VerseOffsetRange
         {
-            get => _verseRange;
+            get => _verseOffsetRange;
             set
             {
-                _verseRange = value;
-                NotifyOfPropertyChange(() => _verseRange);
+                if (value != _verseOffsetRange)
+                {
+                    _verseOffsetRange = value;
+                    NotifyOfPropertyChange(() => _verseOffsetRange);
+                }
             }
         }
-
-
-
-
-        public string? TokenizationType
-        {
-            get => _tokenizationType;
-            set => Set(ref _tokenizationType, value);
-        }
-
-        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
-        {
-            get => _currentTokenizedTextCorpus;
-            set => Set(ref _currentTokenizedTextCorpus, value);
-        }
-
-        public Visibility? ProgressBarVisibility
-        {
-            get => _progressBarVisibility;
-            set
-            {
-                _progressBarVisibility = value;
-                NotifyOfPropertyChange(() => ProgressBarVisibility);
-            }
-        }
-
-
-
-        public ObservableCollection<TokensTextRow>? Verses
-        {
-            get => _verses;
-            set => Set(ref _verses, value);
-        }
-
-
-        public string? Message
-        {
-            get => _message;
-            set => Set(ref _message, value);
-        }
-
 
 
         public BookInfo? CurrentBook
@@ -158,6 +136,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 NotifyOfPropertyChange<string>(() => CurrentBookDisplay);
             }
         }
+
+        private string _verseChange = string.Empty;
+        public string VerseChange
+        {
+            get => _verseChange;
+            set
+            {
+                if (_verseChange == "")
+                {
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+                else if (_verseChange != value)
+                {
+                    // push to Paratext
+                    if (ParatextSync)
+                    {
+                        _ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    }
+
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+            }
+        }   
+
 
 
         #endregion BCV
@@ -185,8 +190,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public string? TokenizationType
+        {
+            get => _tokenizationType;
+            set => Set(ref _tokenizationType, value);
+        }
+
+        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
+        {
+            get => _currentTokenizedTextCorpus;
+            set => Set(ref _currentTokenizedTextCorpus, value);
+        }
+
+        public Visibility? ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+        public ObservableCollection<TokensTextRow>? Verses
+        {
+            get => _verses;
+            set => Set(ref _verses, value);
+        }
+
+        public string? Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
         #endregion //Observable Properties
 
+        
         #region Constructor
 
         public EnhancedCorpusViewModel()
@@ -195,7 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             _logger = logger;
@@ -204,7 +244,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
             this.ContentId = "ENHANCEDCORPUS";
 
-            BcvInit(_projectManager.CurrentParatextProject.Guid);
+            //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
         }
 
@@ -215,6 +255,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Verses = new ObservableCollection<TokensTextRow>();
             return base.OnInitializeAsync(cancellationToken);
         }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+            NotifyOfPropertyChange(() => CurrentBcv);
+            VerseChange = _projectManager.CurrentVerse;
+
+            base.OnViewAttached(view, context);
+        }
+
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
@@ -244,162 +295,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
         }
 
-        private async void BcvInit(string paratextProjectId = "")
-        {
-
-            var result = await ProjectManager.Mediator.Send(new GetBcvDictionariesQuery(paratextProjectId));
-            if (result.Success)
-            {
-                BCVDictionary = result.Data;
-            }
-            else
-            {
-                BCVDictionary = new Dictionary<string, string>();
-            }
-
-            InComingChangesStarted = true;
-
-            // set the CurrentBcv prior to listening to the event
-            CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
-
-            CalculateBooks();
-            CalculateChapters();
-            CalculateVerses();
-            InComingChangesStarted = false;
-
-            // Subscribe to changes of the Book Chapter Verse data object.
-            CurrentBcv.PropertyChanged += BcvChanged;
-        }
-
-        private void BcvChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (ParatextSync && InComingChangesStarted == false)
-            {
-                string verseId;
-                bool somethingChanged = false;
-                if (e.PropertyName == "BookNum")
-                {
-                    // book switch so find the first chapter and verse for that book
-                    verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
-
-                        CalculateChapters();
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Chapter")
-                {
-                    // ReSharper disable once InconsistentNaming
-                    var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
-
-                    // chapter switch so find the first verse for that book and chapter
-                    verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
-
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Verse")
-                {
-                    InComingChangesStarted = true;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-                    InComingChangesStarted = false;
-                    somethingChanged = true;
-                }
-
-                if (somethingChanged)
-                {
-                    // send to the event aggregator for everyone else to hear about a verse change
-                    EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
-
-                    // push to Paratext
-                    if (ParatextSync)
-                    {
-                        _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-                    }
-                }
-
-            }
-        }
-
-        private void CalculateBooks()
-        {
-            CurrentBcv.BibleBookList?.Clear();
-
-            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                .Select(g => g.First())
-                .ToList();
-
-            foreach (var book in books)
-            {
-                var bookId = book.Substring(0, 3);
-
-                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
-                CurrentBcv.BibleBookList?.Add(bookName);
-            }
-
-        }
-
-        private void CalculateChapters()
-        {
-            // CHAPTERS
-            var bookId = CurrentBcv.Book;
-            var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-            for (int i = 0; i < chapters.Count; i++)
-            {
-                chapters[i] = chapters[i].Substring(3, 3);
-            }
-
-            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> chapterNumbers = new List<int>();
-                foreach (var chapter in chapters)
-                {
-                    chapterNumbers.Add(Convert.ToInt16(chapter));
-                }
-
-                CurrentBcv.ChapterNumbers = chapterNumbers;
-            });
-        }
-
-        private void CalculateVerses()
-        {
-            // VERSES
-            var bookId = CurrentBcv.Book;
-            var chapId = CurrentBcv.ChapterIdText;
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
-
-            for (int i = 0; i < verses.Count; i++)
-            {
-                verses[i] = verses[i].Substring(6);
-            }
-
-            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> verseNumbers = new List<int>();
-                foreach (var verse in verses)
-                {
-                    verseNumbers.Add(Convert.ToInt16(verse));
-                }
-
-                CurrentBcv.VerseNumbers = verseNumbers;
-            });
-        }
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
@@ -416,8 +311,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
-                CalculateChapters();
-                CalculateVerses();
+                //CalculateChapters();
+                //CalculateVerses();
                 InComingChangesStarted = false;
             }
 
@@ -431,32 +326,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-
-                //BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                 InComingChangesStarted = true;
-
-                // add in the books to the dropdown list
-                CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-
-                CalculateChapters();
-                CalculateVerses();
 
                 NotifyOfPropertyChange(() => CurrentBcv);
                 InComingChangesStarted = false;
             }
             else
             {
-                BCVDictionary = new Dictionary<string, string>();
+                BcvDictionary = new Dictionary<string, string>();
             }
-
-            return;
         }
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
+            // we don't want this as it was for demonstration
+            
+            return;
+
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -548,12 +437,267 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            BcvInit(message.ParatextProjectId);
-
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
+            
+            ProgressBarVisibility = Visibility.Visible;
+
+            TokenProject? project = null;
+            // check if we have this already
+            try
+            {
+                if (_tokenProjects.Count > 0)
+                {
+                    project = _tokenProjects.First(p =>
+                    {
+                        return p.ParatextProjectId == message.ParatextProjectId
+                               && p.TokenizationType == message.TokenizationType;
+                    }) ?? null;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+            
+            // existing project
+            if (project is not null)
+            {
+                await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        var metadata = project.Metadata;
+
+                        CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
+                        TokenizationType = project.TokenizationType;
+                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Getting book '{CurrentBook?.Code}'...",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Working
+                            }), cancellationToken);
+
+                        // get the rows for the current book and chapter
+                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                            .ToList();
+
+
+                        // get the row for the current verse
+                        int index = 0;
+                        for (int i = 0; i < tokensTextRows.Count; i++)
+                        {
+                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                            {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        var lowEnd = index - VerseOffsetRange;
+                        if (lowEnd < 0)
+                            lowEnd = 0;
+
+                        var upperEnd = index + VerseOffsetRange;
+
+                        // filter down to only these verses
+                        var offset = upperEnd - lowEnd + 1;
+                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
+
+                        OnUIThread(() =>
+                        {
+                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                            ProgressBarVisibility = Visibility.Collapsed;
+                        });
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Completed
+                            }), cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!localCancellationToken.IsCancellationRequested)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                new BackgroundTaskStatus
+                                {
+                                    Name = "Fetch Book",
+                                    EndTime = DateTime.Now,
+                                    ErrorMessage = $"{ex}",
+                                    TaskStatus = StatusEnum.Error
+                                }), cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _handleAsyncRunning = false;
+                        _cancellationTokenSource.Dispose();
+                    }
+                }, cancellationToken);
+            }
+            else
+            {
+                // current project
+                await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        ParatextProjectMetadata metadata;
+
+                        if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
+                        {
+                            // our fake Manuscript corpus
+                            var bookInfo = new BookInfo();
+                            var books = bookInfo.GenerateScriptureBookList();
+
+                            metadata = new ParatextProjectMetadata
+                            {
+                                Id = _projectManager.ManuscriptGuid.ToString(),
+                                CorpusType = CorpusType.Manuscript,
+                                Name = "Manuscript",
+                                AvailableBooks = books,
+                            };
+
+                        }
+                        else
+                        {
+                            // regular Paratext corpus
+                            var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                            if (result.Success && result.HasData)
+                            {
+                                metadata = result.Data.FirstOrDefault(b =>
+                                               b.Id == message.ParatextProjectId.Replace("-", "")) ??
+                                           throw new InvalidOperationException();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException(result.Message);
+                            }
+
+                        }
+
+                        CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+
+                        TokenizationType = message.TokenizationType;
+
+                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+
+                        // add this corpus to our master list
+                        _tokenProjects.Add(new TokenProject
+                        {
+                            ParatextProjectId = message.ParatextProjectId,
+                            ProjectName = message.ProjectName,
+                            TokenizationType = message.TokenizationType,
+                            CorpusId = message.CorpusId,
+                            TokenizedTextCorpusId = message.TokenizedTextCorpusId,
+                            Metadata = metadata,
+                            TokenizedTextCorpus = CurrentTokenizedTextCorpus,
+                        });
+
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Getting book '{CurrentBook?.Code}'...",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Working
+                            }), cancellationToken);
+
+                        // get the rows for the current book and chapter
+                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                            .ToList();
+
+
+                        // get the row for the current verse
+                        int index = 0;
+                        for (int i = 0; i < tokensTextRows.Count; i++)
+                        {
+                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                            {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        var lowEnd = index - VerseOffsetRange;
+                        if (lowEnd < 0)
+                            lowEnd = 0;
+
+                        var upperEnd = index + VerseOffsetRange;
+
+                        // filter down to only these verses
+                        var offset = upperEnd - lowEnd + 1;
+                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
+
+                        OnUIThread(() =>
+                        {
+                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                            ProgressBarVisibility = Visibility.Collapsed;
+                        });
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Completed
+                            }), cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!localCancellationToken.IsCancellationRequested)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                new BackgroundTaskStatus
+                                {
+                                    Name = "Fetch Book",
+                                    EndTime = DateTime.Now,
+                                    ErrorMessage = $"{ex}",
+                                    TaskStatus = StatusEnum.Error
+                                }), cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _handleAsyncRunning = false;
+                        _cancellationTokenSource.Dispose();
+                    }
+                }, cancellationToken);
+            }
+
+
 
             ProgressBarVisibility = Visibility.Visible;
 
@@ -584,7 +728,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
                         if (result.Success && result.HasData)
                         {
-                            metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", "")) ?? throw new InvalidOperationException();
+                            metadata = result.Data.FirstOrDefault(b =>
+                                           b.Id == message.ParatextProjectId.Replace("-", "")) ??
+                                       throw new InvalidOperationException();
                         }
                         else
                         {
@@ -593,11 +739,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     }
 
-                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(_projectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
 
                     TokenizationType = message.TokenizationType;
 
-                    CurrentBook = metadata?.AvailableBooks.First();
+                    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
@@ -608,21 +754,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TaskStatus = StatusEnum.Working
                         }), cancellationToken);
 
-                    var tokensTextRows =
-                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBook?.Number) > 0)
-                            .ToList();
+                    // get the rows for the current book and chapter
+                    var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                        .GetRows()
+                        .WithCancellation(localCancellationToken)
+                        .Cast<TokensTextRow>()
+                        .Where(ttr => ttr
+                            .Tokens
+                            .Count(t => t
+                                .TokenId
+                                .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                        .ToList();
+
+
+                    // get the row for the current verse
+                    int index = 0;
+                    for (int i = 0; i < tokensTextRows.Count; i++)
+                    {
+                        var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                        if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                        {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    var lowEnd = index - VerseOffsetRange;
+                    if (lowEnd < 0)
+                        lowEnd = 0;
+
+                    var upperEnd = index + VerseOffsetRange;
+
+                    // filter down to only these verses
+                    var offset = upperEnd - lowEnd + 1;
+                    var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -657,6 +828,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+        public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
+        {
+            this.BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+
+            return Task.CompletedTask;
+        }
 
 
         #endregion // Methods
@@ -816,6 +993,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper restore UnusedMember.Global
 
         #endregion
+
+
     }
 
 

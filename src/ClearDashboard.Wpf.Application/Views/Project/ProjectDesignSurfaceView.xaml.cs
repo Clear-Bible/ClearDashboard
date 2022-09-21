@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void OnProjectDesignSurfaceConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
         {
-            if (ViewModel.AddCorpusEnabled == false)
+            if (ViewModel.IsBusy)
             {
                 return;
             }

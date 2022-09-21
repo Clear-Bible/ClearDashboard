@@ -35,11 +35,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="sourceCorpusId"></param>
         /// <param name="targetCorpusId"></param>
         /// <param name="parallelCorpusId"></param>
+        /// <param name="displayName"></param>
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<ParallelCorpus> Create(
             this EngineParallelTextCorpus engineParallelTextCorpus,
+            string displayName,
             IMediator mediator)
         {
             if (engineParallelTextCorpus.GetType() == typeof(ParallelCorpus))
@@ -47,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(
                     name: "engineParallelTextCorpus",
                     value: "ParallelCorpus",
-                    message: "ParallelCorpus alreacy created");
+                    message: "ParallelCorpus already created");
             }
 
             if (
@@ -64,7 +66,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId,
-                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null")));
+                engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                displayName));
 
             if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
             {

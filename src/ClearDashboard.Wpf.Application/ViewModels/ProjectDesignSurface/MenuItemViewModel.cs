@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 
@@ -53,6 +54,13 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
     {
         get => _header;
         set => Set(ref _header, value);
+    }
+
+    private ProjectDesignSurfaceViewModel? _projectDesignSurfaceViewModel;
+    public ProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
+    {
+        get => _projectDesignSurfaceViewModel;
+        set => Set(ref _projectDesignSurfaceViewModel, value);
     }
 
     public ObservableCollection<TMenuItemViewModel>? MenuItems { get; set; }

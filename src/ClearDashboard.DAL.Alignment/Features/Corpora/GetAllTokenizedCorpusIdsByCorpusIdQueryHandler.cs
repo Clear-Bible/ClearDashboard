@@ -3,6 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
@@ -25,6 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             
             var tokenizedCorpusIds = ProjectDbContext.TokenizedCorpora
+                .Include(tc => tc.User)
                 .Where(tc => tc.CorpusId == request.CorpusId.Id)
                 .Select(tc => ModelHelper.BuildTokenizedTextCorpusId(tc))
                 .AsEnumerable();

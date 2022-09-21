@@ -6,15 +6,38 @@
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.ParallelCorpusDialog"
              xmlns:cm="http://caliburnmicro.com"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FlowDirection="{Binding WindowFlowDirection}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:TranslationSetStepViewModel,
+                                     IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+
+        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="20,10" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        <Label Content="TranslationSet" />
 
         <StackPanel
             Grid.Row="2"
@@ -32,8 +55,8 @@
                 Style="{StaticResource TransparentStyle}">
             </Button>
             <Button
-                x:Name="Create"
-                Content="{helpers:Localization Create}" 
+                x:Name="MoveForwards"
+                Content="{helpers:Localization Next}" 
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>

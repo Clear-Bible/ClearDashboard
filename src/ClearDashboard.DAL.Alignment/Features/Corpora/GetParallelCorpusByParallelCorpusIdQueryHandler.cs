@@ -42,12 +42,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var parallelCorpus =
                 ProjectDbContext.ParallelCorpa
+                    .Include(pc => pc.User)
                     .Include(pc => pc.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
                     .Include(pc => pc.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
                     .Include(pc => pc.VerseMappings)
-                    .ThenInclude(vm => vm.Verses)
-                    .ThenInclude(v => v.TokenVerseAssociations)
-                    .ThenInclude(tva => tva.TokenComponent)
+                        .ThenInclude(vm => vm.Verses)
+                            .ThenInclude(v => v.TokenVerseAssociations)
+                                .ThenInclude(tva => tva.TokenComponent)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";

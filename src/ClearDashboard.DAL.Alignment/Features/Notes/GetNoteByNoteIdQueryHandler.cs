@@ -1,10 +1,11 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
@@ -30,7 +31,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            var note = ProjectDbContext.Notes.FirstOrDefault(pc => pc.Id == request.NoteId.Id);
+            var note = ProjectDbContext.Notes
+                .Include(n => n.NoteDomainEntityAssociations)
+                .Include(n => n.LabelNoteAssociations)
+                    .ThenInclude(ln => ln.Label)
+                .Include(n => n.User)
+                .FirstOrDefault(pc => pc.Id == request.NoteId.Id);
             if (note == null)
             {
                 return new RequestResult<Note>
@@ -43,14 +49,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             return new RequestResult<Note>
             (
                 new Note(
-                    _mediator,
                     new NoteId(
                         note.Id,
                         note.Created,
                         note.Modified,
-                        new UserId(note.UserId)),
+                        ModelHelper.BuildUserId(note.User!)),
                     note.Text!,
-                    note.AbbreviatedText)
+                    note.AbbreviatedText,
+                    note.LabelNoteAssociations.Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
+                    note.NoteDomainEntityAssociations
+                            .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet())
             );
         }
     }

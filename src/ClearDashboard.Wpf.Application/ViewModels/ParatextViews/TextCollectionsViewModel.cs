@@ -15,6 +15,9 @@ using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using Autofac;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels
 {
@@ -22,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
     public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>,
         IHandle<VerseChangedMessage>
     {
+        private readonly DashboardProjectManager? _projectManager;
 
         #region Member Variables
 
@@ -49,6 +53,92 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
 
+        #region BCV
+        private bool _paratextSync = false;
+        public bool ParatextSync
+        {
+            get => _paratextSync;
+            set
+            {
+                if (value == true)
+                {
+                    // TODO do we return back the control to what Paratext is showing
+                    // or do we change Paratext to this new verse?  currently set to 
+                    // change Paratext to this new verse
+                    _ = Task.Run(() =>
+                        ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                }
+
+                _paratextSync = value;
+                NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+        private Dictionary<string, string> _bcvDictionary;
+        public Dictionary<string, string> BcvDictionary
+        {
+            get => _bcvDictionary;
+            set
+            {
+                _bcvDictionary = value;
+                NotifyOfPropertyChange(() => BcvDictionary);
+            }
+        }
+
+        private BookChapterVerseViewModel _currentBcv = new();
+        public BookChapterVerseViewModel CurrentBcv
+        {
+            get => _currentBcv;
+            set
+            {
+                _currentBcv = value;
+                NotifyOfPropertyChange(() => CurrentBcv);
+            }
+        }
+
+        private int _verseOffsetRange = 0;
+        public int VerseOffsetRange
+        {
+            get => _verseOffsetRange;
+            set
+            {
+                _verseOffsetRange = value;
+                NotifyOfPropertyChange(() => _verseOffsetRange);
+            }
+        }
+
+
+
+        private string _verseChange = string.Empty;
+        public string VerseChange
+        {
+            get => _verseChange;
+            set
+            {
+                if (_verseChange == "")
+                {
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+                else if (_verseChange != value)
+                {
+                    // push to Paratext
+                    if (ParatextSync)
+                    {
+                        _ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    }
+
+                    _verseChange = value;
+                    NotifyOfPropertyChange(() => VerseChange);
+                }
+            }
+        }
+
+
+
+        #endregion BCV
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -59,15 +149,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
         public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
             navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
+            _projectManager = projectManager;
             Title = "🗐 " + LocalizationStrings.Get("Windows_TextCollection", Logger);
             this.ContentId = "TEXTCOLLECTION";
         }
 
         protected override async void OnViewAttached(object view, object context)
         {
+            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+            NotifyOfPropertyChange(() => CurrentBcv);
+            VerseChange = _projectManager.CurrentVerse;
+
+
             await CallGetTextCollections().ConfigureAwait(false);
             base.OnViewAttached(view, context);
         }
@@ -129,11 +226,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            if (_currentVerse != message.Verse.PadLeft(9, '0'))
+            var incomingVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse == incomingVerse)
             {
-                _currentVerse = message.Verse.PadLeft(9, '0');
-                await CallGetTextCollections().ConfigureAwait(false);
+                return;
             }
+
+            _currentVerse = incomingVerse;
+            CurrentBcv.SetVerseFromId(_currentVerse);
+
+            await CallGetTextCollections().ConfigureAwait(false);
         }
 
         #endregion // Methods

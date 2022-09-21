@@ -64,6 +64,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
+        public virtual DbSet<TranslationModelEntry> TranslationModelEntries => Set<TranslationModelEntry>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
@@ -76,7 +77,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite($"Filename={DatabasePath}");
+                optionsBuilder.UseSqlite($"DataSource={DatabasePath};Pooling=true;Mode=ReadWriteCreate");
+                //optionsBuilder.UseSqlite($"Filename={DatabasePath}");
             }
 
             optionsBuilder.AddInterceptors(_sqliteDatabaseConnectionInterceptor);
@@ -89,14 +91,20 @@ namespace ClearDashboard.DataAccessLayer.Data
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
-                //_logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
+                _logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
                 if ( (await Database.GetPendingMigrationsAsync()).Any())
                 {
+                    _logger?.LogInformation("Migration required, migrating...");
                     await Database.MigrateAsync();
+                    //await Database.CloseConnectionAsync();
 
                     await EnsureMigrated();
                 }
+
+                _logger?.LogInformation("Check to migrate database complete");
+
+
             }
             catch (Exception ex)
             {

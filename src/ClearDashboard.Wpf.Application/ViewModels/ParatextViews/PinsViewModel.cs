@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
-        private readonly DashboardProjectManager _projectManager;
+        private readonly DashboardProjectManager? _projectManager;
         private readonly IMediator _mediator;
 
         private ObservableList<PinsDataTable> GridData { get; } = new();
@@ -134,7 +134,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         // ReSharper disable once UnusedMember.Global
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger,
-            DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);

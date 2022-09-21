@@ -4,13 +4,13 @@ using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.Bcv;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Corpus;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
@@ -19,7 +19,6 @@ using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +29,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -40,20 +43,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<ShowTokenizationWindowMessage>,
-                IHandle<UiLanguageChangedMessage>
+                IHandle<UiLanguageChangedMessage>,
+                IHandle<ActiveDocumentMessage>
     {
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
         private ILogger<MainViewModel> Logger { get; }
-        private INavigationService NavigationService { get; }
-        private DashboardProject DashboardProject { get; }
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceView _projectDesignSurfaceControl = null;
-        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel = null;
+        private ProjectDesignSurfaceView _projectDesignSurfaceControl;
+        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -74,34 +76,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
 
-        public event EventHandler ActiveDocumentChanged;
-
-        private DocumentViewModel _activeDocument;
-        public DocumentViewModel ActiveDocument
-        {
-            get => _activeDocument;
-            set
-            {
-                if (_activeDocument != value)
-                {
-                    _activeDocument = value;
-                    NotifyOfPropertyChange(() => MenuItems);
-                    ActiveDocumentChanged(this, EventArgs.Empty);
-                }
-            }
-        }
-
-        public bool IsRtl { get; set; }
-
         private bool InComingChangesStarted { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
         {
             get => _isBusy;
-            set => Set(ref _isBusy, value, nameof(IsBusy));
+            set => Set(ref _isBusy, value);
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
         #endregion //Public Properties
 
@@ -143,20 +128,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
 
-
-        //private ObservableCollection<int> _verseNumbers = new();
-        //public ObservableCollection<int> VerseNumbers
-        //{
-        //    get => _verseNumbers;
-        //    set
-        //    {
-        //        _verseNumbers = value;
-        //        NotifyOfPropertyChange(() => VerseNumbers);
-        //    }
-        //}
-
         private Dictionary<string, string> _bcvDictionary;
-
         private Dictionary<string, string> BCVDictionary
         {
             get => _bcvDictionary;
@@ -167,28 +139,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        //private ObservableCollection<string> _bookNames = new();
-        //public ObservableCollection<string> BookNames
-        //{
-        //    get => _bookNames;
-        //    set
-        //    {
-        //        _bookNames = value;
-        //        NotifyOfPropertyChange(() => BookNames);
-        //    }
-        //}
-
-
-        //private string _verseRef;
-        //public string VerseRef
-        //{
-        //    get => _verseRef;
-        //    set
-        //    {
-        //        _verseRef = value;
-        //        NotifyOfPropertyChange(() => VerseRef);
-        //    }
-        //}
 
         private string _windowIdToLoad;
         public string WindowIdToLoad
@@ -216,7 +166,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "NewID")
                 {
+#pragma warning disable CS4014
                     StartDashboardAsync();
+#pragma warning restore CS4014
                 }
                 else
                 {
@@ -225,44 +177,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case "LayoutID":
                             Console.WriteLine();
                             break;
-                        case "AlignmentToolID":
-                            _windowIdToLoad = "ALIGNMENTTOOL";
-                            break;
                         case "BiblicalTermsID":
                             _windowIdToLoad = "BIBLICALTERMS";
-                            break;
-                        case "ConcordanceToolID":
-                            _windowIdToLoad = "CONCORDANCETOOL";
-                            break;
-                        case "CorpusTokensID":
-                            _windowIdToLoad = "CORPUSTOKENS";
-                            break;
-                        case "DashboardID":
-                            _windowIdToLoad = "DASHBOARD";
                             break;
                         case "EnhancedCorpusID":
                             _windowIdToLoad = "ENHANCEDCORPUS";
                             break;
-                        case "NotesID":
-                            _windowIdToLoad = "NOTES";
-                            break;
                         case "PINSID":
                             _windowIdToLoad = "PINS";
                             break;
-                        //case "ProjectDesignSurfaceID":
-                        //    _windowIdToLoad = "PROJECTDESIGNSURFACETOOL";
-                        //    break;
                         case "WordMeaningsID":
                             _windowIdToLoad = "WORDMEANINGS";
-                            break;
-                        case "SourceContextID":
-                            _windowIdToLoad = "SOURCECONTEXT";
-                            break;
-                        case "StartPageID":
-                            _windowIdToLoad = "STARTPAGE";
-                            break;
-                        case "TargetContextID":
-                            _windowIdToLoad = "TARGETCONTEXT";
                             break;
                         case "TextCollectionID":
                             _windowIdToLoad = "TEXTCOLLECTION";
@@ -280,19 +205,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        public async Task<Process> StartDashboardAsync(int secondsToWait = 10)
+        private async Task StartDashboardAsync(int secondsToWait = 10)
         {
-            var dashboard = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
-            Process process = null;
-            
+            _ = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
+
             Logger.LogInformation("Opening a new instance of Dashboard.");
-            process = await InternalStartDashboardAsync();
+            _ = await InternalStartDashboardAsync();
 
 
             Logger.LogInformation($"Waiting {secondsToWait} seconds for Dashboard to completely start");
             await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
-            
-            return process;
         }
 
         private async Task<Process> InternalStartDashboardAsync()
@@ -372,7 +294,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set
             {
                 _selectedLayout = value;
-                NotifyOfPropertyChange(nameof(SelectedLayout));
+                NotifyOfPropertyChange(() => SelectedLayout);
             }
         }
 
@@ -391,7 +313,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public FlowDirection WindowFlowDirection
         {
             get => _windowFlowDirection;
-            init => Set(ref _windowFlowDirection, value, nameof(WindowFlowDirection));
+            init => Set(ref _windowFlowDirection, value);
         }
 
         private bool _showProgressBar;
@@ -418,19 +340,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedMember.Global
         public MainViewModel()
         {
-
+            // no-op for design time support
         }
 
 
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(INavigationService navigationService,
-            ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
+        public MainViewModel(ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
 
         {
             EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
-            NavigationService = navigationService;
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
 
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -497,7 +417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (Parameter != null)
             {
-               
+
                 Logger.LogInformation($"Received {Parameter.ProjectName}.");
                 if (Parameter.IsNew)
                 {
@@ -505,7 +425,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else
                 {
-                    await ProjectManager.LoadProjectFromDatabase(Parameter.ProjectName);
+                    await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
             }
 
@@ -520,11 +440,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
 
             base.OnViewLoaded(view);
-        }
-
-        protected override async void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
         }
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -542,9 +457,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             //we need to cancel running background processes
             //check a bool to see if it already cancelled or already completed
-            if (_projectDesignSurfaceViewModel.AddParatextCorpusRunning)
+            if (_projectDesignSurfaceViewModel.LongProcessRunning)
             {
 #pragma warning disable CS8602
+                // ReSharper disable once PossibleNullReferenceException
                 _projectDesignSurfaceViewModel.CancellationTokenSource.Cancel();
 #pragma warning restore CS8602
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -574,22 +490,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
                 _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
-                
+
+                // subscribe to the event aggregator
+                //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
             Init();
-            //await Task.Run(() =>
-            //{
-            //    OnUIThread(Init);
-            //});
-           
         }
 
         private async void Init()
         {
             RebuildMenu();
-
 
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
@@ -599,25 +511,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // force a load to happen as it is getting swallowed up elsewhere
             _projectDesignSurfaceViewModel.LoadCanvas();
 
-
-
             Items.Clear();
+
             // documents
-            await ActivateItemAsync<AlignmentToolViewModel>();
-            //await ActivateItemAsync<ConcordanceViewModel>();
-            await ActivateItemAsync<CorpusTokensViewModel>();
-            await ActivateItemAsync<DashboardViewModel>();
-            //await ActivateItemAsync<StartPageViewModel>();
-            //await ActivateItemAsync<TreeDownViewModel>();
             await ActivateItemAsync<EnhancedCorpusViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
-            //await ActivateItemAsync<NotesViewModel>();
             await ActivateItemAsync<PinsViewModel>();
-            
-            //await ActivateItemAsync<SourceContextViewModel>();
-            //await ActivateItemAsync<TargetContextViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
 
@@ -654,9 +555,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // set the CurrentBcv prior to listening to the event
             CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
 
-            CalculateBooks();
-            CalculateChapters();
-            CalculateVerses();
+            //CalculateBooks();
+            //CalculateChapters();
+            //CalculateVerses();
             InComingChangesStarted = false;
 
             // Subscribe to changes of the Book Chapter Verse data object.
@@ -707,9 +608,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // get the project layouts
-            if (ProjectManager?.CurrentDashboardProject?.TargetProject != null)
+            if (ProjectManager.CurrentParatextProject.DirectoryPath != null)
             {
-                path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
+                // ReSharper disable once AssignNullToNotNullAttribute
+                path = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
                 if (Directory.Exists(path))
                 {
                     var files = Directory.GetFiles(path, "*.Layout.config");
@@ -746,7 +648,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 new MenuItemViewModel
                 {
                     Header = "🖫 " + LocalizationStrings.Get("MainView_LayoutsSave", Logger), Id = "SaveID",
-                    ViewModel = this, Icon = null
+                    ViewModel = this
                 },
                 
                 // Delete Saved Layout
@@ -763,7 +665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Id = "SeparatorID", ViewModel = this,
                 }
             };
-            
+
             var bFound = false;
             foreach (var fileLayout in FileLayouts)
             {
@@ -773,7 +675,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     layouts.Add(new MenuItemViewModel
                     {
                         Header = "---- " + LocalizationStrings.Get("MainView_LayoutsProjectLayouts", Logger) + " ----",
-                        Id = "SeparatorID", ViewModel = this,
+                        Id = "SeparatorID",
+                        ViewModel = this,
                     });
                     bFound = true;
                 }
@@ -813,37 +716,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
-                        // Alignment Tool
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsAlignmentTool", Logger), Id = "AlignmentToolID", ViewModel = this, },
                         // Biblical Terms
                         new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
-                        
-                        //new() { Header = "🆎 Concordance Tool", Id = "ConcordanceToolID", ViewModel = this, },
-                        
-                        // Corpus Tokens
-                        new() { Header = "🗟 " + LocalizationStrings.Get("MainView_WindowsCorpusTokens", Logger), Id = "CorpusTokensID", ViewModel = this, },
-
-                        // Dashboard
-                        new() { Header = "📐 " + LocalizationStrings.Get("MainView_WindowsDashboard", Logger), Id = "DashboardID", ViewModel = this, },
                         
                         // Enhanced Corpus
                         new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
                         
-                        //new() { Header = "🖉 Notes", Id = "NotesID", ViewModel = this, },
-                        
                         // PINS
                         new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
                         
-                        //new() { Header = "🖧 ProjectDesignSurface", Id = "ProjectDesignSurfaceID", ViewModel = this,  },
-                        //new() { Header = "⬒ Source Context", Id = "SourceContextID", ViewModel = this, },
-                        //new() { Header = "⌂ Start Page", Id = "StartPageID", ViewModel = this, },
-                        //new() { Header = "⬓ Target Context", Id = "TargetContextID", ViewModel = this, },
-
                         // Text Collection
                         new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
                         
-                        //new() { Header = "⯭ Treedown", Id = "TreedownID", ViewModel = this, },
-
                         // Word Meanings
                         new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                     }
@@ -857,7 +741,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <summary>
         /// Save the layout
         /// </summary>
-        public void OkSave()
+        public async void OkSave()
         {
             var filePath = string.Empty;
             if (SelectedLayout == null)
@@ -865,11 +749,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // create a new layout
                 if (SelectedLayoutText != string.Empty)
                 {
-                    // TODO this isn't working right as CurrentDashboardProject isn't always filled in
-
-
-                    // get the project layouts
-                    filePath = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+                    filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
             }
@@ -899,42 +779,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         }
 
-        //public void DeleteLayout(LayoutFile layoutFile)
-        //{
-        //    if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
-        //    {
-        //        return;
-        //    }
+        public void DeleteLayout(LayoutFile layoutFile)
+        {
+            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+            {
+                return;
+            }
 
-        //    try
-        //    {
-        //        File.Delete(layoutFile.LayoutPath);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.LogError(e.Message);
-        //        return;
-        //    }
+            try
+            {
+                File.Delete(layoutFile.LayoutPath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+                return;
+            }
 
-        //    FileLayouts.Remove(layoutFile);
-        //    ReBuildMenu();
-        //}
+            FileLayouts.Remove(layoutFile);
+            RebuildMenu();
+        }
 
         public void CancelSave()
         {
             GridIsVisible = Visibility.Collapsed;
         }
 
-        //public void CancelDelete()
-        //{
-        //    DeleteGridIsVisible = Visibility.Collapsed;
-        //}
-
-        private void WorkSpaceViewModel_ThemeChanged()
+        public void CancelDelete()
         {
-            GridIsVisible = Visibility.Collapsed;
-            SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
+            DeleteGridIsVisible = Visibility.Collapsed;
         }
+
+        //private void WorkSpaceViewModel_ThemeChanged()
+        //{
+        //    GridIsVisible = Visibility.Collapsed;
+        //    SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
+        //}
 
         private void LoadLayoutById(string layoutId)
         {
@@ -972,24 +852,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (e.Model.ContentId.ToUpper())
                     {
                         // Documents
-                        case WorkspaceLayoutNames.Dashboard:
-                            e.Content = GetPaneViewModelFromItems("DashboardViewModel");
-                            break;
-                        case WorkspaceLayoutNames.ConcordanceTool:
-                            e.Content = GetPaneViewModelFromItems("ConcordanceViewModel");
-                            break;
-                        case WorkspaceLayoutNames.StartPage:
-                            e.Content = GetPaneViewModelFromItems("StartPageViewModel");
-                            break;
-                        case WorkspaceLayoutNames.AlignmentTool:
-                            e.Content = GetPaneViewModelFromItems("AlignmentToolViewModel");
-                            break;
-                        case WorkspaceLayoutNames.TreeDown:
-                            e.Content = GetPaneViewModelFromItems("TreeDownViewModel");
-                            break;
-                        case WorkspaceLayoutNames.CorpusTokens:
-                            e.Content = GetPaneViewModelFromItems("CorpusTokensViewModel");
-                            break;
                         case WorkspaceLayoutNames.EnhancedCorpus:
                             e.Content = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
                             break;
@@ -1001,24 +863,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.WordMeanings:
                             e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
                             break;
-                        case WorkspaceLayoutNames.SourceContext:
-                            e.Content = GetToolViewModelFromItems("SourceContextViewModel");
-                            break;
-                        case WorkspaceLayoutNames.TargetContext:
-                            e.Content = GetToolViewModelFromItems("TargetContextViewModel");
-                            break;
-                        case WorkspaceLayoutNames.Notes:
-                            e.Content = GetToolViewModelFromItems("NotesViewModel");
-                            break;
                         case WorkspaceLayoutNames.Pins:
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
                             break;
                         case WorkspaceLayoutNames.TextCollection:
                             e.Content = GetToolViewModelFromItems("TextCollectionsViewModel");
                             break;
-                        //case WorkspaceLayoutNames.ProjectDesignSurface:
-                        //    e.Content = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                        //    break;
 
                     }
                 }
@@ -1049,22 +899,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         var type = t;
                         switch (type)
                         {
-                            case AlignmentToolViewModel:
-                            //case ConcordanceViewModel:
-                            case CorpusTokensViewModel:
-                            case DashboardViewModel:
+
                             case EnhancedCorpusViewModel:
-                                //case StartPageViewModel:
-                                //case TreeDownViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
                             case BiblicalTermsViewModel:
-                            //case NotesViewModel:
                             case PinsViewModel:
-                            //case ProjectDesignSurfaceViewModel:
-                            //case SourceContextViewModel:
-                            //case TargetContextViewModel:
                             case TextCollectionsViewModel:
                             case WordMeaningsViewModel:
                                 _tools.Add((ToolViewModel)t);
@@ -1099,13 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
-                        case AlignmentToolViewModel:
-                        //case ConcordanceViewModel:
-                        case CorpusTokensViewModel:
-                        case DashboardViewModel:
                         case EnhancedCorpusViewModel:
-                            //case StartPageViewModel:
-                            //case TreeDownViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -1129,11 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case BiblicalTermsViewModel:
-                        //case NotesViewModel:
                         case PinsViewModel:
-                        //case ProjectDesignSurfaceViewModel:
-                        //case SourceContextViewModel:
-                        //case TargetContextViewModel:
                         case TextCollectionsViewModel:
                         case WordMeaningsViewModel:
                             return (ToolViewModel)t;
@@ -1149,55 +980,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // window has been closed so we need to reopen it
             switch (windowTag)
             {
-                // Documents
-                case WorkspaceLayoutNames.AlignmentTool:
-                    var vm10 = GetPaneViewModelFromItems("AlignmentToolViewModel");
-                    return (vm10, vm10.Title, vm10.DockSide);
-                //case WorkspaceLayoutNames.ConcordanceTool:
-                //    var vm2 = GetPaneViewModelFromItems("ConcordanceViewModel");
-                //    return (vm2, vm2.Title, vm2.DockSide);
-                case WorkspaceLayoutNames.CorpusTokens:
-                    var vm12 = GetPaneViewModelFromItems("CorpusTokensViewModel");
-                    return (vm12, vm12.Title, vm12.DockSide);
-                case WorkspaceLayoutNames.Dashboard:
-                    var vm1 = GetPaneViewModelFromItems("DashboardViewModel");
-                    return (vm1, vm1.Title, vm1.DockSide);
+                // DOCUMENTS
                 case WorkspaceLayoutNames.EnhancedCorpus:
                     var vm14 = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
                     return (vm14, vm14.Title, vm14.DockSide);
-                case WorkspaceLayoutNames.Pins:
-                    var vm7 = GetPaneViewModelFromItems("PinsViewModel");
-                    return (vm7, vm7.Title, vm7.DockSide);
-                case WorkspaceLayoutNames.StartPage:
-                    var vm9 = GetPaneViewModelFromItems("StartPageViewModel");
-                    return (vm9, vm9.Title, vm9.DockSide);
-                //case WorkspaceLayoutNames.TreeDown:
-                //    var vm11 = GetPaneViewModelFromItems("TreeDownViewModel");
-                //    return (vm11, vm11.Title, vm11.DockSide);
 
-
-                // Tools
+                // TOOLS
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var vm = GetToolViewModelFromItems("BiblicalTermsViewModel");
                     return (vm, vm.Title, vm.DockSide);
-                //case WorkspaceLayoutNames.Notes:
-                //    var vm6 = GetToolViewModelFromItems("NotesViewModel");
-                //    return (vm6, vm6.Title, vm6.DockSide);
-                //case WorkspaceLayoutNames.ProjectDesignSurface:
-                //    var vm13 = GetToolViewModelFromItems("ProjectDesignSurfaceViewModel");
-                //    return (vm13, vm13.Title, vm13.DockSide);
-                //case WorkspaceLayoutNames.SourceContext:
-                //    var vm4 = GetToolViewModelFromItems("SourceContextViewModel");
-                //    return (vm4, vm4.Title, vm4.DockSide);
-                //case WorkspaceLayoutNames.TargetContext:
-                //    var vm5 = GetToolViewModelFromItems("TargetContextViewModel");
-                //    return (vm5, vm5.Title, vm5.DockSide);
+                case WorkspaceLayoutNames.Pins:
+                    var vm7 = GetToolViewModelFromItems("PinsViewModel");
+                    return (vm7, vm7.Title, vm7.DockSide);
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
                 case WorkspaceLayoutNames.WordMeanings:
                     var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
                     return (vm3, vm3.Title, vm3.DockSide);
+
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
         }
@@ -1259,12 +1060,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (windowTag.ToUpper())
                     {
                         // Documents
-                        case WorkspaceLayoutNames.Dashboard:
-                        case WorkspaceLayoutNames.ConcordanceTool:
-                        case WorkspaceLayoutNames.StartPage:
-                        case WorkspaceLayoutNames.AlignmentTool:
-                        case WorkspaceLayoutNames.TreeDown:
-                        case WorkspaceLayoutNames.CorpusTokens:
                         case WorkspaceLayoutNames.EnhancedCorpus:
                             windowDockable = new LayoutDocument
                             {
@@ -1287,11 +1082,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
                         case WorkspaceLayoutNames.WordMeanings:
-                        case WorkspaceLayoutNames.SourceContext:
-                        case WorkspaceLayoutNames.TargetContext:
-                        case WorkspaceLayoutNames.Notes:
                         case WorkspaceLayoutNames.Pins:
-                        //case WorkspaceLayoutNames.ProjectDesignSurface:
                         case WorkspaceLayoutNames.TextCollection:
 
                             // window has been closed so reload it
@@ -1305,7 +1096,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.Content = obj.vm;
                             windowPane.Title = obj.title;
                             windowPane.IsActive = true;
-                            
+
                             // set where it will doc on layout
                             if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
                             {
@@ -1331,133 +1122,133 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void BcvChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ParatextSync && InComingChangesStarted == false)
-            {
-                string verseId;
-                bool somethingChanged = false;
-                if (e.PropertyName == "BookNum")
-                {
-                    // book switch so find the first chapter and verse for that book
-                    verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
+            //if (ParatextSync && InComingChangesStarted == false)
+            //{
+            //    string verseId;
+            //    bool somethingChanged = false;
+            //    if (e.PropertyName == "BookNum")
+            //    {
+            //        // book switch so find the first chapter and verse for that book
+            //        verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
+            //        if (verseId != "")
+            //        {
+            //            InComingChangesStarted = true;
+            //            CurrentBcv.SetVerseFromId(verseId);
 
-                        CalculateChapters();
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Chapter")
-                {
-                    // ReSharper disable once InconsistentNaming
-                    var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
+            //            CalculateChapters();
+            //            CalculateVerses();
+            //            InComingChangesStarted = false;
+            //            somethingChanged = true;
+            //        }
+            //    }
+            //    else if (e.PropertyName == "Chapter")
+            //    {
+            //        // ReSharper disable once InconsistentNaming
+            //        var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
-                    // chapter switch so find the first verse for that book and chapter
-                    verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
-                    if (verseId != "")
-                    {
-                        InComingChangesStarted = true;
-                        CurrentBcv.SetVerseFromId(verseId);
+            //        // chapter switch so find the first verse for that book and chapter
+            //        verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
+            //        if (verseId != "")
+            //        {
+            //            InComingChangesStarted = true;
+            //            CurrentBcv.SetVerseFromId(verseId);
 
-                        CalculateVerses();
-                        InComingChangesStarted = false;
-                        somethingChanged = true;
-                    }
-                }
-                else if (e.PropertyName == "Verse")
-                {
-                    InComingChangesStarted = true;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-                    InComingChangesStarted = false;
-                    somethingChanged = true;
-                }
+            //            CalculateVerses();
+            //            InComingChangesStarted = false;
+            //            somethingChanged = true;
+            //        }
+            //    }
+            //    else if (e.PropertyName == "Verse")
+            //    {
+            //        InComingChangesStarted = true;
+            //        CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+            //        InComingChangesStarted = false;
+            //        somethingChanged = true;
+            //    }
 
-                if (somethingChanged)
-                {
-                    // send to the event aggregator for everyone else to hear about a verse change
-                    EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
+            //    if (somethingChanged)
+            //    {
+            //        // send to the event aggregator for everyone else to hear about a verse change
+            //        EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
 
-                    // push to Paratext
-                    if (ParatextSync)
-                    {
-                        _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-                    }
-                }
+            //        // push to Paratext
+            //        if (ParatextSync)
+            //        {
+            //            _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+            //        }
+            //    }
 
-            }
+            //}
         }
 
-        private void CalculateBooks()
-        {
-            CurrentBcv.BibleBookList?.Clear();
+        //private void CalculateBooks()
+        //{
+        //    CurrentBcv.BibleBookList?.Clear();
 
-            var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                .Select(g => g.First())
-                .ToList();
+        //    var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+        //        .Select(g => g.First())
+        //        .ToList();
 
-            foreach (var book in books)
-            {
-                var bookId = book.Substring(0, 3);
+        //    foreach (var book in books)
+        //    {
+        //        var bookId = book.Substring(0, 3);
 
-                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+        //        var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
 
-                CurrentBcv.BibleBookList?.Add(bookName);
-            }
+        //        CurrentBcv.BibleBookList?.Add(bookName);
+        //    }
 
-        }
+        //}
 
-        private void CalculateChapters()
-        {
-            // CHAPTERS
-            var bookId = CurrentBcv.Book;
-            var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-            for (var i = 0; i < chapters.Count; i++)
-            {
-                chapters[i] = chapters[i].Substring(3, 3);
-            }
+        //private void CalculateChapters()
+        //{
+        //    // CHAPTERS
+        //    var bookId = CurrentBcv.Book;
+        //    var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+        //    for (var i = 0; i < chapters.Count; i++)
+        //    {
+        //        chapters[i] = chapters[i].Substring(3, 3);
+        //    }
 
-            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                var chapterNumbers = new List<int>();
-                foreach (var chapter in chapters)
-                {
-                    chapterNumbers.Add(Convert.ToInt16(chapter));
-                }
+        //    chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+        //    // invoke to get it to run in STA mode
+        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
+        //    {
+        //        var chapterNumbers = new List<int>();
+        //        foreach (var chapter in chapters)
+        //        {
+        //            chapterNumbers.Add(Convert.ToInt16(chapter));
+        //        }
 
-                CurrentBcv.ChapterNumbers = chapterNumbers;
-            });
-        }
+        //        CurrentBcv.ChapterNumbers = chapterNumbers;
+        //    });
+        //}
 
-        private void CalculateVerses()
-        {
-            // VERSES
-            var bookId = CurrentBcv.Book;
-            var chapId = CurrentBcv.ChapterIdText;
-            var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+        //private void CalculateVerses()
+        //{
+        //    // VERSES
+        //    var bookId = CurrentBcv.Book;
+        //    var chapId = CurrentBcv.ChapterIdText;
+        //    var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
 
-            for (int i = 0; i < verses.Count; i++)
-            {
-                verses[i] = verses[i].Substring(6);
-            }
+        //    for (int i = 0; i < verses.Count; i++)
+        //    {
+        //        verses[i] = verses[i].Substring(6);
+        //    }
 
-            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-            // invoke to get it to run in STA mode
-            System.Windows.Application.Current.Dispatcher.Invoke(delegate
-            {
-                List<int> verseNumbers = new List<int>();
-                foreach (var verse in verses)
-                {
-                    verseNumbers.Add(Convert.ToInt16(verse));
-                }
+        //    verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+        //    // invoke to get it to run in STA mode
+        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
+        //    {
+        //        List<int> verseNumbers = new List<int>();
+        //        foreach (var verse in verses)
+        //        {
+        //            verseNumbers.Add(Convert.ToInt16(verse));
+        //        }
 
-                CurrentBcv.VerseNumbers = verseNumbers;
-            });
-        }
+        //        CurrentBcv.VerseNumbers = verseNumbers;
+        //    });
+        //}
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
@@ -1474,12 +1265,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
-                CalculateChapters();
-                CalculateVerses();
+                //CalculateChapters();
+                //CalculateVerses();
                 InComingChangesStarted = false;
             }
-
-            return;
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -1495,13 +1284,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 InComingChangesStarted = true;
 
                 // add in the books to the dropdown list
-                CalculateBooks();
+                //CalculateBooks();
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
-                CalculateChapters();
-                CalculateVerses();
+                //CalculateChapters();
+                //CalculateVerses();
 
                 NotifyOfPropertyChange(() => CurrentBcv);
                 InComingChangesStarted = false;
@@ -1510,8 +1299,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 BCVDictionary = new Dictionary<string, string>();
             }
-
-            return;
         }
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
@@ -1535,28 +1322,82 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <exception cref="NotImplementedException"></exception>
         public async Task HandleAsync(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
+
+            // the user wants to add to the currently active window
+            if (message.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>().ToList();
+                if (dockableWindows.Count == 1)
+                {
+                    // there is only one doc window open, so we can just add to it
+                    var enhancedCorpusViewModels =
+                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
+                            EnhancedCorpusViewModel;
+                    if (enhancedCorpusViewModels is not null)
+                    {
+                        await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
+                    }
+
+                    return;
+                }
+
+                // more than one enhanced corpus window is open and active
+                foreach (var document in dockableWindows)
+                {
+                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
+                    {
+                        var vm = document.Content as EnhancedCorpusViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        var guid = vm.Guid;
+
+                        var enhancedCorpusViewModels =
+                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                                    // ReSharper disable once UsePatternMatching
+                                    .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as
+                                EnhancedCorpusViewModel;
+                        if (enhancedCorpusViewModels is not null)
+                        {
+                            await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // unactivate any other doc windows before we add in the new one
+            var docWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var document in docWindows)
+            {
+                document.IsActive = false;
+            }
+
+
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
             EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
-            
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
-                ContentId = paratextId
+                ContentId = paratextId,
+                Content = viewModel,
+                Title = message.ProjectName + " (" + tokenizationType + ")",
+                IsActive = true
             };
-            // setup the right ViewModel for the pane
-            windowDockable.Content = viewModel;
-            windowDockable.Title = message.ProjectName + " (" + tokenizationType + ")";
-            windowDockable.IsActive = true;
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-
-            if (documentPane != null)
-            {
-                documentPane.Children.Add(windowDockable);
-            }
+            documentPane?.Children.Add(windowDockable);
 
             await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
@@ -1571,7 +1412,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // rebuild the menu system with the new language
             RebuildMenu();
-            
+
+            return Task.CompletedTask;
+        }
+
+
+
+        public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
+        {
+            var guid = message.Guid;
+
+            var dockableWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var pane in dockableWindows)
+            {
+                var content = pane.Content as EnhancedCorpusViewModel;
+                // ReSharper disable once PossibleNullReferenceException
+                if (content.Guid != guid)
+                {
+                    pane.IsActive = false;
+                }
+            }
+
             return Task.CompletedTask;
         }
 
@@ -1580,20 +1442,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
     public static class WorkspaceLayoutNames
     {
-        public const string AlignmentTool = "ALIGNMENTTOOL";
-        public const string BiblicalTerms = "BIBLICALTERMS";
-        public const string ConcordanceTool = "CONCORDANCETOOL";
-        public const string CorpusTokens = "CORPUSTOKENS";
-        public const string Dashboard = "DASHBOARD";
-        public const string Notes = "NOTES";
-        public const string Pins = "PINS";
-        //public const string ProjectDesignSurface = "PROJECTDESIGNSURFACETOOL";
-        public const string SourceContext = "SOURCECONTEXT";
-        public const string StartPage = "STARTPAGE";
-        public const string TargetContext = "TARGETCONTEXT";
-        public const string TextCollection = "TEXTCOLLECTION";
-        public const string TreeDown = "TREEDOWN";
-        public const string WordMeanings = "WORDMEANINGS";
         public const string EnhancedCorpus = "ENHANCEDCORPUS";
+
+        public const string BiblicalTerms = "BIBLICALTERMS";
+        public const string Pins = "PINS";
+        public const string TextCollection = "TEXTCOLLECTION";
+        public const string WordMeanings = "WORDMEANINGS";
     }
 }

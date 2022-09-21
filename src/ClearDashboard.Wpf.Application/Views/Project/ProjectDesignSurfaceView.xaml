@@ -570,6 +570,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
+                                IsHitTestVisible="False"
                                 Text="{Binding Name}" />
 
                             <!--  The project type of the node.  -->
@@ -580,6 +581,7 @@
                                 Grid.ColumnSpan="3"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                IsHitTestVisible="False"
                                 Text="{Binding CorpusType}" />
 
                             <!--  Displays the node's input connectors.  -->
@@ -600,6 +602,7 @@
                                 Margin="0,-5,6,0"
                                 HorizontalAlignment="Right"
                                 Content="{Binding Path=NodeTokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                IsHitTestVisible="False"
                                 ToolTip="Number of different tokenizations">
                                 <materialDesign:Chip.Style>
                                     <Style TargetType="materialDesign:Chip">
@@ -754,7 +757,7 @@
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            IsEnabled="{Binding AddCorpusEnabled}">
+            IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}">
             <StackPanel Grid.Row="0" MinWidth="400">
                 <!--  Add Corpora  -->
                 <Label
@@ -804,7 +807,7 @@
                 <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding AddCorpusEnabled}" Value="True">
+                        <DataTrigger Binding="{Binding IsBusy}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>

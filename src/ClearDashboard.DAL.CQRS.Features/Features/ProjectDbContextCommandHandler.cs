@@ -7,7 +7,7 @@ namespace ClearDashboard.DAL.CQRS.Features;
 
 public abstract record ProjectRequestCommand<TData> : IRequest<RequestResult<TData>>;
 
-public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>
+public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>, IDisposable
     where TRequest : ProjectRequestCommand<TData>,IRequest<TResponse>
     where TResponse : RequestResult<TData>, new()
 {
@@ -47,5 +47,20 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
                 Success = false
             };
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            ProjectNameDbContextFactory?.Dispose();
+            ProjectDbContext.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

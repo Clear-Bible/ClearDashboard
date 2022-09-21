@@ -10,9 +10,11 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DataContext="{d:DesignInstance Type=project:EnhancedCorpusViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -97,7 +99,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="20" />
+                            Value="16" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -123,7 +125,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="20" />
+                            Value="14" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -304,11 +306,16 @@
                 <userControls:BcvUserControl
                     Grid.Column="1"
                     Margin="50,0,0,0"
-                    CurrentBcv="{Binding CurrentBcv}"
+                    BcvDictionary="{Binding Path=BcvDictionary}"
+                    CurrentBcv="{Binding Path=CurrentBcv}"
                     IsControlEnabled="True"
+                    IsControlMinimal="False"
                     IsRtl="{Binding IsRtl}"
-                    ParatextSync="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    ShowOffsetControl="True" />
+                    ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ShowHeader="True"
+                    ShowOffsetControl="True"
+                    VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </materialDesign:DrawerHost>
 
@@ -423,7 +430,7 @@
                                     Content="{Binding Converter={StaticResource VerseTokensToChapterVerseValueConvertor}}"
                                     FontSize="12"
                                     Foreground="{DynamicResource MaterialDesignBody}" />-->
-                                
+
                                 <!--<userControls:VerseDisplay FontSize="20" Wrap="True">
                                     <userControls:VerseDisplay.Tokens>
                                         <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
@@ -433,12 +440,12 @@
                                     </userControls:VerseDisplay.Tokens>
                                 </userControls:VerseDisplay>-->
 
-                                <!--cm:Message.Attach="[EventTokenClicked]=[ActionTokenClicked($eventArgs)]; [EventTokenDoubleClicked]=[ActionTokenDoubleClicked($eventArgs)]; [EventTokenRightButtonDown]=[ActionTokenRightButtonDown($eventArgs)]; [EventTokenMouseEnter]=[ActionTokenMouseEnter($eventArgs)]; [EventTokenMouseLeave]=[ActionTokenMouseLeave($eventArgs)]; [EventTokenMouseWheel]=[ActionTokenMouseWheel($eventArgs)]; [EventTranslationClicked]=[ActionTranslationClicked($eventArgs)]; [EventTranslationDoubleClicked]=[ActionTranslationDoubleClicked($eventArgs)]; [EventTranslationRightButtonDown]=[ActionTranslationRightButtonDown($eventArgs)]; [EventTranslationMouseEnter]=[ActionTranslationMouseEnter($eventArgs)]; [EventTranslationMouseLeave]=[ActionTranslationMouseLeave($eventArgs)]; [EventTranslationMouseWheel]=[ActionTranslationMouseWheel($eventArgs)]; [EventNoteLeftButtonDown]=[ActionNoteLeftButtonDown($eventArgs)]; [EventNoteDoubleClicked]=[ActionNoteDoubleClicked($eventArgs)]; [EventNoteRightButtonDown]=[ActionNoteRightButtonDown($eventArgs)]; [EventNoteMouseEnter]=[ActionNoteMouseEnter($eventArgs)]; [EventNoteMouseLeave]=[ActionNoteMouseLeave($eventArgs)]; [EventNoteMouseWheel]=[ActionNoteMouseWheel($eventArgs)]"-->
-                                <userControls:VerseDisplay IsEnabled="True"
+                                <!--  cm:Message.Attach="[EventTokenClicked]=[ActionTokenClicked($eventArgs)]; [EventTokenDoubleClicked]=[ActionTokenDoubleClicked($eventArgs)]; [EventTokenRightButtonDown]=[ActionTokenRightButtonDown($eventArgs)]; [EventTokenMouseEnter]=[ActionTokenMouseEnter($eventArgs)]; [EventTokenMouseLeave]=[ActionTokenMouseLeave($eventArgs)]; [EventTokenMouseWheel]=[ActionTokenMouseWheel($eventArgs)]; [EventTranslationClicked]=[ActionTranslationClicked($eventArgs)]; [EventTranslationDoubleClicked]=[ActionTranslationDoubleClicked($eventArgs)]; [EventTranslationRightButtonDown]=[ActionTranslationRightButtonDown($eventArgs)]; [EventTranslationMouseEnter]=[ActionTranslationMouseEnter($eventArgs)]; [EventTranslationMouseLeave]=[ActionTranslationMouseLeave($eventArgs)]; [EventTranslationMouseWheel]=[ActionTranslationMouseWheel($eventArgs)]; [EventNoteLeftButtonDown]=[ActionNoteLeftButtonDown($eventArgs)]; [EventNoteDoubleClicked]=[ActionNoteDoubleClicked($eventArgs)]; [EventNoteRightButtonDown]=[ActionNoteRightButtonDown($eventArgs)]; [EventNoteMouseEnter]=[ActionNoteMouseEnter($eventArgs)]; [EventNoteMouseLeave]=[ActionNoteMouseLeave($eventArgs)]; [EventNoteMouseWheel]=[ActionNoteMouseWheel($eventArgs)]"  -->
+                                <userControls:VerseDisplay
                                     Title=""
-                                    
                                     FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -486,6 +493,7 @@
                 Style="{StaticResource RightExpander}">
                 <controls:SidebarExpander.Header>
                     <TextBlock
+                        Margin="-5,0,0,0"
                         BaselineOffset="100"
                         FontWeight="Bold"
                         Text="{helpers:Localization EnhancedView_Notes}"

@@ -9,6 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     x:Name="WordMeaningsControl"
     d:DataContext="{d:DesignInstance Type=local:WordMeaningsViewModel,
@@ -81,36 +82,51 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal">
+            <Button
+                Width="20"
+                Height="20"
+                Margin="5,5,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                ToolTip="{helpers:Localization ExpandView}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <materialDesign:PackIcon
+                    Background="Transparent"
+                    Foreground="{StaticResource SecondaryHueDarkBrush}"
+                    Kind="ArrowExpandAll" />
+            </Button>
 
-        <Button
-            Width="20"
-            Height="20"
-            Margin="5,5,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-            ToolTip="{helpers:Localization ExpandView}">
-            <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                            <Setter Property="RenderTransform">
-                                <Setter.Value>
-                                    <ScaleTransform ScaleX="2" ScaleY="2" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-            <materialDesign:PackIcon
-                Background="Transparent"
-                Foreground="{StaticResource SecondaryHueDarkBrush}"
-                Kind="ArrowExpandAll" />
-        </Button>
+            <userControls:BcvUserControl
+                Margin="50,0,0,0"
+                BcvDictionary="{Binding Path=BcvDictionary}"
+                CurrentBcv="{Binding Path=CurrentBcv}"
+                IsControlEnabled="False"
+                IsControlMinimal="True"
+                IsRtl="{Binding IsRtl}"
+                ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ShowHeader="False"
+                ShowOffsetControl="False"
+                VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
 
         <helpers:ScrollingToTopListBox
             x:Name="LVSenses"
@@ -213,7 +229,7 @@
                                             Text="{Binding WordTransliterated, StringFormat=({0})}" />
                                     </StackPanel>
                                     <TextBlock
-                                        Width="235"
+                                        MinWidth="235"
                                         Margin="5,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
