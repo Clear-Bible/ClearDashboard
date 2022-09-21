@@ -30,7 +30,7 @@ public class TokensTextRowMultiValueConvertor : IMultiValueConverter
 
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        var list = new List<TokenDisplay>();
+        var list = new List<TokenDisplayViewModel>();
         if (values.Length < 2)
         {
             throw new NullReferenceException(
@@ -54,7 +54,7 @@ public class TokensTextRowMultiValueConvertor : IMultiValueConverter
             try
             {
                 var tokensWithPadding = detokenizer.Detokenize(tokensTextRow.Tokens);
-                return tokensWithPadding.Select(t => new TokenDisplay
+                return tokensWithPadding.Select(t => new TokenDisplayViewModel
                     { Token = t.token, PaddingAfter = t.paddingAfter, PaddingBefore = t.paddingBefore });
             }
             catch (Exception ex)

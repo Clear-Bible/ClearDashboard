@@ -58,9 +58,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public string? Message { get; set; }
-        public IEnumerable<TokenDisplay>? Verse1 { get; set; }
+        public IEnumerable<TokenDisplayViewModel>? Verse1 { get; set; }
         public Note CurrentNote { get; set; }
-        public TokenDisplay CurrentTokenDisplay { get; set; }
+        public TokenDisplayViewModel CurrentTokenDisplayViewModel { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
 
@@ -81,30 +81,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (e.TokenDisplay.HasNote)
+            if (e.TokenDisplayViewModel.HasNote)
             {
-                DisplayNote(e.TokenDisplay);
+                DisplayNote(e.TokenDisplayViewModel);
             }
 
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseWheel(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -196,12 +196,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteCreate(NoteEventArgs e)
         {
-            //DisplayNote(e.TokenDisplay);
+            //DisplayNote(e.TokenDisplayViewModel);
         }
 
         public void TranslationApplied(TranslationEventArgs e)
         {
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
             TranslationControlVisibility = Visibility.Hidden;
@@ -379,16 +379,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return result.OrderByDescending(to => to.Probability);
         }
 
-        private List<TokenDisplay> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
+        private List<TokenDisplayViewModel> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
         {
-            var tokenDisplays = new List<TokenDisplay>();
+            var tokenDisplays = new List<TokenDisplayViewModel>();
 
             var tokens = GetTokens(corpus, BBBCCCVVV);
             if (tokens != null)
             {
                 tokenDisplays.AddRange(from token in tokens 
                     let translation = GetTranslation(token.token) 
-                    select new TokenDisplay { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
+                    select new TokenDisplayViewModel { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
             }
 
             return tokenDisplays;
@@ -400,24 +400,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             TranslationControlVisibility = Visibility.Visible;
 
-            CurrentTokenDisplay = e.TokenDisplay;
+            CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
             TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
 
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
             NotifyOfPropertyChange(nameof(TranslationOptions));
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
         }
 
         public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-        private void DisplayNote(TokenDisplay tokenDisplay)
+        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
             NoteControlVisibility = Visibility.Visible;
-            CurrentTokenDisplay = tokenDisplay;
+            CurrentTokenDisplayViewModel = tokenDisplayViewModel;
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
         }
 
         private async Task LoadFiles()

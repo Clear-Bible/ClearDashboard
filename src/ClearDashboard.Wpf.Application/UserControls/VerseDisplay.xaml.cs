@@ -8,7 +8,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Display;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplay" /> instances.
+    /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
     public partial class VerseDisplay : UserControl
     {
@@ -302,11 +302,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplay;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay
+                TokenDisplayViewModel = tokenDisplay
             });
         }
 
@@ -360,8 +360,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = control?.TokenDisplay,
-                Translation = control?.TokenDisplay?.Translation
+                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                Translation = control?.TokenDisplayViewModel?.Translation
             });
         }
 
@@ -415,7 +415,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                //TokenDisplay = control?.TokenDisplay
+                //TokenDisplayViewModel = control?.TokenDisplayViewModel
             });
         }
 
@@ -774,7 +774,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
         /// </summary>
         public IEnumerable Tokens
         {
@@ -786,7 +786,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplayViewModel.PaddingBefore"/> and <see cref="TokenDisplayViewModel.PaddingAfter"/> values.
         /// </remarks>
         public double HorizontalSpacing
         {

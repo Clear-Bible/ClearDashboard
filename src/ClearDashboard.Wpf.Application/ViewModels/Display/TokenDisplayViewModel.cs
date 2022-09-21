@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
-    public class TokenDisplay
+    public class TokenDisplayViewModel
     {
         /// <summary>
         /// The token itself.

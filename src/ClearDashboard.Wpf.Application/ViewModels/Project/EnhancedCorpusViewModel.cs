@@ -665,30 +665,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (e.TokenDisplay.HasNote)
+            if (e.TokenDisplayViewModel.HasNote)
             {
                 // DisplayNote(e);
             }
 
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -700,7 +700,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenMouseWheel(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -780,7 +780,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TranslationApplied(TranslationEventArgs e)
         {
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
             TranslationControlVisibility = Visibility.Hidden;

@@ -537,11 +537,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplay;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay
+                TokenDisplayViewModel = tokenDisplay
             });
         }
 
@@ -592,11 +592,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplay;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay,
+                TokenDisplayViewModel = tokenDisplay,
                 Translation = tokenDisplay?.Translation
             });
         }
@@ -648,11 +648,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplay;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                //TokenDisplay = tokenDisplay
+                //TokenDisplayViewModel = tokenDisplayViewModel
             });
         }
 
@@ -748,7 +748,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplayViewModel.PaddingBefore"/> and <see cref="TokenDisplayViewModel.PaddingAfter"/> values.
         /// </remarks>
         public double HorizontalSpacing
         {
@@ -852,9 +852,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets the <see cref="TokenDisplay"/> data source for this control.
+        /// Gets the <see cref="TokenDisplayViewModel"/> data source for this control.
         /// </summary>
-        public TokenDisplay TokenDisplay => (TokenDisplay) DataContext;
+        public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel) DataContext;
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
@@ -897,18 +897,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateLayout()
         {
-            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingBefore.Length * HorizontalSpacing : 0;
-            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplay.PaddingAfter.Length * HorizontalSpacing : 0;
+            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
+            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
 
             TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
             TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
-            TranslationVisibility = (ShowTranslation && TokenDisplay.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplay.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
+            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
 
-            SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplay.SurfaceText : TokenDisplay.SurfaceText.Trim();
-            TargetTranslationText = TokenDisplay.TargetTranslationText;
-            TranslationColor = TokenDisplay.TranslationState switch
+            SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
+            TargetTranslationText = TokenDisplayViewModel.TargetTranslationText;
+            TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
                 "FromTranslationModel" => Brushes.Red,
                 "FromOther" => Brushes.Blue,

@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the TokenDisplayProperty dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenDisplayProperty = DependencyProperty.Register("TokenDisplay", typeof(TokenDisplay), typeof(TranslationControl));
+        public static readonly DependencyProperty TokenDisplayViewModelProperty = DependencyProperty.Register("TokenDisplayViewModel", typeof(TokenDisplayViewModel), typeof(TranslationControl));
 
         /// <summary>
         /// Identifies the TranslationOptions dependency property.
@@ -67,16 +67,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TokenDisplay"/> token display information to display in this control.
+        /// Gets or sets the <see cref="TokenDisplayViewModel"/> token display information to display in this control.
         /// </summary>
-        public TokenDisplay TokenDisplay
+        public TokenDisplayViewModel TokenDisplayViewModel
         {
-            get => (TokenDisplay)GetValue(TokenDisplayProperty);
-            set => SetValue(TokenDisplayProperty, value);
+            get => (TokenDisplayViewModel)GetValue(TokenDisplayViewModelProperty);
+            set => SetValue(TokenDisplayViewModelProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
         /// </summary>
         public IEnumerable TranslationOptions
         {
@@ -94,8 +94,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = TranslationAppliedEvent,
-                TokenDisplay = TokenDisplay,
-                Translation = new Translation(TokenDisplay.Token, TranslationValue.Text, "Assigned"),
+                TokenDisplayViewModel = TokenDisplayViewModel,
+                Translation = new Translation(TokenDisplayViewModel.Token, TranslationValue.Text, "Assigned"),
                 TranslationActionType = ApplyAllCheckbox != null && (bool) ApplyAllCheckbox.IsChecked ? "PutPropagate" : "PutNoPropagate"
             });
         }

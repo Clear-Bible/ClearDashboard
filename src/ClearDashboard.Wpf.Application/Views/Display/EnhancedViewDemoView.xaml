@@ -260,16 +260,16 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="7" Orientation="Vertical">
             <userControls:TranslationControl Visibility="{Binding TranslationControlVisibility}"
-                                             TokenDisplay="{Binding CurrentTokenDisplay}"
+                                             TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
                                              TranslationOptions="{Binding TranslationOptions}"
                                              SelectedItem="{Binding CurrentTranslationOption}"
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
             <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
-                                       Title="{Binding CurrentTokenDisplay.SurfaceText}"
-                                       EntityId="{Binding CurrentTokenDisplay.Token.TokenId}"
-                                       Notes="{Binding CurrentTokenDisplay.Notes}"
+                                       Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
+                                       EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+                                       Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelSuggestions="{Binding LabelSuggestions}"
