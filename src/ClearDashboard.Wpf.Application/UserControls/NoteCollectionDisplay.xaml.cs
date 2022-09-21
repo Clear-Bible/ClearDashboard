@@ -321,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(LabelSuggestionsProperty, value);
         }
 
-        public Note NewNote { get; set; } = new(null, "(enter a new note)", string.Empty);
+        public Note NewNote { get; set; } = new(null, "", string.Empty);
 
         #endregion
         #region Public Events
