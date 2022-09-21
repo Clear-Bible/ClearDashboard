@@ -699,9 +699,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+        // ReSharper disable UnusedMember.Global
+        // ReSharper disable once UnusedMember.Global
+        public async void AddParatextCorpus()
+        {
+            await AddParatextCorpus(string.Empty);
+        }
+        // ReSharper restore UnusedMember.Global
 
         // ReSharper disable once UnusedMember.Global
-        private async void AddParatextCorpus(string selectedParatextProjectId = "")
+        private async Task AddParatextCorpus(string selectedParatextProjectId = "")
         {
             _logger.LogInformation("AddParatextCorpus called.");
             LongProcessRunning = true;
