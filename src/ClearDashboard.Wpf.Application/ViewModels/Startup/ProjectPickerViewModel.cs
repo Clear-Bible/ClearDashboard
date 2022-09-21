@@ -260,6 +260,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public void NavigateToMainViewModel(DashboardProject project, MouseButtonEventArgs args)
         {
+            if (StartupDialogViewModel.DeleteVisible == Visibility.Collapsed)
+            {
+                EventAggregator.PublishOnUIThreadAsync(new NewProjectPickerMessage(project));
+            }
 
             // Only respond to a Left button click otherwise,
             // the context menu will not be shown on a right click.
@@ -277,6 +281,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
            
             ParentViewModel!.ExtraData = project;
             ParentViewModel.Ok();
+        }
+
+        private async Task SendUiLanguageChangeMessage(string language)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
         }
 
         private bool CheckIfConnectedToParatext()

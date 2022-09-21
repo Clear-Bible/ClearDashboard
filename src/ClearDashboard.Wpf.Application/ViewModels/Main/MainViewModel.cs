@@ -49,7 +49,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarMessage>,
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
-                IHandle<ActiveDocumentMessage>
+                IHandle<ActiveDocumentMessage>,
+                IHandle<NewProjectPickerMessage>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -81,7 +82,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => ParatextSync);
             }
         }
-
 
         private bool InComingChangesStarted { get; set; }
 
@@ -1483,6 +1483,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(NewProjectPickerMessage message, CancellationToken cancellationToken)
+        {
+            
+            //update properties here
+            throw new NotImplementedException();
         }
     }
 
