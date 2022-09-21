@@ -30,8 +30,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
-        public static bool StartupComplete;
-         private bool _licenseCleared = false;
+        public static Visibility DeleteVisible = Visibility.Visible;
+        private bool _licenseCleared = false;
         private bool _runRegistration = false;
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
@@ -73,7 +73,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (MimicParatextConnection)
             {
-                var vm = Steps[0] as ProjectPickerViewModel;
+                var vm = Steps[1] as ProjectPickerViewModel;
                 vm.Connected = true;
             }
 
@@ -106,7 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void Ok()
         {
-            StartupComplete = true;
+            DeleteVisible = Visibility.Collapsed;
             await TryCloseAsync(true);
         }
 
