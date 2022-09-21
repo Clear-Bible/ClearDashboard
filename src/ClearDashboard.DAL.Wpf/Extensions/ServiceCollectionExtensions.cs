@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
         }
 
-        public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
+        public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection, bool registerDatabaseAbstractions = true)
         {
             serviceCollection.AddLogging();
 
@@ -34,8 +34,12 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 
 
             serviceCollection.AddScoped<ParatextProxy>();
-            serviceCollection.AddProjectNameDatabaseContextFactory();
 
+            if (registerDatabaseAbstractions)
+            {
+                serviceCollection.AddProjectNameDatabaseContextFactory();
+            }
+            
             // QUESTION:  Can we run the HostedService as a scoped service?
             // ANSWER:    Testing seems to indicate, YES!
 

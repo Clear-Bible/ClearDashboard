@@ -614,7 +614,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
-                        mediator: _projectManager.Mediator, 
+                        mediator: Mediator, 
                         IsRtl: false, 
                         Name: "Manuscript", 
                         Language: "Manuscript",
@@ -650,7 +650,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskStatus = StatusEnum.Working
                     }), cancellationToken);
 
-                    var tokenizedTextCorpus = await sourceCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
+                    var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
                         "Manuscript",
                         Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
@@ -699,9 +699,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+        // ReSharper disable UnusedMember.Global
+        // ReSharper disable once UnusedMember.Global
+        public async void AddParatextCorpus()
+        {
+            await AddParatextCorpus(string.Empty);
+        }
+        // ReSharper restore UnusedMember.Global
 
         // ReSharper disable once UnusedMember.Global
-        private async void AddParatextCorpus(string selectedParatextProjectId = "")
+        private async Task AddParatextCorpus(string selectedParatextProjectId = "")
         {
             _logger.LogInformation("AddParatextCorpus called.");
             LongProcessRunning = true;
@@ -759,7 +766,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 #pragma warning disable CS8604
                             corpus = await DAL.Alignment.Corpora.Corpus.Create(
-                                mediator: _projectManager.Mediator,
+                                mediator: Mediator,
                                 IsRtl: metadata.IsRtl, 
                                 Name: metadata.Name, 
                                 Language: metadata.LanguageName,
@@ -792,22 +799,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         switch (viewModel.SelectedTokenizer)
                         {
                             case Tokenizer.LatinWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.WhitespaceTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.ZwspWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             default:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(_projectManager.Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
@@ -822,7 +829,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
 #pragma warning disable CS8604
-                        var tokenizedTextCorpus = await textCorpus.Create(_projectManager.Mediator, corpus.CorpusId,
+                        var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
                             metadata.Name, viewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
