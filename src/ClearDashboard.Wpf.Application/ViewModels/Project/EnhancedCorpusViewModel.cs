@@ -466,7 +466,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     }
 
-                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(_projectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
 
                     TokenizationType = message.TokenizationType;
 
