@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 }
                 else
                 {
-                    RaiseLabelEvent(LabelAddedEvent, new NotesLabel(null, LabelTextBox.Text));
+                    RaiseLabelEvent(LabelAddedEvent, new NotesLabel {Text = LabelTextBox.Text});
                 }
             }
         }

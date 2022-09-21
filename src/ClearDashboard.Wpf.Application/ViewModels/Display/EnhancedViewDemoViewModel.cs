@@ -19,9 +19,9 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 //using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SIL.Machine.Corpora;
@@ -295,18 +295,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 }
             }
 
-            return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label(Mediator, lt)));
+            return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label {Text = lt}));
         }        
         
         private void GetLabelSuggestions()
         {
             var labels = new List<Label>
             {
-                new Label(Mediator, $"alfa"),
-                new Label(Mediator, $"bravo"),
-                new Label(Mediator, $"charlie"),
-                new Label(Mediator, $"delta"),
-                new Label(Mediator, $"echo")
+                new Label {Text="alfa"},
+                new Label {Text="bravo"},
+                new Label {Text="charlie"},
+                new Label {Text="delta"},
+                new Label {Text="echo"}
             };
 
             LabelSuggestions = labels;
@@ -427,16 +427,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
 
-            CurrentNote = new Note(null, "This is a note.", string.Empty)
+            CurrentNote = new Note
             {
-                NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                Labels = GetLabels()
+                Text = "This is a note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
             };
 
-            var note2 = new Note(null, "Here's another note.", string.Empty)
+            var note2 = new Note
             {
-                NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                Labels = GetLabels()
+                Text = "Here's another note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
             };
 
             Verse1.First().Notes.Add(CurrentNote); 
