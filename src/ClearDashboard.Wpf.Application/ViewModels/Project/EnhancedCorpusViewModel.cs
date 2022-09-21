@@ -74,11 +74,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 if (value == true)
                 {
-                    // TODO do we return back the control to what Paratext is showing
-                    // or do we change Paratext to this new verse?  currently set to 
-                    // change Paratext to this new verse
-                    _ = Task.Run(() =>
-                        ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    // update Paratext with the verseId
+                    //_ = Task.Run(() =>
+                    //    ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+
+                    // update this window with the Paratext verse
+                    CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+
+                    //TODO regenerate the verses to display
+                    
                 }
 
                 _paratextSync = value;
