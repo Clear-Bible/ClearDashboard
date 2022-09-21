@@ -243,6 +243,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NoteControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
+
+        public void LabelSelected(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' selected for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void LabelAdded(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
         // ReSharper restore UnusedMember.Global
 
         #endregion
@@ -289,6 +301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             };
 
             LabelSuggestions = labels;
+            NotifyOfPropertyChange(nameof(LabelSuggestions));
         }
 
         private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
@@ -399,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
         }
 
-        private void CloseRequested()
+        private void CloseRequested(RoutedEventArgs args)
         {
             NoteControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));

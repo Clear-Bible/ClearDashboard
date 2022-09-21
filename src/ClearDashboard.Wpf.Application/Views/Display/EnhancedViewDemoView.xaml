@@ -268,6 +268,7 @@
 
             <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
                                        Title="{Binding CurrentTokenDisplay.SurfaceText}"
+                                       EntityId="{Binding CurrentTokenDisplay.Token.TokenId}"
                                        Notes="{Binding CurrentTokenDisplay.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -278,7 +279,7 @@
                                        cal:Message.Attach="[Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
-                                                           [Event CloseRequested] = [Action CloseRequested];
+                                                           [Event CloseRequested] = [Action CloseRequested($eventArgs)];
                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];
                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];" >
                 <userControls:NotesControl.NoteMargin>
