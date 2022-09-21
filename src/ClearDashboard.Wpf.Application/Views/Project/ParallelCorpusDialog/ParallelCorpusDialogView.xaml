@@ -22,6 +22,7 @@
       ShowCloseButton="True"
       ShowMinButton="False"
       ShowMaxRestoreButton="False"
+      TitleCharacterCasing="Normal"
       Title="{Binding Title}"
       TextElement.FontSize="13"
       TextElement.FontWeight="Regular"
@@ -30,6 +31,7 @@
       TextOptions.TextRenderingMode="Auto"
       WindowStartupLocation="CenterOwner"
       Width="600"
+      Height="600"
       d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:ParallelCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}">
    
