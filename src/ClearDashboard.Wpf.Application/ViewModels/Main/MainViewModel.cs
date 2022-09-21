@@ -1484,8 +1484,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
-
-        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames
