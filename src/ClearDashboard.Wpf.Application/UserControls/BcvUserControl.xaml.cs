@@ -206,28 +206,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
 
-        #region VerseRange
+        #region VerseOffsetRange
 
-        public static readonly DependencyProperty VerseRangeProperty =
-            DependencyProperty.Register(nameof(VerseRange), typeof(int), typeof(BcvUserControl),
-                new PropertyMetadata(1,
-                new PropertyChangedCallback(OnVerseRangePropertyChanged)));
+        public static readonly DependencyProperty VerseOffsetRangeProperty =
+            DependencyProperty.Register(nameof(VerseOffsetRange), typeof(int), typeof(BcvUserControl),
+                new PropertyMetadata(0,
+                new PropertyChangedCallback(OnVerseRangeOffsetPropertyChanged)));
 
-        private static void OnVerseRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnVerseRangeOffsetPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BcvUserControl? userControl = d as BcvUserControl;
-            userControl?.OnVerseRangePropertyChanged(e);
+            userControl?.OnVerseRangeOffsetPropertyChanged(e);
         }
 
-        private void OnVerseRangePropertyChanged(DependencyPropertyChangedEventArgs e)
+        private void OnVerseRangeOffsetPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            VerseRange = (int)e.NewValue;
+            VerseOffsetRange = (int)e.NewValue;
         }
 
-        public int VerseRange
+        public int VerseOffsetRange
         {
-            get => (int)GetValue(VerseRangeProperty);
-            set => SetValue(VerseRangeProperty, value);
+            get => (int)GetValue(VerseOffsetRangeProperty);
+            set => SetValue(VerseOffsetRangeProperty, value);
         }
 
         # endregion VerseRange
