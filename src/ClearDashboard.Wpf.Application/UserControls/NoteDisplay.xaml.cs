@@ -11,7 +11,6 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
-using MahApps.Metro.Converters;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -121,20 +120,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register("LabelFontSize", typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(11d));
+
+
         #endregion
         #region Private event handlers
 
         private void CloseEdit()
         {
-            NoteLabelVisibility = Visibility.Visible;
-            NoteTextBoxVisibility = Visibility.Hidden;
-            TimestampVisibility = Visibility.Visible;
-            ButtonVisibility = Visibility.Hidden;
-
-            OnPropertyChanged(nameof(NoteLabelVisibility));
-            OnPropertyChanged(nameof(NoteTextBoxVisibility));
-            OnPropertyChanged(nameof(TimestampVisibility));
-            OnPropertyChanged(nameof(ButtonVisibility));
+            IsEditing = false;
+            IsChanged = false;
         }
 
         private void ApplyNote(object sender, RoutedEventArgs e)
@@ -162,25 +156,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void NoteLabelClick(object sender, MouseButtonEventArgs e)
         {
-            NoteLabelVisibility = Visibility.Hidden;
-            NoteTextBoxVisibility = Visibility.Visible;
+            IsEditing = true;
+
             NoteTextBox.Focus();
-
+            NoteTextBox.Select(NoteTextBox.Text.Length, 0);
+            
             OriginalNoteText = NoteText;
-
-            OnPropertyChanged(nameof(NoteLabelVisibility));
-            OnPropertyChanged(nameof(NoteTextBoxVisibility));
         }
 
         private void NoteTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (NoteTextBoxVisibility == Visibility.Visible)
             {
-                TimestampVisibility = Visibility.Hidden;
-                ButtonVisibility = Visibility.Visible;
-
-                OnPropertyChanged(nameof(TimestampVisibility));
-                OnPropertyChanged(nameof(ButtonVisibility));
+                IsChanged = true;
             }
         }
 
@@ -231,10 +219,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private string OriginalNoteText { get; set; }
 
-        public Visibility NoteLabelVisibility { get; set; } = Visibility.Visible;
-        public Visibility NoteTextBoxVisibility { get; set; } = Visibility.Collapsed;
-        public Visibility TimestampVisibility { get; set; } = Visibility.Visible;
-        public Visibility ButtonVisibility { get; set; } = Visibility.Hidden;
+        private bool _isEditing = false;
+        private bool _isChanged = false;
+
+        private bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                _isEditing = value;
+                OnPropertyChanged(nameof(NoteLabelVisibility));
+                OnPropertyChanged(nameof(NoteTextBoxVisibility));
+            }
+        }
+
+        private bool IsChanged
+        {
+            get => _isChanged;
+            set
+            {
+                _isChanged = value;
+                OnPropertyChanged(nameof(TimestampVisibility));
+                OnPropertyChanged(nameof(ButtonVisibility));
+            } 
+        }
+
+        public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
+        public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
+        public Visibility TimestampVisibility => IsChanged ? Visibility.Hidden : Visibility.Visible;
+        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
 
         /// <summary>
         /// Gets the text of the note to display.

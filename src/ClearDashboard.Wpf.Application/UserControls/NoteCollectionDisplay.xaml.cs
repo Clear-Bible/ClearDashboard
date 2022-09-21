@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -319,6 +320,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
             set => SetValue(LabelSuggestionsProperty, value);
         }
+
+        public Note NewNote { get; set; } = new(null, "(enter a new note)", string.Empty);
 
         #endregion
         #region Public Events

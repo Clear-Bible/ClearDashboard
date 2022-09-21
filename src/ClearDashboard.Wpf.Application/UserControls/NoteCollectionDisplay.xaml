@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="16">
     <UserControl.Resources>
-        <DataTemplate x:Key="NoteTemplate">
+        <DataTemplate x:Key="NoteTemplate" DataType="local:NoteDisplay">
             <local:NoteDisplay
                 Note="{Binding}"
                 EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
@@ -51,7 +51,7 @@
             <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
                           ItemTemplate="{StaticResource NoteTemplate}" 
                           ItemsPanel="{StaticResource NotesPanelTemplate}" />
-
+            <ContentControl Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}" ContentTemplate="{StaticResource NoteTemplate}"></ContentControl>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="10" Click="OnCloseRequested">Close</Button>
