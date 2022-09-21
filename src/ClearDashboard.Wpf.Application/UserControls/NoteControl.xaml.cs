@@ -147,12 +147,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
-        public string NoteText => Note?.Text;
-
         private void Cancel(object sender, RoutedEventArgs e)
         {
             Note.Text = OriginalNoteText;
-            OnPropertyChanged("Note.Text");
+            OnPropertyChanged("NoteText");
 
             CloseEdit();
         }
@@ -214,13 +212,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Private event handlers
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets whether the control is adding a new note or editing an existing one.
+        /// </summary>
         public bool AddMode { get; set; } = false;
         
         // TODO: localize
         public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
 
+        private string OriginalNoteText { get; set; }
+
         public Visibility NoteLabelVisibility { get; set; } = Visibility.Visible;
         public Visibility NoteTextBoxVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TimestampVisibility { get; set; } = Visibility.Visible;
+        public Visibility ButtonVisibility { get; set; } = Visibility.Hidden;
+
+        /// <summary>
+        /// Gets the text of the note to display.
+        /// </summary>
+        public string NoteText => Note?.Text;
 
         /// <summary>
         /// Gets or sets the <see cref="EntityId{T}"/> that contains the note.
@@ -250,7 +260,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the note textbox.
+        /// Gets or sets the font size for the note text box.
         /// </summary>
         public double NoteFontSize
         {
@@ -395,6 +405,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(LabelAddedEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion Public events
@@ -405,14 +418,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             Loaded += OnLoaded;
         }
-
-        private string OriginalNoteText { get; set; }
-
-        public Visibility TimestampVisibility { get; set; } = Visibility.Visible;
-        public Visibility ButtonVisibility { get; set; } = Visibility.Hidden;
-
-
-
-
     }
 }
