@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
@@ -279,7 +280,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             //await RetrieveTokensViaCorpusClass();
         }
 
-        private List<Label> GetLabels()
+        private ObservableCollection<Label> GetLabels()
         {
             var labelSuggestions = LabelSuggestions.ToList();
             var labelTexts = new List<string>();
@@ -294,7 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 }
             }
 
-            return labelTexts.OrderBy(lt => lt).Select(lt => new Label(Mediator, lt)).AsList();
+            return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label(Mediator, lt)));
         }        
         
         private void GetLabelSuggestions()

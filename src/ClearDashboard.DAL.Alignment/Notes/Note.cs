@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Exceptions;
+﻿using System.Collections.ObjectModel;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
 
@@ -13,7 +14,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string? AbbreviatedText { get; set; }
 
         // Temporary
-        public List<Label> Labels { get; set; } = new();
+        public ObservableCollection<Label> Labels { get; set; } = new();
 
         public Note(IMediator mediator, string text, string? abbreviatedText)
         {
