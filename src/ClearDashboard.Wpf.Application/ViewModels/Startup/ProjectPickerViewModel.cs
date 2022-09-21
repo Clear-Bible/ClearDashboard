@@ -56,6 +56,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        public bool ShowDelete => StartupDialogViewModel.StartupComplete;
+
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
         {

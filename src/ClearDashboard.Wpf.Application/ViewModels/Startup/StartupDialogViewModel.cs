@@ -19,6 +19,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         private readonly DashboardProjectManager _projectManager;
         public bool MimicParatextConnection { get; set; }
+        public static bool StartupComplete;
+
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager) 
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
@@ -74,6 +76,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void Ok()
         {
+            StartupComplete = true;
             await TryCloseAsync(true);
         }
 
