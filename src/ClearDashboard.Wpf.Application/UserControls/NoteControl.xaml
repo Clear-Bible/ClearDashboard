@@ -39,8 +39,8 @@
                 Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Modified}" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonVisibility}">
-            <Button Foreground="White" Margin="10" Click="ApplyNote">Apply Note</Button>
-            <Button Foreground="White" Margin="10" Click="Cancel">Cancel</Button>
+            <Button Foreground="{DynamicResource MaterialDesignBody}" Margin="5" FontSize="11" Height="25" Click="ApplyNote" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ApplyLabel}"></Button>
+            <Button Foreground="{DynamicResource MaterialDesignBody}" Margin="5" FontSize="11" Height="25"  Click="Cancel">Cancel</Button>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <local:LabelsDisplayControl Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}" 

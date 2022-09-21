@@ -141,7 +141,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CloseEdit();
             RaiseEvent(new NoteEventArgs()
             {
-                RoutedEvent = NoteUpdatedEvent,
+                RoutedEvent = AddMode ? NoteAddedEvent : NoteUpdatedEvent,
                 EntityId = EntityId,
                 Note = Note
             });
@@ -213,6 +213,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Private event handlers
         #region Public Properties
+
+        public bool AddMode { get; set; } = false;
+        
+        // TODO: localize
+        public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
 
         public Visibility NoteLabelVisibility { get; set; } = Visibility.Visible;
         public Visibility NoteTextBoxVisibility { get; set; } = Visibility.Collapsed;
