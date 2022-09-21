@@ -26,7 +26,7 @@ namespace ClearDashboard.WPF.Tests
             var directoryPath = "LicenseTest";
             var filePath = "LicenseTest\\license.txt";
 
-            var originalLicenseUser = new LicenseUser
+            var originalLicenseUser = new DalLicenseUser
             {
                 Id = Guid.NewGuid().ToString("N"),
                 LicenseKey = Guid.NewGuid().ToString("N"),
