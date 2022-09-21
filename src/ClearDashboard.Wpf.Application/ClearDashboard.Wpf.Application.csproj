@@ -169,7 +169,7 @@
     <Compile Update="UserControls\NotesControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteControl.xaml.cs">
+    <Compile Update="UserControls\NoteDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -273,7 +273,7 @@
     <Page Update="UserControls\TimerUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteControl.xaml">
+    <Page Update="UserControls\NoteDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

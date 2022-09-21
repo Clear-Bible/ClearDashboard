@@ -18,107 +18,107 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control that displays the details of a single <see cref="Note"/>.
     /// </summary>
-    public partial class NoteControl : UserControl, INotifyPropertyChanged
+    public partial class NoteDisplay : UserControl, INotifyPropertyChanged
     {
         #region Static Routed Events
         /// <summary>
         /// Identifies the NoteAdded routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
-            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteUpdated routed event.
         /// </summary>
         public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
-            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteDeleted routed event.
         /// </summary>
         public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
-            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
-            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelAddedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
-            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteControl));
+            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
         /// <summary>
         /// Identifies the EntityId dependency property.
         /// </summary>
-        public static readonly DependencyProperty EntityIdProperty = DependencyProperty.Register("EntityId", typeof(IId), typeof(NoteControl));
+        public static readonly DependencyProperty EntityIdProperty = DependencyProperty.Register("EntityId", typeof(IId), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the Note dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register("Note", typeof(Note), typeof(NoteControl));
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register("Note", typeof(Note), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelBackground dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register("LabelBackground", typeof(SolidColorBrush), typeof(NoteControl));
+        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register("LabelBackground", typeof(SolidColorBrush), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register("NoteFontSize", typeof(double), typeof(NoteControl),
+        public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register("NoteFontSize", typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(15d));
 
         /// <summary>
         /// Identifies the NoteMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register("NoteMargin", typeof(Thickness), typeof(NoteControl),
+        public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register("NoteMargin", typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(2, 2, 2, 2)));
 
         /// <summary>
         /// Identifies the TimestampFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty TimestampFontSizeProperty = DependencyProperty.Register("TimestampFontSize", typeof(double), typeof(NoteControl),
+        public static readonly DependencyProperty TimestampFontSizeProperty = DependencyProperty.Register("TimestampFontSize", typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(11d));
 
         /// <summary>
         /// Identifies the TimestampMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TimestampMarginProperty = DependencyProperty.Register("TimestampMargin", typeof(Thickness), typeof(NoteControl),
+        public static readonly DependencyProperty TimestampMarginProperty = DependencyProperty.Register("TimestampMargin", typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register("LabelSuggestions", typeof(IEnumerable<NotesLabel>), typeof(NoteControl));
+        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register("LabelSuggestions", typeof(IEnumerable<NotesLabel>), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register("LabelMargin", typeof(Thickness), typeof(NoteControl),
+        public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register("LabelMargin", typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(3, 0, 3, 0)));
 
         /// <summary>
         /// Identifies the LabelPadding dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register("LabelPadding", typeof(Thickness), typeof(NoteControl),
+        public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register("LabelPadding", typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the LabelCornerRadius dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelCornerRadiusProperty = DependencyProperty.Register("LabelCornerRadius", typeof(CornerRadius), typeof(NoteControl),
+        public static readonly DependencyProperty LabelCornerRadiusProperty = DependencyProperty.Register("LabelCornerRadius", typeof(CornerRadius), typeof(NoteDisplay),
             new PropertyMetadata(new CornerRadius(0)));
        
         /// <summary>
         /// Identifies the LabelFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register("LabelFontSize", typeof(double), typeof(NoteControl),
+        public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register("LabelFontSize", typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(11d));
         #endregion
         #region Private event handlers
@@ -150,7 +150,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void Cancel(object sender, RoutedEventArgs e)
         {
             Note.Text = OriginalNoteText;
-            OnPropertyChanged("NoteText");
+            OnPropertyChanged(nameof(NoteText));
 
             CloseEdit();
         }
@@ -412,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Public events
 
-        public NoteControl()
+        public NoteDisplay()
         {
             InitializeComponent();
 

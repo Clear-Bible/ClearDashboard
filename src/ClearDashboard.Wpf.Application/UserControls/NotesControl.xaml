@@ -9,7 +9,7 @@
              FontSize="16">
     <UserControl.Resources>
         <DataTemplate x:Key="NoteTemplate">
-            <local:NoteControl
+            <local:NoteDisplay
                 Note="{Binding}"
                 EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
                 NoteMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
