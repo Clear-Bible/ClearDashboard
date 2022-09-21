@@ -424,6 +424,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     NodeTokenizations = corpusNode.NodeTokenizations,
+                    CorpusId = corpusNode.CorpusId,
                 });
             }
 
@@ -506,7 +507,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var corpusNode in deserialized.CorpusNodes)
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
-                        corpusId: new CorpusId(Guid.NewGuid()),
+                        corpusId: new CorpusId(corpusNode.CorpusId),
                         mediator: _mediator,
                         isRtl: false,
                         name: corpusNode.Name,
