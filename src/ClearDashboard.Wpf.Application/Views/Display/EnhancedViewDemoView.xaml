@@ -266,7 +266,7 @@
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
-            <userControls:NotesControl Visibility="{Binding NoteControlVisibility}"
+            <userControls:NoteCollectionDisplay Visibility="{Binding NoteControlVisibility}"
                                        Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                                        EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
                                        Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
@@ -282,39 +282,39 @@
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];
                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];" >
-                <userControls:NotesControl.NoteMargin>
+                <userControls:NoteCollectionDisplay.NoteMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="NoteLeftMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="NoteTopMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="NoteRightMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="NoteBottomMarginSlider" Path="Value"></Binding>
                     </MultiBinding>
-                </userControls:NotesControl.NoteMargin>
-                <userControls:NotesControl.TimestampMargin>
+                </userControls:NoteCollectionDisplay.NoteMargin>
+                <userControls:NoteCollectionDisplay.TimestampMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="TimestampLeftMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="TimestampTopMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="TimestampRightMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="TimestampBottomMarginSlider" Path="Value"></Binding>
                     </MultiBinding>
-                </userControls:NotesControl.TimestampMargin>
-                <userControls:NotesControl.LabelMargin>
+                </userControls:NoteCollectionDisplay.TimestampMargin>
+                <userControls:NoteCollectionDisplay.LabelMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="LabelLeftMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelTopMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelRightMarginSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelBottomMarginSlider" Path="Value"></Binding>
                     </MultiBinding>
-                </userControls:NotesControl.LabelMargin>
-                <userControls:NotesControl.LabelPadding>
+                </userControls:NoteCollectionDisplay.LabelMargin>
+                <userControls:NoteCollectionDisplay.LabelPadding>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="LabelLeftPaddingSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelTopPaddingSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelRightPaddingSlider" Path="Value"></Binding>
                         <Binding ElementName="LabelBottomPaddingSlider" Path="Value"></Binding>
                     </MultiBinding>
-                </userControls:NotesControl.LabelPadding>
-            </userControls:NotesControl>
+                </userControls:NoteCollectionDisplay.LabelPadding>
+            </userControls:NoteCollectionDisplay>
         </StackPanel>
     </Grid>
 </Page>
