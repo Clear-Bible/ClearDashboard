@@ -120,7 +120,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             
             
             services.AddSingleton<IProject>(sp => _project);
-            services.AddSingleton<IVerseRef>(sp => _verseRef);
+            services.AddTransient<IVerseRef>(sp => _verseRef);
             services.AddSingleton<IPluginHost>(sp =>_pluginHost);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
            
@@ -132,6 +132,12 @@ namespace ClearDashboard.WebApiParatextPlugin
             var serviceProvider = services.BuildServiceProvider();
             return serviceProvider;
         }
+
+        public void ChangeVerse(IVerseRef verse)
+        {
+            _verseRef = verse;
+        }
+
     }
 
     public static class ServiceProviderExtensions
@@ -167,4 +173,5 @@ namespace ClearDashboard.WebApiParatextPlugin
             return _serviceProvider.GetServices(serviceType);
         }
     }
+
 }
