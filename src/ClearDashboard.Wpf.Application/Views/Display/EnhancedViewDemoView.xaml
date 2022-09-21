@@ -259,7 +259,7 @@
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="7" Orientation="Vertical">
-            <userControls:TranslationControl Visibility="{Binding TranslationControlVisibility}"
+            <userControls:TranslationSelector Visibility="{Binding TranslationControlVisibility}"
                                              TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
                                              TranslationOptions="{Binding TranslationOptions}"
                                              SelectedItem="{Binding CurrentTranslationOption}"
