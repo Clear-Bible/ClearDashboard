@@ -165,7 +165,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteTextBoxVisibility = Visibility.Visible;
             NoteTextBox.Focus();
 
-            OriginalNoteText = Note.Text;
+            OriginalNoteText = NoteText;
 
             OnPropertyChanged(nameof(NoteLabelVisibility));
             OnPropertyChanged(nameof(NoteTextBoxVisibility));
@@ -195,12 +195,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
-            RaiseLabelEvent(LabelAddedEvent, e as LabelEventArgs);
+            var labelEventArgs = e as LabelEventArgs;
+            Note.Labels.Add(labelEventArgs.Label);
+            OnPropertyChanged(nameof(NoteLabels));
+
+            RaiseLabelEvent(LabelAddedEvent, labelEventArgs);
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
-            RaiseLabelEvent(LabelSelectedEvent, e as LabelEventArgs);
+            var labelEventArgs = e as LabelEventArgs;
+            Note.Labels.Add(labelEventArgs.Label);
+            OnPropertyChanged(nameof(NoteLabels));
+
+            RaiseLabelEvent(LabelSelectedEvent, labelEventArgs);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -231,6 +239,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets the text of the note to display.
         /// </summary>
         public string NoteText => Note?.Text;
+
+        /// <summary>
+        /// Gets the labels of the note to display.
+        /// </summary>
+        public List<NotesLabel> NoteLabels => Note?.Labels;
 
         /// <summary>
         /// Gets or sets the <see cref="EntityId{T}"/> that contains the note.
