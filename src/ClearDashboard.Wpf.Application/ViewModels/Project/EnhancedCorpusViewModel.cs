@@ -330,6 +330,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
+            // we don't want this as it was for demonstration
+            
+            return;
+
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
