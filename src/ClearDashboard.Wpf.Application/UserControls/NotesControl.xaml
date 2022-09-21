@@ -53,7 +53,7 @@
 
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Margin="10" Click="Cancel">Close</Button>
+            <Button Margin="10" Click="OnCloseRequested">Close</Button>
         </StackPanel>
     </Grid>
 </UserControl>

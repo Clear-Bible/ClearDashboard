@@ -155,7 +155,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
-        private void Cancel(object sender, RoutedEventArgs e)
+        private void OnCloseRequested(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs { RoutedEvent = CloseRequestedEvent });
         }
@@ -350,6 +350,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(NoteDeletedEvent, value);
             remove => RemoveHandler(NoteDeletedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to close the notes control.
+        /// </summary>
+        public event RoutedEventHandler CloseRequested
+        {
+            add => AddHandler(CloseRequestedEvent, value);
+            remove => RemoveHandler(CloseRequestedEvent, value);
         }
 
         #endregion

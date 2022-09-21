@@ -255,6 +255,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
         }
+
+        public void CloseRequested(RoutedEventArgs args)
+        {
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+
         // ReSharper restore UnusedMember.Global
 
         #endregion
@@ -410,12 +418,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
-        }
-
-        private void CloseRequested(RoutedEventArgs args)
-        {
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
         private async Task LoadFiles()
