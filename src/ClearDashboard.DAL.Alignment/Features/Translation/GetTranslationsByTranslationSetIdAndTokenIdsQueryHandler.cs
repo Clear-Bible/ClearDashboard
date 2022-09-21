@@ -1,4 +1,6 @@
-﻿using ClearDashboard.DAL.CQRS;
+﻿using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
@@ -51,6 +53,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // and create the resulting Translations using the highest TargetTextScores.Text.
             if (tokenGuidsNotFound.Any())
             {
+                //var tokenComponents = ProjectDbContext!.TokenComponents
+                //    .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                //    .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
+                //    .ToList()
+                //    .Select(tc =>
+                //    {
+                //        tc.TrainingText = tc.TrainingText?.ToSmtTrainingText() ?? throw new InvalidDataEngineException(name: "Token.Id", value: tc.Id.ToString(), message: "TrainingText is null");
+                //        return tc;
+                //    }).ToList();
+
+                // FIXME:  ToLower should be ToLowerInvariant().  How does Sqlite do ToLower?
                 var translationModelEntries = ProjectDbContext!.TranslationModelEntries
                     .Include(tm => tm.TargetTextScores)
                     .Join(
@@ -58,7 +71,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                             .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
                         tm => tm.SourceText,
-                        tc => tc.TrainingText,
+                        tc => (tc.TrainingText ?? "").ToLower(),
                         (tm, tc) => new { tm, tc })
                     .Where(tmtc => tmtc.tm.TranslationSetId == request.TranslationSetId.Id)
                     .Select(tmtc => new Alignment.Translation.Translation(
@@ -69,15 +82,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 var combined = translations.ToList();
                 combined.AddRange(translationModelEntries.ToList());
 
+                var tokensIdsNotFound = request.TokenIds
+                    .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid.Id))
+                    .Select(tid => tid.Id)
+                    .ToList();
+
+                if (tokensIdsNotFound.Any())
+                {
+                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
+                }
+
                 return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(
-                    combined.OrderBy(t => t.SourceToken.TokenId)
+                    combined.OrderBy(t => t.SourceToken.TokenId.ToString())
                 );
             }
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<Alignment.Translation.Translation>>( translations.OrderBy(t => t.SourceToken.TokenId) );
+            return new RequestResult<IEnumerable<Alignment.Translation.Translation>>( translations.OrderBy(t => t.SourceToken.TokenId.ToString()) );
         }
      }
 }

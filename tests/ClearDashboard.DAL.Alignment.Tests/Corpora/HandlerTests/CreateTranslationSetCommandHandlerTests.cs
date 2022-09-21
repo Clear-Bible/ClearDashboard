@@ -212,10 +212,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
             Assert.NotNull(translationSet);
 
-            var initialFilteredEngineParallelTextRows = parallelTextCorpus.Take(5).Cast<EngineParallelTextRow>();
+            var initialFilteredEngineParallelTextRows = parallelCorpus.Take(5).Cast<EngineParallelTextRow>();
             var initialTranslations = await translationSet.GetTranslations(initialFilteredEngineParallelTextRows);
 
-            Output.WriteLine($"Translations from model count: {initialTranslations.Count()} (from first five engine paralle text rows)");
+            Output.WriteLine($"Translations from model count: {initialTranslations.Count()} (from first five engine parallel text rows)");
             //foreach (var translation in initialTranslations)
             //{
             //    Output.WriteLine($"\tTokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
@@ -264,7 +264,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .ToList();
 
             var translations = await translationSet.GetTranslations(filteredEngineParallelTextRows);
-            Assert.Equal(18, translations.Count());
+            Assert.Equal(22, translations.Count());
 
             Output.WriteLine($"Translation count: {translations.Count()}");
             Output.WriteLine("");
@@ -339,11 +339,6 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         try
         {
-            FunctionWordTextRowProcessor.Train(parallelTextCorpus);
-
-            parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
-                .Filter<FunctionWordTextRowProcessor>();
-
             var translationCommandable = new TranslationCommands();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
