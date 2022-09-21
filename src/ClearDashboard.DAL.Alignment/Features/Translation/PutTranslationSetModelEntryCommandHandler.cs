@@ -45,14 +45,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             var modelEntry = translationSet.TranslationModel
-                .Where(tm => tm.SourceText == request.sourceText)
+                .Where(tm => tm.SourceText == request.SourceText)
                 .FirstOrDefault();
 
             if (modelEntry == null)
             {
                 modelEntry = new Models.TranslationModelEntry
                 {
-                    SourceText = request.sourceText,
+                    SourceText = request.SourceText,
                     TargetTextScores = new List<Models.TranslationModelTargetTextScore>()
                 };
 
@@ -64,7 +64,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 modelEntry.TargetTextScores.Clear();
             }
 
-            modelEntry.TargetTextScores.AddRange(request.targetTranslationTextScores
+            modelEntry.TargetTextScores.AddRange(request.TargetTranslationTextScores
                 .Select(ttts => new Models.TranslationModelTargetTextScore
                 {
                     Text = ttts.Key,

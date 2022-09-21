@@ -94,8 +94,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSetDb);
 
             Assert.Equal(translationSet.ParallelCorpusId.Id, translationSetDb!.ParallelCorpusId);
-            Assert.Equal(translationSet.GetTranslationModel().Count, translationSetDb!.TranslationModel.Count);
             Assert.Empty(translationSetDb!.Translations);
+            Assert.True(translationModel.Keys.Count > 3);
+            var tm = await translationSet.GetTranslationModelEntryForToken(new Token(new TokenId(1, 1, 1, 1, 1), "surface", translationModel.Keys.Skip(3).First()));
+            Assert.NotNull(tm);
+
+            Output.WriteLine($"Translation model entry for {translationModel.Keys.Skip(3).First()}");
+            foreach (var kvp in tm)
+            {
+                Output.WriteLine($"\tTarget text: {kvp.Key} / score: {kvp.Value}");
+            }
         }
         finally
         {

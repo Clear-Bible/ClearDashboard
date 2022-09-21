@@ -13,23 +13,29 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
-        private Dictionary<string, Dictionary<string, double>> TranslationModel { get; set; }
 
-        public Dictionary<string, Dictionary<string, double>> GetTranslationModel()
-        {
-            return TranslationModel;
-        }
-
-        public async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
+        private async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
         {
             // Put the model (save to db and set the TranslationModel property)
             // Put the smtModel property on the ID and update
+            throw new NotImplementedException();
+        }
+
+        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token)
+        {
+            var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
+            if (result.Success)
+            {
+                return result.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
         }
 
         public async void PutTranslationModelEntry(string sourceText, Dictionary<string, double> targetTranslationTextScores)
         {
-            TranslationModel[sourceText] = targetTranslationTextScores;
-
             var result = await mediator_.Send(new PutTranslationSetModelEntryCommand(TranslationSetId, sourceText, targetTranslationTextScores));
             if (result.Success)
             {
@@ -101,7 +107,6 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 return new TranslationSet(
                     data.translationSetId,
                     data.parallelCorpusId,
-                    data.translationModel,
                     mediator);
             }
             else
@@ -113,14 +118,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
         internal TranslationSet(
             TranslationSetId translationSetId,
             ParallelCorpusId parallelCorpusId,
-            Dictionary<string, Dictionary<string, double>> translationModel,
             IMediator mediator)
         {
             mediator_ = mediator;
 
             TranslationSetId = translationSetId;
             ParallelCorpusId = parallelCorpusId;
-            TranslationModel = translationModel;
         }
     }
 }
